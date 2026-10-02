@@ -1611,9 +1611,10 @@ function main() {
    * 它们注定会被 sync 的窗口过滤丢掉，留在中间文件里只会污染覆盖率表。
    */
   const WINDOW_START = '2024-09-01';
-  const releaseDates = existsSync(join(WORK, 'release-dates.json'))
-    ? JSON.parse(readFileSync(join(WORK, 'release-dates.json'), 'utf8'))
-    : null;
+  // 取证表是 curated 数据，权威副本在 data/（入库）；_work/ 只是本地兼容路径
+  const rdPath = [join(ROOT, 'data', 'release-dates.json'), join(WORK, 'release-dates.json')]
+    .find((p) => existsSync(p));
+  const releaseDates = rdPath ? JSON.parse(readFileSync(rdPath, 'utf8')) : null;
   const dateById = new Map((releaseDates?.entries ?? []).map((e) => [e.id, e]));
   /** 名字里能直接读出「16 代及以后」的写法，用于取证表缺失时的兜底判断 */
   const nameInWindow = (n) => /\b(1[6-9]|2\d)(e| Plus| Pro| Pro Max| Air| mini)?\b/i.test(stripInvisible(n));

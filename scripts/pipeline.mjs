@@ -101,17 +101,26 @@ if (existsSync(mf)) {
   console.log(`自包含：${m.selfContained ? '是' : '否'} · 失效链接 ${m.brokenLinks} · 内容问题 ${(m.contentIssues ?? []).length}`);
 }
 
-/* ---- 供 CI 判断「数据有没有变」 ---- */
-// 把关键产物的哈希写出来，workflow 用它决定要不要 commit。
+/* ---- 供 CI 判断「这次跑完，用户看得见的东西变了吗」 ---- */
+//
+// 直接哈希 data/products.json 是错的：那份文件里带着 generatedAt / lastSeenAt /
+// listedAt / fetchedAt 一串运行时刻字段，每次跑都在变，跟官网数据有没有变无关。
+// 实测连跑两次一台机器的数据都没动，哈希照样从 3c0a68e2 变成 e637e240 ——
+// 那样「数据无变化就跳过提交」永远不成立，CI 会每 12 小时制造一次空提交。
+//
+// 所以用 scripts/publish/fingerprint.mjs：剥掉运行时刻后算数据指纹，
+// 站点指纹 = 数据指纹 + 模板代码哈希（模板改版也要重新发布）。
 if (!DRY) {
-  const crypto = await import('node:crypto');
-  const h = crypto.createHash('sha256');
-  for (const f of ['data/products.json']) {
-    const p = join(ROOT, f);
-    if (existsSync(p)) h.update(readFileSync(p));
+  // 指纹单独作为最后一步跑：它要读 data/.fingerprint（入库的上次状态）做比对，
+  // 把结果写进 _work/fingerprint.json，CI 从里面的 changed 标志决定提交与发布。
+  run('内容指纹（供 CI 判断有无变化）', 'scripts/publish/fingerprint.mjs');
+
+  const fpPath = join(ROOT, '_work/fingerprint.json');
+  if (existsSync(fpPath)) {
+    const fp = JSON.parse(readFileSync(fpPath, 'utf8'));
+    console.log(`\n数据指纹 ${fp.dataFingerprint} · 站点指纹 ${fp.siteFingerprint}`);
+    console.log(`数据内容变化：${fp.changed.data ? '是' : '否'} · 站点内容变化：${fp.changed.site ? '是' : '否'}`);
+    console.log('CI 读 _work/fingerprint.json 的 changed 决定提交与发布；');
+    console.log('提交/发布成功后用 --write-pointer 推进 data/.fingerprint。');
   }
-  const digest = h.digest('hex').slice(0, 16);
-  writeFileSync(join(ROOT, '_work/pipeline-digest.txt'), `${digest}\n`, 'utf8');
-  console.log(`\n数据指纹（data/products.json）：${digest}`);
-  console.log('CI 用它判断是否需要提交：git diff --quiet _work/pipeline-digest.txt || commit');
 }

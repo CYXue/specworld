@@ -1,0 +1,629 @@
+{
+  "generatedAt": "2026-10-02T12:04:32.000Z",
+  "entries": [
+    {
+      "id": "apple-iphone-16",
+      "name": "iPhone 16",
+      "brand": "apple",
+      "date": "2024-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
+      "note": "Apple 中国新闻稿标注 2024-09-10（北京时间；库比蒂诺发布会为当地 09-09）；9 月 13 日起预购，9 月 20 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-16-plus",
+      "name": "iPhone 16 Plus",
+      "brand": "apple",
+      "date": "2024-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
+      "note": "同 iPhone 16 一篇新闻稿；9 月 13 日起预购，9 月 20 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-16-pro",
+      "name": "iPhone 16 Pro",
+      "brand": "apple",
+      "date": "2024-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
+      "note": "Apple 中国新闻稿标注 2024-09-10（北京时间；库比蒂诺发布会为当地 09-09）；9 月 13 日起预购，9 月 20 日起正式发售。冲突记录：若按美国当地发布会日则为 2024-09-09，本表统一取官方中国新闻稿日期"
+    },
+    {
+      "id": "apple-iphone-16-pro-max",
+      "name": "iPhone 16 Pro Max",
+      "brand": "apple",
+      "date": "2024-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
+      "note": "同 iPhone 16 Pro 一篇新闻稿；9 月 13 日起预购，9 月 20 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-16e",
+      "name": "iPhone 16e",
+      "brand": "apple",
+      "date": "2025-02-19",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2025/02/apple-debuts-iphone-16e/",
+      "note": "Apple 中国新闻稿标注 2025-02-19；2 月 21 日起接受预购，2 月 28 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-17",
+      "name": "iPhone 17",
+      "brand": "apple",
+      "date": "2025-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-debuts-iphone-17/",
+      "note": "Apple 中国新闻稿标注 2025-09-10（北京时间；库比蒂诺发布会为当地 09-09）；9 月 19 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-17-pro",
+      "name": "iPhone 17 Pro",
+      "brand": "apple",
+      "date": "2025-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
+      "note": "Apple 中国新闻稿标注 2025-09-10（北京时间；库比蒂诺发布会为当地 09-09）；9 月 12 日起预购，9 月 19 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-17-pro-max",
+      "name": "iPhone 17 Pro Max",
+      "brand": "apple",
+      "date": "2025-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
+      "note": "同 iPhone 17 Pro 一篇新闻稿；9 月 12 日起预购，9 月 19 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-17e",
+      "name": "iPhone 17e",
+      "brand": "apple",
+      "date": "2026-03-02",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2026/03/apple-introduces-iphone-17e/",
+      "note": "Apple 中国新闻稿标注 2026-03-02；3 月 4 日起接受订购，3 月 11 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-air",
+      "name": "iPhone Air",
+      "brand": "apple",
+      "date": "2025-09-10",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone/",
+      "note": "Apple 中国新闻稿标注 2025-09-10（北京时间）；中国大陆另于 10 月 22 日起发售，见 https://www.apple.com.cn/newsroom/2025/10/iphone-air-will-be-available-in-china-beginning-october-22/"
+    },
+    {
+      "id": "apple-iphone-duo",
+      "name": "iPhone Duo",
+      "brand": "apple",
+      "date": "2026-09-09",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-unveils-iphone-duo/",
+      "note": "Apple 中国新闻稿标注 2026-09-09；10 月 16 日起预购，10 月 23 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-18-pro",
+      "name": "iPhone 18 Pro",
+      "brand": "apple",
+      "date": "2026-09-09",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
+      "note": "Apple 中国新闻稿标注 2026-09-09；9 月 12 日起预购，9 月 18 日起正式发售"
+    },
+    {
+      "id": "apple-iphone-18-pro-max",
+      "name": "iPhone 18 Pro Max",
+      "brand": "apple",
+      "date": "2026-09-09",
+      "precision": "day",
+      "source": "apple-official",
+      "sourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
+      "note": "同 iPhone 18 Pro 一篇新闻稿；9 月 12 日起预购，9 月 18 日起正式发售"
+    },
+    {
+      "id": "huawei-mate90-pro-max",
+      "name": "HUAWEI Mate 90 Pro Max",
+      "brand": "huawei",
+      "date": "2026-10-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-10-01（CBG_DREDATE 2026-10-01 15:23）；央广网同日报道；2026-10-01 12:08 正式开售"
+    },
+    {
+      "id": "huawei-mate90-rs-ultimate-design",
+      "name": "HUAWEI Mate 90 RS 非凡大师",
+      "brand": "huawei",
+      "date": "2026-10-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
+      "note": "Mate 90 系列同场发布；2026-10-01 12:08 正式开售"
+    },
+    {
+      "id": "huawei-mate90-pro",
+      "name": "HUAWEI Mate 90 Pro",
+      "brand": "huawei",
+      "date": "2026-10-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
+      "note": "Mate 90 系列同场发布；2026-10-01 12:08 正式开售"
+    },
+    {
+      "id": "huawei-mate90",
+      "name": "HUAWEI Mate 90",
+      "brand": "huawei",
+      "date": "2026-10-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
+      "note": "Mate 90 系列同场发布；2026-10-01 12:08 正式开售"
+    },
+    {
+      "id": "huawei-mate-xt-2-ultimate-design",
+      "name": "HUAWEI Mate XT 2 非凡大师",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-09-07（CBG_DREDATE 2026-09-07 15:23）；新华网同日报道；9 月 12 日 10:08 正式开售"
+    },
+    {
+      "id": "huawei-mate80-pro-max-fengchiban",
+      "name": "HUAWEI Mate 80 Pro Max 风驰版",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
+      "note": "官方未公布日期（该场发布会无官方日期标注页）；来源：新华网 2026-03-23《华为畅享90系列发布…》报道「3月23日，华为举办春季全场景新品发布会，接连发布华为畅享90系列、华为Mate80 Pro Max风驰版等新品」"
+    },
+    {
+      "id": "huawei-mate80-pro-max",
+      "name": "HUAWEI Mate 80 Pro Max",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
+      "note": "官方发布会页 https://consumer.huawei.com/cn/press/events/2025/huawei-mate-80-series-mate-x7-and-all-scenario-new-product-launch-event/ 存在但未标注日期；来源：央广网 2025-11-25 报道「11月25日，华为Mate 80系列 | Mate X7及全场景新品发布会正式举行」；Mate 80 系列 2025-11-28 10:08 正式开售"
+    },
+    {
+      "id": "huawei-mate-x7",
+      "name": "HUAWEI Mate X7",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
+      "note": "官方发布会页存在但未标注日期；来源：央广网 2025-11-25 报道，与 Mate 80 系列同场发布"
+    },
+    {
+      "id": "huawei-mate80-rs-ultimate-design",
+      "name": "HUAWEI Mate 80 RS 非凡大师",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
+      "note": "官方发布会页存在但未标注日期；来源：央广网 2025-11-25 报道，属 Mate 80 系列"
+    },
+    {
+      "id": "huawei-mate-xts-ultimate-design",
+      "name": "HUAWEI Mate XTs 非凡大师",
+      "brand": "huawei",
+      "date": "2025-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.cnr.cn/techxp/20250905/t20250905_527351812.shtml",
+      "note": "官方发布会页 https://consumer.huawei.com/cn/press/events/2025/huawei-mate-xts-ultimate-design-and-all-scenario-new-product-launch-event/ 存在但未标注日期；来源：央广网 2025-09-05 报道「9 月 4 日」发布会；9 月 12 日开售"
+    },
+    {
+      "id": "huawei-mate80-pro",
+      "name": "HUAWEI Mate 80 Pro",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
+      "note": "官方发布会页存在但未标注日期；来源：央广网 2025-11-25 报道，属 Mate 80 系列；2025-11-28 10:08 开售"
+    },
+    {
+      "id": "huawei-mate80",
+      "name": "HUAWEI Mate 80",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
+      "note": "官方发布会页存在但未标注日期；来源：央广网 2025-11-25 报道，属 Mate 80 系列；2025-11-28 10:08 开售"
+    },
+    {
+      "id": "huawei-mate70-air",
+      "name": "HUAWEI Mate 70 Air",
+      "brand": "huawei",
+      "date": "2025-11-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://ai.zol.com.cn/1076/10763772.html",
+      "note": "官方未公布日期；来源：中关村在线 2025-11-06《华为发布史上最薄 Mate 70 Air：轻至208克，起售价4199元》；2025-11-11 正式开售"
+    },
+    {
+      "id": "huawei-mate70-pro-plus",
+      "name": "HUAWEI Mate 70 Pro+",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
+      "note": "官方「华为 Mate 品牌盛典」页 https://consumer.huawei.com/cn/press/events/2024/huawei-mate-brand-ceremony-new-product-launch-event/ 未标注日期；来源：新华网 2024-11-27 报道「11 月 26 日」盛典"
+    },
+    {
+      "id": "huawei-mate-x6",
+      "name": "HUAWEI Mate X6",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
+      "note": "与 Mate 70 系列同场（华为 Mate 品牌盛典）发布；官方盛典页未标注日期；来源：新华网 2024-11-27 报道"
+    },
+    {
+      "id": "huawei-mate70-rs-ultimate-design",
+      "name": "HUAWEI Mate 70 RS 非凡大师",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
+      "note": "与 Mate 70 系列同场发布；官方盛典页未标注日期；来源：新华网 2024-11-27 报道"
+    },
+    {
+      "id": "huawei-mate70-pro",
+      "name": "HUAWEI Mate 70 Pro",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
+      "note": "与 Mate 70 系列同场发布；官方盛典页未标注日期；来源：新华网 2024-11-27 报道"
+    },
+    {
+      "id": "huawei-mate70-pro-youxiangban",
+      "name": "HUAWEI Mate 70 Pro 优享版",
+      "brand": "huawei",
+      "date": "2025-02-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://ai.zol.com.cn/954/9543191_all.html",
+      "note": "官方未公布日期；来源：中关村在线 2025-02-28《华为Mate70 Pro优享版正式发布》；2025-03-05 正式开售（海峡网 2025-02-28 报道）"
+    },
+    {
+      "id": "huawei-mate70",
+      "name": "HUAWEI Mate 70",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
+      "note": "与 Mate 70 系列同场发布；官方盛典页未标注日期；来源：新华网 2024-11-27 报道"
+    },
+    {
+      "id": "huawei-mate-xt-ultimate-design",
+      "name": "HUAWEI Mate XT 非凡大师",
+      "brand": "huawei",
+      "date": "2024-09-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.cnr.cn/techxp/20240910/t20240910_526897854.shtml",
+      "note": "官方未在发布会页标注日期；来源：央广网 2024-09-10《全球首款三折叠手机亮相 华为抢占折叠屏手机高位》。注意：该机型已不在官网在售目录（50 款）内，按覆盖清单补入"
+    },
+    {
+      "id": "huawei-pura-x-view",
+      "name": "HUAWEI Pura X View",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-09-07（该页关键词明确含 HUAWEI Pura X View）；2026-09-09 正式开售"
+    },
+    {
+      "id": "huawei-pura90-pro-max",
+      "name": "HUAWEI Pura 90 Pro Max",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-04-20（CBG_DREDATE 2026-04-20 14:30）"
+    },
+    {
+      "id": "huawei-pura-x-max",
+      "name": "HUAWEI Pura X Max",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-09-07；新华网同日报道该机 9 月 7 日 18:08 预售、9 月 12 日 10:08 开售"
+    },
+    {
+      "id": "huawei-pura90-pro",
+      "name": "HUAWEI Pura 90 Pro",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
+      "note": "Pura 90 系列同场发布（官方发布会页标注 2026-04-20）"
+    },
+    {
+      "id": "huawei-pura90",
+      "name": "HUAWEI Pura 90",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
+      "note": "Pura 90 系列同场发布（官方发布会页标注 2026-04-20）"
+    },
+    {
+      "id": "huawei-pura80-pro-plus",
+      "name": "HUAWEI Pura 80 Pro+",
+      "brand": "huawei",
+      "date": "2025-06-11",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
+      "note": "官方新闻稿页标注 2025-06-11（页面内 CBG_DREDATE）"
+    },
+    {
+      "id": "huawei-pura80-ultra",
+      "name": "HUAWEI Pura 80 Ultra",
+      "brand": "huawei",
+      "date": "2025-06-11",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
+      "note": "Pura 80 系列同场发布（官方新闻稿页标注 2025-06-11）"
+    },
+    {
+      "id": "huawei-pura80-pro",
+      "name": "HUAWEI Pura 80 Pro",
+      "brand": "huawei",
+      "date": "2025-06-11",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
+      "note": "Pura 80 系列同场发布（官方新闻稿页标注 2025-06-11）"
+    },
+    {
+      "id": "huawei-pura80",
+      "name": "HUAWEI Pura 80",
+      "brand": "huawei",
+      "date": "2025-06-11",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
+      "note": "Pura 80 系列同场发布（官方新闻稿页标注 2025-06-11）"
+    },
+    {
+      "id": "huawei-pura-x",
+      "name": "HUAWEI Pura X",
+      "brand": "huawei",
+      "date": "2025-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.xinhuanet.com/tech/20250321/109d362178b24e4e97f07de8db6ed04c/c.html",
+      "note": "官方发布会页 https://consumer.huawei.com/cn/press/events/2025/huawei-pura-fashion-gala-and-hima-new-product-launch-event/ 未标注日期；来源：新华网 2025-03-21 报道「华为Pura先锋盛典…3月20日在深圳举行，正式推出首款阔折叠华为Pura X」"
+    },
+    {
+      "id": "huawei-pocket-2-youxiangban",
+      "name": "HUAWEI Pocket 2 优享版",
+      "brand": "huawei",
+      "date": "2025-06-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.ithome.com/html/863120.htm",
+      "note": "官方未公布日期；来源：IT之家 2025-06-23《华为 Pocket 2 优享版小折叠手机官宣：6 月 26 日开售》（官宣当日即发布日）；2025-06-26 10:08 正式开售"
+    },
+    {
+      "id": "huawei-nova16-ultra",
+      "name": "HUAWEI nova 16 Ultra",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2026-06-01（CBG_DREDATE 2026-06-01 14:30）；6 月 5 日 10:08 开售"
+    },
+    {
+      "id": "huawei-nova16-pro",
+      "name": "HUAWEI nova 16 Pro",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
+      "note": "nova 16 系列同场发布（官方发布会页标注 2026-06-01）"
+    },
+    {
+      "id": "huawei-nova16",
+      "name": "HUAWEI nova 16",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
+      "note": "nova 16 系列同场发布（官方发布会页标注 2026-06-01）"
+    },
+    {
+      "id": "huawei-nova16-se",
+      "name": "HUAWEI nova 16 SE",
+      "brand": "huawei",
+      "date": "2026-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/8vLTNjTHlpG",
+      "note": "官方未公布日期；来源：凤凰网科技 2026-08-05《华为nova16 SE发布：麒麟8020+8500mAh电池，2499元起》（8 月 5 日发布会）；2026-08-12 正式开售"
+    },
+    {
+      "id": "huawei-nova16-z",
+      "name": "HUAWEI nova 16z",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.ithome.com/html/0958214.htm",
+      "note": "官方发布会页覆盖 nova 16 系列（2026-06-01）但未单列 16z；来源：IT之家 2026-06-01 报道该机于当日成都全场景发布会推出；2026-06-05 10:08 开售"
+    },
+    {
+      "id": "huawei-nova15-ultra",
+      "name": "HUAWEI nova 15 Ultra",
+      "brand": "huawei",
+      "date": "2025-12-22",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
+      "note": "官方发布会页标注 2025-12-22（CBG_DREDATE 2025-12-22 11:07）；新华网同日报道"
+    },
+    {
+      "id": "huawei-nova15-pro",
+      "name": "HUAWEI nova 15 Pro",
+      "brand": "huawei",
+      "date": "2025-12-22",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
+      "note": "nova 15 系列同场发布（官方发布会页标注 2025-12-22）"
+    },
+    {
+      "id": "huawei-nova15",
+      "name": "HUAWEI nova 15",
+      "brand": "huawei",
+      "date": "2025-12-22",
+      "precision": "day",
+      "source": "huawei-official",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
+      "note": "nova 15 系列同场发布（官方发布会页标注 2025-12-22）"
+    },
+    {
+      "id": "huawei-nova14-ultra",
+      "name": "HUAWEI nova 14 Ultra",
+      "brand": "huawei",
+      "date": "2025-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
+      "note": "官方发布会页 https://consumer.huawei.com/cn/press/events/2025/huawei-nova14-series-and-harmonyos-computer-new-product-launch-event/ 未标注日期；来源：新华网 2025-05-19 报道「5月19日…发布会在成都举行」；5 月 23 日开售"
+    },
+    {
+      "id": "huawei-nova14-pro",
+      "name": "HUAWEI nova 14 Pro",
+      "brand": "huawei",
+      "date": "2025-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
+      "note": "nova 14 系列同场发布；官方发布会页未标注日期；来源：新华网 2025-05-19 报道；5 月 23 日开售"
+    },
+    {
+      "id": "huawei-nova14",
+      "name": "HUAWEI nova 14",
+      "brand": "huawei",
+      "date": "2025-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
+      "note": "nova 14 系列同场发布；官方发布会页未标注日期；来源：新华网 2025-05-19 报道；5 月 23 日开售"
+    },
+    {
+      "id": "huawei-changxiang-90-pro-max",
+      "name": "华为畅享 90 Pro Max",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
+      "note": "官方未公布日期；来源：新华网 2026-03-23《华为畅享90系列发布，首次搭载HarmonyOS 6》「3月23日，华为举办春季全场景新品发布会」，文中点名畅享 90 Pro Max"
+    },
+    {
+      "id": "huawei-changxiang-90-plus",
+      "name": "华为畅享 90 Plus",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
+      "note": "官方未公布日期；来源：新华网 2026-03-23 报道畅享 90 系列发布；机型归属见 CNMO 2026-04-08 报道「畅享90系列于3月23日正式发布，包含畅享90、畅享90 Plus和畅享90 Pro Max三款机型」"
+    },
+    {
+      "id": "huawei-changxiang-90",
+      "name": "华为畅享 90",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
+      "note": "官方未公布日期；来源：新华网 2026-03-23 报道畅享 90 系列发布；机型归属见 CNMO 2026-04-08 报道"
+    },
+    {
+      "id": "huawei-changxiang-80",
+      "name": "华为畅享 80",
+      "brand": "huawei",
+      "date": "2025-04-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/847/979.htm",
+      "note": "官方未公布日期；来源：IT之家 2025-04-22《华为畅享 80 手机发布：6620mAh 电池…》「4 月 22 日消息，华为畅享 80 手机今日正式发布」"
+    },
+    {
+      "id": "huawei-changxiang-70x-zunxiangban",
+      "name": "华为畅享 70X 尊享版",
+      "brand": "huawei",
+      "date": "2025-11-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.ithome.com/html/0900550.htm",
+      "note": "官方未公布日期；来源：IT之家 2025-11-27「华为今日宣布畅享 70X 尊享版手机今日 10:08 正式开售」——宣布与开售同日"
+    },
+    {
+      "id": "huawei-changxiang-70x",
+      "name": "华为畅享 70X",
+      "brand": "huawei",
+      "date": "2025-01-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.cnstock.com/commonDetail/340710",
+      "note": "官方未公布日期；来源：上海证券报·中国证券网 2025-01-03《华为千元机携北斗卫星和麒麟芯片上市》。该来源正文有付费墙，未能逐字确认型号；按发布日期与「北斗卫星+麒麟芯片」特征对应畅享 70X，属于本表中置信度最低的一条"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "huawei-changxiang-90m-plus",
+      "reason": "未找到官方或可信二手来源的发布日期。CNMO 2026-04-08 报道明确「畅享90系列于3月23日正式发布，包含畅享90、畅享90 Plus和畅享90 Pro Max三款机型」，说明 90m Plus 不在该场首发之列，其自身发布日无从确认"
+    },
+    {
+      "id": "huawei-changxiang-70s",
+      "reason": "官网在售目录收录该机型，但未找到官方或可信二手来源的发布日期（仅见电商报价页，无发布时间）"
+    },
+    {
+      "id": "huawei-nova14-huoliban",
+      "reason": "仅查到 2025-10-24 正式开售（IT之家 2025-10-24《nova 14 活力版正式开售》），发布时间未见可靠来源；按规则不以开售日冒充发布日"
+    }
+  ]
+}

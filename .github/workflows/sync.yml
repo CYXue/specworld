@@ -1,37 +1,59 @@
 name: 数据自动同步
 
-# 对齐参考项目「AI 大模型世界」的同步节奏：每 12 小时跑一次。
-# 新机发布后最快半天自己出现在站里，仓库不做人工维护。
+# 「发布后不用人管」这台发动机的一句话说明：
+# 每 12 小时抓一次官网、过闸门、把快照提交回仓库，站点内容真有变化时顺手发布到 GitHub Pages。
+#
+# 三个容易被忽略、但决定这条管线能不能长期无人值守的点：
+#
+# 1. 抓取跑在 GitHub 的境外节点上，华为与苹果官网都直连得通；从中国大陆跑则不一定。
+# 2. 「数据变了才提交」靠的是内容指纹，**不是 git diff**。data/products.json 里带着
+#    generatedAt / lastSeenAt / listedAt 一串运行时刻字段，每次跑都在变，用它做判据
+#    等于每 12 小时制造一次空提交。指纹由 scripts/publish/fingerprint.mjs 负责剥离。
+# 3. 发布日期取证表 data/release-dates.json 是人工核对的 curated 数据，必须入库。
+#    它曾经躺在 _work/ 里（被 .gitignore 排除），CI 全新 checkout 拿不到，
+#    60 台全部因「无发布日期」被窗口过滤丢掉 —— 同步每一次都失败。
+
 on:
   schedule:
-    # 每 12 小时一次（GitHub Actions 的 cron 是 UTC：00:00 / 12:00）
-    - cron: '0 0,12 * * *'
-  # 手动触发（调试用），可在 Actions 页点 "Run workflow"
+    # 每 12 小时一次。GitHub 的 cron 走 UTC，这里对应北京时间 09:40 与 21:40。
+    # 新机发布后最快半天自己出现在站里。
+    - cron: '40 1,13 * * *'
+  # 手动触发（抢时效时用，整轮不到一分钟）
   workflow_dispatch:
     inputs:
       offline:
-        description: '离线模式（只用缓存，网络抓取失败时重跑用）'
+        description: '离线模式：只用缓存，上游抓取失败时的重跑方式'
         type: boolean
         default: false
-  # 改动取数/规范化/建站代码时立即验证，不等 12 小时
+      force_publish:
+        description: '内容没变也重新发布站点'
+        type: boolean
+        default: false
+  # 改动取数/规范化/建站代码时立即验证，不等 12 小时。
+  # bot 自己提交的是 data/，不匹配这里，因此不会自己触发自己。
   push:
     paths:
       - 'scripts/**'
       - 'src/**'
+      - 'data/release-dates.json'
       - '.github/workflows/sync.yml'
 
-# 同一时间只跑一个实例，避免两次抓取互相覆盖缓存
+permissions:
+  contents: write   # 提交快照
+  issues: write     # 同步失败时开 issue 留痕
+
 concurrency:
   group: phone-spec-world-sync
   cancel-in-progress: false
-
-permissions:
-  contents: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    outputs:
+      data_changed: ${{ steps.fp.outputs.data_changed }}
+      site_changed: ${{ steps.fp.outputs.site_changed }}
+      summary: ${{ steps.fp.outputs.summary }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,8 +61,24 @@ jobs:
         with:
           node-version: '22'
 
-      # 不装依赖：全链路只用 Node 内置模块（node:fs / node:https / node:cheerio 都不用，
-      # HTML 解析是手写正则与状态机）。少一个装包失败点。
+      # 不装依赖：全链路只用 Node 内置模块，HTML 解析是手写正则与状态机。
+      # 少一个装包失败点，也让「12 小时无人值守」少一件能坏的东西。
+
+      # 条件请求缓存。_work/ 不入库，CI 每次 checkout 都是空的，
+      # 全靠这里恢复；命中 ETag 时上游返回 304，零流量。
+      - name: 恢复 HTTP 缓存
+        uses: actions/cache@v4
+        with:
+          path: |
+            _work/huawei.cache
+            _work/apple.cache
+            _work/apple-compare.cache
+            _work/apple-prices.cache
+          key: sync-http-cache-${{ github.run_id }}
+          restore-keys: sync-http-cache-
+
+      # 管线内建合理性闸门：机型总数骤降、必填字段覆盖率下滑、数值超出物理区间
+      # 都会拒绝写入并以非零退出码结束，此时旧快照原封不动地保留。
       - name: 跑全链路
         run: |
           if [ "${{ inputs.offline }}" = "true" ]; then
@@ -49,43 +87,186 @@ jobs:
             node scripts/pipeline.mjs
           fi
 
-      # 只有数据真的变了才提交。
-      # 只提交 data/（唯一数据源），不提交 dist/ 与 _work/ —— 二者都在 .gitignore 里，
+      # 从指纹结果里取判断依据。注意看的是 changed，不是 git diff。
+      - name: 判断内容是否变化
+        id: fp
+        run: |
+          node -e "
+            const fs = require('fs');
+            const out = process.env.GITHUB_OUTPUT;
+            const fp = JSON.parse(fs.readFileSync('_work/fingerprint.json', 'utf8'));
+            const s = fp.stats || {};
+            const brands = Object.entries(s.byBrand || {}).map(([k,v]) => k + ' ' + v).join(' / ');
+            const summary = s.products + ' 台（' + brands + '）';
+            const lines = [
+              'data_changed=' + fp.changed.data,
+              'site_changed=' + fp.changed.site,
+              'data_fingerprint=' + fp.dataFingerprint,
+              'site_fingerprint=' + fp.siteFingerprint,
+              'summary=' + summary,
+            ].join('\n') + '\n';
+            fs.appendFileSync(out, lines);
+            console.log(lines);
+          "
+
+      # 只提交 data/（唯一数据源）。dist/ 与 _work/ 都在 .gitignore 里，
       # 站点产物任何人都能用 `node scripts/pipeline.mjs --offline` 重新生成。
-      # 这与参考项目「AI 大模型世界」的做法一致：仓库存数据与代码，产物不入库。
-      - name: 提交数据变化
+      # 这与参考项目一致：仓库存数据与代码，产物不入库。
+      #
+      # 触发条件是「数据变了 **或** 站点变了」，不是只看数据：
+      # 只改了模板时数据内容没变，但站点变了 —— 若不推进指纹指针，
+      # 之后每一轮都会被判成「站点有变化」，于是每 12 小时重复发布一次同样的站点。
+      - name: 提交变化
+        if: steps.fp.outputs.data_changed == 'true' || steps.fp.outputs.site_changed == 'true'
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          # 指纹落在 data/ 目录里（_work/ 被 gitignore），这样 --quiet 判断才有效
-          cp _work/pipeline-digest.txt data/.pipeline-digest
-          git add -f data/.pipeline-digest
-          git add -A data/
-          if git diff --cached --quiet; then
-            echo '数据无变化，跳过提交。'
-            exit 0
+          # 把指针推进到这一版
+          node scripts/publish/fingerprint.mjs --write-pointer
+          if [ "${{ steps.fp.outputs.data_changed }}" = "true" ]; then
+            git add -A -- data/
+          else
+            # 数据内容没变（只是模板或取数代码变了）：只提交指纹指针。
+            # 快照不带进来，是因为它唯一的变化是那串运行时刻字段。
+            git add -- data/.fingerprint
           fi
-          MSG="chore(data): 自动同步 $(date -u +'%Y-%m-%d %H:%M UTC')"
-          # 带上关键统计，review 时一眼能看出这次同步带来了什么
-          STATS=$(node -e "
-            const p=require('./data/products.json');
-            const ps=p.products;
-            const by=ps.reduce((a,x)=>{a[x.brand]=(a[x.brand]||0)+1;return a},{});
-            console.log(ps.length+' 台（'+Object.entries(by).map(([k,v])=>k+' '+v).join(' / ')+'），快照 '+(p.generatedAt||'').slice(0,10));
-          ")
-          git commit -m "$MSG" -m "机型：$STATS"
+          # 显式 pathspec 之后再拦一道：只许 data/ 下的文件入库，
+          # 避免 _work/ 里的原始响应被误提交
+          if git diff --cached --name-only | grep -Ev '^data/'; then
+            echo "::error::暂存区出现了 data/ 以外的文件，拒绝提交"
+            git diff --cached --name-only
+            exit 1
+          fi
+          git commit -m "chore(data): 自动同步 — ${{ steps.fp.outputs.summary }}" \
+                     -m "数据指纹 ${{ steps.fp.outputs.data_fingerprint }} · 站点指纹 ${{ steps.fp.outputs.site_fingerprint }}"
           git push
 
-      # 抓取失败时把日志留在 artifact 里，方便排查官网是否改版
-      - name: 上传构建日志
+      # 站点产物交给下一个 job 发布。同一次运行内传递，不重复抓官网。
+      - name: 上传站点产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+          retention-days: 7
+
+      # 闸门拦截时留下证据，方便回溯是哪一次上游出了问题
+      - name: 上传同步报告
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pipeline-log
+          name: sync-report
           path: |
             _work/sync-report.json
-            _work/derived.json
-            _work/analytics.json
+            _work/fingerprint.json
             dist/manifest.json
-          retention-days: 14
+          retention-days: 30
           if-no-files-found: ignore
+
+      # 「零维护」承诺失效时必须留下一条看得见的痕迹。
+      # 找标题为「数据同步失败」且仍 open 的 issue：有就追加评论，没有就新建——
+      # 连续失败不会刷出一堆 issue，修好之后手动关掉那一条即可。
+      - name: 同步失败时开 issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const title = '数据同步失败';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let summary = '本次运行没有产出 _work/sync-report.json，多半是管线在校验之前就异常终止了，请直接看运行日志。';
+            try {
+              const r = JSON.parse(fs.readFileSync('_work/sync-report.json', 'utf8'));
+              summary = [
+                `- 收录 ${r.kept ?? '?'} 台，丢弃 ${(r.dropped ?? []).length} 台`,
+                '',
+                `**校验失败（${(r.failures ?? []).length}）**`,
+                ...((r.failures ?? []).length ? r.failures.map((f) => `- ${f}`) : ['- （无）']),
+                '',
+                `**注意（${(r.notes ?? []).length}）**`,
+                ...((r.notes ?? []).length ? r.notes.slice(0, 10).map((n) => `- ${n}`) : ['- （无）']),
+                '',
+                '**字段覆盖率**',
+                ...(r.coverage ?? []).map((c) => `- ${c}`),
+              ].join('\n');
+            } catch (err) {
+              summary += `\n\n（读取报告时出错：${String(err)}）`;
+            }
+
+            const body = [
+              `### 同步失败 · ${new Date().toISOString()}`,
+              '',
+              `运行链接：${runUrl}`,
+              '',
+              summary,
+              '',
+              '常见的三类原因：官网改版导致取数解析失败、闸门判定数据不合理（此时旧快照会被完整保留）、发布日期取证表缺失。',
+              '完整的 sync-report.json 在该次运行的 artifact `sync-report` 里。',
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.find((i) => i.title === title && !i.pull_request);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+              core.info(`已在 issue #${existing.number} 追加评论`);
+            } else {
+              const { data: created } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: [
+                  '数据同步管线（`.github/workflows/sync.yml`）运行失败。',
+                  '每次失败都会在这条 issue 下追加一条评论；问题修复、同步恢复后请手动关闭。',
+                  '',
+                  body,
+                ].join('\n'),
+              });
+              core.info(`已新建 issue #${created.number}`);
+            }
+
+  # 发布到 GitHub Pages。零凭据：不需要配任何 Secret，
+  # 只要在仓库 Settings → Pages 把 Source 切成 GitHub Actions。
+  #
+  # 只在「用户看得见的东西变了」时才发 —— 判据是站点指纹（数据 × 模板）。
+  # 数据没变、模板没变，就不发，哪怕时间戳已经刷新过一轮。
+  deploy:
+    needs: sync
+    # 定时任务没有 inputs，这时 github.event.inputs 为空串，整体等价于只看 site_changed
+    if: ${{ needs.sync.outputs.site_changed == 'true' || github.event.inputs.force_publish == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      # Pages 默认走 Jekyll，会把下划线开头的目录与文件吃掉。产物里没有，
+      # 但加这个文件是零成本的保险。
+      - name: 关闭 Jekyll
+        run: touch dist/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

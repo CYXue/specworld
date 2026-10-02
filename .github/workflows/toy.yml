@@ -1,0 +1,173 @@
+name: 发布到 B 站 Toy
+
+# 每天一次，把最新快照打包送审。
+#
+# 为什么不像同步那样每 12 小时跑：每次送审都要平台人工过一遍。
+# 每天最多一次，而且只在页面内容真有变化时才送（判据见 scripts/publish/should-publish.mjs）。
+#
+# 前置条件（两样都得配，缺一样这个工作流会**安静地跳过**，不制造失败告警）
+#   1. 仓库 Secret  TOY_CLI_SESSION_TOKEN
+#      就是本机 ~/.toy/session.json 里的 session_token。过期后本机会报「尚未登录」：
+#        toy login
+#        node -p 'require(process.env.HOME+"/.toy/session.json").session_token' | gh secret set TOY_CLI_SESSION_TOKEN
+#   2. 仓库 Variable TOY_ID
+#      Toy 的 ID。第一次发布要人工跑 `toy create` 拿到，之后固定不变；
+#      配在 Settings → Secrets and variables → Actions → Variables，不写进代码。
+# 这个工作流只响应定时与手动触发，外部 PR 拿不到 Secret。
+
+on:
+  schedule:
+    # 02:30 UTC = 北京时间 10:30，排在早上那次同步（09:40）之后，也落在平台审核的工作时间里
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '内容没变也送审'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # 送审成功后把发布记录提交回仓库
+  issues: write
+
+concurrency:
+  group: toy
+  cancel-in-progress: false
+
+env:
+  # 固定版本，升级 CLI 时改这里
+  TOY_CLI_VERSION: v0.6.1
+  TOY_NO_UPDATE_CHECK: '1'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 缺凭据就安静退出：没配 Secret 的情况下天天报红，只会让人忽略真正的失败。
+      # exit 0 是这个工作流的**预期行为**之一，不是掩盖问题 —— 下面这行会写进日志。
+      - name: 检查凭据
+        id: cred
+        env:
+          TOY_CLI_SESSION_TOKEN: ${{ secrets.TOY_CLI_SESSION_TOKEN }}
+          TOY_ID: ${{ vars.TOY_ID }}
+        run: |
+          missing=""
+          [ -z "$TOY_CLI_SESSION_TOKEN" ] && missing="$missing TOY_CLI_SESSION_TOKEN"
+          [ -z "$TOY_ID" ] && missing="$missing TOY_ID"
+          if [ -n "$missing" ]; then
+            echo "::warning::未配置：$missing —— 跳过本次 Toy 发布。"
+            echo "  配置方法见 .github/workflows/toy.yml 顶部注释。"
+            echo "  GitHub Pages 那条发布链路不需要任何凭据，已随 sync.yml 自动运行。"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 恢复 HTTP 缓存
+        if: steps.cred.outputs.skip != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            _work/huawei.cache
+            _work/apple.cache
+            _work/apple-compare.cache
+            _work/apple-prices.cache
+          key: sync-http-cache-${{ github.run_id }}
+          restore-keys: sync-http-cache-
+
+      # 这里必须联网跑完整管线，不能用 --offline。
+      # _work/ 不入库，全新 checkout 里没有 *.raw.json，--offline 会直接以「缺少取数缓存」退出。
+      # 每天只跑一次，多抓一轮官网的成本可以接受；换来的是 Toy 上永远是最新数据。
+      - name: 重建站点
+        if: steps.cred.outputs.skip != 'true'
+        run: node scripts/pipeline.mjs
+
+      - name: 判断要不要送审
+        if: steps.cred.outputs.skip != 'true'
+        id: decide
+        env:
+          FORCE: ${{ inputs.force && '1' || '0' }}
+        run: node scripts/publish/should-publish.mjs --github
+
+      - name: 安装 toy CLI
+        if: steps.cred.outputs.skip != 'true' && steps.decide.outputs.publish == 'true'
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/toy" "https://boss.hdslb.com/toy-cli/toy/releases/${TOY_CLI_VERSION}/toy_linux_amd64"
+          chmod +x "$RUNNER_TEMP/toy"
+          echo "TOY_BIN=$RUNNER_TEMP/toy" >> "$GITHUB_ENV"
+          "$RUNNER_TEMP/toy" version
+
+      # 打包时自检：入口存在、包内零外链（平台整改口径要求）
+      - name: 打包
+        if: steps.cred.outputs.skip != 'true' && steps.decide.outputs.publish == 'true'
+        run: node scripts/publish/pack.mjs
+
+      - name: 提交审核
+        if: steps.cred.outputs.skip != 'true' && steps.decide.outputs.publish == 'true'
+        env:
+          TOY_CLI_SESSION_TOKEN: ${{ secrets.TOY_CLI_SESSION_TOKEN }}
+          TOY_ID: ${{ vars.TOY_ID }}
+        run: '"$TOY_BIN" update "$TOY_ID" .toy-pkg --yes'
+
+      # 只有平台收下这一版，才推进仓库里的发布记录。
+      # 送审失败时绝不推进 —— 否则后面真正该送的版本会被判成「无变化」而永远送不出去。
+      - name: 推进发布记录
+        if: success() && steps.decide.outputs.publish == 'true'
+        run: |
+          node scripts/publish/pack.mjs --mark-released
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- data/.toy-release.json
+          if git diff --cached --quiet; then
+            echo '发布记录无变化，跳过提交'
+            exit 0
+          fi
+          git commit -m "chore(toy): 送审 ${{ steps.decide.outputs.site_fingerprint }} — ${{ steps.decide.outputs.products }} 台"
+          git push
+
+      - name: 失败时开 issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'B 站 Toy 自动发布失败';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `### ${new Date().toISOString()}`,
+              '',
+              `运行链接：${runUrl}`,
+              '',
+              '常见原因：登录凭据过期（本机 `toy login` 后更新 Secret，命令见工作流文件顶部）、',
+              'TOY_ID 未配或填错（配在仓库 Variables 里）、打包自检没过、上一版被驳回。',
+              '',
+              '被驳回时不会自动重发 —— 先按平台给的整改意见人工处理，再手动触发一次。',
+            ].join('\n');
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.find((i) => i.title === title && !i.pull_request);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: ['`.github/workflows/toy.yml` 运行失败，每次失败都会在这里追加评论，修好后手动关闭。', '', body].join('\n'),
+              });
+            }

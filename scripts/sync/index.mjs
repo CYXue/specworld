@@ -48,6 +48,24 @@ const VENDORS = [
 
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
+/**
+ * 发布日期取证表：61 条人工核对的上市日期，带来源 URL 与取证说明。
+ *
+ * 它**不是运行产物，是 curated 数据**，因此放在 data/ 里跟快照一起入库。
+ * 曾经放在 _work/ 下，而 _work/ 在 .gitignore 里 —— 后果是 CI 全新 checkout
+ * 后拿不到这张表，60 台全部因「无发布日期」被窗口过滤丢掉，闸门拒绝写盘，
+ * 自动同步每一次都以失败告终。迁到 data/ 根治。
+ *
+ * 读取顺序：data/（入库版，权威）→ _work/（本地旧路径，兼容）。
+ */
+function readReleaseDates() {
+  const candidates = [join(DATA, 'release-dates.json'), join(WORK, 'release-dates.json')];
+  for (const p of candidates) {
+    if (existsSync(p)) return readJson(p);
+  }
+  return null;
+}
+
 function atomicWrite(path, text) {
   mkdirSync(dirname(path), { recursive: true });
   const tmp = `${path}.tmp-${process.pid}`;
@@ -64,7 +82,7 @@ function main() {
   }
 
   const products = readJson(normalizedPath);
-  const releaseDates = existsSync(join(WORK, 'release-dates.json')) ? readJson(join(WORK, 'release-dates.json')) : null;
+  const releaseDates = readReleaseDates();
   const previous = existsSync(join(DATA, 'products.json')) ? readJson(join(DATA, 'products.json')) : null;
 
   const notes = [];

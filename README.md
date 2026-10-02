@@ -65,11 +65,44 @@ node scripts/pipeline.mjs --offline    # 只用缓存，秒级完成
 顶栏搜索支持机型名、厂商名与能力关键词（`折叠` / `长续航` / `便宜` / `潜望长焦` …），
 按 <kbd>/</kbd> 聚焦。索引内联进每一页，`file://` 直接可用。
 
-## 自动同步
+## 自动化
 
-`.github/workflows/sync.yml` 每 12 小时（UTC 00:00 / 12:00）自动跑一次全链路，
-数据有变化才提交 `data/`。改了解析/建站代码会在 push 时立即验证。
-新机发布后最快半天自己出现在站里。
+三条工作流，构成一个「发布后不用人管」的闭环：
+
+| 工作流 | 频率 | 干什么 |
+|---|---|---|
+| `.github/workflows/sync.yml` → job `sync` | 每 12 小时（UTC 01:40 / 13:40，即北京 09:40 / 21:40） | 抓官网 → 过闸门 → 内容有变化才提交 `data/` |
+| 同上 → job `deploy` | 跟在 sync 后面 | 站点内容有变化才发布到 GitHub Pages |
+| `.github/workflows/toy.yml` | 每天 UTC 02:30（北京 10:30） | 内容有变化才打包送审 B 站 Toy |
+
+改了取数/建站代码会在 push 时立即验证，不等 12 小时。
+两条发布链都是**零凭据优先**：Pages 完全不需要配 Secret；Toy 缺凭据时安静跳过，不制造失败告警。
+
+### 判据是内容指纹，不是 `git diff`
+
+`data/products.json` 里带着 `generatedAt` / `lastSeenAt` / `listedAt` / `fetchedAt`
+一串运行时刻字段，每次跑都在变。用它做判据，等于每 12 小时制造一次空提交，
+下游的「内容没变就不发布」也一并失效。
+
+`scripts/publish/fingerprint.mjs` 先剥掉这些字段再算：
+
+- **数据指纹** —— 剥掉运行时刻后的快照内容，决定要不要提交
+- **站点指纹** —— 数据指纹 × 模板代码哈希，决定要不要发布
+
+所以改模板会发布但不提交快照；改数据两者都会触发；什么都不改则什么都不做。
+上次的状态存在入库的 `data/.fingerprint` 里，下次 checkout 时读它做比对。
+
+### 上线前需要你做两件事
+
+1. **GitHub Pages**：仓库 Settings → Pages → Source 选 **GitHub Actions**。
+   零 Secret，配完第一个 12 小时周期就会自动发布。
+2. **B 站 Toy**（可选）：配 `secrets.TOY_CLI_SESSION_TOKEN` 与 `vars.TOY_ID`，
+   方法写在 `toy.yml` 顶部注释里。没配的话这条链会安静跳过，不影响其他两条。
+
+### 失败不会静默
+
+同步或发布失败时，工作流会在同名 issue 下追加评论（不重复开新 issue），
+带上失败项、告警与字段覆盖率；`sync-report` 与站点清单会挂到 artifact 上保留 30 天。
 
 ## 管线
 
@@ -78,7 +111,7 @@ node scripts/pipeline.mjs --offline    # 只用缓存，秒级完成
         ↓
 规范化（scripts/normalize）  官网字段 → 契约字段，口径判定 + 逐字段 provenance
         ↓
-发布日期取证（_work/release-dates.json） 61 条，100% 日精度
+发布日期取证（data/release-dates.json） 61 条人工核对，100% 日精度，**入库**
         ↓
 整合（scripts/sync）        窗口过滤 + 发布日期回填 + 校验闸门 + 原子写
         ↓
@@ -101,7 +134,7 @@ data/products.json          60 台（华为 47 / 苹果 13）
 - [x] 覆盖口径决策：**窗口 2024-09 之后**（两家官网都只保留在售机型规格页，归档站不可达）
 - [x] 范围决策：**不做跑分评分**（手机圈无可公开核查的第三方成绩源），只做客观参数
 - [x] 四个适配器：华为 50 台（0 跳过）、苹果规格页 7 台、苹果对比页矩阵 42 列 × 25 组、苹果价格 7 台
-- [x] 发布日期取证：61 条，100% 日精度（`_work/release-dates.json`）
+- [x] 发布日期取证：61 条，100% 日精度（`data/release-dates.json`，curated 数据入库）
 - [x] 规范化层：官网字段 → 契约字段，含机型拆分、口径判定、逐字段 provenance
 - [x] 跑通管线产出真实 `data/products.json`（60 台）并通过全部校验闸门
 - [x] 修复 `refreshHz` 解析污染：旧实现把 PWM 调光频率（1440/2160）与分辨率（2622）当成刷新率，
@@ -116,12 +149,16 @@ data/products.json          60 台（华为 47 / 苹果 13）
 - [x] 访客评价**预留位**（未接入数据源）：数据契约有字段、页面有位置、显式显示「暂无访客评价」，
       接入方式（离线快照 or Serverless + 定时导出）已写在页面折叠区
 - [x] 全链路编排 `scripts/pipeline.mjs`：一条命令跑通，失败即停不写盘
-- [x] GitHub Actions 每 12 小时自动同步，数据有变化才提交
+- [x] 内容指纹 `scripts/publish/fingerprint.mjs`：剥掉运行时刻字段后再算，
+      解决「每次跑指纹都变 → 每 12 小时空提交一次」的去重失效问题
+- [x] 自动同步 `sync.yml`：每 12 小时 + HTTP 缓存复用 + 失败自动开 issue（同名追加评论不刷屏）
+- [x] 自动发布 GitHub Pages：零凭据，站点内容有变化才发（`sync.yml` 的 `deploy` job）
+- [x] 自动送审 B 站 Toy `toy.yml`：每天一次 + 指纹去重 + 缺凭据安静跳过 + 失败开 issue
 - [x] 发布校验加固：零外链 / 零外部脚本 / 零失效链接 / 关键页存在 / 表格不得用「—」冒充数据
 - [x] 对比页渲染器：自包含单文件 + 5 条自证断言（`scripts/preview/render.mjs`）
 - [x] 像素立绘：60 张 SVG 生成器保留，**当前未接入任何页面**（曾按产品侧意见移除）
 - [ ] 扩品牌（小米/OPPO/vivo/荣耀/三星/Google）—— 需要各写一个官网取数适配器
-- [ ] 部署到公网（GitHub Pages / B 站 Toy / 自己的服务器）
+- [ ] 首次发布到 B 站 Toy（需要你本机 `toy login` 拿到 token，填进仓库 Secret）
 
 ## 数据侧的两个结构性缺口（不是 bug，是官网决定的）
 
