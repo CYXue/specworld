@@ -106,7 +106,13 @@ function collectFiles(dir, exts) {
       } else if (exts.some((e) => name.endsWith(e))) {
         out.push({
           path: relative(ROOT, p).split('\\').join('/'),
-          hash: createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 16),
+          // 归一化行尾再哈希。Windows 上 checkout 出来是 CRLF，Linux CI 上是 LF，
+          // 同一份代码会算出两个模板指纹 —— 于是本地推一次、CI 就判成「站点变了」
+          // 发布一次，反过来 CI 提交后本地又判一次变，两边来回空转。
+          hash: createHash('sha256')
+            .update(readFileSync(p, 'utf8').replace(/\r\n/g, '\n'))
+            .digest('hex')
+            .slice(0, 16),
         });
       }
     }
