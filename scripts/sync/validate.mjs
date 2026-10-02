@@ -22,6 +22,13 @@ export const LIMITS = {
   screenIn: [3, 12],
   chargeW: [0, 300],
   batteryMah: [1000, 12000],
+  /**
+   * 刷新率：手机屏幕真实范围。取值 `120` / `1-120`（LTPO）/ `60/90`（离散档位）。
+   * 上下界都取「字符串里最后一个数字」——`1-120` 的下限 1 是 LTPO 的真实语义，不是异常。
+   * 闸门存在的理由（2026-10-02 实测）：旧解析器把 PWM 调光频率（1440 / 2160）
+   * 和分辨率数字（2622）当成了刷新率，这种错值能一路畅通地发布出去，只能靠闸门兜。
+   */
+  refreshHz: [48, 240],
 };
 
 /** 必填字段：这些字段的覆盖率是数据质量的体温计 */
@@ -82,6 +89,21 @@ export function validate(snapshot, previous) {
       const v = get(p, path);
       if (v === null || v === undefined) continue;
       if (!inRange(v, range)) fail.push(`${p.id} 的 ${path} = ${v}，超出合理区间 ${range.join('–')}`);
+    }
+    // 5b. 刷新率是字符串（要保留 `1-120` 的区间语义），单独校验上界
+    if (p.display?.refreshHz) {
+      const parts = String(p.display.refreshHz).split(/[-–~/]/).map(Number).filter(Number.isFinite);
+      if (!parts.length) {
+        fail.push(`${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 里没有可解析的数字`);
+      } else {
+        const top = Math.max(...parts);
+        if (!inRange(top, LIMITS.refreshHz)) {
+          fail.push(
+            `${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 上界 ${top} Hz 超出合理区间 ` +
+              `${LIMITS.refreshHz.join('–')}（疑似把 PWM 调光频率或分辨率当成刷新率）`
+          );
+        }
+      }
     }
     // 5. 负值/零值
     for (const path of ['body.weightG', 'body.thicknessMm', 'display.sizeIn']) {

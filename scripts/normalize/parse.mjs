@@ -96,15 +96,95 @@ export function parseResolution(text) {
 /**
  * 刷新率：官网写法五花八门——`最高可达 120Hz`、`1-120Hz 自适应`、`120Hz`。
  * 上限取最大值，区间原样保留为字符串（区间本身是有信息量的：只有上限会掩盖 LTPO）。
+ *
+ * 修复记录（2026-10-02）：旧实现取「整段文本里第一个 Hz 之前的全部数字的最大值」，
+ * 官网一个段落里同时塞了分辨率/像素密度/亮度/调光频率，于是：
+ *   - iPhone 17 `2622 x 1206 像素分辨率，460 ppi | ProMotion…最高可达 120Hz`
+ *     → 误得 `6.3-2622`（把英寸数和横向像素当成了刷新率）
+ *   - Mate 70 Air `2160 Hz 高频 PWM 调光` → 误得 `2160`（调光频率不是刷新率）
+ *   - Mate XTS `1440 Hz 高频 PWM 调光` → 同上误得 `1440`
+ * 现在按三条规则收紧：
+ *   1. 先按分隔符切成子句，只在**含「刷新率 / 刷新 / Hz / LTPO / ProMotion」的子句**里取值；
+ *   2. 显式排除 PWM 调光、触控采样率、闪烁频率所在的子句；
+ *   3. 只取紧邻 Hz 的那个数（允许 `120Hz`、`120 Hz`、`120赫兹`），不跨标点向前捞。
+ * 仍然拿不到就返回 null —— 官网没写就是没写。
  */
 export function parseRefresh(text) {
   const s = stripInvisible(text);
-  if (!s || !/hz/i.test(s)) return null;
-  const nums = allNumbers(s.slice(0, s.toLowerCase().indexOf('hz') + 2));
-  if (!nums.length) return null;
-  const max = Math.max(...nums);
-  const range = nums.length >= 2 && Math.min(...nums) < max ? `${Math.min(...nums)}-${max}` : null;
-  return { maxHz: max, text: range ?? `${max}`, raw: s };
+  if (!s || !/hz|刷新|ltpo|promotion/i.test(s)) return null;
+
+  /** 切句：官网用中英文逗号、顿号、竖线、分号堆叠属性 */
+  const clauses = s
+    .split(/[,，、|｜;；/]+/)
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  /** 这些子句里的 Hz 不是屏幕刷新率 */
+  const NOT_REFRESH = /pwm|调光|采样|触控采样|闪烁|频闪|占空/i;
+  /** 修饰词：官网常把「最高可达 120Hz」用逗号切成独立子句，这些词允许出现在 Hz 数字之前 */
+  const MODIFIER = '(?:最高|最大|可达|支持|支持最高|最高可达|最高支持|高达)?';
+  const NUM = String.raw`\d+(?:\.\d+)?`;
+  const UNIT = String.raw`(?:hz|赫兹)`;
+
+  /**
+   * 从子句里抽刷新率，返回一个「原文形态」列表。
+   * 区分三种写法，因为它们在界面上的读法完全不同：
+   *   `1-120 Hz`  → 连续区间（LTPO），显示 1-120
+   *   `60 Hz / 90 Hz` → 离散档位，显示 60/90（合并成 60-90 会谎称「中间值也支持」）
+   *   `120 Hz`    → 单值
+   */
+  const harvest = (clause) => {
+    const out = [];
+    // 先吃掉区间写法（1-120 Hz / 1~120Hz / 1至120Hz）
+    const rangeRe = new RegExp(`${MODIFIER}\\s*(${NUM})\\s*[-–~—至]\\s*(${NUM})\\s*${UNIT}`, 'gi');
+    let rest = clause;
+    for (const m of clause.matchAll(rangeRe)) {
+      out.push({ lo: Number(m[1]), hi: Number(m[2]) });
+      rest = rest.replace(m[0], ' ');
+    }
+    // 再吃掉离散/单值写法
+    for (const m of rest.matchAll(new RegExp(`${MODIFIER}\\s*(${NUM})\\s*${UNIT}`, 'gi'))) {
+      out.push({ lo: null, hi: Number(m[1]) });
+    }
+    return out;
+  };
+
+  const picked = [];
+  for (const clause of clauses) {
+    if (NOT_REFRESH.test(clause)) continue;
+
+    if (/刷新|ltpo|promotion/i.test(clause)) {
+      const hz = harvest(clause);
+      if (hz.length) {
+        picked.push(...hz);
+      } else {
+        // 「自适应刷新率 120」这种不带单位的写法
+        const bare = clause.match(new RegExp(`(${NUM})\\s*(?=刷新率|刷新|$)`));
+        if (bare) picked.push({ lo: null, hi: Number(bare[1]) });
+      }
+      continue;
+    }
+
+    // 整子句就是 `120Hz` 这种裸写法
+    const bareHz = clause.match(new RegExp(`^${MODIFIER}\\s*(${NUM})\\s*${UNIT}$`, 'i'));
+    if (bareHz) picked.push({ lo: null, hi: Number(bareHz[1]) });
+  }
+
+  if (!picked.length) return null;
+
+  // 汇总：只要出现任何一个区间，就以区间的下限为最小值（LTPO 的 1Hz 下限是有信息量的）
+  const los = picked.map((p) => p.lo).filter((v) => v !== null);
+  const his = picked.map((p) => p.hi).filter((v) => v !== null);
+  if (!his.length) return null;
+  const max = Math.max(...his);
+  const min = los.length ? Math.min(...los) : Math.min(...his);
+
+  /** 离散档位（无区间、多个不同值）原样并列；单一值或真区间才用短横线 */
+  const distinct = [...new Set(his)].sort((a, b) => a - b);
+  const isDiscrete = los.length === 0 && distinct.length >= 2;
+  const label = isDiscrete ? distinct.join('/') : min < max ? `${min}-${max}` : `${max}`;
+
+  return { maxHz: max, minHz: min < max ? min : null, discrete: isDiscrete, text: label, raw: s };
 }
 
 /**

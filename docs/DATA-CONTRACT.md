@@ -70,10 +70,41 @@
 | `display.type` | string | `OLED` / `LTPO OLED` / `LCD` |
 | `display.resolutionPx` | `{w,h}` | |
 | `display.ppi` | ppi | |
-| `display.refreshHz` | Hz | 自适应刷新要记范围 `1–120` |
+| `display.refreshHz` | Hz | 字符串。见下方「刷新率口径」 |
 | `display.brightnessTypicalNits` | nits | **典型亮度** |
 | `display.brightnessPeakNits` | nits | **峰值亮度（HDR）**，与上一条永远分列 |
 | `display.protection` | string \| null | 玻璃型号 |
+
+#### 刷新率口径（2026-10-02 修订）
+
+`display.refreshHz` 是**字符串**，不是数字 —— 因为它有三种形态，混在一起会丢信息：
+
+| 官网原文 | 契约取值 | 含义 |
+|---|---|---|
+| `支持 1-120 Hz LTPO 自适应刷新率` | `"1-120"` | 连续区间，下限本身是有信息量的（LTPO 能到 1 Hz） |
+| `支持 60 Hz / 90 Hz 刷新率` | `"60/90"` | **离散档位**，不能写成 `60-90`（那等于谎称中间值也支持） |
+| `最高支持 120 Hz 刷新率` | `"120"` | 单值 |
+
+**必须排除的非刷新率 Hz**（官网同一段落里混着这些，最容易解析错）：
+
+- `1440 Hz 高频 PWM 调光` / `2160 Hz 高频 PWM 调光` —— 这是**调光频率**，不是刷新率
+- `300 Hz 触控采样率` / `240 Hz 触屏采样率` —— 这是**触控采样率**
+
+**曾经踩过的坑**（保留在文档里，避免重构时再犯）：
+
+旧实现取「整段文本里第一个 `Hz` 之前的全部数字的最大值」。官网一个段落里同时塞了
+分辨率、像素密度、亮度和调光频率，于是：
+
+```
+iPhone 17  原文「2622 x 1206 像素分辨率，460 ppi | ProMotion…最高可达 120Hz」
+           → 误得 "6.3-2622"   （把英寸数和横向像素当成了刷新率）
+Mate 70 Air  原文「2160 Hz 高频 PWM 调光」→ 误得 "2160"
+Mate XTS     原文「1440 Hz 高频 PWM 调光」→ 误得 "1440"
+```
+
+现在的规则（`scripts/normalize/parse.mjs` 的 `parseRefresh`）：
+按分隔符切子句 → 排除含 PWM/调光/采样/闪烁的子句 → 只取紧邻 `Hz` 的数字。
+仍然拿不到就返回 `null`。`scripts/sync/validate.mjs` 另有一道 `[48,240]` 闸门兜底。
 
 ### 3.4 性能与存储
 
@@ -210,3 +241,48 @@ provenance: Record<string, SourceId>;  // 键 = 字段路径，值 = 来源 id
 ```
 
 > 注意示例里苹果的电池容量是 `null` —— **这不是没做完，这是正确状态**。
+
+## 7. 访客评价（预留字段，当前未启用）
+
+产品侧决定：**暂不做访客评分**。但位置、字段、接入方式已完整预留，接入数据源时不需要改任何页面代码。
+
+数据源文件：`data/visitor-ratings.json`（当前**不存在**，分析层读到空数组时页面显示「暂无访客评价」）。
+
+```jsonc
+[
+  {
+    "productId": "huawei-mate90-pro",  // 必填，机型 id
+    "score": 4.5,                      // 必填，1–5
+    "count": 128,                      // 必填，评价人数
+    "updatedAt": "2026-10-01"          // 必填，ISO 日期
+  }
+]
+```
+
+**两种接入方式**（都不需要改页面）：
+
+- **A. 离线快照** —— 人工或外部系统生成这个 JSON，提交进 `data/`，Actions 自动重跑建站。
+- **B. 表单提交** —— 接一个 Serverless 函数接收评分写进数据库，
+  再由 Actions 定时导出成同样的 JSON。保持纯静态站形态，前端仍无后端。
+
+**不用做的事**：不要在契约里给「访客评价」写进 `products.json`。
+它是**独立于官网事实的第二类数据**，混进主契约会污染 provenance 语义
+（`provenance` 记录的是「这个字段来自哪个官网」）。
+
+## 8. 站点分析层字段（不入契约）
+
+`scripts/lib/analyze.mjs` 产出的 `_work/analytics.json` 里有一批**派生字段**，
+它们不是官网事实，不进 `products.json`，也不参与 provenance：
+
+| 字段 | 说明 |
+|---|---|
+| `detail.<id>.axes.<维度>.score` | 池内分位（1=最好），由该维度的多个已公布参数加权 |
+| `detail.<id>.analogies[]` | 类比换算文案，每条带 `from`（原始值）与 `assume`（换算假设） |
+| `detail.<id>.formFactor` | `foldable` / `bar`，由官网是否列出内外屏推导 |
+| `detail.<id>.priceTier` | 价格档，由起售价落入哪个区间推导 |
+| `leagues[]` | 客观参数榜，每条带 `pool`（参赛数）与 `partial`（样本是否有限） |
+| `lineage.<产品线>.gen.<id>` | 代际链：同产品线内按发布时间的 `prev` / `next` |
+
+**为什么单独一层**：这些东西会随「分位池」「维度权重」「换算假设」变化而变化，
+而 `products.json` 应该只随官网变化而变化。混在一起会让 git 历史无法解读 ——
+看到一个 commit 时说不清是官网改了还是我们改了权重。

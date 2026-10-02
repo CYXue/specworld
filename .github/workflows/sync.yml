@@ -1,0 +1,91 @@
+name: 数据自动同步
+
+# 对齐参考项目「AI 大模型世界」的同步节奏：每 12 小时跑一次。
+# 新机发布后最快半天自己出现在站里，仓库不做人工维护。
+on:
+  schedule:
+    # 每 12 小时一次（GitHub Actions 的 cron 是 UTC：00:00 / 12:00）
+    - cron: '0 0,12 * * *'
+  # 手动触发（调试用），可在 Actions 页点 "Run workflow"
+  workflow_dispatch:
+    inputs:
+      offline:
+        description: '离线模式（只用缓存，网络抓取失败时重跑用）'
+        type: boolean
+        default: false
+  # 改动取数/规范化/建站代码时立即验证，不等 12 小时
+  push:
+    paths:
+      - 'scripts/**'
+      - 'src/**'
+      - '.github/workflows/sync.yml'
+
+# 同一时间只跑一个实例，避免两次抓取互相覆盖缓存
+concurrency:
+  group: phone-spec-world-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 不装依赖：全链路只用 Node 内置模块（node:fs / node:https / node:cheerio 都不用，
+      # HTML 解析是手写正则与状态机）。少一个装包失败点。
+      - name: 跑全链路
+        run: |
+          if [ "${{ inputs.offline }}" = "true" ]; then
+            node scripts/pipeline.mjs --offline
+          else
+            node scripts/pipeline.mjs
+          fi
+
+      # 只有数据真的变了才提交。
+      # 只提交 data/（唯一数据源），不提交 dist/ 与 _work/ —— 二者都在 .gitignore 里，
+      # 站点产物任何人都能用 `node scripts/pipeline.mjs --offline` 重新生成。
+      # 这与参考项目「AI 大模型世界」的做法一致：仓库存数据与代码，产物不入库。
+      - name: 提交数据变化
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # 指纹落在 data/ 目录里（_work/ 被 gitignore），这样 --quiet 判断才有效
+          cp _work/pipeline-digest.txt data/.pipeline-digest
+          git add -f data/.pipeline-digest
+          git add -A data/
+          if git diff --cached --quiet; then
+            echo '数据无变化，跳过提交。'
+            exit 0
+          fi
+          MSG="chore(data): 自动同步 $(date -u +'%Y-%m-%d %H:%M UTC')"
+          # 带上关键统计，review 时一眼能看出这次同步带来了什么
+          STATS=$(node -e "
+            const p=require('./data/products.json');
+            const ps=p.products;
+            const by=ps.reduce((a,x)=>{a[x.brand]=(a[x.brand]||0)+1;return a},{});
+            console.log(ps.length+' 台（'+Object.entries(by).map(([k,v])=>k+' '+v).join(' / ')+'），快照 '+(p.generatedAt||'').slice(0,10));
+          ")
+          git commit -m "$MSG" -m "机型：$STATS"
+          git push
+
+      # 抓取失败时把日志留在 artifact 里，方便排查官网是否改版
+      - name: 上传构建日志
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-log
+          path: |
+            _work/sync-report.json
+            _work/derived.json
+            _work/analytics.json
+            dist/manifest.json
+          retention-days: 14
+          if-no-files-found: ignore

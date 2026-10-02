@@ -26,10 +26,50 @@ docs/COMPARE-DESIGN.md  对比页信息设计定稿（主表/折叠/高亮阈值
 docs/PROBE-FINDINGS.md  官网取数通道探针（华为/苹果可解析性证据）
 src/lib/types.ts        契约的 TypeScript 定义
 src/lib/compare-spec.mjs 对比页行定义与差异等级（全站唯一判断源）
-scripts/                取数、解析、校验、构建、立绘、站点、发布
+scripts/pipeline.mjs    全链路编排（本地与 CI 共用的唯一入口）
+scripts/sources/        四个官网取数适配器
+scripts/normalize/      官网字段 → 契约字段（含纯函数解析层）
+scripts/sync/           窗口过滤 + 校验闸门 + 原子写
+scripts/lib/derive.mjs  派生层：分位标尺、首页头衔、一句话定位
+scripts/lib/analyze.mjs 分析层：六维能力、分类聚合、类比换算
+scripts/site/           站点构建（7 个页面类型 + lib/ui.mjs 设计系统）
+scripts/preview/        对比页渲染器
+scripts/publish/        发布封装与自包含校验
+.github/workflows/      每 12 小时自动同步
 data/products.json      唯一数据契约产物（提交入库）
-data/sprites/           数据驱动的像素立绘（60 张 SVG）
+data/sprites/           数据驱动的像素立绘（60 张 SVG，当前未接入页面）
 ```
+
+## 一条命令跑通
+
+```bash
+node scripts/pipeline.mjs              # 完整跑（联网取数）
+node scripts/pipeline.mjs --offline    # 只用缓存，秒级完成
+```
+
+产物在 `dist/`，双击 `dist/index.html` 就能看 —— 零外链、零密钥、零外部脚本。
+
+## 站点结构
+
+| 页面 | 内容 |
+|---|---|
+| `index.html` | 今日格局：8 个冠军位（每个写清凭什么）+ 六维能力总览 + 分类入口 |
+| `categories.html` | 分类查看：形态 / 价格档 / 产品线，每组内部单独排名 |
+| `rankings.html` | 10 个客观参数榜 + 6 个综合维度分，可按品牌/形态/价格档筛选 |
+| `brands.html` `brand/<id>.html` | 厂商分区（国内/国外）+ 单厂商的产品线演进与历代之最 |
+| `timeline.html` | 60 台机器按发布月份铺开的完整发布史 |
+| `products/<id>.html` | 详情页：身份卡 + 六维能力 + 类比换算 + 代际链 + 完整规格 |
+| `all.html` | 全部机型一张表 |
+| `compare/*.html` | 对比页（复用 `preview/render.mjs` 的行定义与阈值） |
+
+顶栏搜索支持机型名、厂商名与能力关键词（`折叠` / `长续航` / `便宜` / `潜望长焦` …），
+按 <kbd>/</kbd> 聚焦。索引内联进每一页，`file://` 直接可用。
+
+## 自动同步
+
+`.github/workflows/sync.yml` 每 12 小时（UTC 00:00 / 12:00）自动跑一次全链路，
+数据有变化才提交 `data/`。改了解析/建站代码会在 push 时立即验证。
+新机发布后最快半天自己出现在站里。
 
 ## 管线
 
@@ -42,15 +82,15 @@ data/sprites/           数据驱动的像素立绘（60 张 SVG）
         ↓
 整合（scripts/sync）        窗口过滤 + 发布日期回填 + 校验闸门 + 原子写
         ↓
-data/products.json          60 台（华为 47 / 苹果 13）+ _work/derived.json（分位/头衔/一句话定位）
+data/products.json          60 台（华为 47 / 苹果 13）
         ↓
-立绘（scripts/sprite）      60 张 SVG，几何全由数据算出
+派生（scripts/lib/derive）  分位标尺 + 首页头衔 + 一句话定位
         ↓
-对比页渲染器（scripts/preview）  自包含单文件 + 5 条自证断言
+分析（scripts/lib/analyze） 六维能力条 + 分类聚合 + 榜单 + 类比换算 + 代际链
         ↓
-站点骨架（scripts/site）    首页/列表/卡页/对比页，零外链
+建站（scripts/site）        7 类页面，CSS 与搜索索引全部内联
         ↓
-发布封装（scripts/publish）  相对路径 + <base> 注入 + 指纹 + 发布清单
+发布封装（scripts/publish）  <base> 注入 + 指纹 + 清单 + 自包含校验
 ```
 
 ## 当前进度
@@ -59,17 +99,29 @@ data/products.json          60 台（华为 47 / 苹果 13）+ _work/derived.jso
 - [x] 对比页信息设计定稿（`docs/COMPARE-DESIGN.md`）+ 可执行行定义（`src/lib/compare-spec.mjs`）
 - [x] 官网取数通道探针（`docs/PROBE-FINDINGS.md`）：两家都通，纯 HTTP、无鉴权、无隐藏 JSON API
 - [x] 覆盖口径决策：**窗口 2024-09 之后**（两家官网都只保留在售机型规格页，归档站不可达）
-- [x] 范围决策：**首版不做跑分**，只做参数对比 + 客观规格榜
-- [x] 四个适配器：华为 50 台（0 跳过）、苹果规格页 7 台（保真度 98.66%）、苹果对比页矩阵 42 列 × 25 组 / 208 行（列对齐 75/75）、苹果价格 7 台（3 重交叉验证）
+- [x] 范围决策：**不做跑分评分**（手机圈无可公开核查的第三方成绩源），只做客观参数
+- [x] 四个适配器：华为 50 台（0 跳过）、苹果规格页 7 台、苹果对比页矩阵 42 列 × 25 组、苹果价格 7 台
 - [x] 发布日期取证：61 条，100% 日精度（`_work/release-dates.json`）
-- [x] 规范化层：官网字段 → 契约字段，含机型拆分、口径判定、逐字段 provenance、价格接入
+- [x] 规范化层：官网字段 → 契约字段，含机型拆分、口径判定、逐字段 provenance
 - [x] 跑通管线产出真实 `data/products.json`（60 台）并通过全部校验闸门
-- [x] 像素立绘：60 张数据驱动 SVG（`scripts/sprite/generate.mjs`）
+- [x] 修复 `refreshHz` 解析污染：旧实现把 PWM 调光频率（1440/2160）与分辨率（2622）当成刷新率，
+      已改为子句级解析 + 排除调光/采样 + 区分区间/离散/单值，并在 `sync/validate.mjs` 加了 `[48,240]` 闸门
+- [x] 派生层：分位标尺、首页头衔、一句话定位（`scripts/lib/derive.mjs`）
+- [x] 分析层：六维能力条 + 10 个客观榜 + 分类聚合 + 代际链 + 类比换算（`scripts/lib/analyze.mjs`）
+- [x] 设计系统与页面壳（`scripts/site/lib/ui.mjs`）：零外链、零密钥、零外部脚本
+- [x] 7 类页面全部产出，共 76 页：今日格局 / 分类 / 排行榜 / 厂商分区 / 厂商页 / 时间线 / 详情页 / 全部机型 / 对比页
+- [x] 全站搜索：索引内联进每页，按机型名/厂商/能力关键词搜，<kbd>/</kbd> 聚焦 + 方向键导航
+- [x] 排行榜前端筛选：品牌 × 形态 × 价格档 × 维度分，维度分榜按筛选结果实时重算
+- [x] 类比换算：存储→能装多少张照/电影、重量→几罐可乐、厚度→几枚硬币、ppi→人眼可辨极限，全部标注换算假设
+- [x] 访客评价**预留位**（未接入数据源）：数据契约有字段、页面有位置、显式显示「暂无访客评价」，
+      接入方式（离线快照 or Serverless + 定时导出）已写在页面折叠区
+- [x] 全链路编排 `scripts/pipeline.mjs`：一条命令跑通，失败即停不写盘
+- [x] GitHub Actions 每 12 小时自动同步，数据有变化才提交
+- [x] 发布校验加固：零外链 / 零外部脚本 / 零失效链接 / 关键页存在 / 表格不得用「—」冒充数据
 - [x] 对比页渲染器：自包含单文件 + 5 条自证断言（`scripts/preview/render.mjs`）
-- [x] 静态站骨架：首页/列表/60 张卡页/6 张对比页（`scripts/site/build.mjs`）
-- [x] 发布封装：相对路径 + `<base>` 注入 + 指纹 + 发布清单（`scripts/publish/verify.mjs`）
-- [x] 像素立绘：**已按产品侧意见移除**（曾实现于 `scripts/sprite/`，生成器与 60 张 SVG 保留但不再接入任何页面；`docs/COMPARE-DESIGN.md` 第五节标记为不做）
-- [ ] B 站 Toy 发布（首版封装等价物已就绪，待接入 Toy CLI）
+- [x] 像素立绘：60 张 SVG 生成器保留，**当前未接入任何页面**（曾按产品侧意见移除）
+- [ ] 扩品牌（小米/OPPO/vivo/荣耀/三星/Google）—— 需要各写一个官网取数适配器
+- [ ] 部署到公网（GitHub Pages / B 站 Toy / 自己的服务器）
 
 ## 数据侧的两个结构性缺口（不是 bug，是官网决定的）
 
