@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 348" width="346" height="348">
+<g transform="translate(10,0)">
+    <defs>
+      <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2d31"/>
+        <stop offset="0.5" stop-color="#1c1e21"/>
+        <stop offset="1" stop-color="#1c1e21"/>
+      </linearGradient>
+    </defs>
+    <rect x="17.593972599270494" y="27.22121829632019" width="124.81205480145901" height="265.5575634073596" rx="7.98" fill="url(#scr)" stroke="#17181a" stroke-width="2.1945"/>
+    <rect x="19.593972599270494" y="29.22121829632019" width="120.81205480145901" height="261.5575634073596" rx="5.98" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <circle cx="80" cy="36.22121829632019" r="3.4" fill="#000"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">正面</text>
+  </g>
+  <g transform="translate(186,0)">
+    <rect x="17.593972599270494" y="27.22121829632019" width="124.81205480145901" height="265.5575634073596" rx="7.98" fill="#3a3d42" stroke="#17181a" stroke-width="2.1945"/>
+    <rect x="19.593972599270494" y="29.22121829632019" width="120.81205480145901" height="261.5575634073596" rx="5.98" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <circle cx="42.593972599270494" cy="52.22121829632019" r="11" fill="#000"/>
+            <circle cx="42.593972599270494" cy="52.22121829632019" r="6.82" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="39.593972599270494" cy="49.22121829632019" r="8" fill="#000"/>
+            <circle cx="39.593972599270494" cy="49.22121829632019" r="4.96" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="43.593972599270494" cy="67.22121829632019" r="4" fill="#000"/>
+    <circle cx="80" cy="130" r="10" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">背面</text>
+  </g>
+</svg>

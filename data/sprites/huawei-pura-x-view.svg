@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 348" width="346" height="348">
+<g transform="translate(10,0)">
+    <defs>
+      <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2d31"/>
+        <stop offset="0.5" stop-color="#1c1e21"/>
+        <stop offset="1" stop-color="#1c1e21"/>
+      </linearGradient>
+    </defs>
+    <rect x="21.6996322966869" y="35.956664461035956" width="116.6007354066262" height="248.0866710779281" rx="6.68" fill="url(#scr)" stroke="#17181a" stroke-width="1.837"/>
+    <rect x="23.6996322966869" y="37.956664461035956" width="112.6007354066262" height="244.0866710779281" rx="4.68" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <circle cx="80" cy="44.956664461035956" r="3.4" fill="#000"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">正面</text>
+  </g>
+  <g transform="translate(186,0)">
+    <rect x="21.6996322966869" y="35.956664461035956" width="116.6007354066262" height="248.0866710779281" rx="6.68" fill="#3a3d42" stroke="#17181a" stroke-width="1.837"/>
+    <rect x="23.6996322966869" y="37.956664461035956" width="112.6007354066262" height="244.0866710779281" rx="4.68" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <circle cx="44.6996322966869" cy="58.956664461035956" r="9" fill="#000"/>
+          <circle cx="44.6996322966869" cy="58.956664461035956" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="44.6996322966869" cy="80.95666446103596" r="9" fill="#000"/>
+          <circle cx="44.6996322966869" cy="80.95666446103596" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="66.6996322966869" cy="58.956664461035956" r="9" fill="#000"/>
+          <circle cx="66.6996322966869" cy="58.956664461035956" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="66.6996322966869" cy="80.95666446103596" r="9" fill="#000"/>
+          <circle cx="66.6996322966869" cy="80.95666446103596" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <circle cx="80" cy="130" r="10" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">背面</text>
+  </g>
+</svg>

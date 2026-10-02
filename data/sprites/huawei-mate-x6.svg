@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 346 348" width="346" height="348">
+<g transform="translate(10,0)">
+    <defs>
+      <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a2d31"/>
+        <stop offset="0.5" stop-color="#1c1e21"/>
+        <stop offset="1" stop-color="#1c1e21"/>
+      </linearGradient>
+    </defs>
+    <rect x="12" y="65.55555555555556" width="136" height="188.88888888888889" rx="9.85" fill="url(#scr)" stroke="#17181a" stroke-width="2.70875"/>
+    <rect x="14" y="67.55555555555556" width="132" height="184.88888888888889" rx="7.85" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <circle cx="80" cy="74.55555555555556" r="3.4" fill="#000"/><line x1="80" y1="73.55555555555556" x2="80" y2="246.44444444444446" stroke="#17181a" stroke-width="1.2" opacity="0.55"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">正面 · 折叠</text>
+  </g>
+  <g transform="translate(186,0)">
+    <rect x="12" y="65.55555555555556" width="136" height="188.88888888888889" rx="9.85" fill="#3a3d42" stroke="#17181a" stroke-width="2.70875"/>
+    <rect x="14" y="67.55555555555556" width="132" height="184.88888888888889" rx="7.85" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    <circle cx="35" cy="88.55555555555556" r="9" fill="#000"/>
+          <circle cx="35" cy="88.55555555555556" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="35" cy="110.55555555555556" r="9" fill="#000"/>
+          <circle cx="35" cy="110.55555555555556" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="57" cy="88.55555555555556" r="9" fill="#000"/>
+          <circle cx="57" cy="88.55555555555556" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/><circle cx="57" cy="110.55555555555556" r="9" fill="#000"/>
+          <circle cx="57" cy="110.55555555555556" r="5.3999999999999995" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <circle cx="80" cy="130" r="10" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1.4"/>
+    <text x="80" y="334" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="11" fill="#8a8f98">背面 · 折叠</text>
+  </g>
+</svg>

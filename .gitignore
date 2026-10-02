@@ -1,0 +1,15 @@
+# Node
+node_modules/
+*.log
+
+# 构建与发布产物（可随时重新生成，不入库）
+dist/
+
+# 中间产物与调试垃圾（适配器缓存、渲染/截图 profile、临时脚本）
+_work/
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
