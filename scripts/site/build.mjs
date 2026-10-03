@@ -1038,7 +1038,7 @@ async function build() {
 
   /* 对比页：复用 preview/render.mjs 的行定义与阈值判断 */
   const render = await import('../preview/render.mjs');
-  const spec = await import('../../src/lib/compare-spec.mjs');
+  const spec = await import('./lib/compare-spec.mjs');
   const derived = render.loadDerived(join(ROOT, '_work/derived.json'));
 
   const { CSS: SITE_CSS } = { CSS: '' };

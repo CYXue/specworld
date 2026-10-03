@@ -165,8 +165,17 @@ export function parseRefresh(text) {
       continue;
     }
 
-    // 整子句就是 `120Hz` 这种裸写法
-    const bareHz = clause.match(new RegExp(`^${MODIFIER}\\s*(${NUM})\\s*${UNIT}$`, 'i'));
+    /*
+     * 整子句就是 `120Hz` 这种裸写法。
+     *
+     * 尾部允许一小段不含数字的中文/字母尾巴（`90 Hz 屏幕`、`120Hz 全面屏`）。
+     * 修复记录（2026-10-03，自测 scripts/selftest.mjs 抓到）：尾部尾巴让
+     * `^…Hz$` 的严格锚定失配，于是 `60 Hz / 90 Hz 屏幕` 里的 90Hz 整段被丢弃，
+     * 刷新率上限从 90 掉到 60 —— 而 60 落在闸门区间内，闸门不会拦，脏数据静默发布。
+     * 放开尾巴是安全的：真正危险的 `2160 Hz 高频 PWM 调光`、`300 Hz 触控采样率`
+     * 已在上面的 NOT_REFRESH 里被子句级排除，走不到这里。
+     */
+    const bareHz = clause.match(new RegExp(`^${MODIFIER}\\s*(${NUM})\\s*${UNIT}[^\\d]{0,8}$`, 'i'));
     if (bareHz) picked.push({ lo: null, hi: Number(bareHz[1]) });
   }
 
@@ -251,27 +260,3 @@ export function slugify(name) {
     .replace(/^-+|-+$/g, '');
 }
 
-/** 简单单测：node scripts/normalize/parse.mjs --selftest */
-if (process.argv.includes('--selftest')) {
-  const cases = [
-    ['parseMm', parseMm('150.0 毫米 (5.91 英寸)'), 150],
-    ['parseWeight', parseWeight('211 克 (7.44 盎司)').value, 211],
-    ['parseWeight并列', parseWeight('标准版 234g / 典藏版 235g').value, 234],
-    ['parseCapacity', parseCapacity('6800 mAh（典型值）').value, 6800],
-    ['parseCapacity口径', parseCapacity('6800 mAh（典型值）').caliber, 'typical'],
-    ['parseStorageList', JSON.stringify(parseStorageList('256 GB / 512 GB / 1 TB')), JSON.stringify([256, 512, 1024])],
-    ['parseResolution', JSON.stringify(parseResolution('2622 x 1206 像素分辨率')), JSON.stringify({ w: 2622, h: 1206 })],
-    ['parseRefresh', parseRefresh('ProMotion 自适应刷新率技术，最高可达 120Hz').maxHz, 120],
-    ['parseNits', parseNits('峰值亮度 2000 尼特'), 2000],
-    ['stripInvisible', stripInvisible('Mate 90 RS 非\u2008凡\u2008大\u2008师'), 'Mate 90 RS 非凡大师'],
-    ['sliceByVariants', JSON.stringify(sliceByVariants('[A] 1 [B] 2', ['A', 'B'])), JSON.stringify({ A: '1', B: '2' })],
-  ];
-  let bad = 0;
-  for (const [name, got, want] of cases) {
-    const ok = String(got) === String(want);
-    if (!ok) bad += 1;
-    console.log(`${ok ? '✅' : '❌'} ${name} → ${got}${ok ? '' : `（期望 ${want}）`}`);
-  }
-  console.log(bad ? `\n${bad} 项未通过` : '\n全部通过');
-  process.exit(bad ? 1 : 0);
-}

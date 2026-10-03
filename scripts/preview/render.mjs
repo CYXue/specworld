@@ -25,7 +25,7 @@ import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /* 唯一的判断逻辑来源 —— 只 import，不重写 */
-import { GROUPS, ROWS, THRESHOLDS, diffLevel, winner } from '../../src/lib/compare-spec.mjs';
+import { GROUPS, ROWS, THRESHOLDS, diffLevel, winner } from '../site/lib/compare-spec.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const HERE = resolve(dirname(fileURLToPath(import.meta.url)));
@@ -908,7 +908,7 @@ function renderSources(a, b, opts, dataInfo, derived) {
     <div class="src-grid">${col(a, 'a')}${col(b, 'b')}</div>
     <h3 class="group-title"><span>差异阈值（写进代码，可调）</span><span class="group-meta">右侧 = 强高亮门槛（阈值 × 2）</span></h3>
     <table class="thr-table"><tr><th>指标</th><th>有意义差异阈值</th><th>强高亮门槛</th></tr>${thresholds}</table>
-    <p class="sec-note">阈值来自 <code>src/lib/compare-spec.mjs</code> 的 <code>THRESHOLDS</code>；差异等级来自 <code>diffLevel()</code>，
+    <p class="sec-note">阈值来自 <code>scripts/site/lib/compare-spec.mjs</code> 的 <code>THRESHOLDS</code>；差异等级来自 <code>diffLevel()</code>，
       优势方来自 <code>winner()</code>。本页不重写任何一条判断。</p>
   </section>`;
 }
@@ -1107,7 +1107,7 @@ function renderPage(ctx) {
   <header class="page-head">
     <h1>${esc(shortName(a))} <span class="v-unpub">vs</span> ${esc(shortName(b))}</h1>
     <p>对比页静态渲染器产出 · 生成于 <span class="mono">${esc(generatedAt)}</span> ·
-      差异等级与优势方判定来自 <code>src/lib/compare-spec.mjs</code>（本页未重写任何判断）</p>
+      差异等级与优势方判定来自 <code>scripts/site/lib/compare-spec.mjs</code>（本页未重写任何判断）</p>
   </header>
   ${fixtureBanner}${dataBanner}
   ${renderIdentity(a, b, opts)}

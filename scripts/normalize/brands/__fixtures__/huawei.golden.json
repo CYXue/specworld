@@ -1,0 +1,180 @@
+{
+  "id": "huawei-mate90-pro-max",
+  "slug": "huawei-mate90-pro-max",
+  "brand": "huawei",
+  "line": "Mate",
+  "name": "HUAWEI Mate 90 Pro Max",
+  "nameZh": "HUAWEI Mate 90 Pro Max",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 164.5,
+    "widthMm": 78.7,
+    "thicknessMm": 8.15,
+    "weightG": 234,
+    "ipRating": "IP68/IP69",
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": 6.9,
+    "type": "双层 OLED, 支持 1-120 Hz LTPO 自适应刷新率, 1440 Hz 高频 PWM 调光, 300 Hz 触控采样率",
+    "resolutionPx": {
+      "w": 2848,
+      "h": 1320
+    },
+    "ppi": 455,
+    "refreshHz": "1-120",
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": "第三代昆仑玻璃"
+  },
+  "chipset": {
+    "name": "麒麟9050 Pro 麒麟9050",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      12,
+      16
+    ],
+    "storageGb": [
+      512,
+      1024
+    ]
+  },
+  "battery": {
+    "capacityMah": 6800,
+    "capacityCaliber": "typical",
+    "wiredChargeW": 100,
+    "wirelessChargeW": 50,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [
+      {
+        "role": "main",
+        "mp": 50,
+        "aperture": "f/1.4-4.0",
+        "ois": true,
+        "sensorNote": "RYYB"
+      },
+      {
+        "role": "ultrawide",
+        "mp": 40,
+        "aperture": "f/2.2",
+        "ois": false,
+        "sensorNote": "RYYB"
+      },
+      {
+        "role": "tele",
+        "mp": null,
+        "aperture": "f/2.6",
+        "ois": true,
+        "sensorNote": "RYYB"
+      },
+      {
+        "role": "depth",
+        "mp": null,
+        "aperture": null,
+        "ois": false,
+        "sensorNote": null
+      }
+    ],
+    "front": {
+      "mp": 13,
+      "aperture": "f/2.0"
+    },
+    "videoMax": "4K"
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
+    "bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
+    "nfc": true,
+    "satellite": "北斗卫星消息",
+    "usb": "USB Type-C，USB 3.1 Gen 1",
+    "sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
+    "esim": true
+  },
+  "os": {
+    "launch": "HarmonyOS 7.0",
+    "upgradableTo": null
+  },
+  "skus": [
+    {
+      "storageGb": 512,
+      "ramGb": 12,
+      "priceCny": 9499,
+      "priceNote": "官网目录页售价（最低配档）",
+      "listedAt": "2026-10-02"
+    }
+  ],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "尺寸与重量": "164.5 mm | 78.7 mm | 8.15 mm | HUAWEI Mate 90 Pro Max：约 234 g（含电池） HUAWEI Mate 90 Pro Max 典藏版：约 235 g（含电池）",
+    "屏幕": "6.9 英寸 | 双层 OLED，支持 1-120 Hz LTPO 自适应刷新率，1440 Hz 高频 PWM 调光，300 Hz 触控采样率 | FHD+ 2848 × 1320 像素 | 第三代昆仑玻璃",
+    "处理器": "麒麟9050 Pro 麒麟9050",
+    "存储": "12 GB / 16 GB RAM | 512 GB / 1 TB ROM",
+    "电池": "6800 mAh（典型值）",
+    "充电": "手机支持最大超级快充 100 W（20V/5A），兼容 20V/4.4A 或 11V/6A 或 10V/4A 或 10V/2.25A 或 4.5V/5A 或 5V/4.5A 超级快充，兼容 9V/2A 快充，支持 18 W 有线反向充电。",
+    "后置摄像头": "5000 万像素超高动态摄像头（F1.4-F4.0 光圈，OIS 光学防抖，RYYB 传感器） | 4000 万像素超广角摄像头（F2.2 光圈，RYYB 传感器） | 超大底 2 亿长焦摄像头（F2.6 光圈，OIS 光学防抖，长焦微距，RYYB 传感器） | 第三代红枫原色摄像头",
+    "前置摄像头": "1300 万像素超广角摄像头（F2.0 光圈，自动对焦） | 3D 深感摄像头",
+    "防尘抗水": "IP68 级 6 米抗水，IP69 级抗高温高压喷水",
+    "数据连接": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO | Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频 | USB Type-C，USB 3.1 Gen 1 | 北斗卫星消息",
+    "屏幕脚注": "*显示屏采用圆角设计，按照标准矩形测量时，屏幕的对角线长度是 6.9 英寸（实际可视区域略小）。 | *该分辨率对应标准矩形，实际屏幕有效像素略少。",
+    "电池脚注": "*电池额定容量为 6615 mAh。 | **电池内置不可拆卸。",
+    "充电脚注": "*最大支持 100 W 华为有线超级快充，需搭配 100 W 华为超级快充充电套装使用。最大支持 18 W 有线反向充电，支持对通过华为实验室测试的设备进行反向充电。 | **最大支持 50 W 华为无线超级快充，需单独购买华为超级快充立式无线充电器（Max 50 W / 80 W）或华为超级快充无线车充（Max 50 W / 80 W），并搭配特定 66 W 及以上的华为超级快充充电套装使用。无…"
+  },
+  "notes": [
+    "重量原文「HUAWEI Mate 90 Pro Max：约 234 g（含电池） HUAWEI Mate 90 Pro Max 典藏版：约 235 g（含电池）」：原文含 2 个重量值（234 / 235 g），取第一个，口径需人工确认",
+    "官网未直接给出 ppi；display.ppi 由官网的分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived",
+    "后置影像原文见 rawOfficial「后置摄像头」；未标注像素的辅助器件（红枫原色/多光谱/深感）role 记 depth、mp 记 null",
+    "前置摄像头原文含多个镜头（「1300 万像素超广角摄像头（F2.0 光圈，自动对焦） | 3D 深感摄像头」），camera.front 取第一个",
+    "以下字段使用了带 @变体 后缀的键（基键不存在），已取匹配本机型的第一个变体：屏幕.尺寸@HUAWEI Mate 90 Pro Max、屏幕.类型@HUAWEI Mate 90 Pro Max、屏幕.分辨率@HUAWEI Mate 90 Pro Max、屏幕.玻璃类型@HUAWEI Mate 90 Pro Max、处理器@HUAWEI Mate 90 Pro Max、存储@HUAWEI Mate 90 Pro Max"
+  ],
+  "provenance": {
+    "body.heightMm": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.thicknessMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "body.ipRating": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.ppi": "derived",
+    "display.refreshHz": "huawei-official",
+    "display.protection": "huawei-official",
+    "chipset.name": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "battery.capacityMah": "huawei-official",
+    "battery.capacityCaliber": "huawei-official",
+    "battery.wiredChargeW": "huawei-official",
+    "battery.wirelessChargeW": "huawei-official",
+    "camera.rear": "huawei-official",
+    "camera.front.mp": "huawei-official",
+    "camera.videoMax": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "connectivity.bluetooth": "huawei-official",
+    "connectivity.nfc": "huawei-official",
+    "connectivity.satellite": "huawei-official",
+    "connectivity.usb": "huawei-official",
+    "connectivity.sim": "huawei-official",
+    "connectivity.esim": "huawei-official",
+    "os.launch": "huawei-official",
+    "skus": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-02T11:57:29.200Z",
+  "lastSeenAt": "2026-10-02T11:57:29.200Z"
+}

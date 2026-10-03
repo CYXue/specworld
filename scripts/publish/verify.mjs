@@ -9,6 +9,7 @@ import { readFileSync, writeFileSync, existsSync, cpSync, readdirSync, statSync 
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { BRAND_IDS } from '../brands.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SRC = join(ROOT, '_work/site');
@@ -47,19 +48,37 @@ for (const f of htmls) {
 }
 console.log(`已注入 <base> 的页面: ${injected} 个`);
 
-/* 3) 外链检查 + 内联脚本体检
+/* 3–5a) 单次遍历：外链 / 内联脚本 / 本地死链 / 「—」冒充数据，三类检查同轮完成。
+ * 原实现把 76 个 HTML 读了三遍（外链一遍、死链一遍、内容纪律一遍）；合并后只读一遍，
+ * I/O 量直接砍掉 2/3（n 小无所谓，但顺手即省）。
  *
- * 纪律更新（2026-10-02）：原先是「零行为脚本」，现在改为「零外部依赖脚本」。
- * 搜索与排行榜筛选必须有 JS，否则功能做不出来。允许的是**页面内联的 <script>**，
- * 禁止的是 <script src="...">——任何指向外部文件的脚本引用都会让页面在离线/内网环境失效。
- *
- * 判定方式：src 属性里出现 http(s):// 或 .js 就算外部依赖。
+ * 纪律（与旧实现一致，照抄不丢）：
+ *   - 允许页面内联 <script>，禁止 <script src="...">——任何指向外部文件的脚本引用
+ *     都会让页面在离线/内网环境失效。判定方式：src 属性里出现 http(s):// 或 .js 就算外部依赖。
+ *   - 「—」不得冒充数据：空值只能显示「官方未公布」，能力条空位才允许用「—」。
  */
+
+/* 5b. 关键页面必须存在（防止某次重构漏产出），不依赖读页面内容，故放在遍历之外 */
+const REQUIRED_PAGES = [
+  'index.html', 'categories.html', 'rankings.html', 'brands.html',
+  'timeline.html', 'all.html',
+  'brand/apple.html', 'brand/huawei.html',
+];
+const contentIssues = [];
+const missingPages = REQUIRED_PAGES.filter((rel) => !existsSync(join(DIST, rel)));
+if (missingPages.length) contentIssues.push(`缺少关键页面：${missingPages.join(', ')}`);
+
 let extLinks = 0;
 let extScripts = 0;
 let inlineScripts = 0;
+let brokenLinks = 0;
+const missing = [];
 for (const f of htmls) {
   const html = readFileSync(f, 'utf8');
+  const relDir = dirname(f);
+  const rel = f.slice(DIST.length + 1).split('\\').join('/');
+
+  // 3) 外链 + 内联脚本体检
   extLinks += (html.match(/(?:href|src)=["'](https?:\/\/[^"']+)["']/g) ?? []).length;
   for (const m of html.matchAll(/<script\b([^>]*)>/gi)) {
     const attrs = m[1].trim();
@@ -67,17 +86,8 @@ for (const f of htmls) {
     if (/\bsrc\s*=/i.test(attrs)) extScripts++;
     else if (!/type="application\/json"/i.test(attrs)) inlineScripts++;
   }
-}
-console.log(
-  `外链引用: ${extLinks} 处 / 内联 <script>: ${inlineScripts} 个 / 外部依赖 <script src>: ${extScripts} 个`
-);
 
-/* 4) 本地 <a> / <svg> 检查：指向的相对文件必须存在 */
-let brokenLinks = 0;
-const missing = [];
-for (const f of htmls) {
-  const html = readFileSync(f, 'utf8');
-  const relDir = dirname(f);
+  // 4) 本地 <a> / <svg> 死链
   const targets = [
     ...[...html.matchAll(/href=["']([^"'#]+\.html)["']/g)].map((m) => m[1]),
     ...[...html.matchAll(/(?:href|src)=["']([^"'#]+\.svg)["']/g)].map((m) => m[1]),
@@ -90,38 +100,17 @@ for (const f of htmls) {
       missing.push(`${f} → ${t}`);
     }
   }
+
+  // 5a) 「—」冒充数据
+  const dashCells = [...html.matchAll(/<td[^>]*>\s*—\s*<\/td>/g)].length;
+  if (dashCells) contentIssues.push(`${rel} 有 ${dashCells} 个表格单元格用「—」占位（应写「官方未公布」）`);
 }
+console.log(
+  `外链引用: ${extLinks} 处 / 内联 <script>: ${inlineScripts} 个 / 外部依赖 <script src>: ${extScripts} 个`
+);
 console.log(`失效本地链接: ${brokenLinks} 处`);
 if (missing.length) {
   for (const x of missing.slice(0, 10)) console.log(`  ❌ ${x}`);
-}
-
-/* 5) 内容纪律检查
- *
- * 5a. 「—」不得冒充数据。空值只能显示「官方未公布」，
- *     能力条空位才允许用「—」（那是有明确 title 解释的空条）。
- * 5b. 关键页面必须存在（防止某次重构漏产出）。
- *
- * 曾经还想加一条「正文不得出现写死年份」（2026-10-02 实测删掉了）：
- * 那条检查无法区分「模板里写死的年份」和「数据渲染出来的年份」——
- * 时间线页的「2026 年」来自 releaseDate 聚合，是数据不是硬编码，一样会被拦。
- * 答不出「它防的是哪种真实故障」的闸门不要加。年份类硬编码改用 review 约束。
- */
-const REQUIRED_PAGES = [
-  'index.html', 'categories.html', 'rankings.html', 'brands.html',
-  'timeline.html', 'all.html',
-  'brand/apple.html', 'brand/huawei.html',
-];
-const contentIssues = [];
-const missingPages = REQUIRED_PAGES.filter((rel) => !existsSync(join(DIST, rel)));
-if (missingPages.length) contentIssues.push(`缺少关键页面：${missingPages.join(', ')}`);
-
-for (const f of htmls) {
-  const html = readFileSync(f, 'utf8');
-  const rel = f.slice(DIST.length + 1).split('\\').join('/');
-  // 5a：表格单元格里出现裸「—」视为用破折号冒充数据
-  const dashCells = [...html.matchAll(/<td[^>]*>\s*—\s*<\/td>/g)].length;
-  if (dashCells) contentIssues.push(`${rel} 有 ${dashCells} 个表格单元格用「—」占位（应写「官方未公布」）`);
 }
 
 /* 6) 数据快照 + 指纹（参考项目 toy 的等价物：指纹用于自动发布去重） */
@@ -141,8 +130,7 @@ const manifest = {
   products: {
     total: products.length,
     generatedAt: p.generatedAt ?? null,
-    apple: products.filter((x) => x.brand === 'apple').length,
-    huawei: products.filter((x) => x.brand === 'huawei').length,
+    ...Object.fromEntries(BRAND_IDS.map((id) => [id, products.filter((x) => x.brand === id).length])),
   },
   comparePairs: compareFiles,
   selfContained: extLinks === 0 && extScripts === 0 && brokenLinks === 0,

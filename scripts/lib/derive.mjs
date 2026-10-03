@@ -1,3 +1,5 @@
+import { brandShortLabel } from '../brands.mjs';
+
 /**
  * 派生层：分位标尺、首页头衔、一句话定位。
  *
@@ -165,7 +167,7 @@ const DIMENSIONS = [
 ];
 
 export function buildPersona(product, products, scales) {
-  const brandLabel = product.brand === 'apple' ? 'iPhone' : '华为';
+  const brandLabel = brandShortLabel(product.brand);
   for (const domain of DOMAINS) {
     const pool = products.filter((p) => domain.filter(p, product));
     if (pool.length < domain.min || !pool.some((p) => p.id === product.id)) continue;

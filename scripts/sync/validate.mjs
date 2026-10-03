@@ -11,6 +11,8 @@
  * 答不上来的闸门不要加。
  */
 
+import { isValidBrand } from '../brands.mjs';
+
 export const LIMITS = {
   minProducts: 20, // 低于这个数说明抓取整体失败了
   maxDropRatio: 0.1, // 比上一版少 10% 就拦
@@ -142,8 +144,24 @@ export function validate(snapshot, previous) {
         fail.push(`${p.id} 的 ${path} 有值但缺 provenance`);
       }
     }
-    // 11. 品牌必须在注册表里
-    if (!['apple', 'huawei'].includes(p.brand)) fail.push(`${p.id} 的品牌不在注册表：${p.brand}`);
+    // 10b. 子对象型必填字段的 provenance 登记在子路径上，不是父路径。
+    //
+    // 修复记录（2026-10-03，由 scripts/qa/coverage.mjs 抓到）：
+    // display.resolutionPx 是 {w,h} 对象，规范化层登记的是 `display.resolutionPx.w`，
+    // 而这条闸门查的是父路径 `display.resolutionPx` —— 于是 **60 台全部**报
+    // 「有值但缺 provenance」。规范化层 scripts/normalize/index.mjs 早已特判过
+    // 子路径（见其1705 行），闸门这边漏了，于是每台机器都挂一条假警报。
+    //
+    // 为什么它没被发现：闸门失败会让管线非零退出，可这条是**跟着必填字段一起**
+    // 触发的，看起来像「数据本来就缺 provenance」，被当成结构性缺口忽略了。
+    // 教训：**闸门自己也会误报**，所以它需要被测试（见 scripts/selftest.mjs）。
+    for (const path of ['display.resolutionPx']) {
+      if (has(get(p, path)) && !p.provenance?.[`${path}.w`]) {
+        fail.push(`${p.id} 的 ${path} 有值但缺 provenance（应登记在 ${path}.w 上）`);
+      }
+    }
+    // 11. 品牌必须在注册表里（注册表单一真源见 scripts/brands.mjs，新增品牌只改那一个文件）
+    if (!isValidBrand(p.brand)) fail.push(`${p.id} 的品牌不在注册表：${p.brand}`);
   }
 
   // 12. 与上一版对比的退化检测

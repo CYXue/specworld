@@ -133,10 +133,13 @@ function compute() {
   // 数据指纹：只反映用户看得见的规格内容
   const dataFingerprint = canonicalHash(stable);
 
-  // 模板指纹：站点生成器的代码。改了版式/加了板块就应当重新发布
+  // 模板指纹：站点生成器的代码。改了版式/加了板块就应当重新发布。
+  // 只哈希真正参与构建的 .mjs —— 把纯文档型的 .ts（src/lib/types.ts、
+  // scripts/sources/types.ts，项目无 tsconfig / 无 tsc 步骤，永不参与产物）
+  // 排除在外，否则改一个注释就会让站点指纹变化、误触发一次白发的 Pages 重发。
+  // 归一化行尾后再哈希（见 collectFiles 内部），避免 Windows CRLF / Linux LF 造成两份指纹。
   const templateFiles = [
-    ...collectFiles(join(ROOT, 'scripts/site'), ['.mjs']),
-    ...collectFiles(join(ROOT, 'src/lib'), ['.mjs', '.ts']),
+    ...collectFiles(join(ROOT, 'scripts'), ['.mjs']),
   ];
   const templateFingerprint = canonicalHash(
     templateFiles.map((f) => `${f.path}:${f.hash}`),

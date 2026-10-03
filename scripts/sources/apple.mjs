@@ -11,8 +11,11 @@
  *      给出全量机型清单与官方给出的 42 个机型名；
  *   2. 由机型名推导 slug（如 `iPhone 18 Pro` → `iphone-18-pro`），
  *      拼成 `https://www.apple.com.cn/{slug}/specs/` 逐机型抓取；
- *   3. 规格区是 `role="table"` 的 div 网格（**不是** `<table>`），
- *      35 个 `techspecs-section section-{key}` 段落，纯 SSR，无需 JS。
+ *   3. 规格区是 `role="rowgroup"/"row"/"cell"` 的 div 网格（**不是** `<table>`），
+ *      段落锚点是 class 里的 `techspecs-section section-{key}`，纯 SSR，无需 JS。
+ *      段落数实测 54（iphone-16 / 17 / 18-pro 三台一致，2026-10-03）。
+ *      改版时的判据是「`section-capacity` 这类关键 key 还在不在」，
+ *      不是总数——总数会随页面增删段落而变。详见 docs/PITFALLS.md A1。
  *
  * ⚠️ 覆盖范围的实测真相（2026-10-02 复核，别被「42 款」误导）：
  *   对比页列 42 款，但官网只保留了 **6 个** `/specs/` 页

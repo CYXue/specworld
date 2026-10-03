@@ -75,6 +75,11 @@ run('规范化（官网字段 → 契约字段）', 'scripts/normalize/index.mjs
 /* ---- 3. 整合（窗口过滤 + 校验闸门 + 原子写） ---- */
 run('整合与校验闸门', 'scripts/sync/index.mjs', DRY ? ['--dry'] : []);
 
+/* ---- 3.5 精灵图：构建期生成，不入库（见 .gitignore 的 data/sprites/）。
+ * 立绘完全由数据几何算出（机身宽高比←屏幕、镜头数←后摄），改一个字段就跟着变，
+ * 所以必须随管线重建，而不是手提交 60 个 .svg 进仓库——那样既爆仓库又必然和官网数据脱节。 ---- */
+if (!DRY) run('生成精灵图', 'scripts/sprite/generate.mjs');
+
 /* ---- 4. 派生（分位、头衔、一句话定位） ---- */
 // derive 由 sync 内部调用（见 scripts/sync/index.mjs 的 buildChampions/buildScales），
 // 这里不再单独跑，避免两次计算产生口径不一致。

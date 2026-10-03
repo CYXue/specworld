@@ -17,6 +17,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
 import { coverageReport, validate } from './validate.mjs';
+import { VENDORS } from '../brands.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORK = join(ROOT, '_work');
@@ -26,25 +27,6 @@ const DATA = join(ROOT, 'data');
 const WINDOW_START = process.env.WINDOW_START ?? '2024-09-01';
 /** 精度不足的日期落在这个缓冲区内时，标记为「窗口边界不确定」而不是悄悄收录 */
 const WINDOW_FUZZ_DAYS = 45;
-
-const VENDORS = [
-  {
-    id: 'apple',
-    name: 'Apple',
-    nameZh: '苹果',
-    accentColor: '#0071e3',
-    motif: 'apple',
-    country: 'US',
-  },
-  {
-    id: 'huawei',
-    name: 'HUAWEI',
-    nameZh: '华为',
-    accentColor: '#cf0a2c',
-    motif: 'petal',
-    country: 'CN',
-  },
-];
 
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 

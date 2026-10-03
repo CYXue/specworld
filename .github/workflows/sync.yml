@@ -47,9 +47,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 护栏：不联网、不碰官网，1 秒内跑完 66 项断言。
+  # 放在最前面是因为它最便宜，而且失败信息最明确——解析器或闸门写错了，
+  # 后面那次联网抓取跑出来的也是脏数据，不如当场停。
+  selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # 覆盖两类东西：
+      #   1. 解析器——错了不报错，只会静默产出脏值（历史上刷新率解析错过两次）
+      #   2. 校验闸门本身——它是「拒绝写盘」的唯一防线，自己写错了防线就漏了
+      - name: 管线自测
+        run: node scripts/selftest.mjs
+
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    needs: selftest
     outputs:
       data_changed: ${{ steps.fp.outputs.data_changed }}
       site_changed: ${{ steps.fp.outputs.site_changed }}
@@ -240,7 +258,7 @@ jobs:
   # 只在「用户看得见的东西变了」时才发 —— 判据是站点指纹（数据 × 模板）。
   # 数据没变、模板没变，就不发，哪怕时间戳已经刷新过一轮。
   deploy:
-    needs: sync
+    needs: [sync, selftest]
     # 定时任务没有 inputs，这时 github.event.inputs 为空串，整体等价于只看 site_changed
     if: ${{ needs.sync.outputs.site_changed == 'true' || github.event.inputs.force_publish == 'true' }}
     runs-on: ubuntu-latest

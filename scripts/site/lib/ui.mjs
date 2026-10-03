@@ -6,7 +6,11 @@
  *      双击 index.html 就能看，不需要起服务器。
  *   2. **缺数据长成「官方未公布」的样子**，绝不用 0、—、N/A 冒充。
  *   3. **文案由数据套模板**，不调用 LLM，逐字可追溯到 data/products.json 的某个字段。
+ *   4. **界面文案走 i18n 字典**，见 lib/i18n.mjs。加语言时本文件不用改。
  */
+
+import { DICT, t, htmlLang, DEFAULT_LANG } from './i18n.mjs';
+import { BRANDS } from '../../brands.mjs';
 
 /* ------------------------------------------------------------------ *
  * 一、HTML 转义 —— 所有插值都必须过这一层
@@ -28,43 +32,32 @@ export function esc(s) {
  * 产品线（Mate / Pura / iPhone…）另有自己的色相映射，用于导航与分组。
  */
 
-export const BRANDS = {
-  apple: {
-    id: 'apple',
-    name: 'Apple',
-    nameZh: '苹果',
-    monogram: 'A',
-    accent: '#0071e3',
-    accentSoft: 'rgba(0,113,227,.10)',
-    accentLine: 'rgba(0,113,227,.32)',
-    country: 'US',
-    countryLabel: '美国',
-    region: 'global',
-  },
-  huawei: {
-    id: 'huawei',
-    name: 'HUAWEI',
-    nameZh: '华为',
-    monogram: 'H',
-    accent: '#cf0a2c',
-    accentSoft: 'rgba(207,10,44,.10)',
-    accentLine: 'rgba(207,10,44,.32)',
-    country: 'CN',
-    countryLabel: '中国',
-    region: 'cn',
-  },
-};
+// BRANDS 现由 scripts/brands.mjs 统一导出（单一真源），此处只做 re-export，避免改动到它的调用方。
 
 export function brandOf(id) {
   return BRANDS[id] ?? { id, name: id, nameZh: id, monogram: '?', accent: '#8a8f98', accentSoft: 'rgba(138,143,152,.10)', accentLine: 'rgba(138,143,152,.3)', country: '??', countryLabel: '未知', region: 'other' };
 }
 
+/**
+ * 品牌显示名。英文站要显示「Apple / Huawei」而不是「苹果 / 华为」——
+ * 所以显示名按语言取，不读 `nameZh`。
+ *
+ * 保留 `nameZh` 字段是为了让引用它的地方（搜索索引、对比页）不必立刻改签名，
+ * 但**新代码一律走 brandName(b, lang)**。
+ */
+export function brandName(idOrBrand, lang = 'zh') {
+  const id = typeof idOrBrand === 'string' ? idOrBrand : idOrBrand?.brand;
+  const node = DICT.brand[id];
+  if (!node) return brandOf(id).name;
+  return lang === 'zh' ? node.zh : node.en;
+}
+
 /** 品牌徽章：首字母 + 品牌色。用 CSS 变量承载颜色，页面自包含 */
-export function badge(product, { size = 'md' } = {}) {
+export function badge(product, { size = 'md', lang = 'zh' } = {}) {
   const b = brandOf(product.brand);
   const px = size === 'lg' ? 44 : size === 'sm' ? 22 : 30;
   const fs = size === 'lg' ? 19 : size === 'sm' ? 11 : 14;
-  return `<span class="badge ${size}" style="--bw:${px}px;--bf:${fs}px;background:${b.accentSoft};color:${b.accent};border-color:${b.accentLine}" title="${esc(b.nameZh)}">${esc(b.monogram)}</span>`;
+  return `<span class="badge ${size}" style="--bw:${px}px;--bf:${fs}px;background:${b.accentSoft};color:${b.accent};border-color:${b.accentLine}" title="${esc(brandName(product, lang))}">${esc(b.monogram)}</span>`;
 }
 
 /**
@@ -84,17 +77,30 @@ export function lineColor(line) {
  * 三、格式化
  * ------------------------------------------------------------------ */
 
-/** 「官方未公布」是这个站点的诚实底线：任何缺失都走这里 */
-export const UNPUB = '<span class="unpub">官方未公布</span>';
+/**
+ * 「官方未公布」是这个站点的诚实底线：任何缺失都走这里。
+ *
+ * 做成函数而不是常量：它是文案，就得跟其他文案一样走字典。
+ * （第一版是常量，加语言时改不动——这正是 i18n 架子要消灭的那类硬编码。）
+ */
+export const unpub = (lang = DEFAULT_LANG) =>
+  `<span class="unpub">${esc(t(DICT.common, 'unpublished', lang))}</span>`;
 
-export function fmtNum(v, digits = 0) {
+/** 保留旧名以免 build.mjs 到处改；但它是「永远是中文」的写法，仅限纯中文页内的临时占位 */
+export const UNPUB = unpub('zh');
+
+/** 数字本地化：中文站用千分位，英文站按英文习惯（分隔符不同） */
+const numLocale = (lang) => (lang === 'zh' ? 'zh-CN' : 'en-US');
+
+export function fmtNum(v, digits = 0, lang = 'zh') {
   if (typeof v !== 'number' || !Number.isFinite(v)) return null;
-  return v.toLocaleString('zh-CN', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  return v.toLocaleString(numLocale(lang), { minimumFractionDigits: digits, maximumFractionDigits: digits });
 }
 
-export function fmtPrice(v) {
+export function fmtPrice(v, lang = 'zh') {
   if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0) return null;
-  return `¥${v.toLocaleString('zh-CN')}`;
+  // 中文站用 ¥ 前缀；英文站也用 ¥（人民币符号是 ¥/CN¥，不用换算成 $——本站不改汇率）
+  return `¥${v.toLocaleString(numLocale(lang))}`;
 }
 
 export function fmtDate(iso, { withYear = false } = {}) {
@@ -309,50 +315,52 @@ footer a{color:var(--ink3);text-decoration:underline;text-underline-offset:2px}
  * @param {number} [o.depth]    相对站点根的层级（0=根，1=子目录），决定 <base> 与链接前缀
  * @param {boolean} [o.search]  是否显示搜索框
  */
-export function shell({ title, body, nav = '', depth = 0, search = true, lede = '' }) {
+export function shell({ title, body, nav = '', depth = 0, search = true, lede = '', lang = 'zh' }) {
   const root = depth === 0 ? '' : '../'.repeat(depth);
+  // 导航标签与站点名走字典。加英文页时这里不用改。
+  const N = (k) => t(DICT.nav, k, lang);
   const navItems = [
-    { key: 'home', href: `${root}index.html`, label: '今日格局' },
-    { key: 'categories', href: `${root}categories.html`, label: '分类' },
-    { key: 'rankings', href: `${root}rankings.html`, label: '排行榜' },
-    { key: 'brands', href: `${root}brands.html`, label: '厂商' },
-    { key: 'timeline', href: `${root}timeline.html`, label: '时间线' },
-    { key: 'all', href: `${root}all.html`, label: '全部机型' },
+    { key: 'home', href: `${root}index.html`, label: N('home') },
+    { key: 'categories', href: `${root}categories.html`, label: N('categories') },
+    { key: 'rankings', href: `${root}rankings.html`, label: N('rankings') },
+    { key: 'brands', href: `${root}brands.html`, label: N('brands') },
+    { key: 'timeline', href: `${root}timeline.html`, label: N('timeline') },
+    { key: 'all', href: `${root}all.html`, label: N('all') },
   ];
   return `<!doctype html>
-<html lang="zh-CN">
+<html lang="${htmlLang(lang)}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(title)} · 手机参数世界</title>
-<meta name="description" content="华为与苹果在售手机参数的可核查对比。数据全部来自厂商官网，缺失项标注「官方未公布」，不做估算。">
+<title>${esc(title)} · ${esc(t(DICT.site, 'name', lang))}</title>
+<meta name="description" content="${esc(t(DICT.site, 'description', lang))}">
 <style>${CSS}</style>
 </head>
 <body>
 <header class="topbar"><div class="topbar-in">
-<a class="brandmark" href="${root}index.html"><span class="dot"></span>手机参数世界</a>
+<a class="brandmark" href="${root}index.html"><span class="dot"></span>${esc(t(DICT.site, 'name', lang))}</a>
 <nav class="nav">${navItems.map((n) => `<a href="${n.href}"${n.key === nav ? ' class="on"' : ''}>${n.label}</a>`).join('')}</nav>
-${search ? searchBox(root) : ''}
+${search ? searchBox(root, lang) : ''}
 </div></header>
 <div class="wrap">
 ${lede ? `<p class="lede" style="margin-top:18px">${lede}</p>` : ''}
 ${body}
 <footer>
-  参数全部取自厂商官网规格页与官方对比页，缺失项一律标注「官方未公布」，本站不做任何估算或填充。<br>
-  本站不做跑分评分：手机圈没有可公开核查的第三方成绩源，给不出「综合性能分」，因此只展示官方客观参数。<br>
+  ${esc(t(DICT.site, 'footerSource', lang))}<br>
+  ${esc(t(DICT.site, 'footerNoBench', lang))}<br>
   <span class="srcline" id="srcline"></span>
 </footer>
 </div>
-${search ? searchScript(root) : ''}
+${search ? searchScript(root, lang) : ''}
 </body>
 </html>`;
 }
 
 /** 搜索框 + 结果容器。结果由内联索引在浏览器端算，不发任何请求 */
-function searchBox(root) {
+function searchBox(root, lang = 'zh') {
   return `<div class="searchbox">
   <span class="ico">⌕</span>
-  <input type="search" id="q" placeholder="搜机型、厂商、能力…" autocomplete="off" spellcheck="false" aria-label="搜索">
+  <input type="search" id="q" placeholder="${esc(t(DICT.search, 'placeholder', lang))}" autocomplete="off" spellcheck="false" aria-label="${esc(t(DICT.search, 'label', lang))}">
   <span class="hint">/</span>
   <div class="sres" id="sres" role="listbox"></div>
 </div>`;
@@ -363,10 +371,17 @@ function searchBox(root) {
  * 索引由 <script> 注入的 window.__SW_INDEX__ 提供（构建时内联进本页）。
  * 无 fetch、无外链 —— file:// 直接双击也能用。
  */
-function searchScript(root) {
+function searchScript(root, lang = 'zh') {
+  // 浏览器端要显示的文案在构建时注入。**不硬编码在 JS 字符串里**——
+  // 那样每次加语言都要改这段脚本，而它藏在模板里，最容易漏。
+  const I18N = {
+    noMatch: t(DICT.search, 'noMatch', lang),
+    noMatchHint: t(DICT.search, 'noMatchHint', lang),
+  };
   return `<script>
 (function(){
   var IDX = window.__SW_INDEX__ || {items:[]};
+  var I18N = ${JSON.stringify(I18N)};
   var input = document.getElementById('q');
   var box = document.getElementById('sres');
   if(!input || !box) return;
@@ -401,7 +416,7 @@ function searchScript(root) {
     for(var i=0;i<items.length;i++){ var s = score(items[i], ql); if(s>0) hits.push({it:items[i], s:s}); }
     if(!hits.length){
       box.className='sres open';
-      box.innerHTML = '<div class="empty">没有匹配「'+esc(q)+'」的机型<br><span style="font-size:11.5px">试试：折叠 / 长续航 / 便宜 / 苹果</span></div>';
+      box.innerHTML = '<div class="empty">'+esc(I18N.noMatch).replace('{q}', esc(q))+'<br><span style="font-size:11.5px">'+esc(I18N.noMatchHint)+'</span></div>';
       return;
     }
     hits.sort(function(a,b){ return b.s - a.s || a.it.n.length - b.it.n.length; });

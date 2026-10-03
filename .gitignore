@@ -8,6 +8,9 @@ dist/
 # 中间产物与调试垃圾（适配器缓存、渲染/截图 profile、临时脚本）
 _work/
 
+# 精灵图：由 scripts/sprite/generate.mjs 随管线构建期生成（数据几何算出，改字段即变），不入库
+data/sprites/
+
 # Toy 送审包（dist 的拷贝，随打包重建，不入库）
 .toy-pkg/
 

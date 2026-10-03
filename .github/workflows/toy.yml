@@ -96,13 +96,29 @@ jobs:
           FORCE: ${{ inputs.force && '1' || '0' }}
         run: node scripts/publish/should-publish.mjs --github
 
-      - name: 安装 toy CLI
+      - name: 安装 toy CLI（含 checksum 校验）
         if: steps.cred.outputs.skip != 'true' && steps.decide.outputs.publish == 'true'
+        env:
+          # 在仓库 Variables 里维护与发布 asset 旁公布的哈希一致的已知值；配了就强制比对。
+          TOY_CLI_SHA256: ${{ vars.TOY_CLI_SHA256 }}
         run: |
-          curl -fsSL -o "$RUNNER_TEMP/toy" "https://boss.hdslb.com/toy-cli/toy/releases/${TOY_CLI_VERSION}/toy_linux_amd64"
+          URL="https://boss.hdslb.com/toy-cli/toy/releases/${TOY_CLI_VERSION}/toy_linux_amd64"
+          curl -fsSL -o "$RUNNER_TEMP/toy" "$URL"
           chmod +x "$RUNNER_TEMP/toy"
           echo "TOY_BIN=$RUNNER_TEMP/toy" >> "$GITHUB_ENV"
           "$RUNNER_TEMP/toy" version
+          # checksum 校验：防「下载被中间人篡改 / 源被人动过」——固定版本号本身不防这个。
+          # 没配 TOY_CLI_SHA256 时只告警不阻断，避免「没填哈希」就天天报红、掩盖真正的失败。
+          if [ -n "$TOY_CLI_SHA256" ]; then
+            ACTUAL=$(sha256sum "$RUNNER_TEMP/toy" | cut -d' ' -f1)
+            if [ "$ACTUAL" != "$TOY_CLI_SHA256" ]; then
+              echo "::error::toy CLI checksum 不匹配：期望 $TOY_CLI_SHA256，实际 $ACTUAL"
+              exit 1
+            fi
+            echo "✅ toy CLI checksum 校验通过：$ACTUAL"
+          else
+            echo "::warning::未配置 TOY_CLI_SHA256 —— 跳过 checksum 校验（建议去仓库 Variables 配一份已知哈希）"
+          fi
 
       # 打包时自检：入口存在、包内零外链（平台整改口径要求）
       - name: 打包

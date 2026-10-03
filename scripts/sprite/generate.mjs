@@ -16,6 +16,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { brandMeta } from '../brands.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -74,8 +75,8 @@ export function layout(product) {
   const camUnknown = rear === 0;
   const camCount = camUnknown ? 1 : Math.min(rear, 4);
 
-  /* 屏幕刘海/挖孔：Apple 近几代是灵动岛，华为是挖孔。用品牌兜底即可，不算编造。 */
-  const notch = brand === 'apple' ? 'island' : 'punch';
+  /* 屏幕刘海/挖孔：Apple 近几代是灵动岛，华为是挖孔。品牌类型由注册表统一维护（scripts/brands.mjs）。 */
+  const notch = brandMeta(brand)?.notch ?? 'punch';
 
   return {
     product,
