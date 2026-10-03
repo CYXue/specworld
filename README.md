@@ -24,6 +24,14 @@
 docs/DATA-CONTRACT.md   数据契约（唯一字段定义源，先读这份）
 docs/COMPARE-DESIGN.md  对比页信息设计定稿（主表/折叠/高亮阈值）
 docs/PROBE-FINDINGS.md  官网取数通道探针（华为/苹果可解析性证据）
+docs/AUTOMATION-RECIPE.md 自动化发布配方（Actions + Pages + 指纹去重，可迁移到其他项目）
+docs/PITFALLS.md 踩过的坑与页面结构假设（取不到时怎么查：8 条结构假设 + 排查决策树）
+docs/BENCHMARK-VS-AMW.md 与 ai-model-world 的架构对标（差距在哪、缺什么、为什么不迁 Next.js）
+
+# 规范化文档体系（三份，按需查阅）
+docs/SPEC-AI-MODEL-WORLD.md 参考项目规范提炼（ai-model-world：5 条不可违背原则 + 护栏三层）
+docs/SPEC-PHONE-SPEC-WORLD.md 本项目规范提炼（架构三硬规矩 + 指纹组合式 + 各文件纪律）
+docs/MIGRATION-HANDBOOK.md **迁移手册**（两项目交集：七条骨架 + 领域无关判据 + 10 条实施踩坑 + 可复制骨架代码）
 src/lib/types.ts        契约的 TypeScript 定义
 src/lib/compare-spec.mjs 对比页行定义与差异等级（全站唯一判断源）
 scripts/pipeline.mjs    全链路编排（本地与 CI 共用的唯一入口）
@@ -48,6 +56,49 @@ node scripts/pipeline.mjs --offline    # 只用缓存，秒级完成
 ```
 
 产物在 `dist/`，双击 `dist/index.html` 就能看 —— 零外链、零密钥、零外部脚本。
+
+## 改解析器之前先跑这个
+
+```bash
+node scripts/selftest.mjs           # 66 项断言，不联网，1 秒
+node scripts/selftest.mjs --verbose # 逐项打印
+```
+
+`scripts/normalize/parse.mjs` 里的解析器是纯函数，出错时**不会抛异常**——
+它只会安静地把 PWM 调光频率当刷新率、把分辨率当屏幕尺寸，然后一路畅通地发布出去。
+校验闸门能挡住数值越界的，挡不住「看起来很合理但取错字段」的。
+
+所以历史事故全部固化成断言了，两次刷新率事故各有一条：
+
+| 事故 | 断言 |
+|---|---|
+| iPhone 17 的 `2622 x 1206` 被当刷新率 2622 | `事故一：分辨率数字不得被当成刷新率` |
+| Mate 70 Air 的 `2160 Hz 高频 PWM 调光` 被当刷新率 2160 | `事故二：PWM 调光频率不得被当成刷新率` |
+
+闸门本身也在被测范围内——它是「拒绝写盘」的唯一防线，它自己写错了防线就漏了。
+自测已接进 `.github/workflows/sync.yml` 的第一个 job，不通过则整条管线不启动。
+
+## 体检脚本：回答「为什么是这个结果」
+
+```bash
+node scripts/qa/index.mjs              # 一次跑完三个体检 + 摘要
+node scripts/qa/why-champion.mjs --detail# 为什么这台是榜首（列出全部竞争者）
+node scripts/qa/coverage.mjs --by-brand  # 哪些字段大面积缺数据
+node scripts/qa/stale-lineup.mjs         # 池子里有没有过时机型
+```
+
+全部**只读、离线、确定性**（同一输入产出同一输出）——「体检」和「修复」必须是两件事，
+体检顺手改了数据，就没人信它的结论了。
+
+`coverage.mjs` 会把缺口分成三类，因为这三类的**处置方式完全不同**：
+
+| 类别 | 判据 | 处置 |
+|---|---|---|
+| ① 结构性 | 一个品牌全有、另一个全无 | 官网不公布。覆盖率门槛已生效，不发奖杯 |
+| ② 全站皆零 | 谁都没有 | 去`rawOfficial` 确认官网到底有没有 |
+| ③ 同品牌内部分化 | 同一品牌内有的有、有的没有 | **最可疑**，通常是某几种页面写法漏了解析 |
+
+第三类是解析器失手的信号，第一类是官网事实——混在一起看会误判成「大面积数据缺失」。
 
 ## 站点结构
 
@@ -94,8 +145,17 @@ node scripts/pipeline.mjs --offline    # 只用缓存，秒级完成
 
 ### 上线前需要你做两件事
 
-1. **GitHub Pages**：仓库 Settings → Pages → Source 选 **GitHub Actions**。
-   零 Secret，配完第一个 12 小时周期就会自动发布。
+1. **GitHub Pages**：仓库 Settings → Pages → **Build and deployment** 区块 → Source 选 **GitHub Actions**。
+   零 Secret，配完第一个 12 小时周期就会自动发布，地址是 `https://cyxue.github.io/specworld/`。
+
+   注意：同页面上方那个 **Add a verified domain / Custom domain 输入框不用填**。
+   它是给自有域名（比如你自己买的 `specworld.com`）用的可选功能，留空照样能用上面那个 `github.io` 地址。
+   把 `cyxue.github.io` 填进去一定会报 `Domain is not a valid public domain` —— 那不是你的域名，
+   而且默认地址本来就是白送的，不需要验证。
+
+   另一处易错点：**个人设置（`github.com/settings`）里也有一个 `Pages`，那是账号级的**，
+   管的是 `cyxue.github.io` 个人主页站，跟仓库站不是同一套设置。
+   要开的是仓库级页面：`github.com/CYXue/specworld/settings/pages`（或仓库页顶部 `Settings` 标签）。
 2. **B 站 Toy**（可选）：配 `secrets.TOY_CLI_SESSION_TOKEN` 与 `vars.TOY_ID`，
    方法写在 `toy.yml` 顶部注释里。没配的话这条链会安静跳过，不影响其他两条。
 
