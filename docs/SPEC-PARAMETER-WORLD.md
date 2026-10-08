@@ -479,8 +479,9 @@ workflow_dispatch:                 # 抢时效时手动整轮跑（不到一分�
 
 **cron 避开整点**（整点是高峰排队）。
 
-`push` 触发条件只匹配 `scripts/**`、`data/release-dates.json`、
-`workflow` 自身——**bot 提交的是 `data/`，不匹配这里，因此不会自己触发自己。**
+`push` 触发条件匹配 `scripts/**`、`data/release-dates.json`、`data/products.json`、
+`public/fonts/**`、`src/**` 等——**bot 提交的 data/ 也命中这里，会再触发一轮，
+但因指纹不变不会再次 push，故不会死循环，只是多跑一次无害的冗余 run。**
 
 ---
 
@@ -656,4 +657,4 @@ workflow_dispatch:                 # 抢时效时手动整轮跑（不到一分�
 - [ ] 不装依赖，只用 Node 内置模块
 - [ ] 失败开 issue，连续失败不刷屏
 - [ ] cron 避开整点
-- [ ] `push` 触发路径不匹配 `data/`，避免 bot 自己触发自己
+- [ ] `push` 触发路径含 `data/products.json` 等，bot 提交会再触发一轮，但靠指纹判变（不变则不 push）自愈，不会死循环

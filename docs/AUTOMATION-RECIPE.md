@@ -222,7 +222,8 @@ on:
         type: boolean
         default: false
   # 改代码时立即验证，不等 12 小时。
-  # bot 自己提交的是 data/，不匹配这里，因此不会自己触发自己。
+  # 注意：bot 提交的 data/release-dates.json 也命中下方 paths，会再触发一轮 workflow；
+  # 但那一轮指纹不变、不会再次 push，故不会死循环，只是多跑一次无害的冗余 run。
   push:
     paths: ['scripts/**', 'data/release-dates.json',
             '.github/workflows/sync.yml']

@@ -30,7 +30,10 @@ on:
         type: boolean
         default: false
   # 改动取数/规范化/前端代码时立即验证，不等 12 小时。
-  # bot 自己提交的是 data/，不匹配这里，因此不会自己触发自己。
+  # 注意：bot 提交的 data/products.json 与 data/release-dates.json 也命中下方 paths，
+  # 因此 bot 的提交会再触发一轮 workflow。但那一轮管线重跑后指纹不变（指纹已剥离
+  # 运行时刻字段），data_changed 为 false，提交步不会再次 git push，故不会形成死循环，
+  # 只是每轮数据同步多跑一次无害的冗余 run。
   push:
     paths:
       - 'scripts/**'
