@@ -14,7 +14,14 @@
  */
 
 import {
-  existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, cpSync, rmSync, statSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  cpSync,
+  rmSync,
+  statSync,
 } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,7 +85,9 @@ for (const f of files.filter((f) => f.endsWith('.html'))) {
   if (m.length) external.push(`${f}: ${m.length} 处`);
 }
 if (external.length) {
-  problems.push(`包内存在外链引用（Toy 整改口径要求零外链）：\n    ${external.slice(0, 5).join('\n    ')}`);
+  problems.push(
+    `包内存在外链引用（Toy 整改口径要求零外链）：\n    ${external.slice(0, 5).join('\n    ')}`,
+  );
 }
 
 if (problems.length) {
@@ -96,7 +105,9 @@ console.log('✅ 打包自检通过：入口存在、零外链');
 // 所以推进记录的时机必须晚于「平台确认收下这一版」。
 if (argv.includes('--mark-released')) {
   writeFileSync(RELEASE_FILE, `${JSON.stringify(record, null, 2)}\n`, 'utf8');
-  console.log(`\n已推进 data/.toy-release.json → ${record.siteFingerprint}（送审成功后由 workflow 提交入库）`);
+  console.log(
+    `\n已推进 data/.toy-release.json → ${record.siteFingerprint}（送审成功后由 workflow 提交入库）`,
+  );
 } else {
   console.log('\n（未推进仓库记录：加 --mark-released 才会写 data/.toy-release.json）');
 }

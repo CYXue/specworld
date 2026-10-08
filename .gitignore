@@ -2,20 +2,37 @@
 node_modules/
 *.log
 
+# 冒烟测试截图（本地验证用，不入库）
+_shots/
+
 # 构建与发布产物（可随时重新生成，不入库）
 dist/
 
 # 中间产物与调试垃圾（适配器缓存、渲染/截图 profile、临时脚本）
+# ⚠️ 但 data/release-dates.json 与 data/discovery-pending.json 是例外：
+# 它们是**curated 数据**（人工核对的取证 + 等人工补的待收录队列），必须入库。
+# release-dates.json 曾经躺在这里，后果是 CI 全新 checkout 拿不到，60 台全被窗口过滤丢掉。
 _work/
 
 # 精灵图：由 scripts/sprite/generate.mjs 随管线构建期生成（数据几何算出，改字段即变），不入库
 data/sprites/
 
+# public/ 下的数据与精灵：构建期从 data/ 同步过来的拷贝（scripts/sync-public.mjs，prebuild 自动跑）。
+# 真源只有 data/ —— 入库两份必然出现「改了 data/ 忘了重新 build」的版本漂移。
+public/data/
+public/sprites/
+
 # Toy 送审包（dist 的拷贝，随打包重建，不入库）
 .toy-pkg/
+
+# 本地冒烟验证脚本（puppeteer，依赖本机 Chrome，非 CI 用例，不入库）
+_smoke*.cjs
 
 # 编辑器与系统
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# 像素风视觉核对截图（_smoke-pixel.cjs 的产物，随时可重跑生成，不入库）
+_shots-pixel/

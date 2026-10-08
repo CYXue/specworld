@@ -31,11 +31,10 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
+import { mapAppleSpecs, mapAppleCompare, APPLE_SHARED_MARK } from './brands/apple.mjs';
+import { mapHuawei } from './brands/huawei.mjs';
 import { sliceByVariants, stripInvisible } from './parse.mjs';
 import { put, putObject, addNote, tidy, AP, AC } from './shared.mjs';
-import { mapHuawei } from './brands/huawei.mjs';
-import { mapAppleSpecs, mapAppleCompare, APPLE_SHARED_MARK } from './brands/apple.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORK = join(ROOT, '_work');
 const SRC_HUAWEI = join(WORK, 'huawei.raw.json');
@@ -44,17 +43,48 @@ const SRC_APPLE_COMPARE = join(WORK, 'apple-compare.raw.json');
 const SRC_APPLE_PRICES = join(WORK, 'apple-prices.raw.json');
 
 const CONTRACT_PATHS = [
-  'body.heightMm', 'body.widthMm', 'body.thicknessMm', 'body.weightG', 'body.ipRating', 'body.material', 'body.colors',
-  'display.sizeIn', 'display.type', 'display.resolutionPx', 'display.ppi', 'display.refreshHz',
-  'display.brightnessTypicalNits', 'display.brightnessPeakNits', 'display.protection',
-  'chipset.name', 'chipset.processNm', 'chipset.cpuCores', 'chipset.gpu', 'chipset.npu',
-  'memory.ramGb', 'memory.storageGb',
-  'battery.capacityMah', 'battery.capacityCaliber', 'battery.wiredChargeW', 'battery.wirelessChargeW',
-  'battery.vendorClaimedVideoHours', 'battery.measuredHours',
-  'camera.rear', 'camera.front', 'camera.videoMax',
-  'connectivity.fiveG', 'connectivity.wifi', 'connectivity.bluetooth', 'connectivity.nfc',
-  'connectivity.satellite', 'connectivity.usb', 'connectivity.sim', 'connectivity.esim',
-  'os.launch', 'os.upgradableTo', 'skus',
+  'body.heightMm',
+  'body.widthMm',
+  'body.thicknessMm',
+  'body.weightG',
+  'body.ipRating',
+  'body.material',
+  'body.colors',
+  'display.sizeIn',
+  'display.type',
+  'display.resolutionPx',
+  'display.ppi',
+  'display.refreshHz',
+  'display.brightnessTypicalNits',
+  'display.brightnessPeakNits',
+  'display.protection',
+  'chipset.name',
+  'chipset.processNm',
+  'chipset.cpuCores',
+  'chipset.gpu',
+  'chipset.npu',
+  'memory.ramGb',
+  'memory.storageGb',
+  'battery.capacityMah',
+  'battery.capacityCaliber',
+  'battery.wiredChargeW',
+  'battery.wirelessChargeW',
+  'battery.vendorClaimedVideoHours',
+  'battery.measuredHours',
+  'camera.rear',
+  'camera.front',
+  'camera.videoMax',
+  'connectivity.fiveG',
+  'connectivity.wifi',
+  'connectivity.bluetooth',
+  'connectivity.nfc',
+  'connectivity.satellite',
+  'connectivity.usb',
+  'connectivity.sim',
+  'connectivity.esim',
+  'os.launch',
+  'os.upgradableTo',
+  'skus',
 ];
 
 const getPath = (o, p) => p.split('.').reduce((a, k) => (a == null ? undefined : a[k]), o);
@@ -67,7 +97,9 @@ const setPath = (o, p, v) => {
 };
 
 const isEmpty = (v) =>
-  v === null || v === undefined || (Array.isArray(v) && v.length === 0) ||
+  v === null ||
+  v === undefined ||
+  (Array.isArray(v) && v.length === 0) ||
   (typeof v === 'object' && !Array.isArray(v) && v !== null && Object.keys(v).length === 0);
 
 /**
@@ -102,7 +134,10 @@ function mergeMissing(primary, filler) {
   }
   for (const n of filler.notes) addNote(primary, n);
   if (filled.length) {
-    addNote(primary, `以下字段规格页没有、由对比页矩阵补位（provenance=apple-compare）：${filled.join('、')}`);
+    addNote(
+      primary,
+      `以下字段规格页没有、由对比页矩阵补位（provenance=apple-compare）：${filled.join('、')}`,
+    );
   }
   return primary;
 }
@@ -113,17 +148,46 @@ function mergeMissing(primary, filler) {
 
 /** 契约里所有「应该有值」的叶子字段 */
 const COVERAGE_FIELDS = [
-  'body.heightMm', 'body.widthMm', 'body.thicknessMm', 'body.weightG', 'body.ipRating', 'body.material', 'body.colors',
-  'display.sizeIn', 'display.type', 'display.resolutionPx', 'display.ppi', 'display.refreshHz',
-  'display.brightnessTypicalNits', 'display.brightnessPeakNits', 'display.protection',
-  'chipset.name', 'chipset.cpuCores', 'chipset.gpu', 'chipset.npu',
-  'memory.ramGb', 'memory.storageGb',
-  'battery.capacityMah', 'battery.capacityCaliber', 'battery.wiredChargeW', 'battery.wirelessChargeW',
+  'body.heightMm',
+  'body.widthMm',
+  'body.thicknessMm',
+  'body.weightG',
+  'body.ipRating',
+  'body.material',
+  'body.colors',
+  'display.sizeIn',
+  'display.type',
+  'display.resolutionPx',
+  'display.ppi',
+  'display.refreshHz',
+  'display.brightnessTypicalNits',
+  'display.brightnessPeakNits',
+  'display.protection',
+  'chipset.name',
+  'chipset.cpuCores',
+  'chipset.gpu',
+  'chipset.npu',
+  'memory.ramGb',
+  'memory.storageGb',
+  'battery.capacityMah',
+  'battery.capacityCaliber',
+  'battery.wiredChargeW',
+  'battery.wirelessChargeW',
   'battery.vendorClaimedVideoHours',
-  'camera.rear', 'camera.front', 'camera.videoMax',
-  'connectivity.fiveG', 'connectivity.wifi', 'connectivity.bluetooth', 'connectivity.nfc',
-  'connectivity.satellite', 'connectivity.usb', 'connectivity.sim', 'connectivity.esim',
-  'os.launch', 'skus', 'provenance',
+  'camera.rear',
+  'camera.front',
+  'camera.videoMax',
+  'connectivity.fiveG',
+  'connectivity.wifi',
+  'connectivity.bluetooth',
+  'connectivity.nfc',
+  'connectivity.satellite',
+  'connectivity.usb',
+  'connectivity.sim',
+  'connectivity.esim',
+  'os.launch',
+  'skus',
+  'provenance',
 ];
 
 const hasValue = (p, path) => {
@@ -155,9 +219,12 @@ function printCoverage(products) {
     ['apple-compare', '苹果对比页矩阵（通道 C）'],
   ]) {
     const sub = products.filter((p) =>
-      key === 'huawei' ? p.brand === 'huawei'
-        : key === 'apple-specs' ? p.brand === 'apple' && p.granularity === 'specs-page'
-          : p.brand === 'apple' && p.granularity === 'compare-matrix');
+      key === 'huawei'
+        ? p.brand === 'huawei'
+        : key === 'apple-specs'
+          ? p.brand === 'apple' && p.granularity === 'specs-page'
+          : p.brand === 'apple' && p.granularity === 'compare-matrix',
+    );
     if (!sub.length) {
       console.log(`\n── ${label} ──\n  （无机型）`);
       continue;
@@ -210,13 +277,14 @@ function main() {
     if (siblings.length > 1) {
       const sharedText = Object.entries(p.raw)
         .filter(([k]) => APPLE_SHARED_MARK.test(k))
-        .map(([, v]) => tidy(v)).join(' | ');
+        .map(([, v]) => tidy(v))
+        .join(' | ');
       const sliced = sliceByVariants(sharedText, siblings);
       addNote(
         rec,
         `规格页 ${p.specsUrl} 同时包含 ${siblings.length} 个机型（${siblings.join(' / ')}）；` +
           `本机数据由「按机型名分段」拆出，公共段（两种机型均具备）由全部变体共享。` +
-          `sliceByVariants 结果：${sliced ? `切出 ${Object.keys(sliced).join('、')}` : '未命中机型名，公共段整体共享'}`
+          `sliceByVariants 结果：${sliced ? `切出 ${Object.keys(sliced).join('、')}` : '未命中机型名，公共段整体共享'}`,
       );
       rec.rawOfficial['同页拆分'] = `页面机型：${siblings.join(' / ')}；本机取「${rec.name}」段`;
     }
@@ -231,12 +299,14 @@ function main() {
    */
   const WINDOW_START = '2024-09-01';
   // 取证表是 curated 数据，权威副本在 data/（入库）；_work/ 只是本地兼容路径
-  const rdPath = [join(ROOT, 'data', 'release-dates.json'), join(WORK, 'release-dates.json')]
-    .find((p) => existsSync(p));
+  const rdPath = [join(ROOT, 'data', 'release-dates.json'), join(WORK, 'release-dates.json')].find(
+    (p) => existsSync(p),
+  );
   const releaseDates = rdPath ? JSON.parse(readFileSync(rdPath, 'utf8')) : null;
   const dateById = new Map((releaseDates?.entries ?? []).map((e) => [e.id, e]));
   /** 名字里能直接读出「16 代及以后」的写法，用于取证表缺失时的兜底判断 */
-  const nameInWindow = (n) => /\b(1[6-9]|2\d)(e| Plus| Pro| Pro Max| Air| mini)?\b/i.test(stripInvisible(n));
+  const nameInWindow = (n) =>
+    /\b(1[6-9]|2\d)(e| Plus| Pro| Pro Max| Air| mini)?\b/i.test(stripInvisible(n));
 
   let compare = null;
   let compareRecords = [];
@@ -248,7 +318,9 @@ function main() {
     const gapOnly = compare.products.filter((p) => !specIds.has(p.id));
     for (const p of gapOnly) {
       const dated = dateById.get(p.id);
-      const inWindow = dated?.date ? Date.parse(dated.date) >= Date.parse(WINDOW_START) : nameInWindow(p.name);
+      const inWindow = dated?.date
+        ? Date.parse(dated.date) >= Date.parse(WINDOW_START)
+        : nameInWindow(p.name);
       if (inWindow) compareRecords.push(mapAppleCompare(p));
       else compareDropped.push({ id: p.id, name: p.name, date: dated?.date ?? null });
     }
@@ -256,7 +328,8 @@ function main() {
       `就绪（矩阵 ${compare.products.length} 台；其中规格页没有的 ${gapOnly.length} 台，` +
       `落在首发窗口内 ${compareRecords.length} 台 → 作为独立机型收录，窗口外 ${compareDropped.length} 台不收）`;
   } else {
-    compareStatus = '未就绪：_work/apple-compare.raw.json 不存在 → 本次跳过通道 C，不产出矩阵补位机型';
+    compareStatus =
+      '未就绪：_work/apple-compare.raw.json 不存在 → 本次跳过通道 C，不产出矩阵补位机型';
   }
 
   /* --- 合并：规格页 > 对比页矩阵，矩阵只补空缺 --- */
@@ -311,11 +384,24 @@ function main() {
   for (const p of products) {
     if (ids.has(p.id)) problems.push(`id 重复：${p.id}`);
     ids.add(p.id);
-    if (p.releaseDate !== null) problems.push(`${p.id} releaseDate 应由 sync 回填，规范化层不应写入`);
+    if (p.releaseDate !== null)
+      problems.push(`${p.id} releaseDate 应由 sync 回填，规范化层不应写入`);
     if (p.battery.capacityMah !== null && !p.battery.capacityCaliber) {
       problems.push(`${p.id} 有电池容量但缺口径（capacityCaliber）`);
     }
-    for (const path of ['body.weightG', 'display.sizeIn', 'battery.capacityMah', 'memory.storageGb', 'body.thicknessMm', 'display.ppi', 'display.resolutionPx', 'battery.wiredChargeW', 'chipset.name', 'camera.rear', 'connectivity.sim']) {
+    for (const path of [
+      'body.weightG',
+      'display.sizeIn',
+      'battery.capacityMah',
+      'memory.storageGb',
+      'body.thicknessMm',
+      'display.ppi',
+      'display.resolutionPx',
+      'battery.wiredChargeW',
+      'chipset.name',
+      'camera.rear',
+      'connectivity.sim',
+    ]) {
       const v = getPath(p, path);
       if (isEmpty(v)) continue;
       // putObject 会同时登记父路径与子路径，所以这里查父路径就够。
@@ -337,18 +423,28 @@ function main() {
   /* --- 报告 --- */
   console.log('手机参数对比站 · 规范化层');
   console.log(`输入：${SRC_HUAWEI.replace(ROOT, '.')}（${huawei.products.length} 台）`);
-  console.log(`      ${SRC_APPLE.replace(ROOT, '.')}（${apple.products.length} 台 / ${pageIndex.size} 个规格页）`);
+  console.log(
+    `      ${SRC_APPLE.replace(ROOT, '.')}（${apple.products.length} 台 / ${pageIndex.size} 个规格页）`,
+  );
   console.log(`      ${SRC_APPLE_COMPARE.replace(ROOT, '.')} → ${compareStatus}`);
   console.log(`      ${SRC_APPLE_PRICES.replace(ROOT, '.')} → ${pricesStatus}`);
   console.log(`输出：${outPath.replace(ROOT, '.')}  共 ${products.length} 台\n`);
 
   const hw = products.filter((p) => p.brand === 'huawei').length;
   const aps = products.filter((p) => p.brand === 'apple' && p.granularity === 'specs-page').length;
-  const apc = products.filter((p) => p.brand === 'apple' && p.granularity === 'compare-matrix').length;
-  console.log(`机型数：华为规格页 ${hw} + 苹果规格页 ${aps} + 苹果矩阵 ${apc} = ${products.length}`);
+  const apc = products.filter(
+    (p) => p.brand === 'apple' && p.granularity === 'compare-matrix',
+  ).length;
+  console.log(
+    `机型数：华为规格页 ${hw} + 苹果规格页 ${aps} + 苹果矩阵 ${apc} = ${products.length}`,
+  );
   if (compareDropped.length) {
-    console.log(`矩阵通道另有 ${compareDropped.length} 台落在首发窗口（${WINDOW_START}）之前，未收录：`);
-    console.log(`  ${compareDropped.map((x) => `${x.name}${x.date ? `(${x.date})` : ''}`).join('、')}`);
+    console.log(
+      `矩阵通道另有 ${compareDropped.length} 台落在首发窗口（${WINDOW_START}）之前，未收录：`,
+    );
+    console.log(
+      `  ${compareDropped.map((x) => `${x.name}${x.date ? `(${x.date})` : ''}`).join('、')}`,
+    );
   }
 
   // 苹果规格页拆分自证
@@ -359,7 +455,9 @@ function main() {
     console.log(`  ${url}`);
     console.log(`    页面机型 ${list.length} 台：${names.join(' / ')}`);
     for (const p of products.filter((x) => names.some((n) => stripInvisible(n) === x.name))) {
-      console.log(`      · ${p.id.padEnd(26)} 重量 ${String(p.body.weightG ?? 'null').padStart(4)} g   屏幕 ${String(p.display.sizeIn ?? 'null').padStart(5)} 英寸   granularity=${p.granularity}`);
+      console.log(
+        `      · ${p.id.padEnd(26)} 重量 ${String(p.body.weightG ?? 'null').padStart(4)} g   屏幕 ${String(p.display.sizeIn ?? 'null').padStart(5)} 英寸   granularity=${p.granularity}`,
+      );
     }
   }
 
@@ -368,12 +466,24 @@ function main() {
   console.log('\n── null 计数（「官网真没有」的证据）────────────────────────────');
   console.log(`  华为 chipset.name = null：${hwNoChip.length} / ${hw} 台`);
   console.log(`    ${hwNoChip.map((p) => p.id).join(', ')}`);
-  console.log(`  苹果 battery.capacityMah = null：${products.filter((p) => p.brand === 'apple' && p.battery.capacityMah === null).length} / ${aps + apc} 台（苹果从不公布 mAh）`);
-  console.log(`  苹果 chipset.processNm = null：${products.filter((p) => p.brand === 'apple' && p.chipset.processNm === null).length} / ${aps + apc} 台`);
-  console.log(`  全体 body.weightG = null：${products.filter((p) => p.body.weightG === null).length} 台`);
-  console.log(`  全体 display.brightnessPeakNits = null：${products.filter((p) => p.display.brightnessPeakNits === null).length} 台`);
-  console.log(`  全体 battery.wiredChargeW = null：${products.filter((p) => p.battery.wiredChargeW === null).length} 台`);
-  console.log(`  有 skus（价格）的机型：${products.filter((p) => p.skus?.length).length} 台（华为 ${products.filter((p) => p.brand === 'huawei' && p.skus?.length).length} + 苹果 ${products.filter((p) => p.brand === 'apple' && p.skus?.length).length}）`);
+  console.log(
+    `  苹果 battery.capacityMah = null：${products.filter((p) => p.brand === 'apple' && p.battery.capacityMah === null).length} / ${aps + apc} 台（苹果从不公布 mAh）`,
+  );
+  console.log(
+    `  苹果 chipset.processNm = null：${products.filter((p) => p.brand === 'apple' && p.chipset.processNm === null).length} / ${aps + apc} 台`,
+  );
+  console.log(
+    `  全体 body.weightG = null：${products.filter((p) => p.body.weightG === null).length} 台`,
+  );
+  console.log(
+    `  全体 display.brightnessPeakNits = null：${products.filter((p) => p.display.brightnessPeakNits === null).length} 台`,
+  );
+  console.log(
+    `  全体 battery.wiredChargeW = null：${products.filter((p) => p.battery.wiredChargeW === null).length} 台`,
+  );
+  console.log(
+    `  有 skus（价格）的机型：${products.filter((p) => p.skus?.length).length} 台（华为 ${products.filter((p) => p.brand === 'huawei' && p.skus?.length).length} + 苹果 ${products.filter((p) => p.brand === 'apple' && p.skus?.length).length}）`,
+  );
 
   printCoverage(products);
 

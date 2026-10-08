@@ -2,7 +2,21 @@
  * 规范化层共享工具与常量（从 index.mjs 抽出的纯函数，零依赖）。
  * 品牌映射文件（brands/huawei.mjs、brands/apple.mjs）与 index.mjs 都从这里取。
  */
-import { firstNumber as firstNum, allNumbers as nums, parseCapacity, parseInch, parseMm, parsePpi, parseRefresh, parseResolution, parseStorageList, parseWatt, parseWeight, sliceByVariants, stripInvisible } from './parse.mjs';
+import {
+  firstNumber as firstNum,
+  allNumbers as nums,
+  parseCapacity,
+  parseInch,
+  parseMm,
+  parsePpi,
+  parseRefresh,
+  parseResolution,
+  parseStorageList,
+  parseWatt,
+  parseWeight,
+  sliceByVariants,
+  stripInvisible,
+} from './parse.mjs';
 const HW = 'huawei-official';
 const AP = 'apple-official';
 const AC = 'apple-compare';
@@ -15,7 +29,11 @@ const PLACEHOLDERS = new Set(['-', '—', '–', '--', '不适用', '—不适�
  * ══════════════════════════════════════════════════════════════════════════ */
 
 /** 官网节选：去掉零宽字符、修掉源头的一处多余引号、压平换行 */
-const tidy = (s) => stripInvisible(s).replace(/^"+/, '').replace(/\s*\n\s*/g, ' ').trim();
+const tidy = (s) =>
+  stripInvisible(s)
+    .replace(/^"+/, '')
+    .replace(/\s*\n\s*/g, ' ')
+    .trim();
 
 /** 占位符 / 空串 → undefined（等价「官网没给」） */
 const realValue = (v) => {
@@ -24,7 +42,6 @@ const realValue = (v) => {
   if (!t || PLACEHOLDERS.has(t)) return undefined;
   return t;
 };
-
 
 /** 单位换算后的瓦数：`60 瓦` → 60；`100 W` → 100。只认明确带瓦的写法，不认 V×A 推算 */
 const wattOf = (t) => {
@@ -48,14 +65,27 @@ function parseAppleAppearance(look) {
     // 图片描述段（超过一句、带句号，或以机型名开头）一律排除
     .filter((s) => !/。/.test(s) && !/外观，|展示|机身中央|标志。/.test(s));
 
-  const colorSeg = segs.find((s) => /、/.test(s) && !/[（）()]/.test(s) && !/(面板|玻璃|金属|设计|超瓷晶)/.test(s) && s.length <= 40);
-  const colors = colorSeg ? colorSeg.split(/[、,，]/).map(tidy).filter(Boolean) : [];
+  const colorSeg = segs.find(
+    (s) =>
+      /、/.test(s) &&
+      !/[（）()]/.test(s) &&
+      !/(面板|玻璃|金属|设计|超瓷晶)/.test(s) &&
+      s.length <= 40,
+  );
+  const colors = colorSeg
+    ? colorSeg
+        .split(/[、,，]/)
+        .map(tidy)
+        .filter(Boolean)
+    : [];
 
   const designSeg = segs.find((s) => /(金属|超瓷晶|玻璃|面板)/.test(s) && !/[（）()]/.test(s));
   const material = designSeg ?? null;
 
   const panelSegs = segs.filter((s) => /超瓷晶面板/.test(s) && /[（(]/.test(s));
-  const protection = panelSegs.length ? panelSegs.join(' | ') : (segs.find((s) => /超瓷晶|纳米纹理/.test(s)) ?? null);
+  const protection = panelSegs.length
+    ? panelSegs.join(' | ')
+    : (segs.find((s) => /超瓷晶|纳米纹理/.test(s)) ?? null);
 
   return { colors, material, protection, segments: segs };
 }
@@ -93,7 +123,8 @@ const normalizeType = (s) => (s ? tidy(s).replace(/，/g, ', ') : null);
 
 /** 让 a[path] = value 同时登记来源；value 为「空」时不写（保持 null 语义） */
 function put(record, path, value, source) {
-  const empty = value === null || value === undefined || (Array.isArray(value) && value.length === 0);
+  const empty =
+    value === null || value === undefined || (Array.isArray(value) && value.length === 0);
   if (empty) return;
   record.provenance[path] = source;
 }
@@ -112,7 +143,8 @@ function put(record, path, value, source) {
  * 不需要知道这个字段是对象型的。
  */
 function putObject(record, path, value, source, subKeys) {
-  const empty = value === null || value === undefined || (Array.isArray(value) && value.length === 0);
+  const empty =
+    value === null || value === undefined || (Array.isArray(value) && value.length === 0);
   if (empty) return;
   record.provenance[path] = source;
   for (const k of subKeys) {
@@ -137,7 +169,10 @@ function multiPartValue(text) {
   if (!s) return { text: '', multi: false };
   const LABEL = '(?:内屏|外屏|折叠态|展开态|三屏态|双屏态|单屏态)';
   if (/[|｜；;]/.test(s)) {
-    const parts = s.split(/\s*[|｜；;]\s*/).map(tidy).filter(Boolean);
+    const parts = s
+      .split(/\s*[|｜；;]\s*/)
+      .map(tidy)
+      .filter(Boolean);
     return { text: parts[0] ?? s, multi: parts.length > 1 };
   }
   // 没有分隔符，但第二个形态标签以空格紧跟在后：`内屏：8 英寸 外屏：6.49 英寸`
@@ -238,7 +273,9 @@ const addNote = (record, text) => {
 
 /** 光圈：`F1.4-F4.0` → "f/1.4-4.0"；`ƒ/1.48、ƒ/1.8` → "f/1.48、f/1.8" */
 function parseAperture(text) {
-  const s = stripInvisible(text).replace(/[ƒ]/g, 'f').replace(/f\s*\/\s*/gi, 'F');
+  const s = stripInvisible(text)
+    .replace(/[ƒ]/g, 'f')
+    .replace(/f\s*\/\s*/gi, 'F');
   const range = s.match(/F\s*(\d+(?:\.\d+)?)\s*[-–~]\s*F?\s*(\d+(?:\.\d+)?)/i);
   if (range) return `f/${range[1]}-${range[2]}`;
   const list = [...s.matchAll(/F\s*(\d+(?:\.\d+)?)/gi)].map((m) => `f/${m[1]}`);
@@ -290,7 +327,7 @@ function parseLens(text, fallbackRole = 'main') {
     /可变光圈|连续可变光圈/.test(s) ? '可变光圈' : null,
     /RYYB/.test(s) ? 'RYYB' : null,
     /传感器位移防抖/.test(s) ? '传感器位移防抖' : null,
-    (/多光谱|红枫|超光谱/.test(s) && /万/.test(s) && !/像素/.test(s))
+    /多光谱|红枫|超光谱/.test(s) && /万/.test(s) && !/像素/.test(s)
       ? `官网原文标注「${(s.match(/(\d+(?:\.\d+)?)\s*万多光谱通道[^，,）)]*/) ?? [])[0] ?? '多光谱'}」——非像素指标，故 mp 记 null`
       : null,
     /1\/[\d.]+/.test(s) ? `传感器 ${(s.match(/1\/[\d.]+/) ?? [])[0]}` : null,
@@ -331,7 +368,10 @@ function parseRearLenses(text, limit = 8) {
 function parseFront(text) {
   const s = stripInvisible(text);
   if (!s) return null;
-  const parts = s.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean);
+  const parts = s
+    .split(/\s*[|｜]\s*/)
+    .map(tidy)
+    .filter(Boolean);
   if (!parts.length) return null;
   const lens = parseLens(parts[0], 'main');
   return { mp: lens.mp, aperture: lens.aperture };
@@ -375,7 +415,7 @@ const HW_SERIES_LINE = {
   'Pura 系列': 'Pura',
   'Pocket 系列': 'Pocket',
   'nova 系列': 'nova',
-  '畅享系列': '畅享',
+  畅享系列: '畅享',
 };
 
 /**
@@ -389,7 +429,9 @@ const HW_SERIES_LINE = {
  * 返回值同时给出选中的 key，调用方负责把「用了变体键」这件事记进 notes。
  */
 function hwLookup(raw, base, productName) {
-  const candidates = Object.keys(raw).filter((k) => k.split('@')[0].split('.')[0] === base || k.split('@')[0] === base);
+  const candidates = Object.keys(raw).filter(
+    (k) => k.split('@')[0].split('.')[0] === base || k.split('@')[0] === base,
+  );
   if (!candidates.length) return { value: undefined, key: null, variant: null };
 
   const bare = candidates.find((k) => !k.includes('@') && k.split('.')[0] === base);
@@ -409,7 +451,12 @@ function hwLookup(raw, base, productName) {
   const prefixed = withVariant
     .filter((c) => name && c.variant.startsWith(name))
     .sort((a, b) => a.variant.length - b.variant.length);
-  if (prefixed.length) return { value: realValue(raw[prefixed[0].key]), key: prefixed[0].key, variant: prefixed[0].variant };
+  if (prefixed.length)
+    return {
+      value: realValue(raw[prefixed[0].key]),
+      key: prefixed[0].key,
+      variant: prefixed[0].variant,
+    };
   // ③ 兜底：键序第一个
   const first = withVariant[0];
   return { value: realValue(raw[first.key]), key: first.key, variant: first.variant };
@@ -431,7 +478,7 @@ function hwBattery(raw, productName) {
   // 典藏版/非凡大师版的电池可能与主版本不同（Mate X6：5110 / 5200），
   // 单独把「带机型名的电池键」也读出来，只作为 note 提示，不覆盖主值。
   const altKeys = Object.keys(raw).filter(
-    (k) => !k.startsWith('_') && k.split('@')[0].split('.')[0] === '电池' && k !== body.key
+    (k) => !k.startsWith('_') && k.split('@')[0].split('.')[0] === '电池' && k !== body.key,
   );
   const altMap = new Map();
   for (const k of altKeys) {
@@ -442,7 +489,13 @@ function hwBattery(raw, productName) {
     if (!altMap.has(text)) altMap.set(text, k);
   }
   const alternates = [...altMap].map(([text, key]) => ({ key, text }));
-  return { raw: body.value, rawKey: body.key, variant: body.variant, notes: tidy(notes), alternates };
+  return {
+    raw: body.value,
+    rawKey: body.key,
+    variant: body.variant,
+    notes: tidy(notes),
+    alternates,
+  };
 }
 
 /** 充电：有的机型分 `充电.有线充电` / `充电.无线充电`，有的合并在一行 `充电` 里 */
@@ -458,13 +511,15 @@ function hwCharging(raw, productName) {
     });
     return key ? realValue(raw[key]) : undefined;
   };
-  const wired = find('充电', ['有线充电', '有线快充']) ?? firstOf(raw, ['充电.有线充电', '充电.有线充电：', '充电.有线快充'], productName).value;
-  const wireless = find('充电', ['无线充电']) ?? firstOf(raw, ['充电.无线充电', '充电.无线充电：'], productName).value;
+  const wired =
+    find('充电', ['有线充电', '有线快充']) ??
+    firstOf(raw, ['充电.有线充电', '充电.有线充电：', '充电.有线快充'], productName).value;
+  const wireless =
+    find('充电', ['无线充电']) ??
+    firstOf(raw, ['充电.无线充电', '充电.无线充电：'], productName).value;
   const merged = firstOf(raw, ['充电'], productName).value;
   const pick = (label) => {
-    const fromMerged = merged
-      ?.split(/\s*[|｜]\s*/)
-      .find((seg) => seg.startsWith(label));
+    const fromMerged = merged?.split(/\s*[|｜]\s*/).find((seg) => seg.startsWith(label));
     return fromMerged ?? undefined;
   };
   return {
@@ -480,7 +535,11 @@ function hwMemory(raw, productName) {
   // 变体式整段键：`存储@HUAWEI Mate XT 2 非凡大师` / `存储.HUAWEI Mate X6 典藏版`
   const merged = firstOf(raw, ['存储', '存储.运行内存（RAM）+ 机身内存（ROM）'], productName);
   const byName = Object.keys(raw)
-    .filter((k) => k.split('@')[0].split('.')[0] === '存储' && k.split('@')[0].split('.')[1]?.startsWith('HUAWEI'))
+    .filter(
+      (k) =>
+        k.split('@')[0].split('.')[0] === '存储' &&
+        k.split('@')[0].split('.')[1]?.startsWith('HUAWEI'),
+    )
     .sort((a, b) => a.localeCompare(b));
   const nameKey = byName.find((k) => !/典藏版|非凡大师|灵盾|手写笔/.test(k)) ?? byName[0];
 
@@ -506,11 +565,50 @@ function hwMemory(raw, productName) {
 }
 
 export {
-  tidy, realValue, wattOf, parseAppleAppearance, derivePpi, pickFirstRes, refreshText,
-  normalizeType, put, putObject, multiPartValue, emptyRecord, pushOfficial, addNote,
-  parseAperture, parseOis, cameraRole, parseLens, parseRearLenses, parseFront, parseVideoMax,
-  HW_REAR_KEYS, HW_FRONT_KEYS, HW_SERIES_LINE, hwLookup, firstOf, hwBattery, hwCharging, hwMemory,
-  HW, AP, AC, PLACEHOLDERS,
-  firstNum, nums, parseCapacity, parseInch, parseMm, parsePpi, parseRefresh, parseResolution,
-  parseStorageList, parseWatt, parseWeight, sliceByVariants, stripInvisible,
+  tidy,
+  realValue,
+  wattOf,
+  parseAppleAppearance,
+  derivePpi,
+  pickFirstRes,
+  refreshText,
+  normalizeType,
+  put,
+  putObject,
+  multiPartValue,
+  emptyRecord,
+  pushOfficial,
+  addNote,
+  parseAperture,
+  parseOis,
+  cameraRole,
+  parseLens,
+  parseRearLenses,
+  parseFront,
+  parseVideoMax,
+  HW_REAR_KEYS,
+  HW_FRONT_KEYS,
+  HW_SERIES_LINE,
+  hwLookup,
+  firstOf,
+  hwBattery,
+  hwCharging,
+  hwMemory,
+  HW,
+  AP,
+  AC,
+  PLACEHOLDERS,
+  firstNum,
+  nums,
+  parseCapacity,
+  parseInch,
+  parseMm,
+  parsePpi,
+  parseRefresh,
+  parseResolution,
+  parseStorageList,
+  parseWatt,
+  parseWeight,
+  sliceByVariants,
+  stripInvisible,
 };

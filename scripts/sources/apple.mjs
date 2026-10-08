@@ -100,10 +100,24 @@ const MAX_NOTE_ITEMS = 200;
 const PRODUCT_NAME_RE = /iPhone\s+(?:\d+[A-Za-z]?|X[RS]?|SE|Air|Duo)(?:\s+(?:Pro|Plus|Max|mini))?/;
 
 const ENTITIES = {
-  '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
-  '&#39;': "'", '&apos;': "'", '&times;': '×', '&ndash;': '–',
-  '&mdash;': '—', '&hellip;': '…', '&minus;': '−', '&middot;': '·',
-  '&rsquo;': '’', '&lsquo;': '‘', '&ldquo;': '“', '&rdquo;': '”', '&deg;': '°',
+  '&nbsp;': ' ',
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&#39;': "'",
+  '&apos;': "'",
+  '&times;': '×',
+  '&ndash;': '–',
+  '&mdash;': '—',
+  '&hellip;': '…',
+  '&minus;': '−',
+  '&middot;': '·',
+  '&rsquo;': '’',
+  '&lsquo;': '‘',
+  '&ldquo;': '“',
+  '&rdquo;': '”',
+  '&deg;': '°',
 };
 
 /* ------------------------------------------------------------------ */
@@ -183,7 +197,9 @@ function sameText(a, b) {
   return cleanText(a) === cleanText(b);
 }
 
-/** 取 class 属性里 `section-{key}` 的 key（属性顺序不可依赖，所以先单独取 class） */function sectionKeyOf(attrs) {
+/** 取 class 属性里 `section-{key}` 的 key（属性顺序不可依赖，所以先单独取 class） */ function sectionKeyOf(
+  attrs,
+) {
   const cm = attrs.match(/\bclass\s*=\s*"([^"]*)"/i) || attrs.match(/\bclass\s*=\s*'([^']*)'/i);
   if (!cm) return '';
   if (!/\btechspecs-section\b/.test(cm[1])) return '';
@@ -231,7 +247,11 @@ function sliceChildrenByClass(html, classRe) {
     if (!cm || !classRe.test(cm[1])) continue;
     const end = matchDivEnd(html, openRe.lastIndex);
     if (!end) continue;
-    out.push({ attrs: m[1], outer: html.slice(m.index, end.end), inner: html.slice(openRe.lastIndex, end.start) });
+    out.push({
+      attrs: m[1],
+      outer: html.slice(m.index, end.end),
+      inner: html.slice(openRe.lastIndex, end.start),
+    });
     openRe.lastIndex = end.end;
   }
   return out;
@@ -263,10 +283,14 @@ function usefulAria(cellHtml) {
 export function parseSpecsHtml(html) {
   const rawSections = sliceSections(html).map(({ key, body }) => {
     const rows = sliceChildrenByClass(body, /\btechspecs-row\b/).map((row) => {
-      const headM = row.inner.match(/<div\b[^>]*class="[^"]*\btechspecs-rowheader\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
+      const headM = row.inner.match(
+        /<div\b[^>]*class="[^"]*\btechspecs-rowheader\b[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
+      );
       const label = headM ? plainText(headM[1]) : '';
       const cells = sliceChildrenByClass(row.inner, /\btechspecs-column\b/).map((cell) => {
-        const mh = cell.inner.match(/<strong\b[^>]*class="[^"]*\btechspecs-small-heading\b[^"]*"[^>]*>([\s\S]*?)<\/strong>/i);
+        const mh = cell.inner.match(
+          /<strong\b[^>]*class="[^"]*\btechspecs-small-heading\b[^"]*"[^>]*>([\s\S]*?)<\/strong>/i,
+        );
         const heading = mh ? plainText(mh[1]) : '';
         // 小标题只在确实长得像机型名时才算「型号声明」；
         // 否则它只是单元格内的小标题（如「相机控制」「两种机型均具备」），要留在值里
@@ -315,7 +339,11 @@ export function parseSpecsHtml(html) {
     const bodyStart = headerM.index + headerM[0].length;
     const end = matchDivEnd(html, bodyStart);
     const headerBody = end ? html.slice(bodyStart, end.start) : '';
-    headerModels = [...headerBody.matchAll(/<span\b[^>]*\bclass="[^"]*\bheader-iphone[^"]*"[^>]*>([\s\S]*?)<\/span>/gi)]
+    headerModels = [
+      ...headerBody.matchAll(
+        /<span\b[^>]*\bclass="[^"]*\bheader-iphone[^"]*"[^>]*>([\s\S]*?)<\/span>/gi,
+      ),
+    ]
       .map((m) => cleanText(htmlToText(m[1])))
       .filter((s) => PRODUCT_NAME_RE.test(s));
     headerModels.forEach((name) => registerModel(name, headerModels.indexOf(name)));
@@ -323,7 +351,8 @@ export function parseSpecsHtml(html) {
 
   // 形态 2：表格顶部那行（可能是 visuallyhidden）的裸 `<div role="columnheader">`
   if (!headerModels.length) {
-    const nm = html.match(/<h1\b[^>]*\bid="page-headline"[^>]*>([\s\S]*?)<\/h1>/i) ||
+    const nm =
+      html.match(/<h1\b[^>]*\bid="page-headline"[^>]*>([\s\S]*?)<\/h1>/i) ||
       html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
     const pageModel = nm ? cleanText(htmlToText(nm[1]).replace(/\s*技术规格\s*$/, '')) : '';
     if (pageModel && PRODUCT_NAME_RE.test(pageModel)) {
@@ -349,8 +378,8 @@ export function parseSpecsHtml(html) {
   const sections = rawSections.map((sec) => {
     // section 级归属表：默认继承全局，但本 section 内出现的型号声明优先
     const sectionColumn = columnModel.slice();
-    const declaredRowModels = sec.rows.map(
-      (row) => row.cells.map((c) => c.declaredModel).filter(Boolean),
+    const declaredRowModels = sec.rows.map((row) =>
+      row.cells.map((c) => c.declaredModel).filter(Boolean),
     );
     /** section 标题：无 rowheader 且只声明了一个型号的那一行 */
     let caption = '';
@@ -370,8 +399,7 @@ export function parseSpecsHtml(html) {
       sectionColumn[0] = modelOrder[0];
     }
     const rows = [];
-    const sectionTitle =
-      cleanText(sec.rows.find((r) => r.label)?.label || '') || sec.key;
+    const sectionTitle = cleanText(sec.rows.find((r) => r.label)?.label || '') || sec.key;
     /**
      * 无 rowheader 行的字段名：单元格自己的小标题优先（如 display 的
      * 「两种机型均具备」、external 的「操作按钮功能」），连小标题都没有时
@@ -431,7 +459,8 @@ export function flattenSections(sections, modelName = '') {
   for (const sec of sections) {
     const sectionTitle = sec.label || sec.key;
     const buckets = sec.rows;
-    const matched = buckets.length > 1 && modelName ? buckets.filter((b) => b.model === modelName) : [];
+    const matched =
+      buckets.length > 1 && modelName ? buckets.filter((b) => b.model === modelName) : [];
     const use = matched.length ? matched : buckets;
     let count = 0;
     for (const bucket of use) {
@@ -463,7 +492,9 @@ export function parseCompareProducts(html) {
   const end = matchDivEnd(html, openEnd);
   const body = end ? html.slice(openEnd, end.start) : html.slice(openEnd);
   const names = [
-    ...body.matchAll(/data-type="products"[^>]*>\s*<div\b[^>]*data-store-value=""[^>]*>([\s\S]*?)<\/div>/g),
+    ...body.matchAll(
+      /data-type="products"[^>]*>\s*<div\b[^>]*data-store-value=""[^>]*>([\s\S]*?)<\/div>/g,
+    ),
   ]
     .map((m) => cleanText(htmlToText(m[1])))
     .filter(Boolean);
@@ -509,7 +540,9 @@ export function verifyRawAgainstHtml(html, raw) {
 
   const visible = squash(html.replace(/<sup\b[^>]*>[\s\S]*?<\/sup>/gi, '').replace(/<[^>]+>/g, ''));
   const attrs = squash(
-    [...html.matchAll(/\b(?:aria-label|content|alt)="([^"]*)"/gi)].map((m) => m[1]).join(' \u0001 '),
+    [...html.matchAll(/\b(?:aria-label|content|alt)="([^"]*)"/gi)]
+      .map((m) => m[1])
+      .join(' \u0001 '),
   );
   const hay = `${visible}\u0001${attrs}`;
 
@@ -568,7 +601,10 @@ export function slugCandidatesFor(name) {
     push('iphone-se');
     return out;
   }
-  const word = clean.replace(/^iPhone\s+/i, '').trim().toLowerCase();
+  const word = clean
+    .replace(/^iPhone\s+/i, '')
+    .trim()
+    .toLowerCase();
   if (word) push(`iphone-${word.replace(/\s+/g, '-')}`);
   return out;
 }
@@ -576,7 +612,9 @@ export function slugCandidatesFor(name) {
 /** 候选 slug 与官网机型名的贴合度，用于在多候选中挑「非跳转」的那个时打破平局 */
 function slugNameScore(slug, name) {
   const s = slug.replace(/^iphone-/, '');
-  const n = cleanText(name).replace(/^iPhone\s+/i, '').toLowerCase();
+  const n = cleanText(name)
+    .replace(/^iPhone\s+/i, '')
+    .toLowerCase();
   if (s === n.replace(/\s+/g, '-')) return 100;
   const sTight = s.replace(/-/g, '');
   const nTight = n.replace(/[\s-]+/g, '');
@@ -621,7 +659,11 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     const t0 = Date.now();
     try {
-      const res = await fetch(url, { headers: HEADERS, redirect: 'follow', signal: controller.signal });
+      const res = await fetch(url, {
+        headers: HEADERS,
+        redirect: 'follow',
+        signal: controller.signal,
+      });
       return { res, ms: Date.now() - t0 };
     } finally {
       clearTimeout(timer);
@@ -639,8 +681,17 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
         const html = readFileSync(cachePath, 'utf8');
         if (html && html.length > 0) {
           return {
-            ok: true, status: 200, finalUrl: url, redirected: false, cacheable: false, html,
-            bytes: statSync(cachePath).size, fromCache: true, attempts: 0, ms: 0, error: null,
+            ok: true,
+            status: 200,
+            finalUrl: url,
+            redirected: false,
+            cacheable: false,
+            html,
+            bytes: statSync(cachePath).size,
+            fromCache: true,
+            attempts: 0,
+            ms: 0,
+            error: null,
           };
         }
       } catch {
@@ -649,8 +700,17 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
     }
     if (cacheOnly) {
       return {
-        ok: false, status: 0, finalUrl: url, redirected: false, cacheable: false, html: '',
-        bytes: 0, fromCache: false, attempts: 0, ms: 0, error: 'cache-miss',
+        ok: false,
+        status: 0,
+        finalUrl: url,
+        redirected: false,
+        cacheable: false,
+        html: '',
+        bytes: 0,
+        fromCache: false,
+        attempts: 0,
+        ms: 0,
+        error: 'cache-miss',
       };
     }
 
@@ -682,29 +742,56 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
             }
           }
           return {
-            ok: true, status: res.status, finalUrl, redirected: lastRedirected, cacheable,
-            html, bytes: Buffer.byteLength(html, 'utf8'), fromCache: false, attempts: attempt, ms, error: null,
+            ok: true,
+            status: res.status,
+            finalUrl,
+            redirected: lastRedirected,
+            cacheable,
+            html,
+            bytes: Buffer.byteLength(html, 'utf8'),
+            fromCache: false,
+            attempts: attempt,
+            ms,
+            error: null,
           };
         }
         lastErr = `HTTP ${res.status}`;
         // 4xx（尤其 404）是确定性结论，重试无意义；5xx / 429 才退避重试
         if (res.status >= 400 && res.status < 500 && res.status !== 429) {
           return {
-            ok: false, status: res.status, finalUrl, redirected: lastRedirected,
-            cacheable: !lastRedirected, html: '', bytes: 0, fromCache: false, attempts: attempt, ms,
+            ok: false,
+            status: res.status,
+            finalUrl,
+            redirected: lastRedirected,
+            cacheable: !lastRedirected,
+            html: '',
+            bytes: 0,
+            fromCache: false,
+            attempts: attempt,
+            ms,
             error: lastErr,
           };
         }
       } catch (error) {
         requests.errors += 1;
-        lastErr = isDeadlineError(error) ? `timeout after ${REQUEST_TIMEOUT_MS}ms` : String(error?.message || error);
+        lastErr = isDeadlineError(error)
+          ? `timeout after ${REQUEST_TIMEOUT_MS}ms`
+          : String(error?.message || error);
       }
       if (attempt <= RETRIES) await sleep(RETRY_BACKOFF_MS * attempt);
     }
 
     return {
-      ok: false, status: lastStatus, finalUrl: url, redirected: lastRedirected, html: '',
-      bytes: 0, fromCache: false, attempts: RETRIES + 1, ms: Date.now() - lastReqAt, error: lastErr,
+      ok: false,
+      status: lastStatus,
+      finalUrl: url,
+      redirected: lastRedirected,
+      html: '',
+      bytes: 0,
+      fromCache: false,
+      attempts: RETRIES + 1,
+      ms: Date.now() - lastReqAt,
+      error: lastErr,
     };
   };
 }
@@ -715,7 +802,8 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
 
 function pushNote(notes, text) {
   if (notes.length < MAX_NOTE_ITEMS) notes.push(text);
-  else if (notes.length === MAX_NOTE_ITEMS) notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
+  else if (notes.length === MAX_NOTE_ITEMS)
+    notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
 }
 
 /**
@@ -757,7 +845,10 @@ export async function fetchAll(options = {}) {
   onProgress?.({ phase: 'compare', url: COMPARE_URL });
   const comparePage = await fetchPage(COMPARE_URL, { cacheFile: '_compare.html', kind: 'compare' });
   if (!comparePage.ok) {
-    pushNote(notes, `对比页抓取失败（${comparePage.error || `HTTP ${comparePage.status}`}），无法枚举机型清单`);
+    pushNote(
+      notes,
+      `对比页抓取失败（${comparePage.error || `HTTP ${comparePage.status}`}），无法枚举机型清单`,
+    );
     return {
       source: SOURCE_ID,
       fetchedAt: new Date().toISOString(),
@@ -805,7 +896,14 @@ export async function fetchAll(options = {}) {
   /** 已经成功解析过的 specs 页：`型号名 → { slug, url, parsed, html }` */
   const pageIndex = new Map();
   const record = (id, name, specsUrl, raw) => {
-    products.push({ id, brand: 'apple', name, specsUrl, raw, extractedAt: new Date().toISOString() });
+    products.push({
+      id,
+      brand: 'apple',
+      name,
+      specsUrl,
+      raw,
+      extractedAt: new Date().toISOString(),
+    });
   };
   const rememberPage = (slug, url, parsed, html) => {
     for (const model of parsed.modelOrder) {
@@ -823,8 +921,14 @@ export async function fetchAll(options = {}) {
     const memoize = (payload) => {
       if (!probePath) return;
       try {
-        writeFileSync(probePath, `${JSON.stringify({ slug, checkedAt: new Date().toISOString(), ...payload }, null, 2)}\n`, 'utf8');
-      } catch { /* 缓存写失败不影响取数 */ }
+        writeFileSync(
+          probePath,
+          `${JSON.stringify({ slug, checkedAt: new Date().toISOString(), ...payload }, null, 2)}\n`,
+          'utf8',
+        );
+      } catch {
+        /* 缓存写失败不影响取数 */
+      }
     };
     if (probePath && existsSync(probePath)) {
       let memo = null;
@@ -838,7 +942,8 @@ export async function fetchAll(options = {}) {
 
     const page = await fetchPage(url, { cacheFile: `${slug}.html`, kind: 'specs' });
     if (!page.ok) {
-      if (page.error === 'cache-miss') return { skip: true, reason: `无缓存且 --cache-only：${url}`, fatal: true };
+      if (page.error === 'cache-miss')
+        return { skip: true, reason: `无缓存且 --cache-only：${url}`, fatal: true };
       // 404 = 这个 slug 根本不存在；301 到别处 = 机型已下线。
       // 两者都是确定性的，值得落盘；超时/5xx 是暂时性的，不落盘，下次重试。
       if (page.error === 'HTTP 404') {
@@ -863,7 +968,10 @@ export async function fetchAll(options = {}) {
       return { skip: true, reason };
     }
     if (parsed.sections.length !== EXPECTED_SECTIONS) {
-      pushNote(notes, `${slug}: 段落数 ${parsed.sections.length} ≠ 预期的 ${EXPECTED_SECTIONS}，模板可能已改版`);
+      pushNote(
+        notes,
+        `${slug}: 段落数 ${parsed.sections.length} ≠ 预期的 ${EXPECTED_SECTIONS}，模板可能已改版`,
+      );
     }
     if (parsed.modelOrder.length > 1) {
       pushNote(notes, `${slug}: 该页同时包含 ${parsed.modelOrder.join(' / ')}，按列分别取值`);
@@ -875,7 +983,9 @@ export async function fetchAll(options = {}) {
   /** 从一份已解析的页面里取指名型号的 raw */
   const extractModel = (name, entry) => {
     const modelName =
-      entry.parsed.modelOrder.find((x) => sameText(x, name)) || entry.parsed.modelOrder[0] || cleanText(name);
+      entry.parsed.modelOrder.find((x) => sameText(x, name)) ||
+      entry.parsed.modelOrder[0] ||
+      cleanText(name);
     const { raw, sectionFieldCounts } = flattenSections(entry.parsed.sections, modelName);
     return {
       raw,
@@ -920,8 +1030,13 @@ export async function fetchAll(options = {}) {
       const finalId = `apple-${got.slug}`;
       record(finalId, cleanText(name), got.url, got.raw);
       onProgress?.({
-        phase: 'ok', name, id: finalId, sections: got.sectionCount, fields: got.fieldCount,
-        fromCache: got.fromCache, via: got.via,
+        phase: 'ok',
+        name,
+        id: finalId,
+        sections: got.sectionCount,
+        fields: got.fieldCount,
+        fromCache: got.fromCache,
+        via: got.via,
       });
     } else {
       const reason = skipReason || `未取到规格页：${CN_ORIGIN}/${primary}/specs/`;
@@ -951,15 +1066,23 @@ export async function fetchAll(options = {}) {
     skipped.splice(idx, 1);
     record(id, cleanText(name), hit.url, ex.raw);
     onProgress?.({
-      phase: 'ok', name, id, sections: ex.sectionCount, fields: ex.fieldCount,
-      fromCache: true, via: 'crosstab',
+      phase: 'ok',
+      name,
+      id,
+      sections: ex.sectionCount,
+      fields: ex.fieldCount,
+      fromCache: true,
+      via: 'crosstab',
     });
   }
   for (const n of crossNotes) pushNote(notes, n);
 
   /* 3) 汇总 */
   if (roster.length && products.length + skipped.length !== roster.length) {
-    pushNote(notes, `覆盖范围对不上：机型 ${roster.length}，成功 ${products.length}，跳过 ${skipped.length}`);
+    pushNote(
+      notes,
+      `覆盖范围对不上：机型 ${roster.length}，成功 ${products.length}，跳过 ${skipped.length}`,
+    );
   }
 
   /* 3a) 保真度自检：每个 raw 值都必须在源 HTML 里逐字找得到 */
@@ -989,7 +1112,10 @@ export async function fetchAll(options = {}) {
     `汇总：机型 ${roster.length}，成功 ${products.length}，跳过 ${skipped.length}（跳过原因见 skipped 字段）`,
   );
   const fieldTotal = products.reduce((n, p) => n + Object.keys(p.raw).length, 0);
-  pushNote(notes, `raw 字段合计 ${fieldTotal} 条（成功机型均值 ${products.length ? Math.round(fieldTotal / products.length) : 0} 条/款）`);
+  pushNote(
+    notes,
+    `raw 字段合计 ${fieldTotal} 条（成功机型均值 ${products.length ? Math.round(fieldTotal / products.length) : 0} 条/款）`,
+  );
 
   return {
     source: SOURCE_ID,
@@ -1005,14 +1131,34 @@ export async function fetchAll(options = {}) {
 /* ------------------------------------------------------------------ */
 
 function parseArgv(argv) {
-  const opts = { out: null, cacheDir: null, only: [], delayMs: DEFAULT_DELAY_MS, cacheOnly: false, json: false, help: false };
+  const opts = {
+    out: null,
+    cacheDir: null,
+    only: [],
+    delayMs: DEFAULT_DELAY_MS,
+    cacheOnly: false,
+    json: false,
+    help: false,
+  };
   const take = (i) => argv[i + 1];
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
-    if (a === '--out' || a === '-o') { opts.out = take(i); i += 1; } else if (a.startsWith('--out=')) opts.out = a.slice(6);
-    else if (a === '--cache') { opts.cacheDir = take(i); i += 1; } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
-    else if (a === '--only') { opts.only.push(...String(take(i) || '').split(',')); i += 1; } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
-    else if (a === '--delay') { opts.delayMs = Number(take(i)); i += 1; } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
+    if (a === '--out' || a === '-o') {
+      opts.out = take(i);
+      i += 1;
+    } else if (a.startsWith('--out=')) opts.out = a.slice(6);
+    else if (a === '--cache') {
+      opts.cacheDir = take(i);
+      i += 1;
+    } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
+    else if (a === '--only') {
+      opts.only.push(...String(take(i) || '').split(','));
+      i += 1;
+    } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
+    else if (a === '--delay') {
+      opts.delayMs = Number(take(i));
+      i += 1;
+    } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
     else if (a === '--cache-only') opts.cacheOnly = true;
     else if (a === '--json') opts.json = true;
     else if (a === '--help' || a === '-h') opts.help = true;
@@ -1097,7 +1243,9 @@ const invokedDirectly =
   process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
 if (invokedDirectly) {
   main()
-    .then((code) => { process.exitCode = code; })
+    .then((code) => {
+      process.exitCode = code;
+    })
     .catch((error) => {
       process.stderr.write(`适配器异常退出：${error?.stack || error}\n`);
       process.exitCode = 2;

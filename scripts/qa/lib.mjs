@@ -63,14 +63,17 @@ export const c = {
 export function table(headers, rows, { align = [] } = {}) {
   if (!rows.length) return;
   const widths = headers.map((h, i) =>
-    Math.max(displayWidth(h), ...rows.map((r) => displayWidth(String(r[i] ?? '')))));
+    Math.max(displayWidth(h), ...rows.map((r) => displayWidth(String(r[i] ?? '')))),
+  );
   const line = (cells) =>
-    cells.map((cell, i) => {
-      const w = widths[i];
-      const s = String(cell ?? '');
-      const pad = w - displayWidth(s);
-      return align[i] === 'r' ? ' '.repeat(pad) + s : s + ' '.repeat(pad);
-    }).join('  ');
+    cells
+      .map((cell, i) => {
+        const w = widths[i];
+        const s = String(cell ?? '');
+        const pad = w - displayWidth(s);
+        return align[i] === 'r' ? ' '.repeat(pad) + s : s + ' '.repeat(pad);
+      })
+      .join('  ');
   console.log(c.dim(line(headers)));
   console.log(c.dim(line(widths.map((w) => '─'.repeat(w)))));
   for (const r of rows) console.log(line(r));
@@ -80,9 +83,7 @@ export function table(headers, rows, { align = [] } = {}) {
 function displayWidth(s) {
   let w = 0;
   for (const ch of String(s)) {
-    w += /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦]/.test(ch)
-      ? 2
-      : 1;
+    w += /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦]/.test(ch) ? 2 : 1;
   }
   return w;
 }

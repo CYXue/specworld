@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>参数世界 · 选择更清楚</title>
+    <meta
+      name="description"
+      content="参数世界（specworld）— 华为与苹果在售手机参数的可核查对比，让选择更清楚。数据全部来自厂商官网，缺失项标注「官方未公布」，不做估算。"
+    />
+    <!--
+      像素字体 @font-face 内联在此，不放 style.css。
+      原因同参考项目：字体路径必须跟着部署前缀走（Toy 挂在 /toy/<slug>/ 下），
+      CSS 里写死 /fonts/ 会打到 bilibili.com 根上；放这里用相对路径与精灵图共用同一套规则。
+
+      SpecPixel = Fusion Pixel 12px proportional 的子集（OFL-1.1）。
+      子集属「修改」，故按 OFL 要求改名；上游原名与许可证全文见 public/fonts/OFL.txt。
+      生成方式：python scripts/font/build-subset.py
+      字表 = 项目实需字符 ∪ GB2312 一级常用字(3755) ∪ ASCII ∪ 界面符号。
+      为什么要重做：旧字体只覆盖项目实需汉字的 45%，缺口处静默回退系统无衬线字体，
+      表现为「同一标题里有些字是像素的、有些字是圆滑的」—— 零报错的风格不一致。
+    -->
+    <style>
+      @font-face {
+        font-family: 'SpecPixel';
+        src: url('./fonts/pixel-zh.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

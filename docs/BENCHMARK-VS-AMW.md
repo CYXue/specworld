@@ -1,8 +1,10 @@
-# 架构对标：phone-spec-world vs AI 大模型世界
+# 架构对标：参数世界 vs AI 大模型世界
+
+> ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
 
 对标日期：2026-10-03
 - 参考项目：`liyupi/ai-model-world`（克隆自 `https://github.com/liyupi/ai-model-world`，HEAD `f42beed`）
-- 本地项目：`phone-spec-world`（HEAD `0a7f506`，线上 `https://cyxue.github.io/specworld/`）
+- 本地项目：参数世界（specworld）（HEAD `0a7f506`，线上 `https://cyxue.github.io/specworld/`）
 
 本文回答三个问题：**哪里不一样、哪些不一样是致命的、怎么让下一个项目更快。**
 
@@ -11,7 +13,7 @@
 ## 零、一句话结论
 
 **本地的自动化闭环已经跑通，比参考项目只差一层「防退化」。**
-参考项目 28,561 行 vs 本地 11,936 行；差距不在功能密度，在三处：
+参考项目 28,561 行 vs 本地 13,948 行；差距不在功能密度，在三处：
 **单元自测（224 项 vs 79 项）**、**只读体检脚本（17 个 vs 3 个）**、**i18n 架子（有 vs 有）**——本地在防退化工程化上已追平参考项目，差距只在规模与品牌数。
 
 建议路线：**不迁移技术栈，只补这三层，并把它们抽成模板。**
@@ -23,21 +25,21 @@
 
 | 维度 |参考项目 | 本地项目 | 差距 |
 |---|---|---|---|
-| 代码规模 | 28,561 行 TS/TSX | 11,936 行 mjs/ts | 参考多 2.4×（数据源 8 vs 4、站点页 9 路由 vs 10 页） |
+| 代码规模 | 28,561 行 TS/TSX | 13,948 行 mjs/ts | 参考多约 2.0×（数据源 8 vs 4、站点页 9 路由 vs 76 页） |
 | 数据源个数 | **8 个**（Epoch / HF / LiveBench / LMArena / models.dev / OpenRouter / LiteLLM / Vercel Gateway） | **4 个**（华为官网 / 苹果官网 / 苹果对比页 / 苹果价格） | 本地是「同厂商多页面」，参考是「多厂商多源交叉」 |
 | 数据体量 | 632 模型 / 65 厂商 / 3.4 MB | 60 台 / 2 厂商 / 262 KB | 规模差 10× |
 | 管线自测 | `scripts/sync/selftest.ts` **224 项断言** | `scripts/selftest.mjs` **79 项断言**（2026-10-03 起，含品牌映射层 golden 测试） | ✅ 已补上 |
 | 只读体检脚本 | `scripts/qa/` **17 个** | `scripts/qa/` 三个（why-champion / coverage / stale-lineup，直接复用 `buildChampions` 单一真源） | ✅ 已建（2026-10-03） |
 | 站点框架 | Next.js 16 静态导出 + React 19 + Tailwind 4 | **手写 mjs 模板字符串 + dist输出** | 技术栈不同 |
-| 样式 | Tailwind 原子类 | `lib/ui.mjs` 554 行手写 HTML 片段函数 | 本地更笨但更少依赖 |
+| 样式 | Tailwind 原子类 | `lib/ui.mjs` 569 行手写 HTML 片段函数 | 本地更笨但更少依赖 |
 | 产物 | `.next/out` + 606 张精灵图 | `dist/` 76 页HTML（精灵图不再入库，改由 `scripts/sprite/generate.mjs` 构建期确定性生成 + `.gitignore` 排除 `data/sprites/`） | 本地更小 |
 | 部署 | Vercel + EdgeOne Pages 双端 | GitHub Pages 单端 | 参考多一个国内端 |
 | 子路径部署 | `NEXT_BASE_PATH` 支持（Toy 必需） | 无（Pages 不需要） | 本地用不上 |
 | i18n | `src/lib/i18n.ts` 349 行架子，`Lang` 参数已贯穿视图组件 | `scripts/site/lib/i18n.mjs`（字典 + `t()` 缺键抛错 + `auditDict()`，英文内容刻意留空待二期） | ✅ 已建架子（2026-10-03） |
 | 内容指纹 | `scripts/toy/fingerprint.ts` | `scripts/publish/fingerprint.mjs` | **本地更强**（见下） |
-| 校验闸门 | `validate.ts` 405 行，20+ 条 | `validate.mjs` ~60 行，8 条 | 参考更密 |
+| 校验闸门 | `validate.ts` 405 行，20+ 条 | `validate.mjs` 194 行，8 条 | 参考更密 |
 | 原子写| 有 | **有**（同目录 rename） | 持平 |
-| 文档 | 4,518 行（7 篇，HANDOFF 1086 行） | 1,158 行（5 篇） | 本地薄 |
+| 文档 | 4,518 行（7 篇，HANDOFF 1086 行） | ~4,160 行（12 篇） | 体量相当 |
 
 ---
 
@@ -71,7 +73,7 @@ models.dev → LiteLLM → OpenRouter → Vercel Gateway
 > 没有到「哪个字段来自哪个源」的粒度。加了之后，将来补第三个品牌（小米/三星）时，
 > 同一个字段的两家官网说法不一致，你能立刻看出分歧在哪。
 
-### 差异 2：自测层 —— 本地完全没有
+### 差异 2：自测层 —— 本地已补齐（2026-10-03）
 
 参考项目 `scripts/sync/selftest.ts`，**224 项断言，不联网**，专门测那些
 **错了也不报错、只会静默产出脏数据**的纯函数：
@@ -91,9 +93,9 @@ models.dev → LiteLLM → OpenRouter → Vercel Gateway
 **当时是靠肉眼发现、然后补一条闸门 `refreshHz: [48, 240]` 兜住的。** 但那次的根因在解析器，
 闸门只是把症状按住。如果有自测，`parse.mjs` 里那个解析函数当时就该有一条断言挡住。
 
-**差距的本质**：本地是「**出事 → 补闸门**」，参考项目是「**写代码 → 写断言 → 事前拦住**」。
+**差距的本质（已填平）**：本地曾经是「出事 → 补闸门」，2026-10-03 起已补 `scripts/selftest.mjs`（79 项断言，CI 首个 job），转为「写代码 → 写断言 → 事前拦住」，与参考项目一致。
 
-### 差异 3：只读体检层（QA scripts）—— 本地完全没有
+### 差异 3：只读体检层（QA scripts）—— 本地已补齐（2026-10-03）
 
 参考项目 17 个只读脚本，全部离线确定性，加起来回答一个问题：**「为什么页面是这个结果」**。
 ```
@@ -106,10 +108,10 @@ shots.ts 三个断点批量截图
 ```
 `AGENTS.md` 里还写死了一条：**改了排名逻辑先跑 `flagship-rules.ts` 看影响面**。
 
-本地完全没有这层。现在想回答「为什么这台是榜首」「改了档位影响面多大」，
+本地现已补齐（2026-10-03）：`scripts/qa/` 下 `why-champion` / `coverage` / `stale-lineup` 三件套，全部离线确定性，回答「为什么这台是榜首」「改了档位影响面多大」，且复用 `buildChampions` 单一真源，不会与页面结论分歧。现在想回答这些问题，
 只能手工跑管线 + 手翻 dist HTML。这是**当前最高频的隐形成本**。
 
-### 差异 4：精灵图不进仓库 + 状态层 DOM 化
+### 差异 4：精灵图不进仓库 + 状态层 DOM 化（本地已于 2026-10-03 对齐）
 
 参考项目 606 张精灵图**不提交**，构建时由 `models.json` + 角色设定表确定性生成（7 秒）。
 理由写得很直接：合成器改一次绘制逻辑就产生十几 MB 新blob，几次迭代仓库就撑爆。
@@ -118,8 +120,7 @@ shots.ts 三个断点批量截图
 「模型现在怎么样」（皇冠/光环/闪光）由 DOM 现画**。
 排名一变当场摘冠，不用重新合成 PNG。体积从 18.4 MB 降到 11.5 MB。
 
-本地 `data/sprites/` 里60 个 SVG 是**入库的**（每个文件都是 git 对象）。
-60 台机器这样没问题，但这是**规模增长的第一个爆点**。
+本地 `data/sprites/` 已**不再入库**：2026-10-03 起精灵图改由 `scripts/sprite/generate.mjs` 在管线构建期确定性生成（几何由屏幕对角线/厚度/后摄数算出），`data/sprites/` 写入 `.gitignore`。与参考项目做法一致，**规模增长不再是爆点**。
 
 ### 差异 5：指纹 —— 本地比参考项目强，别改回去
 
@@ -184,8 +185,7 @@ parseRefresh('60 Hz / 90 Hz 屏幕')  →  只取到 60，90Hz 整段被丢掉
 ## 四、怎么让下一个项目更快
 
 现在这两个项目的关系是「**抄了架构，没抄工程化**」。
-`docs/AUTOMATION-RECIPE.md` 已经把自动化的部分沉淀出来了（426 行，含迁移检查单），
-但**自测层和体检层没有沉淀**——所以下一个项目还得重新踩一遍坑。
+`docs/AUTOMATION-RECIPE.md` 已经把自动化的部分沉淀出来了（含迁移检查单）；自测层（`scripts/selftest.mjs`，79 项断言）与体检层（`scripts/qa/` 三件套）也已在 2026-10-03 补齐，下一项目可直接复用，不必再踩一遍坑。
 
 ### 4.1 抽一个 `world-factory` 模板仓
 
@@ -224,32 +224,30 @@ world-factory/
 
 ### 4.3 一份配方文档该长什么样
 
-参考项目 `HANDOFF.md` 1086 行里有两节是本地完全没有、且价值最高的：
+参考项目 `HANDOFF.md` 1086 行里有两节价值最高：**「不可违背的原则」**与**「踩过的坑」**。
 
 - **「不可违背的原则」**（数据诚信 / 合规红线 / 零AI 依赖 / 跨赛制分数永不混算）
 - **「踩过的坑」**（数据侧 + 视觉侧，25+ 条，每条带原因）
 
-**这类文档不能自动生成，必须人写。** 但它可以在项目启动时就建起来、随开发增量补，
-而不是等踩完坑再回头补——本地 `docs/` 1158行里就缺少这一节，
-现在补它需要重新回忆华为官网的每个假设。
+**这类文档不能自动生成，必须人写。** 本地已在 2026-10-03 补 `PRINCIPLES.md`（不可违背原则 + 明确不做清单），下一项目可直接复用，不必从零写、也不必重新回忆华为官网的每个假设。
 
 ---
 
 ## 五、为什么不迁移到 Next.js
 
-本地是手写 mjs 模板（`build.mjs` 1117 行 + `ui.mjs` 554 行）出 76 页静态 HTML。
+本地是手写 mjs 模板（`build.mjs` 1117 行 + `ui.mjs` 569 行）出 76 页静态 HTML。
 参考项目用 Next.js 16 + React 19 + Tailwind 4。看起来落后一大截，**但本地在这条路上更值**：
 
 | 维度 | 手写 mjs 模板 | Next.js 16 |
 |---|---|---|
-| 本地现有存量 | **1671 行已跑通** | 全部重写 |
+| 本地现有存量 | **1686 行已跑通** | 全部重写 |
 | 产物 | 3.8 MB / 76 页，零依赖 | 引入 React 19 + Tailwind 4 构建链 |
 | 装依赖 | **零** | 约 300 MB node_modules |
 | 本地约束 | GitHub Pages 单端 | 需要 Vercel 或 EdgeOne 才能部署 |
 | 加i18n | 字典套模板（本来就该这么做） | 加 `src/app/en/` 路由层 |
 | 加交互 | 手写 DOM 事件（已内联搜索索引，可行） | React 组件天然 |
 
-**结论：迁移的收益是「省手写模板的活」，成本是重写 1671 行 + 引入构建链 + 换部署目标。**
+**结论：迁移的收益是「省手写模板的活」，成本是重写 1686 行 + 引入构建链 + 换部署目标。**
 真要减模板代码，**先把 `ui.mjs` 的片段函数按组件拆开**就够了，不需要换框架。
 
 唯一值得考虑迁移的场景：本地要加**用户可交互的复杂功能**（如在线筛选排序的排行榜、URL 状态同步），
@@ -283,7 +281,7 @@ world-factory/
 # 参考项目
 git clone --depth 1 https://gh-proxy.com/https://github.com/liyupi/ai-model-world.git
 # 本地
-cd C:/aiwork/deepseek/dsh/phone-spec-world && git log --oneline -5
+cd C:/aiwork/deepseek/dsh/specworld && git log --oneline -5
 ```
 参考项目 HEAD `f42beed`（2026-10-02，632 模型 / 65 厂商）。
 本文所有数字来自对两份工作区的直接文件统计，非估计。

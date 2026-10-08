@@ -11,12 +11,14 @@
 
 /** 官网文本里混杂的零宽字符（&#8203; &#8288; 等），会污染名称与数值比对 */
 export function stripInvisible(s) {
-  return String(s ?? '')
-    // 各类非常规空格（U+2000–200A 等）与零宽字符（U+200B–200F、U+2060–2064）一并去掉。
-    // 华为页面的机型名会写成「非<U+2008>凡<U+2008>大<U+2008>师」，不去掉就没法与别处对齐。
-    .replace(/[\u2000-\u200F\u2028\u2029\u202F\u205F\u2060-\u2064\uFEFF]/g, '')
-    .replace(/&(?:#8203|#8288|#8199|nbsp);/gi, '')
-    .trim();
+  return (
+    String(s ?? '')
+      // 各类非常规空格（U+2000–200A 等）与零宽字符（U+200B–200F、U+2060–2064）一并去掉。
+      // 华为页面的机型名会写成「非<U+2008>凡<U+2008>大<U+2008>师」，不去掉就没法与别处对齐。
+      .replace(/[\u2000-\u200F\u2028\u2029\u202F\u205F\u2060-\u2064\uFEFF]/g, '')
+      .replace(/&(?:#8203|#8288|#8199|nbsp);/gi, '')
+      .trim()
+  );
 }
 
 /** 归一化键名用于别名匹配：去空格/全角括号/下划线，便于「运行内存（RAM）」≈「运行内存」 */
@@ -30,17 +32,25 @@ export function normalizeKey(key) {
 
 /** 取文本里第一个数字（支持千位分隔与小数） */
 export function firstNumber(text) {
-  const m = String(text ?? '').replace(/,/g, '').match(/-?\d+(?:\.\d+)?/);
+  const m = String(text ?? '')
+    .replace(/,/g, '')
+    .match(/-?\d+(?:\.\d+)?/);
   return m ? Number(m[0]) : null;
 }
 
 /** 全部数字 */
 export function allNumbers(text) {
-  return (String(text ?? '').replace(/,/g, '').match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
+  return (
+    String(text ?? '')
+      .replace(/,/g, '')
+      .match(/\d+(?:\.\d+)?/g) ?? []
+  ).map(Number);
 }
 
 const withUnit = (text, unitRe) => {
-  const m = String(text ?? '').replace(/,/g, '').match(new RegExp(`(-?\\d+(?:\\.\\d+)?)\\s*(?:${unitRe})`, 'i'));
+  const m = String(text ?? '')
+    .replace(/,/g, '')
+    .match(new RegExp(`(-?\\d+(?:\\.\\d+)?)\\s*(?:${unitRe})`, 'i'));
   return m ? Number(m[1]) : null;
 };
 
@@ -204,14 +214,19 @@ export function parseWeight(text) {
   const s = stripInvisible(text);
   const nums = [...s.matchAll(/(\d+(?:\.\d+)?)\s*(?:g\b|克|gram)/gi)].map((m) => Number(m[1]));
   if (!nums.length) return { value: null, note: null };
-  const note = nums.length > 1 ? `原文含 ${nums.length} 个重量值（${nums.join(' / ')} g），取第一个，口径需人工确认` : null;
+  const note =
+    nums.length > 1
+      ? `原文含 ${nums.length} 个重量值（${nums.join(' / ')} g），取第一个，口径需人工确认`
+      : null;
   return { value: nums[0], note };
 }
 
 /** 从「峰值亮度 2000 尼特」这类文本里分辨口径 */
 export function parseBrightness(text) {
   const s = stripInvisible(text);
-  const nums = [...s.matchAll(/(\d[\d,]*)\s*(?:尼特|nits?)/gi)].map((m) => Number(m[1].replace(/,/g, '')));
+  const nums = [...s.matchAll(/(\d[\d,]*)\s*(?:尼特|nits?)/gi)].map((m) =>
+    Number(m[1].replace(/,/g, '')),
+  );
   if (!nums.length) return { peak: null, typical: null, values: [] };
   const isPeak = /峰值|HDR|局部/.test(s);
   const isTypical = /典型|全屏|持续/.test(s);
@@ -259,4 +274,3 @@ export function slugify(name) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
-

@@ -3,12 +3,46 @@
  * 纯函数，依赖来自 ../shared.mjs 与 ../parse.mjs（经 shared 再导出）。
  */
 import {
-  emptyRecord, put, putObject, hwLookup, firstOf, hwBattery, hwCharging, hwMemory,
-  parseRearLenses, parseFront, parseVideoMax, parseAperture, parseOis, parseLens,
-  multiPartValue, refreshText, derivePpi, pickFirstRes, normalizeType, tidy, realValue,
-  addNote, pushOfficial, HW_REAR_KEYS, HW_FRONT_KEYS, HW_SERIES_LINE,
-  parseCapacity, parseInch, parseMm, parsePpi, parseResolution, parseStorageList, parseWeight, parseWatt,
-  sliceByVariants, stripInvisible, firstNum, nums, HW, wattOf,
+  emptyRecord,
+  put,
+  putObject,
+  hwLookup,
+  firstOf,
+  hwBattery,
+  hwCharging,
+  hwMemory,
+  parseRearLenses,
+  parseFront,
+  parseVideoMax,
+  parseAperture,
+  parseOis,
+  parseLens,
+  multiPartValue,
+  refreshText,
+  derivePpi,
+  pickFirstRes,
+  normalizeType,
+  tidy,
+  realValue,
+  addNote,
+  pushOfficial,
+  HW_REAR_KEYS,
+  HW_FRONT_KEYS,
+  HW_SERIES_LINE,
+  parseCapacity,
+  parseInch,
+  parseMm,
+  parsePpi,
+  parseResolution,
+  parseStorageList,
+  parseWeight,
+  parseWatt,
+  sliceByVariants,
+  stripInvisible,
+  firstNum,
+  nums,
+  HW,
+  wattOf,
 } from '../shared.mjs';
 function mapHuawei(rawProduct) {
   const raw = rawProduct.raw;
@@ -47,11 +81,15 @@ function mapHuawei(rawProduct) {
   })();
   const thickness = foldedThickness ? foldedThickness.value : parseMm(t.value ?? '');
   if (foldedThickness) {
-    addNote(rec, `厚度原文为多态标注「${foldedThickness.text}」；body.thicknessMm 取折叠态，展开态见 rawOfficial`);
+    addNote(
+      rec,
+      `厚度原文为多态标注「${foldedThickness.text}」；body.thicknessMm 取折叠态，展开态见 rawOfficial`,
+    );
   }
   const weight = parseWeight(wt.value ?? '');
   if (weight.note) addNote(rec, `重量原文「${tidy(wt.value)}」：${weight.note}`);
-  if (/屏幕表面层/.test(dimNotes)) addNote(rec, `官网脚注另给含屏幕表面层的重量，未采用：${tidy(dimNotes)}`);
+  if (/屏幕表面层/.test(dimNotes))
+    addNote(rec, `官网脚注另给含屏幕表面层的重量，未采用：${tidy(dimNotes)}`);
 
   rec.body.heightMm = parseMm(h.value ?? '');
   rec.body.widthMm = parseMm(w.value ?? '');
@@ -72,7 +110,10 @@ function mapHuawei(rawProduct) {
   const sizePart = multiPartValue(sizeText);
   const sizeIn = parseInch(sizePart.text);
   if (sizePart.multi) {
-    addNote(rec, `屏幕尺寸原文为多态标注「${tidy(sizeText)}」；display.sizeIn 取第一条（内屏/折叠态），其余见 rawOfficial`);
+    addNote(
+      rec,
+      `屏幕尺寸原文为多态标注「${tidy(sizeText)}」；display.sizeIn 取第一条（内屏/折叠态），其余见 rawOfficial`,
+    );
   }
 
   // 分辨率：`折叠态：2442 × 1140 像素 三屏态：2232 × 3184 像素` / `内屏：2416 × 2210 像素 | 外屏：2444 × 1080 像素`
@@ -80,7 +121,10 @@ function mapHuawei(rawProduct) {
   const resPart = multiPartValue(resText);
   const resolutionPx = parseResolution(resPart.text) ?? parseResolution(resText);
   if (resPart.multi) {
-    addNote(rec, `分辨率原文为多态标注「${tidy(resText)}」；display.resolutionPx 取第一条，其余见 rawOfficial`);
+    addNote(
+      rec,
+      `分辨率原文为多态标注「${tidy(resText)}」；display.resolutionPx 取第一条，其余见 rawOfficial`,
+    );
   }
 
   const ppiPart = multiPartValue(ppiHit.value ?? '');
@@ -89,7 +133,10 @@ function mapHuawei(rawProduct) {
   if (ppi === null) {
     ppi = derivePpi(sizeIn, resolutionPx);
     if (ppi !== null) {
-      addNote(rec, `官网未直接给出 ppi；display.ppi 由官网的分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived`);
+      addNote(
+        rec,
+        `官网未直接给出 ppi；display.ppi 由官网的分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived`,
+      );
     }
   } else if (ppiPart.multi) {
     addNote(rec, `ppi 原文为多态标注「${tidy(ppiHit.value)}」；display.ppi 取第一条`);
@@ -108,7 +155,10 @@ function mapHuawei(rawProduct) {
   const gpu = firstOf(raw, ['处理器.GPU'], name);
   if (cpu.value) {
     // `麒麟9050 Pro 麒麟9050` 是「主型号 + 变体型号」并列，取第一个完整型号名
-    const tokens = tidy(cpu.value).split(/\s{2,}|\s*[|｜]\s*/).map(tidy).filter(Boolean);
+    const tokens = tidy(cpu.value)
+      .split(/\s{2,}|\s*[|｜]\s*/)
+      .map(tidy)
+      .filter(Boolean);
     let chip = tokens[0] ?? tidy(cpu.value);
     if (tokens.length > 1 && /^\S+$/.test(chip) && !/Pro|Max|Ultra/i.test(chip)) {
       // 被空格切开的情况（`麒麟9050 Pro 麒麟9050`）：补回紧随其后的型号后缀
@@ -156,16 +206,24 @@ function mapHuawei(rawProduct) {
     for (const alt of bat.alternates ?? []) {
       const v = parseCapacity(alt.text);
       if (v.value !== null && v.value !== rec.battery.capacityMah) {
-        addNote(rec, `官网另有配置专属电池容量「${alt.key}：${alt.text}」；契约字段是单值，主值未覆盖，请按配置核对`);
+        addNote(
+          rec,
+          `官网另有配置专属电池容量「${alt.key}：${alt.text}」；契约字段是单值，主值未覆盖，请按配置核对`,
+        );
       }
     }
   }
 
   const charge = hwCharging(raw, name);
   rec.battery.wiredChargeW = wattOf(charge.wired ?? '');
-  rec.battery.wirelessChargeW = /不支持/.test(charge.wireless ?? '') ? null : wattOf(charge.wireless ?? '');
+  rec.battery.wirelessChargeW = /不支持/.test(charge.wireless ?? '')
+    ? null
+    : wattOf(charge.wireless ?? '');
   if (charge.wired && rec.battery.wiredChargeW === null) {
-    addNote(rec, `有线充电原文「${tidy(charge.wired)}」未出现明确的「N W」标称，battery.wiredChargeW 记 null（不按 V×A 推算）`);
+    addNote(
+      rec,
+      `有线充电原文「${tidy(charge.wired)}」未出现明确的「N W」标称，battery.wiredChargeW 记 null（不按 V×A 推算）`,
+    );
   }
   if (/不支持/.test(charge.wireless ?? '')) {
     addNote(rec, '官网明确「无线充电：不支持」→ battery.wirelessChargeW 记 null（表示无此能力）');
@@ -174,12 +232,19 @@ function mapHuawei(rawProduct) {
   /* ---- 影像 ------------------------------------------------------------ */
   const rear = firstOf(raw, HW_REAR_KEYS, name);
   const front = firstOf(raw, HW_FRONT_KEYS, name);
-  const rearVideo = firstOf(raw, ['后置摄像头.后置摄像头摄像分辨率', '后置摄像头.后置摄像头视频拍摄'], name);
+  const rearVideo = firstOf(
+    raw,
+    ['后置摄像头.后置摄像头摄像分辨率', '后置摄像头.后置摄像头视频拍摄'],
+    name,
+  );
   rec.camera.rear = parseRearLenses(rear.value ?? '');
   rec.camera.front = parseFront(front.value ?? '');
   rec.camera.videoMax = parseVideoMax(rearVideo.value ?? '');
   if (rear.value) {
-    addNote(rec, `后置影像原文见 rawOfficial「后置摄像头」；未标注像素的辅助器件（红枫原色/多光谱/深感）role 记 depth、mp 记 null`);
+    addNote(
+      rec,
+      `后置影像原文见 rawOfficial「后置摄像头」；未标注像素的辅助器件（红枫原色/多光谱/深感）role 记 depth、mp 记 null`,
+    );
   }
   if (front.value && (front.value.match(/[|｜]/) ?? []).length) {
     addNote(rec, `前置摄像头原文含多个镜头（「${tidy(front.value)}」），camera.front 取第一个`);
@@ -207,12 +272,20 @@ function mapHuawei(rawProduct) {
   /* ---- 机身其他 -------------------------------------------------------- */
   const ipRaw = hwLookup(raw, '防尘抗水', name).value;
   if (ipRaw) {
-    const ips = [...new Set([...ipRaw.matchAll(/IP\s?\d{2}/gi)].map((m) => m[0].replace(/\s/g, '').toUpperCase()))];
+    const ips = [
+      ...new Set(
+        [...ipRaw.matchAll(/IP\s?\d{2}/gi)].map((m) => m[0].replace(/\s/g, '').toUpperCase()),
+      ),
+    ];
     rec.body.ipRating = ips.length ? ips.join('/') : null;
   }
   rec.body.material = hwLookup(raw, '中框', name).value ?? null;
   const colors = hwLookup(raw, '颜色', name).value;
-  if (colors) rec.body.colors = colors.split(/[、,，]/).map(tidy).filter(Boolean);
+  if (colors)
+    rec.body.colors = colors
+      .split(/[、,，]/)
+      .map(tidy)
+      .filter(Boolean);
 
   /* ---- SKU（价格）------------------------------------------------------ */
   const priceRaw = hwLookup(raw, '_catalog.price', name).value;
@@ -246,27 +319,52 @@ function mapHuawei(rawProduct) {
   }
 
   /* ---- 官网原文节选 ---------------------------------------------------- */
-  pushOfficial(rec, '尺寸与重量', [h.value, w.value, t.value, wt.value].filter(Boolean).join(' | '));
-  pushOfficial(rec, '屏幕', [size.value, type.value, res.value, ppiHit.value, glass.value].filter(Boolean).join(' | '));
+  pushOfficial(
+    rec,
+    '尺寸与重量',
+    [h.value, w.value, t.value, wt.value].filter(Boolean).join(' | '),
+  );
+  pushOfficial(
+    rec,
+    '屏幕',
+    [size.value, type.value, res.value, ppiHit.value, glass.value].filter(Boolean).join(' | '),
+  );
   pushOfficial(rec, '处理器', cpu.value);
   pushOfficial(rec, '存储', [mem.ramText, mem.romText].filter(Boolean).join(' | '));
   pushOfficial(rec, '电池', bat.raw);
-  pushOfficial(rec, '充电', charge.merged ?? [charge.wired, charge.wireless].filter(Boolean).join(' | '));
+  pushOfficial(
+    rec,
+    '充电',
+    charge.merged ?? [charge.wired, charge.wireless].filter(Boolean).join(' | '),
+  );
   pushOfficial(rec, '后置摄像头', rear.value);
   pushOfficial(rec, '前置摄像头', front.value);
   pushOfficial(rec, '防尘抗水', ipRaw);
-  pushOfficial(rec, '数据连接', [
-    rec.connectivity.wifi,
-    rec.connectivity.bluetooth,
-    rec.connectivity.usb,
-    rec.connectivity.satellite,
-  ].filter(Boolean).join(' | '));
-  for (const [label, path] of [['屏幕脚注', '_notes.屏幕'], ['电池脚注', '_notes.电池'], ['充电脚注', '_notes.充电']]) {
+  pushOfficial(
+    rec,
+    '数据连接',
+    [
+      rec.connectivity.wifi,
+      rec.connectivity.bluetooth,
+      rec.connectivity.usb,
+      rec.connectivity.satellite,
+    ]
+      .filter(Boolean)
+      .join(' | '),
+  );
+  for (const [label, path] of [
+    ['屏幕脚注', '_notes.屏幕'],
+    ['电池脚注', '_notes.电池'],
+    ['充电脚注', '_notes.充电'],
+  ]) {
     pushOfficial(rec, label, hwLookup(raw, path, name).value, 200);
   }
 
   if (variantKeys.length) {
-    addNote(rec, `以下字段使用了带 @变体 后缀的键（基键不存在），已取匹配本机型的第一个变体：${variantKeys.join('、')}`);
+    addNote(
+      rec,
+      `以下字段使用了带 @变体 后缀的键（基键不存在），已取匹配本机型的第一个变体：${variantKeys.join('、')}`,
+    );
   }
 
   /* ---- provenance 逐字段登记 ------------------------------------------ */
@@ -303,6 +401,5 @@ function mapHuawei(rawProduct) {
 
   return rec;
 }
-
 
 export { mapHuawei };

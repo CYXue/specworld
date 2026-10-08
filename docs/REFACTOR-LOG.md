@@ -1,6 +1,8 @@
 # 重构落地记录（2026-10-03）
 
-> 依据 `docs/ENGINEERING-REVIEW.md` 第 3 节优先级总览的 **11 项建议**，对 `phone-spec-world`
+> ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
+
+> 依据 `docs/ENGINEERING-REVIEW.md` 第 3 节优先级总览的 **11 项建议**，对 `参数世界`
 > 执行全量重构（demo 性质，无兼容性 / 迁移成本约束，大刀阔斧改）。
 > 本文件是可版本化的落地记录；逐条明细见 `ENGINEERING-REVIEW.md` §6。
 

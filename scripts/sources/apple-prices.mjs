@@ -313,8 +313,17 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
         if (body && body.length > 0) {
           stats.cacheHits += 1;
           return {
-            ok: true, status: 200, finalUrl: url, redirected: false, cacheable: false, body,
-            bytes: statSync(cachePath).size, fromCache: true, attempts: 0, ms: 0, error: null,
+            ok: true,
+            status: 200,
+            finalUrl: url,
+            redirected: false,
+            cacheable: false,
+            body,
+            bytes: statSync(cachePath).size,
+            fromCache: true,
+            attempts: 0,
+            ms: 0,
+            error: null,
           };
         }
       } catch {
@@ -323,8 +332,17 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
     }
     if (cacheOnly) {
       return {
-        ok: false, status: 0, finalUrl: url, redirected: false, cacheable: false, body: '',
-        bytes: 0, fromCache: false, attempts: 0, ms: 0, error: 'cache-miss',
+        ok: false,
+        status: 0,
+        finalUrl: url,
+        redirected: false,
+        cacheable: false,
+        body: '',
+        bytes: 0,
+        fromCache: false,
+        attempts: 0,
+        ms: 0,
+        error: 'cache-miss',
       };
     }
 
@@ -354,28 +372,56 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onRequest }) {
             }
           }
           return {
-            ok: true, status: res.status, finalUrl, redirected: lastRedirected, cacheable, body,
-            bytes: Buffer.byteLength(body, 'utf8'), fromCache: false, attempts: attempt, ms, error: null,
+            ok: true,
+            status: res.status,
+            finalUrl,
+            redirected: lastRedirected,
+            cacheable,
+            body,
+            bytes: Buffer.byteLength(body, 'utf8'),
+            fromCache: false,
+            attempts: attempt,
+            ms,
+            error: null,
           };
         }
         lastErr = `HTTP ${res.status}`;
         // 4xx（尤其 404）是确定性结论，重试无意义；5xx / 429 才退避重试
         if (res.status >= 400 && res.status < 500 && res.status !== 429) {
           return {
-            ok: false, status: res.status, finalUrl, redirected: lastRedirected,
-            cacheable: !lastRedirected, body: '', bytes: 0, fromCache: false, attempts: attempt, ms,
+            ok: false,
+            status: res.status,
+            finalUrl,
+            redirected: lastRedirected,
+            cacheable: !lastRedirected,
+            body: '',
+            bytes: 0,
+            fromCache: false,
+            attempts: attempt,
+            ms,
             error: lastErr,
           };
         }
       } catch (error) {
         stats.errors += 1;
-        lastErr = isDeadlineError(error) ? `timeout after ${REQUEST_TIMEOUT_MS}ms` : String(error?.message || error);
+        lastErr = isDeadlineError(error)
+          ? `timeout after ${REQUEST_TIMEOUT_MS}ms`
+          : String(error?.message || error);
       }
       if (attempt <= RETRIES) await sleep(RETRY_BACKOFF_MS * attempt);
     }
     return {
-      ok: false, status: lastStatus, finalUrl: url, redirected: lastRedirected, cacheable: false,
-      body: '', bytes: 0, fromCache: false, attempts: RETRIES + 1, ms: 0, error: lastErr,
+      ok: false,
+      status: lastStatus,
+      finalUrl: url,
+      redirected: lastRedirected,
+      cacheable: false,
+      body: '',
+      bytes: 0,
+      fromCache: false,
+      attempts: RETRIES + 1,
+      ms: 0,
+      error: lastErr,
     };
   };
   fetcher.stats = stats;
@@ -441,7 +487,10 @@ function findEnclosingOpen(text, pos) {
       else if (c === '"') inside = false;
       continue;
     }
-    if (c === '"') { inside = true; inStr[i] = 1; }
+    if (c === '"') {
+      inside = true;
+      inStr[i] = 1;
+    }
   }
   let depth = 0;
   for (let i = pos - 1; i >= 0; i -= 1) {
@@ -511,8 +560,10 @@ function parseComparePlaceholders(html) {
   for (const m of html.matchAll(/\{([A-Z0-9_]+)\}\s*\$price\./g)) modelIds.push(m[1]);
   for (const m of html.matchAll(/\{([A-Z0-9]{4,})\}\s*起/g)) partIds.push(m[1]);
   // 价格脚本地址同样从 <head> 读，证明「endpoint 写在 link 标签里」这条通道
-  const endpoint = html.match(/<link[^>]+rel="ac:pricing-endpoint"[^>]+href="([^"]+)"/i)?.[1] || null;
-  const eduEndpoint = html.match(/<link[^>]+rel="ac:edupricing-endpoint"[^>]+href="([^"]+)"/i)?.[1] || null;
+  const endpoint =
+    html.match(/<link[^>]+rel="ac:pricing-endpoint"[^>]+href="([^"]+)"/i)?.[1] || null;
+  const eduEndpoint =
+    html.match(/<link[^>]+rel="ac:edupricing-endpoint"[^>]+href="([^"]+)"/i)?.[1] || null;
   return {
     modelIds: [...new Set(modelIds)],
     partIds: [...new Set(partIds)],
@@ -557,7 +608,8 @@ async function fetchPricing(fetcher, ids, { cachePrefix = 'pricing' } = {}) {
       headers: JSON_HEADERS,
     });
     if (!res.ok) {
-      for (const id of group) result.set(id, { id, httpStatus: res.status, error: res.error, items: null });
+      for (const id of group)
+        result.set(id, { id, httpStatus: res.status, error: res.error, items: null });
       continue;
     }
     let parsed = null;
@@ -625,13 +677,18 @@ function parseBuyPage(html) {
     const key = String(p?.partNumber || p?.sku || '').toUpperCase();
     if (!key || seen.has(key)) continue;
     seen.add(key);
-    const item = richByPart.get(key) || richByPart.get(`BASE:${String(p?.sku || '').toUpperCase()}`) || null;
+    const item =
+      richByPart.get(key) || richByPart.get(`BASE:${String(p?.sku || '').toUpperCase()}`) || null;
     // displayValues 的键来自 partNumber（MJYH4CH/A → mjyh4ch_a），
     // 拿 sku / basePartNumber 再兜底两次，避免页面改键形态时静默丢证据。
     const display =
       dvPrices[displayKeyFor(p.partNumber)] ||
-      (dvKeys.has(displayKeyFor(p.partNumber)) ? dvPrices[dvKeys.get(displayKeyFor(p.partNumber))] : null) ||
-      (p.sku && dvKeys.has(displayKeyFor(p.sku)) ? dvPrices[dvKeys.get(displayKeyFor(p.sku))] : null) ||
+      (dvKeys.has(displayKeyFor(p.partNumber))
+        ? dvPrices[dvKeys.get(displayKeyFor(p.partNumber))]
+        : null) ||
+      (p.sku && dvKeys.has(displayKeyFor(p.sku))
+        ? dvPrices[dvKeys.get(displayKeyFor(p.sku))]
+        : null) ||
       null;
     const analyticsPrice =
       typeof p?.price?.fullPrice === 'number' && p.price.fullPrice > 0 ? p.price.fullPrice : null;
@@ -656,11 +713,18 @@ function parseBuyPage(html) {
       ),
       priceCny,
       /** 两个来源一致性检查：不一致时留证，绝不静默取一个 */
-      priceAgreement: analyticsPrice != null && displayPrice != null ? analyticsPrice === displayPrice : null,
-      displayPriceText: display?.comparativeDisplayPrice ? htmlToText(display.comparativeDisplayPrice) : null,
+      priceAgreement:
+        analyticsPrice != null && displayPrice != null ? analyticsPrice === displayPrice : null,
+      displayPriceText: display?.comparativeDisplayPrice
+        ? htmlToText(display.comparativeDisplayPrice)
+        : null,
     });
   }
-  return { ok: offers.length > 0, reason: offers.length ? null : '内联 JSON 里没有任何带价格的 SKU', offers };
+  return {
+    ok: offers.length > 0,
+    reason: offers.length ? null : '内联 JSON 里没有任何带价格的 SKU',
+    offers,
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -686,7 +750,8 @@ function modelNameFromProductName(productName, fallback) {
 
 function pushNote(notes, text) {
   if (notes.length < MAX_NOTE_ITEMS) notes.push(text);
-  else if (notes.length === MAX_NOTE_ITEMS) notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
+  else if (notes.length === MAX_NOTE_ITEMS)
+    notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
 }
 
 function selectModel(target, slug, name) {
@@ -760,9 +825,11 @@ export async function fetchAll(options = {}) {
   /* ── 1. 购买页列表页：确认在售机型 slug（用于 notes，不用于编价） ── */
   const buyIndexRes = await fetcher(BUY_INDEX_URL, { cacheFile: 'buy-index.html' });
   const listedSlugs = buyIndexRes.ok
-    ? [...new Set([...buyIndexRes.body.matchAll(/\/shop\/buy-iphone\/([a-z0-9-]+)/g)].map((m) => m[1]))].filter(
-        (s) => s !== 'carrier-offers',
-      )
+    ? [
+        ...new Set(
+          [...buyIndexRes.body.matchAll(/\/shop\/buy-iphone\/([a-z0-9-]+)/g)].map((m) => m[1]),
+        ),
+      ].filter((s) => s !== 'carrier-offers')
     : [];
   if (buyIndexRes.ok) {
     pushNote(
@@ -770,7 +837,10 @@ export async function fetchAll(options = {}) {
       `购买页入口 ${BUY_INDEX_URL} HTTP ${buyIndexRes.status}，在售机型 slug：${listedSlugs.join('、') || '（未解析到）'}。`,
     );
   } else {
-    pushNote(notes, `购买页入口 HTTP ${buyIndexRes.status}${buyIndexRes.error ? `（${buyIndexRes.error}）` : ''}，跳过。`);
+    pushNote(
+      notes,
+      `购买页入口 HTTP ${buyIndexRes.status}${buyIndexRes.error ? `（${buyIndexRes.error}）` : ''}，跳过。`,
+    );
   }
 
   /* ── 2. 抓购买页（同一 slug 只抓一次，18 Pro / Pro Max 共用一页） ── */
@@ -823,7 +893,11 @@ export async function fetchAll(options = {}) {
           if (p.ok) {
             return (
               `${s}=HTTP ${p.status}${redirect}` +
-              (p.parsed && !p.parsed.ok ? `，${p.parsed.reason}` : p.parsed?.ok ? '，页面有报价但无匹配机型' : '')
+              (p.parsed && !p.parsed.ok
+                ? `，${p.parsed.reason}`
+                : p.parsed?.ok
+                  ? '，页面有报价但无匹配机型'
+                  : '')
             );
           }
           return `${s}=${p.error || `HTTP ${p.status}`}${redirect}`;
@@ -846,9 +920,13 @@ export async function fetchAll(options = {}) {
       offers = offers.filter((o) => model.split.require.test(o.productName));
     } else if (model.split?.include) {
       // 共用购买页时按商品名归堆；「非 Max」用 (?!\s*Max) 排除 Max
-      const others = targets.filter((o) => o !== model && o.slugs.includes(source.slug) && o.split?.require);
+      const others = targets.filter(
+        (o) => o !== model && o.slugs.includes(source.slug) && o.split?.require,
+      );
       offers = offers.filter(
-        (o) => model.split.include.test(o.productName) && !others.some((o2) => o2.split.require.test(o.productName)),
+        (o) =>
+          model.split.include.test(o.productName) &&
+          !others.some((o2) => o2.split.require.test(o.productName)),
       );
     }
 
@@ -982,7 +1060,8 @@ export async function fetchAll(options = {}) {
       if (!r) continue;
       const kind = r.items?.type ?? `HTTP ${r.httpStatus}`;
       const m = missing.find((x) => x.id === model.id);
-      if (m) m.pricingEndpoint = `${PRICING_ENDPOINT}?parts=${model.pricingId} → type=${kind}，无 price 字段`;
+      if (m)
+        m.pricingEndpoint = `${PRICING_ENDPOINT}?parts=${model.pricingId} → type=${kind}，无 price 字段`;
       pushNote(
         notes,
         `价格服务对该机型的答复：${model.pricingId} → type=${kind}` +
@@ -996,7 +1075,10 @@ export async function fetchAll(options = {}) {
   {
     const mismatched = products
       .filter((p) => p.crossCheck?.apiName && cleanText(p.crossCheck.apiName) !== p.name)
-      .map((p) => `${p.crossCheck.identifier} 的 name 字段写作「${p.crossCheck.apiName}」但官方商品名是「${p.name}」`);
+      .map(
+        (p) =>
+          `${p.crossCheck.identifier} 的 name 字段写作「${p.crossCheck.apiName}」但官方商品名是「${p.name}」`,
+      );
     if (mismatched.length) {
       pushNote(
         notes,
@@ -1063,14 +1145,34 @@ export async function fetchAll(options = {}) {
 /* ------------------------------------------------------------------ */
 
 function parseArgv(argv) {
-  const opts = { out: null, cacheDir: null, only: [], delayMs: DEFAULT_DELAY_MS, cacheOnly: false, json: false, help: false };
+  const opts = {
+    out: null,
+    cacheDir: null,
+    only: [],
+    delayMs: DEFAULT_DELAY_MS,
+    cacheOnly: false,
+    json: false,
+    help: false,
+  };
   const take = (i) => argv[i + 1];
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
-    if (a === '--out' || a === '-o') { opts.out = take(i); i += 1; } else if (a.startsWith('--out=')) opts.out = a.slice(6);
-    else if (a === '--cache') { opts.cacheDir = take(i); i += 1; } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
-    else if (a === '--only') { opts.only.push(...String(take(i) || '').split(',')); i += 1; } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
-    else if (a === '--delay') { opts.delayMs = Number(take(i)); i += 1; } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
+    if (a === '--out' || a === '-o') {
+      opts.out = take(i);
+      i += 1;
+    } else if (a.startsWith('--out=')) opts.out = a.slice(6);
+    else if (a === '--cache') {
+      opts.cacheDir = take(i);
+      i += 1;
+    } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
+    else if (a === '--only') {
+      opts.only.push(...String(take(i) || '').split(','));
+      i += 1;
+    } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
+    else if (a === '--delay') {
+      opts.delayMs = Number(take(i));
+      i += 1;
+    } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
     else if (a === '--cache-only') opts.cacheOnly = true;
     else if (a === '--json') opts.json = true;
     else if (a === '--help' || a === '-h') opts.help = true;
@@ -1157,7 +1259,9 @@ const invokedDirectly =
   process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
 if (invokedDirectly) {
   main()
-    .then((code) => { process.exitCode = code; })
+    .then((code) => {
+      process.exitCode = code;
+    })
     .catch((error) => {
       process.stderr.write(`适配器异常退出：${error?.stack || error}\n`);
       process.exitCode = 2;

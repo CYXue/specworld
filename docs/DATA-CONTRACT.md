@@ -1,5 +1,7 @@
 # 数据契约 v0.1（手机参数对比站）
 
+> ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
+
 > 范围：**手机品类 · 华为 + 苹果 · 近 3 年在售机型**（首版）
 > 这份文件是全站唯一的字段定义源。管线写入、前端渲染、榜单计算都以此为准；
 > 改任何字段语义必须同步改这里和 `src/lib/types.ts`。
@@ -271,7 +273,7 @@ provenance: Record<string, SourceId>;  // 键 = 字段路径，值 = 来源 id
 
 ## 8. 站点分析层字段（不入契约）
 
-`scripts/lib/analyze.mjs` 产出的 `_work/analytics.json` 里有一批**派生字段**，
+`scripts/lib/analyze.mjs`（已删除，旧多页站分析层整体移除；本节为历史口径）产出的 `_work/analytics.json` 里有一批**派生字段**，
 它们不是官网事实，不进 `products.json`，也不参与 provenance：
 
 | 字段 | 说明 |

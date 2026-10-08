@@ -16,8 +16,16 @@
  * 所以这里看到的结论和页面上看到的一定一致——不一致就说明有 bug，而不是有分歧。
  */
 
+import {
+  buildScales,
+  buildChampions,
+  metricValue,
+  METRICS,
+  percentileOf,
+  TITLE_COVERAGE,
+  TITLE_MIN_POOL,
+} from '../lib/derive.mjs';
 import { loadProducts, section, c, brandZh, pct, padL, bar, verdict } from './lib.mjs';
-import { buildScales, buildChampions, metricValue, METRICS, percentileOf, TITLE_COVERAGE, TITLE_MIN_POOL } from '../lib/derive.mjs';
 
 const argv = process.argv.slice(2);
 const DETAIL = argv.includes('--detail');
@@ -39,8 +47,10 @@ if (only.length && !targets.length) {
 
 section('冠军是怎么选出来的');
 
-console.log(`池子：${products.length} 台（${brandZh('apple')} ${products.filter((p) => p.brand === 'apple').length}` +
-  ` / ${brandZh('huawei')} ${products.filter((p) => p.brand === 'huawei').length}）`);
+console.log(
+  `池子：${products.length} 台（${brandZh('apple')} ${products.filter((p) => p.brand === 'apple').length}` +
+    ` / ${brandZh('huawei')} ${products.filter((p) => p.brand === 'huawei').length}）`,
+);
 console.log(`门槛：参与数≥ ${TITLE_MIN_POOL} 台且覆盖率 ≥ ${pct(TITLE_COVERAGE, 0)}`);
 console.log('');
 console.log('两条口径（别当成绝对阈值看）：');
@@ -60,7 +70,11 @@ for (const ch of targets) {
 
   if (!ch.insufficient) {
     const need = Math.ceil(TITLE_COVERAGE * products.length);
-    console.log(c.dim(`             门槛线 ${pct(TITLE_COVERAGE, 0)} = ${need} 台，实际 ${ch.pool} 台 → 发奖杯`));
+    console.log(
+      c.dim(
+        `             门槛线 ${pct(TITLE_COVERAGE, 0)} = ${need} 台，实际 ${ch.pool} 台 → 发奖杯`,
+      ),
+    );
   }
 
   if (!ch.productId) {
@@ -73,8 +87,12 @@ for (const ch of targets) {
   const pctRank = percentileOf(scales, ch.metric, win);
 
   console.log(`  结论　　　${c.bold(win.name)}　${c.dim(`(${brandZh(win.brand)})`)}`);
-  console.log(`  凭什么　　${ch.why}　${c.dim(`池内第 ${pctRank === null ? '—' : pctRank.toFixed(2)} 分位（1 = 最好）`)}`);
-  console.log(`  数据来源　${win.provenance?.[metric.path] ?? c.yellow('未登记 provenance')}　${c.dim(metric.path)}`);
+  console.log(
+    `  凭什么　　${ch.why}　${c.dim(`池内第 ${pctRank === null ? '—' : pctRank.toFixed(2)} 分位（1 = 最好）`)}`,
+  );
+  console.log(
+    `  数据来源　${win.provenance?.[metric.path] ?? c.yellow('未登记 provenance')}　${c.dim(metric.path)}`,
+  );
 
   if (DETAIL) {
     // 竞争者：把所有有值的按优劣排序，标出分位
@@ -84,14 +102,16 @@ for (const ch of targets) {
       .sort((a, b) => (scale.dir === 'low' ? a.v - b.v : b.v - a.v));
 
     console.log('');
-    console.log(c.dim(`  全部 ${ranked.length} 台（${scale.dir === 'low' ? '越小越优' : '越大越优'}）：`));
+    console.log(
+      c.dim(`  全部 ${ranked.length} 台（${scale.dir === 'low' ? '越小越优' : '越大越优'}）：`),
+    );
     ranked.forEach((x, i) => {
       const isWin = x.p.id === ch.productId;
       const rank = percentileOf(scales, ch.metric, x.p);
       const mark = isWin ? c.green(' ← 榜首') : '';
       console.log(
         `   ${padL(i + 1, 2)}. ${padL(x.p.name, 30)} ${padL(fmtVal(x.v, scale.unit), 9)}` +
-        ` ${c.dim(`分位 ${rank === null ? '—' : rank.toFixed(2)}`)}${mark}`,
+          ` ${c.dim(`分位 ${rank === null ? '—' : rank.toFixed(2)}`)}${mark}`,
       );
     });
 
@@ -100,8 +120,14 @@ for (const ch of targets) {
     const tied = ranked.filter((x) => x.v === best);
     if (tied.length > 1) {
       console.log('');
-      console.log(c.yellow(`  ⚠️ 榜首并列 ${tied.length} 台：${tied.map((x) => x.p.name).join('、')}`));
-      console.log(c.dim('     并列时 buildChampions 取 reduce 的第一个，顺序依赖 products 数组，改数据顺序会换榜首'));
+      console.log(
+        c.yellow(`  ⚠️ 榜首并列 ${tied.length} 台：${tied.map((x) => x.p.name).join('、')}`),
+      );
+      console.log(
+        c.dim(
+          '     并列时 buildChampions 取 reduce 的第一个，顺序依赖 products 数组，改数据顺序会换榜首',
+        ),
+      );
     }
 
     // 差距：差多少才算「稳赢」
@@ -109,8 +135,12 @@ for (const ch of targets) {
     if (runnerUp && runnerUp.v !== best) {
       const gap = Math.abs(best - runnerUp.v);
       const rel = best !== 0 ? (gap / Math.abs(best)) * 100 : 0;
-      console.log(c.dim(`\n  与第二名 ${runnerUp.p.name}（${fmtVal(runnerUp.v, scale.unit)}）差 ${fmtVal(gap, scale.unit)}` +
-        (rel ? `，约 ${rel.toFixed(1)}%` : '')));
+      console.log(
+        c.dim(
+          `\n  与第二名 ${runnerUp.p.name}（${fmtVal(runnerUp.v, scale.unit)}）差 ${fmtVal(gap, scale.unit)}` +
+            (rel ? `，约 ${rel.toFixed(1)}%` : ''),
+        ),
+      );
     }
   }
 }
@@ -126,11 +156,7 @@ if (noTitle.length) {
   console.log(c.dim('\n不发是正确行为，不是缺陷。详见 derive.mjs 头部纪律第 2 条。'));
 }
 
-verdict(
-  true,
-  '所有头条衔的数据来源可追溯',
-  '部分头衔数据不足',
-);
+verdict(true, '所有头条衔的数据来源可追溯', '部分头衔数据不足');
 
 /* ---------------- 局部 ---------------- */
 

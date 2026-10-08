@@ -1,0 +1,46 @@
+{
+  "name": "specworld",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "参数世界（specworld）— 华为/苹果在售手机可核查参数对比。Vite + Vue3 + TS + Tailwind 重构版，视觉基调为 Terraria / Minecraft 式像素美学。",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "node scripts/sync-public.mjs",
+    "build": "vite build",
+    "postbuild": "node scripts/publish/verify-dist.mjs",
+    "preview": "vite preview",
+    "data": "node scripts/pipeline.mjs --data-only",
+    "selftest": "node scripts/selftest.mjs",
+    "sprites:review": "node scripts/sprite/review.mjs",
+    "archive": "node scripts/archive.mjs",
+    "archive:check": "node scripts/archive.mjs --check",
+    "lock:check": "node scripts/publish/normalize-lock.mjs",
+    "lock:fix": "node scripts/publish/normalize-lock.mjs --write",
+    "conventions:check": "node scripts/publish/check-conventions.mjs",
+    "font:check": "node scripts/publish/check-font-coverage.mjs",
+    "favicon:gates": "node scripts/verify-favicon-gates.mjs",
+    "favicon:diff": "node scripts/verify-favicon.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^14.0.0",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.71.0",
+    "vite": "^6.0.0"
+  }
+}

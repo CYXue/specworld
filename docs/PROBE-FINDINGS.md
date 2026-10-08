@@ -1,10 +1,10 @@
 # 官网取数探针结论（2026-10-02 实测）
 
-> 两个探针脚本与原始证据：
-> - 苹果：`_research/probe/apple/`（`FINDINGS.md`、`fetch-specs.mjs`、`json/*.json`、`raw/*.html`）
-> - 华为：`_research/probe/huawei/`（`FINDINGS.md`、`fetch-specs.mjs`、`*.json`、`*.specs.html`）
+> 探针为一次性可行性研究脚本（未入库，原始产物已不保留）；其结论如下，且后续已被正式取数器落实：
+> - 苹果取数：`scripts/sources/apple.mjs` / `apple-compare.mjs` / `apple-prices.mjs`
+> - 华为取数：`scripts/sources/huawei.mjs`
 >
-> 两个脚本都是 **Node ≥18、零第三方依赖、纯 HTTP**，串行请求间隔 ≥1 秒。
+> 探针当时均为 **Node ≥18、零第三方依赖、纯 HTTP**，串行请求间隔 ≥1 秒。
 
 ---
 
@@ -40,7 +40,7 @@
 | 蜂窝频段 | ✅ | ❌ |
 | 上市日期 | ⚠️ 需另取 | ❌ |
 | **跑分 / DXOMARK** | ❌ | ❌ |
-| **价格** | ❌ 对比页是模板占位符，需另接定价接口 | ✅ 目录里带 price |
+| **价格** | ❌→✅ 规格页无价格，但官方价格通道已打通（见第四节），由 `scripts/sources/apple-prices.mjs` 落实 | ✅ 目录里带 price |
 | 分存储版本价格 | ❌ | ❌（只有一个 tab，存储是并列合集） |
 
 **由此推出两条产品决策**：

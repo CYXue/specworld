@@ -9,14 +9,22 @@
  *      机身圆角 ← 厚度（越薄越方正）。任何一台机器的图，改一个字段就跟着变。
  *   2. **配色不编造**：数据里的 `body.colors` 目前两边都没抓到 → 背面用品牌中性色
  *      （苹果银灰 / 华为石墨），正面屏幕用深灰。**将来官网配色进数据，这里自动用真色。**
- *   3. **折叠机特判**：宽度 ≥ 7.5 英寸判为折叠（Mate X 系列 / Pocket 系列），
- *      画成展开态双屏，避免把 8 英寸画成一块砖。
+ *   3. **折叠机特判**：按官网尺寸原文里是否出现「折叠态/展开态/三屏态」判定，
+ *      画成展开态双屏。
+ *      ⚠️ 这里曾用 `sizeIn >= 7.5` 判定，**是错的**——折叠机的主屏尺寸正常只有
+ *      5.4–6.5 英寸（Pura X 是 6.3、Mate XT 2 是 6.5），门槛设7.5 会把三台真折叠机
+ *      画成直板。反过来8 英寸平板会误判成折叠机。
+ *      正确判据与前端 `src/lib/catalog.ts` 的 `isFoldable` 同源（官网原文），
+ *      两处必须一致，否则用户看到的形态标签和立绘互相打脸。
+ *      这个 bug 是 2026-10-06 补`scripts/sprite/review.mjs` 时肉眼发现的：
+ *      审查表按几何分组后，「折叠档里混进直板机」一眼可见。
  *   4. 输出 SVG 字符串（供内联）与 .svg 文件（供列表页），两种都要。
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brandMeta } from '../brands.mjs';
+import { isFoldableOfficial } from '../lib/foldable.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -41,7 +49,7 @@ export function layout(product) {
   const thicknessMm = product.body?.thicknessMm ?? 8;
   const weightG = product.body?.weightG ?? 200;
   const rear = (product.camera?.rear ?? []).length;
-  const foldable = sizeIn >= 7.5 || /fold|pocket|x\d/i.test(product.line ?? '');
+  const foldable = isFoldableOfficial(product);
 
   /* 对角线(英寸) → 像素，画布内留 12px 边距 */
   const pxPerInch = (CANVAS.h - 24) / Math.max(sizeIn, 6.9);
@@ -50,8 +58,8 @@ export function layout(product) {
   /* 宽高比：真实手机 ≈ 0.46–0.49。折叠机展开态更宽（≈0.72）。
      厚度/重量不参与宽高比（那是侧视图的事），只参与圆角与描边宽度。 */
   const ratio = foldable ? 0.72 : 0.47;
-  let w = diagPx * ratio / Math.sqrt(1 + ratio * ratio);
-  let h = diagPx * Math.sqrt(1 + ratio * ratio) / Math.sqrt(1 + ratio * ratio) * (1 / ratio);
+  let w = (diagPx * ratio) / Math.sqrt(1 + ratio * ratio);
+  let h = ((diagPx * Math.sqrt(1 + ratio * ratio)) / Math.sqrt(1 + ratio * ratio)) * (1 / ratio);
   /* 简化：w = diag * ratio / √(1+ratio²)，h = diag / √(1+ratio²) */
   const f = Math.sqrt(1 + ratio * ratio);
   w = (diagPx / f) * ratio;
@@ -128,7 +136,11 @@ export function padOf(scale = 1) {
 function drawFace(L, s, side) {
   const { rect, pal, notch, camCount, camUnknown, foldable, strokeW, rear } = L;
   const r = rect;
-  const rx = r.x * s, ry = r.y * s, rw = r.w * s, rh = r.h * s, rr = r.r * s;
+  const rx = r.x * s,
+    ry = r.y * s,
+    rw = r.w * s,
+    rh = r.h * s,
+    rr = r.r * s;
   const sw = strokeW * s;
 
   if (side === 'front') {
@@ -164,43 +176,53 @@ function drawFace(L, s, side) {
   let cams = '';
   if (camUnknown) {
     const d = 10 * s;
-    cams = `<circle cx="${(r.x + 16 * s)}" cy="${(r.y + 16 * s)}" r="${d}" fill="#000" opacity="0.85"/>
+    cams = `<circle cx="${r.x + 16 * s}" cy="${r.y + 16 * s}" r="${d}" fill="#000" opacity="0.85"/>
       <text x="${r.x + 16 * s}" y="${r.y + 16 * s + 3 * s}" text-anchor="middle" font-size="${8 * s}" fill="#fff" font-family="ui-monospace,monospace">?</text>`;
   } else {
     /* 单列排布（1–3 颗）或 2×2 田字（4 颗） */
-    const big = 11 * s, small = 8 * s, gap = 6 * s;
-    const ox = r.x + 14 * s, oy = r.y + 14 * s;
+    const big = 11 * s,
+      small = 8 * s,
+      gap = 6 * s;
+    const ox = r.x + 14 * s,
+      oy = r.y + 14 * s;
     if (camCount === 1) {
       cams = `<circle cx="${ox + big}" cy="${oy + big}" r="${big}" fill="#000"/>
-        <circle cx="${ox + big}" cy="${oy + big}" r="${big * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1*s}"/>`;
+        <circle cx="${ox + big}" cy="${oy + big}" r="${big * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1 * s}"/>`;
     } else if (camCount === 2) {
       cams = [0, 1]
         .map((i) => {
           const r2 = i === 0 ? big : small;
           return `<circle cx="${ox + r2}" cy="${oy + r2}" r="${r2}" fill="#000"/>
-            <circle cx="${ox + r2}" cy="${oy + r2}" r="${r2 * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1*s}"/>`;
+            <circle cx="${ox + r2}" cy="${oy + r2}" r="${r2 * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1 * s}"/>`;
         })
         .join('');
       cams += `<circle cx="${ox + small + 4 * s}" cy="${oy + small * 2 + 10 * s}" r="${small * 0.5}" fill="#000"/>`;
     } else if (camCount === 3) {
       cams = [
-        [big, 0], [big, 1], [small, 2],
+        [big, 0],
+        [big, 1],
+        [small, 2],
       ]
         .map(([r2, i]) => {
           const cxp = ox + r2 + (i === 2 ? 4 * s : 0);
           const cyp = oy + r2 + i * (big + gap) * 0.8;
           return `<circle cx="${cxp}" cy="${cyp}" r="${r2}" fill="#000"/>
-            <circle cx="${cxp}" cy="${cyp}" r="${r2 * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1*s}"/>`;
+            <circle cx="${cxp}" cy="${cyp}" r="${r2 * 0.62}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1 * s}"/>`;
         })
         .join('');
     } else {
       /* 4 颗：2×2 田字 */
       const d2 = 9 * s;
-      [[0, 0], [0, 1], [1, 0], [1, 1]].forEach(([i, j]) => {
+      [
+        [0, 0],
+        [0, 1],
+        [1, 0],
+        [1, 1],
+      ].forEach(([i, j]) => {
         const cxp = ox + d2 + i * (d2 * 2 + 4 * s);
         const cyp = oy + d2 + j * (d2 * 2 + 4 * s);
         cams += `<circle cx="${cxp}" cy="${cyp}" r="${d2}" fill="#000"/>
-          <circle cx="${cxp}" cy="${cyp}" r="${d2 * 0.6}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1*s}"/>`;
+          <circle cx="${cxp}" cy="${cyp}" r="${d2 * 0.6}" fill="#111" stroke="rgba(255,255,255,0.25)" stroke-width="${1 * s}"/>`;
       });
     }
   }
@@ -209,7 +231,7 @@ function drawFace(L, s, side) {
   const logo = `<circle cx="${cx * s}" cy="${(cy - 30) * s}" r="${10 * s}" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="${1.4 * s}"/>`;
 
   return `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" rx="${rr}" fill="${pal.back}" stroke="${pal.backEdge}" stroke-width="${sw}"/>
-    <rect x="${rx + 2*s}" y="${ry + 2*s}" width="${rw - 4*s}" height="${rh - 4*s}" rx="${rr - 2*s}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${1*s}"/>
+    <rect x="${rx + 2 * s}" y="${ry + 2 * s}" width="${rw - 4 * s}" height="${rh - 4 * s}" rx="${rr - 2 * s}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${1 * s}"/>
     ${cams}
     ${logo}`;
 }
@@ -217,13 +239,17 @@ function drawFace(L, s, side) {
 function caption(text, L, s) {
   const note = L.camUnknown ? '（后摄数未公布）' : '';
   const fold = L.foldable ? ' · 折叠' : '';
-  return `<text x="${CANVAS.w * s / 2}" y="${CANVAS.h * s + 14 * s}" text-anchor="middle"
+  return `<text x="${(CANVAS.w * s) / 2}" y="${CANVAS.h * s + 14 * s}" text-anchor="middle"
       font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
       font-size="${11 * s}" fill="#8a8f98">${text}${fold}${note}</text>`;
 }
 
 function escAttr(v) {
-  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(v ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /** 把一台机器的立绘写成独立 .svg 文件（列表页用）。 */
@@ -232,10 +258,9 @@ export function writeSpriteFile(product, outPath, { scale = 1 } = {}) {
   const s = scale;
   const totalW = CANVAS.w * s + 10 * s + CANVAS.w * s + 16 * s;
   const totalH = CANVAS.h * s + 28 * s;
-  const inner = renderSprite(product, { scale }).replace(
-    /^<svg[\s\S]*?data-id="[^"]*">\s*/,
-    ''
-  ).replace(/\s*<\/svg>$/, '');
+  const inner = renderSprite(product, { scale })
+    .replace(/^<svg[\s\S]*?data-id="[^"]*">\s*/, '')
+    .replace(/\s*<\/svg>$/, '');
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${totalH}" width="${totalW}" height="${totalH}">
 ${inner}
@@ -248,9 +273,16 @@ ${inner}
 
 /** CLI：node scripts/sprite/generate.mjs [--out data/sprites] */
 async function main() {
-  const data = JSON.parse((await import('node:fs')).readFileSync(join(ROOT, 'data', 'products.json'), 'utf8'));
+  const data = JSON.parse(
+    (await import('node:fs')).readFileSync(join(ROOT, 'data', 'products.json'), 'utf8'),
+  );
   const products = data.products ?? data;
-  const outDir = join(ROOT, process.argv.includes('--out') ? process.argv[process.argv.indexOf('--out') + 1] : 'data/sprites');
+  const outDir = join(
+    ROOT,
+    process.argv.includes('--out')
+      ? process.argv[process.argv.indexOf('--out') + 1]
+      : 'data/sprites',
+  );
   mkdirSync(outDir, { recursive: true });
   let n = 0;
   for (const p of products) {
@@ -263,7 +295,9 @@ async function main() {
     const p = products.find((x) => x.id === id);
     if (!p) continue;
     const L = layout(p);
-    console.log(`  ${id}: 折叠=${L.foldable} 后摄=${L.rear} 尺寸=${L.sizeIn}″ 厚=${L.thicknessMm}mm → 画布内 ${L.rect.w.toFixed(1)}×${L.rect.h.toFixed(1)}px`);
+    console.log(
+      `  ${id}: 折叠=${L.foldable} 后摄=${L.rear} 尺寸=${L.sizeIn}″ 厚=${L.thicknessMm}mm → 画布内 ${L.rect.w.toFixed(1)}×${L.rect.h.toFixed(1)}px`,
+    );
   }
 }
 

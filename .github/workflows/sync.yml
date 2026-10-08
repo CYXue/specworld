@@ -29,27 +29,35 @@ on:
         description: '内容没变也重新发布站点'
         type: boolean
         default: false
-  # 改动取数/规范化/建站代码时立即验证，不等 12 小时。
+  # 改动取数/规范化/前端代码时立即验证，不等 12 小时。
   # bot 自己提交的是 data/，不匹配这里，因此不会自己触发自己。
   push:
     paths:
       - 'scripts/**'
-      - 'src/**'
       - 'data/release-dates.json'
+      - 'data/products.json'
+      - 'public/fonts/**'
+      - 'src/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'postcss.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/sync.yml'
 
 permissions:
-  contents: write   # 提交快照
-  issues: write     # 同步失败时开 issue 留痕
+  contents: write # 提交快照
+  issues: write # 同步失败时开 issue 留痕
 
 concurrency:
-  group: phone-spec-world-sync
+  group: specworld-sync
   cancel-in-progress: false
 
 jobs:
-  # 护栏：不联网、不碰官网，1 秒内跑完 66 项断言。
-  # 放在最前面是因为它最便宜，而且失败信息最明确——解析器或闸门写错了，
-  # 后面那次联网抓取跑出来的也是脏数据，不如当场停。
+  # 护栏：不联网、不碰官网，1 秒内跑完 118 项断言。
+  # 放在最前面是因为它最便宜，而且失败信息最明确——解析器、闸门或渲染层几何写错了，
+  # 后面那次联网抓取跑出来的也是脏数据/错页面，不如当场停。
+  # 断言数以 selftest.mjs 末尾自报为准，本行只是注释，改数字时不必同步（但改了最好跟上）。
   selftest:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -64,6 +72,28 @@ jobs:
       - name: 管线自测
         run: node scripts/selftest.mjs
 
+      # 依赖源闸门：lock 里混入镜像地址会让连不上该镜像的环境 `npm ci` 直接失败。
+      # 本机 registry 指向国内镜像（装包快），所以这条几乎必然在本地被写脏——
+      # 靠人记忆在推送前 sed 是不现实的，改成 push 时当场拦截。
+      # 修法：npm run lock:fix（只换 URL 主机名，integrity 与结构不动）。
+      - name: 依赖源检查
+        run: node scripts/publish/normalize-lock.mjs
+
+      # 规范闸门：把 CONVENTIONS.md 里能机器判的条款变成拦截。
+      # 覆盖 Toy 平台硬约束（base: './' + hash 路由，改了会白屏）、
+      # src/ 零调试日志、命令式 innerHTML 的 scoped 样式陷阱、lock 源纯度。
+      # 主观条款（注释质量、命名贴切）不查——闸门只管能判的，避免制造噪声被整体忽略。
+      - name: 规范自检
+        run: node scripts/publish/check-conventions.mjs
+
+      # 字形覆盖闸门：字体缺字形时浏览器**静默**回退系统字体，零报错，
+      # 症状是「同一句话里有些字像素、有些字圆滑」—— 风格不统一最隐蔽的成因。
+      # 历史教训：旧字体只覆盖项目实需汉字的 45%，而所有基于样式声明的检查都是绿的。
+      # 数据来自生成期落下的 public/fonts/coverage.json（含字体 sha256，防「换了字体忘重生成」）。
+      # 换字体/改文案后若报缺字：python scripts/font/build-subset.py
+      - name: 字形覆盖检查
+        run: node scripts/publish/check-font-coverage.mjs
+
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -75,12 +105,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 缓存 npm 依赖。node_modules/ 不入库，CI 每次都是全新安装；
+      # package-lock.json 已锁定精确版本，命中缓存时秒级完成。
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      # 不装依赖：全链路只用 Node 内置模块，HTML 解析是手写正则与状态机。
-      # 少一个装包失败点，也让「12 小时无人值守」少一件能坏的东西。
+          cache: npm
 
       # 条件请求缓存。_work/ 不入库，CI 每次 checkout 都是空的，
       # 全靠这里恢复；命中 ETag 时上游返回 304，零流量。
@@ -95,15 +125,27 @@ jobs:
           key: sync-http-cache-${{ github.run_id }}
           restore-keys: sync-http-cache-
 
+      # 数据层：取数 → 规范化 → 整合闸门 → 精灵图 → 指纹。
+      # --data-only 跳过旧的多页 HTML 建站（渲染已交给 Vite，见下一步）。
+      # 这条链只用 Node 内置模块，不装任何依赖 —— HTML 解析是手写正则与状态机。
       # 管线内建合理性闸门：机型总数骤降、必填字段覆盖率下滑、数值超出物理区间
       # 都会拒绝写入并以非零退出码结束，此时旧快照原封不动地保留。
-      - name: 跑全链路
+      - name: 跑数据管线
         run: |
           if [ "${{ inputs.offline }}" = "true" ]; then
-            node scripts/pipeline.mjs --offline
+            node scripts/pipeline.mjs --data-only --offline
           else
-            node scripts/pipeline.mjs
+            node scripts/pipeline.mjs --data-only
           fi
+
+      # 渲染层：Vite + Vue3 + TS + Tailwind。
+      # npm ci 严格按 package-lock.json 装，可复现；prebuild 会把 data/ 同步进
+      # public/，postbuild 跑 verify-dist.mjs —— 入口缺失/绝对路径/外链/超 50 MB
+      # 任何一条不过，vite build 后的这一步就非零退出，产物不会被发布出去。
+      - name: 构建站点（Vite）
+        run: |
+          npm ci
+          npm run build
 
       # 从指纹结果里取判断依据。注意看的是 changed，不是 git diff。
       - name: 判断内容是否变化
@@ -128,14 +170,27 @@ jobs:
           "
 
       # 只提交 data/（唯一数据源）。dist/ 与 _work/ 都在 .gitignore 里，
-      # 站点产物任何人都能用 `node scripts/pipeline.mjs --offline` 重新生成。
+      # 站点产物任何人都能用 `node scripts/pipeline.mjs --data-only && npm ci && npm run build` 重新生成。
+      # public/data 与 public/sprites 是构建期从 data/ 同步的拷贝，同样不入库 ——
+      # 入库两份必然出现「改了 data/ 忘了重新 build」的版本漂移。
       # 这与参考项目一致：仓库存数据与代码，产物不入库。
       #
-      # 触发条件是「数据变了 **或** 站点变了」，不是只看数据：
-      # 只改了模板时数据内容没变，但站点变了 —— 若不推进指纹指针，
-      # 之后每一轮都会被判成「站点有变化」，于是每 12 小时重复发布一次同样的站点。
+      # 触发条件是「数据变了 **或** 站点变了 **或** 待收录队列变了」，不是只看数据：
+      #   1. 只改了前端（src/**）时数据内容没变，但站点变了 —— 若不推进指纹指针，
+      #      之后每一轮都会被判成「站点有变化」，于是每 12 小时重复发布一次同样的站点。
+      #   2. **队列变了但台数没变**：新机发布却缺发布日期时，它进不了 products.json，
+      #      数据指纹不动、站点指纹也不动。此时若不在触发条件里带上队列，
+      #      data/discovery-pending.json 就永远提交不进仓库 —— 队列等于没有。
+      #      这正是「安静地丢了一台新机」最难发现的一种形态。
+      #   3. **归档变了但页面没变**：官网把某个章节标题改了个字，而那个字段
+      #      恰好没进 products.json。这时两个指纹都不动，但 data/raw/ 必须更新 ——
+      #      否则它记的是上一个版本的官网，回放验证就成了自欺欺人。
       - name: 提交变化
-        if: steps.fp.outputs.data_changed == 'true' || steps.fp.outputs.site_changed == 'true'
+        if: >-
+          steps.fp.outputs.data_changed == 'true' ||
+          steps.fp.outputs.site_changed == 'true' ||
+          steps.fp.outputs.pending_changed == 'true' ||
+          steps.fp.outputs.raw_changed == 'true'
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -143,8 +198,16 @@ jobs:
           node scripts/publish/fingerprint.mjs --write-pointer
           if [ "${{ steps.fp.outputs.data_changed }}" = "true" ]; then
             git add -A -- data/
+          elif [ "${{ steps.fp.outputs.pending_changed }}" = "true" ]; then
+            # 队列变了但快照没变（新机缺发布日期）：只带队列与指针。
+            # 快照不带进来，是因为它这次一个字都没动。
+            git add -- data/discovery-pending.json data/.fingerprint
+          elif [ "${{ steps.fp.outputs.raw_changed }}" = "true" ]; then
+            # 归档变了但快照没变（官网改了章节标题，而该字段没进快照）：
+            # 只带归档与指针。同样不带快照 —— 它这次一个字都没动。
+            git add -- data/raw data/.fingerprint
           else
-            # 数据内容没变（只是模板或取数代码变了）：只提交指纹指针。
+            # 数据内容没变（只是前端或取数代码变了）：只提交指纹指针。
             # 快照不带进来，是因为它唯一的变化是那串运行时刻字段。
             git add -- data/.fingerprint
           fi
@@ -160,7 +223,9 @@ jobs:
           git push
 
       # 站点产物交给下一个 job 发布。同一次运行内传递，不重复抓官网。
+      # dist/ 是 Vite 的产物（单个 index.html + assets/），不是多页 HTML。
       - name: 上传站点产物
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: site

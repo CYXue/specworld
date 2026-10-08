@@ -7,10 +7,18 @@
  * 上游官网改版时，继续跑只会产出一份看着正常、实际残缺的快照。
  *
  * 用法：
- *   node scripts/pipeline.mjs              # 完整跑（联网取数）
- *   node scripts/pipeline.mjs --offline    # 只用缓存，CI 失败时的重跑方式
+ *   node scripts/pipeline.mjs                # 完整跑（联网取数）
+ *   node scripts/pipeline.mjs --offline      # 只用缓存，CI 失败时的重跑方式
  *   node scripts/pipeline.mjs --skip-sources  # 跳过取数，用已有 raw 缓存
- *   node scripts/pipeline.mjs --dry        # 只跑校验，不写盘
+ *   node scripts/pipeline.mjs --dry          # 只跑校验，不写盘
+ *   node scripts/pipeline.mjs --data-only    # 只跑到「取数→规范化→整合→精灵图→指纹」，
+ *                                              跳过旧的多页 HTML 建站与发布校验；渲染交给 Vite。
+ *                                              这是 CI 与本地日常用的模式。
+ *
+ * --data-only 存在的理由：渲染层已经换成 Vite（见 src/ 与 vite.config.ts），
+ * 旧的分析层 / 建站 / 发布校验三步产出的多页 HTML 不再是发布物，继续跑只是浪费。
+ * 数据层（取数→规范化→整合闸门→精灵图）仍然是唯一真源 —— Vite 前端就吃它产出的
+ * data/products.json 与 data/sprites/，所以这两段一步都没动。
  */
 
 import { spawnSync } from 'node:child_process';
@@ -23,6 +31,7 @@ const argv = process.argv.slice(2);
 const OFFLINE = argv.includes('--offline');
 const DRY = argv.includes('--dry');
 const SKIP_SOURCES = argv.includes('--skip-sources') || OFFLINE;
+const DATA_ONLY = argv.includes('--data-only');
 
 const t0 = Date.now();
 const steps = [];
@@ -40,7 +49,9 @@ function run(label, script, args = []) {
     console.error(`\n❌ 步骤失败：${label}（退出码 ${r.status}）`);
     console.error('   管线已停止，不会写盘。上一次的快照保持不变。');
     if (OFFLINE) {
-      console.error('   当前是 --offline 模式：可能是网络抓取失败。联网重跑：node scripts/pipeline.mjs');
+      console.error(
+        '   当前是 --offline 模式：可能是网络抓取失败。联网重跑：node scripts/pipeline.mjs',
+      );
     } else {
       console.error('   上游官网结构可能变了。排查顺序：');
       console.error('     1. node scripts/sources/<brand>.mjs --limit 1   看单台能否解析');
@@ -63,10 +74,30 @@ if (SKIP_SOURCES) {
     process.exit(1);
   }
 } else {
-  run('华为官网取数', 'scripts/sources/huawei.mjs', ['--out', '_work/huawei.raw.json', '--cache', '_work/huawei.cache']);
-  run('苹果官网取数', 'scripts/sources/apple.mjs', ['--out', '_work/apple.raw.json', '--cache', '_work/apple.cache']);
-  run('苹果对比页取数', 'scripts/sources/apple-compare.mjs', ['--out', '_work/apple-compare.raw.json', '--cache', '_work/apple-compare.cache']);
-  run('苹果价格取数', 'scripts/sources/apple-prices.mjs', ['--out', '_work/apple-prices.raw.json', '--cache', '_work/apple-prices.cache']);
+  run('华为官网取数', 'scripts/sources/huawei.mjs', [
+    '--out',
+    '_work/huawei.raw.json',
+    '--cache',
+    '_work/huawei.cache',
+  ]);
+  run('苹果官网取数', 'scripts/sources/apple.mjs', [
+    '--out',
+    '_work/apple.raw.json',
+    '--cache',
+    '_work/apple.cache',
+  ]);
+  run('苹果对比页取数', 'scripts/sources/apple-compare.mjs', [
+    '--out',
+    '_work/apple-compare.raw.json',
+    '--cache',
+    '_work/apple-compare.cache',
+  ]);
+  run('苹果价格取数', 'scripts/sources/apple-prices.mjs', [
+    '--out',
+    '_work/apple-prices.raw.json',
+    '--cache',
+    '_work/apple-prices.cache',
+  ]);
 }
 
 /* ---- 2. 规范化 ---- */
@@ -80,18 +111,33 @@ run('整合与校验闸门', 'scripts/sync/index.mjs', DRY ? ['--dry'] : []);
  * 所以必须随管线重建，而不是手提交 60 个 .svg 进仓库——那样既爆仓库又必然和官网数据脱节。 ---- */
 if (!DRY) run('生成精灵图', 'scripts/sprite/generate.mjs');
 
+/* ---- 3.6 原始响应归档：把官网原文键值对存进 data/raw/（入库）。
+ *
+ * 用途：解析器改坏之后能喂同一份原文离线复现，不需要重新联网 ——
+ * 官网改版那一刻的原页面在 CI 缓存里已经滚掉了。
+ *
+ * 为什么不归档 HTML：全量 HTML 是几十 MB，版本库会被撑爆且不可逆
+ * （参考项目 ai-model-world 的 `.gitignore` 第 39 行写着 `/data/raw/` ——
+ * 它也不入库）。而解析器吃的是 `RawProduct.raw`（章节名 → 页面原文值），
+ * 归档这个就够，体积在几百 KB 量级。详见 scripts/archive.mjs 的注释。
+ *
+ * --skip-sources / --offline 时不跑：那时 _work 里的 raw 是旧的，归档进去会
+ * 让「这一版数据对应这一版官网」这个对应关系失效 —— 而那正是归档的唯一用途。
+ */
+if (!DRY && !SKIP_SOURCES) run('归档官网原始响应', 'scripts/archive.mjs');
+
 /* ---- 4. 派生（分位、头衔、一句话定位） ---- */
 // derive 由 sync 内部调用（见 scripts/sync/index.mjs 的 buildChampions/buildScales），
 // 这里不再单独跑，避免两次计算产生口径不一致。
 
-/* ---- 5. 分析层（能力条 / 分类聚合 / 类比换算） ---- */
-run('分析层', 'scripts/lib/analyze.mjs');
-
-/* ---- 6. 建站 ---- */
-run('站点构建', 'scripts/site/build.mjs');
-
-/* ---- 7. 发布校验 ---- */
-run('发布校验', 'scripts/publish/verify.mjs');
+/* ---- 5–7. 旧多页 HTML 站点链（分析层 / 站点构建 / 发布校验） ----
+ * 已随 Vite 迁移一并清理：scripts/lib/analyze.mjs、scripts/site/、
+ * scripts/preview/、scripts/publish/verify.mjs 均不再存在（2026-10-04）。
+ * 数据链路由 --data-only 覆盖（取数→规范化→整合闸门→精灵图），
+ * 站点产物由 `npm run build`（Vite）与 postbuild 的 verify-dist.mjs 负责。 ---- */
+if (DATA_ONLY) {
+  console.log('\n▶ 旧多页站点链：已移除（渲染交给 Vite，走 npm run build）');
+}
 
 /* ---- 汇总 ---- */
 const total = Date.now() - t0;
@@ -100,10 +146,14 @@ console.log(`✅ 全链路完成，用时 ${(total / 1000).toFixed(1)}s`);
 for (const s of steps) console.log(`   ${s.label.padEnd(34)} ${(s.ms / 1000).toFixed(1)}s`);
 
 const mf = join(ROOT, 'dist/manifest.json');
-if (existsSync(mf)) {
+if (!DATA_ONLY && existsSync(mf)) {
   const m = JSON.parse(readFileSync(mf, 'utf8'));
-  console.log(`\n站点产物：${m.pageCount} 页 · 机型 ${m.products.total} 台 · 指纹 ${m.fingerprint}`);
-  console.log(`自包含：${m.selfContained ? '是' : '否'} · 失效链接 ${m.brokenLinks} · 内容问题 ${(m.contentIssues ?? []).length}`);
+  console.log(
+    `\n站点产物：${m.pageCount} 页 · 机型 ${m.products.total} 台 · 指纹 ${m.fingerprint}`,
+  );
+  console.log(
+    `自包含：${m.selfContained ? '是' : '否'} · 失效链接 ${m.brokenLinks} · 内容问题 ${(m.contentIssues ?? []).length}`,
+  );
 }
 
 /* ---- 供 CI 判断「这次跑完，用户看得见的东西变了吗」 ---- */
@@ -124,7 +174,9 @@ if (!DRY) {
   if (existsSync(fpPath)) {
     const fp = JSON.parse(readFileSync(fpPath, 'utf8'));
     console.log(`\n数据指纹 ${fp.dataFingerprint} · 站点指纹 ${fp.siteFingerprint}`);
-    console.log(`数据内容变化：${fp.changed.data ? '是' : '否'} · 站点内容变化：${fp.changed.site ? '是' : '否'}`);
+    console.log(
+      `数据内容变化：${fp.changed.data ? '是' : '否'} · 站点内容变化：${fp.changed.site ? '是' : '否'}`,
+    );
     console.log('CI 读 _work/fingerprint.json 的 changed 决定提交与发布；');
     console.log('提交/发布成功后用 --write-pointer 推进 data/.fingerprint。');
   }

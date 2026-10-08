@@ -41,12 +41,7 @@
   },
   "memory": {
     "ramGb": [],
-    "storageGb": [
-      256,
-      512,
-      1024,
-      2048
-    ]
+    "storageGb": [256, 512, 1024, 2048]
   },
   "battery": {
     "capacityMah": null,

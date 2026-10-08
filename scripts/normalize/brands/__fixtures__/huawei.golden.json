@@ -40,14 +40,8 @@
     "npu": null
   },
   "memory": {
-    "ramGb": [
-      12,
-      16
-    ],
-    "storageGb": [
-      512,
-      1024
-    ]
+    "ramGb": [12, 16],
+    "storageGb": [512, 1024]
   },
   "battery": {
     "capacityMah": 6800,

@@ -1,6 +1,6 @@
 # 自动化发布配方（可迁移到其他项目）
 
-这份文档记录的是 `specworld` 真实跑通的一套「提交即自动同步、变化才发布」的流水线：
+这份文档记录的是「参数世界（specworld）」真实跑通的一套「提交即自动同步、变化才发布」的流水线：
 GitHub Actions 定时抓取 → 合理性闸门 → 内容指纹去重 → 提交回仓库 → 内容变了才发 GitHub Pages。
 
 **所有内容都是可迁移的**：不依赖本仓的机型数据、不依赖任何密钥、不依赖任何外部服务。
@@ -80,10 +80,11 @@ Source 选成 GitHub Actions 后，页面会显示「GitHub Pages Jekyll」和�
 ## 3. 仓库布局：什么必须入库，什么必须忽略
 
 ```
-data/                 ← 唯一入库的数据源
+data/                 ← 唯一不可重建的输入（代码同样入库，但可由仓库确定性重建）
   products.json         归一化后的快照（含运行时刻字段，无妨，指纹会剥）
   release-dates.json    ★ 人工取证的 curated 数据，必须入库
   .fingerprint          ★ 上次同步/发布的状态指针
+  sprites/              ← 构建期生成的精灵图，gitignore（不入库）
 dist/                 ← 站点产物，gitignore
 _work/                ← 中间物 + HTTP 缓存，gitignore
 .github/workflows/    ← sync.yml / toy.yml，入库
@@ -223,7 +224,7 @@ on:
   # 改代码时立即验证，不等 12 小时。
   # bot 自己提交的是 data/，不匹配这里，因此不会自己触发自己。
   push:
-    paths: ['scripts/**', 'src/**', 'data/release-dates.json',
+    paths: ['scripts/**', 'data/release-dates.json',
             '.github/workflows/sync.yml']
 
 permissions:
@@ -417,7 +418,7 @@ jobs:
    失败原因完全指不到真正想测的地方。
 
 > 这三条不是理论，是本项目写第一版自测时真踩的——
-> 66 项里前四版跑不过，全是测试自己的问题，不是代码的问题。
+> 当时 66 项里前四版跑不过，全是测试自己的问题，不是代码的问题。（自测现已 112 项）
 
 ---
 
@@ -523,3 +524,58 @@ curl -s "https://api.github.com/repos/OWNER/REPO/actions/runs?per_page=5" \
 把抓取放在 GitHub 的境外 runner 上，很多原本连不上的上游就通了
 （本次华为 / 苹果官网直连没问题，但换个上游就不一定）。
 反过来，**从中国大陆跑 GitHub Actions 是反方向，别搞混**。
+
+---
+
+## 10. 依赖源纪律：本地走镜像，提交的 lock 必须干净
+
+> 这条与抓取无关，但任何「国内开发 + 上 GitHub CI」的项目都会踩，且**必然踩**。
+
+### 问题
+
+本机 npm 的 registry 通常指向国内镜像（`registry.npmmirror.com`），装包快。
+但 `package-lock.json` 是两样东西：本地安装的**产物**，和仓库里要提交、
+还要在 GitHub Actions 上 `npm ci` 的**输入**。这两个身份打架：
+
+- 镜像装包时，npm 会把新条目的 `resolved` 写成**镜像地址**；
+- 于是 lock 变成「官方源 + 镜像」混排，甚至全镜像；
+- 后果：境外 CI / 别人的机器 / 连不上该镜像的网络，`npm ci` 直接失败。
+
+### 三个必须讲清的认知（别讲错）
+
+1. **不影响包内容，也不影响构建。** 每个依赖的 `integrity`（sha512 哈希）才是内容正确的保证，
+   镜像与官方源同源同步、tar 包字节一致。谁从哪台机器下都得到同一个 `node_modules`。
+2. **所以别用「怕镜像投毒」当理由锁死 registry。** 供应链风险由 integrity 兜底，
+   镜像只是 redistributor。真正的理由是**可移植性与 CI 稳定性**。
+3. **别用 `npm install --package-lock-only --registry=...` 重生成 lock。**
+   实测会重写整份文件、可能丢字段/结构残缺。正确做法是**只替换 URL 的主机名**，
+   其余字节不动——改完应与原始 lock 逐字节一致（这是可验证的判据）。
+
+### 解法：制度 + 闸门 + 脚本，三件套
+
+| 层 | 做法 | 作用 |
+|---|---|---|
+| 制度 | **本地装包走镜像，提交的 lock 必须干净** | 说清为什么这么取舍 |
+| 脚本 | `lock:check`（只读检查）/ `lock:fix`（只换主机名） | 不依赖人记 sed，且跨平台 |
+| 闸门 | `lock:check` 挂进 CI 第一个 job | push 时当场暴露，而不是等某台机器 `npm ci` 失败 |
+
+**为什么不挂 pre-commit hook**：hook 会被 `git commit --no-verify` 绕过、
+在新克隆的机器上默认不生效（需 `core.hooksPath` 或 husky 之类的额外机制），
+而 CI 闸门是**强制且所有人都过一遍**的。pre-commit 适合当「别让我提交脏东西」的快速反馈，
+CI 适合当「这条规矩不许破」的底线——本项目选后者。
+
+### 脚本要处理的三个细节
+
+1. **只换主机名，其余不动**：用 `new URL()` 解析后改 `hostname`，别用字符串 `replace`——
+   否则会误伤 integrity 字段里的同名字符串。
+2. **改完重新 `JSON.parse` 一遍**：写出去的东西自己要先能读。写盘前也要先 parse 一次原文件，
+   宁可什么都不做，也不要写坏 lock。
+3. **不认识的源要人工确认**：只自动替换**已知**镜像；遇到陌生主机（私有源、换过的源）
+   直接报错退出，不要擅自决定替成什么。
+
+### 检查单（迁移到新项目时）
+
+- [ ] `package-lock.json` 里 `resolved` 的主机名是否只有官方源
+- [ ] 有没有把这条检查挂进 CI（而不是只写在 README 里靠人记）
+- [ ] 修法是「只换主机名」还是「重生成 lock」——后者会丢结构，禁用
+- [ ] 有没有把「不影响包内容、integrity 才是保证」讲清楚（否则会有人拿安全当理由乱改配置）

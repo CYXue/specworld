@@ -22,7 +22,12 @@ export const METRICS = {
   thicknessMm: { label: '厚度', unit: 'mm', dir: 'low', path: 'body.thicknessMm' },
   screenIn: { label: '屏幕尺寸', unit: '英寸', dir: 'high', path: 'display.sizeIn' },
   ppi: { label: '像素密度', unit: 'ppi', dir: 'high', path: 'display.ppi' },
-  brightnessPeakNits: { label: '峰值亮度', unit: 'nits', dir: 'high', path: 'display.brightnessPeakNits' },
+  brightnessPeakNits: {
+    label: '峰值亮度',
+    unit: 'nits',
+    dir: 'high',
+    path: 'display.brightnessPeakNits',
+  },
   batteryMah: { label: '电池容量', unit: 'mAh', dir: 'high', path: 'battery.capacityMah' },
   wiredChargeW: { label: '有线充电', unit: 'W', dir: 'high', path: 'battery.wiredChargeW' },
   storageMaxGb: { label: '最大存储', unit: 'GB', dir: 'high', path: 'memory.storageGb' },
@@ -45,7 +50,9 @@ export function metricValue(product, key) {
       return arr.length ? Math.max(...arr) : null;
     }
     case 'priceCny': {
-      const prices = (product.skus ?? []).map((s) => s.priceCny).filter((v) => typeof v === 'number' && v > 0);
+      const prices = (product.skus ?? [])
+        .map((s) => s.priceCny)
+        .filter((v) => typeof v === 'number' && v > 0);
       return prices.length ? Math.min(...prices) : null;
     }
     case 'releaseDate': {
@@ -73,7 +80,9 @@ export function buildScales(products) {
       values,
       byId: new Map(pairs.map((x) => [x.id, x.v])),
       coverage: products.length ? pairs.length / products.length : 0,
-      enough: pairs.length >= TITLE_MIN_POOL && pairs.length / Math.max(products.length, 1) >= TITLE_COVERAGE,
+      enough:
+        pairs.length >= TITLE_MIN_POOL &&
+        pairs.length / Math.max(products.length, 1) >= TITLE_COVERAGE,
     };
   }
   return scales;
@@ -96,11 +105,31 @@ const TITLES = [
   { id: 'thinnest', metric: 'thicknessMm', title: '最薄', why: (v, u) => `机身 ${v} ${u}` },
   { id: 'biggest-screen', metric: 'screenIn', title: '屏幕最大', why: (v, u) => `${v} ${u} 屏幕` },
   { id: 'sharpest', metric: 'ppi', title: '最细腻', why: (v, u) => `${v} ${u}` },
-  { id: 'brightest', metric: 'brightnessPeakNits', title: '屏幕最亮', why: (v, u) => `峰值 ${v} ${u}` },
+  {
+    id: 'brightest',
+    metric: 'brightnessPeakNits',
+    title: '屏幕最亮',
+    why: (v, u) => `峰值 ${v} ${u}`,
+  },
   { id: 'longest-battery', metric: 'batteryMah', title: '电池最大', why: (v, u) => `${v} ${u}` },
-  { id: 'fastest-charge', metric: 'wiredChargeW', title: '充电最快', why: (v, u) => `${v} ${u} 有线` },
-  { id: 'most-storage', metric: 'storageMaxGb', title: '存储最大', why: (v) => `最高 ${v / 1024 >= 1 ? `${v / 1024} TB` : `${v} GB`}` },
-  { id: 'newest', metric: 'releaseDate', title: '最新发布', why: (v) => new Date(v).toISOString().slice(0, 10) },
+  {
+    id: 'fastest-charge',
+    metric: 'wiredChargeW',
+    title: '充电最快',
+    why: (v, u) => `${v} ${u} 有线`,
+  },
+  {
+    id: 'most-storage',
+    metric: 'storageMaxGb',
+    title: '存储最大',
+    why: (v) => `最高 ${v / 1024 >= 1 ? `${v / 1024} TB` : `${v} GB`}`,
+  },
+  {
+    id: 'newest',
+    metric: 'releaseDate',
+    title: '最新发布',
+    why: (v) => new Date(v).toISOString().slice(0, 10),
+  },
 ];
 
 /**
@@ -152,9 +181,27 @@ export function buildChampions(products, scales) {
 const DOMAINS = [
   { id: 'all', label: '', filter: () => true, min: 8 },
   { id: 'brand', label: '{brand}', filter: (p, self) => p.brand === self.brand, min: 5 },
-  { id: 'flagship', label: '旗舰里', filter: (p) => (metricValue(p, 'priceCny') ?? 0) >= 5000, min: 5 },
-  { id: 'budget', label: '五千元以内', filter: (p) => { const v = metricValue(p, 'priceCny'); return v !== null && v <= 5000; }, min: 5 },
-  { id: 'foldable', label: '折叠机型里', filter: (p) => /折叠|Mate X|Pocket|Flip/i.test(`${p.line} ${p.name}`), min: 3 },
+  {
+    id: 'flagship',
+    label: '旗舰里',
+    filter: (p) => (metricValue(p, 'priceCny') ?? 0) >= 5000,
+    min: 5,
+  },
+  {
+    id: 'budget',
+    label: '五千元以内',
+    filter: (p) => {
+      const v = metricValue(p, 'priceCny');
+      return v !== null && v <= 5000;
+    },
+    min: 5,
+  },
+  {
+    id: 'foldable',
+    label: '折叠机型里',
+    filter: (p) => /折叠|Mate X|Pocket|Flip/i.test(`${p.line} ${p.name}`),
+    min: 3,
+  },
 ];
 
 const DIMENSIONS = [
@@ -187,6 +234,7 @@ export function buildPersona(product, products, scales) {
   const bits = [];
   if (product.display?.sizeIn) bits.push(`${product.display.sizeIn} 英寸屏幕`);
   if (product.body?.weightG) bits.push(`${product.body.weightG} 克`);
-  if (metricValue(product, 'storageMaxGb')) bits.push(`最高 ${metricValue(product, 'storageMaxGb')} GB 存储`);
+  if (metricValue(product, 'storageMaxGb'))
+    bits.push(`最高 ${metricValue(product, 'storageMaxGb')} GB 存储`);
   return bits.length ? bits.join('，') : '暂无足够参数生成定位';
 }

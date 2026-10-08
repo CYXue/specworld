@@ -1,7 +1,9 @@
-# 工程评估：phone-spec-world 对照 ai-model-world
+# 工程评估：参数世界 对照 ai-model-world
+
+> ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
 
 - 评估日期：2026-10-03
-- 评估对象：`phone-spec-world`（手写 mjs 模板 + 全链路数据管线，线上 `cyxue.github.io/specworld/`）
+- 评估对象：参数世界（specworld）（手写 mjs 模板 + 全链路数据管线，线上 `cyxue.github.io/specworld/`）
 - 参考项目：`liyupi/ai-model-world`（Next.js 16 静态导出）
 - 方法：直接读源码 + CI 配置 + 既有文档（`BENCHMARK-VS-AMW.md` 等），对照成熟工程实践逐项核验。
 
@@ -24,9 +26,9 @@
 
 | 维度 | BENCHMARK 旧结论 | 当前实际 |
 |---|---|---|
-| 单元自测 | 66 项 | `scripts/selftest.mjs` 727 行、断言 70+ 项，CI 第一个 job 强制跑 |
+| 单元自测 | 66 项（旧结论） | `scripts/selftest.mjs` 断言 **112 项**（含品牌映射层 golden 测试、闸门自身、**渲染层几何数学**：环面 + 球面），CI 第一个 job 强制跑（见 §6） |
 | 只读 QA 脚本 | P1 未做 | `scripts/qa/` 已建 `why-champion` / `coverage` / `stale-lineup` 三件套，且直接复用 `buildChampions` 单一真源 |
-| 精灵图 | 入库，规模增长爆点 | **仍是入库**（60 个 SVG，`.gitignore` 未排除 `data/sprites/`）——这是唯一"比参考项目退步"的点 |
+| 精灵图 | 入库，规模增长爆点 | **已改为构建期生成、`data/sprites/` 写入 `.gitignore` 不再入库**（见 §6）——不再是退步点 |
 
 其余差异仍然成立且合理：
 - **指纹设计本地更强**（数据指纹 × 模板哈希，参考项目该抄本地）。
@@ -44,7 +46,7 @@
 | `scripts/normalize/index.mjs`（1804 行；`mapHuawei` 568–862 ≈294 行、`mapAppleSpecs` 928–1237 ≈309 行） | 单体文件过大，两个品牌映射函数是巨型函数。每次上游改版、每次加字段都在这一个文件里改，review 困难、单测困难、易引入耦合。 | 拆出 `scripts/normalize/brands/huawei.mjs` 与 `apple.mjs`，主文件只做编排与 `emptyRecord` / `put` / `putObject` 等共享基建。拆完用现有 `selftest.mjs` 兜底回归。 | **中**·建议改进 |
 | `scripts/normalize/index.mjs:79,85` 的 `firstNum` / `nums` | 与 `scripts/normalize/parse.mjs` 的 `firstNumber` / `allNumbers` **逐字重复**（DRY 违反），两处可能漂移。 | 直接 `import { firstNumber as firstNum, allNumbers as nums } from '../normalize/parse.mjs'`，删掉本地副本。 | **中**·建议改进 |
 | `src/lib/` 与 `scripts/` 割裂 | `src/lib/compare-spec.mjs` 是构建期领域定义（对比页行/阈值/判定），却被放在 `src/` 而非 `scripts/`；`build.mjs:1041` 用 `'../../src/lib/compare-spec.mjs'` 动态相对路径 import，位置一旦变动即断。 | 统一约定：构建期代码全部进 `scripts/`（`scripts/site/lib/compare-spec.mjs`），或显式定义 `src/` 的语义并改用稳定别名。 | **低**·可选优化 |
-| `parse.mjs` 内联 `--selftest`（11 条）vs `scripts/selftest.mjs`（70+ 条） | 双测试机制，内联那份未接入 CI，长期会漂移且与主自测口径不一致。 | 删掉 `parse.mjs` 的内联 selftest，全部归一到 `selftest.mjs`。 | **低**·可选优化 |
+| `parse.mjs` 内联 `--selftest`（11 条）vs `scripts/selftest.mjs`（70+ 条，现已 79 条） | 双测试机制，内联那份未接入 CI，长期会漂移且与主自测口径不一致。 | 删掉 `parse.mjs` 的内联 selftest，全部归一到 `selftest.mjs`。 | **低**·可选优化 |
 
 ### 维度二：架构设计
 
@@ -74,7 +76,7 @@
 | 位置 | 问题 | 建议 | 优先级·分类 |
 |---|---|---|---|
 | `scripts/normalize/parse.mjs` vs `index.mjs` | 见维度一"DRY 违反"。 | 合并到 `parse.mjs`，删副本。 | **中**·建议改进 |
-| `scripts/selftest.mjs` 断言数 | 文档（sync.yml:50、BENCHMARK）均写"66 项"，实际 727 行、断言远多于此；计数口径不一致，review 时容易误判覆盖度。 | 让 `selftest.mjs` 末尾打印实际断言数，并统一文档措辞。 | **低**·可选优化 |
+| `scripts/selftest.mjs` 断言数 | ~~文档曾写"66 项"，与实际不一致~~ **已解决**：`selftest.mjs` 末尾本就会打印实际断言数（现为 107），文档措辞已统一为「引用旧数字处标注已过时」。 | 保持：新增断言时顺手更新引用了计数的文档。 | ~~低~~ 已闭环 |
 | 注释质量（`parse.mjs`、`validate.mjs`、`normalize/index.mjs`、`fingerprint.mjs`） | ✅ **极佳**：每个解析函数写明"为什么这么写 / 踩过什么坑"，闸门每条标注"防哪种故障 + 误报概率"，`provenance` 子路径 bug 的修复记录完整。这是项目最值得保持的资产。 | 保持；新代码沿用此风格。 | — |
 | 命名 / 常量 / 单一职责 | ✅ `parse.mjs` 纯函数、常量集中（`LIMITS` / `THRESHOLDS` / `VENDORS`）、函数粒度合理。 | 保持。 | — |
 

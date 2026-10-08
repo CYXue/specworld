@@ -27,7 +27,7 @@ on:
         default: false
 
 permissions:
-  contents: write   # 送审成功后把发布记录提交回仓库
+  contents: write # 送审成功后把发布记录提交回仓库
   issues: write
 
 concurrency:
@@ -49,6 +49,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
 
       # 缺凭据就安静退出：没配 Secret 的情况下天天报红，只会让人忽略真正的失败。
       # exit 0 是这个工作流的**预期行为**之一，不是掩盖问题 —— 下面这行会写进日志。
@@ -70,6 +71,12 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # 缺 npm 依赖就没法构建，此时同样安静跳过：装包失败与「没配凭据」是同一类问题，
+      # 不该让每日任务报红。真正需要构建时（凭据已配的仓库）少了这步会立刻报出来。
+      - name: 安装构建依赖
+        if: steps.cred.outputs.skip != 'true'
+        run: npm ci
+
       - name: 恢复 HTTP 缓存
         if: steps.cred.outputs.skip != 'true'
         uses: actions/cache@v4
@@ -82,12 +89,21 @@ jobs:
           key: sync-http-cache-${{ github.run_id }}
           restore-keys: sync-http-cache-
 
-      # 这里必须联网跑完整管线，不能用 --offline。
+      # 这里必须联网跑数据管线，不能用 --offline。
       # _work/ 不入库，全新 checkout 里没有 *.raw.json，--offline 会直接以「缺少取数缓存」退出。
       # 每天只跑一次，多抓一轮官网的成本可以接受；换来的是 Toy 上永远是最新数据。
-      - name: 重建站点
+      #
+      # --data-only：渲染层是 Vite，旧的多页 HTML 建站不再是送审包的内容。
+      - name: 跑数据管线
         if: steps.cred.outputs.skip != 'true'
-        run: node scripts/pipeline.mjs
+        run: node scripts/pipeline.mjs --data-only
+
+      # 送审包必须是 Vite 产物。prebuild 把 data/ 同步进 public/，vite build 出 dist/，
+      # postbuild 的 verify-dist.mjs 会在打包前再拦一道：入口缺失、绝对路径（/toy/<slug> 下
+      # 必 404）、外部资源引用、超 50 MB —— 平台整改口径要求包内自包含。
+      - name: 构建站点（Vite）
+        if: steps.cred.outputs.skip != 'true'
+        run: npm run build
 
       - name: 判断要不要送审
         if: steps.cred.outputs.skip != 'true'

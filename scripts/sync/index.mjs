@@ -10,14 +10,16 @@
  *   _work/release-dates.json  发布日期取证结果
  * 输出：
  *   data/products.json        唯一数据契约（提交入库）
+ *   data/discovery-pending.json  待收录队列（提交入库，见下方说明）
  *   _work/derived.json        标尺/头衔/定位（构建期产物，不入库，供检查）
  */
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
-import { coverageReport, validate } from './validate.mjs';
 import { VENDORS } from '../brands.mjs';
+import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
+import { buildQueueFile, classifyByWindow } from './queue.mjs';
+import { coverageReport, validate } from './validate.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORK = join(ROOT, '_work');
@@ -65,7 +67,9 @@ function main() {
 
   const products = readJson(normalizedPath);
   const releaseDates = readReleaseDates();
-  const previous = existsSync(join(DATA, 'products.json')) ? readJson(join(DATA, 'products.json')) : null;
+  const previous = existsSync(join(DATA, 'products.json'))
+    ? readJson(join(DATA, 'products.json'))
+    : null;
 
   const notes = [];
 
@@ -78,10 +82,15 @@ function main() {
       if (!p.releaseDate) {
         p.releaseDate = e.date;
         p.releaseDatePrecision = e.precision ?? 'day';
-        p.provenance = { ...(p.provenance ?? {}), releaseDate: e.source === 'apple-official' ? 'apple-official' : 'manual' };
+        p.provenance = {
+          ...(p.provenance ?? {}),
+          releaseDate: e.source === 'apple-official' ? 'apple-official' : 'manual',
+        };
         p.releaseDateSourceUrl = e.sourceUrl ?? null;
       } else if (p.releaseDate !== e.date) {
-        notes.push(`${p.id} 发布日期冲突：规格页/其它来源 ${p.releaseDate}，取证结果 ${e.date}（采用取证结果）`);
+        notes.push(
+          `${p.id} 发布日期冲突：规格页/其它来源 ${p.releaseDate}，取证结果 ${e.date}（采用取证结果）`,
+        );
         p.releaseDate = e.date;
         p.releaseDatePrecision = e.precision ?? 'day';
         p.releaseDateSourceUrl = e.sourceUrl ?? null;
@@ -92,27 +101,12 @@ function main() {
   }
 
   // ---- 2. 窗口过滤 -----------------------------------------------------
+  // 判据在 scripts/sync/queue.mjs（纯函数，自测直接 import 它）。
   const windowStart = Date.parse(WINDOW_START);
-  const kept = [];
-  const dropped = [];
-  for (const p of products) {
-    const t = p.releaseDate ? Date.parse(p.releaseDate) : Number.NaN;
-    if (Number.isNaN(t)) {
-      dropped.push({ id: p.id, reason: '无发布日期，无法判定是否在窗口内' });
-      continue;
-    }
-    if (t < windowStart) {
-      const fuzz = p.releaseDatePrecision !== 'day' && windowStart - t <= WINDOW_FUZZ_DAYS * 86400000;
-      if (fuzz) {
-        p.windowNote = `发布日期精度为 ${p.releaseDatePrecision}，恰好压在 ${WINDOW_START} 边界上`;
-        kept.push(p);
-      } else {
-        dropped.push({ id: p.id, reason: `发布于 ${p.releaseDate}，早于窗口起点 ${WINDOW_START}` });
-      }
-      continue;
-    }
-    kept.push(p);
-  }
+  const { kept, dropped, pending } = classifyByWindow(products, {
+    windowStart: WINDOW_START,
+    windowFuzzDays: WINDOW_FUZZ_DAYS,
+  });
 
   // ---- 3. 首末次出现时间 -----------------------------------------------
   const prevById = new Map((previous?.products ?? []).map((p) => [p.id, p]));
@@ -129,11 +123,21 @@ function main() {
     generatedAt: now,
     windowStart: WINDOW_START,
     sources: {
-      'apple-official': { fetchedAt: now, note: `苹果官网规格页`, ok: kept.some((p) => p.brand === 'apple') },
-      'huawei-official': { fetchedAt: now, note: `华为官网规格页`, ok: kept.some((p) => p.brand === 'huawei') },
+      'apple-official': {
+        fetchedAt: now,
+        note: `苹果官网规格页`,
+        ok: kept.some((p) => p.brand === 'apple'),
+      },
+      'huawei-official': {
+        fetchedAt: now,
+        note: `华为官网规格页`,
+        ok: kept.some((p) => p.brand === 'huawei'),
+      },
       'release-dates': {
         fetchedAt: releaseDates?.generatedAt ?? null,
-        note: releaseDates ? `${releaseDates.entries?.length ?? 0} 条取证，${releaseDates.unresolved?.length ?? 0} 条未解决` : '缺失',
+        note: releaseDates
+          ? `${releaseDates.entries?.length ?? 0} 条取证，${releaseDates.unresolved?.length ?? 0} 条未解决`
+          : '缺失',
         ok: Boolean(releaseDates),
       },
     },
@@ -148,6 +152,7 @@ function main() {
     windowStart: WINDOW_START,
     kept: kept.length,
     dropped,
+    pending,
     notes,
     coverage: coverageReport(snapshot),
     failures,
@@ -157,6 +162,13 @@ function main() {
   console.log(`窗口 ${WINDOW_START} 起：收录 ${kept.length} 台，丢弃 ${dropped.length} 台`);
   console.log(`覆盖：${report.coverage.join(' | ')}`);
   if (notes.length) console.log(`注意：\n  - ${notes.join('\n  - ')}`);
+  if (pending.length) {
+    console.log(
+      `\n⚠️ 待收录 ${pending.length} 台（缺发布日期，需人工补 data/release-dates.json）：`,
+    );
+    for (const q of pending) console.log(`  - ${q.brand} ${q.id} ${q.nameZh ?? q.name ?? ''}`);
+    console.log('   已记入 data/discovery-pending.json');
+  }
 
   if (failures.length) {
     console.error(`\n❌ 闸门未通过（${failures.length} 项），拒绝写盘，保留上一版快照：`);
@@ -172,14 +184,23 @@ function main() {
     scales: Object.fromEntries(
       Object.entries(scales).map(([k, s]) => [
         k,
-        { label: s.label, unit: s.unit, dir: s.dir, coverage: Number(s.coverage.toFixed(3)), pool: s.values.length, enough: s.enough },
+        {
+          label: s.label,
+          unit: s.unit,
+          dir: s.dir,
+          coverage: Number(s.coverage.toFixed(3)),
+          pool: s.values.length,
+          enough: s.enough,
+        },
       ]),
     ),
     champions: buildChampions(snapshot.products, scales),
     products: snapshot.products.map((p) => ({
       id: p.id,
       persona: buildPersona(p, snapshot.products, scales),
-      percentiles: Object.fromEntries(Object.keys(scales).map((k) => [k, percentileOf(scales, k, p)])),
+      percentiles: Object.fromEntries(
+        Object.keys(scales).map((k) => [k, percentileOf(scales, k, p)]),
+      ),
     })),
   };
 
@@ -188,12 +209,36 @@ function main() {
   } else {
     atomicWrite(join(DATA, 'products.json'), `${JSON.stringify(snapshot, null, 2)}\n`);
     atomicWrite(join(WORK, 'derived.json'), `${JSON.stringify(derived, null, 2)}\n`);
-    console.log(`已写入 data/products.json（${snapshot.products.length} 台）与 _work/derived.json`);
+    /**
+     * 队列文件：**入库**（data/ 顶层 JSON），与 release-dates.json 同理 ——
+     * 它是「等人工补一句话」的可行动清单，躺在 _work/ 里就等于没有。
+     *
+     * 内容里**不能有任何时间戳**（见 queue.mjs 的 buildQueueFile 说明），
+     * 否则每轮都变，CI 每 12 小时一次空提交。
+     * 只有队列非空时才写：空队列不必在版本库里留一个空文件当噪音，
+     * 但真的从有到无时必须删掉旧文件，否则会留一条已经解决掉的待办。
+     */
+    const queuePath = join(DATA, 'discovery-pending.json');
+    if (pending.length) {
+      const queue = buildQueueFile(pending, { windowStart: WINDOW_START });
+      atomicWrite(queuePath, `${JSON.stringify(queue, null, 2)}\n`);
+    } else if (existsSync(queuePath)) {
+      rmSync(queuePath);
+      console.log('队列已清空（补齐发布日期或机型离开官网目录），已删除 data/discovery-pending.json');
+    }
+    console.log(
+      `已写入 data/products.json（${snapshot.products.length} 台）与 _work/derived.json` +
+        (pending.length ? `，待收录 ${pending.length} 台入 data/discovery-pending.json` : ''),
+    );
   }
 
   console.log('\n首页头衔：');
   for (const c of derived.champions) {
-    console.log(c.insufficient ? `  ${c.title}：数据不足 —— ${c.insufficient}` : `  ${c.title}：${c.productId}（${c.why}）`);
+    console.log(
+      c.insufficient
+        ? `  ${c.title}：数据不足 —— ${c.insufficient}`
+        : `  ${c.title}：${c.productId}（${c.why}）`,
+    );
   }
 }
 

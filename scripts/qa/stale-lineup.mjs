@@ -23,8 +23,8 @@
  * 只负责把「该看这件事」这件事摆到眼前。
  */
 
-import { loadProducts, section, c, table, brandZh, pct, verdict } from './lib.mjs';
 import { metricValue } from '../lib/derive.mjs';
+import { loadProducts, section, c, table, brandZh, pct, verdict } from './lib.mjs';
 
 const argv = process.argv.slice(2);
 const ageArg = argv.indexOf('--age');
@@ -33,7 +33,8 @@ const SAME_GEN = argv.includes('--same-generation');
 
 const products = loadProducts();
 const today = Date.now();
-const daysSince = (p) => (p.releaseDate ? Math.floor((today - Date.parse(p.releaseDate)) / 86400000) : null);
+const daysSince = (p) =>
+  p.releaseDate ? Math.floor((today - Date.parse(p.releaseDate)) / 86400000) : null;
 
 /* ------------------------------------------------------------------ *
  * 1. 池子年龄分布
@@ -44,8 +45,17 @@ const dated = products.filter((p) => p.releaseDate).map((p) => ({ p, d: daysSinc
 const undated = products.filter((p) => !p.releaseDate);
 
 if (undated.length) {
-  console.log(c.yellow(`⚠️  ${undated.length} 台没有发布日期，无法判断时新：${undated.map((p) => p.name).slice(0, 5).join('、')}`));
-  console.log(c.dim('   数据来自 data/release-dates.json（人工核对的取证表），补进去就能参与本检查。'));
+  console.log(
+    c.yellow(
+      `⚠️  ${undated.length} 台没有发布日期，无法判断时新：${undated
+        .map((p) => p.name)
+        .slice(0, 5)
+        .join('、')}`,
+    ),
+  );
+  console.log(
+    c.dim('   数据来自 data/release-dates.json（人工核对的取证表），补进去就能参与本检查。'),
+  );
   console.log('');
 }
 
@@ -63,7 +73,9 @@ const dist = buckets.map((b) => ({
   label: b.label,
   n: dated.filter((x) => x.d >= b.lo && x.d <= b.hi).length,
 }));
-console.log(`池内 ${products.length} 台 · 有发布日期 ${dated.length} 台 · 窗口起点见 data/products.json 的 windowStart`);
+console.log(
+  `池内 ${products.length} 台 · 有发布日期 ${dated.length} 台 · 窗口起点见 data/products.json 的 windowStart`,
+);
 console.log('');
 // 分桶是互斥的，加起来必须等于总数——不检查的话桶写错了我也看不见
 const bucketSum = dist.reduce((a, b) => a + b.n, 0);
@@ -95,8 +107,14 @@ for (const p of products) {
 
 const lineRows = [];
 for (const [key, list] of lines) {
-  const ds = list.map(daysSince).filter((d) => d !== null).sort((a, b) => b - a);
-  const newest = list.reduce((a, b) => (Date.parse(b.releaseDate ?? 0) > Date.parse(a.releaseDate ?? 0) ? b : a), list[0]);
+  const ds = list
+    .map(daysSince)
+    .filter((d) => d !== null)
+    .sort((a, b) => b - a);
+  const newest = list.reduce(
+    (a, b) => (Date.parse(b.releaseDate ?? 0) > Date.parse(a.releaseDate ?? 0) ? b : a),
+    list[0],
+  );
   lineRows.push({
     key,
     n: list.length,
@@ -136,15 +154,12 @@ if (!stale.length) {
   console.log('');
   table(
     ['机型', '品牌', '发布于', '天数', '当前该维度排名'],
-    stale.slice(0, 20).map(({ p, d }) => [
-      p.name,
-      brandZh(p.brand),
-      p.releaseDate,
-      String(d),
-      rankNotes(p),
-    ]),
+    stale
+      .slice(0, 20)
+      .map(({ p, d }) => [p.name, brandZh(p.brand), p.releaseDate, String(d), rankNotes(p)]),
   );
-  if (stale.length > 20) console.log(c.dim(`\n…另有 ${stale.length - 20} 台，用 --age 调阈值或看完整清单`));
+  if (stale.length > 20)
+    console.log(c.dim(`\n…另有 ${stale.length - 20} 台，用 --age 调阈值或看完整清单`));
 
   // 重点提示：这些老机型是否正在撑着头衔
   console.log('');
@@ -193,15 +208,21 @@ if (SAME_GEN) {
   }
   console.log('');
   console.log(c.dim('读法：厚度/重量/电池越小越好，屏幕越大越好。'));
-  console.log(c.dim('  若最新一台在某个维度上全面不如上一代，多半是官网还没更新或新机确实没提升，'));
+  console.log(
+    c.dim('  若最新一台在某个维度上全面不如上一代，多半是官网还没更新或新机确实没提升，'),
+  );
   console.log(c.dim('  两种情况都不该由本脚本下结论——去看 _work/*.raw.json 的原文确认。'));
 }
 
 section('结论');
 const worstStale = lineRows[0];
 console.log(`池子年龄中位数 ${median(dated.map((x) => x.d))} 天`);
-console.log(`过时机型 ${stale.length}/${dated.length} 台` +
-  (worstStale?.staleRate > 0 ? `，最严重的产品线是 ${worstStale.key}（${pct(worstStale.staleRate, 0)} 过时）` : ''));
+console.log(
+  `过时机型 ${stale.length}/${dated.length} 台` +
+    (worstStale?.staleRate > 0
+      ? `，最严重的产品线是 ${worstStale.key}（${pct(worstStale.staleRate, 0)} 过时）`
+      : ''),
+);
 
 verdict(
   stale.length === 0,

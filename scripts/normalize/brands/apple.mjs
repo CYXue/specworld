@@ -4,10 +4,35 @@
  * apFind / apFindAll / apKeyBody / FirstRaw）在此文件内定义，供两个 map 复用。
  */
 import {
-  emptyRecord, put, putObject, tidy, realValue, addNote, pushOfficial, parseAppleAppearance,
-  derivePpi, pickFirstRes, refreshText, normalizeType, parseAperture, parseOis, parseLens,
-  parseRearLenses, parseFront, parseVideoMax, parseMm, parseWeight, parseInch, parseResolution,
-  parseStorageList, parsePpi, wattOf, firstNum, AP, AC, stripInvisible,
+  emptyRecord,
+  put,
+  putObject,
+  tidy,
+  realValue,
+  addNote,
+  pushOfficial,
+  parseAppleAppearance,
+  derivePpi,
+  pickFirstRes,
+  refreshText,
+  normalizeType,
+  parseAperture,
+  parseOis,
+  parseLens,
+  parseRearLenses,
+  parseFront,
+  parseVideoMax,
+  parseMm,
+  parseWeight,
+  parseInch,
+  parseResolution,
+  parseStorageList,
+  parsePpi,
+  wattOf,
+  firstNum,
+  AP,
+  AC,
+  stripInvisible,
 } from '../shared.mjs';
 const APPLE_SHARED_MARK = /两种机型均具备|机型均具备/;
 
@@ -23,7 +48,7 @@ const APPLE_SHARED_MARK = /两种机型均具备|机型均具备/;
 function splitApplePage(rawProduct) {
   const merged = {};
   for (const [k, v] of Object.entries(rawProduct.raw)) {
-    merged[k.startsWith('_shared:') ? k : (APPLE_SHARED_MARK.test(k) ? `_shared:${k}` : k)] = v;
+    merged[k.startsWith('_shared:') ? k : APPLE_SHARED_MARK.test(k) ? `_shared:${k}` : k] = v;
   }
   return merged;
 }
@@ -54,7 +79,10 @@ function apRows(raw, group) {
 }
 
 /** 整组文本（按页面行序拼接）；用于 ppi / 刷新率 / 亮度这类「跨行才能读全」的解析 */
-const apBlob = (raw, group, sep = ' ') => apRows(raw, group).map((x) => x.value).join(sep);
+const apBlob = (raw, group, sep = ' ') =>
+  apRows(raw, group)
+    .map((x) => x.value)
+    .join(sep);
 
 /** 第一行 */
 const apFirst = (raw, group) => apRows(raw, group)[0]?.value;
@@ -63,7 +91,10 @@ const apFirst = (raw, group) => apRows(raw, group)[0]?.value;
 const apFind = (raw, group, re) => apRows(raw, group).find((x) => re.test(x.value))?.value;
 
 /** 按正则取全部匹配值 */
-const apFindAll = (raw, group, re) => apRows(raw, group).filter((x) => re.test(x.value)).map((x) => x.value);
+const apFindAll = (raw, group, re) =>
+  apRows(raw, group)
+    .filter((x) => re.test(x.value))
+    .map((x) => x.value);
 /* ---------- B: 苹果规格页 ---------- */
 
 function mapAppleSpecs(rawProduct) {
@@ -104,7 +135,10 @@ function mapAppleSpecs(rawProduct) {
     rec.body.weightG = w.value;
   }
   if (/展开/.test(dimText)) {
-    addNote(rec, `尺寸与重量原文标注「展开」态（${tidy(dimText)}）；未给出折叠态，body.folded 记 null 而不是猜`);
+    addNote(
+      rec,
+      `尺寸与重量原文标注「展开」态（${tidy(dimText)}）；未给出折叠态，body.folded 记 null 而不是猜`,
+    );
   }
 
   const ipText = apBlob(raw, '防溅、抗水、防尘');
@@ -122,27 +156,39 @@ function mapAppleSpecs(rawProduct) {
   const dispJoin = dispRows.join(' | ');
   // 尺寸：优先「N 英寸 (对角线)」那一行；其次是「N 英寸 … 显示屏」的行。
   // 不能拿第一条 —— 第一条常是「超视网膜 XDR 显示屏」，根本不含尺寸。
-  const sizeLine = dispRows.find((t) => /英寸/.test(t) && /对角线/.test(t))
-    ?? dispRows.find((t) => /英寸/.test(t) && /显示屏|OLED|全面屏/.test(t) && !/可视区域/.test(t))
-    ?? dispRows.find((t) => /英寸/.test(t));
+  const sizeLine =
+    dispRows.find((t) => /英寸/.test(t) && /对角线/.test(t)) ??
+    dispRows.find((t) => /英寸/.test(t) && /显示屏|OLED|全面屏/.test(t) && !/可视区域/.test(t)) ??
+    dispRows.find((t) => /英寸/.test(t));
   rec.display.sizeIn = sizeLine ? parseInch(sizeLine) : null;
-  const typeMatch = dispJoin.match(/(超视网膜 XDR 显示屏|超视网膜显示屏|LTPO[^，,|｜]*|OLED 可折叠全面屏|OLED 全面屏|OLED)/);
+  const typeMatch = dispJoin.match(
+    /(超视网膜 XDR 显示屏|超视网膜显示屏|LTPO[^，,|｜]*|OLED 可折叠全面屏|OLED 全面屏|OLED)/,
+  );
   rec.display.type = typeMatch ? normalizeType(typeMatch[1]) : null;
   rec.display.resolutionPx = pickFirstRes(dispRows);
   // ppi 与分辨率同处一行（`2622 x 1206 像素分辨率，460 ppi`），整组里正则直接抓
   const declaredPpi = (() => {
-    const m = dispJoin.replace(/,/g, '').match(/(\d{3,5})\s*[x×]\s*(\d{3,5})\s*像素分辨率[，,]?\s*(\d+(?:\.\d+)?)\s*ppi/i)
-      ?? dispJoin.replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*ppi/i);
+    const m =
+      dispJoin
+        .replace(/,/g, '')
+        .match(/(\d{3,5})\s*[x×]\s*(\d{3,5})\s*像素分辨率[，,]?\s*(\d+(?:\.\d+)?)\s*ppi/i) ??
+      dispJoin.replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*ppi/i);
     return m ? Number(m[m.length - 1]) : null;
   })();
   rec.display.ppi = declaredPpi ?? derivePpi(rec.display.sizeIn, rec.display.resolutionPx);
   if (declaredPpi === null && rec.display.ppi !== null) {
-    addNote(rec, '官网该页未直接给出 ppi；display.ppi 由官网的分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived');
+    addNote(
+      rec,
+      '官网该页未直接给出 ppi；display.ppi 由官网的分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived',
+    );
   }
   // 刷新率：只从含 Hz 的那一行读，避免把「6.27 英寸」当成刷新率下限
   rec.display.refreshHz = refreshText(apFind(raw, '显示屏', /Hz/i) ?? '');
   if (/最小亮度/.test(dispJoin)) {
-    addNote(rec, '屏幕原文含「最小亮度为 1 尼特」，属最低亮度口径，未记入 brightnessTypicalNits/brightnessPeakNits');
+    addNote(
+      rec,
+      '屏幕原文含「最小亮度为 1 尼特」，属最低亮度口径，未记入 brightnessTypicalNits/brightnessPeakNits',
+    );
   }
 
   /**
@@ -154,7 +200,9 @@ function mapAppleSpecs(rawProduct) {
   const peakVals = [];
   const typVals = [];
   for (const line of brightLines) {
-    for (const m of line.matchAll(/(\d[\d,]*)\s*尼特\s*(?:峰值亮度|最大亮度)?\s*(?:\(([^)]*)\)|（([^）]*)）)?/g)) {
+    for (const m of line.matchAll(
+      /(\d[\d,]*)\s*尼特\s*(?:峰值亮度|最大亮度)?\s*(?:\(([^)]*)\)|（([^）]*)）)?/g,
+    )) {
       const val = Number(m[1].replace(/,/g, ''));
       const qual = m[2] ?? m[3] ?? '';
       if (/峰值|HDR|户外/.test(qual) || /峰值/.test(m[0])) peakVals.push(val);
@@ -163,15 +211,20 @@ function mapAppleSpecs(rawProduct) {
   }
   rec.display.brightnessPeakNits = peakVals.length ? Math.max(...peakVals) : null;
   rec.display.brightnessTypicalNits = typVals.length ? Math.max(...typVals) : null;
-  if (rec.display.brightnessPeakNits !== null && rec.display.brightnessTypicalNits !== null &&
-      rec.display.brightnessPeakNits < rec.display.brightnessTypicalNits) {
-    addNote(rec, `峰值亮度(${rec.display.brightnessPeakNits}) < 典型亮度(${rec.display.brightnessTypicalNits})，两者口径解析可能串位，已双双置 null`);
+  if (
+    rec.display.brightnessPeakNits !== null &&
+    rec.display.brightnessTypicalNits !== null &&
+    rec.display.brightnessPeakNits < rec.display.brightnessTypicalNits
+  ) {
+    addNote(
+      rec,
+      `峰值亮度(${rec.display.brightnessPeakNits}) < 典型亮度(${rec.display.brightnessTypicalNits})，两者口径解析可能串位，已双双置 null`,
+    );
     rec.display.brightnessPeakNits = null;
     rec.display.brightnessTypicalNits = null;
   }
-  rec.display.protection = appearance.protection
-    ?? apFind(raw, '显示屏', /超瓷晶|纳米纹理|昆仑/)
-    ?? null;
+  rec.display.protection =
+    appearance.protection ?? apFind(raw, '显示屏', /超瓷晶|纳米纹理|昆仑/) ?? null;
 
   /* ---- 芯片 ------------------------------------------------------------ */
   const chipRows = apRows(raw, '芯片').map((x) => x.value);
@@ -183,9 +236,14 @@ function mapAppleSpecs(rawProduct) {
 
   /* ---- 存储（容量）----------------------------------------------------- */
   const capacityRows = apRows(raw, '容量').map((x) => x.value);
-  rec.memory.storageGb = parseStorageList(capacityRows.filter((t) => !/不适用/.test(t)).join(' | '));
+  rec.memory.storageGb = parseStorageList(
+    capacityRows.filter((t) => !/不适用/.test(t)).join(' | '),
+  );
   if (rec.memory.storageGb.length === 1) {
-    addNote(rec, `容量原文「${tidy(capacityRows[0] ?? '')}」只列出该机型在售的首档；memory.storageGb 仅收官网明示档位`);
+    addNote(
+      rec,
+      `容量原文「${tidy(capacityRows[0] ?? '')}」只列出该机型在售的首档；memory.storageGb 仅收官网明示档位`,
+    );
   }
 
   /* ---- 电池与充电 ------------------------------------------------------ */
@@ -195,9 +253,14 @@ function mapAppleSpecs(rawProduct) {
   // 取与「视频播放」同行的那条基准值，其余记 note。
   const videoLine = battRows.find((t) => /视频播放/.test(t));
   if (videoLine) {
-    rec.battery.vendorClaimedVideoHours = firstNum((videoLine.match(/最长可达\s*(\d+(?:\.\d+)?)\s*小时/) ?? [])[1] ?? '');
+    rec.battery.vendorClaimedVideoHours = firstNum(
+      (videoLine.match(/最长可达\s*(\d+(?:\.\d+)?)\s*小时/) ?? [])[1] ?? '',
+    );
     if (battRows.filter((t) => /最长可达/.test(t)).length > 1) {
-      addNote(rec, `厂商自报续航原文含多个口径（${tidy(battJoin)}）；battery.vendorClaimedVideoHours 取「视频播放」第一条`);
+      addNote(
+        rec,
+        `厂商自报续航原文含多个口径（${tidy(battJoin)}）；battery.vendorClaimedVideoHours 取「视频播放」第一条`,
+      );
     }
   }
   // 快速充电：原文只给「N 分钟充至 50%，需 ≥X 瓦适配器」。X 是适配器要求，不是手机峰值功率，
@@ -208,15 +271,17 @@ function mapAppleSpecs(rawProduct) {
     addNote(
       rec,
       `官网只给出「${tidy(fastLine)}」——其中 ${adapterW ?? '—'} 瓦是**电源适配器要求**，不是手机有线充电峰值功率，` +
-        '故 battery.wiredChargeW 记 null（苹果从不公布该值）'
+        '故 battery.wiredChargeW 记 null（苹果从不公布该值）',
     );
   } else if (rec.battery.wiredChargeW === null) {
-    addNote(rec, '规格页电源章节未给出任何有线充电功率（连适配器要求都没有）→ battery.wiredChargeW 记 null');
+    addNote(
+      rec,
+      '规格页电源章节未给出任何有线充电功率（连适配器要求都没有）→ battery.wiredChargeW 记 null',
+    );
   }
   // 无线充电：来自 MagSafe 组，原文写「功率最高可达 15 瓦」→ 官方明确的瓦数，可收
-  const magsafe = apBlob(raw, 'MagSafe 和无线充电', ' | ')
-    || apFind(raw, '电源和电池', /无线充电/)
-    || '';
+  const magsafe =
+    apBlob(raw, 'MagSafe 和无线充电', ' | ') || apFind(raw, '电源和电池', /无线充电/) || '';
   rec.battery.wirelessChargeW = wattOf(magsafe);
   if (rec.battery.wirelessChargeW !== null) {
     addNote(rec, `battery.wirelessChargeW 取自「${tidy(magsafe).slice(0, 60)}」中的明确瓦数`);
@@ -232,7 +297,12 @@ function mapAppleSpecs(rawProduct) {
    *   ② 每段都长得像镜头（以像素数开头，或含「摄像头/镜头」），否则整行不是清单。
    */
   const lensSegs = (t) =>
-    /[|｜]/.test(t) ? t.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean) : [];
+    /[|｜]/.test(t)
+      ? t
+          .split(/\s*[|｜]\s*/)
+          .map(tidy)
+          .filter(Boolean)
+      : [];
   /**
    * 像镜头的一段：以「N 万像素 / N 亿像素」开头，并且**冒号前**的镜头名是个镜头称呼。
    * 注意三处坑：
@@ -290,24 +360,37 @@ function mapAppleSpecs(rawProduct) {
   }
   // 防抖单独成行（`… (融合式主摄) | … (融合式长焦)`），按括号里的镜头名逐条翻 ois。
   // 整行镜头清单本身不算「防抖行」——那会把所有镜头都翻成 true。
-  const oisLine = camRows.find((t) => /防抖/.test(t) && t !== lensRow && /[|｜]/.test(t) && t.length < 200)
-    ?? camRows.filter((t) => /防抖/.test(t) && t !== lensRow && t.length < 200)[0]
-    ?? '';
+  const oisLine =
+    camRows.find((t) => /防抖/.test(t) && t !== lensRow && /[|｜]/.test(t) && t.length < 200) ??
+    camRows.filter((t) => /防抖/.test(t) && t !== lensRow && t.length < 200)[0] ??
+    '';
   if (oisLine && rear.length) {
-    const roleKeys = { main: /主摄/, ultrawide: /超广角/, tele: /长焦/, periscope: /潜望/, macro: /微距/ };
+    const roleKeys = {
+      main: /主摄/,
+      ultrawide: /超广角/,
+      tele: /长焦/,
+      periscope: /潜望/,
+      macro: /微距/,
+    };
     for (const cam of rear) {
       if (cam.ois === false) continue;
       cam.ois = roleKeys[cam.role] ? roleKeys[cam.role].test(oisLine) : true;
     }
-    rear[0].sensorNote = [rear[0].sensorNote, `防抖原文：${tidy(oisLine)}`].filter(Boolean).join('；');
+    rear[0].sensorNote = [rear[0].sensorNote, `防抖原文：${tidy(oisLine)}`]
+      .filter(Boolean)
+      .join('；');
   }
 
   const frontRows = apRows(raw, '前置摄像头').map((x) => x.value);
   const frontMp = frontRows.find((t) => /万像素/.test(t));
   const frontAperture = frontRows.find((t) => /光圈/.test(t));
-  rec.camera.front = frontMp || frontAperture
-    ? { mp: frontMp ? (parseLens(frontMp).mp ?? null) : null, aperture: frontAperture ? parseAperture(frontAperture) : null }
-    : null;
+  rec.camera.front =
+    frontMp || frontAperture
+      ? {
+          mp: frontMp ? (parseLens(frontMp).mp ?? null) : null,
+          aperture: frontAperture ? parseAperture(frontAperture) : null,
+        }
+      : null;
   rec.camera.videoMax = parseVideoMax(apBlob(raw, '视频拍摄', ' | '));
 
   /* ---- 连接与系统 ------------------------------------------------------ */
@@ -315,7 +398,8 @@ function mapAppleSpecs(rawProduct) {
   const cell = cellRows.join(' | ');
   const nfcLine = cellRows.find((t) => /NFC/.test(t));
   rec.connectivity.fiveG = /5G|NR/.test(cell) ? true : null;
-  rec.connectivity.wifi = (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
+  rec.connectivity.wifi =
+    (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
   rec.connectivity.bluetooth = (cell.match(/蓝牙\s*[\d.]+/) ?? [])[0] ?? null;
   rec.connectivity.nfc = nfcLine ? /支持.*NFC|NFC/.test(nfcLine) : null;
   rec.connectivity.satellite = null; // 苹果规格页无卫星通信章节 → null，不凭「SOS 紧急联络」推断
@@ -371,7 +455,10 @@ function mapAppleSpecs(rawProduct) {
     put(rec, `connectivity.${k}`, rec.connectivity[k], ap);
   }
   put(rec, 'os.launch', rec.os.launch, ap);
-  addNote(rec, '苹果官网从不公布电池容量(mAh)、RAM 与有线充电峰值功率 → 对应字段为 null，属官网真没有');
+  addNote(
+    rec,
+    '苹果官网从不公布电池容量(mAh)、RAM 与有线充电峰值功率 → 对应字段为 null，属官网真没有',
+  );
   return rec;
 }
 
@@ -393,7 +480,12 @@ function mapAppleCompare(rawProduct) {
   const matrix = FirstRaw(raw);
 
   /* ---- 尺寸与重量 ------------------------------------------------------ */
-  const seg = { height: '尺寸与重量.高度', width: '尺寸与重量.宽度', thickness: '尺寸与重量.厚度', weight: '尺寸与重量.重量' };
+  const seg = {
+    height: '尺寸与重量.高度',
+    width: '尺寸与重量.宽度',
+    thickness: '尺寸与重量.厚度',
+    weight: '尺寸与重量.重量',
+  };
   rec.body.heightMm = parseMm(realValue(matrix[seg.height]) ?? '');
   rec.body.widthMm = parseMm(realValue(matrix[seg.width]) ?? '');
   rec.body.thicknessMm = parseMm(realValue(matrix[seg.thickness]) ?? '');
@@ -405,27 +497,37 @@ function mapAppleCompare(rawProduct) {
   const ip = ipText.match(/IP\s?\d{2}/i);
   rec.body.ipRating = ip ? ip[0].replace(/\s/g, '').toUpperCase() : null;
   const colorLine = apFirst(raw, '外观.颜色导航');
-  if (colorLine) rec.body.colors = colorLine.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean);
+  if (colorLine)
+    rec.body.colors = colorLine
+      .split(/\s*[|｜]\s*/)
+      .map(tidy)
+      .filter(Boolean);
   rec.body.material = apFirst(raw, '速览.设计：材料') ?? null;
 
   /* ---- 屏幕 ------------------------------------------------------------ */
   const dispRows = apRows(raw, '显示屏').map((x) => x.value);
   const dispJoin = dispRows.join(' | ');
-  const sizeLine = dispRows.find((t) => /英寸/.test(t) && /对角线/.test(t))
-    ?? dispRows.find((t) => /英寸/.test(t) && /OLED|全面屏/.test(t))
-    ?? dispRows.find((t) => /英寸/.test(t));
+  const sizeLine =
+    dispRows.find((t) => /英寸/.test(t) && /对角线/.test(t)) ??
+    dispRows.find((t) => /英寸/.test(t) && /OLED|全面屏/.test(t)) ??
+    dispRows.find((t) => /英寸/.test(t));
   rec.display.sizeIn = sizeLine
     ? parseInch(sizeLine)
     : parseInch(apFirst(raw, '速览.显示屏：屏幕尺寸') ?? '');
   // 矩阵的 `显示屏` 首行是「超视网膜 XDR 显示屏」（不带面板技术），
   // 面板技术写在第二行「6.3 英寸 (对角线) OLED 全面屏」里 → 优先取带面板技术的那一行。
   const typeLine = dispRows.find((t) => /OLED|LTPO|LCD/.test(t)) ?? dispJoin;
-  const typeMatch = typeLine.match(/(超视网膜 XDR 显示屏|超视网膜显示屏|LTPO[^，,|｜()]*|OLED 可折叠全面屏|OLED 全面屏|OLED)/);
+  const typeMatch = typeLine.match(
+    /(超视网膜 XDR 显示屏|超视网膜显示屏|LTPO[^，,|｜()]*|OLED 可折叠全面屏|OLED 全面屏|OLED)/,
+  );
   rec.display.type = typeMatch ? normalizeType(typeMatch[1]) : null;
   rec.display.resolutionPx = pickFirstRes(dispRows);
   const declaredPpi = (() => {
-    const m = dispJoin.replace(/,/g, '').match(/(\d{3,5})\s*[x×]\s*(\d{3,5})\s*像素分辨率[，,]?\s*(\d+(?:\.\d+)?)\s*ppi/i)
-      ?? dispJoin.replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*ppi/i);
+    const m =
+      dispJoin
+        .replace(/,/g, '')
+        .match(/(\d{3,5})\s*[x×]\s*(\d{3,5})\s*像素分辨率[，,]?\s*(\d+(?:\.\d+)?)\s*ppi/i) ??
+      dispJoin.replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*ppi/i);
     return m ? Number(m[m.length - 1]) : null;
   })();
   rec.display.ppi = declaredPpi ?? derivePpi(rec.display.sizeIn, rec.display.resolutionPx);
@@ -436,7 +538,9 @@ function mapAppleCompare(rawProduct) {
   const peakVals = [];
   const typVals = [];
   for (const line of dispRows.filter((t) => /尼特/.test(t))) {
-    for (const m of line.matchAll(/(\d[\d,]*)\s*尼特\s*(?:峰值亮度|最大亮度)?\s*(?:\(([^)]*)\)|（([^）]*)）)?/g)) {
+    for (const m of line.matchAll(
+      /(\d[\d,]*)\s*尼特\s*(?:峰值亮度|最大亮度)?\s*(?:\(([^)]*)\)|（([^）]*)）)?/g,
+    )) {
       const val = Number(m[1].replace(/,/g, ''));
       const qual = m[2] ?? m[3] ?? '';
       if (/峰值|HDR|户外/.test(qual) || /峰值/.test(m[0])) peakVals.push(val);
@@ -445,8 +549,11 @@ function mapAppleCompare(rawProduct) {
   }
   rec.display.brightnessPeakNits = peakVals.length ? Math.max(...peakVals) : null;
   rec.display.brightnessTypicalNits = typVals.length ? Math.max(...typVals) : null;
-  if (rec.display.brightnessPeakNits !== null && rec.display.brightnessTypicalNits !== null &&
-      rec.display.brightnessPeakNits < rec.display.brightnessTypicalNits) {
+  if (
+    rec.display.brightnessPeakNits !== null &&
+    rec.display.brightnessTypicalNits !== null &&
+    rec.display.brightnessPeakNits < rec.display.brightnessTypicalNits
+  ) {
     addNote(rec, '峰值亮度 < 典型亮度，口径解析可能串位，两者已置 null');
     rec.display.brightnessPeakNits = null;
     rec.display.brightnessTypicalNits = null;
@@ -463,44 +570,69 @@ function mapAppleCompare(rawProduct) {
 
   /* ---- 容量 ------------------------------------------------------------ */
   rec.memory.storageGb = parseStorageList(
-    apRows(raw, '容量').map((x) => x.value).filter((t) => !/不适用/.test(t)).join(' | ')
+    apRows(raw, '容量')
+      .map((x) => x.value)
+      .filter((t) => !/不适用/.test(t))
+      .join(' | '),
   );
 
   /* ---- 电池与续航 ------------------------------------------------------ */
   const videoLine = apFind(raw, '电源和电池', /视频播放/) ?? apFind(raw, '速览', /视频播放/);
   if (videoLine) {
-    rec.battery.vendorClaimedVideoHours = firstNum((videoLine.match(/最长可达\s*(\d+(?:\.\d+)?)\s*小时/) ?? [])[1] ?? '');
+    rec.battery.vendorClaimedVideoHours = firstNum(
+      (videoLine.match(/最长可达\s*(\d+(?:\.\d+)?)\s*小时/) ?? [])[1] ?? '',
+    );
   }
   const fastLine = apFind(raw, '电源和电池', /可快速充电|充至 50%/);
   if (fastLine) {
     addNote(
       rec,
       `矩阵只给出「${tidy(fastLine)}」——其中瓦数是**电源适配器要求**，不是手机有线充电峰值功率，` +
-        '故 battery.wiredChargeW 记 null'
+        '故 battery.wiredChargeW 记 null',
     );
   }
-  const wirelessLine = apFind(raw, '电源和电池', /无线充电/) ?? apFirst(raw, '速览.MagSafe: Wireless Charging');
+  const wirelessLine =
+    apFind(raw, '电源和电池', /无线充电/) ?? apFirst(raw, '速览.MagSafe: Wireless Charging');
   rec.battery.wirelessChargeW = wattOf(wirelessLine ?? '');
 
   /* ---- 影像 ------------------------------------------------------------ */
   const camRows = apRows(raw, '摄像头').map((x) => x.value);
   // 矩阵的镜头行形如 `4800 万像素融合式主摄 | 4800 万像素融合式超广角 | 4800 万像素融合式长焦`：
   // 每一段都必须以像素数开头，否则不是镜头清单（`摄像头(3)` 那类防抖行会被排除）。
-  const lensRow = camRows.find((t) => {
-    if (!/[|｜]/.test(t)) return false;
-    const segs = t.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean);
-    return segs.length >= 2 && segs.every((s) => /^[\d.]+\s*[亿万]/.test(s));  }) ?? '';
+  const lensRow =
+    camRows.find((t) => {
+      if (!/[|｜]/.test(t)) return false;
+      const segs = t
+        .split(/\s*[|｜]\s*/)
+        .map(tidy)
+        .filter(Boolean);
+      return segs.length >= 2 && segs.every((s) => /^[\d.]+\s*[亿万]/.test(s));
+    }) ?? '';
   rec.camera.rear = lensRow
-    ? lensRow.split(/\s*[|｜]\s*/).map(tidy).filter((t) => /万像素|亿像素/.test(t)).map((t) => parseLens(t))
+    ? lensRow
+        .split(/\s*[|｜]\s*/)
+        .map(tidy)
+        .filter((t) => /万像素|亿像素/.test(t))
+        .map((t) => parseLens(t))
     : [];
-  const oisLine = camRows.find((t) => /防抖/.test(t) && t !== lensRow && /[（(]/.test(t) && t.length < 200);
+  const oisLine = camRows.find(
+    (t) => /防抖/.test(t) && t !== lensRow && /[（(]/.test(t) && t.length < 200,
+  );
   if (oisLine && rec.camera.rear.length) {
-    const roleKeys = { main: /主摄/, ultrawide: /超广角/, tele: /长焦/, periscope: /潜望/, macro: /微距/ };
+    const roleKeys = {
+      main: /主摄/,
+      ultrawide: /超广角/,
+      tele: /长焦/,
+      periscope: /潜望/,
+      macro: /微距/,
+    };
     for (const cam of rec.camera.rear) {
       if (cam.ois === false) continue;
       cam.ois = roleKeys[cam.role] ? roleKeys[cam.role].test(oisLine) : true;
     }
-    rec.camera.rear[0].sensorNote = [rec.camera.rear[0].sensorNote, `防抖原文：${tidy(oisLine)}`].filter(Boolean).join('；');
+    rec.camera.rear[0].sensorNote = [rec.camera.rear[0].sensorNote, `防抖原文：${tidy(oisLine)}`]
+      .filter(Boolean)
+      .join('；');
   }
   const frontMp = apFind(raw, '前置摄像头', /万像素/);
   rec.camera.front = frontMp ? { mp: parseLens(frontMp).mp ?? null, aperture: null } : null;
@@ -509,7 +641,8 @@ function mapAppleCompare(rawProduct) {
   /* ---- 连接与系统 ------------------------------------------------------ */
   const cell = apBlob(raw, '蜂窝网络和无线连接', ' | ');
   rec.connectivity.fiveG = /5G|NR/.test(cell) ? true : null;
-  rec.connectivity.wifi = (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
+  rec.connectivity.wifi =
+    (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
   rec.connectivity.bluetooth = (cell.match(/蓝牙\s*[\d.]+/) ?? [])[0] ?? null;
   rec.connectivity.nfc = /NFC/.test(cell) ? true : null;
   rec.connectivity.satellite = null;
@@ -522,11 +655,20 @@ function mapAppleCompare(rawProduct) {
   // 矩阵的价格行是 JS 注入模板（{IPHONExxx}）或「于授权经销商处有售」→ 不收价格
   rec.skus = [];
   addNote(rec, '该机型官网已无独立规格页，数据来自对比页矩阵（粒度更粗，字段更少）');
-  addNote(rec, '苹果官网从不公布电池容量(mAh)、RAM 与有线充电峰值功率 → 对应字段为 null，属官网真没有');
+  addNote(
+    rec,
+    '苹果官网从不公布电池容量(mAh)、RAM 与有线充电峰值功率 → 对应字段为 null，属官网真没有',
+  );
 
   /* ---- 官网原文节选 ---------------------------------------------------- */
-  pushOfficial(rec, '尺寸与重量', ['尺寸与重量.高度', '尺寸与重量.宽度', '尺寸与重量.厚度', '尺寸与重量.重量']
-    .map((k) => realValue(raw[k])).filter(Boolean).join(' | '));
+  pushOfficial(
+    rec,
+    '尺寸与重量',
+    ['尺寸与重量.高度', '尺寸与重量.宽度', '尺寸与重量.厚度', '尺寸与重量.重量']
+      .map((k) => realValue(raw[k]))
+      .filter(Boolean)
+      .join(' | '),
+  );
   pushOfficial(rec, '显示屏', dispJoin);
   pushOfficial(rec, '芯片', apBlob(raw, '芯片', ' | '));
   pushOfficial(rec, '容量', apBlob(raw, '容量', ' | '));

@@ -16,10 +16,7 @@
     "weightG": 254,
     "ipRating": "IP68",
     "material": "钛金属可折叠设计",
-    "colors": [
-      "夜空色",
-      "星光白色"
-    ],
+    "colors": ["夜空色", "星光白色"],
     "folded": null
   },
   "display": {
@@ -44,12 +41,7 @@
   },
   "memory": {
     "ramGb": [],
-    "storageGb": [
-      256,
-      512,
-      1024,
-      2048
-    ]
+    "storageGb": [256, 512, 1024, 2048]
   },
   "battery": {
     "capacityMah": null,

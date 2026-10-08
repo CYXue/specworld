@@ -41,9 +41,7 @@ const FORCE = process.env.FORCE === '1' || process.env.FORCE === 'true';
 const RELEASE_FILE = join(ROOT, 'data/.toy-release.json');
 
 const fp = compute();
-const previous = existsSync(RELEASE_FILE)
-  ? JSON.parse(readFileSync(RELEASE_FILE, 'utf8'))
-  : null;
+const previous = existsSync(RELEASE_FILE) ? JSON.parse(readFileSync(RELEASE_FILE, 'utf8')) : null;
 
 let publish;
 let reason;

@@ -30,9 +30,9 @@
  *
  * 无第三方依赖（Node ≥18 内置 fetch）。只访问 consumer.huawei.com。
  */
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 // ---------------------------------------------------------------- constants
@@ -63,7 +63,7 @@ const ZERO_WIDTH_RE = /[\u200B-\u200F\u2060-\u2064\uFEFF\u00AD]/g;
 const INLINE_TAG_RE = /<[^>]*>/g;
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-/** phone-spec-world 仓库根（scripts/sources/ -> ../..） */
+/** specworld 仓库根（scripts/sources/ -> ../..） */
 const PROJECT_ROOT = path.resolve(HERE, '..', '..');
 const WORK_DIR = path.join(PROJECT_ROOT, '_work');
 const DEFAULT_CACHE_DIR = path.join(WORK_DIR, 'huawei.cache');
@@ -152,7 +152,10 @@ async function throttle() {
  * GET 一个 URL，返回 { status, finalUrl, body, contentType, bytes }。
  * 网络错误 / 超时 / 5xx 重试 RETRIES 次（指数退避），4xx 直接返回不重试。
  */
-async function httpGet(url, { accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' } = {}) {
+async function httpGet(
+  url,
+  { accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' } = {},
+) {
   let lastErr = null;
   for (let attempt = 0; attempt <= RETRIES; attempt++) {
     if (attempt > 0) await sleep(DELAY_MS * attempt * 2);
@@ -184,7 +187,9 @@ async function httpGet(url, { accept = 'text/html,application/xhtml+xml,applicat
       lastErr = e; // 网络层错误 / AbortError(timeout)
     }
   }
-  throw new Error(`GET ${url} failed after ${RETRIES + 1} attempts: ${lastErr?.message || lastErr}`);
+  throw new Error(
+    `GET ${url} failed after ${RETRIES + 1} attempts: ${lastErr?.message || lastErr}`,
+  );
 }
 
 // ---------------------------------------------------------------- 磁盘缓存（断点续跑）
@@ -272,7 +277,10 @@ function extractCatalogConfig(html) {
       break;
     }
   }
-  if (!payload) throw new Error('catalog payload (data-config with allProducts/productLink) not found in /cn/phones/');
+  if (!payload)
+    throw new Error(
+      'catalog payload (data-config with allProducts/productLink) not found in /cn/phones/',
+    );
   return JSON.parse(decodeEntities(payload));
 }
 
@@ -297,9 +305,10 @@ function parseCatalog(config, sourceUrl = CATALOG_URL) {
       const slug = m ? m[1].toLowerCase() : null;
       const title = text(p.productTitleText || p.productTitle || p.data?.marketingName || '');
       const priceRaw = p.data?.price;
-      const price = priceRaw === undefined || priceRaw === null || String(priceRaw).trim() === ''
-        ? null
-        : String(priceRaw).trim();
+      const price =
+        priceRaw === undefined || priceRaw === null || String(priceRaw).trim() === ''
+          ? null
+          : String(priceRaw).trim();
 
       if (!slug) {
         // 目录里混进来的非手机类目（或链接形状变了）——透明记录，不猜
@@ -401,13 +410,13 @@ function parseSpecSections(html) {
       '<p[^>]*>([\\s\\S]*?)</p>',
       '<img\\b[^>]*>',
     ].join('|'),
-    'g'
+    'g',
   );
 
   for (const chunk of chunks) {
     // 章节名
     const titleM = chunk.match(
-      /class="large-accordion__title large-accordion-title"[^>]*>([\s\S]*?)<\/span>/
+      /class="large-accordion__title large-accordion-title"[^>]*>([\s\S]*?)<\/span>/,
     );
     if (!titleM) continue;
     const sectionName = text(titleM[1]);
@@ -458,7 +467,12 @@ function parseSpecSections(html) {
       section: sectionName,
       fields: fields.filter((f) => f.values.length > 0),
       notes: [...new Set(sectionNotes)],
-      layout: layouts.multi && layouts.accordion ? 'mixed' : layouts.multi ? 'multi-watchGt' : 'accordion',
+      layout:
+        layouts.multi && layouts.accordion
+          ? 'mixed'
+          : layouts.multi
+            ? 'multi-watchGt'
+            : 'accordion',
     });
   }
   return sections;
@@ -503,7 +517,12 @@ function parseProductJson(html) {
 
 function pageTitle(html) {
   const m = html.match(/<meta name="title" content="([^"]*)"/);
-  return m ? decodeEntities(m[1]).replace(ZERO_WIDTH_RE, '').replace(/\s*规格参数\s*$/, '').trim() : null;
+  return m
+    ? decodeEntities(m[1])
+        .replace(ZERO_WIDTH_RE, '')
+        .replace(/\s*规格参数\s*$/, '')
+        .trim()
+    : null;
 }
 
 /** 是否「已下线」预检响应：title 形如 `301 - HUAWEI nova 13 规格参数` */
@@ -529,9 +548,10 @@ function precheckTitle(body) {
 /** 判断 finalUrl 是否**仍是**目标机型的 specs 页（下线机型会被 301 到 /cn/phones/） */
 function finalUrlIsTargetSpecs(finalUrl, slug) {
   const p = normalizeUrl(finalUrl);
-  return new RegExp(`^/cn/phones/${slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/specs/?$`, 'i').test(
-    p.replace(BASE, '')
-  );
+  return new RegExp(
+    `^/cn/phones/${slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/specs/?$`,
+    'i',
+  ).test(p.replace(BASE, ''));
 }
 
 /**
@@ -542,7 +562,17 @@ async function fetchOneModel(entry, cache, notes) {
   const id = entry.id;
   const preUrl = precheckUrlFor(entry.slug);
   const url = entry.specsUrl;
-  const info = { slug: entry.slug, precheckTitle: null, httpStatus: null, finalUrl: null, bytes: 0, sections: 0, flatFields: 0, layout: null, fromCache: null };
+  const info = {
+    slug: entry.slug,
+    precheckTitle: null,
+    httpStatus: null,
+    finalUrl: null,
+    bytes: 0,
+    sections: 0,
+    flatFields: 0,
+    layout: null,
+    fromCache: null,
+  };
 
   // ---- ① 便宜预检（~460 B，不跟随重定向即可判定下线）
   try {
@@ -551,7 +581,10 @@ async function fetchOneModel(entry, cache, notes) {
     if (precheckSaysRetired(pre.body)) {
       return {
         product: null,
-        skipped: { id, reason: `retired: precheck ${preUrl} title="${info.precheckTitle}" (301 marker, specs withdrawn)` },
+        skipped: {
+          id,
+          reason: `retired: precheck ${preUrl} title="${info.precheckTitle}" (301 marker, specs withdrawn)`,
+        },
         info,
       };
     }
@@ -579,7 +612,10 @@ async function fetchOneModel(entry, cache, notes) {
   if (!finalUrlIsTargetSpecs(page.finalUrl, entry.slug)) {
     return {
       product: null,
-      skipped: { id, reason: `retired: finalUrl redirected to ${page.finalUrl} (expected ${stripSlash(url)})` },
+      skipped: {
+        id,
+        reason: `retired: finalUrl redirected to ${page.finalUrl} (expected ${stripSlash(url)})`,
+      },
       info,
     };
   }
@@ -588,13 +624,18 @@ async function fetchOneModel(entry, cache, notes) {
   const raw = flattenSections(sections);
   info.sections = sections.length;
   info.flatFields = Object.keys(raw).length;
-  info.layout = sections.some((s) => s.layout !== 'accordion') ? 'accordion+multi-watchGt' : 'accordion';
+  info.layout = sections.some((s) => s.layout !== 'accordion')
+    ? 'accordion+multi-watchGt'
+    : 'accordion';
 
   // ---- ④ 护栏二：章节数 / 字段数必须像一份真规格页
   if (sections.length === 0) {
     return {
       product: null,
-      skipped: { id, reason: `retired-or-markup-changed: HTTP 200 at ${page.finalUrl} but 0 spec sections parsed` },
+      skipped: {
+        id,
+        reason: `retired-or-markup-changed: HTTP 200 at ${page.finalUrl} but 0 spec sections parsed`,
+      },
       info,
     };
   }
@@ -611,23 +652,21 @@ async function fetchOneModel(entry, cache, notes) {
 
   // ---- ⑤ 页面级元数据 + 目录页价格/productId
   const pj = parseProductJson(page.body);
-  const nameCandidates = [
-    entry.title,
-    pj?.marketingName,
-    pj?.productName,
-    pageTitle(page.body),
-  ];
+  const nameCandidates = [entry.title, pj?.marketingName, pj?.productName, pageTitle(page.body)];
   const name = nameCandidates.map((s) => (s ? text(s) : '')).find((s) => s) || entry.slug;
 
   const catalogPrice = entry.price;
-  const priceFromPage = pj?.price !== undefined && pj?.price !== null && String(pj.price).trim() !== ''
-    ? String(pj.price).trim()
-    : null;
+  const priceFromPage =
+    pj?.price !== undefined && pj?.price !== null && String(pj.price).trim() !== ''
+      ? String(pj.price).trim()
+      : null;
 
-  raw['_catalog.price'] = catalogPrice ?? (priceFromPage ? `${priceFromPage} (规格页 productJson)` : '');
+  raw['_catalog.price'] =
+    catalogPrice ?? (priceFromPage ? `${priceFromPage} (规格页 productJson)` : '');
   raw['_catalog.productId'] = entry.productId || (pj?.productId ? String(pj.productId) : '');
   raw['_catalog.series'] = entry.series || '';
-  raw['_catalog.ecProductId'] = entry.ecProductId || (pj?.ecProductId ? String(pj.ecProductId) : '');
+  raw['_catalog.ecProductId'] =
+    entry.ecProductId || (pj?.ecProductId ? String(pj.ecProductId) : '');
   raw['_catalog.buyLink'] = entry.buyLink || pj?.buyButtonMode?.thirdPartySiteLink || '';
   raw['_catalog.catalogUrl'] = entry.catalogUrl;
   raw['_catalog.label'] = entry.label || '';
@@ -682,17 +721,18 @@ export async function fetchAll(options = {}) {
   log(`[catalog] ${CATALOG_URL}`);
   const catPage = await cache.fetch(CATALOG_URL);
   if (catPage.status !== 200) throw new Error(`catalog HTTP ${catPage.status}`);
-  const { entries: allEntries, seriesSummaries, skipped: catalogSkipped } = parseCatalog(
-    extractCatalogConfig(catPage.body),
-    CATALOG_URL
-  );
+  const {
+    entries: allEntries,
+    seriesSummaries,
+    skipped: catalogSkipped,
+  } = parseCatalog(extractCatalogConfig(catPage.body), CATALOG_URL);
   skipped.push(...catalogSkipped);
 
   notes.push(
     `catalog: ${allEntries.length} 手机机型 / ${seriesSummaries.length} 系列 ` +
       `(${seriesSummaries.map((s) => `${s.series}=${s.count}`).join(', ')})` +
       `；非手机目录条目 ${catalogSkipped.length} 个` +
-      `；目录页含价格 ${allEntries.filter((e) => e.price).length} 个`
+      `；目录页含价格 ${allEntries.filter((e) => e.price).length} 个`,
   );
 
   let queue = allEntries;
@@ -710,7 +750,11 @@ export async function fetchAll(options = {}) {
     try {
       r = await fetchOneModel(entry, cache, notes);
     } catch (e) {
-      r = { product: null, skipped: { id: entry.id, reason: `unexpected: ${e.message}` }, info: { slug: entry.slug } };
+      r = {
+        product: null,
+        skipped: { id: entry.id, reason: `unexpected: ${e.message}` },
+        info: { slug: entry.slug },
+      };
     }
     if (r.product) {
       products.push(r.product);
@@ -741,10 +785,12 @@ export async function fetchAll(options = {}) {
   const accounted = products.length + skipped.length;
   if (accounted !== queue.length) {
     notes.push(
-      `⚠ 覆盖度不守恒：products(${products.length}) + skipped(${skipped.length}) = ${accounted} ≠ 本次应抓机型数 ${queue.length}`
+      `⚠ 覆盖度不守恒：products(${products.length}) + skipped(${skipped.length}) = ${accounted} ≠ 本次应抓机型数 ${queue.length}`,
     );
   } else if (subset) {
-    notes.push(`本次为子集运行（${queue.length}/${allEntries.length}），未跑到的机型不在 products/skipped 中`);
+    notes.push(
+      `本次为子集运行（${queue.length}/${allEntries.length}），未跑到的机型不在 products/skipped 中`,
+    );
   }
 
   const durations = diagnostics.filter((d) => d.ok);
@@ -755,7 +801,7 @@ export async function fetchAll(options = {}) {
       `扁平字段（含 _catalog./_notes./_source.）区间 ${Math.min(...fieldCounts)}–${Math.max(...fieldCounts)}；` +
       `布局 B（multi-watchGt 变体块）机型 ${multiLayout.length} 款：${multiLayout.map((d) => d.slug).join(', ') || '无'}；` +
       `网络请求 ${netRequests} 次，缓存命中 ${cache.hits} / 未命中 ${cache.misses}；` +
-      `耗时 ${((Date.now() - started) / 1000).toFixed(1)}s；请求间隔 ${DELAY_MS}ms 串行，超时 ${TIMEOUT_MS / 1000}s，重试 ${RETRIES} 次`
+      `耗时 ${((Date.now() - started) / 1000).toFixed(1)}s；请求间隔 ${DELAY_MS}ms 串行，超时 ${TIMEOUT_MS / 1000}s，重试 ${RETRIES} 次`,
   );
 
   return {
@@ -824,7 +870,9 @@ async function main() {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(result, null, 2), 'utf8');
   const json = JSON.stringify(result);
-  console.log(`\n写入 ${outPath}  (${(Buffer.byteLength(json, 'utf8') / 1024).toFixed(1)} KB, ${result.products.length} 机型)`);
+  console.log(
+    `\n写入 ${outPath}  (${(Buffer.byteLength(json, 'utf8') / 1024).toFixed(1)} KB, ${result.products.length} 机型)`,
+  );
 
   if (args.json) console.log(JSON.stringify(result, null, 2));
 
@@ -833,12 +881,18 @@ async function main() {
   console.log('\n' + '='.repeat(86));
   console.log(
     `目录机型 ${cat.productCount} = 抓到 ${cat.fetchedCount} + 跳过 ${cat.skippedCount}` +
-      (cat.fetchedCount + cat.skippedCount === cat.productCount ? '  ✅守恒' : '  ❌不守恒')
+      (cat.fetchedCount + cat.skippedCount === cat.productCount ? '  ✅守恒' : '  ❌不守恒'),
   );
-  for (const s of cat.series) console.log(`  ${s.series.padEnd(10)} ${s.subtitle.padEnd(8)} ${s.count} 条`);
+  for (const s of cat.series)
+    console.log(`  ${s.series.padEnd(10)} ${s.subtitle.padEnd(8)} ${s.count} 条`);
   console.log(
     `价格覆盖: ${cat.diagnostics.filter((d) => d.ok && d.price).length}/${cat.fetchedCount} 款有目录价` +
-      `（目录中无价的机型: ${cat.diagnostics.filter((d) => !d.price).map((d) => d.slug).join(', ') || '无'}）`
+      `（目录中无价的机型: ${
+        cat.diagnostics
+          .filter((d) => !d.price)
+          .map((d) => d.slug)
+          .join(', ') || '无'
+      }）`,
   );
 
   console.log('\n-- 抓到的机型（章节/扁平字段） ' + '-'.repeat(48));
@@ -846,7 +900,7 @@ async function main() {
     if (!d.ok) continue;
     console.log(
       `  ${d.slug.padEnd(28)} ${String(d.sections).padStart(2)} 章节  ${String(d.flatFields).padStart(3)} 字段  ` +
-        `¥${(d.price || '—').padEnd(6)} ${d.layout === 'accordion' ? '' : '[布局B] '}${d.fromCache ? '(cache)' : ''}`
+        `¥${(d.price || '—').padEnd(6)} ${d.layout === 'accordion' ? '' : '[布局B] '}${d.fromCache ? '(cache)' : ''}`,
     );
   }
 

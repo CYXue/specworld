@@ -106,10 +106,24 @@ const LEADING_COLUMNS = 2;
 const PLACEHOLDER_VALUES = new Set(['-', '—', '–', '不适用']);
 
 const ENTITIES = {
-  '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
-  '&#39;': "'", '&apos;': "'", '&times;': '×', '&ndash;': '–',
-  '&mdash;': '—', '&hellip;': '…', '&minus;': '−', '&middot;': '·',
-  '&rsquo;': '’', '&lsquo;': '‘', '&ldquo;': '“', '&rdquo;': '”', '&deg;': '°',
+  '&nbsp;': ' ',
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&#39;': "'",
+  '&apos;': "'",
+  '&times;': '×',
+  '&ndash;': '–',
+  '&mdash;': '—',
+  '&hellip;': '…',
+  '&minus;': '−',
+  '&middot;': '·',
+  '&rsquo;': '’',
+  '&lsquo;': '‘',
+  '&ldquo;': '“',
+  '&rdquo;': '”',
+  '&deg;': '°',
 };
 
 /* ------------------------------------------------------------------ */
@@ -121,7 +135,7 @@ function cleanText(value) {
   if (value == null) return '';
   return String(value)
     .replace(/[\u200b-\u200f\u2028\u2029\u2060\ufeff]/g, '')
-    // eslint-disable-next-line no-control-regex
+
     .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, ' ')
     .replace(/[\s\u00a0\u3000]+/g, ' ')
     .trim();
@@ -167,7 +181,10 @@ function stripHiddenText(html) {
     while ((t = pairRe.exec(s))) {
       if (t[0][1] === '/') {
         depth -= 1;
-        if (depth === 0) { cutEnd = t.index + t[0].length; break; }
+        if (depth === 0) {
+          cutEnd = t.index + t[0].length;
+          break;
+        }
       } else depth += 1;
     }
     s = `${s.slice(0, m.index)} ${s.slice(cutEnd)}`;
@@ -243,7 +260,11 @@ function directDivs(html) {
     const afterOpen = i + m[0].length;
     const end = matchDivEnd(html, afterOpen);
     if (!end) break;
-    out.push({ openTag: m[0], outer: html.slice(i, end.end), inner: html.slice(afterOpen, end.start) });
+    out.push({
+      openTag: m[0],
+      outer: html.slice(i, end.end),
+      inner: html.slice(afterOpen, end.start),
+    });
     i = end.end;
   }
   return out;
@@ -332,9 +353,10 @@ export function parseCompareMatrix(html) {
 
     // 规格分组的判定：第一行的第 0 个子列是 compare-rowheader（分组名）
     const firstKids = directDivs(rows[0].inner);
-    const section = firstKids[0] && /\bcompare-rowheader\b/.test(classOf(firstKids[0].openTag))
-      ? plainText(firstKids[0].inner)
-      : '';
+    const section =
+      firstKids[0] && /\bcompare-rowheader\b/.test(classOf(firstKids[0].openTag))
+        ? plainText(firstKids[0].inner)
+        : '';
     if (!section) {
       warnings.push(`跳过一个没有 compare-rowheader 的 backport-group（class="${gClass}"）`);
       continue;
@@ -417,7 +439,18 @@ export function assignRowKeys(groups) {
 /* 机型名 → slug                                                       */
 /* ------------------------------------------------------------------ */
 
-const CN_NUM = { 一: '1', 二: '2', 三: '3', 四: '4', 五: '5', 六: '6', 七: '7', 八: '8', 九: '9', 十: '10' };
+const CN_NUM = {
+  一: '1',
+  二: '2',
+  三: '3',
+  四: '4',
+  五: '5',
+  六: '6',
+  七: '7',
+  八: '8',
+  九: '9',
+  十: '10',
+};
 
 /**
  * 官网机型名 → slug（`apple-` 前缀由调用方加）。实测规则：
@@ -427,7 +460,9 @@ const CN_NUM = { 一: '1', 二: '2', 三: '3', 四: '4', 五: '5', 六: '6', 七
  */
 export function slugForProductName(name) {
   const clean = cleanText(name);
-  const se = clean.match(/^iPhone\s+SE\s*[（(]?\s*第\s*([一二三四五六七八九十\d]+)\s*代\s*[)）]?\s*$/i);
+  const se = clean.match(
+    /^iPhone\s+SE\s*[（(]?\s*第\s*([一二三四五六七八九十\d]+)\s*代\s*[)）]?\s*$/i,
+  );
   if (se) {
     const num = CN_NUM[se[1]] || se[1];
     return `iphone-se-${num}`;
@@ -482,8 +517,14 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onProgress }) {
         const html = readFileSync(cachePath, 'utf8');
         if (html.length > 0) {
           return {
-            ok: true, status: 200, finalUrl: url, html, bytes: statSync(cachePath).size,
-            fromCache: true, attempts: 0, error: null,
+            ok: true,
+            status: 200,
+            finalUrl: url,
+            html,
+            bytes: statSync(cachePath).size,
+            fromCache: true,
+            attempts: 0,
+            error: null,
           };
         }
       } catch {
@@ -491,7 +532,16 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onProgress }) {
       }
     }
     if (cacheOnly) {
-      return { ok: false, status: 0, finalUrl: url, html: '', bytes: 0, fromCache: false, attempts: 0, error: 'cache-miss' };
+      return {
+        ok: false,
+        status: 0,
+        finalUrl: url,
+        html: '',
+        bytes: 0,
+        fromCache: false,
+        attempts: 0,
+        error: 'cache-miss',
+      };
     }
 
     let lastErr = null;
@@ -502,7 +552,11 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onProgress }) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
-        const res = await fetch(url, { headers: HEADERS, redirect: 'follow', signal: controller.signal });
+        const res = await fetch(url, {
+          headers: HEADERS,
+          redirect: 'follow',
+          signal: controller.signal,
+        });
         const html = await res.text();
         const finalUrl = res.url || url;
         lastStatus = res.status;
@@ -518,20 +572,37 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onProgress }) {
             }
           }
           return {
-            ok: true, status: res.status, finalUrl, html, bytes: Buffer.byteLength(html, 'utf8'),
-            fromCache: false, attempts: attempt, error: null,
+            ok: true,
+            status: res.status,
+            finalUrl,
+            html,
+            bytes: Buffer.byteLength(html, 'utf8'),
+            fromCache: false,
+            attempts: attempt,
+            error: null,
           };
         }
         lastErr = `HTTP ${res.status}`;
         if (res.status >= 400 && res.status < 500 && res.status !== 429) break;
       } catch (error) {
-        lastErr = isDeadlineError(error) ? `timeout after ${REQUEST_TIMEOUT_MS}ms` : String(error?.message || error);
+        lastErr = isDeadlineError(error)
+          ? `timeout after ${REQUEST_TIMEOUT_MS}ms`
+          : String(error?.message || error);
       } finally {
         clearTimeout(timer);
       }
       if (attempt <= RETRIES) await sleep(RETRY_BACKOFF_MS * attempt);
     }
-    return { ok: false, status: lastStatus, finalUrl: url, html: '', bytes: 0, fromCache: false, attempts: RETRIES + 1, error: lastErr };
+    return {
+      ok: false,
+      status: lastStatus,
+      finalUrl: url,
+      html: '',
+      bytes: 0,
+      fromCache: false,
+      attempts: RETRIES + 1,
+      error: lastErr,
+    };
   };
 }
 
@@ -541,7 +612,8 @@ function createFetcher({ delayMs, cacheDir, cacheOnly, onProgress }) {
 
 function pushNote(notes, text) {
   if (notes.length < MAX_NOTE_ITEMS) notes.push(text);
-  else if (notes.length === MAX_NOTE_ITEMS) notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
+  else if (notes.length === MAX_NOTE_ITEMS)
+    notes.push(`…（notes 已达 ${MAX_NOTE_ITEMS} 条上限，后续同类记录省略）`);
 }
 
 /**
@@ -574,8 +646,16 @@ export async function fetchAll(options = {}) {
   }
 
   const emptyMatrix = {
-    url: COMPARE_URL, products: [], columnCount: 0, groupCount: 0, rowCount: 0,
-    labelledRowCount: 0, anonymousRowCount: 0, rowsPerGroup: {}, emptyCells: 0, note: '',
+    url: COMPARE_URL,
+    products: [],
+    columnCount: 0,
+    groupCount: 0,
+    rowCount: 0,
+    labelledRowCount: 0,
+    anonymousRowCount: 0,
+    rowsPerGroup: {},
+    emptyCells: 0,
+    note: '',
   };
 
   const fetchPage = createFetcher({ delayMs: rate, cacheDir, cacheOnly, onProgress });
@@ -584,7 +664,8 @@ export async function fetchAll(options = {}) {
   if (!page.ok) {
     const why = page.error === 'cache-miss' ? `无缓存且 --cache-only：${COMPARE_URL}` : page.error;
     pushNote(notes, `对比页抓取失败（${why}），矩阵为空`);
-    if (page.error === 'cache-miss') skipped.push({ id: 'apple-compare-page', reason: `缺少缓存 ${CACHE_FILE}` });
+    if (page.error === 'cache-miss')
+      skipped.push({ id: 'apple-compare-page', reason: `缺少缓存 ${CACHE_FILE}` });
     return { source: SOURCE_ID, fetchedAt, notes, skipped, products, matrix: emptyMatrix };
   }
   pushNote(
@@ -592,7 +673,10 @@ export async function fetchAll(options = {}) {
     `矩阵来源 ${COMPARE_URL}（${page.fromCache ? '缓存命中，未发请求' : `HTTP ${page.status}`}，${page.bytes} 字节）`,
   );
   if (page.finalUrl !== COMPARE_URL) {
-    pushNote(notes, `对比页发生了跳转：${COMPARE_URL} → ${page.finalUrl}，请确认取到的是对比页而不是落地页`);
+    pushNote(
+      notes,
+      `对比页发生了跳转：${COMPARE_URL} → ${page.finalUrl}，请确认取到的是对比页而不是落地页`,
+    );
   }
 
   const { found, products: columns, groups, warnings } = parseCompareMatrix(page.html);
@@ -650,24 +734,31 @@ export async function fetchAll(options = {}) {
           n += 1;
         }
         plan.seenKeys.add(key);
-        plan.raw[key] = value.length > MAX_VALUE_CHARS ? `${value.slice(0, MAX_VALUE_CHARS)}…` : value;
+        plan.raw[key] =
+          value.length > MAX_VALUE_CHARS ? `${value.slice(0, MAX_VALUE_CHARS)}…` : value;
       }
     }
   }
 
   /* ---- 输出 RawProduct（42 列全出，不只补那 6 台） ---------------------- */
-  const wanted = only && only.length
-    ? new Set(only.map((s) => cleanText(s).toLowerCase()))
-    : null;
+  const wanted = only && only.length ? new Set(only.map((s) => cleanText(s).toLowerCase())) : null;
   const distinctSlugs = new Set();
   for (const plan of labelPlans) {
     if (distinctSlugs.has(plan.slug)) {
-      pushNote(notes, `slug 冲突：${plan.name} 与前一列归一到同一个 slug「${plan.id}」，后者已跳过`);
+      pushNote(
+        notes,
+        `slug 冲突：${plan.name} 与前一列归一到同一个 slug「${plan.id}」，后者已跳过`,
+      );
     }
     distinctSlugs.add(plan.slug);
 
     const fieldCount = Object.keys(plan.raw).length;
-    if (wanted && !wanted.has(plan.slug) && !wanted.has(cleanText(plan.name).toLowerCase()) && !wanted.has(plan.id)) {
+    if (
+      wanted &&
+      !wanted.has(plan.slug) &&
+      !wanted.has(cleanText(plan.name).toLowerCase()) &&
+      !wanted.has(plan.id)
+    ) {
       continue;
     }
     if (!fieldCount) {
@@ -677,7 +768,13 @@ export async function fetchAll(options = {}) {
       });
       continue;
     }
-    onProgress?.({ phase: 'ok', name: plan.name, id: plan.id, fields: fieldCount, columnIndex: plan.columnIndex });
+    onProgress?.({
+      phase: 'ok',
+      name: plan.name,
+      id: plan.id,
+      fields: fieldCount,
+      columnIndex: plan.columnIndex,
+    });
     products.push({
       id: plan.id,
       brand: 'apple',
@@ -710,7 +807,10 @@ export async function fetchAll(options = {}) {
     );
   }
   if (rowCount !== groups.reduce((n, g) => n + g.rows.length, 0)) {
-    pushNote(notes, `行数统计不一致：${rowCount} ≠ ${groups.reduce((n, g) => n + g.rows.length, 0)}`);
+    pushNote(
+      notes,
+      `行数统计不一致：${rowCount} ≠ ${groups.reduce((n, g) => n + g.rows.length, 0)}`,
+    );
   }
 
   const fieldTotal = products.reduce((n, p) => n + Object.keys(p.raw).length, 0);
@@ -721,7 +821,9 @@ export async function fetchAll(options = {}) {
   );
   pushNote(
     notes,
-    `分组-行数：${Object.entries(rowsPerGroup).map(([s, n]) => `${s} ${n}`).join('；')}`,
+    `分组-行数：${Object.entries(rowsPerGroup)
+      .map(([s, n]) => `${s} ${n}`)
+      .join('；')}`,
   );
   pushNote(
     notes,
@@ -747,7 +849,10 @@ export async function fetchAll(options = {}) {
       `按契约「值是页面原文」**原样保留**，由规范化层裁决是否丢弃；` +
       `另有价格行是 ${'{IPHONExxx}'} / ${'{MJT74}'} 模板占位符（真实价格由 JS 注入），同样原样保留`,
   );
-  pushNote(notes, `汇总：机型 ${products.length} 款（列 ${columnCount}，跳过 ${skipped.length}），raw 字段合计 ${fieldTotal} 条`);
+  pushNote(
+    notes,
+    `汇总：机型 ${products.length} 款（列 ${columnCount}，跳过 ${skipped.length}），raw 字段合计 ${fieldTotal} 条`,
+  );
   pushNote(
     notes,
     `覆盖范围：本矩阵一次给出全部 ${columnCount} 款机型；官方 /specs/ 规格页只剩 6 款在售` +
@@ -789,14 +894,34 @@ export async function fetchAll(options = {}) {
 /* ------------------------------------------------------------------ */
 
 function parseArgv(argv) {
-  const opts = { out: null, cacheDir: null, only: [], delayMs: DEFAULT_DELAY_MS, cacheOnly: false, json: false, help: false };
+  const opts = {
+    out: null,
+    cacheDir: null,
+    only: [],
+    delayMs: DEFAULT_DELAY_MS,
+    cacheOnly: false,
+    json: false,
+    help: false,
+  };
   const take = (i) => argv[i + 1];
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
-    if (a === '--out' || a === '-o') { opts.out = take(i); i += 1; } else if (a.startsWith('--out=')) opts.out = a.slice(6);
-    else if (a === '--cache') { opts.cacheDir = take(i); i += 1; } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
-    else if (a === '--only') { opts.only.push(...String(take(i) || '').split(',')); i += 1; } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
-    else if (a === '--delay') { opts.delayMs = Number(take(i)); i += 1; } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
+    if (a === '--out' || a === '-o') {
+      opts.out = take(i);
+      i += 1;
+    } else if (a.startsWith('--out=')) opts.out = a.slice(6);
+    else if (a === '--cache') {
+      opts.cacheDir = take(i);
+      i += 1;
+    } else if (a.startsWith('--cache=')) opts.cacheDir = a.slice(8);
+    else if (a === '--only') {
+      opts.only.push(...String(take(i) || '').split(','));
+      i += 1;
+    } else if (a.startsWith('--only=')) opts.only.push(...a.slice(7).split(','));
+    else if (a === '--delay') {
+      opts.delayMs = Number(take(i));
+      i += 1;
+    } else if (a.startsWith('--delay=')) opts.delayMs = Number(a.slice(8));
     else if (a === '--cache-only') opts.cacheOnly = true;
     else if (a === '--json') opts.json = true;
     else if (a === '--help' || a === '-h') opts.help = true;
@@ -879,7 +1004,9 @@ const invokedDirectly =
   process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
 if (invokedDirectly) {
   main()
-    .then((code) => { process.exitCode = code; })
+    .then((code) => {
+      process.exitCode = code;
+    })
     .catch((error) => {
       process.stderr.write(`适配器异常退出：${error?.stack || error}\n`);
       process.exitCode = 2;

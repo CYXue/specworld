@@ -1,5 +1,13 @@
 import type { Product, Vendor } from '../types';
-import { compact, loose, matchCompact, matchExact, queryTokens, splitRuns, tokenize } from './query';
+import {
+  compact,
+  loose,
+  matchCompact,
+  matchExact,
+  queryTokens,
+  splitRuns,
+  tokenize,
+} from './query';
 
 /**
  * 全站搜索：纯前端、无索引服务、60 条数据量下线性扫描足够。

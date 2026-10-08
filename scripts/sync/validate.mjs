@@ -60,7 +60,8 @@ export function validate(snapshot, previous) {
   const ps = snapshot.products;
 
   // 1. 总量
-  if (ps.length < LIMITS.minProducts) fail.push(`机型总数只有 ${ps.length}，低于下限 ${LIMITS.minProducts}`);
+  if (ps.length < LIMITS.minProducts)
+    fail.push(`机型总数只有 ${ps.length}，低于下限 ${LIMITS.minProducts}`);
 
   // 2. 唯一性
   const ids = new Set();
@@ -90,11 +91,15 @@ export function validate(snapshot, previous) {
     for (const [path, range] of checks) {
       const v = get(p, path);
       if (v === null || v === undefined) continue;
-      if (!inRange(v, range)) fail.push(`${p.id} 的 ${path} = ${v}，超出合理区间 ${range.join('–')}`);
+      if (!inRange(v, range))
+        fail.push(`${p.id} 的 ${path} = ${v}，超出合理区间 ${range.join('–')}`);
     }
     // 5b. 刷新率是字符串（要保留 `1-120` 的区间语义），单独校验上界
     if (p.display?.refreshHz) {
-      const parts = String(p.display.refreshHz).split(/[-–~/]/).map(Number).filter(Number.isFinite);
+      const parts = String(p.display.refreshHz)
+        .split(/[-–~/]/)
+        .map(Number)
+        .filter(Number.isFinite);
       if (!parts.length) {
         fail.push(`${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 里没有可解析的数字`);
       } else {
@@ -102,7 +107,7 @@ export function validate(snapshot, previous) {
         if (!inRange(top, LIMITS.refreshHz)) {
           fail.push(
             `${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 上界 ${top} Hz 超出合理区间 ` +
-              `${LIMITS.refreshHz.join('–')}（疑似把 PWM 调光频率或分辨率当成刷新率）`
+              `${LIMITS.refreshHz.join('–')}（疑似把 PWM 调光频率或分辨率当成刷新率）`,
           );
         }
       }
@@ -114,14 +119,18 @@ export function validate(snapshot, previous) {
     }
     // 6. 价格非正
     for (const sku of p.skus ?? []) {
-      if (sku.priceCny !== null && sku.priceCny <= 0) fail.push(`${p.id} 的 SKU 价格非正：${sku.priceCny}`);
+      if (sku.priceCny !== null && sku.priceCny <= 0)
+        fail.push(`${p.id} 的 SKU 价格非正：${sku.priceCny}`);
     }
     // 7. 口径缺失：有值但没口径 = 不可比，直接拦
     if (has(p.battery?.capacityMah) && !p.battery.capacityCaliber) {
       fail.push(`${p.id} 有电池容量但缺 capacityCaliber（口径不可缺失）`);
     }
-    if (has(p.display?.brightnessPeakNits) && has(p.display?.brightnessTypicalNits) &&
-        p.display.brightnessPeakNits < p.display.brightnessTypicalNits) {
+    if (
+      has(p.display?.brightnessPeakNits) &&
+      has(p.display?.brightnessTypicalNits) &&
+      p.display.brightnessPeakNits < p.display.brightnessTypicalNits
+    ) {
       fail.push(`${p.id} 峰值亮度小于典型亮度，解析可能串行`);
     }
     // 8. 成绩单量纲
@@ -136,7 +145,8 @@ export function validate(snapshot, previous) {
     if (p.releaseDate) {
       const t = Date.parse(p.releaseDate);
       if (Number.isNaN(t)) fail.push(`${p.id} 的 releaseDate 无法解析：${p.releaseDate}`);
-      else if (t > Date.now() + 86400000) fail.push(`${p.id} 的 releaseDate 在未来：${p.releaseDate}`);
+      else if (t > Date.now() + 86400000)
+        fail.push(`${p.id} 的 releaseDate 在未来：${p.releaseDate}`);
     }
     // 10. provenance 必须覆盖所有非空的核心字段
     for (const path of ['body.weightG', 'display.sizeIn', 'battery.capacityMah', 'releaseDate']) {
@@ -168,14 +178,18 @@ export function validate(snapshot, previous) {
   if (previous) {
     const drop = 1 - ps.length / Math.max(previous.products.length, 1);
     if (drop > LIMITS.maxDropRatio) {
-      fail.push(`机型数比上一版减少 ${(drop * 100).toFixed(1)}%（${previous.products.length} → ${ps.length}）`);
+      fail.push(
+        `机型数比上一版减少 ${(drop * 100).toFixed(1)}%（${previous.products.length} → ${ps.length}）`,
+      );
     }
     for (const path of REQUIRED_PATHS) {
       const prev = previous.products.length
         ? previous.products.filter((p) => has(get(p, path))).length / previous.products.length
         : 0;
       if (prev - coverage[path] > LIMITS.maxCoverageDrop) {
-        fail.push(`${path} 覆盖率从 ${(prev * 100).toFixed(1)}% 跌到 ${(coverage[path] * 100).toFixed(1)}%`);
+        fail.push(
+          `${path} 覆盖率从 ${(prev * 100).toFixed(1)}% 跌到 ${(coverage[path] * 100).toFixed(1)}%`,
+        );
       }
     }
   }

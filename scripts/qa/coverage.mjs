@@ -22,8 +22,8 @@
  * 解析性缺口则是待修的队列。
  */
 
-import { loadProducts, section, c, table, brandZh, pct, bar, ratioColor, verdict } from './lib.mjs';
 import { REQUIRED_PATHS } from '../sync/validate.mjs';
+import { loadProducts, section, c, table, brandZh, pct, bar, ratioColor, verdict } from './lib.mjs';
 
 const argv = process.argv.slice(2);
 const BY_BRAND = argv.includes('--by-brand');
@@ -48,7 +48,10 @@ function fieldsOf(product) {
     if (['id', 'slug', 'brand', 'line', 'name', 'provenance', 'sources'].includes(k)) continue;
     if (v && typeof v === 'object' && !Array.isArray(v)) {
       for (const [k2, v2] of Object.entries(v)) {
-        if (k2 === 'rear' && Array.isArray(v2)) { out.push(`${k}.${k2}[]`); continue; }
+        if (k2 === 'rear' && Array.isArray(v2)) {
+          out.push(`${k}.${k2}[]`);
+          continue;
+        }
         out.push(`${k}.${k2}`);
       }
     } else {
@@ -77,7 +80,8 @@ const hasVal = (p, f) => {
   return has(get(p, f));
 };
 
-const covOf = (list, f) => (list.length ? list.filter((p) => hasVal(p, f)).length / list.length : 0);
+const covOf = (list, f) =>
+  list.length ? list.filter((p) => hasVal(p, f)).length / list.length : 0;
 
 section('字段覆盖率总览');
 console.log(`池子 ${products.length} 台 · 共 ${allFields.length} 个字段`);
@@ -86,7 +90,11 @@ console.log('');
 console.log(c.dim('绿色 ≥90% ｜ 黄色 ≥60% ｜ 红色 <60%。★ = 闸门必填字段。'));
 
 const rows = allFields
-  .map((f) => ({ f, cov: covOf(products, f), missing: products.length - products.filter((p) => hasVal(p, f)).length }))
+  .map((f) => ({
+    f,
+    cov: covOf(products, f),
+    missing: products.length - products.filter((p) => hasVal(p, f)).length,
+  }))
   .filter((r) => !GAPS_ONLY || r.cov < GAP_THRESHOLD || isRequired.has(r.f))
   .sort((a, b) => a.cov - b.cov || a.f.localeCompare(b.f));
 
@@ -100,7 +108,12 @@ table(
       })
       .join('  ');
     // 品牌差异大 = 一个品牌全有一个全无 = 结构性；都低 = 可能都没公布
-    const spreads = brands.map((b) => covOf(products.filter((p) => p.brand === b), r.f));
+    const spreads = brands.map((b) =>
+      covOf(
+        products.filter((p) => p.brand === b),
+        r.f,
+      ),
+    );
     const spread = Math.max(...spreads) - Math.min(...spreads);
     const gapMark = spread > 0.5 ? c.yellow('← 一方全无') : '';
     return [
@@ -132,7 +145,13 @@ const gaps = allFields
   .map((f) => {
     const cov = covOf(products, f);
     if (cov >= GAP_THRESHOLD) return null;
-    const per = brands.map((b) => ({ b, cov: covOf(products.filter((p) => p.brand === b), f) }));
+    const per = brands.map((b) => ({
+      b,
+      cov: covOf(
+        products.filter((p) => p.brand === b),
+        f,
+      ),
+    }));
     const hi = Math.max(...per.map((x) => x.cov));
     const lo = Math.min(...per.map((x) => x.cov));
     return {
@@ -157,41 +176,67 @@ const nobody = gaps.filter((g) => g.type === 'nobody');
 /** 同一品牌内部分化：这一类最可疑，通常是某几种页面写法没解析到 */
 const partial = gaps.filter((g) => g.type === 'partial');
 
-console.log(`${c.yellow('① 结构性缺口')} ${structural.length} 个 —— 一个品牌全有、另一个全无，是官网不公布：`);
+console.log(
+  `${c.yellow('① 结构性缺口')} ${structural.length} 个 —— 一个品牌全有、另一个全无，是官网不公布：`,
+);
 if (!structural.length) console.log(c.dim('  （无）'));
 for (const g of structural) {
-  console.log(`  ${g.f.padEnd(28)} ${pct(g.cov).padStart(6)}  ${g.hasBrands.join('/')} 有，${g.noneBrands.join('/')} 全缺`);
+  console.log(
+    `  ${g.f.padEnd(28)} ${pct(g.cov).padStart(6)}  ${g.hasBrands.join('/')} 有，${g.noneBrands.join('/')} 全缺`,
+  );
 }
-console.log(c.dim('  应对：覆盖率门槛已在 derive.mjs 生效（不发奖杯），页面如实说明「官方数据不足」。'));
+console.log(
+  c.dim('  应对：覆盖率门槛已在 derive.mjs 生效（不发奖杯），页面如实说明「官方数据不足」。'),
+);
 
 console.log('');
-console.log(`${c.yellow('② 全站皆零')} ${nobody.length} 个 —— 没人公布，或解析器对所有品牌都失手：`);
+console.log(
+  `${c.yellow('② 全站皆零')} ${nobody.length} 个 —— 没人公布，或解析器对所有品牌都失手：`,
+);
 if (!nobody.length) console.log(c.dim('  （无）'));
 for (const g of nobody) {
   console.log(`  ${g.f.padEnd(28)} ${pct(g.cov).padStart(6)}  缺 ${g.ids.length} 台`);
 }
 console.log(c.dim('  应对：先确认官网到底有没有这个字段（翻 _work/*.raw.json 的 raw 原文），'));
-console.log(c.dim('        官网有而我们没有 → 解析器缺分支；官网也没有 → 写进 DATA-CONTRACT.md 当已知事实。'));
+console.log(
+  c.dim('        官网有而我们没有 → 解析器缺分支；官网也没有 → 写进 DATA-CONTRACT.md 当已知事实。'),
+);
 
 console.log('');
-console.log(`${c.blue('③ 同品牌内部分化')} ${partial.length} 个 —— 最可疑，通常是某几种页面写法漏了解析：`);
+console.log(
+  `${c.blue('③ 同品牌内部分化')} ${partial.length} 个 —— 最可疑，通常是某几种页面写法漏了解析：`,
+);
 if (!partial.length) console.log(c.dim('  （无）'));
 for (const g of partial) {
   console.log(`  ${g.f.padEnd(28)} ${pct(g.cov).padStart(6)}  缺 ${g.ids.length} 台`);
-  console.log(c.dim(`     ${g.ids.slice(0, 6).join(', ')}${g.ids.length > 6 ? ` …共 ${g.ids.length} 台` : ''}`));
+  console.log(
+    c.dim(
+      `     ${g.ids.slice(0, 6).join(', ')}${g.ids.length > 6 ? ` …共 ${g.ids.length} 台` : ''}`,
+    ),
+  );
 }
-console.log(c.dim('  应对：看这批机型的 raw 原文与能解析出来的有何不同，通常能一眼看出页面写法差异。'));
+console.log(
+  c.dim('  应对：看这批机型的 raw 原文与能解析出来的有何不同，通常能一眼看出页面写法差异。'),
+);
 
 /* ---------------- 品牌差异 ---------------- */
 
 if (BY_BRAND) {
   section('按品牌拆开看');
-  console.log(c.dim('同一字段在两个品牌间差得多，通常意味着「某一方不公布」，而不是「解析器对某一方失手」。'));
+  console.log(
+    c.dim('同一字段在两个品牌间差得多，通常意味着「某一方不公布」，而不是「解析器对某一方失手」。'),
+  );
   console.log('');
 
   const brandRows = [];
   for (const f of allFields) {
-    const covs = brands.map((b) => ({ b, cov: covOf(products.filter((p) => p.brand === b), f) }));
+    const covs = brands.map((b) => ({
+      b,
+      cov: covOf(
+        products.filter((p) => p.brand === b),
+        f,
+      ),
+    }));
     const spread = Math.max(...covs.map((x) => x.cov)) - Math.min(...covs.map((x) => x.cov));
     if (spread < 0.3) continue;
     brandRows.push({ f, spread, covs });

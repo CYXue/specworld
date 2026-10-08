@@ -32,9 +32,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import {
-  existsSync, readFileSync, writeFileSync, readdirSync, statSync,
-} from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -44,6 +42,18 @@ const CHECK_ONLY = argv.includes('--check');
 const FOR_GITHUB = argv.includes('--github');
 
 const DATA_FILE = join(ROOT, 'data/products.json');
+/**
+ * 待收录队列。**不参与 dataFingerprint**，单算一个指纹。
+ *
+ * 为什么单算：队列里是「官网已抓到但缺发布日期」的机型，它进不了 products.json，
+ * 所以内容一变dataFingerprint 就不动、站点指纹也不动 ——
+ * CI 若只看那两个标志，队列永远提交不进仓库。而这恰恰是「安静地丢了一台新机」
+ * 最难发现的形态：台数没少、页面没变、没报错，只是多了一台本该上站的机器没人知道。
+ *
+ * 所以它有自己独立的 changed 标志，CI 拿它决定「要不要提交」，
+ * 但**不参与站点指纹** —— 队列变化不该触发重新发布站点（用户看不到变化）。
+ */
+const PENDING_FILE = join(ROOT, 'data/discovery-pending.json');
 /**
  * 本次结果：含与上一次的比对。_work/ 不入库，只在同一次 CI job 内流通。
  */
@@ -121,6 +131,60 @@ function collectFiles(dir, exts) {
   return out;
 }
 
+/** 单文件取 (相对路径, 内容哈希)，文件不存在时返回 null，便于声明式列出 */
+function collectOne(relPath) {
+  const p = join(ROOT, relPath);
+  if (!existsSync(p) || !statSync(p).isFile()) return null;
+  return {
+    path: relPath.split('\\').join('/'),
+    hash: createHash('sha256')
+      .update(readFileSync(p, 'utf8').replace(/\r\n/g, '\n'))
+      .digest('hex')
+      .slice(0, 16),
+  };
+}
+
+/** 队列指纹：内容就是纯数据（无时间戳），直接哈希字节即可 */
+/**
+ * 原始响应归档：也是独立指纹，同样**不参与 dataFingerprint / siteFingerprint**。
+ *
+ * 与队列同理：官网改版时归档件会变，但用户看到的页面可能完全没变
+ * （比如官网只是把某个章节标题改了个字，而那个字段没进products.json）。
+ * 这时站点不该重新发布，但归档必须更新 —— 否则它记的是上一个版本的官网。
+ */
+const RAW_DIR = join(ROOT, 'data/raw');
+
+function computeRawFingerprint() {
+  if (!existsSync(RAW_DIR)) return { rawFingerprint: 'empty', rawBytes: 0 };
+  const files = readdirSync(RAW_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .sort();
+  const parts = [];
+  let bytes = 0;
+  for (const f of files) {
+    const raw = readFileSync(join(RAW_DIR, f), 'utf8');
+    bytes += Buffer.byteLength(raw);
+    parts.push(`${f}:${createHash('sha256').update(raw.replace(/\r\n/g, '\n')).digest('hex').slice(0, 16)}`);
+  }
+  return {
+    rawFingerprint: createHash('sha256').update(parts.join('|')).digest('hex').slice(0, 16),
+    rawBytes: bytes,
+  };
+}
+
+function computePendingFingerprint() {
+  if (!existsSync(PENDING_FILE)) return { pendingFingerprint: 'empty', pendingCount: 0 };
+  const raw = readFileSync(PENDING_FILE, 'utf8');
+  const parsed = JSON.parse(raw);
+  return {
+    pendingFingerprint: createHash('sha256')
+      .update(raw.replace(/\r\n/g, '\n'))
+      .digest('hex')
+      .slice(0, 16),
+    pendingCount: parsed?.count ?? parsed?.items?.length ?? 0,
+  };
+}
+
 function compute() {
   if (!existsSync(DATA_FILE)) {
     console.error('❌ 找不到 data/products.json，先跑一次管线');
@@ -133,17 +197,32 @@ function compute() {
   // 数据指纹：只反映用户看得见的规格内容
   const dataFingerprint = canonicalHash(stable);
 
-  // 模板指纹：站点生成器的代码。改了版式/加了板块就应当重新发布。
-  // 只哈希真正参与构建的 .mjs —— 把纯文档型的 .ts（src/lib/types.ts、
-  // scripts/sources/types.ts，项目无 tsconfig / 无 tsc 步骤，永不参与产物）
-  // 排除在外，否则改一个注释就会让站点指纹变化、误触发一次白发的 Pages 重发。
-  // 归一化行尾后再哈希（见 collectFiles 内部），避免 Windows CRLF / Linux LF 造成两份指纹。
+  // 模板指纹：**Vite 前端的渲染层**。改了版式/加了板块/换组件就应当重新发布。
+  //
+  // 2026-10-03 渲染层从「mjs 手写模板」换成 Vite + Vue3 + TS + Tailwind v4 之后，
+  // 这里的采集范围跟着换了三处：
+  //   1. 主源从 scripts/**/*.mjs 换成 src/**（.vue 组件 / .ts 逻辑 / .css 设计令牌）。
+  //      旧建站器（scripts/site/）已不是发布物路径，不该再算进指纹。
+  //   2. 补上构建期配置：index.html（字体与 favicon 的内联声明）、vite.config.ts
+  //      （base:'./' 是 Toy 能否加载的决定项）、postcss.config.mjs、package.json
+  //      （依赖升级会改变产物字节）。这几个是单文件，声明式列出。
+  //   3. 精灵图生成器 scripts/sprite/ 保留：立绘是由数据算出来的几何图形，
+  //      改画法等于改用户看得见的像素画，必须触发发布。
+  //
+  // 排除的：public/fonts、public/favicon.svg 等二进制资源（用固定哈希会被
+  // 换字体时漏判；真正的字节变化由构建产物与 dataFingerprint 之外的手段兜底，
+  // 字体换版属于人工低频操作，按注释里的指针手动 --write-pointer 即可）。
   const templateFiles = [
-    ...collectFiles(join(ROOT, 'scripts'), ['.mjs']),
+    ...collectFiles(join(ROOT, 'src'), ['.vue', '.ts', '.css']),
+    ...[
+      collectOne('index.html'),
+      collectOne('vite.config.ts'),
+      collectOne('postcss.config.mjs'),
+      collectOne('package.json'),
+    ].filter(Boolean),
+    ...collectFiles(join(ROOT, 'scripts/sprite'), ['.mjs']),
   ];
-  const templateFingerprint = canonicalHash(
-    templateFiles.map((f) => `${f.path}:${f.hash}`),
-  );
+  const templateFingerprint = canonicalHash(templateFiles.map((f) => `${f.path}:${f.hash}`));
 
   // 站点指纹：数据与模板的组合。任一变化都意味着用户看到的东西变了
   const siteFingerprint = createHash('sha256')
@@ -161,6 +240,8 @@ function compute() {
     dataFingerprint,
     templateFingerprint,
     siteFingerprint,
+    ...computePendingFingerprint(),
+    ...computeRawFingerprint(),
     // 下面这些只用于日志与 issue 摘要，不参与指纹计算
     stats: {
       products: products.length,
@@ -178,84 +259,116 @@ export { compute, stripVolatile, canonicalHash };
 /* 仅在被直接运行时执行 CLI 部分；被 import 时不做任何 IO */
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
-const current = compute();
+  const current = compute();
 
-/* ---------------- 比对：上次状态取入库的指针文件 ---------------- */
-const previous = existsSync(POINTER_FILE)
-  ? JSON.parse(readFileSync(POINTER_FILE, 'utf8'))
-  : null;
+  /* ---------------- 比对：上次状态取入库的指针文件 ---------------- */
+  const previous = existsSync(POINTER_FILE) ? JSON.parse(readFileSync(POINTER_FILE, 'utf8')) : null;
 
-const result = {
-  ...current,
-  previous: previous
-    ? {
-        dataFingerprint: previous.dataFingerprint,
-        siteFingerprint: previous.siteFingerprint,
-      }
-    : null,
-  changed: {
-    data: previous ? previous.dataFingerprint !== current.dataFingerprint : true,
-    site: previous ? previous.siteFingerprint !== current.siteFingerprint : true,
-  },
-  computedAt: new Date().toISOString(),
-};
-
-if (!CHECK_ONLY) {
-  writeFileSync(OUT_FILE, `${JSON.stringify(result, null, 2)}\n`, 'utf8');
-}
-
-/**
- * --write-pointer：把当前状态推进到入库的指针文件。
- * 只在真正提交/发布之后调用 —— 它代表「线上现在就是这一版」。
- */
-if (argv.includes('--write-pointer')) {
-  const pointer = {
-    dataFingerprint: current.dataFingerprint,
-    siteFingerprint: current.siteFingerprint,
-    templateFingerprint: current.templateFingerprint,
-    products: current.stats.products,
+  const result = {
+    ...current,
+    previous: previous
+      ? {
+          dataFingerprint: previous.dataFingerprint,
+          siteFingerprint: previous.siteFingerprint,
+        }
+      : null,
+    changed: {
+      data: previous ? previous.dataFingerprint !== current.dataFingerprint : true,
+      site: previous ? previous.siteFingerprint !== current.siteFingerprint : true,
+      /**
+       * 队列变化。指针里没有这一项时算「变了」——
+       * 那意味着队列是这次新加的功能（升级瞬间），第一轮就该把队列提交进去。
+       * 用 `!==` 而不是「指针里存在才比」，避免新增功能上线时队列被永久漏掉。
+       */
+      pending: previous ? previous.pendingFingerprint !== current.pendingFingerprint : true,
+      /** 归档变化。与队列同理：不参与站点发布，但要能提交。 */
+      raw: previous ? previous.rawFingerprint !== current.rawFingerprint : true,
+    },
+    computedAt: new Date().toISOString(),
   };
-  writeFileSync(POINTER_FILE, `${JSON.stringify(pointer, null, 2)}\n`, 'utf8');
-  console.log(`已推进入库指针 data/.fingerprint → ${current.siteFingerprint}`);
-}
 
-/* ---------------- 输出 ---------------- */
-const s = result.stats;
-const brandSummary = Object.entries(s.byBrand)
-  .map(([k, v]) => `${k} ${v}`)
-  .join(' / ');
-
-console.log('数据指纹      ', result.dataFingerprint);
-console.log('模板指纹      ', result.templateFingerprint, `（${s.templateFiles} 个文件）`);
-console.log('站点指纹      ', result.siteFingerprint);
-console.log(`机型 ${s.products} 台（${brandSummary}）· 有发布日期 ${s.releaseDates} 台`);
-console.log();
-if (!previous) {
-  console.log('首次计算，无历史可比对 → data.changed=true  site.changed=true');
-} else {
-  console.log(`数据内容变化：${result.changed.data ? '是' : '否'}（上次 ${previous.dataFingerprint}）`);
-  console.log(`站点内容变化：${result.changed.site ? '是' : '否'}（上次 ${previous.siteFingerprint}）`);
-}
-
-const gh = [
-  `data_fingerprint=${result.dataFingerprint}`,
-  `site_fingerprint=${result.siteFingerprint}`,
-  `data_changed=${result.changed.data}`,
-  `site_changed=${result.changed.site}`,
-  `products=${s.products}`,
-];
-
-if (FOR_GITHUB) {
-  const outPath = process.env.GITHUB_OUTPUT;
-  if (!outPath) {
-    console.error('❌ --github 需要 GITHUB_OUTPUT 环境变量（只在 GitHub Actions 里有）');
-    process.exit(1);
+  if (!CHECK_ONLY) {
+    writeFileSync(OUT_FILE, `${JSON.stringify(result, null, 2)}\n`, 'utf8');
   }
-  // 追加而非覆盖：同一个 job 里前面的步骤可能已经写过
-  const { appendFileSync } = await import('node:fs');
-  appendFileSync(outPath, `${gh.join('\n')}\n`, 'utf8');
-  console.log(`\n已写入 GITHUB_OUTPUT：${gh.join('  ')}`);
-} else {
-  console.log(`\nCI 可用标志：${gh.join('  ')}`);
-}
+
+  /**
+   * --write-pointer：把当前状态推进到入库的指针文件。
+   * 只在真正提交/发布之后调用 —— 它代表「线上现在就是这一版」。
+   */
+  if (argv.includes('--write-pointer')) {
+    const pointer = {
+      dataFingerprint: current.dataFingerprint,
+      siteFingerprint: current.siteFingerprint,
+      templateFingerprint: current.templateFingerprint,
+      products: current.stats.products,
+      // 队列指纹同样要进指针，否则下一轮算不出「队列变了没」
+      pendingFingerprint: current.pendingFingerprint,
+      rawFingerprint: current.rawFingerprint,
+    };
+    writeFileSync(POINTER_FILE, `${JSON.stringify(pointer, null, 2)}\n`, 'utf8');
+    console.log(`已推进入库指针 data/.fingerprint → ${current.siteFingerprint}`);
+  }
+
+  /* ---------------- 输出 ---------------- */
+  const s = result.stats;
+  const brandSummary = Object.entries(s.byBrand)
+    .map(([k, v]) => `${k} ${v}`)
+    .join(' / ');
+
+  console.log('数据指纹      ', result.dataFingerprint);
+  console.log('模板指纹      ', result.templateFingerprint, `（${s.templateFiles} 个文件）`);
+  console.log('站点指纹      ', result.siteFingerprint);
+  console.log(`机型 ${s.products} 台（${brandSummary}）· 有发布日期 ${s.releaseDates} 台`);
+  console.log(
+    `待收录队列 ${current.pendingCount} 台（指纹 ${current.pendingFingerprint}）` +
+      (current.pendingCount ? '——缺发布日期，需人工补 data/release-dates.json' : ''),
+  );
+  console.log(
+    `原始响应归档 ${(current.rawBytes / 1024).toFixed(1)} KB（指纹 ${current.rawFingerprint}）`,
+  );
+  console.log();
+  if (!previous) {
+    console.log('首次计算，无历史可比对 → data.changed=true  site.changed=true');
+  } else {
+    console.log(
+      `数据内容变化：${result.changed.data ? '是' : '否'}（上次 ${previous.dataFingerprint}）`,
+    );
+    console.log(
+      `站点内容变化：${result.changed.site ? '是' : '否'}（上次 ${previous.siteFingerprint}）`,
+    );
+    console.log(
+      `待收录队列变化：${result.changed.pending ? '是' : '否'}` +
+        `（上次 ${previous.pendingFingerprint ?? '（指针里没有，说明是本功能上线后的第一轮）'}）`,
+    );
+    console.log(
+      `归档变化：${result.changed.raw ? '是' : '否'}` +
+        `（上次 ${previous.rawFingerprint ?? '（指针里没有，本功能上线后的第一轮）'}）`,
+    );
+  }
+
+  const gh = [
+    `data_fingerprint=${result.dataFingerprint}`,
+    `site_fingerprint=${result.siteFingerprint}`,
+    `data_changed=${result.changed.data}`,
+    `site_changed=${result.changed.site}`,
+    `pending_changed=${result.changed.pending}`,
+    `pending_count=${current.pendingCount}`,
+    `raw_changed=${result.changed.raw}`,
+    `raw_fingerprint=${current.rawFingerprint}`,
+    `products=${s.products}`,
+  ];
+
+  if (FOR_GITHUB) {
+    const outPath = process.env.GITHUB_OUTPUT;
+    if (!outPath) {
+      console.error('❌ --github 需要 GITHUB_OUTPUT 环境变量（只在 GitHub Actions 里有）');
+      process.exit(1);
+    }
+    // 追加而非覆盖：同一个 job 里前面的步骤可能已经写过
+    const { appendFileSync } = await import('node:fs');
+    appendFileSync(outPath, `${gh.join('\n')}\n`, 'utf8');
+    console.log(`\n已写入 GITHUB_OUTPUT：${gh.join('  ')}`);
+  } else {
+    console.log(`\nCI 可用标志：${gh.join('  ')}`);
+  }
 }

@@ -1,7 +1,9 @@
-# 本地项目规范提炼 · phone-spec-world
+# 本地项目规范提炼 · 参数世界
+
+> ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
 
 > **用途**：这是一份**可执行的工程规范**，不是项目介绍。
-> 项目：手机参数静态站（华为 47 + 苹果 13 = 60 台），线上 `https://cyxue.github.io/specworld/`
+> 项目：参数世界（华为 47 + 苹果 13 = 60 台），线上 `https://cyxue.github.io/specworld/`
 > 本文把散在代码注释、五份docs 文档、CI 配置里的规范收敛成**带出处的条目**。
 >
 > 与 `SPEC-AI-MODEL-WORLD.md`（参考项目规范）互为对照：
@@ -28,7 +30,7 @@
 
 这三条写在 README 与 `docs/AUTOMATION-RECIPE.md` 里，**每条都有对应的真实事故支撑**。
 
-### 1.1 入库的只有 `data/`，产物与中间物一律不进库
+### 1.1 入库的只有 `data/` 与代码；产物与中间物一律不进库
 
 ```
 data/          ← 入库：唯一的机器产出（快照 + 人工核对的取证表 + 指纹指针）
@@ -70,7 +72,7 @@ src/ scripts/  ← 入库：代码
 
 ```js
 dataFingerprint    = hash(剥掉运行时刻字段后的 products.json)
-templateFingerprint= hash(scripts/site/** + src/lib/** 的文件内容)
+templateFingerprint= hash(scripts/**/*.mjs 的文件内容)  // 只哈希参与构建的 .mjs；纯文档型 .ts 不计入
 siteFingerprint    = hash(dataFingerprint + templateFingerprint)
 ```
 
@@ -352,7 +354,7 @@ putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, ap, ['w', 'h'])
 
 ### 7.2 发布校验：6 项
 
-`scripts/publish/verify.mjs` 在产出后逐项检查：
+`scripts/publish/verify-dist.mjs` 在产出后逐项检查（原 `verify.mjs` 已在 2026-10-04 清理中删除）：
 
 1. 复制成 `dist/`（自包含发布目录）
 2. 注入 `<base>`（相对路径发布时浏览器自动补全）
@@ -385,6 +387,8 @@ putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, ap, ['w', 'h'])
 
 **第 2 条值得抄**：**缺数据时退回品牌中性色，而不是猜一个好看的配色。**
 
+> **现状（2026-10-03）**：生成器 `scripts/sprite/generate.mjs` 仍在，并在管线构建期运行；但产物 `data/sprites/` 已写入 `.gitignore` 不再入库，且未接入任何页面（产品侧判定视觉效果不佳）。
+
 ---
 
 ## 八、护栏三层（2026-10-03 补齐）
@@ -392,7 +396,7 @@ putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, ap, ['w', 'h'])
 ### 8.1 三层的分工
 
 ```
-① 单元自测    scripts/selftest.mjs        76 项断言，不联网，1 秒
+① 单元自测    scripts/selftest.mjs        79 项断言，不联网，1 秒
 ② 校验闸门    scripts/sync/validate.mjs  拒绝写盘 + 非零退出
 ③ 只读体检    scripts/qa/                三个脚本，回答「为什么是这个结果」
 ```
@@ -475,25 +479,34 @@ workflow_dispatch:                 # 抢时效时手动整轮跑（不到一分�
 
 **cron 避开整点**（整点是高峰排队）。
 
-`push` 触发条件只匹配 `scripts/**`、`src/**`、`data/release-dates.json`、
+`push` 触发条件只匹配 `scripts/**`、`data/release-dates.json`、
 `workflow` 自身——**bot 提交的是 `data/`，不匹配这里，因此不会自己触发自己。**
 
 ---
 
 ## 十、文档体系
 
-### 10.1 五份文档分工明确
+### 10.1 文档分工明确（12 份）
 
 | 文档 | 回答什么 | 不回答什么 |
 |---|---|---|
 | `DATA-CONTRACT.md` | 字段定义（唯一来源） | 怎么取、怎么排 |
 | `PROBE-FINDINGS.md` | **为什么能取到**（可行性证据） | 取不到时怎么查 |
-| `PITFALLS.md` | **取不到时怎么查**（8 条结构假设 + 排查决策树） | 为什么能取到 |
+| `PITFALLS.md` | **取不到时怎么查**（结构假设 + 排查决策树） | 为什么能取到 |
 | `COMPARE-DESIGN.md` | 对比页信息设计定稿 | — |
-| `AUTOMATION-RECIPE.md` | **怎么迁移到别的项目** | 本项目的业务细节 |
+| `MIGRATION-HANDBOOK.md` | 迁移手册：两项目交集 + 可迁移骨架 | 本项目的业务细节 |
+| `BENCHMARK-VS-AMW.md` | 与参考项目的架构对标 | — |
+| `ENGINEERING-REVIEW.md` | 工程评审 + 建议落地表 | — |
+| `PRINCIPLES.md` | 不可违背原则总纲（数据诚信 / 零AI 依赖 / …） | — |
+| `AUTOMATION-RECIPE.md` | 自动化发布配方（怎么迁移到别的项目） | 本项目的业务细节 |
+| `SPEC-PARAMETER-WORLD.md` | 本项目规范提炼 | 参考项目怎么做 |
+| `SPEC-AI-MODEL-WORLD.md` | 参考项目规范提炼 | 本地怎么做 |
+| `REFACTOR-LOG.md` | 重构落地记录（可版本化变更日志） | — |
 
 **`PROBE-FINDINGS` 与 `PITFALLS` 的分工是本地特有的好设计**：
 一个讲「为什么能取到」，一个讲「取不到时怎么查」。
+
+**`MIGRATION-HANDBOOK` / `BENCHMARK-VS-AMW` / `ENGINEERING-REVIEW` / `PRINCIPLES` 是 2026-10-03 补齐的「防退化工程化」文档。**
 参考项目只有前者，所以它改版时的排查要靠翻代码。
 
 ### 10.2 文档里的数字必须实测
@@ -522,7 +535,7 @@ workflow_dispatch:                 # 抢时效时手动整轮跑（不到一分�
 |---|---|
 | `pipeline.mjs` | 失败即停，不带着旧数据往下走 |
 | `parse.mjs` | 解析不出就 null / 口径一起出来 / 只取第一个合理数字 |
-| `analyze.mjs` | 能力条不做综合评分 / 缺数据 null / 分位只在同分类池内 / 类比可复算 |
+| `analyze.mjs`（已删除，派生逻辑见 `derive.mjs`） | 能力条不做综合评分 / 缺数据 null / 分位只在同分类池内 / 类比可复算 |
 | `derive.mjs` | 分位不用绝对阈值 / 头衔过覆盖率门槛 / 跨口径不排名 |
 | `validate.mjs` | **每条闸门必须能回答：防哪种真实故障？误报概率多大？** |
 

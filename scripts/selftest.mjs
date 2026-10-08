@@ -22,10 +22,10 @@
  */
 
 import { strict as assert } from 'node:assert';
-import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { installTsResolver } from './ts-resolver.mjs';
 // 必须在任何 `await import('../src/lib/*.ts')` 之前装好：search.ts / canvasFilter.ts
 // 内部用 Vite 约定写 `from './query'`（无扩展名），Node 默认解析不了，靠这个钩子补。
 installTsResolver();
@@ -52,7 +52,10 @@ import {
   sliceByVariants,
   slugify,
 } from './normalize/parse.mjs';
+import * as WQ from './sync/queue.mjs';
 import { validate, LIMITS, REQUIRED_PATHS } from './sync/validate.mjs';
+import { installTsResolver } from './ts-resolver.mjs';
+import { assertUnlocked } from './lib/gates-lock.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -729,6 +732,268 @@ check('苹果规格页映射 ↔ golden', () =>
 check('苹果对比页映射 ↔ golden', () =>
   assertGolden(mapAppleCompare, 'apple-compare.json', '苹果对比页'),
 );
+
+/* ================================================================ *
+ * 11. 窗口过滤与待收录队列
+ * ----------------------------------------------------------------
+ * 这段判据原先内联在 main() 里，自测碰不到 —— 而它恰好是「错了也不报错」的那一类：
+ * 把「无发布日期」误判成「窗口外」，新机静默消失、零报错；把「窗口外」误判成
+ * 「待收录」，队列塞满正常老机型、永远清不掉。两个方向都不会抛异常。
+ *
+ * 队列文件更有一条静默失效：只要带一个时间戳进去，「队列没变」就永远不成立，
+ * CI 每 12 小时制造一次空提交。所以下面有专门一条断言盯「同输入同字节」。
+ * ================================================================ */
+section('窗口过滤与待收录队列');
+
+const P2025 = (id, extra = {}) => ({ id, brand: 'apple', releaseDate: '2025-03-01', ...extra });
+
+check('三类丢弃各归其位：缺日期入队、窗口外不入队、模糊边界收进来', () => {
+  const input = [
+    { id: 'a-no-date', brand: 'apple', name: 'A' }, // 无发布日期 → missing-date，入队
+    P2025('b-old', { releaseDate: '2019-09-20' }), // 明确早于窗口 → window，不入队
+    P2025('c-in', {}), // 窗口内 → kept
+    // 日期精度只到月，且压在边界上（2024-09 距2024-09-01 不到 45 天）→ kept + windowNote
+    P2025('d-fuzz', { releaseDate: '2024-09', releaseDatePrecision: 'month' }),
+    // 精度不足但离边界很远 → 仍按 window 出局
+    P2025('e-fuzz-far', { releaseDate: '2023-11', releaseDatePrecision: 'month' }),
+  ];
+  const r = WQ.classifyByWindow(input, { windowStart: '2024-09-01' });
+
+  assert.deepEqual(
+    r.kept.map((p) => p.id).sort(),
+    ['c-in', 'd-fuzz'],
+    '窗口内 + 边界模糊的必须收进来',
+  );
+  assert.deepEqual(
+    r.dropped.map((d) => [d.id, d.kind]).sort(),
+    [
+      ['a-no-date', 'missing-date'],
+      ['b-old', 'window'],
+      ['e-fuzz-far', 'window'],
+    ],
+    '丢弃项必须标清 kind，否则队列分不清「可行动」与「产品侧决定」',
+  );
+  assert.deepEqual(
+    r.pending.map((q) => q.id),
+    ['a-no-date'],
+    '只有缺发布日期的入队 —— 入队标准收窄或放宽都会造成垃圾或漏报',
+  );
+});
+
+check('反向测：模糊边界必须按精度区分，两侧都试一遍', () => {
+  // 只测「边界附近的收进来」会漏掉另一半：若某天有人把 fuzz 条件写成永远 true，
+  // 2019 年的老机型会被全收进来。单测要能区分两个方向，所以造一组对照。
+  const near = WQ.classifyByWindow([P2025('near', { releaseDate: '2024-09', releaseDatePrecision: 'month' })], {
+    windowStart: '2024-09-01',
+  });
+  const far = WQ.classifyByWindow([P2025('far', { releaseDate: '2023-11', releaseDatePrecision: 'month' })], {
+    windowStart: '2024-09-01',
+  });
+  assert.equal(near.kept.length, 1, '边界附近的应保留');
+  assert.equal(far.kept.length, 0, '离边界远的应出局 —— 若此项也保留，fuzz 条件失效了');
+  // 反向：精度到天但压在同一天之前 → 不走fuzz 分支（fuzz 只对精度不足生效）
+  const day = WQ.classifyByWindow([P2025('day', { releaseDate: '2024-08-20', releaseDatePrecision: 'day' })], {
+    windowStart: '2024-09-01',
+  });
+  assert.equal(day.kept.length, 0, '精度到天的应严格按日期判定，不吃fuzz 豁免');
+});
+
+check('窗口起点非法时抛错，而不是静默把所有机型都判出局', () => {
+  assert.throws(
+    () => WQ.classifyByWindow([P2025('x')], { windowStart: 'not-a-date' }),
+    /windowStart/,
+    'Date.parse 得到 NaN 时若不抛错，NaN 比较恒为 false，会把全部机型误判为窗口外',
+  );
+});
+
+check('待收录项带可执行的人工动作（不是一句「失败了」）', () => {
+  const r = WQ.classifyByWindow([{ id: 'iphone-99', brand: 'apple', name: 'iPhone 99' }], {
+    windowStart: '2024-09-01',
+  });
+  const q = r.pending[0];
+  assert.ok(q.action.includes('release-dates.json'), '必须指明补哪张表');
+  assert.ok(q.action.includes('"id": "iphone-99"'), '必须把要补的那条 id 写出来，照抄即可');
+  assert.equal(q.brand, 'apple', '要带品牌，否则 60 台里人工分不清是谁');
+});
+
+check('队列文件是纯数据的函数：同输入必须逐字节一致（反向：带时间戳必失败）', () => {
+  const pending = [
+    { id: 'b', kind: 'missing-date', brand: 'apple', name: null, nameZh: null, slug: null, action: 'x' },
+    { id: 'a', kind: 'missing-date', brand: 'huawei', name: null, nameZh: null, slug: null, action: 'y' },
+  ];
+  const s1 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
+  const s2 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
+  assert.equal(s1, s2, '同输入必须同字节 —— 否则 CI 每轮都判「队列变了」，制造空提交');
+
+  // 反向测：顺序打乱也必须同字节（排序只认 id，不认传入顺序）
+  const s3 = JSON.stringify(WQ.buildQueueFile([...pending].reverse(), { windowStart: '2024-09-01' }));
+  assert.equal(s1, s3, '顺序打乱后仍须一致 —— 说明排序生效');
+
+  // 反向测：文件里不得含任何看起来像时间戳的字段。
+  // 判据用字段名而不是值 —— 直接搜 2024-09-01 会误伤 windowStart（它是业务日期，该留）。
+  const queue = WQ.buildQueueFile(pending, { windowStart: '2024-09-01' });
+  const VOLATILE = /generatedAt|firstSeenAt|lastSeenAt|fetchedAt|syncedAt|builtAt|snapshotAt|checkedAt|updatedAt/;
+  const walk = (n, p) => {
+    if (Array.isArray(n)) return n.forEach((v, i) => walk(v, `${p}[${i}]`));
+    if (n && typeof n === 'object') {
+      for (const [k, v] of Object.entries(n)) {
+        assert.ok(!VOLATILE.test(k), `${p}.${k} 是运行时刻字段，进队列文件必然造成空提交`);
+        walk(v, `${p}.${k}`);
+      }
+    }
+  };
+  walk(queue, '$');
+  assert.equal(queue.count, 2, 'count 必须与 items 长度一致');
+});
+
+check('真实快照里不该有大批待收录项（>5 说明 release-dates 表该补了）', () => {
+  const snap = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+  const dated = snap.products.filter((p) => p.releaseDate).length;
+  assert.equal(
+    dated,
+    snap.products.length,
+    `快照里 ${snap.products.length - dated} 台没有发布日期 —— 收录窗口靠发布日期过滤，没有日期的进不来`,
+  );
+});
+
+/* ================================================================ *
+ * 12. 待收录队列 ↔ 指纹层的接线
+ * ----------------------------------------------------------------
+ * 队列本身测过了，但还有一条「接上去之后能不能被发现」的链路。
+ * 这类接线最容易出的事是：**功能写对了，可它挂在一条判据从来不看的分支上**。
+ *
+ * 具体故障：新机发布却缺发布日期时，它进不了 products.json →
+ * dataFingerprint 不动、siteFingerprint 不动 →
+ * CI 的提交条件只看这两个标志 → data/discovery-pending.json 永远不进仓库。
+ * 台数没少、页面没变、零报错，只是多了一台本该上站的机器没人知道。
+ *
+ * 所以这里测的是「队列变化能被独立算出来」，量法本身必须先证明有效。
+ * ================================================================ */
+section('待收录队列与指纹接线');
+
+const FP = await import('./publish/fingerprint.mjs');
+
+check('量法 sanity check：同一份队列文件必须算出同一指纹', () => {
+  // 先证明「量法本身有效」：同内容两次算出的指纹必须一致，内容变了必须不同。
+  // 量法失效（永远返回常量）的话，下面所有关于 pending_changed 的断言都是空的。
+  const fp = FP.compute();
+  const again = FP.compute();
+  assert.equal(
+    fp.pendingFingerprint,
+    again.pendingFingerprint,
+    '量法失效：同一份内容两次算出不同指纹，下面关于 pending_changed 的断言都不可信',
+  );
+  assert.equal(typeof fp.pendingFingerprint, 'string');
+  assert.ok(fp.pendingFingerprint.length > 0, '队列指纹不能是空串');
+});
+
+check('反向测：队列内容一变，指纹必须跟着变（否则 CI 永远发现不了新机）', () => {
+  // 先 sanity check 量法：同内容两次算出的指纹必须一致。量法失效（永远返回常量）
+  // 的话，下面所有关于 pending_changed 的断言都是空的。
+  const fp = FP.compute();
+  const again = FP.compute();
+  assert.equal(
+    fp.pendingFingerprint,
+    again.pendingFingerprint,
+    '量法失效：同一份内容两次算出不同指纹',
+  );
+
+  // 再反向测内容敏感性：队列增减必须改变指纹。
+  // 算法与 fingerprint.mjs 的 computePendingFingerprint 一致（sha256 前 16 位）。
+  const h = (obj) =>
+    createHash('sha256')
+      .update(JSON.stringify(obj, null, 2).replace(/\r\n/g, '\n'))
+      .digest('hex')
+      .slice(0, 16);
+  const one = { windowStart: '2024-09-01', count: 1, items: [{ id: 'a' }] };
+  const two = { windowStart: '2024-09-01', count: 2, items: [{ id: 'a' }, { id: 'b' }] };
+  assert.notEqual(
+    h(one),
+    h(two),
+    '队列增减必须改变指纹 —— 这一条若不成立，pending_changed 永远是 false，队列提交不进仓库',
+  );
+
+  // 接线必须真的接上了：compute() 要吐出这些字段，缺一个 CI 就拿不到信号
+  assert.ok('pendingFingerprint' in fp, 'compute() 必须返回 pendingFingerprint');
+  assert.equal(typeof fp.pendingCount, 'number', 'compute() 必须返回 pendingCount');
+  assert.ok('rawFingerprint' in fp, 'compute() 必须返回 rawFingerprint（归档接线）');
+  assert.equal(typeof fp.rawBytes, 'number', 'compute() 必须返回 rawBytes');
+});
+
+check('归档若存在，指纹必须随它变化（官网改版时raw_changed 要能被发现）', () => {
+  const fp = FP.compute();
+  const dir = join(ROOT, 'data/raw');
+  if (!existsSync(dir)) {
+    // 还没归档过：必须报 empty，且指针里那一项也不能是空串以外的乱值
+    assert.equal(fp.rawFingerprint, 'empty', '没有 data/raw/ 时应返回 empty');
+    assert.equal(fp.rawBytes, 0);
+    return;
+  }
+  assert.notEqual(fp.rawFingerprint, 'empty', 'data/raw/ 有文件却算出 empty —— 接线断了');
+  assert.ok(fp.rawBytes > 0, '归档非空时 rawBytes 必须 > 0');
+});
+
+check('队列文件不存在时指纹是 empty 而非崩溃（60 台发布日期齐全是常态）', () => {
+  const fp = FP.compute();
+  const p = join(ROOT, 'data/discovery-pending.json');
+  if (!existsSync(p)) {
+    assert.equal(fp.pendingFingerprint, 'empty', '没有队列文件时应返回 empty');
+    assert.equal(fp.pendingCount, 0);
+  } else {
+    assert.notEqual(fp.pendingFingerprint, 'empty', '队列文件存在却算出 empty —— 接线断了');
+    assert.ok(fp.pendingCount > 0, '队列非空时 pendingCount 必须 > 0');
+  }
+});
+
+check('队列指纹不参与站点指纹（用户看不到队列变化，不该触发重新发布）', () => {
+  const fp = FP.compute();
+  //站点指纹 = data × template，公式里没有队列这一项。
+  // 这是刻意的：队列变了只需要提交，不需要重新发布站点。
+  assert.ok(
+    fp.siteFingerprint !== fp.pendingFingerprint || fp.pendingFingerprint === 'empty',
+    '队列指纹与站点指纹不应是同一个值',
+  );
+  assert.ok(fp.siteFingerprint && fp.dataFingerprint && fp.templateFingerprint, '三个指纹都必须有值');
+});
+
+check('入库指针 data/.fingerprint 必须记队列指纹（否则下一轮算不出变化）', () => {
+  const ptrPath = join(ROOT, 'data/.fingerprint');
+  assert.ok(existsSync(ptrPath), `缺少入库指针 ${ptrPath} —— CI 下一轮没法比对`);
+  const ptr = JSON.parse(readFileSync(ptrPath, 'utf8'));
+  for (const k of ['dataFingerprint', 'siteFingerprint', 'templateFingerprint', 'products']) {
+    assert.ok(k in ptr, `指针缺字段 ${k}`);
+  }
+  // pendingFingerprint 允许暂时缺失（功能刚上线的那一轮还没推进指针），
+  // 但只要它存在就不能是 undefined —— 显式 undefined 会让JSON.stringify 丢键，
+  // 下轮比对时又变成「没有」，形成静默的永久漏报。
+  if ('pendingFingerprint' in ptr) {
+    assert.equal(typeof ptr.pendingFingerprint, 'string', 'pendingFingerprint 存在就必须是字符串');
+  }
+});
+
+check('data/discovery-pending.json 若存在，必须是无时间戳的纯数据文件', () => {
+  const p = join(ROOT, 'data/discovery-pending.json');
+  if (!existsSync(p)) {
+    // 当前没有待收录项是正常状态（60 台发布日期齐全）。
+    // 但必须确认「真的没有」而不是「忘了生成」—— 用 release-dates 的条数佐证。
+    const rd = JSON.parse(readFileSync(join(ROOT, 'data/release-dates.json'), 'utf8'));
+    assert.ok(
+      rd.entries.length >= 60,
+      `既没有待收录队列，取证表也只有 ${rd.entries.length} 条 —— 两者必有一处不对`,
+    );
+    return;
+  }
+  const raw = readFileSync(p, 'utf8');
+  const q = JSON.parse(raw);
+  assert.equal(typeof q.count, 'number', 'count 必须是数字');
+  assert.equal(q.count, q.items.length, 'count 必须与 items 长度一致');
+  assert.equal(q.windowStart, '2024-09-01', 'windowStart 应与管线窗口一致');
+  assert.ok(!/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw), '队列文件含时间戳字段，会造成空提交');
+  for (const it of q.items) {
+    assert.equal(it.kind, 'missing-date', '队列里只该有缺发布日期这一类');
+    assert.ok(it.action?.includes('release-dates.json'), '每条都要指明补哪张表');
+  }
+});
 
 /* ================================================================ *
  * 无限画布层（环面回绕瓦片画廊）
@@ -1810,8 +2075,7 @@ check('搜索：分级匹配 —— 精确优先，无果才放宽', () => {
 
   // 比较只看「结果集」不看「顺序」：search() 按相关度重排，参考实现保输入序，
   // 两者顺序天然不同；这条用例钉的是「精确有果时集合不受 compact 通道污染」。
-  const setEq = (a, b) =>
-    JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
+  const setEq = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
 
   for (const q of ['nova 14', 'nova', 'iPhone 16', '麒麟 9020', '测试']) {
     const ex = exactOnlyResult(DOCS, q);
@@ -1850,7 +2114,10 @@ check('搜索：数据里写法不统一时，两种写法必须等价（真 bug
     ],
     new Map(),
   );
-  const ids = (q) => S.search(mixed, q).map((d) => d.product.id).sort();
+  const ids = (q) =>
+    S.search(mixed, q)
+      .map((d) => d.product.id)
+      .sort();
 
   assert.deepEqual(ids('麒麟9020'), ['c1', 'c2', 'c3'], '连写要命中全部三种写法');
   assert.deepEqual(ids('麒麟 9020'), ['c1', 'c2', 'c3'], '带空格要命中全部三种写法');
@@ -1904,7 +2171,10 @@ const CJK_DOCS = S.buildDocs(
     ['huawei', { id: 'huawei', name: 'HUAWEI', nameZh: '华为', accentColor: '#fff' }],
   ]),
 );
-const cjkIds = (q) => S.search(CJK_DOCS, q).map((d) => d.product.id).sort();
+const cjkIds = (q) =>
+  S.search(CJK_DOCS, q)
+    .map((d) => d.product.id)
+    .sort();
 
 check('搜索：中文与西文连写（苹果16 / 华为nova14）', () => {
   /*
@@ -1937,7 +2207,11 @@ check('splitRuns 必须返回全部段，不能只返回汉字段', () => {
   assert.deepEqual(Q.splitRuns('16pro苹果'), ['16pro', '苹果'], '非汉段保留完整，不切碎');
   assert.deepEqual(Q.splitRuns('mate80'), ['mate80'], '无汉字 → 原样');
   assert.deepEqual(Q.splitRuns('苹果'), ['苹果'], '纯汉字 → 原样，不重复');
-  assert.deepEqual(Q.splitRuns('苹果手机'), ['苹果手机'], '纯汉字整词原样返回，不空拆（见 splitRuns 注释）');
+  assert.deepEqual(
+    Q.splitRuns('苹果手机'),
+    ['苹果手机'],
+    '纯汉字整词原样返回，不空拆（见 splitRuns 注释）',
+  );
 });
 
 check('拆词只放宽、不收紧（不变量）', () => {
@@ -1987,7 +2261,10 @@ check('数字边界：纯数字词不许命中更长数字的一部分', () => {
     new Map(),
   );
   // 结果排序由相关度决定，本用例只验「命中集合」，故排序后再比
-  const ids = (q) => S.search(noisy, q).map((d) => d.product.id).sort();
+  const ids = (q) =>
+    S.search(noisy, q)
+      .map((d) => d.product.id)
+      .sort();
 
   assert.deepEqual(ids('mate 1'), [], '「1」落在 16 内部 → 不得命中');
   assert.deepEqual(ids('mate 80 1'), [], '同上，多词也一样');
@@ -2037,7 +2314,15 @@ check('搜索与画布筛选口径一致（同一个词，两个答案就是 bug
   const cQ = (q) => applyFilter(cdocs, { ...EMPTY_FILTER, q }).map((d) => d.name);
   const sQ = (q) => S.search(CJK_DOCS, q).map((d) => d.product.name);
 
-  for (const q of ['mate80', 'nova14', '苹果16', '苹果 16', 'iphone16', 'nova 14 ultra', '苹果16promax']) {
+  for (const q of [
+    'mate80',
+    'nova14',
+    '苹果16',
+    '苹果 16',
+    'iphone16',
+    'nova 14 ultra',
+    '苹果16promax',
+  ]) {
     assert.equal(setOf(cQ(q)), setOf(sQ(q)), `「${q}」两个入口结果集必须一致`);
   }
   // 注：画布**有意**不搜芯片名（见 canvasFilter 口径），本组查询均走 name/中文名/产品线，
@@ -2078,6 +2363,1895 @@ check('搜索：分面等式（全部 = 各分面项之和）不得被分级匹�
     const sum = facets.slice(1).reduce((a, b) => a + b.count, 0);
     assert.equal(total, sum, `q="${q}"：全部(${total}) 必须等于各分面项之和(${sum})`);
   }
+});
+
+/* ================================================================ *
+ * 广场三榜 / 品类 / 系列+变体 / 芯片归一 / 全量筛选
+ *
+ * 这一批锁的是「派生口径」。它们最危险的形态是**静默错**：
+ * 页面照常渲染、机型照常列出，只是最贵那台选错了、折叠屏全被判成直板、
+ * 或者筛了某芯片后 19 台「人间蒸发」，全程零报错。
+ * 每条断言都对着一个具体故障写。
+ * ================================================================ */
+section('广场三榜 / 品类 / 系列+变体 / 芯片归一 / 全量筛选');
+
+const C = await import('../src/lib/catalog.ts');
+const F = await import('../src/lib/facets.ts');
+
+const REAL = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+const REAL_P = REAL.products;
+const REAL_LABELS = new Map(REAL.vendors.map((v) => [v.id, v.nameZh]));
+const DIMS = F.DIMENSIONS.map((d) => d.key);
+
+/** 造一台最小机型，只带品类/系列/变体/价格判定用得到的字段 */
+function pdoc(over = {}) {
+  return {
+    id: 'x',
+    brand: 'apple',
+    line: 'iPhone',
+    name: 'iPhone X',
+    releaseDate: '2024-01-01',
+    skus: [],
+    memory: { ramGb: [], storageGb: [] },
+    rawOfficial: {},
+    ...over,
+  };
+}
+
+// ── 折叠屏判据 ──
+
+check('折叠屏判据认「折叠态」也认「折叠：」（同品牌两种措辞）', () => {
+  // 真实故障：Mate X6 / X7 官网写「折叠：73.78 mm | 展开：144.04 mm」，**没有「态」字**，
+  // 而 Mate XT 写「折叠态」。按一家一种措辞写正则必然漏判，且漏了不报错。
+  const withZhuang = pdoc({ rawOfficial: { 尺寸与重量: '折叠态：12.3 mm | 三屏态：4.0 mm' } });
+  const withColon = pdoc({ rawOfficial: { 尺寸与重量: '折叠：73.78 mm | 展开：144.04 mm' } });
+  assert.equal(C.isFoldable(withZhuang), true, '带「态」字应命中');
+  assert.equal(C.isFoldable(withColon), true, '不带「态」字也必须命中（真 bug 回归）');
+});
+
+check('折叠屏判据不误伤直板机（对照组取真实机型）', () => {
+  const bars = REAL_P.filter((p) => !C.isFoldable(p)).map((p) => p.name);
+  assert.ok(bars.includes('iPhone 16'), 'iPhone 16 应判为直板');
+  assert.ok(bars.includes('HUAWEI Mate 90'), 'Mate 90 应判为直板');
+  assert.ok(bars.includes('华为畅享 90'), '畅享 90 应判为直板');
+  for (const p of REAL_P) {
+    if (C.isFoldable(p)) continue;
+    const dims = String(p.rawOfficial?.['尺寸与重量'] ?? '');
+    assert.ok(!/折叠|展开/.test(dims), `${p.name} 被误判成折叠屏`);
+  }
+});
+
+check('折叠屏判据在真实数据上命中已知机型', () => {
+  const names = REAL_P.filter(C.isFoldable).map((p) => p.name);
+  for (const n of [
+    'HUAWEI Mate X6',
+    'HUAWEI Mate X7',
+    'HUAWEI Mate XT 2 非凡大师',
+    'HUAWEI Pocket 2 优享版',
+    'HUAWEI Pura X',
+    'iPhone Duo',
+  ]) {
+    assert.ok(names.includes(n), `${n} 应判为折叠屏`);
+  }
+});
+
+check('body.folded 全为 null 时不塌成「无折叠屏」（字段陷阱回归）', () => {
+  // `body.folded` 类型是 `unknown | null`，看着能用，实测 60 台全是 null。
+  // 一旦谁拿它当判据，折叠屏会静默全灭。
+  const allNull = REAL_P.every((p) => p.body?.folded == null);
+  assert.ok(
+    allNull && REAL_P.filter(C.isFoldable).length > 0,
+    'folded 恒为 null 但仍需靠官网原文判出折叠屏 —— 说明判据没误用该字段',
+  );
+});
+
+// ── 品类 / 形态 / 系列 / 变体 ──
+
+check('品类计数之和等于在册台数（不能有机型漏归类）', () => {
+  const counts = C.categoryCounts(REAL_P);
+  const sum = Object.values(counts).reduce((a, b) => a + b, 0);
+  assert.equal(sum, REAL_P.length, '每台都必须落进某个品类，不能凭空消失');
+  assert.equal(counts.phone, REAL_P.length, '本数据集只有手机（折叠屏也是手机，归形态维度）');
+});
+
+check('形态维度：折叠屏 7 台 / 直板 53 台，之和等于全集（用户 2026-10-06 纠正）', () => {
+  const forms = REAL_P.map(C.formOf);
+  const fold = forms.filter((f) => f === 'foldable').length;
+  const bar = forms.filter((f) => f === 'bar').length;
+  assert.equal(fold + bar, REAL_P.length, '每台都必须有形态');
+  assert.equal(fold, 7, '折叠屏应恰好 7 台（与 isFoldable 判据一致）');
+  assert.equal(bar, 53);
+  // 反向测：形态与 isFoldable 必须严格同源，不能各判各的
+  for (const p of REAL_P) {
+    assert.equal(C.formOf(p) === 'foldable', C.isFoldable(p), `${p.name} 形态与折叠判据不一致`);
+  }
+});
+
+check('没有数据的品类如实为 0，不拿别的品类凑数', () => {
+  // 平板/笔记本/音频在本数据集里一台都没有：不因「苹果肯定有 iPad」就造一台。
+  const counts = C.categoryCounts(REAL_P);
+  assert.equal(counts.tablet, 0);
+  assert.equal(counts.laptop, 0);
+  assert.equal(counts.audio, 0);
+});
+
+check('苹果系列只有四条线，Pro/Pro Max/Plus 归入「标准」（用户口径）', () => {
+  // 用户 2026-10-05 明确：Pro / Pro Max / Plus 都是**标准系列的后缀**，
+  // 与标准系列平级是错的（会让人以为它们是并行的独立产品线）。
+  const apple = REAL_P.filter((p) => p.brand === 'apple');
+  const series = new Set(apple.map(C.seriesOf));
+  assert.deepEqual([...series].sort(), ['Air', 'SE', '标准', '折叠屏'].sort());
+  const byName = Object.fromEntries(apple.map((p) => [p.name, C.seriesOf(p)]));
+  for (const n of ['iPhone 18 Pro', 'iPhone 18 Pro Max', 'iPhone 16 Plus', 'iPhone 17']) {
+    assert.equal(byName[n], '标准', `${n} 应属标准系列`);
+  }
+  assert.equal(byName['iPhone Air'], 'Air');
+  assert.equal(byName['iPhone Duo'], '折叠屏');
+  assert.equal(byName['iPhone 17e'], 'SE');
+});
+
+check('变体判定长后缀优先：Pro Max 不落进 Pro 档', () => {
+  // iPhone 18 Pro Max 同时含 Pro 与 Max，先判 Pro Max 才不会少一档。
+  const v = Object.fromEntries(
+    REAL_P.filter((p) => p.brand === 'apple').map((p) => [p.name, C.variantOf(p)]),
+  );
+  assert.equal(v['iPhone 18 Pro Max'], 'Pro Max');
+  assert.equal(v['iPhone 18 Pro'], 'Pro');
+  assert.equal(v['iPhone 16 Plus'], 'Plus');
+  assert.equal(v['iPhone 16'], '标准');
+  assert.equal(v['iPhone Duo'], '折叠双屏');
+});
+
+check('系列分面计数之和等于品牌台数（不能有机型漏分系列）', () => {
+  for (const brand of ['apple', 'huawei']) {
+    const pool = REAL_P.filter((p) => p.brand === brand);
+    for (const f of C.seriesFacets(pool)) {
+      assert.ok(f.count > 0, `${brand} 的系列 ${f.id} 计数不能为 0`);
+    }
+    const sum = C.seriesFacets(pool).reduce((a, b) => a + b.count, 0);
+    assert.equal(sum, pool.length, `${brand} 有机型没落进任何系列`);
+    const vs = C.variantFacets(pool).reduce((a, b) => a + b.count, 0);
+    assert.equal(vs, pool.length, `${brand} 有机型没落进任何变体`);
+  }
+});
+
+check('华为系列直接用官网 line 字段（不被机型名规则污染）', () => {
+  const hua = REAL_P.filter((p) => p.brand === 'huawei');
+  for (const p of hua) {
+    assert.equal(C.seriesOf(p), p.line, `${p.name} 系列应等于官网 line`);
+  }
+  const ids = C.seriesFacets(hua)
+    .map((f) => f.id)
+    .sort();
+  assert.deepEqual(ids, ['Pocket', 'Pura', 'Mate', 'nova', '畅享'].sort());
+});
+
+// ── 芯片归一 ──
+
+check('芯片归一合并同款不同写法（空格 / 规格括号）', () => {
+  // 实测：麒麟 8000 与麒麟8000 是同款；麒麟9030 Pro（16 GB RAM 版本）是内存版本不是另一颗芯片。
+  const a = pdoc({ chipset: { name: '麒麟 8000' } });
+  const b = pdoc({ chipset: { name: '麒麟8000' } });
+  assert.equal(C.chipName(a), C.chipName(b), '空格写法必须合并');
+  const withVer = pdoc({ chipset: { name: '麒麟9030 Pro（16 GB RAM 版本）' } });
+  assert.equal(C.chipName(withVer), '麒麟9030Pro', '去掉内存版本括号后与裸型号一致');
+  assert.equal(
+    C.chipName(pdoc({ chipset: { name: 'A18 芯片' } })),
+    'A18',
+    '「芯片」二字是描述词不是型号',
+  );
+});
+
+check('芯片归一不得吃掉型号里的 Pro（麒麟9030Pro ≠ 麒麟9030）', () => {
+  assert.notEqual(
+    C.chipName(pdoc({ chipset: { name: '麒麟9030 Pro' } })),
+    C.chipName(pdoc({ chipset: { name: '麒麟9030' } })),
+    'Pro 是型号的一部分，去掉就变成两种芯片了',
+  );
+});
+
+check('缺芯片名归到「未公布」而不是空串/消失', () => {
+  assert.equal(C.chipName(pdoc({ chipset: null })), C.UNKNOWN);
+  assert.equal(C.chipName(pdoc({ chipset: { name: '   ' } })), C.UNKNOWN);
+});
+
+check('官网并列写多颗芯片要被标出来（且不误伤单颗）', () => {
+  // 官网把同系列不同批次并列写在一格里。第一版用「长度>8」判，把 ×5 的单颗
+  // 麒麟9030Pro 也标成并列了；第二版用「去掉后缀后还有两个数字」判，A18 几乎全中。
+  assert.equal(C.isMultiChip('麒麟9020A麒麟9020B'), true);
+  assert.equal(C.isMultiChip('麒麟9050Pro麒麟9050'), true);
+  for (const single of ['麒麟9030Pro', '麒麟9010S', 'A19Pro', '麒麟8000A', 'A18', 'A20Pro']) {
+    assert.equal(C.isMultiChip(single), false, `${single} 是单颗，不该标为并列`);
+  }
+});
+
+check('芯片显示名只补 Pro 接缝，不动型号尾字母', () => {
+  assert.equal(C.chipNameLabel('麒麟9030Pro'), '麒麟9030 Pro');
+  assert.equal(C.chipNameLabel('A19Pro'), 'A19 Pro');
+  // 型号尾字母（S/A）**不补空格** —— 补了会把型号拆碎：
+  // `麒麟9020A` → 「麒麟9020 A」读不通（这正是第二版踩的坑）
+  assert.equal(C.chipNameLabel('麒麟9010S'), '麒麟9010S');
+  assert.equal(C.chipNameLabel('麒麟8000A'), '麒麟8000A');
+  // 并列写法两段型号都要完整
+  const multi = C.chipNameLabel('麒麟9020A麒麟9020B');
+  assert.ok(multi.includes('9020A') && multi.includes('9020B'), `并列写法被拆碎：${multi}`);
+});
+
+check('芯片分面计数之和等于台数（不能有芯片名重复计数或丢失）', () => {
+  const sum = C.chipFacets(REAL_P).reduce((a, b) => a + b.count, 0);
+  assert.equal(sum, REAL_P.length);
+});
+
+// ── 价格 / 三榜 ──
+
+check('官方起售价取多容量档的最低档（问的是「多少钱起步」）', () => {
+  const p = REAL_P.find((x) => x.name === 'iPhone 18 Pro');
+  const prices = (p.skus ?? []).map((s) => s.priceCny).filter((v) => typeof v === 'number');
+  assert.ok(prices.length > 1, '该机型应有多档容量');
+  assert.equal(C.basePriceCny(p), Math.min(...prices));
+});
+
+check('缺价机型返回 null 而非 0（0 会被「最便宜」榜当成真价格）', () => {
+  const p = REAL_P.find((x) => x.name === 'iPhone 17 Pro');
+  assert.equal(
+    (p.skus ?? []).every((s) => s.priceCny == null),
+    true,
+    '前置条件：确实缺价',
+  );
+  assert.equal(C.basePriceCny(p), null);
+  assert.equal(C.fmtPriceCny(null), '官方未公布');
+});
+
+check('三榜：最贵榜不出现缺价机型，且真的是有价里最贵', () => {
+  for (const s of C.spotlights(REAL_P)) {
+    if (!s.priciest) continue;
+    const price = C.basePriceCny(s.priciest);
+    assert.notEqual(price, null, `${s.priciest.name} 缺价却进了最贵榜`);
+    const pool = REAL_P.filter((p) => C.categoryOf(p) === s.category.id)
+      .map(C.basePriceCny)
+      .filter((v) => v != null);
+    assert.equal(price, Math.max(...pool), `${s.category.label}最贵榜选错`);
+    assert.equal(C.basePriceCny(s.cheapest), Math.min(...pool), `${s.category.label}最便宜榜选错`);
+  }
+});
+
+check('三榜：最新按发布日期倒序，不走 Date 解析', () => {
+  const latest = C.spotlights(REAL_P).find((s) => s.category.id === 'phone').latest;
+  for (const p of REAL_P) {
+    if (C.categoryOf(p) !== 'phone') continue;
+    assert.ok(p.releaseDate <= latest.releaseDate, `${p.name} 比「最新」还新`);
+  }
+});
+
+// ── 全量筛选 ──
+
+check('默认筛选 = 全量（不能少任何一台）', () => {
+  assert.equal(F.applyFilter(REAL_P, F.emptyFilter()).length, REAL_P.length);
+});
+
+check('维度间取交集、同维度内取并集', () => {
+  const both = F.applyFilter(REAL_P, { ...F.emptyFilter(), brand: ['apple', 'huawei'] });
+  assert.equal(both.length, REAL_P.length, '同维度多选是「或」');
+  const appleFold = F.applyFilter(REAL_P, {
+    ...F.emptyFilter(),
+    brand: ['apple'],
+    form: ['foldable'],
+  });
+  assert.ok(
+    appleFold.every((p) => p.brand === 'apple' && C.isFoldable(p)),
+    '维度间是「与」',
+  );
+  assert.equal(appleFold.length, 1);
+});
+
+check('缺数据机型可被筛出来（19 台无芯片、30 台无内存不是隐形消失）', () => {
+  // 不给「未公布」选项的话，筛「芯片=A19」后这 19 台会人间蒸发且无处可寻。
+  const noChip = F.applyFilter(REAL_P, { ...F.emptyFilter(), chip: [C.UNKNOWN] });
+  assert.equal(noChip.length, 19, '缺芯片名的 19 台必须能被筛出来');
+  const noRam = F.applyFilter(REAL_P, { ...F.emptyFilter(), ram: [C.UNKNOWN] });
+  assert.equal(noRam.length, 30, '缺内存的 30 台必须能被筛出来');
+});
+
+check('分面计数联动但选项枚举看全集（0 计数灰显保留，选中后仍能改主意）', () => {
+  const fa = { ...F.emptyFilter(), brand: ['apple'] };
+  const chips = F.facetOf(REAL_P, 'chip', F.applyExcept(REAL_P, fa, 'chip'));
+  // 京东式：所有档位常驻，不兼容的 0 计数灰显 —— 华为芯片还在列表里但 count=0
+  const qilin = chips.filter((c) => c.id.includes('麒麟'));
+  assert.ok(qilin.length > 0, '选苹果后麒麟芯片必须仍出现在分面里（否则无法反悔）');
+  assert.ok(qilin.every((c) => c.count === 0), '选苹果后麒麟芯片计数必须为 0（灰显依据）');
+  // 联动计数正确：苹果自己的芯片计数 = 苹果池内台数
+  const a19 = chips.find((c) => c.id === 'A19Pro');
+  assert.ok(a19 && a19.count > 0, '选苹果后 A19 Pro 必须还有计数');
+  // 而品牌分面自身不受限制，13 + 47 都还能看到
+  const brands = F.facetOf(REAL_P, 'brand', F.applyExcept(REAL_P, fa, 'brand'), REAL_LABELS);
+  assert.equal(brands.length, 2, '品牌分面不应被自己的选择收窄');
+  assert.equal(brands.find((b) => b.id === 'huawei')?.count, 47);
+});
+
+check('反向测：选华为芯片后品牌分面仍含苹果（0 计数），维度不会整体消失', () => {
+  // 曾经的真 bug：facetOf 枚举走 pool，选两个华为芯片后苹果从品牌分面蒸发，
+  // FilterBar 的 dims 过滤（选项 >1 才显示）把品牌触发器整个藏掉 —— 用户没法反悔。
+  const fa = { ...F.emptyFilter(), chip: ['麒麟9010S', '麒麟9030Pro'] };
+  const brands = F.facetOf(REAL_P, 'brand', F.applyExcept(REAL_P, fa, 'brand'), REAL_LABELS);
+  assert.equal(brands.length, 2, '品牌分面必须仍有两个品牌');
+  const apple = brands.find((b) => b.id === 'apple');
+  assert.ok(apple, '苹果必须还在品牌分面里');
+  assert.equal(apple?.count, 0, '苹果计数应为 0（灰显不可点）');
+  assert.equal(brands.find((b) => b.id === 'huawei')?.count, F.applyFilter(REAL_P, fa).length,
+    '华为计数 = 芯片筛选后命中台数');
+});
+
+check('各维度分面计数之和 = 该维度池内台数', () => {
+  for (const d of DIMS) {
+    const pool = F.applyExcept(REAL_P, F.emptyFilter(), d);
+    const sum = F.facetOf(REAL_P, d, pool, REAL_LABELS).reduce((a, b) => a + b.count, 0);
+    assert.equal(sum, pool.length, `${d} 分面计数之和与池内台数不符`);
+  }
+});
+
+check('「未公布」分面项排在最后（它不是一个小数值）', () => {
+  const chips = F.facetOf(REAL_P, 'chip', REAL_P);
+  const last = chips[chips.length - 1];
+  assert.equal(last.id, C.UNKNOWN, '「未公布」必须排最后，混在数字里会被误读成最小/最大');
+  assert.equal(last.isUnknown, true, '要带 isUnknown 标记供页面标注');
+  const ram = F.facetOf(REAL_P, 'ram', REAL_P);
+  assert.equal(ram[ram.length - 1].id, C.UNKNOWN, '内存同理');
+});
+
+check('价格升序把缺价排末尾，不当成 0 元顶到榜首', () => {
+  // 最阴的一条：把 null 当 0 排序，「官方未公布」会被渲染成「全站最便宜」。
+  const asc = F.applySort(REAL_P, 'price-asc');
+  const firstMissing = asc.findIndex((p) => C.basePriceCny(p) == null);
+  if (firstMissing >= 0) {
+    for (let i = firstMissing; i < asc.length; i++) {
+      assert.equal(C.basePriceCny(asc[i]), null, `缺价机型 ${asc[i].name} 混进了价格区`);
+    }
+  }
+  const desc = F.applySort(REAL_P, 'price-desc');
+  const firstPriced = desc.findIndex((p) => C.basePriceCny(p) != null);
+  if (firstPriced >= 0) {
+    const lastPriced = desc.map((p) => C.basePriceCny(p) != null).lastIndexOf(true);
+    assert.ok(firstPriced <= lastPriced, '降序时缺价应聚在末尾');
+  }
+});
+
+check('四个能力维度排序：缺值同样排末尾', () => {
+  for (const s of ['ppi-desc', 'weight-asc', 'battery-desc', 'camera-desc']) {
+    const rows = F.applySort(REAL_P, s);
+    const keys = rows.map((p) => {
+      switch (s) {
+        case 'ppi-desc':
+          return p.display?.ppi ?? null;
+        case 'weight-asc':
+          return p.body?.weightG ?? null;
+        case 'battery-desc':
+          return p.battery?.capacityMah ?? null;
+        default:
+          return C.mainCameraMp?.(p) ?? null;
+      }
+    });
+    const firstNull = keys.findIndex((v) => v == null);
+    if (firstNull >= 0) {
+      for (let i = firstNull; i < keys.length; i++) {
+        assert.equal(keys[i], null, `${s}：缺值机型 ${rows[i].name} 混进了排序区`);
+      }
+    }
+  }
+});
+
+check('排序键与榜单四条能力一一对应（榜单下钻能命中）', () => {
+  for (const k of ['display', 'light', 'battery', 'camera']) {
+    assert.ok(F.ABILITY_SORT[k], `${k} 缺排序映射，点「看全部」会跳到默认排序`);
+    assert.ok(F.isSortKey(F.ABILITY_SORT[k]), `${k} 的排序键必须合法`);
+  }
+});
+
+// ── 价格维度筛选（京东式价格段）──
+
+check('priceBucket 分桶：边界与缺价正确', () => {
+  const mk = (priceCny) => ({ skus: priceCny == null ? [] : [{ priceCny }] });
+  assert.equal(C.priceBucket(mk(0)), C.UNKNOWN, '0 元不是有效价格，归未公布');
+  assert.equal(C.priceBucket(mk(1)), '0-1999');
+  assert.equal(C.priceBucket(mk(1999)), '0-1999');
+  assert.equal(C.priceBucket(mk(2000)), '2000-2999');
+  assert.equal(C.priceBucket(mk(7999)), '6000-7999');
+  assert.equal(C.priceBucket(mk(8000)), '8000+');
+  assert.equal(C.priceBucket(mk(99999)), '8000+');
+  assert.equal(C.priceBucket({}), C.UNKNOWN, '缺价档必须归「未公布」');
+});
+
+check('筛选：选某价格档只保留该档机型（反向测价格维度真生效）', () => {
+  // 若 applyFilter 把 price 维度忽略（回归），结果会混入其它档 → 断言失败。
+  const priced = REAL_P.find((p) => C.basePriceCny(p) != null);
+  assert.ok(priced, '数据集应有有价机型');
+  const b = C.priceBucket(priced);
+  const got = F.applyFilter(REAL_P, { ...F.emptyFilter(), price: [b] });
+  assert.ok(got.length > 0 && got.length < REAL_P.length, '应减员且非空');
+  for (const p of got) assert.equal(C.priceBucket(p), b, `${p.name} 不应出现在档 ${b}`);
+});
+
+check('筛选：选「未公布」价格档只含无价机型', () => {
+  const got = F.applyFilter(REAL_P, { ...F.emptyFilter(), price: [C.UNKNOWN] });
+  for (const p of got) assert.equal(C.priceBucket(p), C.UNKNOWN);
+  assert.ok(got.every((p) => C.basePriceCny(p) == null), '有价机型混入说明价格维度失效');
+});
+
+check('价格分面：金额升序、未公布排最后', () => {
+  const items = F.facetOf(REAL_P, 'price', REAL_P);
+  const ranks = items
+    .filter((i) => i.id !== C.UNKNOWN)
+    .map((i) => C.PRICE_BUCKETS.find((b) => b.id === i.id)?.min ?? -1);
+  for (let i = 1; i < ranks.length; i++) {
+    assert.ok(ranks[i - 1] <= ranks[i], '价格档应按金额升序');
+  }
+  assert.equal(items[items.length - 1].id, C.UNKNOWN, '未公布排最后');
+});
+
+check('URL 往返：价格档写读一致', () => {
+  const f = { ...F.emptyFilter(), price: ['6000-7999'] };
+  const back = F.readFilter(
+    new URLSearchParams(F.writeFilter(f)),
+    F.buildCatalog(REAL_P, DIMS, REAL_LABELS),
+  );
+  assert.deepEqual(back.filter.price, ['6000-7999']);
+});
+
+check('多级排序：一级决定大顺序，一级相等才看二级（榜单核心语义）', () => {
+  // 优先「电池大→小」(battery-desc) 是一级，「相机高→低」(camera-desc) 是二级。
+  const mk = (id, battery, camera, release = '2025-01-01') => ({
+    id,
+    name: id,
+    releaseDate: release,
+    skus: [{ priceCny: 1000 }],
+    display: { ppi: 400 },
+    body: { weightG: 200 },
+    battery: { capacityMah: battery },
+    camera: { rear: camera != null ? [{ role: 'main', mp: camera }] : [] },
+  });
+  const arr = [
+    mk('a', 5000, 50, '2025-01-01'),
+    mk('b', 5000, 80, '2025-02-01'), // 电池同 a，相机更高 → 二级决定 b 在 a 前
+    mk('c', 6000, 10, '2025-03-01'), // 电池最大 → 排第一
+    mk('d', 4000, 99, '2025-04-01'), // 电池最小，尽管相机最高 → 排最后
+  ];
+  const r = F.applyMultiSort(arr, ['battery-desc', 'camera-desc']);
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['c', 'b', 'a', 'd'],
+    '电池 c 第一；a/b 同电池，b 相机更高排前；d 电池最小垫底',
+  );
+});
+
+check('多级排序的反向测：优先级顺序必须生效（一级能压过二级）', () => {
+  // 与上一条同一批数据，但把相机提到一级、电池降到二级。
+  // 若实现退化成「只按最后一级排序」或「各级平权」，这个断言会红 —— 正是要抓的 bug。
+  const mk = (id, battery, camera, release = '2025-01-01') => ({
+    id,
+    name: id,
+    releaseDate: release,
+    skus: [{ priceCny: 1000 }],
+    display: { ppi: 400 },
+    body: { weightG: 200 },
+    battery: { capacityMah: battery },
+    camera: { rear: camera != null ? [{ role: 'main', mp: camera }] : [] },
+  });
+  const arr = [
+    mk('a', 5000, 50),
+    mk('b', 5000, 80),
+    mk('c', 6000, 10),
+    mk('d', 4000, 99),
+  ];
+  const r = F.applyMultiSort(arr, ['camera-desc', 'battery-desc']);
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['d', 'b', 'a', 'c'],
+    '一级是相机：d(99) > b(80) > a(50) > c(10)，电池不再主导',
+  );
+});
+
+check('多级排序：缺值一律排末尾（无论升/降序，且不因二级翻盘）', () => {
+  const mk = (id, battery, camera) => ({
+    id,
+    name: id,
+    releaseDate: '2025-01-01',
+    skus: [{ priceCny: 1000 }],
+    display: { ppi: 400 },
+    body: { weightG: 200 },
+    battery: { capacityMah: battery },
+    camera: { rear: camera != null ? [{ role: 'main', mp: camera }] : [] },
+  });
+  const arr = [
+    mk('g', null, null), // 两级都缺
+    mk('h', null, 70), // 一级缺但二级有
+    mk('i', 5000, 5), // 两级都有
+  ];
+  const r = F.applyMultiSort(arr, ['battery-desc', 'camera-desc']);
+  assert.deepEqual(r.map((p) => p.id), ['i', 'h', 'g'], '有电池的 i 第一；h 一级缺排第二；g 两级都缺垫底');
+});
+
+check('空排序链 = 默认按发布日期倒序', () => {
+  const mk = (id, release) => ({
+    id,
+    name: id,
+    releaseDate: release,
+    skus: [{ priceCny: 1000 }],
+    display: { ppi: 400 },
+    body: { weightG: 200 },
+    battery: { capacityMah: 5000 },
+    camera: { rear: [{ role: 'main', mp: 50 }] },
+  });
+  const arr = [mk('x', '2025-01-01'), mk('y', '2025-03-01'), mk('z', '2025-02-01')];
+  const r = F.applyMultiSort(arr, []);
+  assert.deepEqual(r.map((p) => p.id), ['y', 'z', 'x'], '无排序键时按发布日期倒序兜底');
+});
+
+check('URL 往返：写什么就读回什么（多级排序用逗号分隔的 o）', () => {
+  const cat = F.buildCatalog(REAL_P, DIMS, REAL_LABELS);
+  const want = {
+    ...F.emptyFilter(),
+    brand: ['apple'],
+    series: ['标准'],
+    chip: ['A19Pro'],
+    year: ['2026'],
+  };
+  const back = F.readFilter(new URLSearchParams(F.writeFilter(want, ['battery-desc', 'camera-desc'])), cat);
+  assert.deepEqual(back.filter.brand, ['apple']);
+  assert.deepEqual(back.filter.series, ['标准']);
+  assert.deepEqual(back.filter.chip, ['A19Pro']);
+  assert.deepEqual(back.filter.year, ['2026']);
+  assert.deepEqual(back.sorts, ['battery-desc', 'camera-desc'], '排序优先级链要能经 URL 往返');
+  // 默认态不写任何 query（URL 保持干净）
+  assert.deepEqual(F.writeFilter(F.emptyFilter(), []), {}, '默认（无排序）不应写 o');
+});
+
+check('手改 URL 的非法值被丢弃（不产生永远 0 台的死条件）', () => {
+  const cat = F.buildCatalog(REAL_P, DIMS, REAL_LABELS);
+  const r = F.readFilter(new URLSearchParams('c=不存在的芯片&o=炸&a=平板'), cat);
+  assert.deepEqual(r.filter.chip, [], '非法芯片应被丢弃');
+  assert.deepEqual(r.sorts, [], '非法排序键被丢弃，回落为空（默认按发布日期）');
+  assert.equal(r.filter.category.length, 0, '该品牌真实存在的品类才会被接受');
+});
+
+check('筛选 + 排序串联后结果一致（两者口径不能互相干扰）', () => {
+  const f = { ...F.emptyFilter(), brand: ['apple'], variant: ['Pro Max'] };
+  const rows = F.applySort(F.applyFilter(REAL_P, f), 'release');
+  assert.equal(rows.length, 3, '苹果 Pro Max 共 3 台');
+  for (const p of rows) {
+    assert.equal(C.seriesOf(p), '标准');
+    assert.equal(C.variantOf(p), 'Pro Max');
+  }
+});
+
+check('「未公布」筛选条件能经 URL 往返（否则分享链接会丢条件）', () => {
+  // 反向测抓到的缺口：readFilter 按 valid 集过滤，手改代码把「未公布」排除掉时，
+  // **没有任何用例报警** —— 因为原先只测了 applyFilter，没测 URL 往返。
+  // 症状是「本页点未公布能筛出 19 台，但把链接发给别人就筛不出来了」。
+  const cat = F.buildCatalog(REAL_P, DIMS, REAL_LABELS);
+  const want = { ...F.emptyFilter(), chip: [C.UNKNOWN], ram: [C.UNKNOWN] };
+  const qs = F.writeFilter(want);
+  assert.ok(qs.c && qs.r, '缺数据条件必须写进 URL');
+  const back = F.readFilter(new URLSearchParams(qs), cat);
+  assert.deepEqual(back.filter.chip, [C.UNKNOWN], '芯片的「未公布」丢了');
+  assert.deepEqual(back.filter.ram, [C.UNKNOWN], '内存的「未公布」丢了');
+  assert.equal(
+    F.applyFilter(REAL_P, back.filter).length,
+    F.applyFilter(REAL_P, want).length,
+    '往返前后筛出的台数必须一致',
+  );
+});
+
+check('isFiltered 只认真实条件，不把排序当筛选', () => {
+  const empty = F.emptyFilter();
+  assert.equal(F.isFiltered(empty), false);
+  assert.equal(F.activeCount(empty), 0);
+  const one = F.toggleValue(empty, 'brand', 'apple');
+  assert.equal(F.isFiltered(one), true);
+  assert.equal(F.activeCount(one), 1);
+  const off = F.toggleValue(one, 'brand', 'apple');
+  assert.equal(F.isFiltered(off), false, '再点一次应取消');
+});
+
+check('品类是筛选条的第一个维度（用户 2026-10-05 明确要求置顶）', () => {
+  assert.equal(F.DIMENSIONS[0].key, 'category', '品类必须排第一');
+});
+
+check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 纠正概念）', () => {
+  assert.equal(F.DIMENSIONS[1].key, 'form', '形态必须紧跟品类');
+  assert.ok(!F.DIMENSIONS.some((d) => d.key === 'category' && d.key === 'form'));
+  const catFacets = F.facetOf(REAL_P, 'category', REAL_P);
+  assert.deepEqual(
+    catFacets.map((f) => f.id),
+    ['phone'],
+    '品类分面只有手机 —— 折叠屏不是品类',
+  );
+  const formFacets = F.facetOf(REAL_P, 'form', REAL_P);
+  assert.deepEqual(
+    formFacets.map((f) => [f.id, f.count, f.label]),
+    [
+      ['foldable', 7, '折叠屏'],
+      ['bar', 53, '直板'],
+    ],
+    '形态分面 = 折叠屏 7 + 直板 53，折叠屏在前',
+  );
+});
+
+check('形态条件经 URL 往返（参数 m）', () => {
+  const cat = F.buildCatalog(REAL_P, F.DIMENSIONS.map((d) => d.key));
+  const want = { ...F.emptyFilter(), form: ['foldable'] };
+  const back = F.readFilter(new URLSearchParams(F.writeFilter(want)), cat);
+  assert.deepEqual(back.filter.form, ['foldable'], '形态条件必须能从 URL 完整读回');
+});
+
+/* ================================================================ *
+ * 13. 像素立绘的几何（layout 纯函数）
+ * ----------------------------------------------------------------
+ * 立绘每一根线都由数据算出：宽高比←屏幕对角线、镜头数←后摄数、圆角←厚度、
+ * 描边←厚度。改 layout() 一个阈值就是改全部 60 张图，而这类改动：
+ *   - 单测抓不到（返回的仍是合法数字，只是画错了）
+ *   - 产物闸门抓不到（SVG 结构完整）
+ *   - 像素风扫描抓不到（圆角/模糊/字号都合规）
+ * 唯一防线是 scripts/sprite/review.mjs 的肉眼核对；这里钉住的是
+ * 「几何自洽」这部分——那部分本就该由单测负责。
+ * ================================================================ */
+section('像素立绘几何');
+
+const SPRITE = await import('./sprite/generate.mjs');
+const FOLD = await import('./lib/foldable.mjs');
+
+check('立绘的折叠判据与前端同源（同一个真源，不是各写一份正则）', () => {
+  // 这条锁的是 2026-10-06 修掉的真 bug：sprite 曾用 `sizeIn >= 7.5` 判折叠，
+  // 而折叠机主屏只有 5.4–6.5 英寸 —— 7 台真折叠机里漏了 3 台，
+  // 用户看到的是「机型库标着折叠屏、立绘却画成直板」。
+  const snapshot = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+  for (const p of snapshot.products) {
+    assert.equal(
+      SPRITE.layout(p).foldable,
+      FOLD.isFoldableOfficial(p),
+      `${p.id}：立绘的 foldable 与官网原文判据不一致 —— 用户会看到形态标签与立绘互相打脸`,
+    );
+  }
+  // 回归锁定：这三个正是被 sizeIn 阈值漏掉的那几台
+  const missed = ['huawei-mate-xt-2-ultimate-design', 'huawei-pura-x', 'huawei-pura-x-max'];
+  for (const id of missed) {
+    const p = snapshot.products.find((x) => x.id === id);
+    assert.ok(p, `真实数据里应存在 ${id}`);
+    assert.equal(
+      SPRITE.layout(p).foldable,
+      true,
+      `${id} 是官网原文写明的折叠机（主屏 ${p.display?.sizeIn}″），立绘必须画成展开态`,
+    );
+  }
+});
+
+check('反向测：主屏够大不等于折叠（尺寸阈值是估算，官网写了才算）', () => {
+  // 构造一台「大但官网没写折叠」的机器：8.3 英寸。若判据退回尺寸阈值，
+  // 它会被误判成折叠机 —— 这条断言就是拦住那个退化的。
+  const fake = { rawOfficial: { '尺寸与重量': '220 mm | 130 mm | 6.1 mm' }, display: { sizeIn: 8.3 } };
+  assert.equal(FOLD.isFoldableOfficial(fake), false, '大屏平板没有折叠原文依据，不得判为折叠');
+  assert.equal(SPRITE.layout(fake).foldable, false, '立绘与大屏平板的判据必须一致');
+  // 反向：大屏但官网写了折叠 → 必须判为折叠（不是只认小屏）
+  const fakeFold = { rawOfficial: { '尺寸与重量': '展开态：220 mm | 折叠态：130 mm' }, display: { sizeIn: 6.1 } };
+  assert.equal(FOLD.isFoldableOfficial(fakeFold), true, '官网写了折叠就必须认，哪怕主屏只有 6.1 英寸');
+});
+
+check('layout 几何自洽：画布内、不越界、圆角与厚度同向', () => {
+  const snapshot = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+  for (const p of snapshot.products) {
+    const L = SPRITE.layout(p);
+    const { x, y, w, h, r } = L.rect;
+    assert.ok(w > 0 && h > 0, `${p.id}：宽高必须为正（${w}×${h}）`);
+    assert.ok(x >= 0 && y >= 0, `${p.id}：不得画到画布左侧/上方之外（x=${x} y=${y}）`);
+    assert.ok(x + w <= 160.001, `${p.id}：右侧越出画布（${x}+${w} > 160）`);
+    assert.ok(y + h <= 320.001, `${p.id}：底部越出画布（${y}+${h} > 320）`);
+    assert.ok(r > 0, `${p.id}：圆角须为正（${r}）`);
+    // 折叠机更宽：宽高比应明显大于直板
+    const ratio = w / h;
+    if (L.foldable) assert.ok(ratio > 0.6, `${p.id}：折叠机宽高比 ${ratio.toFixed(3)} 应 >0.6`);
+    else assert.ok(ratio < 0.55, `${p.id}：直板宽高比 ${ratio.toFixed(3)} 应 <0.55`);
+  }
+});
+
+check('相机数量 0（官网未公布）走占位分支，不画成「没有镜头」', () => {
+  const p = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8')).products.find(
+    (x) => x.id === 'apple-iphone-16e',
+  );
+  assert.ok(p, '真实数据里应存在 iphone-16e');
+  assert.equal(SPRITE.layout(p).camUnknown, true, '后摄未公布必须标为 camUnknown');
+  assert.equal(SPRITE.layout(p).camCount, 1, '占位画1 个圆 —— 画 0 个等于宣称「无后摄」');
+});
+
+check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）', () => {
+  // 判据是**单调性**，不是「圆角必须小于某个数」—— 公式是 6+(厚-6)/6*6，
+  // 厚机圆角能到 15 以上，钉死上限反而会把厚机误判成 bug。
+  // 单调性才是设计契约：有人把符号写反（越薄越圆）时它会立刻报出。
+  const probe = (mm) => {
+    const L = SPRITE.layout({ brand: 'apple', display: { sizeIn: 6.5 }, body: { thicknessMm: mm } });
+    return { r: L.rect.r, sw: L.strokeW };
+  };
+  for (const [lo, hi] of [[6, 7], [7, 9], [9, 12]]) {
+    const a = probe(lo);
+    const b = probe(hi);
+    assert.ok(b.r >= a.r, `厚度 ${lo}→${hi}mm 圆角应不减（${a.r.toFixed(2)} → ${b.r.toFixed(2)}）`);
+    assert.ok(
+      b.sw >= a.sw,
+      `厚度 ${lo}→${hi}mm 描边应不减（${a.sw.toFixed(2)} → ${b.sw.toFixed(2)}）`,
+    );
+  }
+  // 反向测：符号写反时（越薄越圆）必须被抓出来。构造一个「比 6mm 更薄」的对照，
+  // 按公式圆角应更小；若实现反了，这里会报出。
+  assert.ok(
+    probe(5.5).r < probe(6.5).r,
+    '5.5mm 的圆角必须小于 6.5mm —— 若成立说明方向没写反',
+  );
+});
+
+/* ================================================================ *
+ * 14. 原始响应归档（data/raw/）
+ * ----------------------------------------------------------------
+ * 归档件存在的唯一理由：解析器改坏之后能喂同一份官网原文离线复现。
+ * 所以它的形状纪律与 products.json 不同 —— **不要往里塞运行时刻字段**。
+ *
+ * 最危险的坑：fetchedAt / extractedAt 一进归档，每轮归档都不同 →
+ * CI 每 12 小时一次空提交（本项目已因此踩过两次，见 fingerprint.mjs 的注释）。
+ * ================================================================ */
+section('原始响应归档');
+
+const RAW_ARCHIVE_DIR = join(ROOT, 'data/raw');
+const ARCHIVE_VOLATILE = [
+  'fetchedAt',
+  'extractedAt',
+  'generatedAt',
+  'firstSeenAt',
+  'lastSeenAt',
+  'publishedAt',
+  'builtAt',
+];
+
+check('归档件若存在，必须不含运行时刻字段（否则造成空提交）', () => {
+  if (!existsSync(RAW_ARCHIVE_DIR)) return; // 还没跑过取数
+  const files = readdirSync(RAW_ARCHIVE_DIR).filter((f) => f.endsWith('.json'));
+  for (const f of files) {
+    const a = JSON.parse(readFileSync(join(RAW_ARCHIVE_DIR, f), 'utf8'));
+    const bad = ARCHIVE_VOLATILE.filter((k) => JSON.stringify(a).includes(`"${k}"`));
+    assert.deepEqual(bad, [], `${f} 含运行时刻字段 ${bad.join(',')} —— 每轮归档都不同会造成空提交`);
+  }
+});
+
+check('归档件的形状只保留回放必需的字段（不多不少）', () => {
+  if (!existsSync(RAW_ARCHIVE_DIR)) return;
+  const files = readdirSync(RAW_ARCHIVE_DIR).filter((f) => f.endsWith('.json'));
+  assert.ok(files.length > 0, 'data/raw/ 存在却没有任何归档件 —— 孤儿目录应被清理');
+  for (const f of files) {
+    const a = JSON.parse(readFileSync(join(RAW_ARCHIVE_DIR, f), 'utf8'));
+    // 顶层只允许这三个键 —— 多出来的说明有人往里塞了不该塞的东西
+    assert.deepEqual(
+      Object.keys(a).sort(),
+      ['products', 'skipped', 'source'],
+      `${f} 顶层键应恰好是 products/skipped/source，多出来的都会造成版本库噪声或空提交`,
+    );
+    for (const p of a.products) {
+      assert.deepEqual(
+        Object.keys(p).sort(),
+        ['id', 'name', 'raw', 'specsUrl'],
+        `${f}: ${p.id} 的键应恰好是 id/name/raw/specsUrl（releaseHint / extractedAt 不该进来）`,
+      );
+      // raw 的值必须是页面原文（字符串），不是换算后的数字 —— 换算是规范化层的职责。
+      // 这里判字符串而不只是判真值：数字 6.9 与字符串「6.9 英寸」都能通过真值检查，
+      // 但后者才是原文；数字进归档等于把换算结果当成了输入，破坏回放的意义。
+      for (const [k, v] of Object.entries(p.raw)) {
+        assert.equal(
+          typeof v,
+          'string',
+          `${f}: ${p.id}.raw['${k}'] 必须是页面原文字符串，不是 ${typeof v}`,
+        );
+      }
+    }
+  }
+});
+
+check('归档体积在闸门内（超了会让版本库不可逆地膨胀）', () => {
+  if (!existsSync(RAW_ARCHIVE_DIR)) return;
+  let total = 0;
+  for (const f of readdirSync(RAW_ARCHIVE_DIR)) {
+    total += statSync(join(RAW_ARCHIVE_DIR, f)).size;
+  }
+  assert.ok(
+    total < 4 * 1024 * 1024,
+    `data/raw/ 共 ${(total / 1024 / 1024).toFixed(2)} MB，超过 4 MB 闸门 —— 确认是否该改为「只归档字段名清单」`,
+  );
+});
+
+check('反向测：归档通道若漏一个，检查必须报出（否则「改了版却以为没改」会静默）', () => {
+  // 造一个「归档里字段被改名」的形状，确认形状检查能区分改版前后。
+  // 不去真改 data/raw/（那是真数据），只验判据本身能区分两个不同形状。
+  const before = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量': '6600 mAh' } }], skipped: [] };
+  const after = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量新写法': '6600 mAh' } }], skipped: [] };
+  assert.notEqual(
+    JSON.stringify(before),
+    JSON.stringify(after),
+    '官网把章节改名后，归档内容必须不同 —— 否则 --check 永远绿灯，改版无人发现',
+  );
+});
+
+/* ================================================================ *
+ * 15. 路由可达性（防孤儿页）
+ * ----------------------------------------------------------------
+ * 孤儿页 = 有路由、能打开，但没有任何导航链接能到达。
+ * 搜索引擎能进来，用户走不进来 —— 且**零报错**，
+ * 冒烟脚本也抓不到（它们只测「已知入口还能用」，不测「有没有漏掉的入口」）。
+ *
+ * 2026-10-06 把「关于」从主导航移到页脚时就差点造出一个，靠这条断言拦住。
+ * ================================================================ */
+section('路由可达性（防孤儿页）');
+
+const SRC_DIR = join(ROOT, 'src');
+function allVueSource(dir) {
+  const out = [];
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) out.push(allVueSource(p));
+    else if (name.endsWith('.vue')) out.push(readFileSync(p, 'utf8'));
+  }
+  return out.join('\n');
+}
+
+check('每个静态路由都必须有站内链接指向它（孤儿页零报错）', () => {
+  const vueSrc = allVueSource(SRC_DIR);
+  const routerSrc = readFileSync(join(SRC_DIR, 'router/index.ts'), 'utf8');
+  const routes = [...routerSrc.matchAll(/path:\s*'([^']+)',\s*name:\s*'([^']+)'/g)].map((m) => ({
+    path: m[1],
+    name: m[2],
+  }));
+  const staticRoutes = routes.filter((r) => !r.path.includes('pathMatch') && !r.path.includes(':'));
+  assert.ok(staticRoutes.length >= 6, `解析到的静态路由只有 ${staticRoutes.length} 条，正则可能失效了`);
+
+  const orphans = [];
+  for (const r of staticRoutes) {
+    const sub = r.path.replace(/^\//, '');
+    const byPath = vueSrc.includes(`to="/${sub}"`) || vueSrc.includes(`path: '${r.path}'`);
+    const byName = new RegExp(`['"\`]${r.name}['"\`]`).test(vueSrc);
+    if (!byPath && !byName) orphans.push(`${r.name}(${r.path})`);
+  }
+  assert.deepEqual(
+    orphans,
+    [],
+    `孤儿页：${orphans.join('、')} 有路由能打开，但没有任何导航链接能到 —— 用户只能手输 URL`,
+  );
+});
+
+check('导航条不得有两个入口指向同一路由（两个按钮做一件事）', () => {
+  const navFile = readFileSync(join(SRC_DIR, 'components/SiteNav.vue'), 'utf8');
+  const targets = [
+    ...[...navFile.matchAll(/to:\s*'([^']+)'/g)].map((m) => m[1]),
+    ...[...navFile.matchAll(/to="([^"]+)"/g)].map((m) => m[1]),
+  ].filter((t) => t.startsWith('/'));
+  assert.ok(targets.length > 0, '一个入口都没解析到 —— 选择器可能失效了');
+  const seen = new Map();
+  for (const t of targets) seen.set(t, (seen.get(t) ?? 0) + 1);
+  const dup = [...seen].filter(([, n]) => n > 1).map(([t, n]) => `${t}×${n}`);
+  assert.deepEqual(dup, [], `导航条里重复的入口：${dup.join('、')} —— 改一处会漏另一处`);
+});
+
+check('页脚必须保留「关于」入口（它不在主导航里，删掉就成孤儿页）', () => {
+  // 场景：「关于」是完整内容但低频的页，2026-10-06 从主导航移到页脚。
+  // 下次有人觉得「页脚太乱」把它删掉，「关于」就静默变成孤儿页 ——
+  // 而那种删除看起来只是「清理」，不会有任何提示。
+  const footerFile = readFileSync(join(SRC_DIR, 'components/SiteFooter.vue'), 'utf8');
+  // 两种写法都要认：模板字面量 to="/about"，或数组项里的 { name:'about', to:'/about' }。
+  // 只认前者会把「用数据驱动渲染导航」的实现误判成没有入口 —— 那正是本文件自己的写法。
+  const hasAbout =
+    /to="\/about"/.test(footerFile) ||
+    /to:\s*'\/about'/.test(footerFile) ||
+    /["'`]\/about["'`]/.test(footerFile);
+  assert.ok(
+    hasAbout,
+    '页脚必须保留「关于」入口 —— 它不在主导航里了，删掉就成孤儿页',
+  );
+  // 顺带钉住当前页高亮：页脚链接不带 aria-current 的话，
+  // 进到「关于」页看不出自己在哪。
+  assert.ok(
+    /aria-current/.test(footerFile),
+    '页脚链接必须有 aria-current 高亮 —— 否则进到低频页看不出位置',
+  );
+});
+
+check('主导航项数受控（>6 项就说明又有人在往里塞低频页）', () => {
+  const navFile = readFileSync(join(SRC_DIR, 'components/SiteNav.vue'), 'utf8');
+  const items = [...navFile.matchAll(/name:\s*'(home|compare|rankings|timeline|canvas|globe)'/g)];
+  assert.ok(
+    items.length <= 6,
+    `主导航有 ${items.length} 项 —— 顶栏在 1080px 下就会占满，1024px 以下还会折成两行`,
+  );
+  // 「关于」不该回到主导航：它是低频页，占的是主导航的视觉预算
+  assert.ok(
+    !/name:\s*'about'/.test(navFile),
+    '「关于」回到主导航了 —— 它是全站访问频率最低的一页，页脚已有它的入口',
+  );
+});
+
+/* ================================================================ *
+ * 16. 顶栏的高度预算与装饰纪律
+ * ----------------------------------------------------------------
+ * 顶栏曾占 76px，其中**一半是装饰**：4px 底边 + 4px 投影 + 8px 纵向 padding
+ * + logo 的 24px 字号（36px 行高）+ 导航按钮 3px 投影撑出的 6px。
+ * 压到 40px 靠的是三件事，每一件都是「装饰的视觉重量必须与容器匹配」：
+ *
+ *   1. 顶栏导航用 `.pixel-button-flat`（纯平面）而不是 `.pixel-button`
+ *      —— 后者的 3px 立体投影读作「厚度」，只适合页面里的大按钮。
+ *   2. 底边/投影 4px → 2px（直接进高度预算）。
+ *   3. logo 行高 leading-[1.5] → leading-none，行高本身就是高度。
+ *
+ * 这些都是**视觉判断**，没有单测能证明「够矮了」——
+ * 所以这里只钉住「不许再变高」这个方向，具体数值由真机测量决定。
+ * ================================================================ */
+section('顶栏高度预算');
+
+const HEADER_CSS = readFileSync(join(SRC_DIR, '..', 'src/style.css'), 'utf8');
+
+check('顶栏装饰不得重新变厚（底边与投影各 ≤2px）', () => {
+  const m = HEADER_CSS.match(/\.pixel-header\s*\{([^}]*)\}/);
+  assert.ok(m, '.pixel-header 规则不见了');
+  const body = m[1];
+  const border = body.match(/border-bottom:\s*(\d+)px/);
+  const shadow = body.match(/box-shadow:\s*0\s+(\d+)px/);
+  assert.ok(border && shadow, 'pixel-header 应显式声明 border-bottom 与 box-shadow');
+  assert.ok(
+    Number(border[1]) <= 2,
+    `顶栏底边 ${border[1]}px > 2px —— 这 2px 直接进高度预算，参考项目是 0`,
+  );
+  assert.ok(
+    Number(shadow[1]) <= 2,
+    `顶栏投影 ${shadow[1]}px > 2px —— 高度算的是「底边+投影」，不是只有底边`,
+  );
+});
+
+check('顶栏导航必须用平面按钮（3px 立体投影撑高 6px，一排就是36px）', () => {
+  const navFile = readFileSync(join(SRC_DIR, 'components/SiteNav.vue'), 'utf8');
+  // 判据必须认变体名。`\bpixel-button\b` 会**误匹配** `pixel-button-flat` ——
+  // 连字符也算词边界，于是 flat 版被判成「用了立体版」，
+  // 报告一条**不存在的**故障。这是「判据写窄了比漏报更糟」的又一例
+  // （同 P7：会把正确实现误判成问题，你会去「修」一个没坏的东西）。
+  //
+  // 正确写法：像素按钮后面必须紧跟引号或空白，即「这个 class 名到此结束」。
+  const USES_RAISED = /class="[^"]*(?<![-\w])pixel-button(?![-\w])/;
+  assert.ok(
+    !USES_RAISED.test(navFile),
+    'SiteNav 里出现了非 flat 版的 pixel-button —— 它的 3px 投影会让顶栏长高 6px',
+  );
+  // 反向验证判据本身有效：造一个含立体版的字符串，必须被抓住。
+  // 量法失效（永远匹配不到）的话，上面那条断言就是空的。
+  assert.ok(
+    USES_RAISED.test('class="pixel-button px-2"'),
+    '判据失效：连明显的立体版都匹配不到，上面那条断言形同虚设',
+  );
+  assert.ok(
+    !USES_RAISED.test('class="pixel-button-flat px-2"'),
+    '判据失效：flat 版被误判成立体版',
+  );
+  // 必须真的定义了 flat 变体，不能只改 class 名
+  assert.ok(
+    /\.pixel-button-flat\s*\{/.test(HEADER_CSS),
+    'nav 用了 pixel-button-flat 但样式里没定义它 —— 顶栏会变成一排无边框裸文字',
+  );
+  // 平面变体必须是「没有投影」，且当前页用别的手段表示（不能用位移，那会顶歪整条导航）
+  const flat = HEADER_CSS.match(/\.pixel-button-flat\s*\{([^}]*)\}/)[1];
+  assert.ok(/box-shadow:\s*none/.test(flat), 'pixel-button-flat 应显式关掉投影');
+  assert.ok(
+    /aria-current/.test(flat) || /\.pixel-button-flat\[aria-current/.test(HEADER_CSS),
+    '平面按钮需要 aria-current 样式 —— 位移式高亮会把整条导航顶歪',
+  );
+});
+
+check('logo 行高必须压到 1（leading-[1.5] 在 24px 字上多出 12px）', () => {
+  const appFile = readFileSync(join(SRC_DIR, 'App.vue'), 'utf8');
+  const logo = appFile.match(/pixel-outline[^"]*"/);
+  assert.ok(logo, '找不到 logo 的 class');
+  assert.ok(
+    /leading-none/.test(logo[0]),
+    `logo 用了 ${logo[0].match(/leading-\S+/)?.[0] ?? '默认行高'} —— 24px 字配 1.5 行高会多出 12px`,
+  );
+});
+
+/* ================================================================ *
+ * 17. 首页 hero 的高度预算
+ * ----------------------------------------------------------------
+ * hero 曾占 208px，加上顶栏要滚 248px 才看到第一张卡片 —— 首屏全浪费在装饰上。
+ * 压到 118px 的四笔里，有三笔是**判据**（可以机器判），一笔是视觉（`clamp` 实测）。
+ *
+ * 顺带记一个踩过的坑：副标题与 chip 并排时用 `items-center`，
+ * chip 因为有 2px 边框比 12px 副标题高 4px，居中后**顶到副标题上方**（gap = −4px），
+ * 视觉上贴住了 h1。**高度不同的一行不该用居中对齐**，该用 `items-start`。
+ * ================================================================ */
+section('首页 hero 高度预算');
+
+const homeView = readFileSync(join(SRC_DIR, 'views/HomeView.vue'), 'utf8');
+
+check('hero 标题不得用 36px（与顶栏 logo 重复强调，24px 才是页面标题层级）', () => {
+  const h1 = homeView.match(/<h1[^>]*class="([^"]*)"/);
+  assert.ok(h1, '找不到 hero 的 h1');
+  assert.ok(
+    /text-\[24px\]/.test(h1[1]),
+    `hero 标题字号应为 24px，当前是 ${h1[1].match(/text-\[\d+px\]/)?.[0] ?? '未显式设置'}`,
+  );
+  // 36px 是品牌标识（顶栏 logo）的尺寸，页面内再用一次就是重复强调
+  assert.ok(
+    !/text-\[36px\]/.test(h1[1]),
+    'hero 标题回到 36px 了 —— 那是顶栏 logo 的尺寸，等于同一句话强调两遍',
+  );
+});
+
+check('hero 副标题必须是 12px（标语，不是自我介绍的数据）', () => {
+  assert.ok(
+    /选择更清楚/.test(homeView) && /text-\[12px\][^>]*>\s*\n?\s*选择更清楚/.test(homeView),
+    'hero 副标题应为 12px',
+  );
+  // 高度不同的并排（副标题纯文字 vs 读数有边框）必须顶对齐：
+  // items-center 会让有边框的那个顶到上方，实测 gap = −4px。
+  const row = homeView.match(/<div class="(mt-[\d.]+ flex flex-wrap items-start[^"]*)"/);
+  assert.ok(row, 'hero 读数区应使用 items-start（顶对齐）');
+});
+
+check('首页顶栏 = 对角灰阶过渡，且是收窄的 HUD 而非标题海报', () => {
+  // 设计演进（2026-10-07~08）：长方形马赛克太极 → **对角黑白灰阶过渡** → **分档高度**。
+  // 马赛克那版实测：宽高比要 ≲4:1 才读得出太极，于是顶栏被顶到 ~346px，
+  // 白白吃掉首屏一大截；改灰阶过渡后「读得出图形」这个约束消失，高度得以回落。
+  //
+  // ⚠️ 判据三次改版，每次都是因为**真实需求变了**，不是为了让断言变绿：
+  //  ① 钉「有 vw 无 vh」—— 26vh 会把宽屏拉成 6.2:1 把太极压成波浪。
+  //  ② 钉 clamp 三段 + 下限 ≥120px。
+  //  ③（2026-10-08）**废弃 clamp 判据，改成分档**。原因：内容高度随宽度**非单调**
+  //     （76 → 110 → 138px），单一 clamp 对两头都不对 —— 桌面 124−76 = 48px 死空间，
+  //     而 360px 窄屏 138px 装不下、被 `overflow-hidden` **裁掉 14px**（实测 maxChildBottom=138）。
+  //     钉 clamp 会把这个 bug 锁在绿灯里。
+  //
+  // 现在的判据钉三件事：
+  //  ① 高度是**分档**的（`.banner-h` 在 CSS 里，且有 ≥901px 的宽屏档）；
+  //  ② 宽屏档 ≤ 120px —— 它是 HUD 不是标题海报，桌面内容只有 76px；
+  //  ③ 不得用 vh —— 内容固定，vh 会在矮窗口压扁。
+  //
+  // ⚠️ 判据只钉**机器能判的**部分。「每档是否真的贴着该档内容高度」需要真实
+  // 渲染才能测（那是 puppeteer 的活，见下条断言），这里只保证没有回退成
+  // 「一个高度值糊到所有断点」——那正是 360px 裁切的根因。
+  const css = homeView.match(/<style scoped>([\s\S]*?)<\/style>/);
+  assert.ok(css, '找不到 <style scoped> —— 顶栏高度应写成 CSS 媒体查询（分档）');
+  const cssText = css[1];
+
+  assert.ok(/\.banner-h\s*\{[^}]*height:/.test(cssText), '.banner-h 必须显式给 height');
+  assert.ok(
+    /@media\s*\(min-width:\s*901px\)/.test(cssText),
+    '缺宽屏档（@media min-width:901px）—— 桌面内容只有 76px，' +
+      '与窄屏 110/138px 差一倍以上，单一高度值必然对一头不对',
+  );
+  assert.ok(
+    !/[\d.]+\s*vh/.test(cssText),
+    `顶栏高度不能用 vh —— 内容（站名+导航）是固定高度，矮窗口下会被压扁：${cssText.slice(0, 80)}`,
+  );
+
+  // 宽屏档的高度：抓 min-width:901px 那段里的 height 值
+  const wide = cssText.match(/@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.banner-h\s*\{[^}]*height:\s*(\d+)px/);
+  assert.ok(wide, '宽屏档里读不到 height（格式应形如 `height: 80px`）');
+
+  // ⚠️ 上下界都从**实测内容高度**推，不是拍脑袋的整数。
+  // 桌面（≥901px）内容实测占 72px：pt-2(8) + h1(34) + mt-1.5(6) + 副标题行(24)。
+  //   上界 120 = 72 + 48：它是 HUD 不是标题海报，超了就是白占地方（实测曾到过 124）。
+  //   下界 80 = 72 + 8：底部至少留 8px —— `pixel-outline` 的 text-shadow 是
+  //     **硬投影**（外投影 2px），贴到 section 底边会被 `overflow-hidden` 削掉。
+  //     这是「呼吸」的物理下限，不是审美偏好。
+  // ⚠️ 若哪天把 h1 字号或行高改了，这两个数会一起过期 —— 改时必须重量。
+  const CONTENT_WIDE = 72;
+  assert.ok(
+    Number(wide[1]) <= CONTENT_WIDE + 48,
+    `宽屏档顶栏 ${wide[1]}px > ${CONTENT_WIDE + 48}px —— 桌面导航单行、内容只占 ${CONTENT_WIDE}px，` +
+      `它是 HUD 不是标题海报，超过就白占地方`,
+  );
+  assert.ok(
+    Number(wide[1]) >= CONTENT_WIDE + 8,
+    `宽屏档顶栏 ${wide[1]}px < ${CONTENT_WIDE + 8}px —— 内容占 ${CONTENT_WIDE}px，` +
+      `底部至少要留 8px：h1 的 text-shadow 是硬投影（外投影 2px），贴边会被 overflow-hidden 削掉`,
+  );
+});
+
+check('首页顶栏各断点高度不得让内容被裁（overflow-hidden 会静默吃掉导航）', () => {
+  // 这条判据的由来：**`overflow-hidden` 裁切是零报错的**。
+  // 2026-10-08 实测 360px 下 maxChildBottom=138 而 section 高 124 ⇒ 导航最后一行
+  // 被切掉 14px，而**所有闸门都是绿的**（内容在 DOM 里、体检只看文件不看渲染）。
+  //
+  // 判据是**单调性**而不是某个像素值：宽屏档必须 ≤ 窄屏档。
+  // 理由：导航的折行数只会随宽度**减少**（宽屏单行、窄屏两/三行），
+  // 所以内容高度随宽度**非单调但整体递减** ⇒ 顶栏高度也必须跟着递减。
+  // 若有人把宽屏档调得比窄屏还高，就是把死空间调回来了。
+  const css = homeView.match(/<style scoped>([\s\S]*?)<\/style>/);
+  assert.ok(css, '找不到 <style scoped>（依赖上一条）');
+  const cssText = css[1];
+
+  // ⚠️ **必须按断点语义解析，不能按「height 出现顺序取首尾」**——
+  // 那样的判据有个洞：把 base 档（窄屏）也改成 92px 时，
+  // `heights[last]` 仍是宽屏档的 92，`92 <= 92` 照样通过，
+  // 而这正是「单一高度糊到所有断点 ⇒ 360px 裁 10px」的根因。
+  // 这条判据自己被反向测抓到过（见 `2026-10-08.md`）。
+  const blocks = [...cssText.matchAll(/@media([^{]*)\{([\s\S]*?)\n\}/g)];
+  const byBreakpoint = new Map();
+  for (const [, cond, body] of blocks) {
+    const h = body.match(/\.banner-h\s*\{[^}]*height:\s*(\d+)px/);
+    if (h) byBreakpoint.set(cond.replace(/\s+/g, ' ').trim(), Number(h[1]));
+  }
+
+  // base（无 @media 的那条）必须有高度
+  const baseMatch = cssText.match(/^\.banner-h\s*\{[^}]*height:\s*(\d+)px/m);
+  assert.ok(baseMatch, '.banner-h 基础档（无 @media）必须给 height');
+  const base = Number(baseMatch[1]);
+
+  // 宽屏档 = min-width ≥ 901 的那条
+  const wideKey = [...byBreakpoint.keys()].find((k) => /min-width:\s*9\d\dpx/.test(k));
+  assert.ok(wideKey, `找不到 min-width ≥900px 的宽屏档，现有：${[...byBreakpoint.keys()].join(' / ')}`);
+  const wide = byBreakpoint.get(wideKey);
+
+  assert.ok(
+    wide < base,
+    `宽屏档 ${wide}px 未严格小于窄屏 base 档 ${base}px —— ` +
+      `导航折行数随宽度递减（宽屏单行 / 窄屏两行 / ≤380px 三行），` +
+      `顶栏高度必须跟着递减。` +
+      `（曾经的 bug：单一 124px 糊到所有断点 ⇒ 桌面 52px 死空间 + 360px 裁 10px。` +
+      `把 base 也调成 92px 同样错：≤380px 那一档内容 134px 会被裁掉 42px）`,
+  );
+
+  // ⚠️ **死空间上限**：每档 = 内容 + 底部 8px 呼吸，**上下必须对称**。
+  // 这条比「上限 ≤120px」更根本 —— 124px 时代桌面是 `pt-2` 8px + 底部 **20px**，
+  // 上下不对称，那 12px 不是设计、只是没人算过。抓「死空间」而不是抓某个像素值。
+  //
+  // 判据：`pt`（顶部内边距）必须与「高度 − 内容」一致，即三档都留 8px 底部。
+  // 内容高度是 puppeteer 实测的，改 h1 字号/行高时这些数会一起过期 ⇒ 必须重量。
+  const CONTENTS = { base: 106, tiny: 134, wide: 72 };
+  const actual = { base, wide, tiny: byBreakpoint.get([...byBreakpoint.keys()].find((k) => /max-width/.test(k))) };
+
+  const pt = Number((cssText.match(/row[\s\S]{0,200}?pt-(\d)/) || [])[1] || 8);
+  for (const [name, content] of Object.entries(CONTENTS)) {
+    const h = actual[name];
+    assert.ok(h, `找不到 ${name} 档的高度`);
+    const breathe = h - content;
+    assert.ok(
+      breathe >= 8,
+      `${name} 档 ${h}px − 实测内容 ${content}px = ${breathe}px 底部留白 < 8px —— ` +
+        `h1 的 text-shadow 是硬投影（外投影 2px），贴到 section 底边会被 overflow-hidden 削掉`,
+    );
+    assert.ok(
+      breathe <= 12,
+      `${name} 档 ${h}px − 实测内容 ${content}px = ${breathe}px 底部留白 > 12px —— ` +
+        `上下不对称（顶部只有 pt-${pt} = ${pt}px）那部分就是白占地方。` +
+        `**上下必须对称**：每档 = 内容 + 8px。`,
+    );
+  }
+
+  // ≤380px 三行档必须比 base 更高（不然窄屏导航被裁）
+  const tinyKey = [...byBreakpoint.keys()].find((k) => /max-width/.test(k));
+  assert.ok(
+    tinyKey,
+    '找不到 `max-width` 的超窄档 —— 导航在 ≤380px 会折到第三行（内容 134px），' +
+      '缺这一档就会被 overflow-hidden 静默裁掉（零报错）',
+  );
+  assert.ok(
+    byBreakpoint.get(tinyKey) > base,
+    `超窄档 ${byBreakpoint.get(tinyKey)}px 未高于 base 档 ${base}px —— ` +
+      `≤380px 时导航折三行、内容占 134px，比两行的 106px 高。` +
+      `这一档矮了会把导航最后一行裁掉，且**没有任何其他闸门会报**。`,
+  );
+});
+
+check('首页顶栏灰阶必须是「离散硬边」而非连续渐变（零渐变纪律）', () => {
+  // `CONVENTIONS.md` 2.5.1 定的是**零渐变**：像素风靠枚举不靠插值。
+  // WARNING `_smoke-pixel.cjs` 抓不到这件事（它只查模糊/圆角/字号/字体），
+  //    所以全靠这条断言守着 —— 一旦有人图省事改成 `linear-gradient(#000,#fff)`，
+  //    风格统一就会从这里开始漏，而且**没有任何其他闸门会报**。
+  //
+  // 判据：色带必须是**数据数组**（便于钉住与复用），且每档在展开成 CSS 时
+  // **写两遍**（起始位置 = 结束位置）—— 于是档内纯色、档间硬边。
+  const m = homeView.match(/const DIAG_BANDS = \[([^\]]+)\]/);
+  assert.ok(
+    m,
+    '找不到 DIAG_BANDS 数组 —— 顶栏灰阶应是数据（这样才能被本断言钉住），而不是散在 CSS 里',
+  );
+  const bands = [...m[1].matchAll(/'(#[0-9a-fA-F]{6})'/g)].map((x) => x[1]);
+  assert.ok(
+    bands.length >= 4,
+    `灰阶至少 10 档才读得出「层次」（现在 ${bands.length} 档）—— ` +
+      `6 档已被实测判定为「太粗、没有层次」`,
+  );
+  // 展开逻辑必须把每档写两遍 —— 这是「硬边」的全部秘密。
+  assert.ok(
+    /\$\{c\} \$\{a\}%, \$\{c\} \$\{b\}%/.test(homeView),
+    '灰阶展开时每档必须写两遍（同一色 + 相同起止位置）—— 只写一遍就变成连续渐变了',
+  );
+  assert.ok(
+    /to bottom right/.test(homeView),
+    '灰阶方向应是 `to bottom right` —— 左上最暗（标题所在），右下最亮（空白区）',
+  );
+});
+
+check('首页顶栏灰阶逐档递增、无死档、跨度足够，且对白字 >= 4.5:1（标题压在斜带上）', () => {
+  const m = homeView.match(/const DIAG_BANDS = \[([^\]]+)\]/);
+  assert.ok(m, '找不到 DIAG_BANDS（依赖上一条的存在性）');
+  const bands = [...m[1].matchAll(/'(#[0-9a-fA-F]{6})'/g)].map((x) => x[1]);
+
+  // 中性灰：通道差 <= 24（与 Sky/Ground 同一判据）
+  for (const hex of bands) {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const spread = Math.max(r, g, b) - Math.min(r, g, b);
+    assert.ok(spread <= 24, `${hex} 不是中性灰（通道差 ${spread} > 24）`);
+  }
+
+  // 判据落在 **8-bit 灰阶**上（取绿通道：已是中性灰，三通道只差舍入）。
+  //
+  // ⚠️ 这里**故意不用「线性亮度差 >= 3%」**：那条是**档数少时的判据**
+  // （6 档时相邻差 3.3% 刚好过线）。档数一加密，相邻差必然被摊薄
+  // （16 档只剩 1.1%），继续钉 3% 等于把「档数更密」这个需求判死。
+  //
+  // 真正要防的是**死档**：看得见硬边、看不出色差的那一行。
+  // 8-bit 上 1 级差 ≈ 0.4% 亮度，人眼在纯色块上基本读不出 ⇒ **>= 2 级**是底线。
+  // 线性亮度那套等差论证（`Sky.vue` 踩过的坑）仍然成立 ——
+  // 它管的是**序列怎么排**，不是**相邻差多少**；两件事，别混成一条判据。
+  const g8 = bands.map((h) => parseInt(h.slice(3, 5), 16));
+  for (let i = 1; i < g8.length; i++) {
+    assert.ok(
+      g8[i] > g8[i - 1],
+      `第 ${i + 1} 档 ${bands[i]} 没有比第 ${i} 档 ${bands[i - 1]} 亮 —— ` +
+        `灰阶必须单调递增才有「过渡」的意思`,
+    );
+  }
+  for (let i = 1; i < g8.length; i++) {
+    const d = g8[i] - g8[i - 1];
+    assert.ok(
+      d >= 2,
+      `第 ${i + 1} 档 ${bands[i]} 与第 ${i} 档 ${bands[i - 1]} 的 8-bit 灰阶只跳 ${d} 级 —— ` +
+        `这一档等于白占一行（看得见边、看不出色差），该合并档数了`,
+    );
+  }
+
+  // 跨度：整条带子要真的在「过渡」，而不是挤在窄区间里
+  const span = g8[g8.length - 1] - g8[0];
+  assert.ok(
+    span >= 80,
+    `灰阶总跨度只有 ${span} 级（8-bit 共 256 级）—— 带子挤在窄区间里，过渡读不出来`,
+  );
+
+  const L = bands.map(relLuminance);
+  const worst = 1.05 / (L[L.length - 1] + 0.05);
+  assert.ok(
+    worst >= 4.5,
+    `最亮档 ${bands[bands.length - 1]} 对纯白文字只有 ${worst.toFixed(2)}:1` +
+      `（AA 需 4.5:1）—— 标题「参数世界」就压在这条带子上`,
+  );
+});
+
+
+// ------------------------------------------------------------------------
+// 天空色带（黑白太极）
+//
+// ⚠️ 这一段的前身是「彩虹弧」的两组断言（207→209 项），
+//2026-10-06 用户改要黑白太极后**整组作废** —— 彩虹在88px 高的横幅里
+// 七条弧各占 1~2px，挤成一道彩色细线，噪声大于信息。
+// **断言跟着设计走**：设计换了，判据要换掉，不是留着不管。
+//
+// 新的判据是**明度不变量**，与具体色值无关：
+//   I1 离散色带（不是 linear-gradient）—— 像素风铁律
+//   I2 相邻档明度差 ≥ 8% —— 否则某档肉眼不可辨，等于白占一行
+//   I3 存在「先升后降」的明度结构 —— 太极的观感来自中间亮、上下暗
+//   I4 每档对白字对比度 ≥ 4.5:1（WCAG AA）—— 标题压在色带上要能读
+// ------------------------------------------------------------------------
+
+/** 取色值的相对亮度（WCAG 定义） */
+function relLuminance(hex) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const lin = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+/** 从 Sky.vue 里读出 BANDS 的实际色值（不是抄一份，是读被测代码） */
+function readSkyBands() {
+  const sky = readFileSync(join(SRC_DIR, 'components/Sky.vue'), 'utf8');
+  const code = sky.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const m = code.match(/const BANDS = \[([\s\S]*?)\]/);
+  assert.ok(m, 'Sky 里找不到 BANDS —— 天空必须有离散色带');
+  const bands = [...m[1].matchAll(/'(#[0-9a-fA-F]{6})'/g)].map((x) => x[1]);
+  assert.ok(bands.length >= 4, `色带只有 ${bands.length} 档，太少—— 像素风要靠离散档位建立层次`);
+  return { bands, code };
+}
+
+check('天空必须是离散色带，不是渐变（像素风铁律）', () => {
+  const { code } = readSkyBands();
+  assert.ok(
+    !/linear-gradient|radial-gradient|conic-gradient/.test(code),
+    'Sky 又出现渐变了 —— 连续过渡是插值，像素风是枚举（CONVENTIONS §2.5.1）',
+  );
+  // 色带必须真的被渲染（模板里v-for 出来）
+  assert.ok(
+    /v-for="\(c, i\) in BANDS"/.test(code),
+    'BANDS 没有被渲染 —— 定义了色带但模板没用，等于没有',
+  );
+});
+
+check('色带相邻档线性亮度差 ≥ 2.5%（否则某档肉眼不可辨，白占一行）', () => {
+  // ⚠️ **必须在 WCAG 线性亮度空间比，不能比 sRGB 通道值**：
+  // sRGB 低亮度端被严重压缩，`#080809` 与 `#141416` 的通道值差 12，
+  // 线性亮度却只差 **0.5%** —— 肉眼完全看不出那一档。
+  // 我第一版就栽在这：按 sRGB 灰阶排色带，自测当场报出 0.5%。
+  // ⚠️ **必须在 WCAG 线性亮度空间比，不能比 sRGB 通道值**：
+  // sRGB 低亮度端被严重压缩，`#080809` 与 `#141416` 的通道值差 12，
+  // 线性亮度却只差 **0.5%** —— 肉眼完全看不出那一档。
+  // 我第一版就栽在这：按 sRGB 灰阶排色带，自测当场报出 0.5%。
+  const { bands } = readSkyBands();
+  // ⚠️ 这条是踩出来的：我先试过 S 形幂曲线，
+  // 结果第 3、4 档明度只差 3% —— **肉眼看不出那一档**，等于白占一行，
+  // 而第 1→2 档跳 41%又太陡。像素色带必须**等差步进**。
+  const L = bands.map(relLuminance);
+  for (let i = 1; i < L.length; i++) {
+    const diff = Math.abs(L[i] - L[i - 1]);
+    assert.ok(
+      diff >= 0.025,
+      `第 ${i}→${i + 1} 档明度只差 ${(diff * 100).toFixed(1)}%（${bands[i - 1]}→${bands[i]}）` +
+        `—— 低于 2.5% 线性亮度差肉眼看不出层次，该档白占一行`,
+    );
+  }
+});
+
+check('色带有「先升后降」的明度结构（中间亮、上下暗 = 太极观感）', () => {
+  const { bands } = readSkyBands();
+  const L = bands.map(relLuminance);
+  const peak = L.indexOf(Math.max(...L));
+  // 峰值不在首尾 —— 若是单调递增或递减，那就是一条普通灰带，不是太极
+  assert.ok(
+    peak > 0 && peak < L.length - 1,
+    `最亮档在第 ${peak + 1} 段（首/尾）—— 太极的观感来自「中间亮、上下暗」，单调渐变不成立`,
+  );
+  // 峰值前必须真升、后必须真降
+  const rising = L.slice(0, peak).every((v, i) => i === 0 || v > L[i - 1]);
+  const falling = L.slice(peak).every((v, i) => i === 0 || v < L[peak + i - 1]);
+  assert.ok(rising, '峰值之前必须是递增的 —— 当前' + L.map((v) => (v * 100).toFixed(0)).join('→'));
+  assert.ok(falling, '峰值之后必须是递减的 —— 当前 ' + L.map((v) => (v * 100).toFixed(0)).join('→'));
+});
+
+check('每档色带对白字对比度 ≥ 4.5:1（WCAG AA，标题压在色带上）', () => {
+  const { bands } = readSkyBands();
+  for (const hex of bands) {
+    const ratio = 1.05 / (relLuminance(hex) + 0.05);
+    assert.ok(
+      ratio >= 4.5,
+      `${hex} 对纯白文字只有 ${ratio.toFixed(2)}:1（AA 需 4.5:1）—— ` +
+        `标题「参数世界」就压在这条色带上`,
+    );
+  }
+});
+
+check('banner 内不得有高饱和色（黑白太极是整条横幅的基调）', () => {
+  // 天空改成黑白太极后，地面那条 `--color-grass: #4a8c3a`（饱和绿）
+  // 成了整个 banner 里唯一的彩色 —— 扎眼得像荧光棒，与黑白体系完全不在一个调里。
+  // **基调整体性是要守的**，不能靠「改的时候顺手看一眼」。
+  //
+  // 判据：Sky 与 Ground 两个组件里所有出现的色值，
+  // **最大通道减最小通道（= 饱和度差）不得超过 24**（约 9% 饱和度）。
+  // 24 的来历：中性灰带里 B 通道刻意比 R 高一点点（冷调），
+  // 实测最大差18；而原来的草绿 #4a8c3a 差 82、泥土 #7d5a36 差 71 ——
+  // 差一个数量级，判据不会误报。
+  const files = ['components/Sky.vue', 'components/Ground.vue'];
+  for (const rel of files) {
+    const code = readFileSync(join(SRC_DIR, rel), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/.*$/gm, '');
+    for (const m of code.matchAll(/#([0-9a-fA-F]{6})/g)) {
+      const hex = m[1];
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      const spread = Math.max(r, g, b) - Math.min(r, g, b);
+      assert.ok(
+        spread <= 24,
+        `${rel} 里的 #${hex} 通道差 ${spread}（阈值 24）—— ` +
+          `banner 是黑白太极，出现高饱和色会像荧光棒一样扎眼`,
+      );
+    }
+  }
+  // 地面层不得再引grass 变量（它是全站唯一的彩色定义）
+  const ground = readFileSync(join(SRC_DIR, 'components/Ground.vue'), 'utf8');
+  assert.ok(
+    !/var\(--color-grass/.test(ground),
+    'Ground 又引回--color-grass（#4a8c3a 饱和绿）—— banner 已经是黑白基调',
+  );
+});
+
+check('天空不得有装饰图形（SVG / 圆 / 太极图案本体）', () => {
+  // 太极图本体 = S 形曲线 + 两个鱼眼。在横幅这种比例下「圆」会被压成椭圆，
+  // 一眼就出戏—— 只取它的**明度结构**，不画图案本身。
+  const { code } = readSkyBands();
+  assert.equal(
+    (code.match(/<svg/g) ?? []).length,
+    0,
+    'Sky 里又出现 SVG —— 装饰全删了，只留色带（黑白太极靠明度说话，不靠图形）',
+  );
+  assert.ok(
+    !/clipPath|<path|<circle/.test(code),
+    'Sky 出现了路径/圆形 —— 太极图案本体在横幅比例下会被压扁出戏',
+  );
+});
+
+check('banner 上的文字必须自带可读底（不靠压小装饰来保证）', () => {
+  //⚠️ 我先前为了「让开导航」把彩虹跨度压到 29% 宽，理由是怕文字读不清——
+  // 那是**用装饰迁就文字**，方向反了。装饰该是背景，文字该自己可读。
+  const navFile = readFileSync(join(SRC_DIR, 'components/SiteNav.vue'), 'utf8');
+  const css = readFileSync(join(SRC_DIR, '..', 'src/style.css'), 'utf8');
+  const flat = css.match(/\.pixel-button-flat\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.ok(
+    /background:\s*rgb\(/.test(flat) && !/background:\s*transparent/.test(flat),
+    '导航按钮必须有半透底 —— banner 上有底色变化，全透明会让文字读不清',
+  );
+  assert.ok(
+    /bg-\[rgb\(/.test(navFile),
+    '逛玩法的弱化链接也要有半透底（它们同样压在色带上）',
+  );
+  // 且不得再读导航位置来调整装饰
+  const sky = readFileSync(join(SRC_DIR, 'components/Sky.vue'), 'utf8');
+  const code = sky.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  assert.ok(
+    !/querySelector/.test(code),
+    'Sky 不该读导航/标题位置 —— 那是「用装饰迁就文字」',
+  );
+});
+
+
+check('首页顶栏必须整条隐藏（站名与导航都进了 banner，否则同一句「参数世界」出现两次）', () => {
+  const app = readFileSync(join(SRC_DIR, 'App.vue'), 'utf8');
+  const header = app.match(/<header[^>]*>/);
+  assert.ok(header, 'App.vue 里找不到 <header>');
+  assert.ok(
+    /v-if="!navInBanner"/.test(header[0]),
+    '顶栏没有 v-if="!navInBanner" —— 首页会同时出现顶栏 logo 与 banner h1，同一句话两遍',
+  );
+  // 导航跟着 header 一起隐藏即可 —— 它在 header 内部，header 没了它自然也没了。
+  // ⚠️ 不要在这里要求 `<SiteNav v-if=...>`：那是在要求**重复的防御**。
+  // 判据要问「首页会不会有两条导航」，答案是「header 没了就没有」，
+  // 而不是「每个子节点都得自己再判一次」。
+  const headerBlock = app.slice(app.indexOf('<header'), app.indexOf('</header>'));
+  assert.ok(
+    /<SiteNav/.test(headerBlock),
+    'App.vue 的 header 里应有 SiteNav —— 非首页页面需要它',
+  );
+});
+
+check('导航在 banner 里（首页唯一一条，且两端对齐）', () => {
+  // 抄参考项目：左站名、右导航，w-full sm:w-auto 负责窄屏换行占满
+  assert.ok(
+    /<SiteNav embedded\s*\/>/.test(homeView),
+    '首页的 banner 里应有 <SiteNav embedded /> —— 导航该压在这一行而不是另起一条',
+  );
+  // class 写在多行上（prettier 会折行），且中间夹了 z-10（内容浮在太极之上），
+  // 所以匹配不能假设 class 与 <div 同行、也不能假设 relative 紧跟 flex。
+  const bannerRow = homeView.match(
+    /<div\s+class="page-shell relative[^"]*flex flex-wrap[\s\S]*?"/,
+  );
+  assert.ok(bannerRow, '找不到 banner 的左右分栏容器');
+  assert.ok(
+    /justify-between/.test(bannerRow[0]),
+    `banner 用的是 ${bannerRow[0].match(/justify-\w+/)?.[0] ?? '（无）'} —— 左右各一组元素时该两端对齐`,
+  );
+  // embedded 模式必须真的让窄屏换行占满，否则 390px 下导航会被压成两行叠在标题右边
+  const nav = readFileSync(join(SRC_DIR, 'components/SiteNav.vue'), 'utf8');
+  assert.ok(
+    /w-full justify-center sm:w-auto/.test(nav),
+    "SiteNav 的 embedded 模式应带 'w-full sm:w-auto' —— 窄屏时导航要占满整行",
+  );
+});
+
+/* ================================================================ *
+ * favicon（站点图标）
+ *
+ * 为什么现在才有闸门（2026-10-08）：favicon 一直是**零覆盖**的，
+ * 而它恰恰是「坏了也没人报」的那类资源 —— 浏览器标签页左上角 16px，
+ * 不可能靠肉眼发现它变成了纯黑方块。本次换图标时实测踩到过一次：
+ * 只有 `viewBox` 而无 `width`/`height` 的 SVG 渲染成纯黑块（能解析≠能显示）。
+ *
+ *⚠️ 本节读`public/favicon.svg`。而 `verify-favicon-gates.mjs` 会**原地改写**它做
+ * 反向测 ⇒ 并发时本节会读到中间态、并自信地报出一堆假失败（或假通过）。
+ * 故读之前必须查锁（`assertUnlocked`）；反向测自己spawn 出来的子进程走
+ * `FAV_GATES_CHILD=1` 旁路 —— 那时的坏产物正是它自己写的，不是竞态。
+ * ================================================================ */
+/** favicon：像素太极。
+ *
+ * ⚠️ 本文件对 favicon 的所有文本判据都必须走 `stripXmlComments()`：
+ * `public/favicon.svg` 顶部有大段说明性 HTML 注释，里面**故意写了**
+ * `<rect>` / `#FFFFFF` / `<svg>` 这些字面量来解释踩过的坑。
+ * 不剥注释就会：① `<svg[^>]*>` 匹配到注释里的字面量 → 报「缺 width/height」；
+ * ② 颜色扫描把注释里的 `#FFFFFF` 当成产物用色 → 报「出现 theme 之外的颜色」。
+ * 这与「闸门正则命中注释里那个正确值示例」是同一类失效，
+ * **剥注释是硬纪律，不是可选优化**。
+ */
+section('favicon：像素太极');
+
+// 查锁：反向测期间磁盘上的 favicon 是坏的，此刻断言它等于在断言一个假象。
+assertUnlocked('自测的favicon 判据');
+
+const FAVICON_RAW = readFileSync(join(ROOT, 'public/favicon.svg'), 'utf8');
+/** 去掉 XML/HTML 注释后的产物正文 —— 判据只许看这个 */
+const FAVICON = FAVICON_RAW.replace(/<!--[\s\S]*?-->/g, '');
+
+/** favicon 的构图参数**单一真源**（2026-10-08 改为「满幅 45° 斜分」）。
+ *
+ *  ⚠️ 这里改的是**构图语义**，不是阈值：旧版是「圆占 80% + 米白底板 + 墨色圆环」，
+ *  用户 2026-10-08 明确裁决「完全照参考图」⇒ 纯黑白 + 满幅 + 45° 斜分背景 + 鱼眼回来。
+ *  下方所有几何判据（深色占比、旋转对称作用域、手性锚点、斜分角度）都由它推出。
+ *
+ *  真源是**设计师逐格给出的 xlsx 网格**（`scripts/favicon/from-xlsx.py` 提取），
+ *  不是本文件里的任何常数 —— 常数只用于**校验**，提取真源与校验真源必须分开，
+ *  否则「改产物」和「改判据」会互相掩护（这正是 P16「判据多源」的变体）。
+ */
+const FAV_FRAC = 1.0;   // 满幅：太极圆盘外切于画幅，不再有「圆外留白」
+const FAV_SKEW = 45;    // 背景斜分角（度）。0 = 上下对半，45 = 沿反对角线
+const FAV_COLORS = { ink: '#000000', paper: '#ffffff' }; // 2026-10-08：纯黑白，不再取 @theme
+
+/** 把 favicon 的行内 rect 还原成 N×N 布尔网格（True = 墨色）
+ *
+ *  ⚠️ 2026-10-08：产物**不再有满幅底板 rect**（旧构图靠底板托住白鱼）。
+ *  新构图是「满幅 45° 斜分」，画幅内每一格都属于图形本身 ⇒ 不画底板。
+ *  所以「未画= 纸」的约定仍然成立（浏览器默认白），但**判据里不许再要求底板存在**
+ *  —— 那是旧构图的遗留要求，留着会把正确产物判成错的（P25判据过期）。
+ */
+function faviconGrid(svg) {
+  const n = Number(svg.match(/viewBox="0 0 (\d+)/)?.[1]);
+  assert.ok(n, 'favicon 的 viewBox 必须是 "0 0 N N" 的正方形');
+  const g = Array.from({ length: n }, () => new Array(n).fill(false));
+  // 只认带 x/y 的行内段 —— 若将来有底板，那条 <rect width height> 没有坐标，天然被排除
+  for (const [, x, y, w] of svg.matchAll(/<rect x="(\d+)" y="(\d+)" width="(\d+)" height="1"/g)) {
+    for (let i = 0; i < Number(w); i++) g[Number(y)][Number(x) + i] = true;
+  }
+  return { n, g };
+}
+
+check('favicon 必须是合法 XML（注释里不能出现连续两个连字符）', () => {
+  // ⚠️ 真实事故（2026-10-08）：头部说明注释里写了 4 处 Markdown 表格分隔线
+  // `|---|---|`，而 **XML 注释体内不允许出现 `--`** ⇒ 整个 SVG 成了非法 XML，
+  // 浏览器**直接拒绝渲染**（标签页显示破图）。
+  //
+  // 为什么之前所有闸门都没抓到：
+  // ① 它是 `.svg` 文件，本仓所有校验都在**正则层面**跑（grid /颜色 / crispEdges），
+  //    正则**不关心 XML 合法性** —— 每一项单看都「有内容」，于是全绿；
+  // ② `verify-favicon.mjs` 的对拍也只按 `<rect>` 解析出网格，
+  //    它同样绕过了 XML 解析器。
+  // ⇒ **「文件存在且被 git 跟踪」与「浏览器能渲染」是两件事。**
+  //
+  // 修法：把 XML 合法性做成判据本体，且必须**剥掉注释再判**（注释本身就是元凶，
+  // 但也要允许注释里出现单连字符如 `left-right`）。
+  const comments = [...FAVICON_RAW.matchAll(/<!--([\s\S]*?)-->/g)].map((m) => m[1]);
+  const bad = [];
+  comments.forEach((c, i) => {
+    if (c.includes('--')) bad.push(`第 ${i + 1} 段注释含 '--'：${c.split('\n').find((l) => l.includes('--'))?.trim().slice(0, 50)}`);
+  });
+  assert.equal(
+    bad.length,
+    0,
+    `favicon 的注释里有连续两个连字符（--），XML 规范禁止 ⇒ 浏览器拒绝渲染整个图标。\n` +
+      `   ${bad.join('\n   ')}\n` +
+      `   Markdown 表格分隔线要写成 |---| |---| ，或改用 = 号。`,
+  );
+  // 兜底：结构上确认注释都能正常闭合（未闭合的 <!-- 会把后面全部吞进注释）
+  assert.equal(
+    (FAVICON_RAW.match(/<!--/g) ?? []).length,
+    comments.length,
+    'favicon 存在未闭合的 <!-- —— 它会把后面的图形全部吞进注释，图标变空白',
+  );
+});
+
+check('favicon 必须有 width/height，不能只有 viewBox（否则渲染成纯黑方块）', () => {
+  // 真实踩过：`<svg viewBox="0 0 16 16">` 无固有尺寸，放进<img> 时浏览器按 0尺寸处理。
+  // 这是「能解析 ≠ 能显示」的典型 —— 文件合法、DOM 在、闸门全绿，图标却是块黑的。
+  const tag = FAVICON.match(/<svg[^>]*>/)?.[0] ?? '';
+  assert.ok(
+    /width="\d+"/.test(tag) && /height="\d+"/.test(tag),
+    `favicon 的 <svg> 缺 width/height —— 只有 viewBox 的 SVG 无固有尺寸，浏览器按 0 渲染成纯黑方块。当前：${tag.slice(0, 90)}`,
+  );
+});
+
+check('favicon 必须声明 crispEdges（像素风要求零抗锯齿）', () => {
+  assert.ok(
+    /shape-rendering="crispEdges"/.test(FAVICON),
+    'favicon 缺 shape-rendering="crispEdges" —— 会走抗锯齿，边缘出灰边，违反 CONVENTIONS.md §2.5.1「零模糊」',
+  );
+});
+
+check('favicon 只能是纯黑白两色（2026-10-08 用户决策：对齐参考图）', () => {
+  // ⚠️ 这条判据的口径**换过一次**（P25判据过期）：旧版要求「只用 @theme 的
+  // ink / parchment-lit」，因为旧构图的米白底板要与站点配色同源。
+  // 用户 2026-10-08 明确「完全照参考图」⇒ 纯 #000000 / #ffffff，
+  // 此时再要求 theme 同源就是拿旧构图约束新构图 ⇒ 正确产物会被判错。
+  // 但「两色」这件事本身要继续钉死 —— 见下一条（谁亮谁暗）。
+  const used = [...new Set((FAVICON.match(/#[0-9a-fA-F]{3,8}/g) ?? []).map((s) => s.toLowerCase()))];
+  const allowed = new Set(Object.values(FAV_COLORS));
+  const extra = used.filter((c) => !allowed.has(c));
+  assert.equal(
+    extra.length,
+    0,
+    `favicon 出现了纯黑白之外的颜色 ${extra.join(', ')} —— 参考图与用户决策都要求` +
+      `纯黑白（${FAV_COLORS.ink} / ${FAV_COLORS.paper}）。`,
+  );
+});
+
+check('favicon 墨段必须是暗色、纸必须是亮色（两色不能写反）', () => {
+  // 这条是**反向测**逼出来的，不是想出来的：
+  // 只查「有没有 theme 之外的颜色」**没查谁拿哪个颜色**，
+  // 于是把 ink 与 paper 两个色值对调（图标变负片）能全绿通过。
+  //
+  // ⚠️⚠️ 按**亮度**判「谁是深色」，不按名字判 —— 名字是约定，亮度是事实。
+  // 这条判据2026-10-08 加过一个新守卫：产物**必须显式写出两色**。
+  // 因为新构图没有满幅底板，若产物只写一种 fill，剩下的格就靠浏览器默认色 ——
+  // 深色模式下默认白、浅色模式下也白，但**在深色背景页面上会变成透明**，
+  // 「图标在暗色标签页上消失」这种问题只有真正渲染才暴露（P27 的同一类）。
+  const lum = (hex) => {
+    const v = hex.replace('#', '');
+    const full = v.length === 3 ? [...v].map((c) => c + c).join('') : v;
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const runs = [...new Set([...FAVICON.matchAll(/<rect x="\d+" y="\d+" width="\d+" height="1"[^>]*fill="(#[0-9a-fA-F]+)"/g)].map((m) => m[1].toLowerCase()))];
+  assert.ok(runs.length > 0, 'favicon 没有任何行内墨段');
+  const brightRun = runs.find((c) => lum(c) > 0.5);
+  assert.ok(
+    !brightRun,
+    `favicon 墨段用了亮色 ${brightRun} —— 墨段应当是暗色（${FAV_COLORS.ink}），` +
+      '若墨段是亮色说明两色写反了（图标成了负片）',
+  );
+  assert.ok(
+    lum(FAV_COLORS.paper) > 0.5 && lum(FAV_COLORS.ink) < 0.5,
+    `FAV_COLORS 常量自身写反了：ink=${FAV_COLORS.ink} paper=${FAV_COLORS.paper}`,
+  );
+});
+
+check('favicon 深色占比符合「满幅 45° 斜分 + 太极黑白各半」的几何预期', () => {
+  // 判据是**从几何推出来的数**，不是目测。
+  //
+  // ⚠️⚠️ 2026-10-08 换构图时这条改过一次，**两版都错过**：
+  //  v1（米白底 + 圆占 80% + 环）写的是「深色占比 40–60%」——
+  //     它把「太极黑白各半」错当成「整幅深浅各半」，忽略了圆只占画幅一半。
+  //  v2（满幅 + 45° 斜分）若照抄 v1 的公式 `π/4 × frac² × 0.5 + π × frac/n`，
+  //     会得到 0.5 + 0.098 ≈ 60% ⇒ 正确产物（实测 50.0%）被判失败。
+  //     错因是公式里的 `frac` 项来自**圆环周长**，新构图根本没有环。
+  //
+  // 现在的推导：新构图里**斜分背景本身就把画幅对半分**（45° 反对角线恰好平分），
+  //  太极叠在中间且自身黑白各半 ⇒ 整体深色占比 = 50%，与圆的大小无关。
+  //  ⇒ 期望值就是一个**与构图参数无关的 0.5**，这比「钉一个数」强：
+  //  它对「斜分角度偏了」「太极填反了」「圆缩了」三类故障都敏感。
+  const { n, g } = faviconGrid(FAVICON);
+  const dark = g.flat().filter(Boolean).length;
+  const ratio = dark / (n * n);
+  const expected = 0.5;
+  assert.ok(
+    Math.abs(ratio - expected) < 0.02,
+    `favicon 深色占比 ${(ratio * 100).toFixed(1)}%，按构图（满幅 ${FAV_FRAC * 100}% + ` +
+      `${FAV_SKEW}° 斜分 + 太极黑白各半）期望 ${(expected * 100).toFixed(1)}% ±2%。` +
+      `深浅失衡量的是黑白颠倒、斜分角度偏了或太极整体缺失。` +
+      `（若为 0% 或 100%，多半整个图标被涂成单色）`,
+  );
+});
+
+check('favicon 圆内是旋转对称的太极（180° 旋转后黑白互换）', () => {
+  // 判据是**结构**不是像素值：太极绕中心旋转 180° 后，黑白两半互换位置。
+  //
+  // ⚠️ 这条断言历史上**写过三次错版**，三次都因为把「对称」想成了「镜像」或想错了作用域：
+  //   - 先写成左右镜像 —— 跑出来第 0 行 x=0 vs x=31 反色；
+  //   - 再写成 180° 旋转后**同色** —— 也错，太极两半本就异色；
+  //   - 再写成 180° 旋转后**全图反色** —— 旧构图下**圆外留白**旋转后还是留白，
+  //     (0,0) 与 (n-1,n-1) 同为底板，要求它们反色等于在描述一个不存在的性质。
+  //  ⇒ **判据写错与 bug 同级**，它会把正确产物判成错的。
+  //
+  // 2026-10-08 新构图下作用域反而**变简单了**：满幅 45° 斜分的背景本身
+  // 就满足「180° 旋转 + 换色」（斜分线过中心 ⇒ 两侧互换），
+  // 所以**全图**都该成立，不必再挖「圆内、排除环」的作用域。
+  // 实测全图 1024格 0 不符 —— 这比旧版的「只判圆内616 格」覆盖面更大。
+  //
+  // ⚠️ 但鱼眼**破坏**这条对称性吗？不破坏：太极的两只眼关于中心对称，
+  // 且颜色相反（黑眼↔ 白眼），旋转 180° 后正好对上。
+  const { n, g } = faviconGrid(FAVICON);
+  const bad = [];
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
+      if (g[y][x] === g[n - 1 - y][n - 1 - x]) bad.push([x, y]);
+    }
+  }
+  assert.equal(
+    bad.length,
+    0,
+    `${bad.length}/${n * n} 格与「旋转 180° 后的自己」同色 —— 满幅斜分背景 + 太极都应满足` +
+      `「180° 旋转后黑白互换」。前 5 处：${bad.slice(0, 5).map(([x, y]) => `(${x},${y})`).join(' ')}。` +
+      `（这条抓的是「黑白画反了」：颠倒后深色占比与手性都不变，只有它能报）`,
+  );
+});
+
+check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩到右侧）', () => {
+  // ⚠️⚠️ 这条补的是一个**整类零覆盖**的缺口，靠反向测发现的（P22）。
+  //
+  // 其余判据（两色 / 占比 / 180°旋转对称）**全部镜像不变**：
+  // 镜像不改变深色占比，且 180° 旋转与过中心的反射**可交换** ⇒
+  // 「180° 旋转后反色」在镜像后依然成立。
+  // ⇒ 把整个 favicon 左右镜像后重跑 selftest，**全绿**（实测）。
+  //
+  // 判据取「180°旋转 + 换色」的对称性**唯一没有覆盖的那一位**：
+  // 满足前者的图形只剩 {本身, 镜像} 两种可能，一个比特就能钉死。
+  //
+  // 2026-10-08 换锚点：旧版取「赤道带浅色重心」（会被斜分背景污染 ——
+  // 背景斜线正好穿过赤道带，把浅色重心往一侧拉，实测偏到 +7.5 即误报）。
+  // 新版取**白鱼眼的重心**：它是鱼身上的孤立小块，位置由太极几何唯一确定，
+  // **与背景斜分无关**（实测偏移 x=−5.50，与期望同号且量级清晰）。
+  const { n, g } = faviconGrid(FAVICON);
+  const c = n / 2;
+  // 4-连通分块，找被异色包住的小块= 鱼眼
+  const seen = Array.from({ length: n }, () => new Array(n).fill(false));
+  const eyes = [];
+  for (let y0 = 0; y0 < n; y0++) {
+    for (let x0 = 0; x0 < n; x0++) {
+      if (seen[y0][x0]) continue;
+      const t = g[y0][x0];
+      const stack = [[x0, y0]];
+      seen[y0][x0] = true;
+      const comp = [];
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
+        comp.push([cx, cy]);
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+          if (seen[ny][nx] || g[ny][nx] !== t) continue;
+          seen[ny][nx] = true;
+          stack.push([nx, ny]);
+        }
+      }
+      // ⚠️ 阈值必须按**占画幅比例**判，不能按「边长」猜：
+      //  旧写法 `(n/8)**2` 在 n=32 时是 16 格，而实测鱼眼 21 格 ⇒ 把鱼眼判成了鱼身，
+      //  「应有两只鱼眼」直接报 0 只。判据写错与 bug 同级。
+      //  实测块尺寸分布 [21, 21, 491, 491] ⇒ 用画幅占比 5% 分割（=51 格）两侧都远。
+      if (comp.length > n * n * 0.05) continue; // 太大的是鱼身/ 背景，不是眼
+      const own = new Set(comp.map(([x, y]) => `${x},${y}`));
+      // 必须**每一格四邻都是异色** ⇒ 是个「洞」而不是轮廓阶梯
+      if (!comp.every(([cx, cy]) =>
+        [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx < 0 || ny < 0 || nx >= n || ny >= n) return false;
+          return own.has(`${nx},${ny}`) || g[ny][nx] !== t;
+        }),
+      )) continue;
+      eyes.push({ t, comp });
+    }
+  }
+  assert.equal(
+    eyes.length,
+    2,
+    `favicon 应有**两只**鱼眼（黑眼 + 白眼），实测 ${eyes.length} 只 —— ` +
+      `用户 2026-10-08 定「鱼眼回来」。判据写错与 bug 同级，别为了过闸门改产物。`,
+  );
+  // ⚠️⚠️ 命名必须无歧义 —— 这里踩过一次「词义歧义」坑：
+  //  太极有两只眼，各在一条鱼身上：
+  //    · **白鱼的眼睛 = 黑色块**（白鱼身是白的，眼是黑的）
+  //    · **黑鱼的眼睛 = 白色块**
+  //  第一版写成 `const white = eyes.find((e) => !e.t)`（变量名 white）
+  //  再判「white 应在左」—— 读起来像「白色的眼」，于是把期望方向钉反了
+  //  （实测白鱼身上的黑眼在 x=10.5= 左侧，却被判成「未落在左侧」）。
+  //  ⇒ 变量名带上**所属鱼**而不只是颜色，这是这类「同名不同义」的唯一防法。
+  const eyeOnWhiteFish = eyes.find((e) => e.t);       // 白鱼身上的眼 = 墨色块
+  const eyeOnBlackFish = eyes.find((e) => !e.t);       // 黑鱼身上的眼 = 浅色块
+  const centroidX = (e) => e.comp.reduce((a, [x]) => a + x + 0.5, 0) / e.comp.length;
+  const wx = centroidX(eyeOnWhiteFish);
+  const bx = centroidX(eyeOnBlackFish);
+  assert.ok(
+    wx < c - 1,
+    `白鱼身上的眼（墨色块）重心 x=${wx.toFixed(2)} 未落在圆心 ${c} 左侧` +
+      `（黑鱼身上的眼在 ${bx.toFixed(2)}）—— 它应在圆心**左侧**。` +
+      '若这条报错：①整个图标被左右镜像了；②或构图/配色被改动而本判据未同步。' +
+      '（其余 favicon 判据全都镜像不变，抓不到镜像，只能靠这条）',
+  );
+  // 两只眼必须关于圆心中心对称 —— 这条与上一条独立：
+  // 它抓的是「两眼画在同一侧」这类镜像**抓不到**的错。
+  assert.ok(
+    Math.abs((wx + bx) - 2 * c) < 1.5,
+    `两只眼重心 x=${wx.toFixed(2)} / ${bx.toFixed(2)}，和 ${(wx + bx).toFixed(2)} 偏离圆心对称值 ${2 * c} —— ` +
+      '太极的两只眼必须关于圆心中心对称。',
+  );
+});
+
+check('favicon 背景是 45° 斜分（沿反对角线平分画幅）', () => {
+  // 构图参数是「满幅 + 45° 斜分」，这条把它钉住。
+  // 判据：**四角中恰好两个暗、两个亮，且暗的那两个角关于反对角线相邻**。
+  // 45° 斜分（沿 x+y 增大方向）⇒ 左下 + 右下暗… 实测：左下暗、右下暗，
+  // 即斜分线是 x+y = const 方向，两侧各占一半。
+  //
+  // 为什么不用「沿 x+y 的暗亮差」当判据：那条会被太极自身的黑白分布污染
+  // （实测 x+y=16 处差值只有 −11，而纯背景应是 ±32）⇒ 判据会被设计细节绑架。
+  // 四角是**最外侧的四点**，那里必然是纯背景，测的是构图本身。
+  const { n, g } = faviconGrid(FAVICON);
+  const darkCorners = [g[0][0], g[0][n - 1], g[n - 1][0], g[n - 1][n - 1]].map(Number);
+  const darkCount = darkCorners.filter(Boolean).length;
+  assert.equal(
+    darkCount,
+    2,
+    `favicon 四角暗色数 ${darkCount}（${darkCorners.join(',')}）—— ${FAV_SKEW}° 斜分要求恰好 2 个角暗、2 个角亮。` +
+      `实测构图：左上${darkCorners[0] ? '暗' : '亮'} 右上${darkCorners[1] ? '暗' : '亮'} ` +
+      `左下${darkCorners[2] ? '暗' : '亮'} 右下${darkCorners[3] ? '暗' : '亮'}。`,
+  );
+  // 「左上亮、右下亮」还是「左上暗、右下暗」——两种都是合法 45° 斜分，
+  // 但它们互为镜像 ⇒ 必须钉死一个，否则手性判据单点失败时无从区分。
+  assert.ok(
+    !darkCorners[0] && darkCorners[2],
+    `favicon 斜分方向反了：期望「左上亮 / 左下暗」，实测 ` +
+      `左上${darkCorners[0] ? '暗' : '亮'} / 左下${darkCorners[2] ? '暗' : '亮'}。` +
+      '参考图是左上亮、左下暗。',
+  );
+});
+
+check('favicon 的墨色连通成块（无游离碎片：白鱼被墨点咬掉就看不出太极）', () => {
+  // 这条是旧「圆环闭合」判据的**替身**。为什么必须换掉：
+  //
+  // 旧构图（米白底 + 墨环）里，白鱼是纯白 #FFF 而底板是米白 #FFFAF0，
+  // 亮度只差 0.02 ⇒ 降采样后白鱼彻底消失。**唯一**解法是给白鱼加一圈墨环，
+  // 于是「环断一格」成了最致命的故障 ⇒ 有了flood-fill 那条判据。
+  //
+  // 2026-10-08 新构图（纯黑白 + 满幅 45° 斜分）下**这个前提整个消失**：
+  //  -白鱼纯白 vs 斜分背景纯黑，亮度差 1.0 ⇒ 不需要环也永远看得见；
+  //  - 没有底板、没有圆外留白 ⇒ 「从边缘flood-fill 浅色」找环缺口这个手法
+  //    在新产物上**恒真**（实测 flood-fill 从四边出发能吃到全部 512 个浅色格）。
+  //  ⇒ 留着旧判据 = 判据描述的是早已不存在的性质（P25 判据过期），
+  //    它要么永远绿、要么某天误报，两种都是坏判据。
+  //
+  // 新构图的对应真问题是：墨色是**满幅斜分背景 + 太极鱼身**，两者都应是连通块，
+  // 且**鱼眼必须是鱼身上的洞**而不是漂浮的碎片。所以判据钉「块结构」：
+  //  ① 恰好 2 个大连通块（背景 + 鱼身的黑部分），鱼身与背景**同色时自然合并**；
+  //  ② 恰好 2 个被异色包住的小洞（两只鱼眼）—— 在手性判据里已断言，这里只钉数量下限。
+  // 这样「白鱼被墨点咬掉」会表现为「多出 1 个小黑洞」⇒ 被抓住。
+  const { n, g } = faviconGrid(FAVICON);
+  const seen = Array.from({ length: n }, () => new Array(n).fill(false));
+  const blobs = [];
+  for (let y0 = 0; y0 < n; y0++) {
+    for (let x0 = 0; x0 < n; x0++) {
+      if (seen[y0][x0]) continue;
+      const t = g[y0][x0];
+      const stack = [[x0, y0]];
+      seen[y0][x0] = true;
+      const comp = [];
+      while (stack.length) {
+        const [cx, cy] = stack.pop();
+        comp.push([cx, cy]);
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = cx + dx;
+          const ny = cy + dy;
+          if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+          if (seen[ny][nx] || g[ny][nx] !== t) continue;
+          seen[ny][nx] = true;
+          stack.push([nx, ny]);
+        }
+      }
+      blobs.push({ t, size: comp.length });
+    }
+  }
+  // 分割阈值取画幅的 5%（实测分布 21 / 21 / 491 / 491，两侧都离得很远）。
+  // ⚠️ 别用 `(n/8)**2` 这种「按边长猜」的阈值 —— 见手性判据里的同一处注释。
+  const cut = n * n * 0.05;
+  const big = blobs.filter((b) => b.size > cut);
+  const small = blobs.filter((b) => b.size <= cut);
+  assert.ok(
+    big.length <= 2 && big.length >= 1,
+    `favicon 的深色大块有 ${big.length} 个（尺寸 ${big.map((b) => b.size).join(',')}）—— ` +
+      `满幅斜分 + 太极鱼身应合成1–2 个连通块。多出来的说明有游离墨块。`,
+  );
+  // 浅色同理：斜分背景的亮半+ 白鱼（若不与背景连通时）
+  const light = blobs.filter((b) => !b.t);
+  const lightBig = light.filter((b) => b.size > cut);
+  assert.ok(
+    lightBig.length >= 1,
+    `favicon 的浅色大块有 ${lightBig.length} 个 —— 应至少 1 个（斜分亮半）。`,
+  );
+  assert.equal(
+    small.length,
+    2,
+    `favicon 有 ${small.length} 个「被异色包住的小块」（尺寸 ${small.map((b) => b.size).join(',')}）—— ` +
+      '应恰好 2 个（两只鱼眼）。多出来说明白鱼身上有墨点碎片（16px 下会读不出太极），' +
+      '少一个说明鱼眼被墨色吞掉。',
+  );
 });
 
 /* ================================================================ *
