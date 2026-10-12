@@ -202,9 +202,12 @@ jobs:
           if [ "${{ steps.fp.outputs.data_changed }}" = "true" ]; then
             git add -A -- data/
           elif [ "${{ steps.fp.outputs.pending_changed }}" = "true" ]; then
-            # 队列变了但快照没变（新机缺发布日期）：只带队列与指针。
+            # 队列变了但快照没变（新机缺发布日期）：只带队列、归档与指针。
             # 快照不带进来，是因为它这次一个字都没动。
-            git add -- data/discovery-pending.json data/.fingerprint
+            # 归档必须一起带：新机进队列的那一刻官网页面必然也变了，两者几乎总是同时发生。
+            # 早先这里漏了 data/raw —— elif 链是互斥的，raw 分支永远等不到「队列没变」的机会，
+            # 于是每次有新机待收录，归档就静默地不更新，回放验证逐渐失真。
+            git add -- data/discovery-pending.json data/raw data/.fingerprint
           elif [ "${{ steps.fp.outputs.raw_changed }}" = "true" ]; then
             # 归档变了但快照没变（官网改了章节标题，而该字段没进快照）：
             # 只带归档与指针。同样不带快照 —— 它这次一个字都没动。
