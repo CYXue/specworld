@@ -39,6 +39,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CHANNELS, archiveShape } from './lib/archive-shape.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const WORK = join(ROOT, '_work');
@@ -52,37 +53,16 @@ const CHECK_ONLY = process.argv.includes('--check');
  */
 const MAX_BYTES = 4 * 1024 * 1024;
 
-/** 四个取数通道 → 归档文件名 */
-const CHANNELS = [
-  { file: 'huawei.raw.json', out: 'huawei-official.json' },
-  { file: 'apple.raw.json', out: 'apple-official.json' },
-  { file: 'apple-compare.raw.json', out: 'apple-compare-official.json' },
-  { file: 'apple-prices.raw.json', out: 'apple-prices-official.json' },
-];
-
 /**
- * 把一个通道的 SourceResult 压成归档形状。
+ * 四个取数通道 → 归档文件名与形状（规格 / 价格两种，见 lib/archive-shape.mjs）。
+ * CHANNELS 与 archiveShape 均从 lib/archive-shape.mjs 引入 —— 形状契约的
+ * 唯一真源在那里，生成器与 selftest 判据共用，避免再次出现「判据没喂过真数据」。
  *
- * 只保留三样东西：**通道名**、**每台机器的 id / name / specsUrl / raw**、
- * 以及 **skipped 的 id + 原因**（跳过的机型也是覆盖范围的一部分，必须可追溯）。
- *
- * 刻意丢掉的：
- *   - `fetchedAt` / `extractedAt`：运行时刻，会造成空提交。
- *   - `notes`：抓取过程的临时告警，进了 products.json 的 sources.note。
- *   - 字段值的来源标记：契约层已有 `provenance`，重复存两份会分叉。
+ * 这里曾有一份本地 archiveShape，只懂规格通道（id/name/specsUrl/raw）：
+ * 价格通道 7/7 台没有 specsUrl/raw，JSON.stringify 把 undefined 键整个丢掉，
+ * 归档件被剥成只剩 id/name 的空壳，价格原文全丢而目录看着一切正常。
+ * 2026-10-12 第一次提交 data/raw/ 时被 selftest 的形状判据拦住。
  */
-function archiveShape(result) {
-  return {
-    source: result.source,
-    products: (result.products ?? []).map((p) => ({
-      id: p.id,
-      name: p.name,
-      specsUrl: p.specsUrl,
-      raw: p.raw,
-    })),
-    skipped: (result.skipped ?? []).map((s) => ({ id: s.id, reason: s.reason })),
-  };
-}
 
 /** 同形比对：判断归档件与源raw 是否逐字节等价（只比内容不比键序） */
 function sameShape(a, b) {
@@ -106,7 +86,7 @@ function main() {
       continue;
     }
     const result = JSON.parse(readFileSync(src, 'utf8'));
-    const shape = archiveShape(result);
+    const shape = archiveShape(result, ch.shape);
     const body = `${JSON.stringify(shape, null, 2)}\n`;
     const dst = join(RAW_DIR, ch.out);
     archived.push({ out: ch.out, body, count: shape.products.length });

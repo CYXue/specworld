@@ -32,6 +32,12 @@ installTsResolver();
 import { mapAppleSpecs, mapAppleCompare } from './normalize/brands/apple.mjs';
 import { mapHuawei } from './normalize/brands/huawei.mjs';
 import {
+  ARCHIVE_TOP_FIELDS,
+  ARCHIVE_VOLATILE_FIELDS,
+  productFields,
+  shapeOfArchive,
+} from './lib/archive-shape.mjs';
+import {
   stripInvisible,
   normalizeKey,
   firstNumber,
@@ -3097,27 +3103,18 @@ check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）'
 section('原始响应归档');
 
 const RAW_ARCHIVE_DIR = join(ROOT, 'data/raw');
-const ARCHIVE_VOLATILE = [
-  'fetchedAt',
-  'extractedAt',
-  'generatedAt',
-  'firstSeenAt',
-  'lastSeenAt',
-  'publishedAt',
-  'builtAt',
-];
 
 check('归档件若存在，必须不含运行时刻字段（否则造成空提交）', () => {
   if (!existsSync(RAW_ARCHIVE_DIR)) return; // 还没跑过取数
   const files = readdirSync(RAW_ARCHIVE_DIR).filter((f) => f.endsWith('.json'));
   for (const f of files) {
     const a = JSON.parse(readFileSync(join(RAW_ARCHIVE_DIR, f), 'utf8'));
-    const bad = ARCHIVE_VOLATILE.filter((k) => JSON.stringify(a).includes(`"${k}"`));
+    const bad = ARCHIVE_VOLATILE_FIELDS.filter((k) => JSON.stringify(a).includes(`"${k}"`));
     assert.deepEqual(bad, [], `${f} 含运行时刻字段 ${bad.join(',')} —— 每轮归档都不同会造成空提交`);
   }
 });
 
-check('归档件的形状只保留回放必需的字段（不多不少）', () => {
+check('归档件的形状只保留回放必需的字段（不多不少，按渠道）', () => {
   if (!existsSync(RAW_ARCHIVE_DIR)) return;
   const files = readdirSync(RAW_ARCHIVE_DIR).filter((f) => f.endsWith('.json'));
   assert.ok(files.length > 0, 'data/raw/ 存在却没有任何归档件 —— 孤儿目录应被清理');
@@ -3126,18 +3123,27 @@ check('归档件的形状只保留回放必需的字段（不多不少）', () =
     // 顶层只允许这三个键 —— 多出来的说明有人往里塞了不该塞的东西
     assert.deepEqual(
       Object.keys(a).sort(),
-      ['products', 'skipped', 'source'],
-      `${f} 顶层键应恰好是 products/skipped/source，多出来的都会造成版本库噪声或空提交`,
+      ARCHIVE_TOP_FIELDS,
+      `${f} 顶层键应恰好是 ${ARCHIVE_TOP_FIELDS.join('/')}，多出来的都会造成版本库噪声或空提交`,
     );
+    // 形状按渠道断言：规格通道是 id/name/raw/specsUrl，价格通道是另一套 14 字段
+    // （startPriceCny/pricesByStorage/evidence…，没有 specsUrl/raw）。
+    // 曾用一套模子套所有渠道：价格通道 7/7 台被 JSON.stringify 剥得只剩 id/name，
+    // 价格原文全丢而归档目录看着正常 —— 2026-10-12 第一次提交 data/raw/ 时现形。
+    // 期望字段从 lib/archive-shape.mjs 引（生成器与判据的唯一真源）。
+    const shape = shapeOfArchive(f);
+    const expect = productFields(shape);
     for (const p of a.products) {
       assert.deepEqual(
         Object.keys(p).sort(),
-        ['id', 'name', 'raw', 'specsUrl'],
-        `${f}: ${p.id} 的键应恰好是 id/name/raw/specsUrl（releaseHint / extractedAt 不该进来）`,
+        expect,
+        `${f}（${shape} 渠道）: ${p.id} 的键应恰好是 ${expect.join('/')}`,
       );
       // raw 的值必须是页面原文（字符串），不是换算后的数字 —— 换算是规范化层的职责。
       // 这里判字符串而不只是判真值：数字 6.9 与字符串「6.9 英寸」都能通过真值检查，
       // 但后者才是原文；数字进归档等于把换算结果当成了输入，破坏回放的意义。
+      // 价格渠道没有 raw 键（它的原文是价格字段），不适用这条。
+      if (shape !== 'spec') continue;
       for (const [k, v] of Object.entries(p.raw)) {
         assert.equal(
           typeof v,

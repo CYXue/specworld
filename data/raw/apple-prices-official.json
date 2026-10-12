@@ -3,31 +3,431 @@
   "products": [
     {
       "id": "apple-iphone-18-pro",
-      "name": "iPhone 18 Pro"
+      "name": "iPhone 18 Pro",
+      "startPriceCny": 9999,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 9999,
+          "sku": "MJTA4",
+          "partNumber": "MJTA4CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 11999,
+          "sku": "MJTC4",
+          "partNumber": "MJTC4CH/A"
+        },
+        {
+          "storageGb": 1024,
+          "priceCny": 15499,
+          "sku": "MJTG4",
+          "partNumber": "MJTG4CH/A"
+        },
+        {
+          "storageGb": 2048,
+          "priceCny": 20499,
+          "sku": "MJTL4",
+          "partNumber": "MJTL4CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-18-pro",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 16,
+      "capacitiesCount": 4,
+      "colorCount": 16,
+      "storePricingId": "IPHONE18PRO_MAIN",
+      "buySlug": "iphone-18-pro",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MJTA4",
+        "cheapestPartNumber": "MJTA4CH/A",
+        "cheapestProductName": "iPhone 18 Pro 256GB Glacier",
+        "displayPriceText": "RMB 9999 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 4
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONE18PRO_MAIN",
+        "httpStatus": 200,
+        "apiStartPriceCny": 9999,
+        "apiDisplay": "RMB 9999",
+        "apiType": "WUIP",
+        "apiName": "iPhone 18 Pro",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-18-pro-max",
-      "name": "iPhone 18 Pro Max"
+      "name": "iPhone 18 Pro Max",
+      "startPriceCny": 10999,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 10999,
+          "sku": "MJY94",
+          "partNumber": "MJY94CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 12999,
+          "sku": "MJYA4",
+          "partNumber": "MJYA4CH/A"
+        },
+        {
+          "storageGb": 1024,
+          "priceCny": 16499,
+          "sku": "MJYH4",
+          "partNumber": "MJYH4CH/A"
+        },
+        {
+          "storageGb": 2048,
+          "priceCny": 21499,
+          "sku": "MJYM4",
+          "partNumber": "MJYM4CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-18-pro",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 16,
+      "capacitiesCount": 4,
+      "colorCount": 16,
+      "storePricingId": "IPHONE18PROMAX",
+      "buySlug": "iphone-18-pro",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MJY94",
+        "cheapestPartNumber": "MJY94CH/A",
+        "cheapestProductName": "iPhone 18 Pro Max 256GB Glacier",
+        "displayPriceText": "RMB 10,999 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 4
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONE18PROMAX",
+        "httpStatus": 200,
+        "apiStartPriceCny": 10999,
+        "apiDisplay": "RMB 10,999",
+        "apiType": "WUIP",
+        "apiName": "iPhone 18 Pro",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-17",
-      "name": "iPhone 17"
+      "name": "iPhone 17",
+      "startPriceCny": 6799,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 6799,
+          "sku": "MG714",
+          "partNumber": "MG714CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 8799,
+          "sku": "MG724",
+          "partNumber": "MG724CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-17",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 10,
+      "capacitiesCount": 2,
+      "colorCount": 10,
+      "storePricingId": "IPHONE17",
+      "buySlug": "iphone-17",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MG714",
+        "cheapestPartNumber": "MG714CH/A",
+        "cheapestProductName": "iPhone 17 256GB Sage",
+        "displayPriceText": "RMB 6799 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 2
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONE17",
+        "httpStatus": 200,
+        "apiStartPriceCny": 6799,
+        "apiDisplay": "RMB 6799",
+        "apiType": "WUIP",
+        "apiName": "iPhone 17",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-17e",
-      "name": "iPhone 17e"
+      "name": "iPhone 17e",
+      "startPriceCny": 5299,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 5299,
+          "sku": "MHU64",
+          "partNumber": "MHU64CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 7299,
+          "sku": "MHU74",
+          "partNumber": "MHU74CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-17e",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 6,
+      "capacitiesCount": 2,
+      "colorCount": 6,
+      "storePricingId": "IPHONE17E",
+      "buySlug": "iphone-17e",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MHU64",
+        "cheapestPartNumber": "MHU64CH/A",
+        "cheapestProductName": "iPhone 17e 256GB Soft Pink",
+        "displayPriceText": "RMB 5299 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 2
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONE17E",
+        "httpStatus": 200,
+        "apiStartPriceCny": 5299,
+        "apiDisplay": "RMB 5299",
+        "apiType": "WUIP",
+        "apiName": "iPhone 17e",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-air",
-      "name": "iPhone Air"
+      "name": "iPhone Air",
+      "startPriceCny": 8799,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 8799,
+          "sku": "MG364",
+          "partNumber": "MG364CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 10799,
+          "sku": "MG374",
+          "partNumber": "MG374CH/A"
+        },
+        {
+          "storageGb": 1024,
+          "priceCny": 14299,
+          "sku": "MG3F4",
+          "partNumber": "MG3F4CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-air",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 12,
+      "capacitiesCount": 3,
+      "colorCount": 12,
+      "storePricingId": "IPHONEAIR",
+      "buySlug": "iphone-air",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MG364",
+        "cheapestPartNumber": "MG364CH/A",
+        "cheapestProductName": "iPhone Air 256GB Sky Blue",
+        "displayPriceText": "RMB 8799 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 3
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONEAIR",
+        "httpStatus": 200,
+        "apiStartPriceCny": 8799,
+        "apiDisplay": "RMB 8799",
+        "apiType": "WUIP",
+        "apiName": "iPhone Air",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-duo",
-      "name": "iPhone Duo"
+      "name": "iPhone Duo",
+      "startPriceCny": 15999,
+      "pricesByStorage": [
+        {
+          "storageGb": 256,
+          "priceCny": 15999,
+          "sku": "MK2M4",
+          "partNumber": "MK2M4CH/A"
+        },
+        {
+          "storageGb": 512,
+          "priceCny": 17999,
+          "sku": "MK2Q4",
+          "partNumber": "MK2Q4CH/A"
+        },
+        {
+          "storageGb": 1024,
+          "priceCny": 21499,
+          "sku": "MK2U4",
+          "partNumber": "MK2U4CH/A"
+        },
+        {
+          "storageGb": 2048,
+          "priceCny": 26499,
+          "sku": "MK2W4",
+          "partNumber": "MK2W4CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-duo",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 8,
+      "capacitiesCount": 4,
+      "colorCount": 8,
+      "storePricingId": "IPHONEDUO",
+      "buySlug": "iphone-duo",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MK2M4",
+        "cheapestPartNumber": "MK2M4CH/A",
+        "cheapestProductName": "iPhone Duo 256GB Star White",
+        "displayPriceText": "RMB 15,999 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 4
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONEDUO",
+        "httpStatus": 200,
+        "apiStartPriceCny": 15999,
+        "apiDisplay": "RMB 15,999",
+        "apiType": "WUIP",
+        "apiName": "iPhone Duo",
+        "agreesWithBuyPage": true
+      }
     },
     {
       "id": "apple-iphone-16",
-      "name": "iPhone 16"
+      "name": "iPhone 16",
+      "startPriceCny": 5999,
+      "pricesByStorage": [
+        {
+          "storageGb": 128,
+          "priceCny": 5999,
+          "sku": "MYEV3",
+          "partNumber": "MYEV3CH/A"
+        }
+      ],
+      "sourceUrl": "https://www.apple.com.cn/shop/buy-iphone/iphone-16",
+      "currency": "CNY",
+      "priceScope": "官方起售价（中国大陆，含增值税）",
+      "skuCount": 5,
+      "capacitiesCount": 1,
+      "colorCount": 5,
+      "storePricingId": "IPHONE16",
+      "buySlug": "iphone-16",
+      "evidence": {
+        "buyPageStatus": 200,
+        "buyPageFromCache": false,
+        "cheapestSku": "MYEV3",
+        "cheapestPartNumber": "MYEV3CH/A",
+        "cheapestProductName": "iPhone 16 128GB Black",
+        "displayPriceText": "RMB 5999 起",
+        "priceField": "products[].price.fullPrice",
+        "comparePageCapacities": [
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048
+        ],
+        "capacityOverlapWithComparePage": 1
+      },
+      "crossCheck": {
+        "pricingEndpoint": "https://www.apple.com.cn/shop/mcm/product-price",
+        "identifier": "IPHONE16",
+        "httpStatus": 200,
+        "apiStartPriceCny": 5999,
+        "apiDisplay": "RMB 5999",
+        "apiType": "WUIP",
+        "apiName": "iPhone 16",
+        "agreesWithBuyPage": true
+      }
     }
   ],
   "skipped": []
