@@ -20,7 +20,6 @@
     "conventions:check": "node scripts/publish/check-conventions.mjs",
     "font:check": "node scripts/publish/check-font-coverage.mjs",
     "favicon:gates": "node scripts/verify-favicon-gates.mjs",
-    "favicon:diff": "node scripts/verify-favicon.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."

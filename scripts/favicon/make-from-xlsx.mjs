@@ -16,8 +16,11 @@
  *
  * ## 判据只有一个真源
  * 网格提取在 `from-xlsx.py`（承担「c@s 是 cellXfs 下标而非 fills 下标」这个坑）；
- * 校验复用 `verify-favicon.mjs` 的 `faviconGrid`。本脚本只做**按 run 合并写 rect**，
+ * 图形判据在 `scripts/selftest.mjs` 的 favicon 小节（XML 合法性 / 网格 / 颜色 / crispEdges），
+ * 反向测在 `scripts/verify-favicon-gates.mjs`。本脚本只做**按 run 合并写 rect**，
  * 不重新实现任何图形判据。
+ * （旧版曾「校验复用 verify-favicon.mjs 的 faviconGrid」，那套从源 SVG 反推几何的对拍
+ * 连同 render.cjs / grid.py 已于 2026-10-12 删除——构图换代后它描述的是已不存在的性质。）
  *
  * 用法: node scripts/favicon/make-from-xlsx.mjs <xlsx> [outSvg]
  */
