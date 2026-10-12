@@ -1905,14 +1905,29 @@ check('转球与缩放：rotateBy / zoomDist 的组合不产生非法相机', ()
   assert.ok(cam.dist <= G.DIST_MAX, 'dist 超过上限');
 });
 
-check('真实数据能跑通球面：60 台全部落在视口内且不重叠成堆', () => {
+check('真实数据能跑通球面：全部设备都落在视口内且不重叠成堆', () => {
   const pj = join(ROOT, 'data/products.json');
   if (!existsSync(pj)) return;
   const snap = JSON.parse(readFileSync(pj, 'utf8'));
   const n = (snap.products ?? []).length;
   if (!n) return;
+  // 品牌分区台数必须**从数据推导**（与 GlobeView.vue 的 groups 同逻辑：
+  // 按 items 里品牌的出现顺序分组计数）。曾在这里写死 [47, 13] ——
+  // 华为变成 49 台那天，spherePoints(62, [47,13]) 只返回 60 个点，
+  // 两台新机型静默不上球，而前端（推导逻辑）是对的，只有测试夹具是错的。
+  // 教训：判据可以钉性质（每台都有点、不出视口），不能钉当期数值。
+  const g2 = [];
+  let curBrand = '';
+  for (const p of snap.products) {
+    if (p.brand !== curBrand) {
+      g2.push(1);
+      curBrand = p.brand;
+    } else {
+      g2[g2.length - 1]++;
+    }
+  }
   const vp = { w: 1200, h: 700 };
-  const pts = G.spherePoints(n, [47, 13]);
+  const pts = G.spherePoints(n, g2);
   assert.equal(pts.length, n, '球面点数与设备数不符');
   for (const cam of [
     { lon: 0, lat: 0, dist: 2.8 },
@@ -2460,13 +2475,15 @@ check('品类计数之和等于在册台数（不能有机型漏归类）', () =
   assert.equal(counts.phone, REAL_P.length, '本数据集只有手机（折叠屏也是手机，归形态维度）');
 });
 
-check('形态维度：折叠屏 7 台 / 直板 53 台，之和等于全集（用户 2026-10-06 纠正）', () => {
+check('形态维度：折叠屏 / 直板两类，之和等于全集（用户 2026-10-06 纠正）', () => {
   const forms = REAL_P.map(C.formOf);
   const fold = forms.filter((f) => f === 'foldable').length;
   const bar = forms.filter((f) => f === 'bar').length;
   assert.equal(fold + bar, REAL_P.length, '每台都必须有形态');
-  assert.equal(fold, 7, '折叠屏应恰好 7 台（与 isFoldable 判据一致）');
-  assert.equal(bar, 53);
+  // 台数从数据推导，不钉当期值：新机型入库（折叠或直板）时判据不该假警报。
+  // 这里测的是性质 —— 恰好两类、之和等于全集、与 isFoldable 严格同源。
+  assert.equal(bar, REAL_P.length - fold, '直板台数 = 全集 - 折叠台数');
+  assert.equal(fold, REAL_P.filter(C.isFoldable).length, '折叠台数必须与 isFoldable 判据同源');
   // 反向测：形态与 isFoldable 必须严格同源，不能各判各的
   for (const p of REAL_P) {
     assert.equal(C.formOf(p) === 'foldable', C.isFoldable(p), `${p.name} 形态与折叠判据不一致`);
@@ -2647,15 +2664,27 @@ check('维度间取交集、同维度内取并集', () => {
     appleFold.every((p) => p.brand === 'apple' && C.isFoldable(p)),
     '维度间是「与」',
   );
-  assert.equal(appleFold.length, 1);
+  // 台数从数据推导：苹果出折叠机那天这条不该假警报
+  assert.equal(
+    appleFold.length,
+    REAL_P.filter((p) => p.brand === 'apple' && C.isFoldable(p)).length,
+    '苹果折叠台数必须与筛选结果一致',
+  );
 });
 
-check('缺数据机型可被筛出来（19 台无芯片、30 台无内存不是隐形消失）', () => {
-  // 不给「未公布」选项的话，筛「芯片=A19」后这 19 台会人间蒸发且无处可寻。
+check('缺数据机型可被筛出来（无芯片 / 无内存的机型不是隐形消失）', () => {
+  // 不给「未公布」选项的话，筛「芯片=A19」后这些机型会人间蒸发且无处可寻。
+  // 台数不钉数值（官网补全数据时会变），测的是自洽性：
+  // 筛「未公布」的结果 == 数据里真正缺该项的机型，一台不差。
   const noChip = F.applyFilter(REAL_P, { ...F.emptyFilter(), chip: [C.UNKNOWN] });
-  assert.equal(noChip.length, 19, '缺芯片名的 19 台必须能被筛出来');
+  const chipFacet = F.facetOf(REAL_P, 'chip', REAL_P).find((c) => c.id === C.UNKNOWN);
+  assert.ok(chipFacet, '芯片分面必须有「未公布」档位，否则缺数据的机型无处可寻');
+  assert.equal(noChip.length, chipFacet.count, '筛「未公布芯片」的结果必须与分面计数一致');
+  assert.ok(noChip.every((p) => !p.chipset?.name), '筛出来的必须真的没有芯片名');
   const noRam = F.applyFilter(REAL_P, { ...F.emptyFilter(), ram: [C.UNKNOWN] });
-  assert.equal(noRam.length, 30, '缺内存的 30 台必须能被筛出来');
+  const ramFacet = F.facetOf(REAL_P, 'ram', REAL_P).find((c) => c.id === C.UNKNOWN);
+  assert.ok(ramFacet, '内存分面必须有「未公布」档位');
+  assert.equal(noRam.length, ramFacet.count, '筛「未公布内存」的结果必须与分面计数一致');
 });
 
 check('分面计数联动但选项枚举看全集（0 计数灰显保留，选中后仍能改主意）', () => {
@@ -2668,10 +2697,14 @@ check('分面计数联动但选项枚举看全集（0 计数灰显保留，选�
   // 联动计数正确：苹果自己的芯片计数 = 苹果池内台数
   const a19 = chips.find((c) => c.id === 'A19Pro');
   assert.ok(a19 && a19.count > 0, '选苹果后 A19 Pro 必须还有计数');
-  // 而品牌分面自身不受限制，13 + 47 都还能看到
+  // 而品牌分面自身不受限制，两个品牌都还能看到
   const brands = F.facetOf(REAL_P, 'brand', F.applyExcept(REAL_P, fa, 'brand'), REAL_LABELS);
   assert.equal(brands.length, 2, '品牌分面不应被自己的选择收窄');
-  assert.equal(brands.find((b) => b.id === 'huawei')?.count, 47);
+  assert.equal(
+    brands.find((b) => b.id === 'huawei')?.count,
+    REAL_P.filter((p) => p.brand === 'huawei').length,
+    '华为分面计数必须与数据里的华为台数一致（曾写死 47，华为 49 台那天假警报）',
+  );
 });
 
 check('反向测：选华为芯片后品牌分面仍含苹果（0 计数），维度不会整体消失', () => {
@@ -2971,13 +3004,21 @@ check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 �
     '品类分面只有手机 —— 折叠屏不是品类',
   );
   const formFacets = F.facetOf(REAL_P, 'form', REAL_P);
+  // 顺序与标签钉死（折叠屏在前），台数从数据推导 —— 曾写死 7/53，
+  // 华为入库两台直板机那天 deepEqual 整体失败，而性质毫无问题。
   assert.deepEqual(
-    formFacets.map((f) => [f.id, f.count, f.label]),
+    formFacets.map((f) => [f.id, f.label]),
     [
-      ['foldable', 7, '折叠屏'],
-      ['bar', 53, '直板'],
+      ['foldable', '折叠屏'],
+      ['bar', '直板'],
     ],
-    '形态分面 = 折叠屏 7 + 直板 53，折叠屏在前',
+    '形态分面 = 折叠屏 + 直板两类，折叠屏在前',
+  );
+  const realFold = REAL_P.filter(C.isFoldable).length;
+  assert.deepEqual(
+    formFacets.map((f) => f.count),
+    [realFold, REAL_P.length - realFold],
+    '形态分面计数必须与数据一致',
   );
 });
 
