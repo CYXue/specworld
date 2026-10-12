@@ -69,12 +69,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      # 精灵图是构建期产物（data/sprites/ 在 .gitignore 里），全新 checkout 不存在。
+      # 而「画布字段与数据对齐」等判据要读立绘 SVG —— 不补这一步，CI 上 selftest
+      # 从工作流上线第一天起就必失败（缺 apple-iphone-16.svg），
+      # needs: selftest 的 sync / deploy 全部被跳过 ⇒ 定时同步其实一次都没跑通过。
+      # 2026-10-12 复盘 24 次历史 run 时发现：唯一的 bot 成功提交停留在 10-02，
+      # 正是因为 10-02 时 sprites 还入库，10-03 重构把它移出仓库后判据就开始必挂。
+      # 离线生成：只读 data/products.json，零网络零依赖，秒级；不入库（CI 用完即弃）。
+      - name: 生成精灵图（离线）
+        run: node scripts/sprite/generate.mjs
+
       # 覆盖两类东西：
       #   1. 解析器——错了不报错，只会静默产出脏值（历史上刷新率解析错过两次）
       #   2. 校验闸门本身——它是「拒绝写盘」的唯一防线，自己写错了防线就漏了
       - name: 管线自测
         run: node scripts/selftest.mjs
-
       # 依赖源闸门：lock 里混入镜像地址会让连不上该镜像的环境 `npm ci` 直接失败。
       # 本机 registry 指向国内镜像（装包快），所以这条几乎必然在本地被写脏——
       # 靠人记忆在推送前 sed 是不现实的，改成 push 时当场拦截。
