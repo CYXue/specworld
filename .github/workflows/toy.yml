@@ -9,7 +9,16 @@ name: 发布到 B 站 Toy
 #   1. 仓库 Secret  TOY_CLI_SESSION_TOKEN
 #      就是本机 ~/.toy/session.json 里的 session_token。过期后本机会报「尚未登录」：
 #        toy login
-#        node -p 'require(process.env.HOME+"/.toy/session.json").session_token' | gh secret set TOY_CLI_SESSION_TOKEN
+#      拿 token 的命令（Git Bash 里跑，粘进 Settings → Secrets → Actions）：
+#        TOY_SESSION="$USERPROFILE/.toy/session.json" node -e 'process.stdout.write(require(process.env.TOY_SESSION).session_token)' | clip
+#      ⚠️ 不要写成 node -p 'require(process.env.HOME+"/.toy/session.json")...'：
+#      MSYS（Git Bash 的 POSIX 层）会把 node 参数里的 /.toy/session.json 当成
+#      POSIX 路径改写成 C:/Program Files/Git/.toy/session.json（MSYS 的 / 根 =
+#      Git 安装目录），JS 源码被 shell 层改写，require 必失败、剪贴板空白
+#      （2026-10-12 实踩）。正道：路径走环境变量，node 参数里不放斜杠；
+#      用 process.stdout.write 而非 -p，免得尾部换行也粘进 Secret 表单。
+#      PowerShell 无此问题，也可：
+#        (Get-Content "$env:USERPROFILE\.toy\session.json" | ConvertFrom-Json).session_token | clip
 #   2. 仓库 Variable TOY_ID
 #      Toy 的 ID。第一次发布要人工跑 `toy create` 拿到，之后固定不变；
 #      配在 Settings → Secrets and variables → Actions → Variables，不写进代码。
