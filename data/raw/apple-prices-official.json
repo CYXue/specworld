@@ -1,0 +1,34 @@
+{
+  "source": "apple-official",
+  "products": [
+    {
+      "id": "apple-iphone-18-pro",
+      "name": "iPhone 18 Pro"
+    },
+    {
+      "id": "apple-iphone-18-pro-max",
+      "name": "iPhone 18 Pro Max"
+    },
+    {
+      "id": "apple-iphone-17",
+      "name": "iPhone 17"
+    },
+    {
+      "id": "apple-iphone-17e",
+      "name": "iPhone 17e"
+    },
+    {
+      "id": "apple-iphone-air",
+      "name": "iPhone Air"
+    },
+    {
+      "id": "apple-iphone-duo",
+      "name": "iPhone Duo"
+    },
+    {
+      "id": "apple-iphone-16",
+      "name": "iPhone 16"
+    }
+  ],
+  "skipped": []
+}
