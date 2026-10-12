@@ -17,6 +17,7 @@
  *   ① 校验 coverage.json 里的 sha256 与磁盘上的字体一致
  *      → 防止「换了字体忘了重生成清单」（那会让闸门拿旧数据报绿）
  *   ② 用清单里的码位集合与「源码 + 数据」求差集
+ *      （字源只含会渲染的文本；data/raw/ 归档不渲染，排除 —— 见下文 walk 注释）
  *
  * 为什么不自己解析 woff2
  * ────────────────────
@@ -63,10 +64,15 @@ const covered = new Set(coverage.codePoints);
 if (!covered.size) fail('❌ coverage.json 的 codePoints 为空');
 
 /* ── 2. 收集站点会用到的字符 ── */
+// 只收「会渲染到页面」的文本：src/ + index.html + data/ 顶层的快照类 JSON。
+// ⚠️ data/raw/（原始响应归档）必须排除：它是解析器回放输入，不进任何渲染路径。
+// 2026-10-12 实测：华为官网原文里的「伽」「骁」让这道闸门报缺字，
+// 而这两个字 products.json / src/ 里一个都没有 —— 站点根本不显示它们。
+// 判据对象错了比判据严了更糟：为了永不渲染的字给字体子集加码位是反向修复。
 function walk(dir, exts, out = []) {
   if (!existsSync(dir)) return out;
   for (const name of readdirSync(dir)) {
-    if (name === 'node_modules' || name === 'dist' || name.startsWith('.')) continue;
+    if (name === 'node_modules' || name === 'dist' || name === 'raw' || name.startsWith('.')) continue;
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p, exts, out);
     else if (exts.includes(extname(name))) out.push(p);
