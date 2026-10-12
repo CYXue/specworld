@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <!--
-  Toy 封面（poster）源文件 —— 960×540（16:9），由 make-toy-assets.mjs 栅格化成 PNG。
+  Toy 封面（poster）源文件 —— 960×720（4:3），由 make-toy-assets.mjs 栅格化成 PNG。
+
+  为什么是 4:3 而不是 16:9
+  ------------------------
+  B 站 Toy 的 doctor 预检明确偏好 4:3 横版封面（COVER_RATIO = 4/3，容差 0.08）：
+  偏差超了会 warn「portrait/异形封面在 Toy 卡片里可能裁切不佳」。
+  第一版做过 960×540（16:9），偏差 0.44 远超容差 —— 而且更坑的是，
+  toy-create.mjs 跑 doctor 时没传 --poster，这条校验被静默跳过、零 findings 是假象。
+  2026-10-12 改为 4:3 并把 --poster 补上。
+
+  构图：上下结构（标识居上 → 标题组 → 黑带压底）。
+  4:3 比 16:9 高 180px，原来的「左太极右文字」横排会出现大片死空；
+  上下结构在卡片缩略图里标题更大，裁切也裁不到主体。
 
   像素风纪律（CONVENTIONS.md §2.5.1）：零圆角 / 零模糊 / 零渐变 / 字号 12 整数倍。
-  SpecPixel 是 12px 字体，这里只取 24/48/60 三档，保证字形不被缩放糊掉。
+  SpecPixel 是 12px 字体，这里只取 24/72 两档，保证字形不被缩放糊掉。
   太极图直接 NEAREST 放大 public/favicon.svg —— 它就是本站的视觉标识，
   像素块必须硬，一放大就糊等于自己砸自己的美学。
   改这张页面 = 改封面；改完重跑 node scripts/publish/make-toy-assets.mjs。
@@ -21,7 +33,7 @@
     font-display: block;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 960px; height: 540px; overflow: hidden; }
+  html, body { width: 960px; height: 720px; overflow: hidden; }
   body {
     background: #f5f5f7;
     font-family: 'SpecPixel', monospace;
@@ -31,28 +43,26 @@
   }
   /* 四角像素装饰：8px 实心方块，顶左/底右各一，呼应 favicon 的黑白语言 */
   .corner { position: absolute; width: 8px; height: 8px; background: #111114; }
-  .corner.tl { top: 24px; left: 24px; }
-  .corner.tr { top: 24px; right: 24px; background: #f5f5f7; border: 8px solid #111114; }
-  .corner.bl { bottom: 60px; left: 24px; background: #f5f5f7; border: 8px solid #111114; }
-  .corner.br { bottom: 60px; right: 24px; }
+  .corner.tl { top: 32px; left: 32px; }
+  .corner.tr { top: 32px; right: 32px; background: #f5f5f7; border: 8px solid #111114; }
+  .corner.bl { bottom: 92px; left: 32px; background: #f5f5f7; border: 8px solid #111114; }
+  .corner.br { bottom: 92px; right: 32px; }
 
-  .stage { position: absolute; inset: 0; display: flex; align-items: center; }
+  .stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
 
-  /* 左：太极标识，NEAREST 放大保像素硬边 */
+  /* 太极标识，NEAREST 放大保像素硬边 */
   .mark {
-    width: 192px; height: 192px;
-    margin-left: 88px;
+    width: 224px; height: 224px;
+    margin-top: 64px;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     flex: none;
   }
 
-  /* 右：文字区（中英双语：站名与 slogan 各出一条，英文用同一 SpecPixel，
-     52/52 拉丁字形全覆盖，不会静默回退系统字体） */
-  .copy { margin-left: 64px; }
-  .title { font-size: 60px; line-height: 1.2; letter-spacing: 4px; }
-  .title-en { font-size: 24px; line-height: 1.5; letter-spacing: 6px; color: #3c3d44; margin-top: 12px; }
-  .rule { width: 96px; height: 12px; background: #111114; margin: 24px 0; }
+  /* 标题组：中英双语，英文用同一 SpecPixel（52/52 拉丁字形全覆盖，不回退系统字体） */
+  .title { font-size: 72px; line-height: 1.2; letter-spacing: 8px; margin-top: 48px; }
+  .title-en { font-size: 24px; line-height: 1.5; letter-spacing: 8px; color: #3c3d44; margin-top: 16px; }
+  .rule { width: 96px; height: 12px; background: #111114; margin: 28px 0; }
   .slogan { font-size: 24px; line-height: 1.5; letter-spacing: 2px; }
   .sub { font-size: 24px; line-height: 1.5; letter-spacing: 2px; margin-top: 12px; }
 
@@ -61,7 +71,7 @@
     position: absolute; left: 0; right: 0; bottom: 0; height: 36px;
     background: #111114; color: #f5f5f7;
     font-size: 12px; letter-spacing: 3px; line-height: 36px;
-    padding: 0 24px;
+    padding: 0 32px;
     display: flex; justify-content: space-between;
   }
 </style>
@@ -72,13 +82,11 @@
 
   <div class="stage">
     <img class="mark" src="../../../public/favicon.svg" alt="参数世界">
-    <div class="copy">
-      <div class="title">参数世界</div>
-      <div class="title-en">PARAMETER WORLD</div>
-      <div class="rule"></div>
-      <div class="slogan">选择更清楚 · Choose with Clarity</div>
-      <div class="sub">量化参数可对比</div>
-    </div>
+    <div class="title">参数世界</div>
+    <div class="title-en">PARAMETER WORLD</div>
+    <div class="rule"></div>
+    <div class="slogan">选择更清楚 · Choose with Clarity</div>
+    <div class="sub">量化参数可对比</div>
   </div>
 
   <div class="band">

@@ -62,8 +62,24 @@ if (!toyBin) {
   console.error('❌ 找不到 toy CLI。安装：curl -fsSL https://boss.hdslb.com/toy-cli/toy/install.sh | bash');
   process.exit(1);
 }
+/**
+ * 调 toy CLI。Windows 上必须经 bash 包装，不能直接 execFileSync(toyBin)：
+ * `command -v toy` 返回的是 MSYS 风格路径（/c/Users/.../toy），
+ * 且该可执行文件没有 .exe 扩展名 —— Windows CreateProcess 两样都不认，
+ * 直接 spawn 报 ENOENT，被误判成「未登录」（2026-10-12 实踩：
+ * whoami 明明在线，预览却跑不起来）。
+ * bash -c 'toy "$@"' 的写法让 bash 自己按 PATH 找 toy，参数逐个传递、
+ * 不手拼引号，值里带空格/中文/点号都安全（CI 的 Linux runner 上
+ * bash 同样存在，走同一条路，行为一致）。
+ */
+const runToy = (args, opts = {}) => {
+  if (process.platform === 'win32') {
+    return execFileSync('bash', ['-c', 'toy "$@"', 'toy', ...args], opts);
+  }
+  return execFileSync(toyBin, args, opts);
+};
 try {
-  const who = JSON.parse(execFileSync(toyBin, ['whoami', '--json'], { encoding: 'utf8' }));
+  const who = JSON.parse(runToy(['whoami', '--json'], { encoding: 'utf8' }));
   console.log(`✅ 已登录：${who.name}（uid ${who.uid}）`);
 } catch {
   console.error('❌ 未登录或登录态失效。跑一次 toy login 后重试（重试一次就停，别循环）。');
@@ -83,7 +99,10 @@ if (doctor) {
   console.log('▶ 官方 toy_doctor.py 预检');
   try {
     const py = process.env.TOY_PYTHON || 'C:/Program Files/Python312/python.exe';
-    execFileSync(py, [doctor, PKG, '--slug', meta.slug, '--json'], { stdio: 'inherit' });
+    // ⚠️ 必须传 --poster：validate_poster 在 poster 参数缺失时直接 return，
+    // 「格式/4:3 比例」校验被静默跳过、零 findings 是假象（2026-10-12 实踩：
+    // 16:9 封面偏差 0.44 超容差，预检却报 ok）。
+    execFileSync(py, [doctor, PKG, '--slug', meta.slug, '--poster', assetPath(meta.poster), '--json'], { stdio: 'inherit' });
   } catch {
     console.error('❌ doctor 预检未通过 —— 按上面的 ERROR 逐条修，修完重跑。');
     process.exit(1);
@@ -133,7 +152,7 @@ if (COMMIT) {
   console.log('▶ 提交审核（--yes）…');
   let out;
   try {
-    out = execFileSync(toyBin, args, { encoding: 'utf8' });
+    out = runToy(args, { encoding: 'utf8' });
   } catch (e) {
     console.error(e.stdout || e.message);
     console.error('❌ 提交失败 —— 按上面的 message 处理，不要盲目重试。');
@@ -157,7 +176,7 @@ if (COMMIT) {
 console.log('▶ 创建预览（不带 --yes，不会提交审核）…');
 let out;
 try {
-  out = execFileSync(toyBin, args, { encoding: 'utf8' });
+  out = runToy(args, { encoding: 'utf8' });
 } catch (e) {
   console.error(e.stdout || e.message);
   console.error('❌ 预览失败 —— 按上面的 message 处理。');

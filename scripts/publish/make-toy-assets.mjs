@@ -23,7 +23,10 @@
  * 平台规格（toy create --help-json）
  * --------------------------------
  *   icon：PNG/JPEG，≤512KB，宽高 ≤1024px。这里取 512×512。
- *   poster：封面图，无硬性上限，取 960×540（16:9，B 站卡片主流比例）。
+ *   poster：封面图。尺寸取 960×720（4:3）—— B 站 Toy 的 doctor 预检偏好
+ *     4:3 横版（COVER_RATIO = 4/3，容差 0.08），异形封面 warn「卡片可能裁切不佳」。
+ *     第一版 960×540（16:9）偏差 0.44 超容差，且 --poster 没传给 doctor、
+ *     校验被静默跳过。2026-10-12 改 4:3 并补上 --poster。
  *
  * 退出码：0 成功；1 资产不合规（体积/尺寸超限）。
  */
@@ -150,7 +153,7 @@ if (stale(FAVICON, ICON_PNG)) {
 }
 if (stale(POSTER_HTML, POSTER_PNG)) {
   checkLocalRefs(POSTER_HTML);
-  shoot(chrome, `file:///${POSTER_HTML.replace(/\\/g, '/')}`, POSTER_PNG, 960, 540);
+  shoot(chrome, `file:///${POSTER_HTML.replace(/\\/g, '/')}`, POSTER_PNG, 960, 720);
   jobs++;
 }
 if (jobs === 0) console.log('资产都是新的，跳过（--force 可强制重生成）');
