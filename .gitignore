@@ -36,3 +36,8 @@ Thumbs.db
 
 # 像素风视觉核对截图（_smoke-pixel.cjs 的产物，随时可重跑生成，不入库）
 _shots-pixel/
+
+# Toy 资产是可再生产物：真源 = public/favicon.svg + toy-assets/poster.html + make-toy-assets.mjs。
+# PNG 入库只会多一份会漂移的副本（与 data/ vs dist/ 同一纪律）。
+scripts/publish/toy-assets/*.png
+scripts/publish/toy-assets/.icon-wrap.html

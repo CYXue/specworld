@@ -35,8 +35,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # 固定版本，升级 CLI 时改这里
-  TOY_CLI_VERSION: v0.6.1
+  # 固定版本，升级 CLI 时改这里。
+  # 本机 CLI 为 v0.6.2（2026-10-12 对齐；create 的 flags 与 doctor 预检均在此版本验证过）。
+  TOY_CLI_VERSION: v0.6.2
   TOY_NO_UPDATE_CHECK: '1'
 
 jobs:

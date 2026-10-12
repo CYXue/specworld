@@ -1,0 +1,21 @@
+{
+  "_comment": "B 站 Toy 发布元信息（唯一真源）。toy-create.mjs / toy.yml / 文档都读这里，不散落。slug 一旦发布不可改（平台规则），改它 = 删除重建，链接全失效。",
+  "title": "参数世界 · 手机参数对比",
+  "_title_note": "Toy 卡片上显示的名称。想换随时能换（toy update --title），与 slug 无关。",
+  "slug": "parameter-world",
+  "_slug_note": "⚠️ 待用户最终确认。发布后不可改。候选：parameter-world（与远端仓库对齐）/ specworld（与包名一致，但远端仓库计划改名）/ canshu-shijie（拼音）。确认前 toy-create.mjs 拒绝执行。",
+  "slugConfirmed": false,
+  "_slugConfirmed_note": "用户明确拍板 slug 后改为 true。这是防手滑的最后一道闸：slug 发布后不可改（平台规则），改它 = 删除重建、分享链接全失效。",
+  "category": "TOOL",
+  "_category_note": "参数对比站 = 工具，不是游戏。枚举：GAME|INTERACTIVE_PLAY|TOOL|TEST|GUIDE|COLLECTION|OTHER。",
+  "visibility": "link-only",
+  "_visibility_note": "拿到链接的人可看。公开（public）等站点内容更完善后再评估。",
+  "watermark": false,
+  "_watermark_note": "含自由绘制能力的 Toy 必须开。本站无画布涂鸦类功能，不开。",
+  "icon": "toy-assets/icon-512.png",
+  "_icon_note": "平台规格：PNG/JPEG，≤512KB，宽高≤1024px。由 make-toy-assets.mjs 从 public/favicon.svg 栅格化。",
+  "poster": "toy-assets/poster.png",
+  "_poster_note": "Toy 卡片封面。由 make-toy-assets.mjs 从 toy-assets/poster.html 渲染。",
+  "share": "https://www.bilibili.com/toy/parameter-world/index.html",
+  "_share_note": "发布后的分享链接形态（slug 定了才有效）。"
+}

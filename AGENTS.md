@@ -202,6 +202,10 @@ data/sprites/  精灵图 —— 构建期生成，不入库
   仓库 git 根在子目录。
 - **B 站 Toy 需 `secrets.TOY_CLI_SESSION_TOKEN` + `vars.TOY_ID`**，未配则安静跳过。
 - **页面挂 `/toy/<slug>/`**：dist 里不能有任何写死的路径前缀。
+- **首次发布 Toy 走人工两段式**：`node scripts/publish/toy-create.mjs`（预览，不带 `--yes`）
+  → 用户看过预览 → `--commit`。slug 发布后不可改，`scripts/publish/toy-meta.json` 的
+  `slugConfirmed` 不为 true 时脚本拒绝执行。元信息与资产（icon/poster）真源都在
+  `scripts/publish/` 下，详见 `docs/AUTOMATION-RECIPE.md` §9「B 站 Toy：本项目实作」。
 
 ---
 

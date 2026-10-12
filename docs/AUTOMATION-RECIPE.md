@@ -526,6 +526,53 @@ curl -s "https://api.github.com/repos/OWNER/REPO/actions/runs?per_page=5" \
 （本次华为 / 苹果官网直连没问题，但换个上游就不一定）。
 反过来，**从中国大陆跑 GitHub Actions 是反方向，别搞混**。
 
+### B 站 Toy：本项目实作（第二台发动机的完整形态）
+
+上面是骨架，这里是 specworld 已经落地的全貌。分五层：
+
+**① 链路分工。** `sync.yml` 每 12 小时抓数据 + 发 GitHub Pages；
+`toy.yml` 每天一次（北京时间 10:30，排在早上那次同步之后）打包送审，
+同样缺凭据安静跳过（`TOY_CLI_SESSION_TOKEN` + `TOY_ID` 两样都配才跑）。
+两个工作流互不依赖：Pages 不需要任何凭据。
+
+**② CI 只 update，首次 create 必须人工。** slug 发布后不可改（平台规则），
+改它等于删除重建、分享链接全失效 —— 这个决定不该由定时任务替用户做。
+人工首次发布走 `scripts/publish/toy-create.mjs`，**两段式**：
+
+```
+node scripts/publish/toy-create.mjs            # 第一段：doctor 预检 → 打包 → create 预览（不带 --yes）
+node scripts/publish/toy-create.mjs --commit   # 第二段：人看过预览链接、明确确认后才加 --yes
+```
+
+防手滑的最后一道闸是 `toy-meta.json` 的 `slugConfirmed`：不为 `true` 脚本拒绝执行。
+元信息（title/slug/category/visibility/icon/poster）只存这一个文件，CI 与脚本都读它。
+
+**③ 资产不存二进制，只存源。** icon / poster 都是从「favicon.svg + poster.html + 字体」
+确定性再生的产物（与 data/ vs dist/ 同一纪律）：`node scripts/publish/make-toy-assets.mjs`。
+栅格化用 Chrome headless 而不是 PIL，两个理由：中文像素字体只有浏览器渲染才与站点一致；
+像素作品的放大必须走渲染链，不能走降采样链（P31 的教训）。
+⚠️ 静默失效点：HTML 里字体/图片相对路径写错时**不报错**，只是静默回退系统字形 /
+显示破图，截图照样出。所以截图前先做引用体检（逐个 resolve 核对存在性）——
+这个坑在实作中真踩过一次（`../` 少数一层，poster 标题整个掉回宋体）。
+
+**④ 判据分布（Toy 硬约束）。** 三层各管一段，互不重复：
+
+| 闸门 | 拦什么 | 什么时候跑 |
+|---|---|---|
+| `check-conventions.mjs` | `base` 必须是 `'./'`、必须 hash 路由（子路径下绝对路径 404、history 模式刷新即 404） | CI 第一个 job |
+| `verify-dist.mjs`（postbuild） | 入口真的打进去了、引用全相对、零外链、无失效引用、data/ 与 sprites/ 齐备、≤50MB | 每次 build 后 |
+| 官方 `toy_doctor.py` | 平台侧口径（源码目录误传、HTML 过大、URL mutation） | create 前（找不到不阻断，核心 ERROR 已被 verify-dist 覆盖） |
+
+**⑤ SDK 决策：不主动引。** 参考项目（AI 大模型世界）的 `BiliLink.tsx` 是
+「特性检测 + 降级」模式：Toy 容器里点视频链接走 `toy.navigate({type:'video'})`
+由原生播放页打开、Toy 留后台；非 Toy 环境就是普通 `<a target="_blank">`；
+SDK 没加载或调用抛错都退回普通链接。它**没有**在 `<head>` 引 `toy-sdk.js`——
+SDK 由平台容器注入。本站照这个决策：零外链是 verify-dist 的硬判据，
+为引 SDK 在 GitHub Pages 侧多一个注定失败的外部请求不值得；
+且本站没有 B 站视频链接场景，先不实现桥接组件。将来要绑视频，
+照 BiliLink 模式写 Vue 版（`window.toy` 特性检测 + 降级），并把 SDK script
+只加在 Toy 构建变体里。
+
 ---
 
 ## 10. 依赖源纪律：本地走镜像，提交的 lock 必须干净
