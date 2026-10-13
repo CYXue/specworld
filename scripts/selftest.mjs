@@ -4421,6 +4421,7 @@ const FIELDS_LIB = await import('../src/lib/fields.ts');
 const ADAPT_LIB = await import('../src/lib/adapt.ts');
 const SPECS_LIB = await import('../src/lib/specs.ts');
 const FACETS_LIB = await import('../src/lib/facets.ts');
+const CMP = await import('../src/lib/compare.ts');
 
 /* 渲染对账闸门（2026-10-13 首建，同日升级为视图字典版）：specGroups 已重构为
  * 「全声明式视图字典 + 泛化引擎」（data/view-phone.json），新字段默认自动出现。
@@ -4740,6 +4741,23 @@ check('orderDeriver 声明与注册表对账（序类适配器不游离）', () 
     assert.equal(impl(undefined), null);
   }
   assert.ok(declared >= 1, 'phone schema 应至少声明一个 orderDeriver（refreshHz），声明丢失说明被误删');
+});
+
+check('对比差异判定纯函数（准绳口径：缺失不参与值比较，缺失/不等分两类）', () => {
+  // 完整采用准绳方案（用户 2026-10-13 裁决）。对照准绳判据：
+  // 「有值 vs 缺失→标缺失色；双方都缺→不标；相等→不标；不等→标不等色」。
+  const S = CMP.compareRowState;
+  // 关键 case：缺失混入不污染相等判断——120 / — / 120 是「缺失差异」，不是「值不等」
+  assert.deepEqual(S(['120', '—', '120']), { different: false, missing: true });
+  assert.deepEqual(S(['120', '—', '200']), { different: true, missing: true });
+  assert.deepEqual(S(['120', '120', '120']), { different: false, missing: false });
+  assert.deepEqual(S(['120', '200']), { different: true, missing: false });
+  assert.deepEqual(S(['—', '—']), { different: false, missing: false }); // 全缺失不标
+  assert.deepEqual(S(['X 轴线性马达', '转子马达', '—']), { different: true, missing: true });
+  // 上浮入选条件：isDifferent || isMissing
+  assert.equal(CMP.isDiffRow(S(['120', '120'])), false);
+  assert.equal(CMP.isDiffRow(S(['120', '—'])), true);
+  assert.equal(CMP.isDiffRow(S(['120', '200'])), true);
 });
 
 section('v2 全品类目录：品类 schema 校验');

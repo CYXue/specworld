@@ -28,6 +28,7 @@ import {
   writeFilter,
 } from '../lib/facets';
 import type { DimKey, FacetItem, FilterState, SortKey } from '../lib/facets';
+import { compareRowState } from '../lib/compare';
 import { continentOf } from '../types';
 import AbilityBars from '../components/AbilityBars.vue';
 import FilterBar from '../components/FilterBar.vue';
@@ -89,15 +90,28 @@ const picked = computed<string[]>(() => {
 
 /**
  * 「只看差异」开关：状态进 URL（?d=1），与本页其他状态同原则——刷新不丢、可分享。
- * 只标差异、**不判好坏**（用户 2026-10-13 明确要求）：参数没有客观优劣，
- * 轻/重、大/小各有偏好，金色 ◆ 只表示「这几台在这里不一样」，不代表谁更好。
+ * 只标差异、**不判好坏**：参数没有客观优劣（轻/重、大/小各有偏好）。
  */
 const diffOnly = computed(() => route.query.d === '1');
+
+/**
+ * 差异高亮总开关（完整采用准绳 diffHighlightOn）：默认开，?h=0 关——
+ * 关掉后是纯中性表格（无底色/竖线/加粗）。与「只看差异」正交：
+ * 「只看差异 + 高亮关」= 不带标记的差异行清单。
+ */
+const highlight = computed(() => route.query.h !== '0');
 
 function setDiffOnly(v: boolean) {
   const q: Record<string, unknown> = { ...route.query };
   if (v) q.d = '1';
   else delete q.d;
+  router.replace({ path: '/compare', query: q });
+}
+
+function setHighlight(v: boolean) {
+  const q: Record<string, unknown> = { ...route.query };
+  if (v) delete q.h;
+  else q.h = '0';
   router.replace({ path: '/compare', query: q });
 }
 
@@ -107,8 +121,9 @@ function push(nextFilter: FilterState, nextPicked: string[], nextSorts: SortKey[
     query: {
       ...writeFilter(nextFilter, nextSorts),
       ...(nextPicked.length ? { p: nextPicked.join(',') } : {}),
-      // 保留「只看差异」状态：切换筛选/排序不应把用户的对比视图设置冲掉
+      // 保留对比视图设置：切筛选/排序不应冲掉「只看差异」与「高亮」状态
       ...(diffOnly.value ? { d: '1' } : {}),
+      ...(highlight.value ? {} : { h: '0' }),
     },
   });
 }
@@ -200,28 +215,66 @@ const matrix = computed(() => {
       }
     return m;
   });
-  // 差异检测：同一参数在所有机型上的取值（含「—」）不完全相同 → 有差异。
-  // 全部「—」= 都未公布 = 相同行（没有信息量）；部分「—」= 真实差异（有的公布有的没公布）。
-  // 缺行的机型按「—」参与比较，与表格显示一致。
+  // 差异判定：完整采用准绳口径（src/lib/compare.ts 纯函数，缺失不参与值比较）——
+  // **两种标记**：值不等（different）与 缺失差异（missing：有值 vs 未公布并存）是不同信息，
+  // 混成一种会让「官方未公布」被误读成「配置不同」（本数据集 40% 格子未公布）。
   const rows = order.map((o) => {
     const k = `${o.group}|${o.label}`;
     const values = per.map((m) => m.get(k) ?? '—');
-    return { ...o, diff: new Set(values).size > 1 };
+    return { ...o, ...compareRowState(values) };
   });
+  // 差异行上浮（准绳 sortDiffUp）：组内 isDifferent/isMissing 的行排前面，其余保持原序。
+  const floated = [...rows].sort(
+    (a, b) => Number(b.different || b.missing) - Number(a.different || a.missing),
+  );
   const groups: string[] = [];
-  for (const o of rows) if (!groups.includes(o.group)) groups.push(o.group);
-  return { list, per, groups, order: rows, diffCount: rows.filter((r) => r.diff).length };
+  for (const o of floated) if (!groups.includes(o.group)) groups.push(o.group);
+  return {
+    list,
+    per,
+    groups,
+    order: floated,
+    diffCount: rows.filter((r) => r.different || r.missing).length,
+  };
 });
 
-/** 「只看差异」模式下实际渲染的行；组内无差异行时整组隐藏。 */
+/** 「只看差异」模式下实际渲染的行（准绳 sortDiffUp 入选条件：值不等或缺失差异）；
+ * 组内无差异行时整组隐藏。 */
 const visibleOrder = computed(() =>
-  !matrix.value ? [] : diffOnly.value ? matrix.value.order.filter((r) => r.diff) : matrix.value.order,
+  !matrix.value
+    ? []
+    : diffOnly.value
+      ? matrix.value.order.filter((r) => r.different || r.missing)
+      : matrix.value.order,
 );
 const visibleGroups = computed(() =>
   matrix.value
     ? matrix.value.groups.filter((g) => visibleOrder.value.some((r) => r.group === g))
     : [],
 );
+
+/**
+ * 行标记样式（2026-10-13 完整采用准绳三重标识：底色 + 左竖线 + 差异行加粗，不依赖颜色——
+ * 用户明确裁决「准绳做得更好，采用准绳建议」；此前单底色是协作铁律失守案例，已纠正）。
+ * 两种底色区分两种信息：金 = 配置不同；蓝(lapis) = 公布情况不同（有值 vs 未公布并存）。
+ * both 时随准绳取缺失色（missing 优先）。highlight 关 → 纯中性表格。
+ */
+function rowStyle(o: { different: boolean; missing: boolean }): Record<string, string> {
+  if (!highlight.value) return {};
+  if (o.missing) {
+    return {
+      background: 'rgba(74, 127, 212, 0.14)',
+      borderLeft: '3px solid var(--color-lapis)',
+    };
+  }
+  if (o.different) {
+    return {
+      background: 'rgba(242, 201, 76, 0.13)',
+      borderLeft: '3px solid var(--color-gold)',
+    };
+  }
+  return {};
+}
 
 /** 列表项副标题：系列 · 变体 · 形态 · 芯片，一行说清是谁。 */
 function subline(p: (typeof all.value)[number]): string {
@@ -241,7 +294,7 @@ function subline(p: (typeof all.value)[number]): string {
   <div class="page-shell py-6">
     <SectionFrame title="机型库 · 筛选与对比" hud="var(--color-west)" icon="compare">
       <p
-        class="pixel-note mb-3 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)"
+        class="pixel-note mb-3 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]"
       >
         先筛出想要的机型，再勾左侧方块加入对比：勾 1 台看完整详情，勾 2 台以上并排对比，
         <span style="color: var(--color-gold)">不限台数</span>。条件与已选项都在网址里，可直接分享。
@@ -483,6 +536,14 @@ function subline(p: (typeof all.value)[number]): string {
           >
             只看差异（{{ matrix.diffCount }} 项）
           </button>
+          <span class="mx-1 h-4 w-px" style="background: var(--color-ink)" />
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="highlight"
+            @click="setHighlight(!highlight)"
+          >
+            差异高亮{{ highlight ? ' 开' : ' 关' }}
+          </button>
         </div>
         <div class="mb-3 overflow-x-auto">
           <table
@@ -539,10 +600,7 @@ function subline(p: (typeof all.value)[number]): string {
               <tr v-for="o in visibleOrder.filter((x) => x.group === g)" :key="o.label">
                 <td
                   class="sticky left-0 z-1 border-2 border-[var(--color-ink)] bg-[var(--color-panel)] px-2 py-1"
-                  :style="{
-                    color: 'var(--color-parchment-dim)',
-                    background: o.diff ? 'rgba(242, 201, 76, 0.13)' : undefined,
-                  }"
+                  :style="rowStyle(o)"
                 >
                   {{ o.label }}
                 </td>
@@ -551,11 +609,12 @@ function subline(p: (typeof all.value)[number]): string {
                   :key="i"
                   class="border-2 border-[var(--color-ink)] bg-[var(--color-panel)] px-2 py-1"
                   :style="{
+                    ...rowStyle(o),
                     color:
                       m.get(`${o.group}|${o.label}`) === '—'
                         ? 'var(--color-ink-soft)'
                         : 'var(--color-parchment-lit)',
-                    background: o.diff ? 'rgba(242, 201, 76, 0.13)' : undefined,
+                    fontWeight: highlight && o.different ? 600 : 400,
                   }"
                 >
                   {{ m.get(`${o.group}|${o.label}`) ?? '—' }}
@@ -564,10 +623,12 @@ function subline(p: (typeof all.value)[number]): string {
             </template>
           </table>
         </div>
-        <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)">
+        <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]">
           「—」代表该机型官网未公布此参数，不是 0。<br />
-          金色底色行 = 机型间存在差异的参数。本表只列差异、不评好坏——参数没有客观优劣
-          （轻/重、大/小各有偏好），请按自己的需求判断。
+          金色底 = 机型间<b style="color: var(--color-gold)">配置不同</b>；蓝色底 =
+          <b style="color: var(--color-lapis)">公布情况不同</b>（有的官网没写）；左侧竖线 +
+          差异行加粗为同一标记的无障碍冗余，不依赖颜色也可辨。<br />
+          本表只列差异、不评好坏——参数没有客观优劣（轻/重、大/小各有偏好），请按自己的需求判断。
         </p>
       </SectionFrame>
     </div>
