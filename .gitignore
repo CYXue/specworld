@@ -7,6 +7,8 @@ _shots/
 
 # 构建与发布产物（可随时重新生成，不入库）
 dist/
+# 构建前清理用的中转目录（rename 旧 dist 到这里，绕开安全删除 shim；可再生产，不入库）
+.dist-trash/
 
 # 中间产物与调试垃圾（适配器缓存、渲染/截图 profile、临时脚本）
 # ⚠️ 但 data/release-dates.json 与 data/discovery-pending.json 是例外：

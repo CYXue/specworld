@@ -1,0 +1,5 @@
+{
+  "_doc": "用户手动数据层（全品类目录的第二数据源）。管线每次同步都会把本文件的条目重新应用到官网数据上——官网刷新不会冲掉用户数据，因为本文件与 data/products.json 相互独立，管线只读不写它。条目类型：① set-field 修正/补录单个参数字段（官网抓漏、抓错、口径变化）；② add-product 整机新增（官网没有但已上市的机型）。每条必填 reason（为什么改）与 createdAt；active=false 是软删除（留痕不生效）。同一 (productId, field) 多条生效时，按 createdAt 升序最后一条赢。字段路径必须在该品类 data/schemas/<category>.json 注册，拼错会被闸门拦下。",
+  "version": 1,
+  "entries": []
+}

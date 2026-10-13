@@ -1,0 +1,34 @@
+{
+  "_doc": "品类注册表（全品类目录的入口）。每个品类引用 data/schemas/<id>.json 定义其可量化参数字段。新增品类 = 加一行 + 加一份 schema 文件，管线、闸门、前端分面自动识别。注意：前端展示顺序另有 src/lib/catalog.ts 的 CATEGORY_ORDER，两处顺序必须一致（selftest 有对账断言）。",
+  "version": 1,
+  "categories": [
+    {
+      "id": "phone",
+      "label": "手机",
+      "labelEn": "Phone",
+      "schema": "phone",
+      "builtin": true
+    },
+    {
+      "id": "tablet",
+      "label": "平板",
+      "labelEn": "Tablet",
+      "schema": "tablet",
+      "builtin": false
+    },
+    {
+      "id": "laptop",
+      "label": "笔记本",
+      "labelEn": "Laptop",
+      "schema": "laptop",
+      "builtin": false
+    },
+    {
+      "id": "audio",
+      "label": "音频",
+      "labelEn": "Audio",
+      "schema": "audio",
+      "builtin": false
+    }
+  ]
+}

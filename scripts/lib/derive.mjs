@@ -1,4 +1,5 @@
 import { brandShortLabel } from '../brands.mjs';
+import { pick } from './specs.mjs';
 
 /**
  * 派生层：分位标尺、首页头衔、一句话定位。
@@ -40,13 +41,13 @@ export const TITLE_COVERAGE = 0.5;
 /** 头衔的最少参赛数 */
 export const TITLE_MIN_POOL = 6;
 
-const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+const get = pick; // specs-first：v2 读 specs 容器，v1 回退嵌套（迁移期双兼容）
 
 /** 从机型上取指标原始值。返回 null 表示这台机器没有这个数据（不是 0） */
 export function metricValue(product, key) {
   switch (key) {
     case 'storageMaxGb': {
-      const arr = product.memory?.storageGb ?? [];
+      const arr = get(product, 'memory.storageGb') ?? [];
       return arr.length ? Math.max(...arr) : null;
     }
     case 'priceCny': {
@@ -232,8 +233,10 @@ export function buildPersona(product, products, scales) {
   }
   // 一个第一都没拿到：如实描述，不硬凑
   const bits = [];
-  if (product.display?.sizeIn) bits.push(`${product.display.sizeIn} 英寸屏幕`);
-  if (product.body?.weightG) bits.push(`${product.body.weightG} 克`);
+  const sizeIn = get(product, 'display.sizeIn');
+  const weightG = get(product, 'body.weightG');
+  if (sizeIn) bits.push(`${sizeIn} 英寸屏幕`);
+  if (weightG) bits.push(`${weightG} 克`);
   if (metricValue(product, 'storageMaxGb'))
     bits.push(`最高 ${metricValue(product, 'storageMaxGb')} GB 存储`);
   return bits.length ? bits.join('，') : '暂无足够参数生成定位';

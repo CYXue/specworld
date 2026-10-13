@@ -27,10 +27,10 @@
  * 退出码：0 正常（含第一段停在预览）；1 闸门未过 / 命令失败。
  */
 
+import { execFileSync, execSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync, execSync } from 'node:child_process';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const HERE = dirname(fileURLToPath(import.meta.url));

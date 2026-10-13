@@ -12,6 +12,14 @@
  */
 
 import { isValidBrand } from '../brands.mjs';
+import { validateOverrides } from '../lib/overrides.mjs';
+import {
+  isRegisteredCategory,
+  loadSchema,
+  validateSpecs,
+  validateStatusMap,
+} from '../lib/schema.mjs';
+import { pick } from '../lib/specs.mjs';
 
 export const LIMITS = {
   minProducts: 20, // 低于这个数说明抓取整体失败了
@@ -43,8 +51,15 @@ export const REQUIRED_PATHS = [
   'memory.storageGb',
 ];
 
-const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
 const has = (v) => v !== null && v !== undefined && !(Array.isArray(v) && v.length === 0);
+
+/**
+ * 取值一律走 specs-first 的 pick（scripts/lib/specs.mjs）：
+ * v2 快照读 specs 容器，v1 历史快照回退嵌套结构。
+ * 只读 specs 会让迁移后第一轮同步的覆盖率对比瞬间跌到 0，触发拒写——
+ * 双兼容是迁移平滑的必要条件，不是兼容负担。
+ */
+const get = pick;
 
 function inRange(v, [lo, hi]) {
   return typeof v === 'number' && Number.isFinite(v) && v >= lo && v <= hi;
@@ -53,9 +68,12 @@ function inRange(v, [lo, hi]) {
 /**
  * @param {import('../src/lib/types.ts').Snapshot} snapshot
  * @param {import('../src/lib/types.ts').Snapshot|null} previous
+ * @param {{overrides?: {entries: object[]}, appliedIds?: string[]}} [options]
+ *   overrides 用户数据层（合并后传入，闸门代为校验）；appliedIds 是本层 add-product
+ *   已并入 snapshot 的 id（冲突检查要排除，否则自己冲突自己）
  * @returns {string[]} 失败原因列表，空数组表示通过
  */
-export function validate(snapshot, previous) {
+export function validate(snapshot, previous, options = {}) {
   const fail = [];
   const ps = snapshot.products;
 
@@ -95,18 +113,19 @@ export function validate(snapshot, previous) {
         fail.push(`${p.id} 的 ${path} = ${v}，超出合理区间 ${range.join('–')}`);
     }
     // 5b. 刷新率是字符串（要保留 `1-120` 的区间语义），单独校验上界
-    if (p.display?.refreshHz) {
-      const parts = String(p.display.refreshHz)
+    const refreshHz = get(p, 'display.refreshHz');
+    if (refreshHz) {
+      const parts = String(refreshHz)
         .split(/[-–~/]/)
         .map(Number)
         .filter(Number.isFinite);
       if (!parts.length) {
-        fail.push(`${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 里没有可解析的数字`);
+        fail.push(`${p.id} 的 display.refreshHz = "${refreshHz}" 里没有可解析的数字`);
       } else {
         const top = Math.max(...parts);
         if (!inRange(top, LIMITS.refreshHz)) {
           fail.push(
-            `${p.id} 的 display.refreshHz = "${p.display.refreshHz}" 上界 ${top} Hz 超出合理区间 ` +
+            `${p.id} 的 display.refreshHz = "${refreshHz}" 上界 ${top} Hz 超出合理区间 ` +
               `${LIMITS.refreshHz.join('–')}（疑似把 PWM 调光频率或分辨率当成刷新率）`,
           );
         }
@@ -123,13 +142,17 @@ export function validate(snapshot, previous) {
         fail.push(`${p.id} 的 SKU 价格非正：${sku.priceCny}`);
     }
     // 7. 口径缺失：有值但没口径 = 不可比，直接拦
-    if (has(p.battery?.capacityMah) && !p.battery.capacityCaliber) {
+    const capacityMah = get(p, 'battery.capacityMah');
+    const capacityCaliber = get(p, 'battery.capacityCaliber');
+    if (has(capacityMah) && !has(capacityCaliber)) {
       fail.push(`${p.id} 有电池容量但缺 capacityCaliber（口径不可缺失）`);
     }
+    const peakNits = get(p, 'display.brightnessPeakNits');
+    const typicalNits = get(p, 'display.brightnessTypicalNits');
     if (
-      has(p.display?.brightnessPeakNits) &&
-      has(p.display?.brightnessTypicalNits) &&
-      p.display.brightnessPeakNits < p.display.brightnessTypicalNits
+      has(peakNits) &&
+      has(typicalNits) &&
+      peakNits < typicalNits
     ) {
       fail.push(`${p.id} 峰值亮度小于典型亮度，解析可能串行`);
     }
@@ -172,6 +195,28 @@ export function validate(snapshot, previous) {
     }
     // 11. 品牌必须在注册表里（注册表单一真源见 scripts/brands.mjs，新增品牌只改那一个文件）
     if (!isValidBrand(p.brand)) fail.push(`${p.id} 的品牌不在注册表：${p.brand}`);
+    // 11b. 品类必须注册，且 specs 逐键过该品类的 schema（v2 全品类结构）。
+    // 防的故障：① category 指向不存在的品类 → 没有字段表，参数表渲染直接崩；
+    // ② specs 里出现未注册键（拍平漏组 / 用户层字段名拼错）→ 值安静地躺进去没人读。
+    if (p.category !== undefined && !isRegisteredCategory(p.category)) {
+      fail.push(`${p.id} 的品类未注册：${p.category}（见 data/categories.json）`);
+    }
+    if (p.specs) {
+      const schema = loadSchema(p.category);
+      for (const e of validateSpecs(p, schema)) fail.push(e);
+      // 11c. status 例外映射（四态 none/not_applicable）必须引用已注册字段、取值合法。
+      // 防的故障：用户层把 not_applicable 写错字段名，导致该字段被静默隐藏或从不隐藏。
+      for (const e of validateStatusMap(p, schema)) fail.push(e);
+    }
+  }
+
+  // 13. 用户数据层合法性（set-field 引用悬空 / 字段未注册 / 值类型区间 / add-product 冲突）。
+  // 与官网闸门同级：写错一样拒绝写盘——静默跳过的后果是用户以为改好了而页面纹丝不动。
+  // appliedIds 排除本层自己新增的机型（snapshot 已含它们，不排除会「自己冲突自己」误报）。
+  if (options.overrides) {
+    for (const e of validateOverrides(options.overrides, ps, { excludeIds: options.appliedIds })) {
+      fail.push(`用户数据层 ${e}`);
+    }
   }
 
   // 12. 与上一版对比的退化检测

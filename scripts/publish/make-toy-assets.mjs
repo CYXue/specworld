@@ -31,10 +31,10 @@
  * 退出码：0 成功；1 资产不合规（体积/尺寸超限）。
  */
 
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { execFileSync } from 'node:child_process';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const HERE = dirname(fileURLToPath(import.meta.url));

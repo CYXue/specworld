@@ -68,14 +68,14 @@ export function isFoldable(p: Product): boolean {
 /**
  * 品类判定。
  *
- * 口径：折叠屏**也是手机**（形态归形态维度），平板 / 笔记本 / 音频在本数据集里
- * 一台都没有 —— 所以当前一律归 `phone`。注释写明这是「本数据集内只有手机」的
- * **事实陈述**，不是「这款是手机」的推断。
- * 未来接入 iPad 数据源时，这里加 `if (looksLikeTablet(p)) return 'tablet'`，
+ * 口径：折叠屏**也是手机**（形态归形态维度）。
+ * v2 起产品记录自带 `category` 字段（管线按数据源写入，见 data/categories.json），
+ * 这里读它；旧快照没有该字段时回落 'phone'（本数据集历史全是手机的事实陈述）。
+ * 未来接入 iPad 数据源时，对应 normalize 通道直接写 category='tablet'，
  * 品类榜与筛选分面会**自动**把新数据分对，不需要改页面。
  */
 export function categoryOf(p: Product): CategoryId {
-  return 'phone';
+  return (p.category as CategoryId | undefined) ?? 'phone';
 }
 
 /** 各品类的在册台数。用于分面计数与「暂无数据」提示。 */

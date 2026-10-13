@@ -56,13 +56,15 @@ function sameSize(a, b) {
  * 目录同步：只拷贝变化过的文件，只删除源里已不存在的文件。
  * 返回 { copied, removed, skipped } —— removed 单独报出来，
  * 因为「删了东西」是件需要被看见的事，静默清理会让人以为构建没生效。
+ *
+ * @param ext 只同步该后缀的文件（sprites 是 .svg，schemas 是 .json）
  */
-function copyDir(relFrom, relTo) {
+function copyDir(relFrom, relTo, ext = '.svg') {
   const src = join(ROOT, relFrom);
   const dst = join(ROOT, relTo);
   if (!existsSync(src)) return { copied: 0, removed: 0, skipped: true };
 
-  const want = new Set(readdirSync(src).filter((n) => n.endsWith('.svg')));
+  const want = new Set(readdirSync(src).filter((n) => n.endsWith(ext)));
   mkdirSync(dst, { recursive: true });
 
   let copied = 0;
@@ -86,11 +88,18 @@ function copyDir(relFrom, relTo) {
 
 const products = copyOne('data/products.json', 'public/data/products.json');
 const dates = copyOne('data/release-dates.json', 'public/data/release-dates.json');
+// v2 全品类目录：品类注册表与字段 schema 也要进 public/data/ ——
+// 前端品类分面读 categories.json，通用参数表（新品类页面）读 schemas/。
+const categories = copyOne('data/categories.json', 'public/data/categories.json');
+const schemas = copyDir('data/schemas', 'public/data/schemas', '.json');
 const sprites = copyDir('data/sprites', 'public/sprites');
 
 const parts = [];
 parts.push(products ? 'products.json ✓' : 'products.json ✗(缺失)');
 parts.push(dates ? 'release-dates.json ✓' : 'release-dates.json ✗(缺失)');
+parts.push(categories ? 'categories.json ✓' : 'categories.json ✗(缺失)');
+if (schemas.skipped) parts.push('schemas ✗(data/schemas 不存在)');
+else parts.push(`schemas ${schemas.total} 个 ✓`);
 if (sprites.skipped) parts.push('sprites ✗(data/sprites 不存在，先跑一次管线)');
 else {
   parts.push(`sprites ${sprites.total} 个 ✓`);

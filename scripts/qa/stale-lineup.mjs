@@ -24,6 +24,7 @@
  */
 
 import { metricValue } from '../lib/derive.mjs';
+import { pick } from '../lib/specs.mjs';
 import { loadProducts, section, c, table, brandZh, pct, verdict } from './lib.mjs';
 
 const argv = process.argv.slice(2);
@@ -199,10 +200,10 @@ if (SAME_GEN) {
       list.map((p) => [
         p.name,
         p.releaseDate,
-        fmt(p.body?.thicknessMm, 'mm'),
-        fmt(p.body?.weightG, 'g'),
-        fmt(p.battery?.capacityMah, 'mAh'),
-        fmt(p.display?.sizeIn, '"'),
+        fmt(pick(p, 'body.thicknessMm'), 'mm'),
+        fmt(pick(p, 'body.weightG'), 'g'),
+        fmt(pick(p, 'battery.capacityMah'), 'mAh'),
+        fmt(pick(p, 'display.sizeIn'), '"'),
       ]),
     );
   }

@@ -9,6 +9,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    // 关掉 Vite 自带的 emptyOutDir：本环境「安全删除 shim」会 fail-closed 拦截
+    // 对 dist 的 trash，导致重建必失败。清理由 scripts/clean-dist.mjs（rename 绕开 shim）负责。
+    emptyOutDir: false,
     // 第三方依赖很少（仅 vue + vue-router），单独拆出 vendor 块，更新时用户不用重下全量。
     rollupOptions: {
       output: {

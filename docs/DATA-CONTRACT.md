@@ -2,6 +2,14 @@
 
 > ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
 
+> ⚠️ **v2 全品类目录（2026-10-13，`feature/universal-catalog` 分支）**：
+> 产品记录已从「手机专属嵌套结构」迁移为「身份字段在顶层 + 品类参数进扁平 specs 容器」
+> （`category` + `specs: Record<string, SpecValue>`），字段定义源移至
+> `data/schemas/phone.json`（本文第三节的字段表是其内容来源，改字段必须三处同步：
+> schema JSON、`src/lib/types.ts`、本文）。用户手动数据层见 `data/overrides.json`
+> 与 `scripts/lib/overrides.mjs`。完整设计见 **`docs/UNIVERSAL-CATALOG.md`**。
+> 下文除明确标注「v2」的段落外，均为 v1 时期原文，保留作为设计依据。
+
 > 范围：**手机品类 · 华为 + 苹果 · 近 3 年在售机型**（首版）
 > 这份文件是全站唯一的字段定义源。管线写入、前端渲染、榜单计算都以此为准；
 > 改任何字段语义必须同步改这里和 `src/lib/types.ts`。
@@ -45,10 +53,11 @@
 | 字段 | 类型 | 说明 |
 |---|---|---|
 | `id` / `slug` | string | `apple-iphone-17-pro`，URL 与文件名共用 |
-| `brand` | `'apple' \| 'huawei'` | |
+| `brand` | `'apple' \| 'huawei'` | 品牌 **slug**；显示名（品牌名，如「苹果 / 华为」）由 `vendors` 注册表（scripts/brands.mjs）按 slug 派生，单一真源，不在此字段重复存 |
 | `line` | string | 产品线：`iPhone` / `Mate` / `Pura` / `nova` / `Mate X`（折叠） |
-| `name` | string | `iPhone 17 Pro` |
+| `name` | string | **型号名称**：`iPhone 17 Pro` / `nova 14 Ultra`（与 `line` 产品线、`modelCode` 型号代码三者区分） |
 | `nameZh` | string \| null | 中文名（华为有，苹果通常与英文同名） |
+| `modelCode` | string \| null | **型号代码**（监管 / 硬件型号）：如 HUAWEI `MRT-AL10`、iPhone `A3292`（国行 / 美版不同）。在 设置→关于手机→型号 或 工信部进网许可 查得。顶层身份字段，不进 specs；**只由官方来源填充，禁止编造** |
 | `releaseDate` | string \| null | ISO 日期；只有年月时记 `YYYY-MM` |
 | `releaseDatePrecision` | `'day'\|'month'\|'year'\|null` | **不许把年月补成 01 冒充精确** |
 | `status` | `'upcoming'\|'on-sale'\|'discontinued'` | |

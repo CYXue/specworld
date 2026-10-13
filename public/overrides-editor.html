@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>参数世界 · 用户数据编辑器（overrides 原型）</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1a1d21; --ink2: #5b6168;
+    --line: #e4e7eb; --brand: #0f9d8b; --brand2: #e07a3f;
+    --danger: #c0392b; --ok: #1e7d4f; --warn: #b7791f;
+  }
+  [data-theme="dark"] {
+    --bg: #14171a; --card: #1d2126; --ink: #e7eaee; --ink2: #9aa2ab;
+    --line: #2b3138; --brand: #2bc0ab; --brand2: #f0925a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 14px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); padding: 24px;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--ink2); margin: 0 0 20px; font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .field { flex: 1 1 220px; min-width: 200px; }
+  label { display: block; font-size: 12px; color: var(--ink2); margin-bottom: 4px; }
+  select, input, textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--ink); font: inherit;
+  }
+  textarea { min-height: 70px; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; }
+  button {
+    background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 9px 16px;
+    font: inherit; cursor: pointer; margin-top: 4px;
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs button { background: transparent; color: var(--ink2); border: 1px solid var(--line); }
+  .tabs button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .msg { font-size: 13px; padding: 8px 10px; border-radius: 8px; margin-top: 10px; }
+  .msg.err { background: #fdecea; color: var(--danger); }
+  .msg.ok { background: #e7f6ee; color: var(--ok); }
+  .msg.warn { background: #fdf3e0; color: var(--warn); }
+  pre { background: #0e1114; color: #d6e2e8; padding: 14px; border-radius: 10px; overflow:auto; font-size:12px; }
+  .hint { font-size: 12px; color: var(--ink2); margin-top: 4px; }
+  .hidden { display: none; }
+  .pill { display:inline-block; background: var(--bg); border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:11px; color:var(--ink2); }
+</style>
+</head>
+<body>
+  <h1>参数世界 · 用户数据编辑器</h1>
+  <p class="sub">对齐准绳/Baseline 的 F009「数据纠错入口（本地记录版）」。本原型产出合法的 <code>data/overrides.json</code> 条目（set-field 改字段 / add-product 整机新增），并客户端按 schema 校验，避免写错静默失效。<br>
+  <span class="pill">零构建</span> 在 <code>npx vite preview</code> 或任意静态服务器下打开即可（需能访问 <code>/data/*.json</code>）。</p>
+
+  <div class="tabs">
+    <button id="tabSet" class="active" onclick="switchOp('set')">✏️ 修改现有机型字段</button>
+    <button id="tabAdd" onclick="switchOp('add')">➕ 新增整机</button>
+  </div>
+
+  <div class="card" id="formSet">
+    <div class="row">
+      <div class="field"><label>目标机型</label><select id="setProduct"></select></div>
+      <div class="field"><label>字段（按分组）</label><select id="setField"></select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>新值</label><input id="setValue" placeholder="按字段类型输入" /></div>
+      <div class="field"><label>单位 / 提示</label><input id="setUnit" disabled placeholder="自动带出" /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>修改原因（必填）</label><input id="setReason" placeholder="例如：官网抓漏 / 实测修正" /></div>
+      <div class="field"><label>操作人</label><input id="setBy" placeholder="你的署名" /></div>
+    </div>
+    <button onclick="genSet()">生成条目</button>
+    <div id="setMsg"></div>
+  </div>
+
+  <div class="card hidden" id="formAdd">
+    <div class="row">
+      <div class="field"><label>机型 id（唯一，如 test-xiaomi-17）</label><input id="addId" /></div>
+      <div class="field"><label>品牌（须已在注册表）</label><input id="addBrand" placeholder="apple / huawei ..." /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>品类</label><select id="addCategory"></select></div>
+      <div class="field"><label>名称</label><input id="addName" placeholder="小米 17" /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>上市日期</label><input id="addDate" placeholder="2026-09-01" /></div>
+      <div class="field"><label>操作人</label><input id="addBy" /></div>
+    </div>
+    <div class="field" style="margin-bottom:12px"><label>字段值（仅填你要录入的，JSON 对象，键须为 schema 已注册 path）</label>
+      <textarea id="addSpecs" placeholder='{ "body.weightG": 190, "display.sizeIn": 6.3 }'></textarea>
+      <div class="hint">提示：可点下方「按 schema 生成空模板」再填。</div>
+    </div>
+    <div class="row">
+      <button onclick="genAdd()">生成条目</button>
+      <button class="ghost" onclick="fillSpecsTemplate()">按 schema 生成空模板</button>
+    </div>
+    <div class="field" style="margin-top:10px"><label>修改原因（必填）</label><input id="addReason" /></div>
+    <div id="addMsg"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 8px">产出：overrides.json 新增条目</h3>
+    <pre id="out">// 选择上方操作并生成后，这里显示一条合法 entry；复制进 data/overrides.json 的 entries 数组即可</pre>
+    <div class="hint">合并规则（已在管线实现）：用户层优先级 &gt; 官网；被覆盖的官网原值会记入 <code>_work/sync-report.json</code> 可回查；写错（字段未注册/类型错/越界/缺 reason）会被闸门拒绝写盘，绝不静默失效。</div>
+  </div>
+
+<script>
+let SCHEMA = null, CATS = null, PRODUCTS = null;
+
+async function boot() {
+  try {
+    const [pj, cj, dj] = await Promise.all([
+      fetch('/data/schemas/phone.json').then(r => r.json()),
+      fetch('/data/categories.json').then(r => r.json()),
+      fetch('/data/products.json').then(r => r.json()),
+    ]);
+    SCHEMA = pj; CATS = cj; PRODUCTS = dj;
+    initSetForm(); initAddForm();
+  } catch (e) {
+    document.getElementById('out').textContent =
+      '加载 /data/*.json 失败：' + e.message + '\n请通过静态服务器打开本页（如 npx vite preview），不要直接 file:// 打开。';
+  }
+}
+
+function groupsOf() { return SCHEMA.groups || []; }
+function fieldMap() { const m = {}; (SCHEMA.fields||[]).forEach(f => m[f.path] = f); return m; }
+function fm() { return fieldMap(); }
+
+function initSetForm() {
+  const sp = document.getElementById('setProduct');
+  sp.innerHTML = PRODUCTS.products.map(p => `<option value="${p.id}">${p.name}（${p.id}）</option>`).join('');
+  const sf = document.getElementById('setField');
+  const fmObj = fm();
+  sf.innerHTML = groupsOf().map(g =>
+    `<optgroup label="${g.name}">` +
+    (SCHEMA.fields||[]).filter(f => f.group === g.id).map(f =>
+      `<option value="${f.path}">${f.label} · ${f.path}${f.unit?(' ('+f.unit+')'):''}</option>`).join('') +
+    `</optgroup>`).join('');
+  sf.onchange = () => {
+    const f = fmObj[sf.value];
+    const u = document.getElementById('setUnit');
+    u.value = f ? `${f.type}${f.unit?(' · '+f.unit):''}${f.range?(' · 区间 '+f.range.join('~')):''}${f.values?(' · '+f.values.join('/')):''}` : '';
+  };
+  sf.onchange();
+}
+
+function initAddForm() {
+  document.getElementById('addCategory').innerHTML =
+    CATS.categories.map(c => `<option value="${c.id}">${c.label}（${c.id}）</option>`).join('');
+}
+
+function switchOp(op) {
+  document.getElementById('formSet').classList.toggle('hidden', op !== 'set');
+  document.getElementById('formAdd').classList.toggle('hidden', op !== 'add');
+  document.getElementById('tabSet').classList.toggle('active', op === 'set');
+  document.getElementById('tabAdd').classList.toggle('active', op === 'add');
+}
+
+// 复用管线同款校验逻辑（与 scripts/lib/schema.mjs validateSpecValue 对齐）
+function validateValue(field, raw) {
+  if (raw === '' || raw === null || raw === undefined) return '值不能为空（未公布请用 unknown，不要填空字符串）';
+  switch (field.type) {
+    case 'number': {
+      const n = Number(raw);
+      if (!Number.isFinite(n)) return `应为数值，收到 ${JSON.stringify(raw)}`;
+      if (Array.isArray(field.range) && (n < field.range[0] || n > field.range[1]))
+        return `= ${n} 超出合理区间 ${field.range.join('~')}${field.unit?(' '+field.unit):''}`;
+      return null;
+    }
+    case 'boolean':
+      if (!['true','false'].includes(String(raw).toLowerCase())) return '应为 true/false';
+      return null;
+    case 'enum':
+      if (!field.values.includes(raw)) return `=${JSON.stringify(raw)} 不在枚举 ${field.values.join('/')} 内`;
+      return null;
+    case 'array:number': {
+      const arr = String(raw).split(/[，,]/).map(s=>s.trim()).filter(Boolean).map(Number);
+      if (arr.some(n=>!Number.isFinite(n))) return '应为逗号分隔的数值数组';
+      return null;
+    }
+    case 'array:string': {
+      const arr = String(raw).split(/[，,]/).map(s=>s.trim()).filter(Boolean);
+      if (!arr.length) return '至少一项';
+      return null;
+    }
+    case 'string':
+    case 'object':
+    case 'array:object':
+      return null; // 对象/数组型交由 JSON 解析（add-product 场景）
+    default: return `未知 schema type：${field.type}`;
+  }
+}
+
+function coerce(field, raw) {
+  switch (field.type) {
+    case 'number': return Number(raw);
+    case 'boolean': return String(raw).toLowerCase() === 'true';
+    case 'array:number': return String(raw).split(/[，,]/).map(s=>s.trim()).filter(Boolean).map(Number);
+    case 'array:string': return String(raw).split(/[，,]/).map(s=>s.trim()).filter(Boolean);
+    default: return raw;
+  }
+}
+
+function genSet() {
+  const msg = document.getElementById('setMsg'); msg.className = 'msg'; msg.textContent = '';
+  const pid = document.getElementById('setProduct').value;
+  const path = document.getElementById('setField').value;
+  const raw = document.getElementById('setValue').value;
+  const reason = document.getElementById('setReason').value.trim();
+  const by = document.getElementById('setBy').value.trim() || '匿名';
+  const field = fm()[path];
+  if (!reason) { msg.className='msg err'; msg.textContent='修改原因必填（闸门会拦）'; return; }
+  const verr = validateValue(field, raw);
+  if (verr) { msg.className='msg err'; msg.textContent='值校验未过：'+verr; return; }
+  const entry = {
+    id: 'ovr-' + Date.now(),
+    op: 'set-field',
+    productId: pid,
+    field: path,
+    value: coerce(field, raw),
+    reason, source: 'user-manual', sourceUrl: null,
+    createdBy: by, createdAt: new Date().toISOString().slice(0,10), active: true,
+  };
+  msg.className='msg ok'; msg.textContent='✅ 合法条目已生成（下方 JSON）';
+  document.getElementById('out').textContent = JSON.stringify(entry, null, 2);
+}
+
+function fillSpecsTemplate() {
+  const t = {};
+  (SCHEMA.fields||[]).forEach(f => { t[f.path] = null; });
+  document.getElementById('addSpecs').value = JSON.stringify(t, null, 2);
+}
+
+function genAdd() {
+  const msg = document.getElementById('addMsg'); msg.className='msg'; msg.textContent='';
+  const id = document.getElementById('addId').value.trim();
+  const brand = document.getElementById('addBrand').value.trim();
+  const category = document.getElementById('addCategory').value;
+  const name = document.getElementById('addName').value.trim();
+  const date = document.getElementById('addDate').value.trim();
+  const by = document.getElementById('addBy').value.trim() || '匿名';
+  const reason = document.getElementById('addReason').value.trim();
+  const rawSpecs = document.getElementById('addSpecs').value.trim();
+  if (!id||!brand||!name||!date) { msg.className='msg err'; msg.textContent='id/品牌/名称/日期必填'; return; }
+  if (!reason) { msg.className='msg err'; msg.textContent='修改原因必填（闸门会拦）'; return; }
+  let specs;
+  try { specs = JSON.parse(rawSpecs || '{}'); }
+  catch(e){ msg.className='msg err'; msg.textContent='specs 不是合法 JSON：'+e.message; return; }
+  if (typeof specs !== 'object' || Array.isArray(specs)) { msg.className='msg err'; msg.textContent='specs 必须是对象'; return; }
+  const fmObj = fm();
+  for (const [k,v] of Object.entries(specs)) {
+    if (k === '_comment') continue;
+    if (!(k in fmObj)) { msg.className='msg err'; msg.textContent=`字段未注册：${k}（对照 data/schemas/phone.json）`; return; }
+    if (fmObj[k].type === 'object' || fmObj[k].type === 'array:object') continue; // 对象型不在此校验
+    const verr = validateValue(fmObj[k], v);
+    if (verr) { msg.className='msg err'; msg.textContent=`${k} ${verr}`; return; }
+  }
+  const entry = {
+    id: 'ovr-' + Date.now(),
+    op: 'add-product',
+    product: { id, brand, category, name, releaseDate: date, status:'on-sale',
+               releaseDatePrecision:'day', granularity:'manual', specs,
+               skus:[], scores:[], provenance: Object.fromEntries(Object.keys(specs).map(k=>[k,'user-manual'])) },
+    reason, createdBy: by, createdAt: new Date().toISOString().slice(0,10), active: true,
+  };
+  msg.className='msg ok'; msg.textContent='✅ 合法整机新增条目已生成（下方 JSON）';
+  document.getElementById('out').textContent = JSON.stringify(entry, null, 2);
+}
+
+boot();
+</script>
+</body>
+</html>

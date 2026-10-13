@@ -24,9 +24,9 @@
  *
  * 用法: node scripts/favicon/make-from-xlsx.mjs <xlsx> [outSvg]
  */
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
