@@ -32,6 +32,9 @@ public/sprites/
 
 # 本地冒烟验证脚本（puppeteer，依赖本机 Chrome，非 CI 用例，不入库）
 _smoke*.cjs
+# 同上：favicon 的真实浏览器截图核对（写死本机 Chrome 路径的手动工具，
+# 2026-10-13 审计下架——零引用的孤本，留在本地用即可）
+scripts/favicon/browsershot.cjs
 
 # 编辑器与系统
 .DS_Store
