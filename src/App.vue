@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import PxIcon from './components/PxIcon.vue';
 import SiteFooter from './components/SiteFooter.vue';
 import SiteNav from './components/SiteNav.vue';
 
 const route = useRoute();
+const { t, locale } = useI18n();
 
 /**
  * 导航在首页**不显示**（它已经压进首页 banner 的天空上了），
@@ -18,6 +20,22 @@ const route = useRoute();
  * 但「首页不放重复导航」这条是一致的。
  */
 const navInBanner = computed(() => route.name === 'home');
+
+/**
+ * `<html lang>` 与 `<title>` / meta description 跟随语言（a11y + 分享卡片）：
+ * index.html 里的静态值是 zh-CN 的预 hydration 缺省，之后由这里接管。
+ * immediate: 首屏就跑一次，保证「默认中文但 localStorage 里存了 en」的
+ * 直接进来就是英文全套（含 title），而不是中文 title + 英文正文的混搭。
+ */
+watch(
+  locale,
+  (l) => {
+    document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
+    document.title = t('meta.title');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t('meta.description'));
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -52,7 +70,7 @@ const navInBanner = computed(() => route.name === 'home');
           class="pixel-outline flex items-center gap-1.5 font-pixel text-[24px] leading-none"
         >
           <PxIcon name="home" :size="16" />
-          参数世界
+          {{ $t('brand.name') }}
         </RouterLink>
         <SiteNav />
       </div>

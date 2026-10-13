@@ -271,8 +271,6 @@ function directDivs(html) {
 }
 
 const classOf = (openTag) => (openTag.match(/\bclass\s*=\s*"([^"]*)"/i) || [, ''])[1];
-const attrOf = (openTag, name) =>
-  (openTag.match(new RegExp(`\\b${name}\\s*=\\s*"([^"]*)"`, 'i')) || [, ''])[1];
 
 /**
  * 取单元格的原文。

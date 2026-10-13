@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ABILITIES, abilityRaw, fmtAbility } from '../lib/specs';
+import { useI18n } from 'vue-i18n';
+import { ABILITIES, abilityLabel, abilityRaw, fmtAbility } from '../lib/specs';
 import type { AbilityKey } from '../lib/specs';
 import { useDataset } from '../lib/useDataset';
 import {
@@ -15,11 +16,13 @@ import {
 } from '../lib/facets';
 import type { SortKey } from '../lib/facets';
 import {
+  UNKNOWN,
   basePriceCny,
   categoryLabel,
   categoryOf,
   chipNameLabel,
   fmtPriceCny,
+  seriesLabel,
   seriesOf,
 } from '../lib/catalog';
 import PxIcon from '../components/PxIcon.vue';
@@ -37,6 +40,7 @@ import SpriteImg from '../components/SpriteImg.vue';
  *
  * 因此本页**不跳转到机型库**、不接筛选；它只做一件事：拿全部机型，按用户排好的优先级链排序。
  */
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();
@@ -62,7 +66,7 @@ const ranked = computed(() => applyMultiSort(all.value, sorts.value));
 
 // ── 排序键解析 ──
 
-const SORT_LABEL = new Map(SORTS.map((s) => [s.id, s.label]));
+const SORT_LABEL = new Map(SORTS.map((s) => [s.id, s.labelKey]));
 
 const ABILITY_OF_DIM: Record<string, AbilityKey> = {
   ppi: 'display',
@@ -82,11 +86,11 @@ const DEFAULT_SORT: Record<string, SortKey> = {
 
 /** 可添加的维度（已选维度不再出现）。 */
 const DIM_OPTIONS = [
-  { dim: 'price', label: '价格' },
-  { dim: 'ppi', label: '屏幕像素密度' },
-  { dim: 'weight', label: '机身重量' },
-  { dim: 'battery', label: '电池容量' },
-  { dim: 'camera', label: '主摄像素' },
+  { dim: 'price', labelKey: 'rank.dimPrice' },
+  { dim: 'ppi', labelKey: 'rank.dimPpi' },
+  { dim: 'weight', labelKey: 'rank.dimWeight' },
+  { dim: 'battery', labelKey: 'rank.dimBattery' },
+  { dim: 'camera', labelKey: 'rank.dimCamera' },
 ];
 
 const REVERSE: Record<string, SortKey> = {
@@ -107,9 +111,10 @@ const rows = computed(() =>
   sorts.value.map((sort, idx) => ({
     idx,
     sort,
-    label: SORT_LABEL.get(sort) ?? sort,
+    labelKey: SORT_LABEL.get(sort) ?? null,
+    label: SORT_LABEL.get(sort) ? t(SORT_LABEL.get(sort)!) : sort,
     dim: sort.split('-')[0],
-    dir: sort.endsWith('-asc') ? '升' : '降',
+    asc: sort.endsWith('-asc'),
     isPrimary: idx === 0,
   })),
 );
@@ -162,37 +167,41 @@ function cell(p: (typeof all.value)[number], sort: SortKey): { text: string; mis
   const dim = sort.split('-')[0];
   if (dim === 'price') {
     const v = basePriceCny(p);
-    return v == null ? { text: '未公布', missing: true } : { text: fmtPriceCny(v), missing: false };
+    return v == null
+      ? { text: t('common.unpublished'), missing: true }
+      : { text: fmtPriceCny(v), missing: false };
   }
   const ak = ABILITY_OF_DIM[dim];
   const raw = ak ? abilityRaw(p, ak) : null;
   return raw == null
-    ? { text: '未公布', missing: true }
+    ? { text: t('common.unpublished'), missing: true }
     : { text: fmtAbility(ak, raw), missing: false };
 }
 
 function subline(p: (typeof all.value)[number]): string {
   const chip = chipNameLabel(p.chipset?.name ?? '');
-  return [seriesOf(p), chip === '未公布' ? null : chip].filter(Boolean).join(' · ');
+  return [seriesLabel(seriesOf(p)), chip === UNKNOWN ? null : chip].filter(Boolean).join(' · ');
 }
 </script>
 
 <template>
   <div class="page-shell space-y-6 py-6">
-    <SectionFrame title="榜单 · 多级排序" hud="var(--color-crown)" icon="trophy">
+    <SectionFrame :title="t('rank.title')" hud="var(--color-crown)" icon="trophy">
       <p
         class="pixel-note mb-4 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)"
       >
-        榜单是<b style="color: var(--color-parchment-lit)">排序</b>，不是筛选：它永远列出
-        <b style="color: var(--color-parchment-lit)">全部 {{ all.length }} 台</b>，按你排好的优先级链排序。
-        先加「一级排序」（如大电池），再加「二级排序」（如相机）—— 一级相同的机型才用二级区分。
+        {{ t('rank.introA') }}<b style="color: var(--color-parchment-lit)">{{
+          t('rank.introSort')
+        }}</b
+        >{{ t('rank.introB', { n: all.length }) }}
+        {{ t('rank.introC') }}
       </p>
 
       <!-- 四个能力维度快捷入口 -->
       <div class="mb-3 flex flex-wrap items-center gap-1.5">
         <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
           <PxIcon name="dot" :size="8" />
-          快捷加
+          {{ t('rank.quickAdd') }}
         </span>
         <button
           v-for="def in ABILITIES"
@@ -201,7 +210,7 @@ function subline(p: (typeof all.value)[number]): string {
           :aria-pressed="sorts.includes(ABILITY_SORT[def.key])"
           @click="toggleAbility(def.key)"
         >
-          {{ def.label }}
+          {{ abilityLabel(def.key) }}
         </button>
       </div>
 
@@ -210,14 +219,14 @@ function subline(p: (typeof all.value)[number]): string {
         <div class="mb-2 flex items-center gap-2">
           <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
             <PxIcon name="sort" :size="12" />
-            排序优先级（从上到下，一级 → 末级）
+            {{ t('rank.priority') }}
           </span>
           <button
             v-if="sorts.length"
             class="pixel-button ml-auto px-2 py-1 text-[12px] leading-[1.5]"
             @click="pushSorts([])"
           >
-            清空排序
+            {{ t('rank.clearSorts') }}
           </button>
         </div>
 
@@ -226,7 +235,7 @@ function subline(p: (typeof all.value)[number]): string {
           class="pixel-note px-2 py-3 text-[12px] leading-[1.5]"
           style="color: var(--color-parchment-dim)"
         >
-          未选择排序，默认按「最新发布」陈列。点上方能力标签或下方「添加排序」开始。
+          {{ t('rank.noSorts') }}
         </p>
 
         <ul v-else class="space-y-1.5">
@@ -250,23 +259,23 @@ function subline(p: (typeof all.value)[number]): string {
               class="pixel-chip px-1.5 py-0.5 text-[12px]"
               style="color: var(--color-gold)"
             >
-              一级
+              {{ t('rank.primary') }}
             </span>
             <span class="flex-none text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-              {{ r.dir }}
+              {{ r.asc ? t('rank.asc') : t('rank.desc') }}
             </span>
             <div class="ml-auto flex flex-none items-center gap-1">
               <button
                 class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"
-                title="切换升/降序"
+                :title="t('rank.toggleDir')"
                 @click="toggleDir(r.idx)"
               >
-                {{ r.dir === '升' ? '↑' : '↓' }}
+                {{ r.asc ? '↑' : '↓' }}
               </button>
               <button
                 class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"
                 :disabled="r.idx === 0"
-                title="提升优先级"
+                :title="t('rank.promote')"
                 @click="move(r.idx, -1)"
               >
                 <PxIcon name="arrow" :size="10" class="rotate-[-90deg]" />
@@ -274,17 +283,17 @@ function subline(p: (typeof all.value)[number]): string {
               <button
                 class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"
                 :disabled="r.idx === rows.length - 1"
-                title="降低优先级"
+                :title="t('rank.demote')"
                 @click="move(r.idx, 1)"
               >
                 <PxIcon name="arrow" :size="10" class="rotate-90" />
               </button>
               <button
                 class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"
-                title="移除该排序"
+                :title="t('rank.removeSort')"
                 @click="removeAt(r.idx)"
               >
-                移除
+                {{ t('common.remove') }}
               </button>
             </div>
           </li>
@@ -294,7 +303,7 @@ function subline(p: (typeof all.value)[number]): string {
         <div v-if="addable.length" class="mt-2 flex flex-wrap items-center gap-1.5 border-t-2 border-[var(--color-ink)] pt-2">
           <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
             <PxIcon name="dot" :size="8" />
-            添加排序
+            {{ t('rank.addSort') }}
           </span>
           <button
             v-for="d in addable"
@@ -302,14 +311,18 @@ function subline(p: (typeof all.value)[number]): string {
             class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
             @click="addDim(d.dim)"
           >
-            + {{ d.label }}
+            + {{ t(d.labelKey) }}
           </button>
         </div>
       </div>
     </SectionFrame>
 
     <!-- 排序结果：全部机型，不减员 -->
-    <SectionFrame :title="`排序结果 · ${ranked.length} 台`" hud="var(--color-crown)" icon="list">
+    <SectionFrame
+      :title="t('rank.resultTitle', { n: ranked.length })"
+      hud="var(--color-crown)"
+      icon="list"
+    >
       <div class="overflow-x-auto">
         <table class="w-full border-collapse text-[12px]" :style="{ minWidth: '640px' }">
           <thead>
@@ -324,7 +337,7 @@ function subline(p: (typeof all.value)[number]): string {
                 class="border-2 border-[var(--color-ink)] bg-[var(--color-panel-lit)] p-2 text-left"
                 style="color: var(--color-parchment-dim)"
               >
-                机型
+                  {{ t('compare.modelHeader') }}
               </th>
               <th
                 v-for="r in rows"
@@ -374,8 +387,8 @@ function subline(p: (typeof all.value)[number]): string {
         </table>
       </div>
       <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)">
-        「未公布」= 官网未公布该参数，按纪律排在所有有值机型之后；不等于 0 或最小。
-        榜单不减员，永远展示全部 {{ all.length }} 台。
+        {{ t('rank.noteA') }}
+        {{ t('rank.noteB', { n: all.length }) }}
       </p>
     </SectionFrame>
   </div>

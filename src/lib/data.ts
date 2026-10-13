@@ -1,6 +1,9 @@
+import { i18n } from '../i18n';
 import type { Dataset, Product, Vendor } from '../types';
 import { toPhoneViews } from './adapt';
 import { asset } from './assets';
+
+const t = (key: string) => i18n.global.t(key);
 
 let cache: Promise<Dataset> | null = null;
 
@@ -8,7 +11,7 @@ export function loadDataset(): Promise<Dataset> {
   if (cache) return cache;
   cache = fetch(asset('data/products.json'))
     .then((r) => {
-      if (!r.ok) throw new Error(`数据加载失败：HTTP ${r.status}`);
+      if (!r.ok) throw new Error(`${t('common.loadFailedRaw')} HTTP ${r.status}`);
       return r.json() as Promise<Dataset>;
     })
     .then((d) => ({

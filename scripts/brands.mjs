@@ -93,8 +93,3 @@ export function brandZh(id) {
 export function brandShortLabel(id) {
   return BRANDS[id]?.shortLabel ?? id;
 }
-
-/** 品牌英文名 */
-function brandName(id) {
-  return BRANDS[id]?.name ?? id;
-}

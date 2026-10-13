@@ -23,7 +23,16 @@
 
 import { strict as assert } from 'node:assert';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+  mkdirSync,
+  rmSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // 必须在任何 `await import('../src/lib/*.ts')` 之前装好：search.ts / canvasFilter.ts
@@ -37,8 +46,9 @@ import {
 } from './lib/archive-shape.mjs';
 import * as DERIVE from './lib/derive.mjs';
 import { assertUnlocked } from './lib/gates-lock.mjs';
+import * as I18N from './lib/i18n-keys.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from './lib/overrides.mjs';
-import { fieldMap, isRegisteredCategory, loadCategories, loadSchema, quantifiableFields, validateSchema, validateSpecs, validateSpecValue, groupsOf, fieldsByGroup, valueStatus, validateStatusMap, STATUS_VALUES } from './lib/schema.mjs';
+import { fieldMap, isRegisteredCategory, loadCategories, loadSchema, quantifiableFields, validateSchema, validateSpecs, validateSpecValue, groupsOf, fieldsByGroup, valueStatus, validateStatusMap } from './lib/schema.mjs';
 import { expandSpecs, flattenSpecs, pick, setSpec } from './lib/specs.mjs';
 import { mapAppleSpecs, mapAppleCompare } from './normalize/brands/apple.mjs';
 import { mapHuawei } from './normalize/brands/huawei.mjs';
@@ -1776,11 +1786,25 @@ const EXS = await import('../src/lib/exportSummary.ts');
   const byBrandSum = all.priceByBrand.reduce((a, b) => a + b.totalCny, 0);
   assert.equal(byBrandSum, all.priceTotalCny, '各品牌小计之和应等于累计总计');
 
-  // 单台基准：iPhone 16 起售价 5999；iPhone 17 多 SKU 应取最小 6799
+  // 单台基准：iPhone 16 起售价 5999；iPhone 17 多 SKU 应取最小 6799。
+  // 走 basePriceCny（price.ts 单一真身）：exportSummary 以前有自己的一份
+  // deviceStartPriceCny，判据少了 `> 0`，已经合并掉了 —— 这里测的是合并后的那一份。
   const ip16 = snap.products.find((p) => p.id === 'apple-iphone-16');
   const ip17 = snap.products.find((p) => p.id === 'apple-iphone-17');
-  assert.equal(EXS.deviceStartPriceCny(ip16), 5999, 'iPhone 16 起售价应为 5999');
-  assert.equal(EXS.deviceStartPriceCny(ip17), 6799, '多 SKU 应取最小价');
+  assert.equal(EXS.basePriceCny(ip16), 5999, 'iPhone 16 起售价应为 5999');
+  assert.equal(EXS.basePriceCny(ip17), 6799, '多 SKU 应取最小价');
+  // 口径对账：0 与负数不算价格（导出合计曾经会把它算进去，详情页却是「未公布」）
+  assert.equal(EXS.basePriceCny({ skus: [{ priceCny: 0 }] }), null, 'priceCny 为 0 应判未公布');
+  assert.equal(EXS.basePriceCny({ skus: [{ priceCny: -1 }] }), null, '负价不应计入起售价');
+  assert.equal(EXS.basePriceCny({ skus: [] }), null, '无 skus 应判未公布');
+  assert.equal(EXS.basePriceCny({}), null, '缺 skus 字段应判未公布');
+
+  // 单一真身（结构对账）：三处导出必须是**同一个函数引用**。
+  // 只测语义不够——语义测试各自都过得去，只有引用相等能挡住「又抄一份」。
+  const PRICE = await import('../src/lib/price.ts');
+  const CAT_PRICE = await import('../src/lib/catalog.ts');
+  assert.equal(EXS.basePriceCny, PRICE.basePriceCny, 'exportSummary 应转出 price.ts 的同一份实现');
+  assert.equal(CAT_PRICE.basePriceCny, PRICE.basePriceCny, 'catalog 应转出 price.ts 的同一份实现');
 
   // 分布之和守恒
   const stSum = all.status.onSale + all.status.upcoming + all.status.retired + all.status.other;
@@ -2455,7 +2479,7 @@ const REAL = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
 const ADAPT = await import('../src/lib/adapt.ts');
 const REAL_P = ADAPT.toPhoneViews(REAL.products);
 const REAL_LABELS = new Map(REAL.vendors.map((v) => [v.id, v.nameZh]));
-const DIMS = F.DIMENSIONS.map((d) => d.key);
+const DIMS = [...F.DIMENSION_KEYS];
 
 /** 造一台最小机型，只带品类/系列/变体/价格判定用得到的字段 */
 function pdoc(over = {}) {
@@ -2675,7 +2699,7 @@ check('缺价机型返回 null 而非 0（0 会被「最便宜」榜当成真价
     '前置条件：确实缺价',
   );
   assert.equal(C.basePriceCny(p), null);
-  assert.equal(C.fmtPriceCny(null), '官方未公布');
+  assert.equal(C.fmtPriceCny(null), '官方未公布中国区售价');
 });
 
 check('三榜：最贵榜不出现缺价机型，且真的是有价里最贵', () => {
@@ -3044,12 +3068,12 @@ check('isFiltered 只认真实条件，不把排序当筛选', () => {
 });
 
 check('品类是筛选条的第一个维度（用户 2026-10-05 明确要求置顶）', () => {
-  assert.equal(F.DIMENSIONS[0].key, 'category', '品类必须排第一');
+  assert.equal(F.DIMENSION_KEYS[0], 'category', '品类必须排第一');
 });
 
 check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 纠正概念）', () => {
-  assert.equal(F.DIMENSIONS[1].key, 'form', '形态必须紧跟品类');
-  assert.ok(!F.DIMENSIONS.some((d) => d.key === 'category' && d.key === 'form'));
+  assert.equal(F.DIMENSION_KEYS[1], 'form', '形态必须紧跟品类');
+  assert.ok(F.DIMENSION_KEYS.includes('category') && F.DIMENSION_KEYS.includes('form'));
   const catFacets = F.facetOf(REAL_P, 'category', REAL_P);
   assert.deepEqual(
     catFacets.map((f) => f.id),
@@ -3076,7 +3100,7 @@ check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 �
 });
 
 check('形态条件经 URL 往返（参数 m）', () => {
-  const cat = F.buildCatalog(REAL_P, F.DIMENSIONS.map((d) => d.key));
+  const cat = F.buildCatalog(REAL_P, F.DIMENSION_KEYS);
   const want = { ...F.emptyFilter(), form: ['foldable'] };
   const back = F.readFilter(new URLSearchParams(F.writeFilter(want)), cat);
   assert.deepEqual(back.filter.form, ['foldable'], '形态条件必须能从 URL 完整读回');
@@ -3482,7 +3506,11 @@ check('hero 标题不得用 36px（与顶栏 logo 重复强调，24px 才是页�
 
 check('hero 副标题必须是 12px（标语，不是自我介绍的数据）', () => {
   assert.ok(
-    /选择更清楚/.test(homeView) && /text-\[12px\][^>]*>\s*\n?\s*选择更清楚/.test(homeView),
+    // ⚠️ 2026-10-13：这里原本直接匹配中文「选择更清楚」。文案抽进语言包之后
+    // 源码里只剩 `t('brand.tagline')`，若还按中文匹配就是典型的**闸门失效**：
+    // 正则永不命中 → 断言恒真 → 副标题改成 36px 也照样绿灯。改为匹配键。
+    /t\('brand.tagline'\)/.test(homeView) &&
+      /text-\[12px\][^>]*>\s*\n?\s*\{\{ t\('brand.tagline'\) \}\}/.test(homeView),
     'hero 副标题应为 12px',
   );
   // 高度不同的并排（副标题纯文字 vs 读数有边框）必须顶对齐：
@@ -4438,7 +4466,6 @@ check('真实快照的 specs 键全部在 phone schema 注册（防手改数据�
  * 用例永远显示通过（比没写测试更糟）。所以这里顶层 await import，check 里只放同步回调。 */
 const CAT = await import('../src/lib/catalog.ts');
 const FIELDS_LIB = await import('../src/lib/fields.ts');
-const ADAPT_LIB = await import('../src/lib/adapt.ts');
 const SPECS_LIB = await import('../src/lib/specs.ts');
 const FACETS_LIB = await import('../src/lib/facets.ts');
 const CMP = await import('../src/lib/compare.ts');
@@ -5108,6 +5135,188 @@ check('data/overrides.json 入库文件自身合法（防手滑提交坏层）',
     : { products: [] };
   const errs = validateOverrides(ovr, snap.products ?? []);
   assert.deepEqual(errs, [], `入库的 overrides.json 必须合法：${errs.join('; ')}`);
+});
+
+/* ================================================================ *
+ * i18n 对账（B2 方案：全量抽取 + 中英双语 + 覆盖闸门）
+ * ------------------------------------------------------------------
+ * 反面教材是 DevEco Code：有 i18next 骨架、有语言切换对话框，实际覆盖约
+ * 16/719（3%）——用户切到中文「几乎没变化」。那种伤害不是「翻译没排期」，
+ * 而是**没有任何闸门知道翻译没做完**。以下五条把这件事变成红灯。
+ * ================================================================ */
+section('i18n 覆盖');
+
+check('i18n 双向对账：键集一致 / 引用↔定义 / 插值参数一致', () => {
+  const problems = I18N.checkI18n(ROOT);
+  assert.deepEqual(
+    problems,
+    [],
+    `i18n 对账未过（${problems.length} 项）：\n  - ${problems.slice(0, 12).join('\n  - ')}`,
+  );
+});
+
+check('i18n 数据侧双语：schema / 视图字典 / 策展字典 / 品类注册表 labelEn 齐全', () => {
+  const problems = I18N.checkDataBilingual(ROOT);
+  assert.deepEqual(
+    problems,
+    [],
+    `数据侧缺英文字段（${problems.length} 项）——英文页会混进中文：\n  - ${problems.join('\n  - ')}`,
+  );
+});
+
+check('i18n 缺键 = 抛错（不设 fallbackLocale，绝不静默回退到另一种语言）', () => {
+  // 直接读装配源码断言，避免为了测它而真的把 i18n 拉起来（selftest 跑在裸 node）
+  const src = readFileSync(join(ROOT, 'src/i18n/index.ts'), 'utf8');
+  assert.ok(/missing:/.test(src), 'src/i18n/index.ts 必须配置 missing handler');
+  assert.ok(/throw new Error/.test(src), 'missing handler 必须抛错而不是回退');
+  assert.ok(
+    !/fallbackLocale\s*:/.test(src),
+    '不应设 fallbackLocale —— 回退到另一种语言就是「切了没生效」的 DevEco 式背叛',
+  );
+});
+
+check('i18n 闸门自身被反向测试：四类注入必须报红，撤销后必须恢复绿灯', () => {
+  const base = join(tmpdir(), `specworld-i18n-rt-${Date.now()}`);
+  const write = (rel, obj) => {
+    const abs = join(base, rel);
+    mkdirSync(dirname(abs), { recursive: true });
+    writeFileSync(abs, typeof obj === 'string' ? obj : JSON.stringify(obj), 'utf8');
+  };
+  const clean = {
+    zh: { a: { b: '你好 {n}' }, c: { d: '已用' } },
+    en: { a: { b: 'hello {n}' }, c: { d: 'used' } },
+  };
+  const srcTs = "export const K = { x: 'c.d' };\nexport const f = () => t('a.b');\n";
+
+  const build = (zh, en, ts = srcTs) => {
+    rmSync(base, { recursive: true, force: true });
+    write('src/locales/zh.json', zh);
+    write('src/locales/en.json', en);
+    write('src/app.ts', ts);
+  };
+
+  // 0. 干净样本必须是绿灯（否则后面的红灯都不可信）
+  build(clean.zh, clean.en);
+  assert.deepEqual(I18N.checkI18n(base), [], '干净样本应当是绿灯');
+
+  // 1. en 缺键
+  build(clean.zh, { a: { b: 'hello {n}' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /en\.json 缺少键/.test(x)),
+    'en 缺键必须报红',
+  );
+
+  // 2. 引用了不存在的键
+  build(clean.zh, clean.en, srcTs + "export const g = () => t('a.nope');\n");
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /引用了不存在的键/.test(x)),
+    '引用不存在的键必须报红',
+  );
+
+  // 3. 僵尸键（译了没人用）
+  build({ ...clean.zh, zz: { q: '没用' } }, { ...clean.en, zz: { q: 'unused' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /无人引用/.test(x)),
+    '语言包里有未被引用的键必须报红',
+  );
+
+  // 4. 插值参数不一致
+  build({ a: { b: '你好 {n}' }, c: { d: 'x' } }, { a: { b: 'hello {m}' }, c: { d: 'x' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /插值参数不一致/.test(x)),
+    '中英插值参数不一致必须报红',
+  );
+
+  // 撤销后恢复绿灯（防「闸门一次性生效」的假绿）
+  build(clean.zh, clean.en);
+  assert.deepEqual(I18N.checkI18n(base), [], '撤销注入后应恢复绿灯');
+
+  rmSync(base, { recursive: true, force: true });
+});
+
+check('i18n 闸门看得见注释里的假键（剥注释不能省）', () => {
+  // 反向：注释里写 `t('a.b')` 不该被当成引用；若剥注释失效，这里会变成
+  // 「僵尸键」与「假引用」同时出现，正是本项目 2026-10-04 记下的闸门失效形态。
+  const zh = I18N.loadLocalePack(ROOT, 'zh.json');
+  const ns = I18N.namespacesOf(zh);
+  const used = I18N.collectUsedKeys(ROOT, ns);
+  assert.ok(used.size > 100, `引用键数量异常（${used.size}）——扫描器可能整体失灵`);
+  assert.ok(
+    !used.has('product.id'),
+    '注释/模板属性里的 product.id 不应被当成 i18n 键（剥注释或引号判定失效）',
+  );
+});
+
+/* i18n 装配：预装载后交给同步用例（⚠️ check() 是同步的，传 async 回调会让断言
+ * 失败变成未捕获的 Promise rejection —— 用例会显示通过，比没写测试更糟） */
+const I18NCFG = await import('../src/i18n/index.ts');
+const FIELDS_LIB_TOP = await import('../src/lib/fields.ts');
+const SPEC_TOP = await import('../src/lib/specs.ts');
+const CAT_TOP = await import('../src/lib/catalog.ts');
+
+const CJK = /[\u4e00-\u9fff]/;
+
+/** 切语言（同步），供下面的对账用例使用 */
+function withLocale(locale, fn) {
+  const prev = I18NCFG.currentLocale();
+  I18NCFG.setLocale(locale);
+  try {
+    return fn();
+  } finally {
+    I18NCFG.setLocale(prev);
+  }
+}
+
+check('i18n 运行时：语言包每个键都能解析（缺键必须抛错，不能静默回退）', () => {
+  const zh = I18N.loadLocalePack(ROOT, 'zh.json');
+  const keys = [...zh.keys()];
+  assert.ok(keys.length > 100, `键数量异常（${keys.length}）`);
+  const bad = [];
+  for (const k of keys) {
+    try {
+      // 插值参数全量喂一遍：占位符写错也在这里炸，而不是等用户切过去才炸
+      I18NCFG.i18n.global.t(k, { n: 1, total: 2, m: 3, err: 'e', name: 'N', value: 'V' });
+    } catch (e) {
+      bad.push(`${k}: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }
+  assert.deepEqual(bad, [], `以下键解析失败：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('i18n 反半吊子：切到英文后参数表/维度名/能力名不得残留中文', () => {
+  assert.ok(REAL_P.length > 0, '需要真实数据');
+  const probe = REAL_P[0];
+
+  const enBad = [];
+  withLocale('en', () => {
+    for (const g of FIELDS_LIB_TOP.specGroups(probe)) {
+      if (CJK.test(g.title)) enBad.push(`组标题 ${g.title}`);
+      for (const r of g.rows) if (CJK.test(r.label)) enBad.push(`行标签 ${r.label}`);
+    }
+    for (const k of F.DIMENSION_KEYS) {
+      if (CJK.test(F.dimLabel(k))) enBad.push(`维度名 ${k} → ${F.dimLabel(k)}`);
+      if (CJK.test(F.dimAllLabel(k))) enBad.push(`「全部」 ${k} → ${F.dimAllLabel(k)}`);
+    }
+    for (const a of SPEC_TOP.ABILITIES) {
+      if (CJK.test(SPEC_TOP.abilityLabel(a.key))) enBad.push(`能力名 ${a.key}`);
+    }
+    for (const s of F.SORTS) if (CJK.test(F.sortLabel(s.id))) enBad.push(`排序名 ${s.id}`);
+    for (const s of ['on-sale', 'upcoming', 'retired']) {
+      if (CJK.test(CAT_TOP.statusLabelOf(s))) enBad.push(`状态名 ${s}`);
+    }
+  });
+  assert.deepEqual(
+    enBad,
+    [],
+    `英文界面残留中文（这就是「切了没变化」的半吊子）：\n  - ${enBad.slice(0, 12).join('\n  - ')}`,
+  );
+
+  // 反向：中文下必须**有**中文，否则说明读的根本不是中文包（假绿）
+  const zhOk = withLocale('zh-CN', () => FIELDS_LIB_TOP.specGroups(probe).map((g) => g.title));
+  assert.ok(
+    zhOk.some((t) => CJK.test(t ?? '')),
+    '中文下参数表组标题应含中文（否则语言切换根本没生效）',
+  );
 });
 
 /* ================================================================ *

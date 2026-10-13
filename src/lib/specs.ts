@@ -1,4 +1,8 @@
-import type { Dataset, Product } from '../types';
+import { i18n } from '../i18n';
+import type { Product } from '../types';
+
+/** 展示文案助手（语言只从全局来，口径见 `src/i18n/index.ts`） */
+const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
 
 // 四条能力横条：借鉴参考项目「画归画、数归数」——房间负责「这是谁」，
 // 横条负责「它强在哪」。取值全部来自官网实数，缺失即 null（显示「官方未公布」），
@@ -7,17 +11,23 @@ export type AbilityKey = 'display' | 'light' | 'battery' | 'camera';
 
 interface AbilityDef {
   key: AbilityKey;
-  label: string;
+  /** 展示名 → locale 键。**不存中文**（存了就没法双语，且闸门看不见） */
+  labelKey: string;
   higherBetter: boolean;
   unit: string;
 }
 
 export const ABILITIES: AbilityDef[] = [
-  { key: 'display', label: '屏幕', higherBetter: true, unit: 'PPI' },
-  { key: 'light', label: '轻薄', higherBetter: false, unit: 'g' },
-  { key: 'battery', label: '续航', higherBetter: true, unit: 'mAh' },
-  { key: 'camera', label: '影像', higherBetter: true, unit: 'MP' },
+  { key: 'display', labelKey: 'ability.display', higherBetter: true, unit: 'PPI' },
+  { key: 'light', labelKey: 'ability.light', higherBetter: false, unit: 'g' },
+  { key: 'battery', labelKey: 'ability.battery', higherBetter: true, unit: 'mAh' },
+  { key: 'camera', labelKey: 'ability.camera', higherBetter: true, unit: 'MP' },
 ];
+
+/** 能力维度展示名（语言感知） */
+export function abilityLabel(key: AbilityKey | string): string {
+  return t(ABILITIES.find((d) => d.key === key)?.labelKey ?? 'ability.display');
+}
 
 export interface AbilityRow {
   key: AbilityKey;
@@ -81,13 +91,21 @@ export function computeBounds(products: Product[]): Record<AbilityKey, Bounds | 
 function abilityRow(p: Product, def: AbilityDef, b: Bounds | null): AbilityRow {
   const raw = rawFor(p, def.key);
   if (raw == null || !b || b.max === b.min) {
-    return { key: def.key, label: def.label, raw: null, display: '官方未公布', ratio: null };
+    return {
+      key: def.key,
+      label: abilityLabel(def.key),
+      raw: null,
+      display: t('common.unpublished'),
+      ratio: null,
+    };
   }
-  const t = (raw - b.min) / (b.max - b.min);
-  const ratio = def.higherBetter ? t : 1 - t;
+  // ⚠️ 这里原变量名是 `t`，与模块级的翻译助手 `t()` 同名会把它遮蔽
+  // （TS 报「used before declaration」，运行时则是拿数字当函数调用）——改名 `norm`。
+  const norm = (raw - b.min) / (b.max - b.min);
+  const ratio = def.higherBetter ? norm : 1 - norm;
   return {
     key: def.key,
-    label: def.label,
+    label: abilityLabel(def.key),
     raw,
     display: fmt(def.key, raw),
     ratio: Math.max(0, Math.min(1, ratio)),
@@ -130,11 +148,21 @@ export function champions(products: Product[]): Champion[] {
       }
     }
     if (best && bestRaw != null)
-      out.push({ key: def.key, label: def.label, product: best, display: fmt(def.key, bestRaw) });
+      out.push({
+        key: def.key,
+        label: abilityLabel(def.key),
+        product: best,
+        display: fmt(def.key, bestRaw),
+      });
   }
   // 「最新发布」也算一个榜单维度
   const latest = [...products].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate))[0];
   if (latest)
-    out.push({ key: 'display', label: '最新发布', product: latest, display: latest.releaseDate });
+    out.push({
+      key: 'display',
+      label: t('sort.release'),
+      product: latest,
+      display: latest.releaseDate,
+    });
   return out;
 }

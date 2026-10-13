@@ -1,6 +1,10 @@
 import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' };
 import phoneViewJson from '../../data/view-phone.json' with { type: 'json' };
+import { i18n, currentLocale, pickLocale } from '../i18n';
 import type { Product } from '../types';
+
+/** 展示文案助手：语言只从全局来（口径见 `src/i18n/index.ts` 的 `currentLocale`） */
+const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
 
 /**
  * 参数表渲染引擎（2026-10-13 硬编码审计 A1/B1 治理 + SCHEMA-EXTENSIBILITY 最优解落地）。
@@ -24,7 +28,10 @@ import type { Product } from '../types';
 interface SchemaFieldJson {
   path: string;
   label: string;
+  /** 英文标签。**与 label 成对存在**（selftest 的 i18n 对账闸门强制，缺一即红灯） */
+  labelEn?: string;
   unit?: string | null;
+  unitEn?: string | null;
   type: string;
   group: string;
   /** 参数级筛选声明：true = 该字段自动成为一个筛选维度（相等类引擎，任意类型） */
@@ -33,11 +40,12 @@ interface SchemaFieldJson {
   orderDeriver?: string;
 }
 interface SchemaJson {
-  groups?: Array<{ id: string; name: string }>;
+  groups?: Array<{ id: string; name: string; nameEn?: string }>;
   fields: SchemaFieldJson[];
 }
 interface ViewRow {
   label?: string;
+  labelEn?: string;
   field?: string;
   fields?: string[];
   expand?: string;
@@ -46,6 +54,7 @@ interface ViewRow {
 interface ViewGroup {
   id: string;
   title: string;
+  titleEn?: string;
   /** 一个视图组可吞并多个 schema 分组（如「芯片与存储」= chipset + memory） */
   matchGroups?: string[];
   rows: ViewRow[];
@@ -71,19 +80,28 @@ interface SpecGroup {
 
 const dash = (x: unknown): string => (x == null || x === '' ? '—' : String(x));
 
+/** 语言感知的标签/单位解析（数据侧 label/labelEn、unit/unitEn 双字段） */
+const labelOf = (f: { label: string; labelEn?: string }): string =>
+  pickLocale(f.label, f.labelEn);
+const unitOf = (f: SchemaFieldJson | undefined): string => {
+  const u = pickLocale(f?.unit ?? '', f?.unitEn);
+  return u ? ` ${u}` : '';
+};
+
 /** 缺省格式化：按 schema 的 type + unit 通用渲染（新字段的默认展示形态） */
 function defaultFormat(field: SchemaFieldJson | undefined, v: unknown): string {
   if (v == null || v === '') return '—';
-  const unit = field?.unit ? ` ${field.unit}` : '';
+  const unit = unitOf(field);
   switch (field?.type) {
     case 'number':
       return typeof v === 'number' ? `${v}${unit}` : dash(v);
     case 'boolean':
-      return v === true ? '是' : v === false ? '否' : dash(v);
+      return v === true ? t('common.yes') : v === false ? t('common.no') : dash(v);
     case 'array:number':
       return Array.isArray(v) && v.length ? `${v.join(' / ')}${unit}` : '—';
     case 'array:string':
-      return Array.isArray(v) && v.length ? v.join('、') : '—';
+      // 枚举顿号「、」是中文特有；英文用逗号 + 空格（不是「顺手留着」的半吊子）
+      return Array.isArray(v) && v.length ? v.join(currentLocale() === 'en' ? ', ' : '、') : '—';
     case 'object':
     case 'array:object':
       return typeof v === 'object' ? JSON.stringify(v) : dash(v);
@@ -92,11 +110,18 @@ function defaultFormat(field: SchemaFieldJson | undefined, v: unknown): string {
   }
 }
 
-/** 单值 + 单位（string 型字段要带 schema 单位时用，如刷新率 `1-120 Hz`） */
-function unitFormat(values: unknown[], fields: SchemaFieldJson[]): string {
+/**
+ * 单值 + 单位（string 型字段要带 schema 单位时用，如刷新率 `1-120 Hz`）。
+ *
+ * ⚠️ 形参必须与 `FORMATTERS` 的调用形态一致（**解构对象**，不是位置参数）：
+ * 2026-10-13 修 — 原写法是 `(values, fields)` 两个位置参数，而注册表统一按
+ * `fmt({ values, fields })` 调用，真被引用时 `values[0]` 恒为 undefined、静默返回「—」。
+ * 目前视图字典没有行用到 `unit`，所以这个错误一直没显形 —— 正是 A 层静默失效的形状。
+ */
+function unitFormat({ values, fields }: { values: unknown[]; fields: SchemaFieldJson[] }): string {
   const v = values[0];
   if (v == null || v === '') return '—';
-  return `${String(v)}${fields[0]?.unit ? ` ${fields[0].unit}` : ''}`;
+  return `${String(v)}${unitOf(fields[0])}`;
 }
 
 /**
@@ -115,20 +140,23 @@ const FORMATTERS: Record<string, (args: { values: unknown[]; fields: SchemaField
     return v && typeof v.w === 'number' && typeof v.h === 'number' ? `${v.w}×${v.h}` : '—';
   },
   brightness: ({ values }) => {
-    const [t, p] = values;
-    if (typeof p === 'number') return `典型 ${dash(t)} / 峰值 ${p} nits`;
-    if (typeof t === 'number') return `典型 ${t} nits`;
+    const [typ, peak] = values;
+    // 「典型/峰值」是**文案**不是数据：抽到 locale 包，否则英文页会中英混排
+    if (typeof peak === 'number')
+      return t('spec.brightnessBoth', { typical: dash(typ), peak });
+    if (typeof typ === 'number') return t('spec.brightnessTypical', { typical: typ });
     return '—';
   },
-  videoHours: ({ values }) => (typeof values[0] === 'number' ? `${values[0]} 小时（视频）` : '—'),
+  videoHours: ({ values }) =>
+    typeof values[0] === 'number' ? t('spec.videoHours', { hours: values[0] }) : '—',
 };
 
-/** 后置相机展开：每颗镜头一行（官网按角色分列的忠实呈现） */
-const CAMERA_ROLES: Array<{ role: string; label: string }> = [
-  { role: 'main', label: '主摄' },
-  { role: 'ultrawide', label: '超广角' },
-  { role: 'tele', label: '长焦' },
-  { role: 'periscope', label: '潜望长焦' },
+/** 后置相机展开：每颗镜头一行（官网按角色分列的忠实呈现）。角色名走 locale 键。 */
+const CAMERA_ROLES: Array<{ role: string; labelKey: string }> = [
+  { role: 'main', labelKey: 'spec.cameraRole.main' },
+  { role: 'ultrawide', labelKey: 'spec.cameraRole.ultrawide' },
+  { role: 'tele', labelKey: 'spec.cameraRole.tele' },
+  { role: 'periscope', labelKey: 'spec.cameraRole.periscope' },
 ];
 
 function cameraRoleRows(path: string, specs: Record<string, unknown> | null | undefined): SpecRow[] {
@@ -138,12 +166,12 @@ function cameraRoleRows(path: string, specs: Record<string, unknown> | null | un
     aperture?: string | null;
     ois?: boolean | null;
   }>;
-  return CAMERA_ROLES.map(({ role, label }) => {
+  return CAMERA_ROLES.map(({ role, labelKey }) => {
     const c = rear.find((x) => x?.role === role);
     const bits = c
       ? [c.mp != null ? `${c.mp} MP` : null, c.aperture, c.ois ? 'OIS' : null].filter(Boolean)
       : [];
-    return { label, value: bits.length ? bits.join(' · ') : '—' };
+    return { label: t(labelKey), value: bits.length ? bits.join(' · ') : '—' };
   });
 }
 
@@ -179,9 +207,9 @@ function buildSpecGroups(
         : paths.length === 1
           ? defaultFormat(fields[0], values[0])
           : values.map((v, i) => defaultFormat(fields[i], v)).join(' / ');
-      rows.push({ label: r.label ?? paths.join('+'), value });
+      rows.push({ label: pickLocale(r.label ?? paths.join('+'), r.labelEn), value });
     }
-    out.push({ id: g.id, title: g.title, rows });
+    out.push({ id: g.id, title: pickLocale(g.title, g.titleEn), rows });
   }
 
   // ── 自动补挂（最优解核心）：schema 有、视图没引用、也没 hidden 的字段 → 自动出现在页面上。
@@ -191,16 +219,26 @@ function buildSpecGroups(
   const bySchemaGroup = new Map<string, ViewGroup>();
   for (const g of view.groups) for (const gid of g.matchGroups ?? [g.id]) bySchemaGroup.set(gid, g);
   const extra = new Map<string, SpecRow[]>();
+  /** 补挂组的展示名（语言感知）：命中视图组 → 视图标题；否则 → schema 分组名 */
+  const targetId = new Map<string, string>();
   for (const f of schema.fields) {
     if (referenced.has(f.path) || hidden.has(f.path)) continue;
-    const row: SpecRow = { label: f.label, value: defaultFormat(f, specs?.[f.path]) };
     const target = bySchemaGroup.get(f.group);
-    const key = target ? target.id : (schema.groups?.find((sg) => sg.id === f.group)?.name ?? f.group);
+    const sg = schema.groups?.find((x) => x.id === f.group);
+    const key = target
+      ? pickLocale(target.title, target.titleEn)
+      : sg
+        ? pickLocale(sg.name, sg.nameEn)
+        : f.group;
+    if (target) targetId.set(key, target.id);
+    const row: SpecRow = { label: labelOf(f), value: defaultFormat(f, specs?.[f.path]) };
     if (!extra.has(key)) extra.set(key, []);
     extra.get(key)!.push(row);
   }
   for (const [key, rows] of extra) {
-    const g = out.find((x) => x.id === key) ?? out.find((x) => x.title === key);
+    // 先按视图组 id 归位，再按展示名兜底（id 是稳定键，展示名随语言变，不能当主键）
+    const id = targetId.get(key);
+    const g = (id ? out.find((x) => x.id === id) : undefined) ?? out.find((x) => x.title === key);
     if (g) g.rows.push(...rows);
     else out.push({ id: key, title: key, rows });
   }

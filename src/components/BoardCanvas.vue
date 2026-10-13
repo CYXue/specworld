@@ -102,8 +102,20 @@ function stopInertia() {
 
 /** 位移 → 进 ease 缓冲；rAF 循环里逐帧应用 + 回绕 + 换图 */
 function move(dx: number, dy: number) {
-  ease.x += dx * 0.02 * currentScale;
-  ease.y += dy * 0.02 * currentScale;
+  const stepX = dx * 0.02 * currentScale;
+  const stepY = dy * 0.02 * currentScale;
+  // 减动效偏好（a11y：prefers-reduced-motion）——不攒惯性、不补间，
+  // 本帧直接把位移走完就停：松手没有残速拖尾。与 GlobeCanvas 的 glide 分支同口径。
+  if (reduceMotion?.matches) {
+    stopInertia();
+    ease.x = stepX;
+    ease.y = stepY;
+    step();
+    stopInertia();
+    return;
+  }
+  ease.x += stepX;
+  ease.y += stepY;
   if (rafId) return;
   rafId = requestAnimationFrame(step);
 }
@@ -351,7 +363,7 @@ defineExpose({ reset, focusCanvas });
     :class="{ 'is-ready': ready }"
     tabindex="0"
     role="application"
-    aria-label="设备无限画布：拖拽平移，点瓦片看详情"
+    aria-label="$t('board.canvasAriaLabel')"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"
@@ -367,8 +379,8 @@ defineExpose({ reset, focusCanvas });
 
     <!-- 空结果 -->
     <div v-if="!tiles.length" class="board-empty">
-      <p class="board-empty-title">画布上还没有设备</p>
-      <p class="board-empty-sub">当前筛选没有命中任何机型，换个条件或清空看看全部。</p>
+      <p class="board-empty-title">{{ $t('board.emptyTitle') }}</p>
+      <p class="board-empty-sub">{{ $t('board.emptySub') }}</p>
     </div>
 
     <!-- 拖拽提示 -->
@@ -376,9 +388,9 @@ defineExpose({ reset, focusCanvas });
 
     <!-- HUD -->
     <div class="board-hud" aria-hidden="true">
-      <span class="board-hud-b">{{ tiles.length }} 台</span>
+      <span class="board-hud-b">{{ $t('board.hudCount', { n: tiles.length }) }}</span>
       <span class="board-hud-sep">/</span>
-      <span>环面回绕 · 无限平移</span>
+      <span>{{ $t('board.hudWrap') }}</span>
     </div>
 
     <!-- 详情浮层 -->

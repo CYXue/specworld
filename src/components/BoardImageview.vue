@@ -5,7 +5,7 @@
  */
 import { onMounted, ref } from 'vue';
 
-const props = defineProps<{ src: string }>();
+defineProps<{ src: string }>();
 const emit = defineEmits<{ (e: 'close'): void }>();
 
 const img = ref<HTMLElement | null>(null);
@@ -90,12 +90,20 @@ onMounted(() => {
 
 <template>
   <div class="imageview" :class="{ imageview_show: shown }" @click.self="emit('close')">
-    <div ref="img" class="imageview_image">
+    <div
+      ref="img"
+      class="imageview_image"
+      @pointerdown="onDown"
+      @pointermove="onMove"
+      @pointerup="onUp"
+      @pointercancel="onUp"
+      @wheel.prevent="onWheel"
+    >
       <img :src="src" alt="" draggable="false" />
     </div>
-    <p class="imageview_tip">+ 拖拽移动图片，滚轮 / 双指捏合缩放 +</p>
+    <p class="imageview_tip">{{ $t('board.imageviewTip') }}</p>
     <div class="imageview_return">
-      <button class="imageview_return_btn" @click="emit('close')">[ 返回 ] :: close()</button>
+      <button class="imageview_return_btn" @click="emit('close')">{{ $t('board.backClose') }}</button>
     </div>
   </div>
 </template>

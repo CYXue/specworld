@@ -29,14 +29,14 @@ const props = defineProps<{
         {{ vendor.nameZh }}
       </h2>
       <span class="text-[12px] leading-[1.5]" :style="{ color: vendor.accentColor }">
-        {{ vendor.name }} · {{ products.length }} 款
+        {{ $t('brandGroup.count', { name: vendor.name, n: products.length }) }}
       </span>
       <RouterLink
         :to="`/brand/${vendor.id}`"
         class="pixel-button ml-auto flex items-center gap-1 px-2 py-1 text-[12px] leading-[1.5]"
         :style="{ color: vendor.accentColor }"
       >
-        进入{{ vendor.nameZh }} · 可按系列筛选
+        {{ $t('brandGroup.enter', { name: vendor.nameZh }) }}
         <PxIcon name="arrow" :size="10" />
       </RouterLink>
     </div>
@@ -55,11 +55,11 @@ const props = defineProps<{
       class="pixel-note mt-3 px-3 py-1.5 text-[12px] leading-[1.5]"
       style="color: var(--color-parchment-dim)"
     >
-      只列最新 {{ props.limit }} 台，其余 {{ products.length - props.limit }} 款在
+      {{ $t('brandGroup.moreBefore', { n: props.limit, m: products.length - props.limit }) }}
       <RouterLink :to="`/brand/${vendor.id}`" :style="{ color: vendor.accentColor }">
-        {{ vendor.nameZh }}页
+        {{ $t('brandGroup.morePageLink', { name: vendor.nameZh }) }}
       </RouterLink>
-      里可按系列筛选。
+      {{ $t('brandGroup.moreAfter') }}
     </p>
   </div>
 </template>

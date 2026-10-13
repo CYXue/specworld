@@ -15,6 +15,7 @@
  * - 无后端环境（纯静态托管）优雅降级：生成标准模板 JSON 供用户复制发给管理员。
  */
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { asset } from '../lib/assets';
 import { coerceSpecValueClient as coerce, validateSpecValueClient as validate } from '../lib/fieldValidate';
 import type { Product } from '../types';
@@ -22,6 +23,7 @@ import type { Product } from '../types';
 interface SchemaField {
   path: string;
   label: string;
+  labelEn?: string;
   unit: string | null;
   type: string;
   range: number[] | null;
@@ -32,6 +34,7 @@ interface SchemaField {
 /** 公开提交只开放简单标量类型；object/array:object 结构太复杂，走联系渠道 */
 const SCALAR_TYPES = new Set(['number', 'string', 'boolean', 'enum', 'array:number', 'array:string']);
 
+const { t } = useI18n();
 const props = defineProps<{ product: Product | undefined }>();
 
 const open = ref(false);
@@ -52,7 +55,7 @@ const currentField = computed(() => allFields.value.find((f) => f.path === field
 /** 当前值：specs 是扁平 Record<path, value> 容器，直接按 path 取 */
 const currentValueText = computed(() => {
   const v = props.product?.specs?.[fieldPath.value];
-  if (v === undefined || v === null) return '官方未公布';
+  if (v === undefined || v === null) return t('common.unpublished');
   return typeof v === 'string' ? v : JSON.stringify(v);
 });
 
@@ -61,7 +64,7 @@ const typeHint = computed(() => {
   if (!f) return '';
   const parts = [f.type];
   if (f.unit) parts.push(f.unit);
-  if (f.range) parts.push(`合理区间 ${f.range[0]}~${f.range[1]}`);
+  if (f.range) parts.push(t('feedback.rangeHint', { min: f.range[0], max: f.range[1] }));
   if (f.values) parts.push(f.values.join(' / '));
   return parts.join(' · ');
 });
@@ -78,7 +81,7 @@ async function openModal() {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const schema = (await r.json()) as { fields?: SchemaField[]; groups?: { id: string; name: string }[] };
     const fields = (schema.fields ?? []).filter((f) => SCALAR_TYPES.has(f.type));
-    const gs = (schema.groups ?? [{ id: '_', name: '参数' }]).map((g) => ({
+    const gs = (schema.groups ?? [{ id: '_', name: t('feedback.groupOther') }]).map((g) => ({
       id: g.id,
       name: g.name,
       fields: fields.filter((f) => f.group === g.id),
@@ -86,7 +89,7 @@ async function openModal() {
     // 兜底：schema 校验保证 groups 覆盖全部字段，但万一有 orphan 不丢字段
     const grouped = new Set(gs.flatMap((g) => g.fields.map((f) => f.path)));
     const rest = fields.filter((f) => !grouped.has(f.path));
-    if (rest.length) gs.push({ id: '_', name: '其他', fields: rest });
+    if (rest.length) gs.push({ id: '_', name: t('feedback.groupOther'), fields: rest });
     groups.value = gs.filter((g) => g.fields.length);
     fieldPath.value = groups.value[0]?.fields[0]?.path ?? '';
     rawValue.value = '';
@@ -110,12 +113,12 @@ async function submit() {
   const field = currentField.value;
   if (!props.product || !field) return;
   if (!reason.value.trim()) {
-    msg.value = { kind: 'err', text: '请填写数据来源（例如：厂商官网 / 实机测量 / 评测文章链接）' };
+    msg.value = { kind: 'err', text: t('feedback.needReason') };
     return;
   }
   const verr = validate(field, rawValue.value);
   if (verr) {
-    msg.value = { kind: 'err', text: '值校验未过：' + verr };
+    msg.value = { kind: 'err', text: t('feedback.validateFail', { err: verr }) };
     return;
   }
   const payload = {
@@ -139,7 +142,10 @@ async function submit() {
     if (noBackend) throw new Error('no-backend');
     const j = (await r.json().catch(() => ({}))) as { ok?: boolean; id?: string; message?: string; errors?: string[] };
     if (r.ok && j.ok) {
-      msg.value = { kind: 'ok', text: `✅ ${j.message ?? '已提交'}（编号 ${j.id}）` };
+      msg.value = {
+        kind: 'ok',
+        text: t('feedback.submitted', { message: j.message ?? t('feedback.submittedOk'), id: j.id }),
+      };
       rawValue.value = '';
       reason.value = '';
     } else {
@@ -150,7 +156,7 @@ async function submit() {
     fallbackJson.value = JSON.stringify(
       {
         ...payload,
-        submittedBy: payload.submittedBy || '匿名',
+        submittedBy: payload.submittedBy || t('feedback.anonymous'),
         createdAt: new Date().toISOString().slice(0, 10),
         source: 'user-submission',
         status: 'pending',
@@ -160,7 +166,7 @@ async function submit() {
     );
     msg.value = {
       kind: 'warn',
-      text: '当前环境未连接数据服务（如 B 站 Toy 等纯静态托管页面）。请复制下方标准模板，通过私信/评论发给作者——作者导入审核通过后即生效，感谢纠错！',
+      text: t('feedback.noBackend'),
     };
   } finally {
     submitting.value = false;
@@ -174,7 +180,7 @@ async function submit() {
     style="color: var(--color-parchment-dim)"
     @click="openModal"
   >
-    ✎ 纠错 / 补充数据
+    ✎ {{ t('feedback.openButton') }}
   </button>
 
   <div
@@ -196,7 +202,7 @@ async function submit() {
       <div class="mb-3 flex items-start justify-between gap-3">
         <div>
           <h2 class="font-pixel text-[16px] leading-[1.4]" style="color: var(--color-parchment-lit)">
-            纠错 / 补充数据
+            {{ t('feedback.title') }}
           </h2>
           <p class="mt-1 text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
             {{ props.product?.name }}（{{ props.product?.id }}）
@@ -205,7 +211,7 @@ async function submit() {
         <button
           class="pixel-button px-2 py-1 text-[12px]"
           style="color: var(--color-parchment-dim)"
-          aria-label="关闭"
+          :aria-label="t('feedback.close')"
           @click="close"
         >
           ✕
@@ -213,11 +219,13 @@ async function submit() {
       </div>
 
       <div v-if="loadErr" class="text-[12px] leading-[1.6]" style="color: var(--color-east)">
-        字段表加载失败：{{ loadErr }}。请稍后再试，或通过关于页联系渠道反馈。
+        {{ t('feedback.loadFailed', { err: loadErr }) }}
       </div>
 
       <template v-else>
-        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">要修正的参数</label>
+        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">{{
+          t('feedback.fieldLabel')
+        }}</label>
         <select
           v-model="fieldPath"
           class="mb-1 w-full rounded px-2 py-2 text-[12px]"
@@ -228,11 +236,12 @@ async function submit() {
           </optgroup>
         </select>
         <p class="mb-3 text-[11px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-          当前值：{{ currentValueText }}　·　{{ typeHint }}
+          {{ t('feedback.currentValue', { value: currentValueText, hint: typeHint }) }}
         </p>
 
         <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">
-          正确的值<template v-if="currentField && currentField.type === 'boolean'">（true / false）</template>
+          {{ t('feedback.correctValue')
+          }}<template v-if="currentField && currentField.type === 'boolean'">（true / false）</template>
         </label>
         <select
           v-if="currentField && (currentField.type === 'boolean' || currentField.type === 'enum')"
@@ -240,9 +249,9 @@ async function submit() {
           class="mb-3 w-full rounded px-2 py-2 text-[12px]"
           style="background: var(--color-void); color: var(--color-parchment); border: 1px solid var(--color-ink)"
         >
-          <option value="" disabled>请选择</option>
-          <option v-if="currentField.type === 'boolean'" value="true">true（是）</option>
-          <option v-if="currentField.type === 'boolean'" value="false">false（否）</option>
+          <option value="" disabled>{{ t('feedback.pleaseSelect') }}</option>
+          <option v-if="currentField.type === 'boolean'" value="true">true（{{ t('common.yes') }}）</option>
+          <option v-if="currentField.type === 'boolean'" value="false">false（{{ t('common.no') }}）</option>
           <template v-else>
             <option v-for="v in currentField.values" :key="v" :value="v">{{ v }}</option>
           </template>
@@ -252,24 +261,32 @@ async function submit() {
           v-model="rawValue"
           class="mb-3 w-full rounded px-2 py-2 text-[12px]"
           style="background: var(--color-void); color: var(--color-parchment); border: 1px solid var(--color-ink)"
-          :placeholder="currentField?.type === 'array:number' ? '如 8, 12, 16' : '按上方类型提示填写'"
+          :placeholder="
+            currentField?.type === 'array:number'
+              ? t('feedback.placeholderArray')
+              : t('feedback.placeholderScalar')
+          ""
         />
 
-        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">数据来源（必填）</label>
+        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">{{
+          t('feedback.reasonLabel')
+        }}</label>
         <input
           v-model="reason"
           class="mb-3 w-full rounded px-2 py-2 text-[12px]"
           style="background: var(--color-void); color: var(--color-parchment); border: 1px solid var(--color-ink)"
-          placeholder="例如：厂商官网规格页 / 实机测量 / 评测文章（附链接更好）"
+          :placeholder="t('feedback.reasonPlaceholder')"
         />
 
-        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">你的昵称（可选）</label>
+        <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">{{
+          t('feedback.nickLabel')
+        }}</label>
         <input
           v-model="nick"
           maxlength="40"
           class="mb-3 w-full rounded px-2 py-2 text-[12px]"
           style="background: var(--color-void); color: var(--color-parchment); border: 1px solid var(--color-ink)"
-          placeholder="审核通过后会记录在数据来源里"
+          :placeholder="t('feedback.nickPlaceholder')"
         />
 
         <p v-if="msg" class="mb-3 whitespace-pre-wrap text-[12px] leading-[1.6]" :style="{ color: msg.kind === 'ok' ? 'var(--color-emerald)' : msg.kind === 'warn' ? 'var(--color-gold)' : 'var(--color-east)' }">
@@ -288,11 +305,11 @@ async function submit() {
           :disabled="submitting"
           @click="submit"
         >
-          {{ submitting ? '提交中…' : '提交纠错' }}
+          {{ submitting ? t('feedback.submitting') : t('feedback.submit') }}
         </button>
         <p class="mt-2 text-[11px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-          提交后进入人工审核队列，审核通过才会显示在站点上；官网数据更新不会覆盖人工核实值。
-          结构复杂参数（如镜头组明细）暂不支持在线提交，请通过关于页联系渠道反馈。
+          {{ t('feedback.noteQueue') }}
+          {{ t('feedback.noteComplex') }}
         </p>
       </template>
     </div>

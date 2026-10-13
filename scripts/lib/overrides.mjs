@@ -38,16 +38,6 @@ export function loadOverrides(file = OVERRIDES_FILE) {
   return { version: parsed.version ?? 0, entries: Array.isArray(parsed.entries) ? parsed.entries : [] };
 }
 
-/** 条目 id → 条目。重复 id 是文件级错误，调用方负责报 */
-function indexById(entries) {
-  const m = new Map();
-  for (const e of entries) {
-    if (m.has(e.id)) m.get(e.id).push(e);
-    else m.set(e.id, [e]);
-  }
-  return m;
-}
-
 /**
  * 校验用户数据层。返回错误列表（空 = 合法）。
  * 与 applyOverrides 分开：validate 先跑，全过才允许应用——「先校验后应用」

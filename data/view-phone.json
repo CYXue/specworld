@@ -6,64 +6,195 @@
       "id": "body",
       "title": "机身",
       "rows": [
-        { "label": "尺寸", "fields": ["body.heightMm", "body.widthMm", "body.thicknessMm"], "format": "dimensions" },
-        { "label": "重量", "field": "body.weightG" },
-        { "label": "材质", "field": "body.material" },
-        { "label": "防护", "field": "body.ipRating" },
-        { "label": "配色", "field": "body.colors" }
-      ]
+        {
+          "label": "尺寸",
+          "fields": [
+            "body.heightMm",
+            "body.widthMm",
+            "body.thicknessMm"
+          ],
+          "format": "dimensions",
+          "labelEn": "Dimensions"
+        },
+        {
+          "label": "重量",
+          "field": "body.weightG",
+          "labelEn": "Weight"
+        },
+        {
+          "label": "材质",
+          "field": "body.material",
+          "labelEn": "Material"
+        },
+        {
+          "label": "防护",
+          "field": "body.ipRating",
+          "labelEn": "Protection"
+        },
+        {
+          "label": "配色",
+          "field": "body.colors",
+          "labelEn": "Colors"
+        }
+      ],
+      "titleEn": "Build"
     },
     {
       "id": "display",
       "title": "屏幕",
       "rows": [
-        { "label": "类型", "field": "display.type" },
-        { "label": "尺寸", "field": "display.sizeIn" },
-        { "label": "分辨率", "field": "display.resolutionPx", "format": "resolution" },
-        { "label": "PPI", "field": "display.ppi", "format": "plain" },
-        { "label": "刷新率", "field": "display.refreshHz" },
-        { "label": "亮度", "fields": ["display.brightnessTypicalNits", "display.brightnessPeakNits"], "format": "brightness" },
-        { "label": "盖板玻璃", "field": "display.protection" }
-      ]
+        {
+          "label": "类型",
+          "field": "display.type",
+          "labelEn": "Type"
+        },
+        {
+          "label": "尺寸",
+          "field": "display.sizeIn",
+          "labelEn": "Size"
+        },
+        {
+          "label": "分辨率",
+          "field": "display.resolutionPx",
+          "format": "resolution",
+          "labelEn": "Resolution"
+        },
+        {
+          "label": "PPI",
+          "field": "display.ppi",
+          "format": "plain",
+          "labelEn": "PPI"
+        },
+        {
+          "label": "刷新率",
+          "field": "display.refreshHz",
+          "labelEn": "Refresh rate"
+        },
+        {
+          "label": "亮度",
+          "fields": [
+            "display.brightnessTypicalNits",
+            "display.brightnessPeakNits"
+          ],
+          "format": "brightness",
+          "labelEn": "Brightness"
+        },
+        {
+          "label": "盖板玻璃",
+          "field": "display.protection",
+          "labelEn": "Cover glass"
+        }
+      ],
+      "titleEn": "Display"
     },
     {
       "id": "chipset",
       "title": "芯片与存储",
-      "matchGroups": ["chipset", "memory"],
+      "matchGroups": [
+        "chipset",
+        "memory"
+      ],
       "rows": [
-        { "label": "芯片", "field": "chipset.name" },
-        { "label": "制程", "field": "chipset.processNm" },
-        { "label": "CPU 核心", "field": "chipset.cpuCores" },
-        { "label": "GPU", "field": "chipset.gpu" },
-        { "label": "NPU", "field": "chipset.npu" },
-        { "label": "内存", "field": "memory.ramGb" },
-        { "label": "存储", "field": "memory.storageGb" }
-      ]
+        {
+          "label": "芯片",
+          "field": "chipset.name",
+          "labelEn": "Chip"
+        },
+        {
+          "label": "制程",
+          "field": "chipset.processNm",
+          "labelEn": "Process"
+        },
+        {
+          "label": "CPU 核心",
+          "field": "chipset.cpuCores",
+          "labelEn": "CPU cores"
+        },
+        {
+          "label": "GPU",
+          "field": "chipset.gpu",
+          "labelEn": "GPU"
+        },
+        {
+          "label": "NPU",
+          "field": "chipset.npu",
+          "labelEn": "NPU"
+        },
+        {
+          "label": "内存",
+          "field": "memory.ramGb",
+          "labelEn": "RAM"
+        },
+        {
+          "label": "存储",
+          "field": "memory.storageGb",
+          "labelEn": "Storage"
+        }
+      ],
+      "titleEn": "Chip & Storage"
     },
     {
       "id": "battery",
       "title": "电池与充电",
       "rows": [
-        { "label": "容量", "field": "battery.capacityMah" },
-        { "label": "有线充电", "field": "battery.wiredChargeW" },
-        { "label": "无线充电", "field": "battery.wirelessChargeW" },
-        { "label": "官方续航", "field": "battery.vendorClaimedVideoHours", "format": "videoHours" }
-      ]
+        {
+          "label": "容量",
+          "field": "battery.capacityMah",
+          "labelEn": "Capacity"
+        },
+        {
+          "label": "有线充电",
+          "field": "battery.wiredChargeW",
+          "labelEn": "Wired charging"
+        },
+        {
+          "label": "无线充电",
+          "field": "battery.wirelessChargeW",
+          "labelEn": "Wireless charging"
+        },
+        {
+          "label": "官方续航",
+          "field": "battery.vendorClaimedVideoHours",
+          "format": "videoHours",
+          "labelEn": "Official battery life"
+        }
+      ],
+      "titleEn": "Battery & Charging"
     },
     {
       "id": "camera",
       "title": "影像",
-      "rows": [{ "expand": "camera.rear", "format": "cameraRole" }]
+      "rows": [
+        {
+          "expand": "camera.rear",
+          "format": "cameraRole"
+        }
+      ],
+      "titleEn": "Camera"
     },
     {
       "id": "audio",
       "title": "音频",
-      "rows": [{ "label": "扬声器", "field": "audio.speakers" }]
+      "rows": [
+        {
+          "label": "扬声器",
+          "field": "audio.speakers",
+          "labelEn": "Speakers"
+        }
+      ],
+      "titleEn": "Audio"
     },
     {
       "id": "haptic",
       "title": "振动马达",
-      "rows": [{ "label": "马达类型", "field": "haptic.motor" }]
+      "rows": [
+        {
+          "label": "马达类型",
+          "field": "haptic.motor",
+          "labelEn": "Motor type"
+        }
+      ],
+      "titleEn": "Haptics"
     }
   ],
   "hidden": [

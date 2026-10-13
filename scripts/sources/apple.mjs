@@ -609,20 +609,6 @@ function slugCandidatesFor(name) {
   return out;
 }
 
-/** 候选 slug 与官网机型名的贴合度，用于在多候选中挑「非跳转」的那个时打破平局 */
-function slugNameScore(slug, name) {
-  const s = slug.replace(/^iphone-/, '');
-  const n = cleanText(name)
-    .replace(/^iPhone\s+/i, '')
-    .toLowerCase();
-  if (s === n.replace(/\s+/g, '-')) return 100;
-  const sTight = s.replace(/-/g, '');
-  const nTight = n.replace(/[\s-]+/g, '');
-  if (sTight === nTight) return 80;
-  if (nTight.startsWith(sTight)) return 60;
-  return 20;
-}
-
 /* ------------------------------------------------------------------ */
 /* HTTP 层：串行 + 限速 + 重试 + 缓存                                    */
 /* ------------------------------------------------------------------ */

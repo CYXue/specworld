@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import type { AbilityRow } from '../lib/specs';
 
 // 四条能力横条。条长 = 该字段在本数据集内的相对位置（0..1），不是虚构绝对分。
 // 无数据显示空轨 + 「未公布」。
+const { t } = useI18n();
 defineProps<{ rows: AbilityRow[]; hud?: string }>();
 </script>
 
@@ -38,7 +40,7 @@ defineProps<{ rows: AbilityRow[]; hud?: string }>();
         :style="{
           color: row.ratio != null ? 'var(--color-parchment-lit)' : 'var(--color-ink-soft)',
         }"
-        >{{ row.ratio != null ? row.display : '未公布' }}</span
+        >{{ row.ratio != null ? row.display : t('common.unpublished') }}</span
       >
     </div>
   </div>

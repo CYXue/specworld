@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "data": "node scripts/pipeline.mjs --data-only",
     "selftest": "node scripts/selftest.mjs",
+    "smoke:i18n": "node scripts/smoke/i18n-ssr.mjs",
     "quality": "node scripts/report/quality.mjs",
     "editor": "node scripts/editor-server.mjs",
     "sprites:review": "node scripts/sprite/review.mjs",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "vue": "^3.5.13",
+    "vue-i18n": "^9.14.4",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

@@ -41,12 +41,15 @@ specworld/
 │   ├── qa/                #   体检脚本（回答「为什么是这个结果」）
 │   ├── pipeline.mjs       # 编排入口（--data-only 是 CI 与日常唯一用到的模式）
 │   ├── selftest.mjs       # 自测入口（纯函数、不联网、CI 第一个 job）
+│   ├── lib/i18n-keys.mjs  #   语言包双向对账闸门（键集/引用/插值/数据侧双语，见 §2.6.4）
+│   ├── smoke/             #   真机/SSR 级冒烟（i18n-ssr.mjs：全站双语渲染）
 │   └── sync-public.mjs    # 构建期 data/ → public/ 逐文件对账
 ├── src/                   # 前端（Vite + Vue3 + TS）
 │   ├── views/             #   路由级页面，一路由一文件，后缀 View
 │   ├── components/        #   可复用展示/交互组件
 │   ├── lib/               #   纯逻辑层（无 DOM 依赖，可被 selftest 直接 import）
-│   │   ├── catalog.ts     #     品类/系列/价格派生（折叠屏判据、官方起售价、三榜取样）
+│   │   ├── catalog.ts     #     品类/系列/价格派生（折叠屏判据、三榜取样）
+│   │   ├── price.ts       #     ★ 官方起售价的**唯一真身**（曾被抄三份且口径不一致，见文件头）
 │   │   ├── facets.ts      #     品牌页筛选（系列×品类×排序 + URL 序列化）
 │   │   ├── fields.ts      #     规格字段分组渲染
 │   │   ├── specs.ts       #     四条能力横条（min–max 归一）
@@ -55,7 +58,9 @@ specworld/
 │   │   ├── globe.ts       #     球面几何（与 board 是两套实现，别互相套用）
 │   │   ├── assets.ts      #     资源路径（跟着 BASE_URL 走，Toy 挂子路径用）
 │   │   └── site.ts        #     站点标识单一真源（仓库/许可证/字体名，见 §2.5.2）
-│   ├── router/            #   路由表（hash 模式，见 §1.4）
+│   ├── router/            #   路由表（hash 模式，见 §1.4；表单独 export 供 SSR 冒烟复用）
+│   ├── i18n/              #   vue-i18n 装配（缺键抛错、locale 存取、currentLocale）
+│   ├── locales/           #   语言包 zh.json / en.json（键必须一一对应，见 §2.6）
 │   ├── types.ts           #   前端视图模型类型（见 §1.3 命名争议）
 │   ├── env.d.ts           #   Vite 环境类型声明
 │   ├── App.vue            #   根组件（页头/页脚/筛选条）
@@ -311,6 +316,64 @@ npm run lint        # 只报告，CI 用
 
 ---
 
+## 2.6 文案与多语言（i18n）纪律 🔴
+
+> 背景：本项目原来是**诚实单语**（界面全中文、无 i18n 机制，约 150 处硬编码）。
+> 2026-10-13 全量改造为 vue-i18n（`zh-CN` / `en`）。做这套纪律的唯一理由是
+> **DevEco Code 那种反面教材**：机制给了承诺、内容没兑现（i18n 骨架搭好，
+> 实际覆盖 3%），于是「支持多语言」这句话本身变成了假话。
+> 下面每一条都是为了堵死「机制在、内容不在」。
+
+### 2.6.1 三条硬红线
+
+| # | 规则 | 违反会出什么真实故障 |
+|---|---|---|
+| 1 | **缺键抛错，不回退** —— `src/i18n/index.ts` 配 `missing: throw`，且**不许配 `fallbackLocale`** | 配了回退就成了「英文缺键 → 静默掉回中文」，页面半中半英且零报错，正是 DevEco 那种假话 |
+| 2 | **语言走 `localStorage`，首屏即生效** | 存了 `en` 却刷新后先渲染一帧中文再跳英文（闪烁 + 分享卡片抓取到中文标题） |
+| 3 | **`<html lang>` / `<title>` / meta description 跟随语言**（`App.vue` 的 `watch(locale, …, { immediate: true })`） | 屏幕阅读器用中文发音念英文页；分享卡片标题与正文语言不一致 |
+
+### 2.6.2 键的写法
+
+- **键必须是字面量**：`t('about.principleOne.title')`。
+  `t('about.principle' + n + '.title')` **禁止** —— 拼出来的键对账闸门看不见，
+  于是「删了某个键」的绿灯是假的；
+- **lib 层一律读 `currentLocale()`，不接受 `locale` 参数**。
+  参数会成为第二真源，与 lib 内部自己的 `t()` 打架，产出中英混排且无闸门可报
+  （`catalog.ts` / `facets.ts` / `fields.ts` / `specs.ts` 已全部去掉该参数）；
+- **id 不翻译、只翻译展示**：系列 / 变体 / 价格档的 id 进 URL，保持原文，
+  展示层过 `seriesLabel()` / `variantLabel()` / `priceLabel()`。
+  翻译 id 会让分享链接失效；
+- **切换器自身文案不进包**：`LocaleSwitch.vue` 各语言写自己的自称（中文 / English）。
+  切换器是给「看不懂当前语言」的人用的救命入口，译成另一种语言反而认不出来。
+
+### 2.6.3 数据侧双语成对
+
+`label` 与 `labelEn` 必须成对出现（`unit`/`unitEn`、`name`/`nameEn` 同理）：
+
+| 文件 | 双语字段 |
+|---|---|
+| `data/schemas/phone.json` | 49 个字段的 `labelEn`，中英不同形的单位补 `unitEn`（英寸→in、核→cores、小时→h） |
+| `data/view-phone.json` | 每个 `groups[].titleEn`、每个有 `label` 的行的 `labelEn` |
+| `data/curated/facets.json` | `variants[].labelEn`、品牌 `series[].labelEn`、`priceBuckets[].labelEn`、`fallbackLabelEn`、`lineEn` |
+
+### 2.6.4 两道闸门（都必须能报红，已反向测过）
+
+| 闸门 | 命令 | 拦什么 |
+|---|---|---|
+| 语言包双向对账 | `npm run selftest`（`i18n 覆盖` 段） | 中英键集双向一致、引用↔定义双向、插值占位符中英一致、数据侧 `labelEn` 齐全、切英文后参数表/维度名/能力名/排序名/状态名不得残留 CJK |
+| 全站 SSR 双语冒烟 | `npm run smoke:i18n` | 13 条路由 × 2 语言渲染一遍：缺键抛错、英文页界面残留中文、中文页一个汉字都没有（防假绿） |
+
+`scripts/lib/i18n-keys.mjs` 的扫描器**必须先剥注释**（`<!-- -->` / `/* */` / `//`）
+再匹配，开引号前不能是 `=` / `.` / 标识符 —— 否则 `product.id`、`filter.q`
+这类 Vue 模板属性与注释里的假键会淹出几百条假警（2026-10-13 实测：332 条）。
+
+SSR 冒烟同理必须剥 `<!-- -->`：模板里大段中文「为什么这么写」的设计说明会被
+SSR 原样输出，不剥的话几百条假警会淹没真泄漏。
+它还有一份**数据白名单**（从 `public/data/*.json` 抽所有 CJK 连续段）——
+「华为 / 麒麟 / 鸿蒙 / 颜色名」本来就是数据，不算界面残留。
+
+---
+
 ## 3. 技能（Skill）与插件的目录/注册/启用约定
 
 > 本节规范**本机 WorkBuddy 环境**下的技能与插件。它们的注册位置在
@@ -375,7 +438,7 @@ npm run lint        # 只报告，CI 用
 | 项 | 规则 |
 |---|---|
 | 管线侧（`scripts/**`） | **只用 Node 内置模块**（`node:*`），零第三方依赖 |
-| 前端侧（`src/**`） | 依赖保持在个位数，当前仅 `vue` + `vue-router` |
+| 前端侧（`src/**`） | 依赖保持在个位数，当前为 `vue` + `vue-router` + `vue-i18n`（i18n 见 §2.6） |
 | 提交的 `package-lock.json` | `resolved` **只允许** `registry.npmjs.org`（见 `PRINCIPLES.md` §9） |
 | 新增依赖 | 先问「能不能用内置能力写」；必须加时说清替代方案与成本 |
 
@@ -387,7 +450,8 @@ npm run lint        # 只报告，CI 用
 | 命令 | 作用 | 何时必须跑 |
 |---|---|---|
 | `npm run data` | 跑数据管线（`--data-only`） | 改了解析器/闸门 |
-| `npm run selftest` | 纯函数自测（不联网、~1s） | **改解析器/闸门/几何前必跑** |
+| `npm run selftest` | 纯函数自测（不联网、~1s，含 i18n 对账闸门） | **改解析器/闸门/几何/语言包前必跑** |
+| `npm run smoke:i18n` | 全站 SSR 双语冒烟（13 路由 × 2 语言） | **改了界面文案 / 加删语言包键必跑**（见 §2.6.4） |
 | `npm run build` | 构建（含 prebuild 同步 + postbuild 闸门） | 交付前 |
 | `npm run lint` / `lint:fix` | 风格检查 / 自动修 | 交付前 |
 | `npm run format` | Prettier 格式化 | 交付前 |
@@ -513,6 +577,7 @@ npm run conventions:check    # = node scripts/publish/check-conventions.mjs
 - [ ] `npm run conventions:check` 通过（改了 base/路由/依赖/日志更要跑）
 - [ ] `npm run selftest` 全绿（改了解析器/闸门/几何时**必跑**）
 - [ ] `npm run font:check` 通过（改了界面文案/字体**必跑**，缺字形是静默失效）
+- [ ] 改了界面文案 / 加删语言包键 → `npm run smoke:i18n` 通过（见 §2.6）
 - [ ] `npm run build` 通过（含 `verify-dist` 闸门）
 - [ ] 改了样式 → `_smoke-pixel.cjs` 零模糊/零圆角/字号整数（需 `npm run preview` 起服务）
 - [ ] 装过新依赖 → `npm run lock:check` 通过

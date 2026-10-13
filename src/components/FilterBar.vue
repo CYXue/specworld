@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { DimKey, FacetItem, FilterState } from '../lib/facets';
-import { DIMENSIONS } from '../lib/facets';
+import { DIMENSION_KEYS, dimAllLabel, dimLabel } from '../lib/facets';
 import PxIcon from './PxIcon.vue';
+
+const { t } = useI18n();
 
 /**
  * 全量筛选条 —— 京东「高级筛选」式：**每个维度是一个收起的下拉选择器**。
@@ -50,26 +53,21 @@ const emit = defineEmits<{
  */
 const ALWAYS_SHOWN: ReadonlySet<DimKey> = new Set(['category']);
 const dims = computed(() =>
-  DIMENSIONS.filter((d) => ALWAYS_SHOWN.has(d.key) || (props.facets[d.key]?.length ?? 0) > 1),
+  DIMENSION_KEYS.filter((k) => ALWAYS_SHOWN.has(k) || (props.facets[k]?.length ?? 0) > 1).map(
+    (key) => ({ key, label: dimLabel(key), allLabel: dimAllLabel(key) }),
+  ),
 );
 
-/** 品类 id → 中文。分面 key 保持英文（URL 短且稳定），显示时才译。 */
-const CATEGORY_CN: Record<string, string> = {
-  phone: '手机',
-  tablet: '平板',
-  laptop: '笔记本',
-  audio: '音频',
-};
-
-/** 形态 id → 中文（折叠屏/直板；曲屏等数据源补原文后再扩）。 */
-const FORM_CN: Record<string, string> = {
-  foldable: '折叠屏',
-  bar: '直板',
-};
-
-function displayLabel(dim: DimKey, f: FacetItem): string {
-  if (dim === 'category') return CATEGORY_CN[f.id] ?? f.id;
-  if (dim === 'form') return FORM_CN[f.id] ?? f.id;
+/**
+ * 分面项展示名。**直接吃 `f.label`**（lib 的 `facetLabel` 已按维度解析：
+ * 品类走 CATEGORY_ORDER 双语、形态走 locale 键、芯片/价格各自有口径）。
+ *
+ * ⚠️ 这里原本另有一份 CATEGORY_CN / FORM_CN 中文映射（2026-10-13 i18n 治理时删）：
+ * 它与 `src/lib/catalog.ts` 的同名字表是**两份真源**——加个品类要改两处，
+ * 漏一处就是「筛选条显示平板的英文名、详情页显示中文」这种静默分叉。
+ * 且它写死中文，等于在组件里埋了一片闸门看不见的硬编码。
+ */
+function displayLabel(_dim: DimKey, f: FacetItem): string {
   return f.label;
 }
 
@@ -134,13 +132,15 @@ function triggerText(d: { key: DimKey; label: string }): string {
   if (!sel.length) return d.label;
   const f = props.facets[d.key]?.find((x) => x.id === sel[0]);
   const first = f ? displayLabel(d.key, f) : sel[0];
-  return sel.length === 1 ? `${d.label}：${first}` : `${d.label}：${first} 等${sel.length}项`;
+  return sel.length === 1
+    ? t('filter.triggerOne', { name: d.label, value: first })
+    : t('filter.triggerMore', { name: d.label, value: first, n: sel.length });
 }
 
 /** 京东式「已选条件」汇总：所有维度里被选中的项，可逐个删除。 */
 const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() => {
   const out: Array<{ dim: DimKey; id: string; label: string }> = [];
-  for (const d of DIMENSIONS) {
+  for (const d of dims.value) {
     for (const id of props.filter[d.key]) {
       const f = props.facets[d.key]?.find((x) => x.id === id);
       out.push({ dim: d.key, id, label: f ? displayLabel(d.key, f) : id });
@@ -156,17 +156,17 @@ const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() 
     <div class="mb-2 flex flex-wrap items-center gap-2">
       <span class="pixel-chip px-2 py-0.5 text-[12px] leading-[1.5] text-[var(--color-gold)]">{{ shownCount }}</span>
       <span class="text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-        / {{ totalCount }} 款
+        {{ t('filter.matchedTotal', { shown: shownCount, total: totalCount }) }}
       </span>
       <span v-if="pickedCount" class="pixel-chip px-2 py-0.5 text-[12px] leading-[1.5]" style="color: var(--color-west)">
-        已选对比 {{ pickedCount }} 台
+        {{ t('filter.picked', { n: pickedCount }) }}
       </span>
       <button
         class="pixel-button ml-auto flex items-center gap-1 px-2 py-1 text-[12px] leading-[1.5]"
         @click="emit('reset')"
       >
         <PxIcon name="close" :size="10" />
-        清空筛选
+        {{ t('filter.reset') }}
       </button>
     </div>
 
@@ -177,13 +177,13 @@ const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() 
     >
       <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
         <PxIcon name="dot" :size="8" />
-        已选
+        {{ t('filter.selected') }}
       </span>
       <button
         v-for="c in selected"
         :key="c.dim + ':' + c.id"
         class="pixel-tag flex items-center gap-1 px-2 py-1 text-[12px] leading-[1.5]"
-        :title="`移除 ${c.label}`"
+        :title="t('filter.remove', { name: c.label })"
         @click="emit('toggle', c.dim, c.id)"
       >
         <span style="color: var(--color-parchment-dim)">{{
@@ -195,7 +195,7 @@ const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() 
         class="pixel-button px-2 py-1 text-[12px] leading-[1.5]"
         @click="emit('reset')"
       >
-        清空
+        {{ t('filter.clear') }}
       </button>
     </div>
 
@@ -207,7 +207,7 @@ const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() 
           class="pixel-tag flex items-center gap-1 px-2 py-1 text-[12px] leading-[1.5]"
           :aria-pressed="filter[d.key].length > 0"
           :aria-expanded="openDim === d.key"
-          :title="`按${d.label}筛选`"
+          :title="t('filter.byDim', { name: d.label })"
           @click="toggleDim(d.key)"
         >
           {{ triggerText(d) }}
@@ -235,9 +235,9 @@ const selected = computed<Array<{ dim: DimKey; id: string; label: string }>>(() 
             :disabled="f.count === 0"
             :title="
               f.isUnknown
-                ? '官网未公布该字段的点，选它能把这些机型全部列出'
+                ? t('filter.unknownTip')
                 : f.count === 0
-                  ? '当前条件下该档 0 台'
+                  ? t('filter.zeroTip')
                   : undefined
             "
             @click="pick(d.key, f.id)"

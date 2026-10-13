@@ -11,6 +11,11 @@
  * 服务端 `validateOverrides` 才是落盘前最后一道闸门。
  */
 
+import { i18n } from '../i18n';
+
+/** 校验提示是**给用户看的**：语言跟着界面走（否则英文页弹中文提示，等于没翻译） */
+const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
+
 interface SchemaFieldLite {
   type: string;
   range: number[] | null;
@@ -20,20 +25,25 @@ interface SchemaFieldLite {
 
 /** 提交前校验。返回错误文案；null = 合法。与 schema.mjs validateSpecValue 的规则对齐 */
 export function validateSpecValueClient(field: SchemaFieldLite, raw: string): string | null {
-  if (raw === '' || raw === null || raw === undefined) return '值不能为空';
+  if (raw === '' || raw === null || raw === undefined) return t('validate.empty');
   switch (field.type) {
     case 'number': {
       const n = Number(raw);
-      if (!Number.isFinite(n)) return `应为数值，收到「${raw}」`;
+      if (!Number.isFinite(n)) return t('validate.notNumber', { raw });
       if (Array.isArray(field.range) && (n < field.range[0] || n > field.range[1]))
-        return `${n} 超出合理区间 ${field.range.join('~')}${field.unit ? ' ' + field.unit : ''}`;
+        return t('validate.outOfRange', {
+          value: n,
+          range: field.range.join('~'),
+          unit: field.unit ? ' ' + field.unit : '',
+        });
       return null;
     }
     case 'boolean':
-      if (!['true', 'false'].includes(String(raw).toLowerCase())) return '应为 true / false';
+      if (!['true', 'false'].includes(String(raw).toLowerCase())) return t('validate.notBool');
       return null;
     case 'enum':
-      if (!field.values?.includes(raw)) return `「${raw}」不在可选值 ${field.values?.join('/')} 内`;
+      if (!field.values?.includes(raw))
+        return t('validate.notInEnum', { raw, values: field.values?.join('/') });
       return null;
     case 'array:number': {
       const arr = String(raw)
@@ -41,7 +51,7 @@ export function validateSpecValueClient(field: SchemaFieldLite, raw: string): st
         .map((s) => s.trim())
         .filter(Boolean)
         .map(Number);
-      if (arr.some((n) => !Number.isFinite(n))) return '应为逗号分隔的数值，如 8, 12, 16';
+      if (arr.some((n) => !Number.isFinite(n))) return t('validate.badNumberArray');
       return null;
     }
     case 'array:string': {
@@ -49,7 +59,7 @@ export function validateSpecValueClient(field: SchemaFieldLite, raw: string): st
         .split(/[，,]/)
         .map((s) => s.trim())
         .filter(Boolean);
-      if (!arr.length) return '至少一项';
+      if (!arr.length) return t('validate.needOneItem');
       return null;
     }
     default:

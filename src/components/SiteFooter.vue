@@ -11,23 +11,27 @@
 //
 // 许可信息为什么也在这：OFL-1.1 要求随字体附带许可、改名版还要披露修改，
 // 仓库是 MIT 也不该只在 LICENSE 文件里说。**三行以内说完，完整版在关于页。**
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import PxIcon from './PxIcon.vue';
 import { asset } from '../lib/assets';
 import { CODE_LICENSE, FONT_NAME, REPO_URL } from '../lib/site';
 
 const route = useRoute();
-const links = [
-  { name: 'about', label: '关于', to: '/about' },
-  { name: 'search', label: '搜索', to: '/search' },
-];
+const { t } = useI18n();
+// computed：setup 里直接 t() 抓到的是当次语言的值，切语言不会重算
+const links = computed(() => [
+  { name: 'about', label: t('footer.about'), to: '/about' },
+  { name: 'search', label: t('footer.search'), to: '/search' },
+]);
 </script>
 
 <template>
   <footer class="pixel-footer mt-10">
     <div class="page-shell flex flex-wrap items-center justify-center gap-x-4 gap-y-1 py-4">
       <!-- 次要导航：当前页高亮，否则用户进到「关于」看不出自己在哪 -->
-      <nav aria-label="次要导航" class="flex items-center gap-3">
+      <nav :aria-label="$t('footer.label')" class="flex items-center gap-3">
         <RouterLink
           v-for="l in links"
           :key="l.name"
@@ -43,7 +47,7 @@ const links = [
       <p
         class="w-full text-center text-[12px] leading-[1.5] text-[var(--color-ink-soft)] sm:w-auto"
       >
-        参数世界 specworld · 数据来源：厂商官网规格 + 人工核查 · 选择更清楚
+        {{ $t('footer.tagline') }}
       </p>
       <!--
         许可与出处。只给入口不给全文：全文（字体改名说明、商标指称、数据来源）
@@ -54,7 +58,7 @@ const links = [
         class="flex w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px] leading-[1.5]"
       >
         <a class="pixel-link" :href="REPO_URL" target="_blank" rel="noopener noreferrer">
-          {{ CODE_LICENSE }} 源码
+          {{ CODE_LICENSE }} {{ $t('footer.sourceCode') }}
         </a>
         <span class="text-[var(--color-stone)]" aria-hidden="true">·</span>
         <a
@@ -63,10 +67,10 @@ const links = [
           target="_blank"
           rel="noopener noreferrer"
         >
-          字体许可
+          {{ $t('footer.fontLicense') }}
         </a>
         <span class="text-[var(--color-stone)]" aria-hidden="true">·</span>
-        <span class="text-[var(--color-ink-soft)]">{{ FONT_NAME }} 像素字体</span>
+        <span class="text-[var(--color-ink-soft)]">{{ FONT_NAME }} {{ $t('footer.pixelFont') }}</span>
       </p>
     </div>
   </footer>

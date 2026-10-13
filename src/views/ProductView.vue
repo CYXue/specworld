@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { continentOf } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
@@ -14,6 +15,7 @@ import SpriteImg from '../components/SpriteImg.vue';
 import VendorRoof from '../components/VendorRoof.vue';
 import Sky from '../components/Sky.vue';
 
+const { t } = useI18n();
 const route = useRoute();
 const { err } = useDataset();
 const derived = useDerived();
@@ -37,7 +39,7 @@ const statusLabel = computed(() => statusLabelOf(product.value?.status));
       class="page-shell py-10 text-center text-[24px]"
       style="color: var(--color-east)"
     >
-      加载失败：{{ err }}
+      {{ t('common.loadFailed', { err }) }}
     </div>
 
     <div
@@ -45,9 +47,9 @@ const statusLabel = computed(() => statusLabelOf(product.value?.status));
       class="page-shell py-16 text-center text-[24px] leading-[1.5]"
       style="color: var(--color-parchment-dim)"
     >
-      未找到该机型。
+      {{ t('product.notFound') }}
       <RouterLink to="/" class="pixel-button ml-2 px-3 py-1 text-[12px] text-[var(--color-gold)]"
-        >返回广场</RouterLink
+        >{{ t('brand.backToPlaza') }}</RouterLink
       >
     </div>
 
@@ -87,16 +89,16 @@ const statusLabel = computed(() => statusLabelOf(product.value?.status));
       </section>
 
       <div class="page-shell grid gap-6 py-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <SectionFrame title="完整参数" :hud="accent">
+        <SectionFrame :title="t('product.fullSpecs')" :hud="accent">
           <SpecTable :product="product" />
         </SectionFrame>
 
         <div class="space-y-4">
-          <SectionFrame title="能力横条" :hud="accent">
+          <SectionFrame :title="t('product.abilityBars')" :hud="accent">
             <p
               class="pixel-note mb-3 px-2.5 py-2 text-[12px] leading-[1.5] text-[var(--color-ink-soft)]"
             >
-              条长为该字段在本站数据集内的相对位置，非绝对评分；缺失项显示「未公布」。
+              {{ t('product.abilityNote') }}
             </p>
             <AbilityBars :rows="rows" :hud="accent" />
           </SectionFrame>
@@ -105,7 +107,7 @@ const statusLabel = computed(() => statusLabelOf(product.value?.status));
             class="pixel-button flex items-center justify-center gap-2 px-3 py-2 text-[12px] leading-[1.5]"
           >
             <PxIcon name="compare" :size="12" />
-            在对比页查看这台
+            {{ t('product.compareLink') }}
           </RouterLink>
           <DataFeedback :product="product" />
         </div>

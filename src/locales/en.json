@@ -1,0 +1,419 @@
+{
+  "meta": {
+    "title": "Specworld · Compare with clarity",
+    "description": "Specworld — verifiable spec comparisons for Huawei and Apple phones on sale. All data comes from official vendor sites; unpublished specs are marked as such, never estimated."
+  },
+  "brand": {
+    "name": "Specworld",
+    "tagline": "Choices made clearer",
+    "notFound": "Brand not found.",
+    "backToPlaza": "Back to plaza",
+    "empty": "No model under these filters — try relaxing one (each dimension's \"All\" clears only that dimension).",
+    "crossBrandBefore": "Want to compare across brands? Go to ",
+    "crossBrandLink": "the Models page",
+    "crossBrandAfter": ", which filters all {n} models and supports the compare tray."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Plaza",
+    "compare": "Models",
+    "rankings": "Rankings",
+    "timeline": "Timeline",
+    "canvas": "Canvas",
+    "globe": "Globe",
+    "search": "Search",
+    "searchLabel": "Search models",
+    "searchPlaceholder": "Search model / chip"
+  },
+  "footer": {
+    "label": "Secondary navigation",
+    "about": "About",
+    "search": "Search",
+    "tagline": "Specworld · Sources: official vendor specs + manual review · Choose with clarity",
+    "sourceCode": "source",
+    "fontLicense": "Font license",
+    "pixelFont": "pixel font"
+  },
+  "brandGroup": {
+    "count": "{name} · {n} models",
+    "enter": "Enter {name} · filter by series",
+    "moreBefore": "Showing the latest {n}; the other {m} are on the",
+    "morePageLink": "{name} page",
+    "moreAfter": ", filterable by series."
+  },
+  "spotlight": {
+    "latest": "Newest",
+    "priciest": "Most expensive",
+    "cheapest": "Cheapest",
+    "empty": "No data yet — no {category} models in the catalog.",
+    "released": "Released {date}",
+    "fromPrice": "From {price}",
+    "priceUnpublished": "China price not published"
+  },
+  "board": {
+    "dragTitle": "Drag to explore",
+    "dragSub": "Browse all models",
+    "wrapReady": "Infinite wrap ready",
+    "fullSpecs": "Full specs →",
+    "backClose": "[ Back ] :: close()",
+    "imageviewTip": "+ Drag to pan, wheel / pinch to zoom +",
+    "canvasAriaLabel": "Infinite device canvas: drag to pan, click a tile for details",
+    "emptyTitle": "No devices on the canvas",
+    "emptySub": "The current filter matched nothing. Try another condition or clear to see all.",
+    "hudCount": "{n} devices",
+    "hudWrap": "Torus wrap · infinite pan"
+  },
+  "home": {
+    "loadFailed": "Failed to load data: {err}",
+    "status": "{n} models listed · updated {month}/{day}",
+    "statusUndated": "{n} models listed",
+    "spotlightTitle": "Newest · Priciest · Cheapest",
+    "spotlightNote": "Prices are official mainland-China starting prices (lowest tier when multiple capacities exist); models without a published price are excluded from price rankings.",
+    "championTitle": "Best in each dimension"
+  },
+  "filter": {
+    "matchedTotal": "/ {total} models",
+    "picked": "{n} picked",
+    "reset": "Clear filters",
+    "selected": "Selected",
+    "clear": "Clear",
+    "byDim": "Filter by {name}",
+    "remove": "Remove {name}",
+    "triggerOne": "{name}: {value}",
+    "triggerMore": "{name}: {value} +{n}",
+    "unknownTip": "The vendor site does not publish this field; selecting it lists all such models",
+    "zeroTip": "0 models in this bucket under current filters"
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "unpublished": "Not published",
+    "priceUnpublished": "China price not published",
+    "currencySymbol": "¥",
+    "detail": "Details",
+    "remove": "Remove",
+    "countUnits": "{n} devices",
+    "models": "{n} models",
+    "all": "All",
+    "line": "Product line",
+    "unknown": "Unknown",
+    "other": "Other",
+    "yearUnknown": "Year not published",
+    "loadFailed": "Failed to load: {err}",
+    "loadFailedRaw": "Failed to load data: "
+  },
+  "ability": {
+    "display": "Display",
+    "light": "Portability",
+    "battery": "Battery",
+    "camera": "Camera"
+  },
+  "sort": {
+    "release": "Newest",
+    "priceAsc": "Price low→high",
+    "priceDesc": "Price high→low",
+    "ppiAsc": "Pixel density low→high",
+    "ppiDesc": "Pixel density high→low",
+    "weightAsc": "Weight light→heavy",
+    "weightDesc": "Weight heavy→light",
+    "batteryAsc": "Battery small→large",
+    "batteryDesc": "Battery large→small",
+    "cameraAsc": "Main camera MP low→high",
+    "cameraDesc": "Main camera MP high→low",
+    "newToOld": "New→Old",
+    "oldToNew": "Old→New",
+    "name": "Name",
+    "ppi": "Pixel density",
+    "label": "Sort"
+  },
+  "spec": {
+    "brightnessBoth": "Typical {typical} / Peak {peak} nits",
+    "brightnessTypical": "Typical {typical} nits",
+    "videoHours": "{hours} h (video)",
+    "cameraRole": {
+      "main": "Main",
+      "ultrawide": "Ultra-wide",
+      "tele": "Telephoto",
+      "periscope": "Periscope telephoto"
+    }
+  },
+  "status": {
+    "onSale": "On sale",
+    "upcoming": "Upcoming",
+    "retired": "Retired"
+  },
+  "facet": {
+    "category": "Category",
+    "form": "Form",
+    "brand": "Brand",
+    "series": "Series",
+    "variant": "Variant",
+    "chip": "Chip",
+    "ram": "RAM",
+    "year": "Year",
+    "price": "Price",
+    "allCategory": "All categories",
+    "allForm": "All forms",
+    "allBrand": "All brands",
+    "allSeries": "All series",
+    "allVariant": "All variants",
+    "allChip": "All chips",
+    "allRam": "All RAM",
+    "allYear": "All years",
+    "allPrice": "All prices",
+    "allWith": "All {name}",
+    "yes": "Yes",
+    "no": "No",
+    "formValue": {
+      "foldable": "Foldable",
+      "bar": "Bar"
+    }
+  },
+  "compare": {
+    "title": "Models · Filter & Compare",
+    "introBefore": "Filter first, then tick the boxes on the left to compare: pick 1 for full specs, 2 or more for a side-by-side table, ",
+    "introNoLimit": "no limit",
+    "introAfter": ". Filters and picks live in the URL, so links are shareable.",
+    "listAll": "All models",
+    "listFiltered": "Filtered results",
+    "empty": "No model matches every condition — try relaxing one (each dimension's \"All\" clears only that dimension).",
+    "panelTitle": "Compare tray",
+    "panelEmpty1": "Tick models on the left to add them here.",
+    "panelEmpty2": "1 shows details; 2+ shows a side-by-side table.",
+    "removeAria": "Remove {name} from comparison",
+    "openDetail": "Open details",
+    "multiHint": "{n} selected — the side-by-side table is below.",
+    "matrixTitle": "Side by side · {n} models",
+    "display": "Show",
+    "allItems": "All ({n} rows)",
+    "diffOnly": "Differences only ({n} rows)",
+    "highlightOn": "Diff highlight on",
+    "highlightOff": "Diff highlight off",
+    "modelHeader": "Model",
+    "noteDash": "“—” means the vendor site does not publish this spec — it is not 0.",
+    "noteGoldBefore": "Gold background = ",
+    "noteGold": "different specs",
+    "noteLapisBefore": "; blue background = ",
+    "noteLapis": "different publication status",
+    "noteA11y": " (some sites omit it); the left bar and bold rows are redundant, non-color cues for the same marks.",
+    "noteNoVerdict": "This table only lists differences, never a verdict — specs have no objective ranking (light vs heavy, large vs small are preferences). Judge by your own needs."
+  },
+  "rank": {
+    "title": "Rankings · Multi-level sort",
+    "introA": "Rankings are ",
+    "introSort": "sorting",
+    "introB": ", not filtering: all {n} models are always listed, ordered by your priority chain.",
+    "introC": "Add a primary sort first (e.g. big battery), then a secondary one (e.g. camera) — the secondary only breaks ties in the primary.",
+    "quickAdd": "Quick add",
+    "priority": "Sort priority (top to bottom, primary → last)",
+    "clearSorts": "Clear sorting",
+    "noSorts": "No sort selected — the default order is newest release. Click an ability tag above or \"Add sort\" below to start.",
+    "primary": "Primary",
+    "asc": "Asc",
+    "desc": "Desc",
+    "toggleDir": "Toggle ascending / descending",
+    "promote": "Raise priority",
+    "demote": "Lower priority",
+    "removeSort": "Remove this sort",
+    "addSort": "Add sort",
+    "dimPrice": "Price",
+    "dimPpi": "Pixel density",
+    "dimWeight": "Weight",
+    "dimBattery": "Battery capacity",
+    "dimCamera": "Main camera MP",
+    "resultTitle": "Results · {n} models",
+    "noteA": "\"Not published\" = the vendor site omits this spec; by rule it sorts after every model that has a value — it is not 0 or the minimum.",
+    "noteB": "Rankings never shrink: all {n} models are always shown."
+  },
+  "about": {
+    "title": "About Specworld",
+    "subtitle": "Choose with clarity",
+    "introTitle": "About the project",
+    "introA": "Specworld turns phone specs into something ",
+    "introBold": "readable at a glance, verifiable, never invented",
+    "introB": ". The first release is deliberately narrow: get one data pipeline working end to end.",
+    "scopeCategory": {
+      "label": "Category",
+      "value": "Phones only (tablets / watches / earbuds come after the pipeline proves out)"
+    },
+    "scopeBrands": {
+      "label": "Brands",
+      "value": "Huawei + Apple"
+    },
+    "scopeModels": {
+      "label": "Models",
+      "value": "On sale within the last 3 years (including discontinued ones inside that window, distinguished by status)"
+    },
+    "scopeForm": {
+      "label": "Form",
+      "value": "A purely static site with no backend; a copy can also be published to Bilibili Toy"
+    },
+    "scopeData": {
+      "label": "Data",
+      "value": "Official vendor spec pages are the primary source; verifiable gaps are filled by manual review"
+    },
+    "why": "Why this shape: phones get a few launches a year and the data changes slowly, so a static snapshot plus git history is enough — the front end needs no secrets and no runtime dependencies. Buckets use percentiles of the current on-sale pool rather than absolute thresholds, so they will not silently expire in three years. Copy is generated from data by templates, never by an LLM, so claims like \"this is the brightest-screen phone\" stay reproducible and traceable.",
+    "dataTitle": "Data & principles",
+    "principleOne": {
+      "title": "Sources: official specs + manual review",
+      "body": "The primary source is each vendor's official spec page. Fields the vendor does not publish but that can be verified against an independently checkable source (regulatory network-access approval, teardown report, official manual) are filled in by manual review and recorded in the user data layer. All data is labelled as a whole as \"from vendor sites and manual review\" rather than tagged field by field."
+    },
+    "principleTwo": {
+      "title": "Gaps are labelled \"not published\"",
+      "body": "Fields that can neither be obtained from the vendor site nor verified against a reliable independent source are recorded as missing and shown as \"not published\" — never estimated, never inferred from the model name. Rankings use only the extremes of genuinely comparable fields and never third-party benchmark scores."
+    },
+    "principleThree": {
+      "title": "Data integrity is a hard rule",
+      "body": "Every label must have a source. Form judgments such as \"foldable\" require verbatim evidence from the vendor site; attributes the source does not state — screen curvature, for example — are never invented. Manually added fields must likewise cite their source and reason."
+    },
+    "principleFour": {
+      "title": "The test is a content fingerprint, not a git diff",
+      "body": "The data carries a set of runtime fields that change on every run. Those fields are stripped before the fingerprint is computed, so a commit and publish only happen when the data or template actually changed — instead of manufacturing an empty commit every 12 hours."
+    },
+    "principleFive": {
+      "title": "Automated gates stand before every write",
+      "body": "Parsers, validation gates and geometry pure functions are all covered by self-tests (196 of them), enforced by the first CI job. The gates are themselves reverse-tested: injecting a violation must turn them red and reverting must restore green — otherwise a green light means nothing."
+    },
+    "snapshot": "Data snapshot",
+    "loading": "Loading…",
+    "dataFooter": "Specworld · visual tone follows the block aesthetic of Terraria / Minecraft · data integrity first",
+    "licenseTitle": "Licenses & credits",
+    "licenseCode": {
+      "name": "Code & scripts",
+      "terms": "{license} licensed",
+      "body": "Site code, data pipeline, validation gates and self-tests are all open source."
+    },
+    "licenseLinkView": "View license",
+    "licenseFont": {
+      "name": "Site font",
+      "terms": "SIL OFL 1.1",
+      "body": "The pixel font {fontName} is a subset of Fusion Pixel Font 12px. Subsetting counts as a modification under the upstream definition, so it is renamed as the OFL requires; the full license text ships with the font."
+    },
+    "licenseLinkFull": "Full license text",
+    "licenseLinkUpstream": "Upstream project",
+    "licenseData": {
+      "name": "Device data",
+      "terms": "Vendor-site factual data + manual additions",
+      "body": "Specs come primarily from each vendor's official spec page (factual data belonging to each vendor; this site claims no additional licence). Fields the vendor does not publish but that can be verified against independent sources such as regulatory approvals, teardown reports or official manuals are filled in by manual review. Gaps that cannot be verified are marked \"not published\" and never inferred."
+    },
+    "licenseTrademark": {
+      "name": "Model names & trademarks",
+      "terms": "Nominative use only",
+      "body": "Model names and trademarks on these pages belong to their respective owners and are used here only to identify the products being described; they imply no affiliation or endorsement."
+    },
+    "artNote": "All sprites are generated at build time by scripts in this repository; no third-party art assets are used, so there are no additional asset credits."
+  },
+  "search": {
+    "title": "Search models",
+    "count": "{n} / {total} devices",
+    "ariaLabel": "Search models",
+    "placeholder": "Model / Chinese name / product line / chip, e.g. mate, Pura, nova, Kirin",
+    "looseHint": "Matched ignoring case and spaces — what you typed \"{q}\" may officially be written \"{name}\"",
+    "brandLabel": "Brand",
+    "allBrands": "All {n}",
+    "clear": "Clear",
+    "tipA": "Separate words with spaces; all of them must match. Searchable: model name, Chinese name, product line, chip.",
+    "tipBold": "Case, spaces, full- and half-width are all ignored",
+    "tipB": "—",
+    "tipC": "return the same results.",
+    "noResultTitle": "No matching model",
+    "noResultBody": "Fields the vendor does not publish are not indexed. Include the key part of the model name (e.g. \"Mate 60 Pro\", or write \"mate60pro\").",
+    "clearConditions": "Clear conditions"
+  },
+  "product": {
+    "notFound": "Model not found.",
+    "fullSpecs": "Full specs",
+    "abilityBars": "Ability bars",
+    "abilityNote": "Bar length is this field's relative position within this site's dataset, not an absolute score; missing values show \"Not published\".",
+    "compareLink": "Compare this model"
+  },
+  "timeline": {
+    "title": "Release timeline",
+    "note": "Dates come from official vendor releases; when precision is insufficient they are shown by year or month."
+  },
+  "notFound": {
+    "title": "There is no such house on this street."
+  },
+  "canvas": {
+    "loadFailed": "Failed to load: {err}",
+    "title": "Infinite canvas",
+    "howto": "Drag / wheel to pan · click a tile for details · infinite torus wrap",
+    "resetView": "Reset view",
+    "exportPng": "Export PNG",
+    "exporting": "Exporting…",
+    "exportFilename": "specworld-filtered-{n}.png",
+    "noSpecs": "Specs not published",
+    "sortPrefix": "Sort: {name}",
+    "allDevices": "All devices",
+    "brand": "Brand",
+    "line": "Product line",
+    "year": "Year",
+    "all": "All",
+    "searchLabel": "Search within the canvas",
+    "searchPlaceholder": "Search model / chip on the canvas",
+    "a11yNavLabel": "Device list (text equivalent of the canvas)",
+    "a11yListTitle": "Devices under the current filter (text list)"
+  },
+  "globe": {
+    "title": "Device globe",
+    "howto": "Drag to rotate · wheel or pinch to change distance · one full turn returns to the start",
+    "spinPause": "Pause spin",
+    "spinStart": "Start spin",
+    "resetView": "Reset camera",
+    "searchLabel": "Search on the globe",
+    "searchPlaceholder": "Search model / chip on the globe",
+    "a11yNavLabel": "Device list (text equivalent of the globe)",
+    "canvasAria": "Device globe: drag to rotate the sphere and browse all devices",
+    "hud": "{n} devices · lon {lon}° · lat {lat}° · dist {dist}",
+    "empty": "No devices on the globe"
+  },
+  "feedback": {
+    "openButton": "Report an error / add data",
+    "title": "Report an error / add data",
+    "close": "Close",
+    "loadFailed": "Failed to load the field list: {err}. Please try again later, or reach out through the contact channel on the About page.",
+    "fieldLabel": "Field to correct",
+    "currentValue": "Current: {value} · {hint}",
+    "correctValue": "Correct value",
+    "pleaseSelect": "Please select",
+    "placeholderArray": "e.g. 8, 12, 16",
+    "placeholderScalar": "Follow the type hint above",
+    "reasonLabel": "Source (required)",
+    "reasonPlaceholder": "e.g. official spec page / own measurement / review article (a link is better)",
+    "nickLabel": "Your nickname (optional)",
+    "nickPlaceholder": "Recorded as the data source once approved",
+    "submit": "Submit",
+    "submitting": "Submitting…",
+    "noteQueue": "Submissions enter a manual review queue and appear on the site only after approval; vendor updates never overwrite manually verified values.",
+    "noteComplex": "Structurally complex specs (e.g. per-lens details) cannot be submitted online yet — please use the contact channel on the About page.",
+    "rangeHint": "valid range {min}~{max}",
+    "groupOther": "Other",
+    "needReason": "Please fill in the data source (e.g. official spec page / own measurement / review link)",
+    "validateFail": "Validation failed: {err}",
+    "submitted": "✅ {message} (id {id})",
+    "submittedOk": "Submitted",
+    "anonymous": "Anonymous",
+    "noBackend": "No data service is connected in this environment (e.g. a purely static host such as Bilibili Toy). Please copy the template below and send it to the author by DM or comment — once imported and approved it takes effect. Thanks for the correction!"
+  },
+  "export": {
+    "noContext": "Cannot get a 2D canvas context",
+    "title": "Specworld · filtered results",
+    "totalCount": "{n} devices total",
+    "noImage": "(no image)",
+    "statusTitle": "Status distribution",
+    "brandTitle": "Brand distribution",
+    "priceTitle": "Starting price totals (by brand)",
+    "priceRow": "{name} {n} · ¥{total}",
+    "priceMissing": "({n} without a published price)",
+    "priceTotal": "Cumulative total ¥{total}"
+  },
+  "validate": {
+    "empty": "Value cannot be empty",
+    "notNumber": "Expected a number, got \"{raw}\"",
+    "outOfRange": "{value} is outside the valid range {range}{unit}",
+    "notBool": "Expected true / false",
+    "notInEnum": "\"{raw}\" is not among the allowed values {values}",
+    "badNumberArray": "Expected comma-separated numbers, e.g. 8, 12, 16",
+    "needOneItem": "At least one item is required"
+  }
+}

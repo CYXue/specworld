@@ -17,10 +17,10 @@
  * 这是「一直在循环」最直观的体现 —— 不用拖它也在转。
  */
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
   AUTO_SPIN_DPS,
   DIST_DEFAULT,
-  LAT_LIMIT,
   project,
   rotateBy,
   zoomDist,
@@ -33,6 +33,7 @@ import {
 } from '../lib/globe';
 import type { CanvasDoc } from '../lib/canvasFilter';
 
+const { t } = useI18n();
 const props = defineProps<{
   documents: CanvasDoc[];
   /** 品牌分组的台数，用于把不同品牌排到不同纬度带 */
@@ -382,7 +383,7 @@ defineExpose({ reset, stopSpin, startSpin });
     :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
     tabindex="0"
     role="application"
-    aria-label="设备球：拖动可旋转球面，浏览全部设备"
+    :aria-label="t('globe.canvasAria')"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="endPointer"
@@ -423,11 +424,11 @@ defineExpose({ reset, stopSpin, startSpin });
 
     <!-- HUD -->
     <div class="globe-hud">
-      {{ documents.length }} 台 · 经度 {{ Math.round(cam.lon) }}° · 纬度 {{ Math.round(cam.lat) }}°
-      · 视距 {{ cam.dist.toFixed(2) }}
+      {{ t('globe.hud', { n: documents.length, lon: Math.round(cam.lon), lat: Math.round(cam.lat), dist: cam.dist.toFixed(2) }) }}
+      
     </div>
 
-    <div v-if="!documents.length" class="globe-empty">球上一台设备都没有</div>
+    <div v-if="!documents.length" class="globe-empty">{{ t('globe.empty') }}</div>
   </div>
 </template>
 

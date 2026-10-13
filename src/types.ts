@@ -75,6 +75,23 @@ export interface Camera {
   front?: Array<{ role: string; mp: number | null; aperture: string | null }>;
 }
 
+/**
+ * 一个在售档位（容量/内存组合）。
+ *
+ * `priceCny` 是**官方起售价（中国大陆，含增值税）**，官方没公布中国区售价就是 `null`
+ * —— 不是 0、也不是估算值：0 会被「最便宜」榜当成真价格排到榜首。
+ * 以前 Product 只靠索引签名 `[key: string]: unknown` 兜住 skus，于是 `p.skus ?? []`
+ * 被推断成 `{}`，取价的三处代码只能各自 `as` 强转（TS 报 'map' does not exist）。
+ * 现在补上真类型，强转全撤。
+ */
+export interface Sku {
+  storageGb: number | null;
+  ramGb: number | null;
+  priceCny: number | null;
+  priceNote?: string;
+  listedAt?: string;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -100,6 +117,8 @@ export interface Product {
    * 所以现有组件读 product.display.sizeIn 不受影响；新品类页面直接消费它。
    */
   specs?: Record<string, unknown>;
+  /** 在售档位表（容量/内存/价格）。v1 老快照可能整段缺失 */
+  skus?: Sku[];
   releaseDate: string; // ISO date
   releaseDatePrecision: 'day' | 'month' | 'year' | string;
   status: 'on-sale' | 'upcoming' | 'retired' | string;

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Champion } from '../lib/specs';
-import type { Product } from '../types';
 
 // 榜单的一行：某个维度的真实第一名。借鉴参考项目 ChampionRow。
 defineProps<{

@@ -2,17 +2,81 @@
   "_doc": "筛选/分面策展字典（硬编码审计 P2 治理，2026-10-13）。与代码的分工：本文件管「厂商营销命名的识别规则」（变体/系列/多芯判据/价格档），src/lib/catalog.ts 只保留读字典的通用引擎——加变体/调价格档/接新品牌 = 改本文件，不改代码。纪律：① variants 顺序即匹配顺序，**长后缀必须在短后缀之前**（Pro Max 必须在 Pro 前，否则分面计数莫名少一台），selftest 哨兵看守；② match 是正则字符串（JSON 里 \\\\b 转义），flags 常用 'i'；series 的 fallback:true 行忽略 match 直接命中（放最后）；③ brands.<id>.from='name' 表示该品牌系列从机型名解析（苹果 line 全是 iPhone 只能自己判），未配置的品牌走 default:'line'（官网自己的产品线字段）；④ foldVariant = 该品牌「形态即变体」的特殊机型（如 iPhone Duo 双屏）；⑤ chipMultiPrefixes：官网把两颗芯片并列写一格的识别判据 = 归一后串里**同一芯片品牌前缀出现两次**；'A' 前缀覆盖苹果（A18A19），但单颗 A18Pro 不会误报（Pro 里无第二前缀）；⑥ priceBuckets：max:null 表示无穷（只允许最后一条），固定档是为了 URL 档 id 永远不错位（不要改成动态分桶）。selftest「策展表外置对账」双向看守：结构合法性 + 哨兵语义 + 真实数据冒烟。",
   "version": 1,
   "variants": [
-    { "id": "pro-max", "label": "Pro Max", "match": "Pro\\s*Max", "flags": "i" },
-    { "id": "pro-plus", "label": "Pro+", "match": "Pro\\s*\\+", "flags": "i" },
-    { "id": "pro", "label": "Pro", "match": "\\bPro\\b", "flags": "i" },
-    { "id": "rs", "label": "RS", "match": "\\bRS\\b", "flags": "i" },
-    { "id": "ultra", "label": "Ultra", "match": "\\bUltra\\b", "flags": "i" },
-    { "id": "plus", "label": "Plus", "match": "\\bPlus\\b", "flags": "i" },
-    { "id": "max", "label": "Max", "match": "\\bMax\\b", "flags": "i" },
-    { "id": "air", "label": "Air", "match": "\\bAir\\b", "flags": "i" },
-    { "id": "se", "label": "SE", "match": "\\bSE\\b", "flags": "i" },
-    { "id": "yxb", "label": "优享版", "match": "优享版" },
-    { "id": "fcb", "label": "风驰版", "match": "风驰版" }
+    {
+      "id": "pro-max",
+      "label": "Pro Max",
+      "match": "Pro\\s*Max",
+      "flags": "i",
+      "labelEn": "Pro Max"
+    },
+    {
+      "id": "pro-plus",
+      "label": "Pro+",
+      "match": "Pro\\s*\\+",
+      "flags": "i",
+      "labelEn": "Pro+"
+    },
+    {
+      "id": "pro",
+      "label": "Pro",
+      "match": "\\bPro\\b",
+      "flags": "i",
+      "labelEn": "Pro"
+    },
+    {
+      "id": "rs",
+      "label": "RS",
+      "match": "\\bRS\\b",
+      "flags": "i",
+      "labelEn": "RS"
+    },
+    {
+      "id": "ultra",
+      "label": "Ultra",
+      "match": "\\bUltra\\b",
+      "flags": "i",
+      "labelEn": "Ultra"
+    },
+    {
+      "id": "plus",
+      "label": "Plus",
+      "match": "\\bPlus\\b",
+      "flags": "i",
+      "labelEn": "Plus"
+    },
+    {
+      "id": "max",
+      "label": "Max",
+      "match": "\\bMax\\b",
+      "flags": "i",
+      "labelEn": "Max"
+    },
+    {
+      "id": "air",
+      "label": "Air",
+      "match": "\\bAir\\b",
+      "flags": "i",
+      "labelEn": "Air"
+    },
+    {
+      "id": "se",
+      "label": "SE",
+      "match": "\\bSE\\b",
+      "flags": "i",
+      "labelEn": "SE"
+    },
+    {
+      "id": "yxb",
+      "label": "优享版",
+      "match": "优享版",
+      "labelEn": "Youxiang Edition"
+    },
+    {
+      "id": "fcb",
+      "label": "风驰版",
+      "match": "风驰版",
+      "labelEn": "Fengchi Edition"
+    }
   ],
   "series": {
     "default": "line",
@@ -20,23 +84,104 @@
       "apple": {
         "from": "name",
         "series": [
-          { "label": "折叠屏", "match": "\\bDuo\\b", "flags": "i" },
-          { "label": "Air", "match": "\\bAir\\b", "flags": "i" },
-          { "label": "SE", "match": "\\d+e\\b", "flags": "i" },
-          { "label": "标准", "fallback": true }
+          {
+            "label": "折叠屏",
+            "match": "\\bDuo\\b",
+            "flags": "i",
+            "labelEn": "Foldable"
+          },
+          {
+            "label": "Air",
+            "match": "\\bAir\\b",
+            "flags": "i",
+            "labelEn": "Air"
+          },
+          {
+            "label": "SE",
+            "match": "\\d+e\\b",
+            "flags": "i",
+            "labelEn": "SE"
+          },
+          {
+            "label": "标准",
+            "fallback": true,
+            "labelEn": "Standard"
+          }
         ],
-        "foldVariant": { "match": "\\bDuo\\b", "flags": "i", "label": "折叠双屏" }
+        "foldVariant": {
+          "match": "\\bDuo\\b",
+          "flags": "i",
+          "label": "折叠双屏",
+          "labelEn": "Dual-screen Fold"
+        }
       }
+    },
+    "fallbackLabelEn": {
+      "标准": "Standard",
+      "其它": "Other"
+    },
+    "lineEn": {
+      "畅享": "Enjoy"
     }
   },
-  "chipMultiPrefixes": ["麒麟", "A", "天玑", "骁龙", "玄戒", "Exynos", "Tensor"],
+  "chipMultiPrefixes": [
+    "麒麟",
+    "A",
+    "天玑",
+    "骁龙",
+    "玄戒",
+    "Exynos",
+    "Tensor"
+  ],
   "priceBuckets": [
-    { "id": "0-1999", "label": "¥0-1999", "min": 0, "max": 1999 },
-    { "id": "2000-2999", "label": "¥2000-2999", "min": 2000, "max": 2999 },
-    { "id": "3000-3999", "label": "¥3000-3999", "min": 3000, "max": 3999 },
-    { "id": "4000-4999", "label": "¥4000-4999", "min": 4000, "max": 4999 },
-    { "id": "5000-5999", "label": "¥5000-5999", "min": 5000, "max": 5999 },
-    { "id": "6000-7999", "label": "¥6000-7999", "min": 6000, "max": 7999 },
-    { "id": "8000+", "label": "¥8000 以上", "min": 8000, "max": null }
+    {
+      "id": "0-1999",
+      "label": "¥0-1999",
+      "min": 0,
+      "max": 1999,
+      "labelEn": "¥0-1999"
+    },
+    {
+      "id": "2000-2999",
+      "label": "¥2000-2999",
+      "min": 2000,
+      "max": 2999,
+      "labelEn": "¥2000-2999"
+    },
+    {
+      "id": "3000-3999",
+      "label": "¥3000-3999",
+      "min": 3000,
+      "max": 3999,
+      "labelEn": "¥3000-3999"
+    },
+    {
+      "id": "4000-4999",
+      "label": "¥4000-4999",
+      "min": 4000,
+      "max": 4999,
+      "labelEn": "¥4000-4999"
+    },
+    {
+      "id": "5000-5999",
+      "label": "¥5000-5999",
+      "min": 5000,
+      "max": 5999,
+      "labelEn": "¥5000-5999"
+    },
+    {
+      "id": "6000-7999",
+      "label": "¥6000-7999",
+      "min": 6000,
+      "max": 7999,
+      "labelEn": "¥6000-7999"
+    },
+    {
+      "id": "8000+",
+      "label": "¥8000 以上",
+      "min": 8000,
+      "max": null,
+      "labelEn": "¥8000+"
+    }
   ]
 }

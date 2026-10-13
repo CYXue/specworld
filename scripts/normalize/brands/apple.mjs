@@ -1,7 +1,7 @@
 /**
  * 通道 B/C：苹果规格页与对比页矩阵 → ProductRecord。
  * 苹果内部辅助（APPLE_SHARED_MARK / splitApplePage / apRows / apBlob / apFirst /
- * apFind / apFindAll / apKeyBody / FirstRaw）在此文件内定义，供两个 map 复用。
+ * apFind / apKeyBody / FirstRaw）在此文件内定义，供两个 map 复用。
  */
 import {
   emptyRecord,
@@ -17,17 +17,12 @@ import {
   refreshText,
   normalizeType,
   parseAperture,
-  parseOis,
   parseLens,
-  parseRearLenses,
-  parseFront,
   parseVideoMax,
   parseMm,
   parseWeight,
   parseInch,
-  parseResolution,
   parseStorageList,
-  parsePpi,
   wattOf,
   firstNum,
   AP,
@@ -90,11 +85,6 @@ const apFirst = (raw, group) => apRows(raw, group)[0]?.value;
 /** 按正则取第一行匹配值 */
 const apFind = (raw, group, re) => apRows(raw, group).find((x) => re.test(x.value))?.value;
 
-/** 按正则取全部匹配值 */
-const apFindAll = (raw, group, re) =>
-  apRows(raw, group)
-    .filter((x) => re.test(x.value))
-    .map((x) => x.value);
 /* ---------- B: 苹果规格页 ---------- */
 
 function mapAppleSpecs(rawProduct) {

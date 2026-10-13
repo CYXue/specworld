@@ -42,12 +42,12 @@ const CODE = '1231221222121211212122';
             </g>
           </svg>
         </div>
-        <p class="dragtip_title">拖拽画面</p>
-        <p class="dragtip_sub">浏览全部机型</p>
+        <p class="dragtip_title">{{ $t('board.dragTitle') }}</p>
+        <p class="dragtip_sub">{{ $t('board.dragSub') }}</p>
       </div>
     </div>
     <div class="dragtip_bottom">
-      <div class="dragtip_bottom_text">无限回绕已就绪</div>
+      <div class="dragtip_bottom_text">{{ $t('board.wrapReady') }}</div>
       <div class="dragtip_bottom_code">
         <span v-for="(ch, i) in CODE.split('')" :key="i" :style="{ '--i': i }">{{ ch }}</span>
       </div>

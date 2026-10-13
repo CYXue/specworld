@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import PxIcon from './PxIcon.vue';
+import LocaleSwitch from './LocaleSwitch.vue';
 
 /**
  * `embedded` = 嵌进首页 banner（标题左侧、导航右侧同行）。
@@ -48,24 +50,29 @@ withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false });
 // 混在一排里用户读不出「哪些是工具、哪些是玩具」。
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 
-/** 查数据：用户来这里是为了找参数。按钮形态（可点面板）。 */
-const primaryItems: Array<{ name: string; label: string; to: string }> = [
-  { name: 'home', label: '广场', to: '/' },
-  { name: 'compare', label: '机型库', to: '/compare' },
-  { name: 'rankings', label: '榜单', to: '/rankings' },
-  { name: 'timeline', label: '时间线', to: '/timeline' },
-];
+/**
+ * 查数据：用户来这里是为了找参数。按钮形态（可点面板）。
+ * label 走 computed——setup 里直接 `const x = t('k')` 抓到的是当次语言的值，
+ * 切语言不会重算（不是响应式的）；computed 里的 t() 读 locale，切语言自动重来。
+ */
+const primaryItems = computed(() => [
+  { name: 'home', label: t('nav.home'), to: '/' },
+  { name: 'compare', label: t('nav.compare'), to: '/compare' },
+  { name: 'rankings', label: t('nav.rankings'), to: '/rankings' },
+  { name: 'timeline', label: t('nav.timeline'), to: '/timeline' },
+]);
 
 /**
  * 逛玩法：探索型的可视化界面。使用频率明显低于查数据，
  * 所以用**弱化色文字链接**而不是按钮 —— 它们不需要和工具抢点击权重。
  * 仍然给 aria-current，当前页要能看出来（弱化不等于不可见）。
  */
-const secondaryItems: Array<{ name: string; label: string; to: string }> = [
-  { name: 'canvas', label: '画布', to: '/canvas' },
-  { name: 'globe', label: '设备球', to: '/globe' },
-];
+const secondaryItems = computed(() => [
+  { name: 'canvas', label: t('nav.canvas'), to: '/canvas' },
+  { name: 'globe', label: t('nav.globe'), to: '/globe' },
+]);
 
 const isCurrent = (n: string) => route.name === n;
 
@@ -82,7 +89,7 @@ function submit() {
 
 <template>
   <nav
-    aria-label="主导航"
+    :aria-label="$t('nav.label')"
     class="relative z-10 flex flex-wrap items-center gap-x-1 gap-y-1"
     :class="embedded ? 'w-full justify-center sm:w-auto' : ''"
   >
@@ -121,23 +128,26 @@ function submit() {
            - `flex-1 + ml-auto`：同上，只是空隙从导航内部挪到了导航与 logo 之间。
            结论：**顶栏是一组连续元素，不是「左logo + 右控件」的两端对齐布局**。
            窄屏时它靠 flex-wrap 自然折行，折行后仍紧邻。 -->
-      <label class="sr-only" for="site-search">搜索机型</label>
+      <label class="sr-only" for="site-search">{{ $t('nav.searchLabel') }}</label>
       <input
         id="site-search"
         v-model="keyword"
         type="search"
-        placeholder="搜机型 / 芯片"
+        :placeholder="$t('nav.searchPlaceholder')"
         class="pixel-input hidden h-6 w-28 border-r-0 px-2 text-[12px] leading-[1.5] sm:block sm:w-36"
         autocomplete="off"
       />
       <button
         type="submit"
         class="pixel-button-flat h-6 px-1.5 leading-none sm:border-l-0"
-        aria-label="搜索"
+        :aria-label="$t('nav.search')"
         :aria-current="route.name === 'search' ? 'page' : undefined"
       >
         <PxIcon :name="keyword ? 'enter' : 'search'" :size="12" />
       </button>
     </form>
+
+    <!-- 语言切换器：全站唯一入口（顶栏与首页 banner 两种形态都经过本组件） -->
+    <LocaleSwitch />
   </nav>
 </template>

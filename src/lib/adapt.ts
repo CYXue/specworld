@@ -34,9 +34,10 @@ export function toPhoneViews(products: Product[]): Product[] {
  * 前端参数表渲染时按此函数决定每个字段的呈现，而不是只判断「有值/无值」——
  * 否则跨品类会出现「该品类根本没有这个参数，却显示空白」或「本就没有却假装无」。
  */
-type ValueStatus = 'available' | 'unknown' | 'none' | 'not_applicable';
-
-/** 四态对应的展示文案（对齐准绳：未知="—"，无="无"，不适用="不适用"） */
-export function statusLabel(s: ValueStatus): string {
-  return s === 'unknown' ? '—' : s === 'none' ? '无' : s === 'not_applicable' ? '不适用' : '';
-}
+/**
+ * ⚠️ 这里原本有一个 `statusLabel(ValueStatus)`（四态 → 展示文案），2026-10-13 i18n 治理时删除：
+ * 全仓 grep 无任何消费方（selftest 只 import 本文件的 `toPhoneViews`），而它写死了
+ * 「无 / 不适用」三个中文字面量 —— 死代码 + 闸门看不见的硬编码，两者都该清。
+ * 四态语义仍由 data/schemas/phone.json 的 `_doc` 与 scripts/lib/schema.mjs 看守；
+ * 渲染侧目前只用 catalog 的 `statusLabelOf`（生命周期状态，已键化进语言包）。
+ */

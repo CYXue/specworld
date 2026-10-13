@@ -1,0 +1,268 @@
+/**
+ * i18n SSR 冒烟：把整站在 zh-CN / en 两种语言下逐路由渲染一遍，抓两类红灯：
+ *
+ *  1. 缺键抛错 —— src/i18n 配了 missing: throw，任何没抽干净的键会在渲染期炸出来；
+ *  2. 英文页界面残留中文 —— 数据本身带中文（华为/苹果/麒麟/鸿蒙/颜色名…）属正常，
+ *     所以判定用「数据白名单」：从 public/data/*.json 里抽出所有 CJK 连续段作白名单，
+ *     英文页里出现的 CJK 段若不在白名单内，就是没抽走的 UI 硬编码，判红。
+ *
+ * 零新增依赖：vite 走 devDep，@vue/server-renderer 随 vue 一起装好。
+ *
+ *   node scripts/smoke/i18n-ssr.mjs
+ */
+import { readFileSync, readdirSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createServer } from 'vite';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, '..', '..');
+process.chdir(ROOT);
+
+// ── 1. 数据白名单：数据里本来就有的中文不算泄漏 ────────────────────────────
+const CJK_RUN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
+
+function dataCjkWhitelist() {
+  const out = new Set();
+  const dir = join(ROOT, 'public', 'data');
+  const stack = [dir];
+  while (stack.length) {
+    const cur = stack.pop();
+    for (const ent of readdirSync(cur, { withFileTypes: true })) {
+      const p = join(cur, ent.name);
+      if (ent.isDirectory()) stack.push(p);
+      else if (ent.name.endsWith('.json')) {
+        for (const m of readFileSync(p, 'utf8').matchAll(CJK_RUN)) out.add(m[0]);
+      }
+    }
+  }
+  return out;
+}
+
+// ── 2. 浏览器环境桩（必须在加载源码前装好）────────────────────────────────
+const store = new Map();
+globalThis.localStorage = {
+  getItem: (k) => (store.has(k) ? store.get(k) : null),
+  setItem: (k, v) => store.set(k, String(v)),
+  removeItem: (k) => store.delete(k),
+  clear: () => store.clear(),
+};
+// vue-router 会 querySelector('base') 再 getAttribute('href')，桩必须给出这些方法
+const metaStub = { content: '', getAttribute: () => null, setAttribute() {} };
+globalThis.document = {
+  documentElement: { lang: 'zh-CN' },
+  title: '',
+  head: { appendChild() {} },
+  querySelector: () => metaStub,
+  querySelectorAll: () => [],
+  getElementById: () => null,
+  createElement: () => ({
+    style: {},
+    getContext: () => null,
+    remove() {},
+    click() {},
+    setAttribute() {},
+  }),
+  body: { appendChild() {}, removeChild() {}, style: {} },
+  addEventListener() {},
+  removeEventListener() {},
+};
+globalThis.window = {
+  innerHeight: 900,
+  innerWidth: 1440,
+  devicePixelRatio: 1,
+  location: {
+    href: 'http://localhost/#/',
+    hash: '#/',
+    pathname: '/',
+    search: '',
+    host: 'localhost',
+  },
+  navigator: { language: 'zh-CN', userAgent: 'node' },
+  // vue-router 的 useHistoryStateNavigation 解构的是 window.history / window.location
+  history: {
+    state: {},
+    length: 1,
+    pushState() {},
+    replaceState() {},
+    go() {},
+    back() {},
+    forward() {},
+  },
+  // intlify 在 NODE_ENV !== production 且 inBrowser 时会调 window.performance.now()
+  // 给 devtools 打点；桩了 window 就得连这个一起给，否则每次 t() 都炸。
+  performance: globalThis.performance ?? { now: () => Date.now() },
+  console,
+  addEventListener() {},
+  removeEventListener() {},
+  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),
+  localStorage: globalThis.localStorage,
+  requestAnimationFrame: (fn) => setTimeout(fn, 0),
+  cancelAnimationFrame: (id) => clearTimeout(id),
+  getComputedStyle: () => ({}),
+};
+// Node 22 自带只读的 navigator，只能用 defineProperty 覆盖
+Object.defineProperty(globalThis, 'navigator', {
+  value: globalThis.window.navigator,
+  configurable: true,
+  writable: true,
+});
+globalThis.location = globalThis.window.location;
+// vue-router 的 createWebHashHistory/createRouter 读的是裸全局 location/history。
+// 只要 import 路由表，模块顶层的 createRouter 就会执行，所以这两个桩绕不开。
+// 渲染本身走 memory history，不会真去 pushState。
+globalThis.history = {
+  state: {},
+  pushState() {},
+  replaceState() {},
+  go() {},
+  back() {},
+  forward() {},
+};
+globalThis.fetch = async (url) => {
+  const rel = String(url).replace(/^(\.\/|\/)/, '');
+  try {
+    const text = readFileSync(join(ROOT, 'public', rel), 'utf8');
+    return { ok: true, status: 200, json: async () => JSON.parse(text), text: async () => text };
+  } catch {
+    return { ok: false, status: 404, json: async () => ({}), text: async () => '' };
+  }
+};
+
+const server = await createServer({
+  root: ROOT,
+  server: { middlewareMode: true },
+  appType: 'custom',
+  logLevel: 'error',
+});
+
+const { createApp } = await import('vue');
+const { renderToString } = await import('@vue/server-renderer');
+const { createRouter, createMemoryHistory } = await import('vue-router');
+const { default: App } = await server.ssrLoadModule('/src/App.vue');
+const { i18n, setLocale } = await server.ssrLoadModule('/src/i18n/index.ts');
+// 只取路由表，不取项目里那个 hash history 的 router —— 那玩意要 window.location/history，
+// SSR 里没有。用 memory history 重现同一张表，路由不会和测试脚本分叉。
+const { routes } = await server.ssrLoadModule('/src/router/index.ts');
+
+// 先把数据集灌进模块级 cache：useDataset 是在组件 setup 里发 fetch、异步回填单例 ref 的，
+// 而 SSR 不等 onMounted、也不等这个 promise，不预热的话首轮渲染出来的是空壳
+// （zh 与 en 长度会差好几倍，页面内容根本没覆盖到）。
+const { loadDataset } = await server.ssrLoadModule('/src/lib/data.ts');
+await loadDataset();
+const { useDataset } = await server.ssrLoadModule('/src/lib/useDataset.ts');
+const { ds, err: dsErr } = useDataset();
+for (let i = 0; i < 100 && !ds.value && !dsErr.value; i++) {
+  await new Promise((r) => setTimeout(r, 20));
+}
+if (!ds.value) {
+  console.error(
+    `❌ 数据集未就绪：${dsErr.value ?? '超时'}（预热失败，后面测的都是空壳，结果不可信）`,
+  );
+  await server.close();
+  process.exit(1);
+}
+
+async function renderRoute(route) {
+  const router = createRouter({ history: createMemoryHistory(), routes });
+  router.push(route);
+  await router.isReady();
+  const app = createApp(App);
+  app.use(router);
+  app.use(i18n);
+  try {
+    return await renderToString(app);
+  } finally {
+    router.push('/');
+    await router.isReady();
+  }
+}
+
+const products = JSON.parse(readFileSync(join(ROOT, 'public/data/products.json'), 'utf8'));
+const sampleId = products.products?.[0]?.id;
+// 挑两个不同品牌的机型，覆盖详情页里「同系列 / 竞品」这类分支
+const otherBrand = products.products?.find(
+  (p) => p.brand && p.brand !== products.products[0]?.brand,
+);
+const sampleId2 = otherBrand?.id;
+
+const ROUTES = [
+  '/',
+  '/compare',
+  '/rankings',
+  '/timeline',
+  '/search',
+  '/about',
+  '/canvas',
+  '/globe',
+  '/brand/huawei',
+  '/brand/apple',
+  '/nope-404',
+  ...(sampleId ? [`/product/${sampleId}`] : []),
+  ...(sampleId2 ? [`/product/${sampleId2}`] : []),
+];
+
+// 界面里**刻意**保留的中文（不进语言包），逐条写明出处，别让它变成掩盖真泄漏的口子：
+const UI_ALLOW = new Set([
+  // LocaleSwitch.vue：切换器按业界惯例各语言写自己的自称（中文/English），
+  // 「看不懂当前语言的人」要能认出救命入口，译成另一种语言反而认不出来。
+  '语言',
+  '中文',
+]);
+
+const ALLOW = dataCjkWhitelist();
+const LOCALES = ['zh-CN', 'en'];
+const problems = [];
+const stats = [];
+
+for (const locale of LOCALES) {
+  setLocale(locale);
+  for (const route of ROUTES) {
+    const tag = `[${locale}] ${route}`;
+    let html;
+    try {
+      html = await renderRoute(route);
+    } catch (err) {
+      if (process.env.SSR_SMOKE_TRACE) console.error(err);
+      problems.push(`${tag} 渲染抛错：${String(err?.message ?? err).split('\n')[0]}`);
+      continue;
+    }
+    if (html.length < 300) {
+      problems.push(`${tag} 渲染过短（${html.length} 字符），疑似空页`);
+      continue;
+    }
+    // 必须剥 HTML 注释：模板里大段中文「为什么这么写」的设计说明会被 SSR 原样输出成
+    // <!-- -->，不剥的话几百条假警会淹没真正的泄漏（生产构建才会把这些注释编译掉）。
+    const visible = html.replace(/<!--[\s\S]*?-->/g, '');
+    const runs = [...visible.matchAll(CJK_RUN)].map((m) => m[0]);
+    const leaks = [...new Set(runs.filter((s) => !ALLOW.has(s) && !UI_ALLOW.has(s)))];
+    if (locale === 'en' && leaks.length) {
+      problems.push(
+        `${tag} 疑似界面残留中文（${leaks.length} 段）：${leaks.slice(0, 10).join(' / ')}`,
+      );
+    }
+    if (locale === 'zh-CN' && runs.length === 0) {
+      // 反向防假绿：中文页必须有中文，否则说明 t() 根本没接上
+      problems.push(`${tag} 中文页一个汉字都没有，t() 可能没接上`);
+    }
+    stats.push({ locale, route, len: html.length, cjk: runs.length });
+  }
+}
+
+console.log('── SSR 双语冒烟 ───────────────────────────────');
+for (const s of stats) {
+  console.log(
+    `  ${s.locale.padEnd(5)} ${s.route.padEnd(28)} ${String(s.len).padStart(6)} 字符  CJK ${s.cjk}`,
+  );
+}
+console.log(`  数据白名单：${ALLOW.size} 段`);
+console.log('──────────────────────────────────────────────');
+if (problems.length === 0) {
+  console.log(`✅ ${stats.length} 次渲染全通过：无缺键抛错、英文页无界面残留中文、中文页确有中文`);
+} else {
+  for (const p of problems) console.log(`❌ ${p}`);
+  console.log(`❌ ${problems.length} 处问题`);
+}
+
+await server.close();
+process.exit(problems.length === 0 ? 0 : 1);

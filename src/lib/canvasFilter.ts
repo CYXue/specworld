@@ -26,6 +26,7 @@
  *    强塞相关度反而会让「按名称排序」这种确定性行为变得不可预期。
  */
 
+import { i18n } from '../i18n';
 import { compact, loose, matchCompact, matchExact, queryTokens } from './query';
 
 /** 筛选/画布只用到这几个字段，刻意收窄 —— 画布不该关心电池容量 */
@@ -44,12 +45,19 @@ export interface CanvasDoc {
 
 export type SortKey = 'newest' | 'oldest' | 'name' | 'ppi';
 
-export const SORTS: Array<{ key: SortKey; label: string }> = [
-  { key: 'newest', label: '新→旧' },
-  { key: 'oldest', label: '旧→新' },
-  { key: 'name', label: '名称' },
-  { key: 'ppi', label: '像素密度' },
+/** 画布/设备球的排序项（与 facets.SORTS 是两套键空间，各自独立）。label 只存 locale 键。 */
+export const SORTS: Array<{ key: SortKey; labelKey: string }> = [
+  { key: 'newest', labelKey: 'sort.newToOld' },
+  { key: 'oldest', labelKey: 'sort.oldToNew' },
+  { key: 'name', labelKey: 'sort.name' },
+  { key: 'ppi', labelKey: 'sort.ppi' },
 ];
+
+/** 排序项展示名（语言感知） */
+export function sortLabel(key: SortKey | string): string {
+  const hit = SORTS.find((s) => s.key === key);
+  return hit ? i18n.global.t(hit.labelKey) : String(key);
+}
 
 export interface CanvasFilter {
   brand: string;

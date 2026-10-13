@@ -45,9 +45,7 @@ const FILL_WARN = 0.6; // 低于此填充率 → 低填充预警
 const READY = 0.9; // 字段填充率 ≥ 此值 → 视为「就绪」
 
 const STATES = ['available', 'unknown', 'none', 'not_applicable'];
-const stateZh = { available: '有值', unknown: '未公布', none: '无', not_applicable: '不适用' };
 const pct = (v, d = 1) => `${(v * 100).toFixed(d)}%`;
-const hasVal = (v) => v !== null && v !== undefined && !(Array.isArray(v) && v.length === 0);
 
 /* ---------------- 加载数据 ---------------- */
 
