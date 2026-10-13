@@ -597,7 +597,6 @@ export {
   HW,
   AP,
   AC,
-  PLACEHOLDERS,
   firstNum,
   nums,
   parseCapacity,

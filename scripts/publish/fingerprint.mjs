@@ -275,7 +275,7 @@ function compute() {
 }
 
 /* 顶层导出：pipeline.mjs 直接 import，不重复实现一遍指纹逻辑 */
-export { compute, stripVolatile, canonicalHash };
+export { compute };
 
 /* 仅在被直接运行时执行 CLI 部分；被 import 时不做任何 IO */
 const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);

@@ -4,14 +4,14 @@
  * 权威规则在 `scripts/lib/schema.mjs` 的 `validateSpecValue`（服务端落盘闸门）。
  * 浏览器侧需要同一套规则做「提交前即时提示」，此前 DataFeedback.vue 里手抄了一份——
  * 类型系统演进时会静默漂移（本机提示与落盘规则打架）。现在：浏览器侧一律 import 本模块；
- * `public/overrides-editor.html` 因零构建约束无法 import，保留拷贝但受 selftest
+ * `admin/overrides-editor.html` 因零构建约束无法 import，保留拷贝但受 selftest
  * 「类型集弱对账」看守（schema 出现新 type 而 editor 没跟 → selftest 红）。
  *
  * 与权威的分工：本模块**只做体验优化**（提前提示），不是安全边界——
  * 服务端 `validateOverrides` 才是落盘前最后一道闸门。
  */
 
-export interface SchemaFieldLite {
+interface SchemaFieldLite {
   type: string;
   range: number[] | null;
   values?: string[];

@@ -71,7 +71,7 @@ function trunc(ctx: CanvasRenderingContext2D, text: string, maxW: number): strin
   return t + '…';
 }
 
-export interface RenderOpts {
+interface RenderOpts {
   items: CanvasDoc[];
   productsById: Map<string, Product>;
   vendorsById: Map<string, Vendor>;

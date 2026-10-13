@@ -27,9 +27,9 @@
  * 4. **零外部依赖**：只用 Node 内置 http/fs/path，不引入 express 之类。
  */
 
-import http from 'node:http';
-import { readFile, writeFile, rename } from 'node:fs/promises';
 import { existsSync, readFileSync, statSync } from 'node:fs';
+import { readFile, writeFile, rename } from 'node:fs/promises';
+import http from 'node:http';
 import { join, resolve, dirname, normalize, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadOverrides, validateOverrides } from './lib/overrides.mjs';
@@ -37,7 +37,10 @@ import { loadOverrides, validateOverrides } from './lib/overrides.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const DATA_DIR = join(ROOT, 'data');
-const PUBLIC_DIR = join(ROOT, 'public');
+// 后台录入页刻意放 admin/ 而非 public/：public/ 会被 vite 原样拷进 dist 发布到线上，
+// 管理界面与字段结构不应随静态站点暴露（无后端写不进去，但界面本身是信息）。
+// 2026-10-13 审计 Q1 裁决：移出 public/。
+const ADMIN_EDITOR = join(ROOT, 'admin', 'overrides-editor.html');
 const DIST_DIR = join(ROOT, 'dist');
 const OVERRIDES_FILE = join(DATA_DIR, 'overrides.json');
 const SUBMISSIONS_FILE = join(DATA_DIR, 'submissions.json');
@@ -507,9 +510,8 @@ const server = http.createServer(async (req, res) => {
 
     // /editor → 后台录入（管理员直写 overrides）
     if (url.pathname === '/editor' || url.pathname === '/editor/') {
-      const f = join(PUBLIC_DIR, 'overrides-editor.html');
-      if (existsSync(f)) return serveFile(res, f);
-      return send(res, 404, '未找到 overrides-editor.html（应在 public/ 下）', 'text/plain; charset=utf-8');
+      if (existsSync(ADMIN_EDITOR)) return serveFile(res, ADMIN_EDITOR);
+      return send(res, 404, '未找到 overrides-editor.html（应在 admin/ 下）', 'text/plain; charset=utf-8');
     }
 
     // dist 静态文件（展示站点构建产物）
@@ -527,8 +529,7 @@ const server = http.createServer(async (req, res) => {
 
     // 没构建过 dist：根路径降级到后台编辑器（老行为）
     if (url.pathname === '/') {
-      const f = join(PUBLIC_DIR, 'overrides-editor.html');
-      if (existsSync(f)) return serveFile(res, f);
+      if (existsSync(ADMIN_EDITOR)) return serveFile(res, ADMIN_EDITOR);
     }
 
     return send(res, 404, '未找到：' + url.pathname, 'text/plain; charset=utf-8');

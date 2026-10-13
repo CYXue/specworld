@@ -35,6 +35,7 @@ import {
   productFields,
   shapeOfArchive,
 } from './lib/archive-shape.mjs';
+import * as DERIVE from './lib/derive.mjs';
 import { assertUnlocked } from './lib/gates-lock.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from './lib/overrides.mjs';
 import { fieldMap, isRegisteredCategory, loadCategories, loadSchema, quantifiableFields, validateSchema, validateSpecs, validateSpecValue, groupsOf, fieldsByGroup, valueStatus, validateStatusMap, STATUS_VALUES } from './lib/schema.mjs';
@@ -70,7 +71,6 @@ import {
   FIELD_LIMITS,
   SCHEMA_RANGE_PATHS,
 } from './sync/validate.mjs';
-import * as DERIVE from './lib/derive.mjs';
 import { installTsResolver } from './ts-resolver.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -102,6 +102,8 @@ function phone(over = {}) {
   return {
     id: 'test-x1',
     brand: 'apple',
+    // 闸门 11b 要求 category 必填且已注册（2026-10-13 审计 H1 起，缺失也拒）
+    category: 'phone',
     name: 'Test X1',
     releaseDate: '2026-01-15',
     provenance: {
@@ -528,6 +530,24 @@ section('校验闸门（防线自己也要被测）');
 
 check('健康数据通过', () => {
   assert.deepEqual(validate(fleet(), null), []);
+});
+
+// A4 收口（2026-10-13 审计 H1）：categoryOf() 对缺失品类静默回落 'phone'，
+// 上游闸门原先只拦「未注册值」不拦「缺失值」。真实数据 62 台全部带 category
+// （data/products.json 实测），管线必写、用户层 add-product 也已校验
+// （scripts/lib/overrides.mjs）——缺失只可能是解析器/合并层写漏，
+// 那正是必须显性失败、不许静默回落默认品类的形态。
+check('category 缺失被拦（缺失与未注册同样拒绝）', () => {
+  const f = validate(fleet({ category: undefined }), null);
+  assert.ok(
+    f.some((x) => x.includes('品类')),
+    'category 缺失必须报错，不许静默回落默认品类',
+  );
+});
+
+check('category 未注册被拦（原有闸门，防回归）', () => {
+  const f = validate(fleet({ category: 'watch' }), null);
+  assert.ok(f.some((x) => x.includes('品类')), '未注册品类必须报错');
 });
 
 check('机型数低于下限被拦', () => {
@@ -4553,10 +4573,26 @@ check('specs.ts ABILITIES 与 phone schema 对账（字段已注册、higherBett
   }
 });
 
+check('后台录入页在 admin/ 而非 public/（Q1：不随 dist 发布到线上）', () => {
+  // 2026-10-13 审计 Q1 裁决 B：overrides-editor.html 从 public/ 移至 admin/，
+  // 由 editor-server 直读。public/ 会被 vite 原样拷进 dist —— 放回去等于把管理后台
+  // 界面发布到 GitHub Pages / Toy 上（无后端写不进去，但界面与字段结构暴露）。
+  // 本条守「源」：有人挪回 public/ 时在最快的一道闸门红掉；
+  // verify-dist 的「dist 非入口 HTML」闸门守「产物」，两道互补。
+  assert.ok(
+    existsSync(join(ROOT, 'admin/overrides-editor.html')),
+    'admin/overrides-editor.html 应存在（editor-server 从那里读）',
+  );
+  assert.ok(
+    !existsSync(join(ROOT, 'public/overrides-editor.html')),
+    'public/ 下不得有 overrides-editor.html——会被 vite 拷进 dist 发布到线上',
+  );
+});
+
 check('editor.html 值校验类型集与 schema 弱对账（零构建拷贝的看守）', () => {
   // 硬编码审计 A3：editor.html 无法 import 共享校验模块（零构建），保留手工拷贝。
   // 本测试看守「类型集」不漂移：schema 出现新 type 而拷贝没跟 → default 分支静默放行 → 红。
-  const html = readFileSync(join(ROOT, 'public/overrides-editor.html'), 'utf8');
+  const html = readFileSync(join(ROOT, 'admin/overrides-editor.html'), 'utf8');
   const cases = new Set([...html.matchAll(/case '([a-z:]+)':/g)].map((m) => m[1]));
   const schema = loadSchema('phone');
   for (const f of schema.fields) {
@@ -5035,7 +5071,10 @@ check('闸门反向测：v2 快照注入未注册键 / 越界值必须拒绝写�
 
   const badCat = JSON.parse(JSON.stringify(good));
   badCat.products[0].category = 'toaster';
-  assert.ok(validate(badCat, null).some((f) => /品类未注册/.test(f)), '未注册品类必须被闸门拦下');
+  assert.ok(
+    validate(badCat, null).some((f) => /品类缺失或未注册/.test(f)),
+    '未注册品类必须被闸门拦下',
+  );
 
   assert.deepEqual(validate(good, null), [], '改回后必须恢复绿灯（闸门没被反向测污染）');
 });

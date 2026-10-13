@@ -92,15 +92,3 @@ export function expandSpecs(specs) {
   }
   return out;
 }
-
-/** specs 里实际出现过的组名（按 SPEC_GROUPS 顺序，未知组追加在后） */
-export function specGroupsOf(specs) {
-  const seen = new Set();
-  for (const path of Object.keys(specs ?? {})) {
-    const dot = path.indexOf('.');
-    if (dot > 0) seen.add(path.slice(0, dot));
-  }
-  const known = SPEC_GROUPS.filter((g) => seen.has(g));
-  const extra = [...seen].filter((g) => !SPEC_GROUPS.includes(g)).sort();
-  return [...known, ...extra];
-}

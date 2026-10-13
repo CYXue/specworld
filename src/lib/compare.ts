@@ -12,9 +12,9 @@
  */
 
 /** 缺失占位符（与 fields.ts / CompareView 的「—」一致） */
-export const MISSING = '—';
+const MISSING = '—';
 
-export interface CompareRowState {
+interface CompareRowState {
   /** 值不等：**非缺失值**之间不完全相同（缺失不参与值比较——准绳口径） */
   different: boolean;
   /** 缺失差异：同行内既有有值又有缺失（「有值 vs 缺失→标底色」） */

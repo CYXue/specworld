@@ -23,7 +23,6 @@
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadProducts, brandZh } from '../qa/lib.mjs';
 import {
   loadCategories,
   loadSchema,
@@ -33,6 +32,7 @@ import {
   validateStatusMap,
   validateSpecs,
 } from '../lib/schema.mjs';
+import { loadProducts, brandZh } from '../qa/lib.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const argv = process.argv.slice(2);

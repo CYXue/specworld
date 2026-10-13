@@ -40,7 +40,7 @@ export function loadCategories() {
 }
 
 /** 全部品类 id（注册表顺序）。无注册表时返回空数组 */
-export function categoryIds() {
+function categoryIds() {
   return (loadCategories()?.categories ?? []).map((c) => c.id);
 }
 
@@ -50,7 +50,7 @@ export function isRegisteredCategory(id) {
 }
 
 /** 取品类定义（id/label/schema）。未注册返回 undefined */
-export function categoryDef(id) {
+function categoryDef(id) {
   return (loadCategories()?.categories ?? []).find((c) => c.id === id);
 }
 
@@ -142,12 +142,12 @@ export function valueStatus(product, path) {
 export const STATUS_VALUES = Object.freeze(['none', 'not_applicable']);
 
 /** 子字段表（多实例子字典，2026-10-13 最优解「两处结构升级」②）。field.cardinality==='list' 时存在 */
-export function subfieldsOf(field) {
+function subfieldsOf(field) {
   return field?.cardinality === 'list' ? (field.subfields ?? []) : null;
 }
 
 /** 子字段项的键 → 子字段定义映射（子 path 形如 'camera.rear.mp'，键 = 去父前缀的 'mp'） */
-export function subfieldMap(field) {
+function subfieldMap(field) {
   const subs = subfieldsOf(field);
   const m = new Map();
   if (!subs || !field?.path) return m;
@@ -296,7 +296,7 @@ export function validateSpecValue(field, value, where) {
  * 规则：项内键必须在子字段注册（多余键拦——防「静默落盘没人读」）；
  * 已注册子键逐个走 validateSpecValue（子项缺键 = null 语义，合法——官网常只公布部分）。
  */
-export function validateListField(field, item, at) {
+function validateListField(field, item, at) {
   if (!item || typeof item !== 'object' || Array.isArray(item)) {
     return [`${at} 应为对象，收到 ${JSON.stringify(item)}`];
   }

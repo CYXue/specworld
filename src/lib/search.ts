@@ -32,7 +32,7 @@ import {
  *    可能排在 Mate 80 前面。这是**故障被习惯掩盖**：看久了就不觉得是 bug。
  */
 
-export interface SearchableDoc {
+interface SearchableDoc {
   product: Product;
   vendor: Vendor | undefined;
   /** NFKC + 小写、保留分隔符的检索串（含空格），避免每次按键都重建 */
@@ -76,7 +76,7 @@ export function buildDocs(products: Product[], vendors: Map<string, Vendor>): Se
   });
 }
 
-export interface SearchOpts {
+interface SearchOpts {
   /** 品牌过滤；空串表示不限 */
   brand?: string;
 }

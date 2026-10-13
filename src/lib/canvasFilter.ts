@@ -64,7 +64,7 @@ export const EMPTY_FILTER: CanvasFilter = { brand: '', line: '', year: '', q: ''
 /** 与全站搜索同口径的分词、归一化与匹配（唯一一份实现，见文件头口径 1） */
 export { tokenize } from './query';
 
-export interface FilterableDoc {
+interface FilterableDoc {
   doc: CanvasDoc;
   /** NFKC + 小写、保留分隔符的检索串 */
   haystack: string;
@@ -118,7 +118,7 @@ function passes(item: FilterableDoc, f: CanvasFilter, skip: string[], qOk: boole
 }
 
 /** 排序。缺失值一律排到末尾 —— 官网没公布的项不该混在有值的中段冒充数据 */
-export function sortCanvas(
+function sortCanvas(
   docs: CanvasDoc[],
   sort: SortKey,
   ppiOf?: (id: string) => number | null,
@@ -156,7 +156,7 @@ export function applyFilter(
   );
 }
 
-export interface Facet {
+interface Facet {
   value: string;
   label: string;
   count: number;
@@ -213,8 +213,8 @@ export function yearFacets(docs: FilterableDoc[], f: CanvasFilter): Facet[] {
  * 且「#canvas」与「#canvas?sort=newest」指的是同一份画面（sort 是默认值）。
  * 未知取值（手改的链接、旧版本遗留）一律回落默认值，不抛错。 */
 
-export const FILTER_KEYS = ['brand', 'line', 'year', 'q', 'sort'] as const;
-export type FilterKey = (typeof FILTER_KEYS)[number];
+const FILTER_KEYS = ['brand', 'line', 'year', 'q', 'sort'] as const;
+type FilterKey = (typeof FILTER_KEYS)[number];
 
 const SORT_KEYS: SortKey[] = ['newest', 'oldest', 'name', 'ppi'];
 

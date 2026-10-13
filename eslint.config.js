@@ -9,6 +9,9 @@ export default [
     ignores: [
       'node_modules/**',
       'dist/**',
+      // .dist-trash/ 是 clean-dist.mjs 的旧 dist 备份（压缩产物），不 lint——
+      // 漏登它曾让 npm run lint 报出 8000+ 个打在 minified bundle 上的假 error
+      '.dist-trash/**',
       '_work/**',
       'data/**',
       'public/**',

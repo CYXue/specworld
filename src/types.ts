@@ -10,7 +10,7 @@ export interface Vendor {
   country: string;
 }
 
-export interface Body {
+interface Body {
   heightMm: number | null;
   widthMm: number | null;
   thicknessMm: number | null;
@@ -42,7 +42,7 @@ export interface Display {
   protection: string | null;
 }
 
-export interface Chipset {
+interface Chipset {
   name: string | null;
   processNm: number | null;
   cpuCores: number | null;
@@ -50,12 +50,12 @@ export interface Chipset {
   npu: string | null;
 }
 
-export interface Memory {
+interface Memory {
   ramGb: number[];
   storageGb: number[];
 }
 
-export interface Battery {
+interface Battery {
   capacityMah: number | null;
   capacityCaliber: string | null;
   wiredChargeW: number | null;

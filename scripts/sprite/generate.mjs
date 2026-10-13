@@ -107,7 +107,7 @@ export function layout(product) {
 }
 
 /** 把一台机器的立绘渲染成内联 SVG 字符串（正面 + 背面并排）。 */
-export function renderSprite(product, { scale = 1 } = {}) {
+function renderSprite(product, { scale = 1 } = {}) {
   const L = layout(product);
   const s = scale;
   const pad = 10 * s;
@@ -129,11 +129,6 @@ export function renderSprite(product, { scale = 1 } = {}) {
     ${caption('背面', L, s)}
   </g>
 </svg>`;
-}
-
-/** 画布内并排两个手机时的左右间距（与 renderSprite 保持一致） */
-export function padOf(scale = 1) {
-  return 10 * scale;
 }
 
 function drawFace(L, s, side) {

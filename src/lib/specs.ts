@@ -5,7 +5,7 @@ import type { Dataset, Product } from '../types';
 // 条的长度是它在**本数据集内的相对位置**（min→max 归一），不是虚构的绝对分。
 export type AbilityKey = 'display' | 'light' | 'battery' | 'camera';
 
-export interface AbilityDef {
+interface AbilityDef {
   key: AbilityKey;
   label: string;
   higherBetter: boolean;
@@ -78,7 +78,7 @@ export function computeBounds(products: Product[]): Record<AbilityKey, Bounds | 
   return out;
 }
 
-export function abilityRow(p: Product, def: AbilityDef, b: Bounds | null): AbilityRow {
+function abilityRow(p: Product, def: AbilityDef, b: Bounds | null): AbilityRow {
   const raw = rawFor(p, def.key);
   if (raw == null || !b || b.max === b.min) {
     return { key: def.key, label: def.label, raw: null, display: '官方未公布', ratio: null };
@@ -98,22 +98,9 @@ export function abilityRows(p: Product, bounds: Record<AbilityKey, Bounds | null
   return ABILITIES.map((def) => abilityRow(p, def, bounds[def.key]));
 }
 
-// 导出取原始值与 Top-N，供榜单页使用
+// 导出取原始值，供榜单页使用
 export function abilityRaw(p: Product, key: AbilityKey): number | null {
   return rawFor(p, key);
-}
-
-export function topN(
-  products: Product[],
-  key: AbilityKey,
-  n = 3,
-): Array<{ product: Product; raw: number }> {
-  const def = ABILITIES.find((d) => d.key === key)!;
-  const rows = products
-    .map((p) => ({ product: p, raw: rawFor(p, key) }))
-    .filter((r): r is { product: Product; raw: number } => r.raw != null);
-  rows.sort((a, b) => (def.higherBetter ? b.raw - a.raw : a.raw - b.raw));
-  return rows.slice(0, n);
 }
 
 export function fmtAbility(key: AbilityKey, raw: number): string {

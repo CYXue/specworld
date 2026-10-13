@@ -1,5 +1,5 @@
-import { isFoldableOfficial } from '../../scripts/lib/foldable.mjs';
 import curatedFacets from '../../data/curated/facets.json' with { type: 'json' };
+import { isFoldableOfficial } from '../../scripts/lib/foldable.mjs';
 import type { Product } from '../types';
 
 /**
@@ -71,7 +71,7 @@ function makeNameTest(rule: { match?: string; flags?: string }): (n: string) => 
  * 把它和「手机」平级放在品类里，等于拿形态维度冒充品类维度 ——
  * 未来接入平板后「折叠平板」会更没处放。形态另见 `formOf`（折叠屏/直板）。
  */
-export type CategoryId = 'phone' | 'tablet' | 'laptop' | 'audio';
+type CategoryId = 'phone' | 'tablet' | 'laptop' | 'audio';
 
 export interface CategoryDef {
   id: CategoryId;
@@ -136,7 +136,7 @@ export function categoryCounts(products: Product[]): Record<string, number> {
 // ── 生命周期状态（权威枚举见 src/types.ts Product.status；标签单一映射）──
 
 /** 状态 → 中文标签。新状态值只改这一处（ProductView 等消费方不再各写三元链）。 */
-export const STATUS_LABEL: Record<string, string> = {
+const STATUS_LABEL: Record<string, string> = {
   'on-sale': '在售',
   upcoming: '即将发布',
   retired: '已退役',
@@ -160,7 +160,7 @@ export function statusLabelOf(s: string | null | undefined): string {
  * ⚠️ **直屏/曲屏做不了**：官网规格页原文没有任何「曲面/直屏」字样（实测 60 台），
  * 按诚信原则不编造。等数据源补充屏幕形态描述后，这里加判据即可自动进分面。
  */
-export type FormId = 'foldable' | 'bar';
+type FormId = 'foldable' | 'bar';
 
 export const FORM_LABEL: Record<FormId, string> = {
   foldable: '折叠屏',
@@ -192,7 +192,7 @@ export function formOf(p: Product): FormId {
  * **判定顺序：长后缀优先。** `iPhone 18 Pro Max` 同时含 `Pro` 与 `Max`，
  * 先判 `Pro Max` 才不会落进 `Pro` 档（少一档、且分面计数会莫名少一台）。
  */
-export interface VariantDef {
+interface VariantDef {
   id: string;
   label: string;
   test: (n: string) => boolean;
@@ -373,27 +373,6 @@ export function maxRamGb(p: Product): number | null {
   return nums.length ? Math.max(...nums) : null;
 }
 
-export function ramFacets(products: Product[]): Array<{ id: string; count: number }> {
-  const m = new Map<string, number>();
-  for (const p of products) {
-    const v = maxRamGb(p);
-    const key = v == null ? UNKNOWN : String(v);
-    m.set(key, (m.get(key) ?? 0) + 1);
-  }
-  return [...m.entries()]
-    .map(([id, count]) => ({ id, count }))
-    .sort((a, b) => {
-      // 数字档按大小降序，「未公布」永远排最后（它不是一个小数值）
-      const na = Number(a.id);
-      const nb = Number(b.id);
-      const aBad = Number.isNaN(na) ? 1 : 0;
-      const bBad = Number.isNaN(nb) ? 1 : 0;
-      if (aBad !== bBad) return aBad - bBad;
-      if (aBad) return a.id.localeCompare(b.id);
-      return nb - na;
-    });
-}
-
 // ── 价格 ──
 
 /**
@@ -440,7 +419,7 @@ export function fmtPriceCny(v: number | null): string {
 
 // ── 榜单取样 ──
 
-export interface Spotlight {
+interface Spotlight {
   category: CategoryDef;
   /** 该品类最新的一台（无则 null） */
   latest: Product | null;

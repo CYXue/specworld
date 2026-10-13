@@ -1,6 +1,5 @@
 import type { Product } from '../types';
 import { CATEGORY_ORDER } from './catalog';
-import { PHONE_SCHEMA, facetFields } from './fields';
 import {
   FORM_LABEL,
   PRICE_BUCKETS,
@@ -16,6 +15,7 @@ import {
   variantOf,
   yearOf,
 } from './catalog';
+import { PHONE_SCHEMA, facetFields } from './fields';
 import type { AbilityKey } from './specs';
 import { abilityRaw } from './specs';
 
@@ -67,10 +67,6 @@ export const DIMENSIONS: Array<{ key: DimKey; label: string; allLabel: string }>
   })),
 ];
 
-export const DIM_LABEL: Record<DimKey, string> = Object.fromEntries(
-  DIMENSIONS.map((d) => [d.key, d.label]),
-) as Record<DimKey, string>;
-
 /** 筛选状态：每个维度存「已选 id 数组」，空数组 = 该维度不限。 */
 export type FilterState = Record<DimKey, string[]>;
 
@@ -94,7 +90,7 @@ function specFacetValue(p: Product, path: string): string {
   return String(v);
 }
 
-export function valueOf(p: Product, dim: DimKey): string {
+function valueOf(p: Product, dim: DimKey): string {
   switch (dim) {
     case 'brand':
       return p.brand;

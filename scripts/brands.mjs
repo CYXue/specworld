@@ -18,10 +18,10 @@
  */
 
 /** 全部受支持品牌的 id，有序。新增品牌在此追加一项即可 */
-export const BRAND_IDS = Object.freeze(['apple', 'huawei']);
+const BRAND_IDS = Object.freeze(['apple', 'huawei']);
 
 /** 单一真源：每个品牌的完整元数据 */
-export const BRANDS = Object.freeze({
+const BRANDS = Object.freeze({
   apple: {
     id: 'apple',
     name: 'Apple',
@@ -95,6 +95,6 @@ export function brandShortLabel(id) {
 }
 
 /** 品牌英文名 */
-export function brandName(id) {
+function brandName(id) {
   return BRANDS[id]?.name ?? id;
 }

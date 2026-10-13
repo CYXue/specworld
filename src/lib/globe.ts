@@ -45,7 +45,7 @@
 
 // ── 常量 ──
 
-export interface Viewport3 {
+interface Viewport3 {
   w: number;
   h: number;
 }
@@ -59,7 +59,7 @@ export interface Camera3 {
   dist: number;
 }
 
-export interface SpherePoint {
+interface SpherePoint {
   /** 纬度（度），北正 */
   lat: number;
   /** 经度（度） */
@@ -89,9 +89,9 @@ export const LAT_LIMIT = 85;
 /** 自动自转速度（度/秒）。「一直在循环」的直观体现，约 60 秒一圈 */
 export const AUTO_SPIN_DPS = 6;
 /** 球体占视口高度的比例（赤道处） */
-export const FIT_RATIO = 0.42;
+const FIT_RATIO = 0.42;
 /** 背面设备的最低不透明度：0 就是实心球（背面看不见），此处取线框球口径 */
-export const BACK_OPACITY = 0.22;
+const BACK_OPACITY = 0.22;
 
 const DEG = Math.PI / 180;
 const RAD = 180 / Math.PI;
@@ -104,7 +104,7 @@ const GOLDEN = Math.PI * (1 + Math.sqrt(5));
  * 用 (i + 0.5) 而不是 i，是为了避开正好落在南北极 —— 极点处经度无意义，
  * 两台设备会叠在一起（表现为「球顶少了一台」）。
  */
-export function fiboPoint(i: number, n: number): SpherePoint {
+function fiboPoint(i: number, n: number): SpherePoint {
   const phi = Math.acos(1 - (2 * (i + 0.5)) / n); // 极角 0..π
   const theta = GOLDEN * i;
   return {
@@ -195,7 +195,7 @@ interface Vec3 {
 }
 
 /** 球面点 → 单位向量 */
-export function toVec(p: SpherePoint): Vec3 {
+function toVec(p: SpherePoint): Vec3 {
   const la = p.lat * DEG;
   const lo = p.lon * DEG;
   return { x: Math.cos(la) * Math.sin(lo), y: Math.sin(la), z: Math.cos(la) * Math.cos(lo) };
@@ -217,12 +217,12 @@ function rotX(v: Vec3, a: number): Vec3 {
  * 球面点 → 相机系坐标。顺序是 rotY(-lon) 再 rotX(lat)，
  * 反了会在高纬度处整体偏斜（推导见文件头）。
  */
-export function toCameraSpace(p: SpherePoint, cam: Camera3): Vec3 {
+function toCameraSpace(p: SpherePoint, cam: Camera3): Vec3 {
   return rotX(rotY(toVec(p), -cam.lon * DEG), cam.lat * DEG);
 }
 
 /** 焦距（px）：让赤道处的球面点落在视口高度的 FIT_RATIO 处 */
-export function focal(cam: Camera3, vp: Viewport3): number {
+function focal(cam: Camera3, vp: Viewport3): number {
   return (Math.min(vp.w, vp.h) * FIT_RATIO * cam.dist) / R;
 }
 

@@ -11,7 +11,7 @@
  * 路由交给 vue-router 的 hash 模式，页面由 JS 在运行时生成，磁盘上没有 brand/apple.html。
  * 硬套旧清单会天天报「缺少关键页面」，等于把闸门养成摆设 —— 那比没有闸门更糟。
  *
- * 真正的风险换了一批，换成四条
+ * 真正的风险换了一批，换成五条
  * ----------------------------
  * 1. **入口存在**：dist/index.html 必须有。这是唯一的入口，缺了就是白屏。
  * 2. **零绝对路径**：Toy 挂在 /toy/<slug>/ 下，GitHub Pages 挂在 /<repo>/ 下，
@@ -19,7 +19,11 @@
  *    但产物才是判据 —— 这里逐个引用核对，而不是相信配置。
  * 3. **零外部资源引用**：平台整改口径要求包内自包含。外链字体/脚本/图片一律不允许。
  *    注意 @font-face 里的 url() 也要查 —— 它藏在 CSS 里，扫 HTML 抓不到。
- * 4. **体积在平台上限内**：50 MB。超了上传直接被拒。
+ * 4. **管理后台页不随站点发布**：SPA 只有 index.html 一个入口，
+ *    dist 里出现任何其他 HTML = 有人把 admin/ 的后台页挪回了 public/
+ *    （2026-10-13 审计 Q1：overrides-editor.html 已移至 admin/，由 editor-server 直读；
+ *    public/ 会被 vite 原样拷进 dist，管理界面不该在线上公开可访问）。
+ * 5. **体积在平台上限内**：50 MB。超了上传直接被拒。
  *
  * 除此之外还顺手核对数据与精灵是否真被打进去了：prebuild 若忘了跑，
  * 站点能打开但一屏空白，这是最容易被误判成「渲染坏了」的一类失败，
@@ -134,7 +138,19 @@ if (spriteCount === 0) {
   note('dist/sprites/ 为空 —— 跑一次 node scripts/sprite/generate.mjs 生成立绘');
 }
 
-/* ---------- 4. 体积 ---------- */
+/* ---------- 4. 管理后台页不随站点发布 ---------- */
+// SPA 单入口是设计不变量：dist 里除 index.html 外不该有任何 HTML。
+// 唯一的现实来源是 public/（vite 原样拷贝）——后台录入页在 admin/（editor-server 直读），
+// 谁把它挪回 public/，这条会当场拦住，而不是等上线后被人从 /overrides-editor.html 摸进去。
+const strayHtml = files.filter((f) => f.endsWith('.html') && relOf(f) !== 'dist/index.html');
+if (strayHtml.length) {
+  note(
+    `产物里有 ${strayHtml.length} 个非入口 HTML（${strayHtml.map(relOf).join(', ')}）` +
+      '—— 管理后台页不应随站点发布（应在 admin/，由 editor-server 读取）',
+  );
+}
+
+/* ---------- 5. 体积 ---------- */
 const mb = bytes / 1024 / 1024;
 if (bytes > MAX_BYTES) note(`产物 ${mb.toFixed(1)} MB，超过平台 50 MB 上限`);
 
@@ -152,6 +168,7 @@ const manifest = {
   absoluteRefs: absRefs,
   missingRefs,
   sprites: spriteCount,
+  strayHtml: strayHtml.length,
   selfContained: extRefs === 0 && absRefs === 0 && missingRefs === 0,
   issues,
 };
@@ -164,7 +181,9 @@ console.log(`引用体检：外部 ${extRefs} · 绝对路径 ${absRefs} · 失�
 if (refSamples.length) for (const s of refSamples) console.log(`  ${s}`);
 
 if (ok) {
-  console.log('✅ 发布校验通过：入口存在、引用全相对、零外链、包体在限内、数据与精灵齐备');
+  console.log(
+    '✅ 发布校验通过：入口存在、引用全相对、零外链、后台页不随线、包体在限内、数据与精灵齐备',
+  );
 } else {
   console.error(`❌ 发布校验未通过，共 ${issues.length} 处：`);
   for (const x of issues) console.error(`  ❌ ${x}`);

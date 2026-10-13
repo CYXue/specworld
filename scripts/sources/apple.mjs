@@ -280,7 +280,7 @@ function usefulAria(cellHtml) {
  * 它声明的是「这个型号从这一列开始」，后续 row 的同序号单元格仍属于它。
  * 所以必须按列序号跟踪，不能只看当前单元格有没有小标题。
  */
-export function parseSpecsHtml(html) {
+function parseSpecsHtml(html) {
   const rawSections = sliceSections(html).map(({ key, body }) => {
     const rows = sliceChildrenByClass(body, /\btechspecs-row\b/).map((row) => {
       const headM = row.inner.match(
@@ -485,7 +485,7 @@ export function flattenSections(sections, modelName = '') {
 }
 
 /** `/iphone/compare/` 的 `#backport-data`：按文档顺序取机型名 */
-export function parseCompareProducts(html) {
+function parseCompareProducts(html) {
   const start = html.search(/<div\b[^>]*id="backport-data"/i);
   if (start < 0) return [];
   const openEnd = html.indexOf('>', start) + 1;
@@ -508,7 +508,7 @@ export function parseCompareProducts(html) {
  * （`/iphone-17/`），两种都要认；`/iphone/`、`/iphone/compare/` 这类栏目页
  * 不是机型，必须排除 —— `iphone/` 后面跟的是 `specs` 等字母，靠结尾斜杠区分。
  */
-export function parseCompareSlugLinks(html) {
+function parseCompareSlugLinks(html) {
   const out = new Set();
   for (const m of html.matchAll(/href="\/(iphone-[a-z0-9-]+)\//gi)) out.add(m[1].toLowerCase());
   return out;
@@ -526,7 +526,7 @@ export function parseCompareSlugLinks(html) {
  * 注意：这是**保真度**检查，不是来源检查。跨机型的值只可能来自这一份 HTML，
  * 所以命中率就是「值确实出自这一页」的证据。
  */
-export function verifyRawAgainstHtml(html, raw) {
+function verifyRawAgainstHtml(html, raw) {
   const decodeEnt = (s) =>
     String(s)
       .replace(/&nbsp;/g, ' ')
@@ -576,7 +576,7 @@ export function verifyRawAgainstHtml(html, raw) {
 const SLUG_OVERRIDES = new Map([['iphone duo', ['iphone-duo']]]);
 
 /** 由官网机型名推导候选 slug（首选在最前，其余为兜底探测） */
-export function slugCandidatesFor(name) {
+function slugCandidatesFor(name) {
   const clean = cleanText(name);
   const k = clean.toLowerCase();
   if (SLUG_OVERRIDES.has(k)) return SLUG_OVERRIDES.get(k).slice();

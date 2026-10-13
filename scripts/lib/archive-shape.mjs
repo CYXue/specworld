@@ -45,14 +45,14 @@ export const CHANNELS = [
 ];
 
 /** 规格通道：RawProduct 的回放必需字段 */
-export const SPEC_PRODUCT_FIELDS = ['id', 'name', 'specsUrl', 'raw'];
+const SPEC_PRODUCT_FIELDS = ['id', 'name', 'specsUrl', 'raw'];
 
 /**
  * 价格通道：价格抓取的回放必需字段（2026-10-12 按适配器实际产出核定）。
  * evidence / crossCheck 是抓取凭据（HTTP 状态、SKU、交叉验证端点），
  * 静态内容、无时间戳 —— 解析器改坏后复现价格逻辑就靠它们，必须留。
  */
-export const PRICE_PRODUCT_FIELDS = [
+const PRICE_PRODUCT_FIELDS = [
   'id',
   'name',
   'startPriceCny',

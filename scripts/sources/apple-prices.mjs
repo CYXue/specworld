@@ -1268,4 +1268,4 @@ if (invokedDirectly) {
     });
 }
 
-export { HERE as ADAPTER_DIR, PRICING_ENDPOINT, COMPARE_URL, BUY_URL };
+export { HERE as ADAPTER_DIR, COMPARE_URL };

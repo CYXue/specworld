@@ -60,11 +60,11 @@ interface ViewDict {
 export const PHONE_SCHEMA = phoneSchemaJson as unknown as SchemaJson;
 const PHONE_VIEW = phoneViewJson as unknown as ViewDict;
 
-export interface SpecRow {
+interface SpecRow {
   label: string;
   value: string;
 }
-export interface SpecGroup {
+interface SpecGroup {
   title: string;
   rows: SpecRow[];
 }
@@ -151,7 +151,7 @@ function cameraRoleRows(path: string, specs: Record<string, unknown> | null | un
  * 泛化引擎：schema + 视图字典 + 扁平 specs → 分组参数行。
  * 通用到与品类无关（新品类换字典复用）；不认识任何具体字段。
  */
-export function buildSpecGroups(
+function buildSpecGroups(
   schema: SchemaJson,
   view: ViewDict,
   specs: Record<string, unknown> | null | undefined,

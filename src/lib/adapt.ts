@@ -14,7 +14,7 @@ import type { Product } from '../types';
  *
  * 非手机品类不过本函数（没有 specs 的 v1 记录原样返回，兼容旧快照）。
  */
-export function toPhoneView(p: Product): Product {
+function toPhoneView(p: Product): Product {
   if (!p.specs) return p;
   return { ...p, ...expandSpecs(p.specs) } as Product;
 }
@@ -34,30 +34,7 @@ export function toPhoneViews(products: Product[]): Product[] {
  * 前端参数表渲染时按此函数决定每个字段的呈现，而不是只判断「有值/无值」——
  * 否则跨品类会出现「该品类根本没有这个参数，却显示空白」或「本就没有却假装无」。
  */
-export type ValueStatus = 'available' | 'unknown' | 'none' | 'not_applicable';
-
-/**
- * 某个 (产品, 字段) 是否有真实可用值。specs 键存在但值为 null / undefined /
- * 空数组视为没有——本项目把「官方未公布」存成 specs 里的 null
- * （如 iPhone 的 display.refreshHz=null、memory.ramGb=[]）。
- * 否则这些字段会被误判为已填（质量报告虚高、前端空白而非「—」）。
- */
-function hasValue(p: Product, path: string): boolean {
-  if (!p.specs) return false;
-  if (!Object.prototype.hasOwnProperty.call(p.specs, path)) return false;
-  const v = p.specs[path];
-  if (v === null || v === undefined) return false;
-  if (Array.isArray(v) && v.length === 0) return false;
-  return true;
-}
-
-export function fieldStatus(p: Product, path: string): ValueStatus {
-  const explicit = p.valueStatus?.[path];
-  if (explicit === 'not_applicable') return 'not_applicable';
-  if (explicit === 'none') return 'none';
-  if (hasValue(p, path)) return 'available';
-  return 'unknown';
-}
+type ValueStatus = 'available' | 'unknown' | 'none' | 'not_applicable';
 
 /** 四态对应的展示文案（对齐准绳：未知="—"，无="无"，不适用="不适用"） */
 export function statusLabel(s: ValueStatus): string {

@@ -30,16 +30,6 @@ export function loadProducts() {
   return P.products ?? P;
 }
 
-/** 读分析层产物。缺它意味着分析层没跑过 */
-export function loadAnalytics() {
-  const f = join(ROOT, '_work/analytics.json');
-  if (!existsSync(f)) {
-    console.error('❌ 找不到 _work/analytics.json。先跑一次：node scripts/pipeline.mjs --offline');
-    process.exit(1);
-  }
-  return JSON.parse(readFileSync(f, 'utf8'));
-}
-
 /** 品牌中文名。取值来自统一品牌注册表 scripts/brands.mjs，不在这里另立一份 */
 import { brandZh } from '../brands.mjs';
 export { brandZh };

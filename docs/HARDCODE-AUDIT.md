@@ -35,7 +35,7 @@ refreshHz[48,240]）与 `phone.json` 的 `range` **逐字相同但独立维护**
 失效：改 schema range → LIMITS 继续拦旧区间（误报）或放行新越界值（漏报）。
 
 ### A3 值校验逻辑三份
-`scripts/lib/schema.mjs validateSpecValue`（权威）/ `public/overrides-editor.html validateValue` /
+`scripts/lib/schema.mjs validateSpecValue`（权威）/ `admin/overrides-editor.html validateValue` /
 `src/components/DataFeedback.vue validate+coerce`（后两者是手工复制，DataFeedback 注释自称
 「同源」实为拷贝）。失效：类型系统演进 → 两份前端静默按旧规则提示（服务端权威仍能拦落盘，
 但用户会被误导性提示先打一遍）。

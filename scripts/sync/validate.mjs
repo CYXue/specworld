@@ -216,10 +216,16 @@ export function validate(snapshot, previous, options = {}) {
     // 11. 品牌必须在注册表里（注册表单一真源见 scripts/brands.mjs，新增品牌只改那一个文件）
     if (!isValidBrand(p.brand)) fail.push(`${p.id} 的品牌不在注册表：${p.brand}`);
     // 11b. 品类必须注册，且 specs 逐键过该品类的 schema（v2 全品类结构）。
-    // 防的故障：① category 指向不存在的品类 → 没有字段表，参数表渲染直接崩；
+    // 防的故障：① category 缺失或指向不存在的品类 → 没有字段表，参数表渲染直接崩；
+    //   （categoryOf() 对缺失静默回落 'phone'，闸门若只拦「未注册值」，
+    //   这个回落永远见不到光——2026-10-13 审计 H1 起缺失同样拒绝。
+    //   真实数据 62 台全部带 category，用户层 add-product 也已校验，
+    //   缺失只可能是解析器/合并层写漏，那正是要显性失败的形态）；
     // ② specs 里出现未注册键（拍平漏组 / 用户层字段名拼错）→ 值安静地躺进去没人读。
-    if (p.category !== undefined && !isRegisteredCategory(p.category)) {
-      fail.push(`${p.id} 的品类未注册：${p.category}（见 data/categories.json）`);
+    if (!isRegisteredCategory(p.category)) {
+      fail.push(
+        `${p.id} 的品类缺失或未注册：${JSON.stringify(p.category)}（见 data/categories.json）`,
+      );
     }
     if (p.specs) {
       const schema = loadSchema(p.category);
