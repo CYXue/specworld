@@ -1,0 +1,86 @@
+{
+  "_doc": "手机品类视图字典（展示语义真源，2026-10-13 硬编码审计 A1/B1 治理 + SCHEMA-EXTENSIBILITY 最优解落地）。与数据字典 data/schemas/phone.json 分离：schema 管「有什么参数、什么类型区间」，本文件管「怎么展示」。规则：① 列在 groups.rows 里的字段按声明展示（field 单字段 / fields 合并 / expand 展开，format 引擎内置格式化器，缺省按 schema type+unit 通用格式化）；② schema 里有、本文件既没引用也没标 hidden 的字段 → 引擎**自动**按其 schema.group 追加到对应组尾（新组自动新建）——发现新可量化参数只需在 schema 加一行，页面自动出现；③ hidden = 有意不进详情页/对比表的字段（显性化决策，删掉即显示）。matchGroups：一个视图组可吞并多个 schema 分组（如「芯片与存储」吞 chipset+memory）。反向纪律：rows 引用的 path 必须已在 schema 注册（selftest 双向对账）。",
+  "version": 1,
+  "groups": [
+    {
+      "id": "body",
+      "title": "机身",
+      "rows": [
+        { "label": "尺寸", "fields": ["body.heightMm", "body.widthMm", "body.thicknessMm"], "format": "dimensions" },
+        { "label": "重量", "field": "body.weightG" },
+        { "label": "材质", "field": "body.material" },
+        { "label": "防护", "field": "body.ipRating" },
+        { "label": "配色", "field": "body.colors" }
+      ]
+    },
+    {
+      "id": "display",
+      "title": "屏幕",
+      "rows": [
+        { "label": "类型", "field": "display.type" },
+        { "label": "尺寸", "field": "display.sizeIn" },
+        { "label": "分辨率", "field": "display.resolutionPx", "format": "resolution" },
+        { "label": "PPI", "field": "display.ppi", "format": "plain" },
+        { "label": "刷新率", "field": "display.refreshHz" },
+        { "label": "亮度", "fields": ["display.brightnessTypicalNits", "display.brightnessPeakNits"], "format": "brightness" },
+        { "label": "盖板玻璃", "field": "display.protection" }
+      ]
+    },
+    {
+      "id": "chipset",
+      "title": "芯片与存储",
+      "matchGroups": ["chipset", "memory"],
+      "rows": [
+        { "label": "芯片", "field": "chipset.name" },
+        { "label": "制程", "field": "chipset.processNm" },
+        { "label": "CPU 核心", "field": "chipset.cpuCores" },
+        { "label": "GPU", "field": "chipset.gpu" },
+        { "label": "NPU", "field": "chipset.npu" },
+        { "label": "内存", "field": "memory.ramGb" },
+        { "label": "存储", "field": "memory.storageGb" }
+      ]
+    },
+    {
+      "id": "battery",
+      "title": "电池与充电",
+      "rows": [
+        { "label": "容量", "field": "battery.capacityMah" },
+        { "label": "有线充电", "field": "battery.wiredChargeW" },
+        { "label": "无线充电", "field": "battery.wirelessChargeW" },
+        { "label": "官方续航", "field": "battery.vendorClaimedVideoHours", "format": "videoHours" }
+      ]
+    },
+    {
+      "id": "camera",
+      "title": "影像",
+      "rows": [{ "expand": "camera.rear", "format": "cameraRole" }]
+    },
+    {
+      "id": "audio",
+      "title": "音频",
+      "rows": [{ "label": "扬声器", "field": "audio.speakers" }]
+    },
+    {
+      "id": "haptic",
+      "title": "振动马达",
+      "rows": [{ "label": "马达类型", "field": "haptic.motor" }]
+    }
+  ],
+  "hidden": [
+    "body.folded",
+    "battery.capacityCaliber",
+    "battery.measuredHours",
+    "camera.front",
+    "camera.videoMax",
+    "connectivity.fiveG",
+    "connectivity.wifi",
+    "connectivity.bluetooth",
+    "connectivity.nfc",
+    "connectivity.satellite",
+    "connectivity.usb",
+    "connectivity.sim",
+    "connectivity.esim",
+    "os.launch",
+    "os.upgradableTo"
+  ]
+}

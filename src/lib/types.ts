@@ -10,7 +10,12 @@
  *   3. 成绩只以「分榜」形式存在，任何把两个 league 合成一个数的做法都是错的。
  */
 
-export type BrandId = 'apple' | 'huawei';
+/**
+ * 品牌 id。**真源 = scripts/brands.mjs 注册表**（isValidBrand 闸门按它拦截）。
+ * 2026-10-13 硬编码审计 A4 治理：不再写字面量联合（'apple'|'huawei'）——
+ * 那会让新品牌被类型系统挡在门外，而注册表本来就是数据。
+ */
+export type BrandId = string;
 
 export type SourceId =
   | 'apple-official' // 苹果官网·规格页（最细，35 个章节）
@@ -91,7 +96,12 @@ export interface ProductRecord {
 
   releaseDate: string | null;
   releaseDatePrecision: 'day' | 'month' | 'year' | null;
-  status: 'upcoming' | 'on-sale' | 'discontinued';
+  /**
+   * 生命周期状态。⚠️ 权威枚举 = 'on-sale' | 'upcoming' | 'retired'（与 src/types.ts Product.status
+   * 一致——本文件是管线侧镜像、src/types.ts 是前端侧镜像，两份必须同改）。
+   * 历史漂移记录：此处曾写 'discontinued'（v1 残留），与前端 'retired' 打架，2026-10-13 审计统一为 'retired'。
+   */
+  status: 'upcoming' | 'on-sale' | 'retired';
   retiredAt: string | null;
 
   body: {

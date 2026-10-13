@@ -25,21 +25,50 @@ export const LIMITS = {
   minProducts: 20, // 低于这个数说明抓取整体失败了
   maxDropRatio: 0.1, // 比上一版少 10% 就拦
   maxCoverageDrop: 0.05, // 必填字段覆盖率跌超 5 个百分点就拦
-  ppi: [150, 1000],
-  brightnessNits: [100, 10000],
-  thicknessMm: [2, 20],
-  weightG: [80, 400],
-  screenIn: [3, 12],
-  chargeW: [0, 300],
-  batteryMah: [1000, 12000],
   /**
    * 刷新率：手机屏幕真实范围。取值 `120` / `1-120`（LTPO）/ `60/90`（离散档位）。
    * 上下界都取「字符串里最后一个数字」——`1-120` 的下限 1 是 LTPO 的真实语义，不是异常。
    * 闸门存在的理由（2026-10-02 实测）：旧解析器把 PWM 调光频率（1440 / 2160）
    * 和分辨率数字（2622）当成了刷新率，这种错值能一路畅通地发布出去，只能靠闸门兜。
+   * ⚠️ refreshHz 在 schema 里是 string 型（无 range），所以本区间是**唯一**留在代码里的
+   * 字段区间——它是「字符串序类适配器」，不是双源（2026-10-13 硬编码审计 A2 治理）。
    */
   refreshHz: [48, 240],
 };
+
+/**
+ * 字段数值区间：**单一真源 = schema 的 range**（2026-10-13 硬编码审计 A2 治理）。
+ * 此前这里与 phone.json 的 range 双份维护同一批数字，改 schema 时这里会静默漂移。
+ * 现在从 schema 派生；schema 删了某字段/range 会在此**显性报错**，而不是静默用旧值。
+ */
+const SCHEMA_RANGE_PATHS = [
+  'display.ppi',
+  'display.brightnessTypicalNits',
+  'display.brightnessPeakNits',
+  'body.thicknessMm',
+  'body.weightG',
+  'display.sizeIn',
+  'battery.wiredChargeW',
+  'battery.capacityMah',
+];
+
+function schemaFieldLimits() {
+  const schema = loadSchema('phone');
+  const out = {};
+  for (const path of SCHEMA_RANGE_PATHS) {
+    const f = (schema?.fields ?? []).find((x) => x.path === path);
+    if (!f || !Array.isArray(f.range)) {
+      throw new Error(
+        `[闸门] 区间派生失败：phone schema 缺少 ${path} 的 range。` +
+          `schema 改动后请同步 validate.mjs 的 SCHEMA_RANGE_PATHS（或把该字段从清单移除）。`,
+      );
+    }
+    out[path] = f.range;
+  }
+  return out;
+}
+const FIELD_LIMITS = schemaFieldLimits();
+export { FIELD_LIMITS, SCHEMA_RANGE_PATHS };
 
 /** 必填字段：这些字段的覆盖率是数据质量的体温计 */
 export const REQUIRED_PATHS = [
@@ -94,18 +123,9 @@ export function validate(snapshot, previous, options = {}) {
     coverage[path] = ps.length ? ps.filter((p) => has(get(p, path))).length / ps.length : 0;
   }
 
-  // 4. 数值合理性
+  // 4. 数值合理性（区间真源 = schema 的 range，见 FIELD_LIMITS）
   for (const p of ps) {
-    const checks = [
-      ['display.ppi', LIMITS.ppi],
-      ['display.brightnessTypicalNits', LIMITS.brightnessNits],
-      ['display.brightnessPeakNits', LIMITS.brightnessNits],
-      ['body.thicknessMm', LIMITS.thicknessMm],
-      ['body.weightG', LIMITS.weightG],
-      ['display.sizeIn', LIMITS.screenIn],
-      ['battery.wiredChargeW', LIMITS.chargeW],
-      ['battery.capacityMah', LIMITS.batteryMah],
-    ];
+    const checks = SCHEMA_RANGE_PATHS.map((path) => [path, FIELD_LIMITS[path]]);
     for (const [path, range] of checks) {
       const v = get(p, path);
       if (v === null || v === undefined) continue;

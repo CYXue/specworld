@@ -1,5 +1,43 @@
 import { isFoldableOfficial } from '../../scripts/lib/foldable.mjs';
+import curatedFacets from '../../data/curated/facets.json' with { type: 'json' };
 import type { Product } from '../types';
+
+/**
+ * 策展字典（data/curated/facets.json，2026-10-13 硬编码审计 P2 治理）。
+ * 变体表/品牌系列策略/多芯判据/价格档全部是**数据**——加变体、调价格档、接新品牌
+ * 只改 JSON，不改本文件；selftest「策展表外置对账」双向看守（结构合法性+哨兵语义）。
+ */
+interface CuratedVariant {
+  id: string;
+  label: string;
+  match: string;
+  flags?: string;
+}
+interface CuratedSeriesRule {
+  label: string;
+  match?: string;
+  flags?: string;
+  fallback?: boolean;
+}
+interface CuratedBrandSeries {
+  from: 'name';
+  series: CuratedSeriesRule[];
+  foldVariant?: { match: string; flags?: string; label: string };
+}
+interface CuratedDict {
+  variants: CuratedVariant[];
+  series: { default: 'line'; brands?: Record<string, CuratedBrandSeries> };
+  chipMultiPrefixes: string[];
+  priceBuckets: Array<{ id: string; label: string; min: number; max: number | null }>;
+}
+const CURATED = curatedFacets as unknown as CuratedDict;
+
+/** JSON 正则串 → 判定函数（fallback 规则无 match，恒真） */
+function makeNameTest(rule: { match?: string; flags?: string }): (n: string) => boolean {
+  if (rule.fallback || !rule.match) return () => true;
+  const re = new RegExp(rule.match, rule.flags ?? '');
+  return (n: string) => re.test(n);
+}
 // 折叠屏判据的下游真源：构建期的像素立绘（scripts/sprite/generate.mjs）也必须用同一份。
 // 判据注释与三个实测坑全在那个文件里，这里只做转出，避免两份正则各写各的。
 
@@ -78,11 +116,34 @@ export function categoryOf(p: Product): CategoryId {
   return (p.category as CategoryId | undefined) ?? 'phone';
 }
 
-/** 各品类的在册台数。用于分面计数与「暂无数据」提示。 */
-export function categoryCounts(products: Product[]): Record<CategoryId, number> {
-  const out = { phone: 0, tablet: 0, laptop: 0, audio: 0 } as Record<CategoryId, number>;
-  for (const p of products) out[categoryOf(p)] += 1;
+/**
+ * 各品类的在册台数。用于分面计数与「暂无数据」提示。
+ *
+ * 动态构建（2026-10-13 硬编码审计 A4 治理）：此前固定 phone/tablet/laptop/audio 四键，
+ * 新品类注册后计数会被静默丢弃。现在：注册表内的品类全部出现（0 台也显示「暂无数据」），
+ * 注册表外的意外品类也会出现（并应在 selftest 品类对账闸门里被拦下）。
+ */
+export function categoryCounts(products: Product[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const c of CATEGORY_ORDER) out[c.id] = 0; // 注册表内：0 台也可见（「暂无数据」）
+  for (const p of products) {
+    const id = categoryOf(p);
+    out[id] = (out[id] ?? 0) + 1;
+  }
   return out;
+}
+
+// ── 生命周期状态（权威枚举见 src/types.ts Product.status；标签单一映射）──
+
+/** 状态 → 中文标签。新状态值只改这一处（ProductView 等消费方不再各写三元链）。 */
+export const STATUS_LABEL: Record<string, string> = {
+  'on-sale': '在售',
+  upcoming: '即将发布',
+  retired: '已退役',
+};
+
+export function statusLabelOf(s: string | null | undefined): string {
+  return s ? (STATUS_LABEL[s] ?? s) : '—';
 }
 
 // ── 形态（屏幕形态）──
@@ -137,46 +198,34 @@ export interface VariantDef {
   test: (n: string) => boolean;
 }
 
-/** 变体表。两家通用，按顺序匹配（**长后缀必须在短后缀之前**）。 */
-const VARIANTS: VariantDef[] = [
-  { id: 'pro-max', label: 'Pro Max', test: (n) => /Pro\s*Max/i.test(n) },
-  { id: 'pro-plus', label: 'Pro+', test: (n) => /Pro\s*\+/i.test(n) },
-  { id: 'pro', label: 'Pro', test: (n) => /\bPro\b/i.test(n) },
-  { id: 'rs', label: 'RS', test: (n) => /\bRS\b/i.test(n) },
-  { id: 'ultra', label: 'Ultra', test: (n) => /\bUltra\b/i.test(n) },
-  { id: 'plus', label: 'Plus', test: (n) => /\bPlus\b/i.test(n) },
-  { id: 'max', label: 'Max', test: (n) => /\bMax\b/i.test(n) },
-  { id: 'air', label: 'Air', test: (n) => /\bAir\b/i.test(n) },
-  { id: 'se', label: 'SE', test: (n) => /\bSE\b/i.test(n) },
-  { id: 'yxb', label: '优享版', test: (n) => /优享版/.test(n) },
-  { id: 'fcb', label: '风驰版', test: (n) => /风驰版/.test(n) },
-];
+/** 变体表：**数据来自策展字典**（data/curated/facets.json），顺序即匹配顺序（长后缀在前）。 */
+const VARIANTS: VariantDef[] = CURATED.variants.map((v) => ({
+  id: v.id,
+  label: v.label,
+  test: makeNameTest(v),
+}));
 
-/** 苹果：机型名 → 系列。四条系列线，判据用官网命名本身。 */
-const APPLE_SERIES: Array<{ label: string; test: (n: string) => boolean }> = [
-  // 折叠屏优先判：iPhone Duo 是唯一一台，不能被后面的规则吃掉
-  { label: '折叠屏', test: (n) => /\bDuo\b/i.test(n) },
-  { label: 'Air', test: (n) => /\bAir\b/i.test(n) },
-  // 「e 款」在官网口径里是 SE 线的延续（无刘海/小屏低价位），归 SE 系列
-  { label: 'SE', test: (n) => /\d+e\b/i.test(n) },
-  // 其余（含 Pro / Pro Max / Plus）都是标准系列的不同档
-  { label: '标准', test: () => true },
-];
-
-/** 苹果折叠屏的变体名（它不是「Pro」也不是「Max」，是双屏形态） */
-const APPLE_FOLD_VARIANT = '折叠双屏';
-
+/**
+ * 系列/变体解析：**按品牌查策展字典**（2026-10-13 P2 治理）。
+ * 苹果配置了 `from:'name'`（line 全是 iPhone，只能从机型名判）；
+ * 未配置的品牌走默认策略 `line`（官网自己的产品线字段）；
+ * 新品牌接进来 = 在字典 `series.brands` 加一段配置，不改本文件。
+ */
 export function seriesOf(p: Product): string {
-  if (p.brand !== 'apple') return p.line || '其它';
   const name = p.name || '';
-  for (const s of APPLE_SERIES) if (s.test(name)) return s.label;
-  return '标准';
+  const cfg = CURATED.series.brands?.[p.brand];
+  if (cfg?.from === 'name') {
+    for (const s of cfg.series) if (makeNameTest(s)(name)) return s.label;
+    return '标准';
+  }
+  return p.line || '其它';
 }
 
 export function variantOf(p: Product): string {
   const name = p.name || '';
-  // iPhone Duo 的形态是双屏本身，先于通用变体表判定
-  if (/\bDuo\b/i.test(name)) return APPLE_FOLD_VARIANT;
+  const cfg = CURATED.series.brands?.[p.brand];
+  // 「形态即变体」的特殊机型（如 iPhone Duo 双屏）先于通用变体表判定
+  if (cfg?.foldVariant && makeNameTest(cfg.foldVariant)(name)) return cfg.foldVariant.label;
   for (const v of VARIANTS) if (v.test(name)) return v.label;
   return '标准';
 }
@@ -277,13 +326,16 @@ export function chipNameLabel(name: string): string {
  *
  * **所以判据必须是「第二个芯片型号的开头」，不是字符数、也不是数字个数。**
  */
-const CHIP_BRAND = '麒麟';
-
 export function isMultiChip(name: string): boolean {
   if (name === UNKNOWN) return false;
-  const first = name.indexOf(CHIP_BRAND);
-  if (first < 0) return false; // 苹果芯片（无「麒麟」前缀）不在此判据覆盖内
-  return name.indexOf(CHIP_BRAND, first + CHIP_BRAND.length) > 0;
+  // 判据 = 归一后串里**同一芯片品牌前缀出现两次**。前缀清单来自策展字典
+  //（麒麟/A/天玑/骁龙/玄戒/Exynos/Tensor）——新芯片体系改 JSON 即可（P2 治理）。
+  for (const prefix of CURATED.chipMultiPrefixes) {
+    const first = name.indexOf(prefix);
+    if (first < 0) continue;
+    if (name.indexOf(prefix, first + prefix.length) > 0) return true;
+  }
+  return false;
 }
 
 export function chipFacets(products: Product[]): Array<{ id: string; count: number }> {
@@ -364,15 +416,9 @@ export function basePriceCny(p: Product): number | null {
  * 且符合用户对「手机价格段」的直觉认知。某档 0 台时页面灰显不可点（见 FilterBar）。
  * 缺官方起售价的机型落入 `未公布` 项（不编造假价格，与 `basePriceCny` 同口径）。
  */
-export const PRICE_BUCKETS: Array<{ id: string; label: string; min: number; max: number }> = [
-  { id: '0-1999', label: '¥0-1999', min: 0, max: 1999 },
-  { id: '2000-2999', label: '¥2000-2999', min: 2000, max: 2999 },
-  { id: '3000-3999', label: '¥3000-3999', min: 3000, max: 3999 },
-  { id: '4000-4999', label: '¥4000-4999', min: 4000, max: 4999 },
-  { id: '5000-5999', label: '¥5000-5999', min: 5000, max: 5999 },
-  { id: '6000-7999', label: '¥6000-7999', min: 6000, max: 7999 },
-  { id: '8000+', label: '¥8000 以上', min: 8000, max: Infinity },
-];
+/** 价格档：**数据来自策展字典**（调档位改 data/curated/facets.json，不改代码）；max null = 无穷。 */
+export const PRICE_BUCKETS: Array<{ id: string; label: string; min: number; max: number }> =
+  CURATED.priceBuckets.map((b) => ({ id: b.id, label: b.label, min: b.min, max: b.max ?? Infinity }));
 
 /** 机型 → 价格档 id。缺价返回 UNKNOWN（不编造假价格）。 */
 export function priceBucket(p: Product): string {

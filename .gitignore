@@ -10,6 +10,9 @@ dist/
 # 构建前清理用的中转目录（rename 旧 dist 到这里，绕开安全删除 shim；可再生产，不入库）
 .dist-trash/
 
+# 后台录入服务（npm run editor）原子写回 data/overrides.json 产生的备份，不入库
+data/overrides.json.bak
+
 # 中间产物与调试垃圾（适配器缓存、渲染/截图 profile、临时脚本）
 # ⚠️ 但 data/release-dates.json 与 data/discovery-pending.json 是例外：
 # 它们是**curated 数据**（人工核对的取证 + 等人工补的待收录队列），必须入库。

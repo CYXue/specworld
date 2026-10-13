@@ -141,9 +141,29 @@ export function valueStatus(product, path) {
 /** 合法 status 取值（产品侧只显式存这两个例外） */
 export const STATUS_VALUES = Object.freeze(['none', 'not_applicable']);
 
+/** 子字段表（多实例子字典，2026-10-13 最优解「两处结构升级」②）。field.cardinality==='list' 时存在 */
+export function subfieldsOf(field) {
+  return field?.cardinality === 'list' ? (field.subfields ?? []) : null;
+}
+
+/** 子字段项的键 → 子字段定义映射（子 path 形如 'camera.rear.mp'，键 = 去父前缀的 'mp'） */
+export function subfieldMap(field) {
+  const subs = subfieldsOf(field);
+  const m = new Map();
+  if (!subs || !field?.path) return m;
+  const prefix = `${field.path}.`;
+  for (const s of subs) {
+    const key = s.path.startsWith(prefix) ? s.path.slice(prefix.length) : s.path;
+    m.set(key, s);
+  }
+  return m;
+}
+
 /**
  * 校验 schema 自身结构（字段定义源不能错）。返回错误列表，空 = 合法。
- * 防的故障：分组 id 重复 / 字段引用了不存在的分组 / 字段缺 group。
+ * 防的故障：分组 id 重复 / 字段引用了不存在的分组 / 字段缺 group /
+ * 多实例子字典结构错误（cardinality=list 必须有 subfields、子 path 必须挂父 path 下、
+ * 不允许嵌套子字典）。
  */
 export function validateSchema(schema) {
   const errors = [];
@@ -155,9 +175,32 @@ export function validateSchema(schema) {
     else ids.add(g.id);
     if (g.type && !['single', 'multi'].includes(g.type)) errors.push(`分组 ${g.id} 的 type 非法：${g.type}`);
   }
+  const KNOWN_TYPES = new Set([
+    'number', 'string', 'boolean', 'enum', 'array:number', 'array:string', 'object', 'array:object',
+  ]);
+  const checkFieldShape = (f, at) => {
+    if (f.type && !KNOWN_TYPES.has(f.type)) errors.push(`${at} 的 type 非法：${f.type}`);
+    if (f.type === 'enum' && !Array.isArray(f.values)) errors.push(`${at} 是 enum 但缺 values`);
+    if (f.cardinality && f.cardinality !== 'list') errors.push(`${at} 的 cardinality 只支持 'list'：${f.cardinality}`);
+    if (f.cardinality === 'list') {
+      if (f.type !== 'array:object') errors.push(`${at} 的 cardinality=list 只用于 array:object`);
+      if (!Array.isArray(f.subfields) || f.subfields.length === 0)
+        errors.push(`${at} 声明了 cardinality=list 但没有 subfields`);
+      for (const s of f.subfields ?? []) {
+        if (!s.path?.startsWith(`${f.path}.`))
+          errors.push(`${at} 的子字段 "${s.path ?? '?'}" 未挂在父 path 下（应为 "${f.path}." 前缀）`);
+        checkFieldShape(s, at);
+        if (s.cardinality || s.subfields) errors.push(`${at} 的子字段不允许再嵌套子字典（一层深度）`);
+        if (s.group) errors.push(`${at} 的子字段不应声明 group（归属随父字段）`);
+      }
+    } else if (f.subfields) {
+      errors.push(`${at} 有 subfields 但未声明 cardinality:'list'`);
+    }
+  };
   for (const f of schema.fields ?? []) {
     if (!f.group) errors.push(`字段 ${f.path} 缺 group 归属`);
     else if (!ids.has(f.group)) errors.push(`字段 ${f.path} 的 group "${f.group}" 未在 groups 注册`);
+    checkFieldShape(f, `字段 ${f.path}`);
   }
   return errors;
 }
@@ -229,6 +272,15 @@ export function validateSpecValue(field, value, where) {
     case 'array:object':
       if (!Array.isArray(value) || value.some((v) => !v || typeof v !== 'object' || Array.isArray(v)))
         return `${at} 应为对象数组，收到 ${JSON.stringify(value)}`;
+      // 多实例子字典：cardinality=list 的字段对**每一项**做子字段深校验（2026-10-13 最优解②）。
+      // 此前 array:object 不做深校验——镜头 mp 填 999 / role 拼错 / 多余键都能静默落盘。
+      if (subfieldsOf(field)) {
+        const errs = [];
+        value.forEach((item, i) => {
+          errs.push(...validateListField(field, item, `${at}#${i + 1}`));
+        });
+        return errs.length ? errs.join('；') : null;
+      }
       return null;
     case 'object':
       if (!value || typeof value !== 'object' || Array.isArray(value))
@@ -240,9 +292,32 @@ export function validateSpecValue(field, value, where) {
 }
 
 /**
+ * 校验多实例列表的**单条项**（cardinality=list 的子字典深校验）。
+ * 规则：项内键必须在子字段注册（多余键拦——防「静默落盘没人读」）；
+ * 已注册子键逐个走 validateSpecValue（子项缺键 = null 语义，合法——官网常只公布部分）。
+ */
+export function validateListField(field, item, at) {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) {
+    return [`${at} 应为对象，收到 ${JSON.stringify(item)}`];
+  }
+  const errors = [];
+  const subs = subfieldMap(field);
+  for (const [key, val] of Object.entries(item)) {
+    const sub = subs.get(key);
+    if (!sub) {
+      errors.push(`${at} 的键 "${key}" 未在 ${field.path} 的子字典注册（多余键会静默落盘没人读）`);
+      continue;
+    }
+    const err = validateSpecValue(sub, val, at);
+    if (err) errors.push(err);
+  }
+  return errors;
+}
+
+/**
  * 校验整机 specs。两类错误：
  *   1. specs 里出现 schema 未注册的键（拍平漏组 / 用户层拼错字段名）；
- *   2. 已注册字段的值类型/区间/enum 不合法。
+ *   2. 已注册字段的值类型/区间/enum 不合法（cardinality=list 的字段对每项做子字典深校验）。
  * @returns {string[]} 错误列表，空数组表示合法
  */
 export function validateSpecs(product, schema) {

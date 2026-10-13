@@ -43,7 +43,7 @@ const links = [
       <p
         class="w-full text-center text-[12px] leading-[1.5] text-[var(--color-ink-soft)] sm:w-auto"
       >
-        参数世界 specworld · 选择更清楚 Choose with Clarity
+        参数世界 specworld · 数据来源：厂商官网规格 + 人工核查 · 选择更清楚
       </p>
       <!--
         许可与出处。只给入口不给全文：全文（字体改名说明、商标指称、数据来源）

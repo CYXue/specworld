@@ -1,4 +1,6 @@
 import type { Product } from '../types';
+import { CATEGORY_ORDER } from './catalog';
+import { PHONE_SCHEMA, facetFields } from './fields';
 import {
   FORM_LABEL,
   PRICE_BUCKETS,
@@ -34,20 +36,16 @@ import { abilityRaw } from './specs';
  * 手改 query 的非法值**丢弃并回落**（不产生永远 0 台的死条件）。
  */
 
-export type DimKey =
-  | 'category'
-  | 'form'
-  | 'brand'
-  | 'series'
-  | 'variant'
-  | 'chip'
-  | 'ram'
-  | 'year'
-  | 'price';
+/**
+ * 筛选维度键。**两类来源**（2026-10-13 参数级筛选泛化）：
+ * - 身份/派生维度：category/form/brand/series/variant/chip/ram/year/price（下方常量，策展）；
+ * - **参数维度**：schema 里 `facet:true` 的字段（键 = 字段路径，如 'connectivity.nfc'）——
+ *   相等类引擎，boolean→'true'/'false'、string→原文，新字段声明即自动成为筛选维度。
+ */
+export type DimKey = string;
 
-/** 维度顺序即页面展示顺序：**品类第一、形态第二**（品类置顶是用户 2026-10-05 要求；
- * 形态紧跟品类是用户 2026-10-06 纠正 —— 折叠屏从品类挪出，独立成维度）。 */
-export const DIMENSIONS: Array<{ key: DimKey; label: string; allLabel: string }> = [
+/** 身份/派生维度（策展：顺序即页面展示顺序）。参数维度由 schema facet 声明动态追加。 */
+const IDENTITY_DIMENSIONS: Array<{ key: DimKey; label: string; allLabel: string }> = [
   { key: 'category', label: '品类', allLabel: '全部品类' },
   { key: 'form', label: '形态', allLabel: '全部形态' },
   { key: 'brand', label: '品牌', allLabel: '全部品牌' },
@@ -59,6 +57,16 @@ export const DIMENSIONS: Array<{ key: DimKey; label: string; allLabel: string }>
   { key: 'price', label: '价格', allLabel: '全部价格' },
 ];
 
+/** 全量维度 = 身份维度 + schema 声明的参数维度（facet:true）。消费方（FilterBar/页面）零改动。 */
+export const DIMENSIONS: Array<{ key: DimKey; label: string; allLabel: string }> = [
+  ...IDENTITY_DIMENSIONS,
+  ...facetFields(PHONE_SCHEMA).map((f) => ({
+    key: f.path as DimKey,
+    label: f.label,
+    allLabel: `全部${f.label}`,
+  })),
+];
+
 export const DIM_LABEL: Record<DimKey, string> = Object.fromEntries(
   DIMENSIONS.map((d) => [d.key, d.label]),
 ) as Record<DimKey, string>;
@@ -67,20 +75,24 @@ export const DIM_LABEL: Record<DimKey, string> = Object.fromEntries(
 export type FilterState = Record<DimKey, string[]>;
 
 export function emptyFilter(): FilterState {
-  return {
-    category: [],
-    form: [],
-    brand: [],
-    series: [],
-    variant: [],
-    chip: [],
-    ram: [],
-    year: [],
-    price: [],
-  };
+  // 动态构建：身份维度 + schema facet 参数维度全部初始化为空（固定四键会静默丢新维度）
+  const f = {} as FilterState;
+  for (const { key } of DIMENSIONS) f[key] = [];
+  return f;
 }
 
 // ── 取值 ──
+
+/** schema facet:true 的字段路径集合（参数级筛选维度的判定） */
+const SPEC_FACET_SET = new Set(facetFields(PHONE_SCHEMA).map((f) => f.path));
+
+/** 参数维度取值：相等类语义——boolean→'true'/'false'，string→原文，缺失→「未公布」 */
+function specFacetValue(p: Product, path: string): string {
+  const v = p.specs?.[path];
+  if (v == null || v === '') return UNKNOWN;
+  if (typeof v === 'boolean') return v ? 'true' : 'false';
+  return String(v);
+}
 
 export function valueOf(p: Product, dim: DimKey): string {
   switch (dim) {
@@ -96,14 +108,18 @@ export function valueOf(p: Product, dim: DimKey): string {
       return variantOf(p);
     case 'chip':
       return chipName(p);
+    case 'ram': {
+      const v = maxRamGb(p);
+      return v == null ? UNKNOWN : String(v);
+    }
     case 'year':
       return yearOf(p);
     case 'price':
       return priceBucket(p);
-    default: {
-      const v = maxRamGb(p);
-      return v == null ? UNKNOWN : String(v);
-    }
+    default:
+      // 参数维度（schema facet:true）：相等类取值，与对比引擎同一纪律（只判相等，不判序）
+      if (SPEC_FACET_SET.has(dim)) return specFacetValue(p, dim);
+      return UNKNOWN;
   }
 }
 
@@ -117,7 +133,13 @@ export interface FacetItem {
 
 /** 各维度的稳定排序（数组越大越靠前；数字档与年份另有规则）。 */
 const order = {
-  category: (a: string, b: string) => Number(a === 'phone') - Number(b === 'phone'),
+  // 品类按注册表展示顺序（catalog.ts CATEGORY_ORDER，与 data/categories.json 对账）；
+  // 不再写死 'phone' 字面量（2026-10-13 硬编码审计 A4 治理）——新品类自动排在已注册序列里。
+  category: (a: string, b: string) => {
+    const ia = CATEGORY_ORDER.findIndex((c) => c.id === a);
+    const ib = CATEGORY_ORDER.findIndex((c) => c.id === b);
+    return (ia < 0 ? CATEGORY_ORDER.length : ia) - (ib < 0 ? CATEGORY_ORDER.length : ib);
+  },
   series: (a: string, b: string) => 0,
   variant: (a: string, b: string) => 0,
   chip: (a: string, b: string) => 0,
@@ -149,6 +171,10 @@ export function facetOf(
     counts.set(v, (counts.get(v) ?? 0) + 1);
   }
 
+  // 参数维度（schema facet 字段）的显示标签：boolean → 是/否，其余用原文
+  const specField = (PHONE_SCHEMA.fields ?? []).find((x) => x.path === dim);
+  const isBoolFacet = specField?.type === 'boolean';
+
   let items = [...ids].map((id) => ({
     id,
     label:
@@ -158,7 +184,13 @@ export function facetOf(
           ? priceLabel(id)
           : dim === 'form'
             ? FORM_LABEL[id as keyof typeof FORM_LABEL] ?? id
-            : id,
+            : isBoolFacet
+              ? id === 'true'
+                ? '是'
+                : id === 'false'
+                  ? '否'
+                  : id
+              : id,
     count: counts.get(id) ?? 0,
     isUnknown: id === UNKNOWN,
   }));
@@ -191,8 +223,10 @@ export function facetOf(
       const rank: Record<string, number> = { foldable: 0, bar: 1 };
       return (rank[a.id] ?? 9) - (rank[b.id] ?? 9);
     }
-    // 其余（系列/变体/芯片）：台数多的在前，同台数按名称，保证顺序稳定可复现
-    return order[dim](a.id, b.id) || b.count - a.count || a.id.localeCompare(b.id);
+    // 其余（系列/变体/芯片/参数维度）：台数多的在前，同台数按名称，保证顺序稳定可复现。
+    // 参数维度没有专属排序规则（order 表只覆盖身份维度）——安全兜底为 0，防新维度 TypeError。
+    const cmp = (order as Record<string, (a: string, b: string) => number>)[dim];
+    return (cmp ? cmp(a.id, b.id) : 0) || b.count - a.count || a.id.localeCompare(b.id);
   });
 
   if (dim === 'brand' && brandLabels) {
@@ -357,12 +391,17 @@ const PARAM: Record<DimKey, string> = {
   price: 'g',
 };
 
+/** 维度 → URL 参数键：身份维度用单字母（链接短），参数维度直接用字段路径（不冲突、可读）。 */
+function paramKey(dim: DimKey): string {
+  return (PARAM as Record<string, string>)[dim] ?? dim;
+}
+
 export function writeFilter(
   filter: FilterState,
   sorts: SortKey[] = [],
 ): Record<string, string> {
   const q: Record<string, string> = {};
-  for (const { key } of DIMENSIONS) if (filter[key].length) q[PARAM[key]] = filter[key].join(',');
+  for (const { key } of DIMENSIONS) if (filter[key].length) q[paramKey(key)] = filter[key].join(',');
   // 多级排序：逗号分隔按优先级排列。`release` 只是兜底，不写进 URL
   const norm = sorts.filter((s) => s && s !== 'release');
   if (norm.length) q.o = norm.join(',');
@@ -378,7 +417,7 @@ export function readFilter(
   const filter = emptyFilter();
   for (const { key } of DIMENSIONS) {
     const seen = new Set<string>();
-    for (const v of (params.get(PARAM[key]) ?? '').split(',')) {
+    for (const v of (params.get(paramKey(key)) ?? '').split(',')) {
       const t = v.trim();
       // 非法值直接丢弃：产生一个永远 0 台的死条件，用户会以为数据没了
       if (!t || seen.has(t) || !valid.has(t)) continue;

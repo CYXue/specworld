@@ -25,11 +25,25 @@
 | 层 | 文件 | 谁写 | 频率 |
 |---|---|---|---|
 | 官网自动 | `data/products.json`（管线生成） | 管线 | 每 12h CI |
-| 用户手动 | `data/overrides.json`（人工编辑） | 用户 | 随时 |
+| 用户手动 | `data/overrides.json`（人工编辑 / 审核采用） | 用户 · 管理员 | 随时 |
+| 用户纠错 | `data/submissions.json`（展示页公开提交，待审队列） | 访客 | 随时 |
 | 人工取证 | `data/release-dates.json`（curated） | 人工 | 低频 |
 
 合并优先级：**用户手动 > 官网自动**。用户层是独立文件，管线**只读不写**它，
 每次同步重新应用——官网刷新不会冲掉用户数据，这是「不直接改 products.json」的全部理由。
+
+> **公开纠错链路**：访客在机型详情页「纠错 / 补充数据」提交 → `submissions.json`
+> （status=pending；服务端已过 `validateOverrides` 权威校验：机型存在 / 字段注册 /
+> 值类型区间合法 / 来源必填 / 同内容去重 / 单 IP 限频）→ 管理员在 `/editor` 审核区
+> **采用**（转正式 override 追加进 `overrides.json`，id 可追溯 `ovr-<原提交id>`）或
+> **驳回**（留痕）。用户写完管理员**只需审核一遍**，无需重写任何 JSON。
+
+> **数据来源政策（整体声明，不逐条打标）**：数据集整体来源于**厂商官方规格页** +
+> **人工核查补录**两类。主源是官网；官网未公布但能凭可独立核实的来源（工信部进网许可、
+> 监管档案、官方说明书、权威拆解报告）补全的字段，由人工核查录入 `overrides.json`
+> （`provenance` 记 `user-manual`）。既无官网依据、也无可靠独立来源可核实的字段一律记
+> `null`，界面显示「官方未公布」。**不在界面逐格标注「手填 / 官方」角标**——统一以本声明
+> 说明数据构成；`provenance` 仍保留在数据层供审计回查。详见 `docs/DATA-CONTRACT.md` 第一节。
 
 ## 三、文件布局
 
@@ -185,11 +199,18 @@ data/
    数据诚信：不因为「苹果肯定有 iPad」就凭空建字段。接数据源时补 schema 即可。
 2. **normalize 层仍按手机结构产出**，拍平发生在 sync 层。这是刻意的迁移顺序：
    先让 v2 格式与用户层跑通，再把 normalize 各通道改成直出 specs（未来工作）。
-3. **用户层已有 Web 编辑原型**：`public/overrides-editor.html`（零构建、纯前端，
-   对齐准绳计划的 F009）。它拉取 `/data/schemas/phone.json` + `categories.json` +
-   `products.json`，按分组选字段，支持 set-field / add-product 两种模式，客户端按 schema
-   复用 `validateValue` 校验类型/区间/enum，生成合法 `overrides.json` 条目。
-   **当前是原型**：不写盘、产物需人工贴回 `data/overrides.json`；Serverless 直写是未来方向。
+3. **用户层已有两条录入链路**（`npm run editor` 启动的本地服务 `scripts/editor-server.mjs`，
+   零依赖，一个进程托举三件事：展示站点 `dist/` + 后台 `/editor` + 公开提交 `/api/submit`）：
+   - **管理员直写**：`/editor` 选机型 / 字段 / 填值，保存即写回 `data/overrides.json`，
+     **无需复制粘贴**；服务端 `validateOverrides` 权威校验（机型存在 / 字段注册 / 值合法 /
+     reason 必填 / id 不重复），写错 400 拒绝、绝不静默失效；原子写回带 `.bak` 备份。
+   - **访客纠错**：机型详情页「纠错/补充数据」表单（`src/components/DataFeedback.vue`）
+     → `POST /api/submit`（只收 set-field、20KB 限长、单 IP 10 分钟 10 次限频、
+     同内容待审去重 409）→ `data/submissions.json` 待审；`/editor` 审核区采用 / 驳回 /
+     导出下载。用户提交在后台渲染前做 HTML 转义（防存储型 XSS）。
+   随后 `npm run data` 同步即生效，官网刷新不会冲掉。**安全边界**：服务默认监听
+   127.0.0.1 仅供本机；公网部署时反向代理只暴露 `/` 与 `/api/submit`，
+   `/api/overrides/*`、`/api/submissions/*`（有写权）必须留在内网。
    完整字段蓝图见 `docs/UNIVERSAL-FIELD-BLUEPRINT.md`（16 分组 × 98 槽全品类蓝图，
    标注已落地/待补/他品类槽位）。
 4. **`display.refreshHz` 仍是字符串**（`1-120` / `60/90` / `120` 三种官网原文形态）。
@@ -227,7 +248,7 @@ data/
 | `value_status` 四态 | `valueStatus` / `fieldStatus` + `products.valueStatus` 例外映射 | ✅ 已落地（含 null→unknown 修正） |
 | 显式参数分组（groups 表） | schema 顶层 `groups` + field `group` 归属 | ✅ 已落地（phone 8 组） |
 | 16 组 98 槽全品类模板 | `docs/UNIVERSAL-FIELD-BLUEPRINT.md` 蓝图 | ✅ 已落地（作为扩展参考） |
-| 用户改/加数据入口（F009） | `public/overrides-editor.html` 编辑原型 | ✅ 原型（人工贴回） |
+| 用户改/加数据入口（F009） | `/editor` 直写 + 展示页公开纠错待审队列（`DataFeedback.vue` → `/api/submit`） | ✅ 已落地（直写 + 审核采用，无需贴回） |
 | 数据治理铁律（来源优先级/忠实限定词/不互换算） | `docs/DATA-CONTRACT.md` 已贯彻 + 闸门 | ✅ 既有 |
 | 导入原子替换 + 校验纪律 | `scripts/sync/` 已贯彻（校验→备份→替换→清理） | ✅ 既有 |
 | 数据质量报告 | `scripts/report/quality.mjs`（`npm run quality`） | ✅ 已落地 |

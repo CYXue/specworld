@@ -3,8 +3,10 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { continentOf } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
+import { statusLabelOf } from '../lib/catalog';
 import { abilityRows } from '../lib/specs';
 import AbilityBars from '../components/AbilityBars.vue';
+import DataFeedback from '../components/DataFeedback.vue';
 import PxIcon from '../components/PxIcon.vue';
 import SectionFrame from '../components/SectionFrame.vue';
 import SpecTable from '../components/SpecTable.vue';
@@ -24,16 +26,8 @@ const rows = computed(() =>
   product.value && derived.value ? abilityRows(product.value, derived.value.bounds) : [],
 );
 const accent = computed(() => vendor.value?.accentColor ?? 'var(--color-gold)');
-const statusLabel = computed(() => {
-  const s = product.value?.status;
-  return s === 'on-sale'
-    ? '在售'
-    : s === 'upcoming'
-      ? '即将发布'
-      : s === 'retired'
-        ? '已退役'
-        : (s ?? '—');
-});
+// 状态标签走 catalog.ts 的单一映射（硬编码审计 A5 治理：不再各写三元链）
+const statusLabel = computed(() => statusLabelOf(product.value?.status));
 </script>
 
 <template>
@@ -113,6 +107,7 @@ const statusLabel = computed(() => {
             <PxIcon name="compare" :size="12" />
             在对比页查看这台
           </RouterLink>
+          <DataFeedback :product="product" />
         </div>
       </div>
     </template>

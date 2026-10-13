@@ -87,12 +87,28 @@ const picked = computed<string[]>(() => {
   return out;
 });
 
+/**
+ * 「只看差异」开关：状态进 URL（?d=1），与本页其他状态同原则——刷新不丢、可分享。
+ * 只标差异、**不判好坏**（用户 2026-10-13 明确要求）：参数没有客观优劣，
+ * 轻/重、大/小各有偏好，金色 ◆ 只表示「这几台在这里不一样」，不代表谁更好。
+ */
+const diffOnly = computed(() => route.query.d === '1');
+
+function setDiffOnly(v: boolean) {
+  const q: Record<string, unknown> = { ...route.query };
+  if (v) q.d = '1';
+  else delete q.d;
+  router.replace({ path: '/compare', query: q });
+}
+
 function push(nextFilter: FilterState, nextPicked: string[], nextSorts: SortKey[] = []) {
   router.replace({
     path: '/compare',
     query: {
       ...writeFilter(nextFilter, nextSorts),
       ...(nextPicked.length ? { p: nextPicked.join(',') } : {}),
+      // 保留「只看差异」状态：切换筛选/排序不应把用户的对比视图设置冲掉
+      ...(diffOnly.value ? { d: '1' } : {}),
     },
   });
 }
@@ -169,8 +185,8 @@ const singleVendor = computed(() =>
 const matrix = computed(() => {
   const list = pickedProds.value;
   if (list.length < 2) return null;
-  const order: Array<{ group: string; label: string }> = [];
   const seen = new Set<string>();
+  const order: Array<{ group: string; label: string }> = [];
   const per = list.map((p) => {
     const m = new Map<string, string>();
     for (const grp of specGroups(p))
@@ -184,10 +200,28 @@ const matrix = computed(() => {
       }
     return m;
   });
+  // 差异检测：同一参数在所有机型上的取值（含「—」）不完全相同 → 有差异。
+  // 全部「—」= 都未公布 = 相同行（没有信息量）；部分「—」= 真实差异（有的公布有的没公布）。
+  // 缺行的机型按「—」参与比较，与表格显示一致。
+  const rows = order.map((o) => {
+    const k = `${o.group}|${o.label}`;
+    const values = per.map((m) => m.get(k) ?? '—');
+    return { ...o, diff: new Set(values).size > 1 };
+  });
   const groups: string[] = [];
-  for (const o of order) if (!groups.includes(o.group)) groups.push(o.group);
-  return { list, per, groups, order };
+  for (const o of rows) if (!groups.includes(o.group)) groups.push(o.group);
+  return { list, per, groups, order: rows, diffCount: rows.filter((r) => r.diff).length };
 });
+
+/** 「只看差异」模式下实际渲染的行；组内无差异行时整组隐藏。 */
+const visibleOrder = computed(() =>
+  !matrix.value ? [] : diffOnly.value ? matrix.value.order.filter((r) => r.diff) : matrix.value.order,
+);
+const visibleGroups = computed(() =>
+  matrix.value
+    ? matrix.value.groups.filter((g) => visibleOrder.value.some((r) => r.group === g))
+    : [],
+);
 
 /** 列表项副标题：系列 · 变体 · 形态 · 芯片，一行说清是谁。 */
 function subline(p: (typeof all.value)[number]): string {
@@ -433,6 +467,23 @@ function subline(p: (typeof all.value)[number]): string {
         hud="var(--color-west)"
         icon="compare"
       >
+        <div class="mb-3 flex flex-wrap items-center gap-2">
+          <span class="pixel-heading text-[12px] leading-[1.5]">显示</span>
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="!diffOnly"
+            @click="setDiffOnly(false)"
+          >
+            全部（{{ matrix.order.length }} 项）
+          </button>
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="diffOnly"
+            @click="setDiffOnly(true)"
+          >
+            只看差异（{{ matrix.diffCount }} 项）
+          </button>
+        </div>
         <div class="mb-3 overflow-x-auto">
           <table
             class="w-full border-collapse text-[12px]"
@@ -475,7 +526,7 @@ function subline(p: (typeof all.value)[number]): string {
                 </th>
               </tr>
             </thead>
-            <template v-for="g in matrix.groups" :key="g">
+            <template v-for="g in visibleGroups" :key="g">
               <tr>
                 <th
                   colspan="99"
@@ -485,10 +536,13 @@ function subline(p: (typeof all.value)[number]): string {
                   {{ g }}
                 </th>
               </tr>
-              <tr v-for="o in matrix.order.filter((x) => x.group === g)" :key="o.label">
+              <tr v-for="o in visibleOrder.filter((x) => x.group === g)" :key="o.label">
                 <td
                   class="sticky left-0 z-1 border-2 border-[var(--color-ink)] bg-[var(--color-panel)] px-2 py-1"
-                  style="color: var(--color-parchment-dim)"
+                  :style="{
+                    color: 'var(--color-parchment-dim)',
+                    background: o.diff ? 'rgba(242, 201, 76, 0.13)' : undefined,
+                  }"
                 >
                   {{ o.label }}
                 </td>
@@ -501,6 +555,7 @@ function subline(p: (typeof all.value)[number]): string {
                       m.get(`${o.group}|${o.label}`) === '—'
                         ? 'var(--color-ink-soft)'
                         : 'var(--color-parchment-lit)',
+                    background: o.diff ? 'rgba(242, 201, 76, 0.13)' : undefined,
                   }"
                 >
                   {{ m.get(`${o.group}|${o.label}`) ?? '—' }}
@@ -510,7 +565,9 @@ function subline(p: (typeof all.value)[number]): string {
           </table>
         </div>
         <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)">
-          「—」代表该机型官网未公布此参数，不是 0。
+          「—」代表该机型官网未公布此参数，不是 0。<br />
+          金色底色行 = 机型间存在差异的参数。本表只列差异、不评好坏——参数没有客观优劣
+          （轻/重、大/小各有偏好），请按自己的需求判断。
         </p>
       </SectionFrame>
     </div>

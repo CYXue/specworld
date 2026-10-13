@@ -10,6 +10,8 @@
     { "id": "memory", "name": "内存与存储", "nameEn": "Memory & Storage", "type": "single", "guide": "RAM 档位/存储档位" },
     { "id": "battery", "name": "电池与电源", "nameEn": "Battery & Power", "type": "single", "guide": "容量/充电/续航" },
     { "id": "camera", "name": "摄像头", "nameEn": "Camera", "type": "multi", "guide": "前置+后置多摄" },
+    { "id": "audio", "name": "音频", "nameEn": "Audio", "type": "single", "guide": "扬声器/麦克风/耳机孔（蓝图第 9 组）" },
+    { "id": "haptic", "name": "振动马达", "nameEn": "Haptics", "type": "single", "guide": "振动马达类型与量级（超出蓝图 16 组的手机扩展，先例 A.2）" },
     { "id": "connectivity", "name": "网络与通信", "nameEn": "Network & Connectivity", "type": "single", "guide": "5G/WLAN/蓝牙/NFC/卫星/USB/SIM/eSIM" },
     { "id": "os", "name": "系统与软件", "nameEn": "OS & Software", "type": "single", "guide": "出厂系统/可升级" }
   ],
@@ -27,7 +29,7 @@
     { "path": "display.type", "label": "屏幕类型", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display" },
     { "path": "display.resolutionPx", "label": "分辨率", "unit": "px", "type": "object", "range": null, "dir": null, "quantifiable": false, "group": "display" },
     { "path": "display.ppi", "label": "像素密度", "unit": "ppi", "type": "number", "range": [150, 1000], "dir": "high", "quantifiable": true, "group": "display" },
-    { "path": "display.refreshHz", "label": "刷新率", "unit": "Hz", "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "note": "字符串类型：1-120（区间）/ 60/90（离散档）/ 120（单值）都是官网原文形态，强行转 number 会丢语义。排序/算术前用派生函数取代表值" },
+    { "path": "display.refreshHz", "label": "刷新率", "unit": "Hz", "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "facet": true, "orderDeriver": "refreshHzNumber", "note": "字符串类型：1-120（区间）/ 60/90（离散档）/ 120（单值）都是官网原文形态，强行转 number 会丢语义。排序/算术前用派生函数取代表值。orderDeriver=序类适配器声明（string 字段参与排序时的取代表值实现，注册表见 src/lib/fields.ts，selftest 对账）" },
     { "path": "display.brightnessTypicalNits", "label": "典型亮度", "unit": "nits", "type": "number", "range": [100, 10000], "dir": "high", "quantifiable": true, "group": "display" },
     { "path": "display.brightnessPeakNits", "label": "峰值亮度", "unit": "nits", "type": "number", "range": [100, 10000], "dir": "high", "quantifiable": true, "group": "display", "note": "与典型亮度永远分列，不合成「最高亮度」" },
     { "path": "display.protection", "label": "盖板玻璃", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display" },
@@ -48,18 +50,30 @@
     { "path": "battery.vendorClaimedVideoHours", "label": "厂商自报续航", "unit": "小时", "type": "number", "range": [1, 200], "dir": null, "quantifiable": false, "group": "battery", "note": "厂商自报，测试条件不一，只并列展示不参与排名" },
     { "path": "battery.measuredHours", "label": "实测续航", "unit": "小时", "type": "number", "range": [1, 200], "dir": null, "quantifiable": false, "group": "battery" },
 
-    { "path": "camera.rear", "label": "后置相机", "unit": null, "type": "array:object", "range": null, "dir": null, "quantifiable": false, "group": "camera" },
+    { "path": "camera.rear", "label": "后置相机", "unit": null, "type": "array:object", "range": null, "dir": null, "quantifiable": false, "group": "camera",
+      "cardinality": "list",
+      "subfields": [
+        { "path": "camera.rear.role", "label": "镜头角色", "unit": null, "type": "enum", "values": ["main", "ultrawide", "tele", "periscope", "macro", "depth"] },
+        { "path": "camera.rear.mp", "label": "像素", "unit": "MP", "type": "number", "range": [0.1, 250] },
+        { "path": "camera.rear.aperture", "label": "光圈", "unit": null, "type": "string" },
+        { "path": "camera.rear.ois", "label": "光学防抖", "unit": null, "type": "boolean" },
+        { "path": "camera.rear.sensorNote", "label": "传感器备注", "unit": null, "type": "string" }
+      ],
+      "note": "多实例子字典（SCHEMA-EXTENSIBILITY 最优解「两处结构升级」②）：每颗镜头的子属性也走 schema 校验——mp 越界/role 拼错/多余键都被闸门拦（此前 array:object 不做深校验）。给镜头加新子属性 = subfields 加一行。子 path 约定：父 path + '.' + 子键（报错可读）" },
     { "path": "camera.front", "label": "前置相机", "unit": null, "type": "object", "range": null, "dir": null, "quantifiable": false, "group": "camera" },
     { "path": "camera.videoMax", "label": "最高视频规格", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "camera" },
 
-    { "path": "connectivity.fiveG", "label": "5G", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
+    { "path": "audio.speakers", "label": "扬声器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "audio", "note": "官网原文形态（立体声双扬声器/双单元/单扬声器），不换算数量——转数字属自行加工。对比按原文异同标注差异，不判好坏" },
+    { "path": "haptic.motor", "label": "振动马达", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "haptic", "facet": true, "note": "官网原文形态（X 轴线性/Z 轴线性/转子等），厂商写法不一故不做 enum；苹果官网通常不标（unknown）。可量化优先级：马达尺寸/振动量级 mm³ 待有可靠来源再加" },
+
+    { "path": "connectivity.fiveG", "label": "5G", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "facet": true },
     { "path": "connectivity.wifi", "label": "WLAN", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
     { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
-    { "path": "connectivity.nfc", "label": "NFC", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
+    { "path": "connectivity.nfc", "label": "NFC", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "facet": true },
     { "path": "connectivity.satellite", "label": "卫星通信", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
     { "path": "connectivity.usb", "label": "USB", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
     { "path": "connectivity.sim", "label": "SIM", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
-    { "path": "connectivity.esim", "label": "eSIM", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity" },
+    { "path": "connectivity.esim", "label": "eSIM", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "facet": true },
 
     { "path": "os.launch", "label": "出厂系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os" },
     { "path": "os.upgradableTo", "label": "可升级至", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os" }
