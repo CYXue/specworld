@@ -34,6 +34,10 @@ docs/BENCHMARK-VS-AMW.md 与 ai-model-world 的架构对标（差距在哪、缺
 docs/UNIVERSAL-CATALOG.md v2 全品类目录设计（四态 value_status / 显式分组 / 零代码扩品类 recipe）
 docs/HARDCODE-AUDIT.md 第一轮全库审计（硬编码/散落字面量）
 docs/AUDIT-REPORT-2026-10-13.md 第二轮全库审计（死代码/构建副产品生命周期/导出卫生，修复已入库）
+docs/ENGINEERING-REVIEW.md 工程评估（Vite 迁移前历史存档，所提建议已由 REFACTOR-LOG 落地）
+docs/REFACTOR-LOG.md 重构落地记录（2026-10-03，11 项建议的迁移过程存档）
+docs/SCHEMA-EXTENSIBILITY.md schema 可扩展性分析（品类字段表演进约束）
+docs/UNIVERSAL-FIELD-BLUEPRINT.md 全品类字段蓝图（跨品类字段抽象草案）
 
 # 规范化文档体系（三份，按需查阅）
 docs/SPEC-AI-MODEL-WORLD.md 参考项目规范提炼（ai-model-world：5 条不可违背原则 + 护栏三层）

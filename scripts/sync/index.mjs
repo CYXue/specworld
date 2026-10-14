@@ -20,6 +20,7 @@ import { VENDORS } from '../brands.mjs';
 import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from '../lib/overrides.mjs';
 import { flattenSpecs, SPEC_GROUPS } from '../lib/specs.mjs';
+import { WINDOW_FUZZ_DAYS, windowStartEffective } from '../lib/window.mjs';
 import { buildQueueFile, classifyByWindow } from './queue.mjs';
 import { coverageReport, validate } from './validate.mjs';
 
@@ -27,10 +28,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORK = join(ROOT, '_work');
 const DATA = join(ROOT, 'data');
 
-/** 窗口：产品侧决定「2024-09 之后、两家完全对齐」 */
-const WINDOW_START = process.env.WINDOW_START ?? '2024-09-01';
-/** 精度不足的日期落在这个缓冲区内时，标记为「窗口边界不确定」而不是悄悄收录 */
-const WINDOW_FUZZ_DAYS = 45;
+/** 窗口：产品侧决定「2024-09 之后、两家完全对齐」。真源在 lib/window.mjs，env 可覆盖 */
+const WINDOW_START = windowStartEffective();
 
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 

@@ -91,7 +91,6 @@ const doctor = (() => {
   const cands = [
     process.env.TOY_DOCTOR,
     join(process.env.USERPROFILE || process.env.HOME, '.agents/skills/toy/scripts/toy_doctor.py'),
-    '/c/Users/EAWAC/.agents/skills/toy/scripts/toy_doctor.py',
   ].filter(Boolean);
   return cands.find((p) => existsSync(p)) || null;
 })();

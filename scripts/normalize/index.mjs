@@ -31,6 +31,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { WINDOW_START as windowStartFromLib } from '../lib/window.mjs';
 import { mapAppleSpecs, mapAppleCompare, APPLE_SHARED_MARK } from './brands/apple.mjs';
 import { mapHuawei } from './brands/huawei.mjs';
 import { sliceByVariants, stripInvisible } from './parse.mjs';
@@ -297,7 +298,8 @@ function main() {
    * 或 (b) 取证表里没有但名字能看出是 16 代及以后的。其余不进产出 ——
    * 它们注定会被 sync 的窗口过滤丢掉，留在中间文件里只会污染覆盖率表。
    */
-  const WINDOW_START = '2024-09-01';
+  // 真源在 lib/window.mjs —— 与 sync 闸门同一处定义，禁止写字面量副本
+  const WINDOW_START = windowStartFromLib;
   // 取证表是 curated 数据，权威副本在 data/（入库）；_work/ 只是本地兼容路径
   const rdPath = [join(ROOT, 'data', 'release-dates.json'), join(WORK, 'release-dates.json')].find(
     (p) => existsSync(p),
