@@ -29,17 +29,19 @@ const TRASH = join(ROOT, '.dist-trash');
 /** .dist-trash 保留的最近构建备份份数。备份只为排障回滚，不是归档 */
 const KEEP = 3;
 
-if (!existsSync(DIST)) {
-  console.log('clean-dist: dist 不存在，无需清理');
-  process.exit(0);
-}
-
 mkdirSync(TRASH, { recursive: true });
-const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-const target = join(TRASH, `dist-${stamp}`);
-// rename 在同文件系统内是原子操作，不经过删除 shim —— 这是绕开拦截的关键。
-renameSync(DIST, target);
-console.log(`clean-dist: 旧 dist → ${target}`);
+if (existsSync(DIST)) {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const target = join(TRASH, `dist-${stamp}`);
+  // rename 在同文件系统内是原子操作，不经过删除 shim —— 这是绕开拦截的关键。
+  renameSync(DIST, target);
+  console.log(`clean-dist: 旧 dist → ${target}`);
+} else {
+  // 没有可搬的也照样修剪：本环境有东西会在文件编辑后自动跑 prebuild，
+  // 把 dist 搬进 trash 却不跟着重建（2026-10-14 实测两次），此路径下
+  // 若跳过修剪，.dist-trash 会无声越过上限。
+  console.log('clean-dist: dist 不存在，无需搬移（仍执行保留策略）');
+}
 
 pruneTrash();
 
@@ -49,11 +51,13 @@ function pruneTrash() {
   try {
     entries = readdirSync(TRASH)
       .filter((name) => name.startsWith('dist-'))
-      .map((name) => {
-        const p = join(TRASH, name);
-        return { name, path: p, mtime: statSync(p).mtimeMs };
-      })
-      .sort((a, b) => b.mtime - a.mtime); // 新的在前
+      .map((name) => ({ name, path: join(TRASH, name) }))
+      // 排序用**目录名内嵌的 ISO 时间戳**，不用 mtime：目录 mtime 会被无关进程
+      // 随手刷新（IDE 文件监听、杀软扫描、备份工具都会碰一下）——2026-10-14
+      // 实测最旧一份的 mtime 被改成了构建当时的时间，按 mtime 排序的保留策略
+      // 当场失效：该删的没删，.dist-trash 越过上限。名字里的时间戳创建时定死、
+      // 不可变，字典序即时间序（ISO 8601 的性质），这才是稳的判据。
+      .sort((a, b) => (a.name < b.name ? 1 : -1)); // 新的在前
   } catch {
     return; // 列不出目录就不清理——保洁失败不影响构建
   }
