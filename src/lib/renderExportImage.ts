@@ -12,8 +12,12 @@
  * ⚠️ 本文件只在浏览器里被 CanvasView 调用，**绝不**进 selftest（selftest 跑在 node，
  * 没有 document/canvas）。所有「算得对不对」都在 exportSummary.ts 里测。
  */
+import { i18n, currentLocale } from '../i18n';
 import type { Product, Vendor } from '../types';
 import { spriteUrl } from './assets';
+
+/** 导出图上的文案同样走语言包：导出的是「站点的一张截图」，语言必须跟界面一致 */
+const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
 import type { CanvasDoc } from './canvasFilter';
 import { buildExportSummary, type ExportSummary } from './exportSummary';
 
@@ -71,7 +75,7 @@ function trunc(ctx: CanvasRenderingContext2D, text: string, maxW: number): strin
   return t + '…';
 }
 
-export interface RenderOpts {
+interface RenderOpts {
   items: CanvasDoc[];
   productsById: Map<string, Product>;
   vendorsById: Map<string, Vendor>;
@@ -109,7 +113,7 @@ export async function renderExportCanvas(opts: RenderOpts): Promise<HTMLCanvasEl
   canvas.width = Math.round(W * dpr);
   canvas.height = Math.round(H * dpr);
   const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('无法获取 2D 画布上下文');
+  if (!ctx) throw new Error(t('export.noContext'));
   ctx.scale(dpr, dpr);
   ctx.textBaseline = 'alphabetic';
 
@@ -123,13 +127,13 @@ export async function renderExportCanvas(opts: RenderOpts): Promise<HTMLCanvasEl
   // 标题区
   ctx.fillStyle = C.fg;
   ctx.font = `700 24px ${FONT}`;
-  ctx.fillText('参数世界 · 筛选结果', pad, pad + 26);
+  ctx.fillText(t('export.title'), pad, pad + 26);
   ctx.fillStyle = C.dim;
   ctx.font = `12px ${FONT}`;
-  ctx.fillText(filterText || '全部设备', pad, pad + 54);
+  ctx.fillText(filterText || t('canvas.allDevices'), pad, pad + 54);
   ctx.fillStyle = C.gold;
   ctx.font = `700 24px ${FONT}`;
-  ctx.fillText(`共 ${s.total} 台`, pad, pad + 88);
+  ctx.fillText(t('export.totalCount', { n: s.total }), pad, pad + 88);
 
   // 缩略图网格
   const sprites = await Promise.all(items.map((it) => loadImage(spriteUrl(it.id))));
@@ -151,7 +155,7 @@ export async function renderExportCanvas(opts: RenderOpts): Promise<HTMLCanvasEl
     } else {
       ctx.fillStyle = C.dim;
       ctx.font = `14px ${FONT}`;
-      ctx.fillText('(无图)', x + tileW / 2 - 18, y + tileH / 2);
+      ctx.fillText(t('export.noImage'), x + tileW / 2 - 18, y + tileH / 2);
     }
     ctx.fillStyle = C.fg;
     ctx.font = `12px ${FONT}`;
@@ -173,27 +177,48 @@ export async function renderExportCanvas(opts: RenderOpts): Promise<HTMLCanvasEl
 
   const st = s.status;
   block(
-    '状态分布',
-    `在售 ${st.onSale} · 即将发布 ${st.upcoming} · 停产 ${st.retired}` +
-      (st.other ? ` · 其它 ${st.other}` : ''),
+    t('export.statusTitle'),
+    [
+      t('status.onSale') + ' ' + st.onSale,
+      t('status.upcoming') + ' ' + st.upcoming,
+      t('status.retired') + ' ' + st.retired,
+      ...(st.other ? [t('common.other') + ' ' + st.other] : []),
+    ].join(' · '),
   );
-  block('品牌分布', s.brands.map((b) => `${b.nameZh} ${b.count}`).join(' · ') || '—');
+  block(
+    t('export.brandTitle'),
+    s.brands.map((b) => `${b.nameZh} ${b.count}`).join(' · ') || '—',
+  );
 
   // 起售价按品牌细分 + 累计总计
   ctx.fillStyle = C.blue;
   ctx.font = `700 16px ${FONT}`;
-  ctx.fillText('起售价合计（按品牌）', pad, fy);
+  ctx.fillText(t('export.priceTitle'), pad, fy);
   fy += 24;
   ctx.fillStyle = C.fg;
   ctx.font = `12px ${FONT}`;
   for (const b of s.priceByBrand) {
-    ctx.fillText(`${b.nameZh} ${b.count} 台 · ¥${b.totalCny.toLocaleString('zh-CN')}`, pad, fy);
+    ctx.fillText(
+      t('export.priceRow', {
+        name: b.nameZh,
+        n: b.count,
+        total: b.totalCny.toLocaleString(currentLocale() === 'en' ? 'en-US' : 'zh-CN'),
+      }),
+      pad,
+      fy,
+    );
     fy += 22;
   }
   ctx.fillStyle = C.gold;
   ctx.font = `700 12px ${FONT}`;
-  const missTxt = s.priceMissing ? `（${s.priceMissing} 台未公布售价）` : '';
-  ctx.fillText(`累计总计 ¥${s.priceTotalCny.toLocaleString('zh-CN')}${missTxt}`, pad, fy);
+  const missTxt = s.priceMissing ? t('export.priceMissing', { n: s.priceMissing }) : '';
+  ctx.fillText(
+    t('export.priceTotal', {
+      total: s.priceTotalCny.toLocaleString(currentLocale() === 'en' ? 'en-US' : 'zh-CN'),
+    }) + missTxt,
+    pad,
+    fy,
+  );
   fy += 22;
 
   return canvas;

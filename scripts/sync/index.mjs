@@ -18,6 +18,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { VENDORS } from '../brands.mjs';
 import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
+import { applyOverrides, loadOverrides, validateOverrides } from '../lib/overrides.mjs';
+import { flattenSpecs, SPEC_GROUPS } from '../lib/specs.mjs';
 import { buildQueueFile, classifyByWindow } from './queue.mjs';
 import { coverageReport, validate } from './validate.mjs';
 
@@ -108,17 +110,51 @@ function main() {
     windowFuzzDays: WINDOW_FUZZ_DAYS,
   });
 
-  // ---- 3. 首末次出现时间 -----------------------------------------------
+  // ---- 3. v2 拍平 + 用户数据层合并 --------------------------------------
+  //
+  // 拍平：normalize 层仍按手机结构产出（body/display/…），这里统一搬进 specs 容器
+  // （scripts/lib/specs.mjs 的 flattenSpecs），品类无关的身份字段留顶层。
+  // 这样 normalize 一千七百行不用动，而 products.json 落盘即为 v2 全品类形状。
+  //
+  // category：当前数据集全部是手机（详见 src/lib/catalog.ts 的 categoryOf 注释），
+  // normalize 产出不带这个字段，这里默认 'phone'。未来接平板数据源时由对应
+  // normalize 通道直接写 category，本行不再兜底。
+  for (const p of kept) {
+    if (!p.category) p.category = 'phone';
+    p.specs = flattenSpecs(p);
+    // 拍平后**删掉旧的嵌套组**。双真源比没有 specs 更危险：
+    // 用户改了 specs['display.sizeIn']，而顶层 display.sizeIn 还是官网旧值——
+    // pick 是 specs-first 所以闸门/派生/前端读不到旧值，但归档、指纹、
+    // 任何直接读嵌套的下游都会拿到旧值，且没有任何报错。
+    for (const g of SPEC_GROUPS) delete p[g];
+  }
+
+  // 用户数据层：每次同步重新应用。官网刷新不会冲掉用户数据——
+  // overrides.json 与 products.json 相互独立，管线只读不写前者。
+  // 先 validateOverrides 再过 applyOverrides：引用悬空/字段未注册/类型区间错误
+  // 一律拒绝写盘，不静默跳过。
+  const overrides = loadOverrides();
+  const overrideErrors = validateOverrides(overrides, kept);
+  if (overrideErrors.length) {
+    console.error(`\n❌ 用户数据层校验未通过（${overrideErrors.length} 项），拒绝写盘：`);
+    for (const e of overrideErrors) console.error(`  - ${e}`);
+    process.exit(1);
+  }
+  const { products: merged, report: overrideReport } = applyOverrides(kept, overrides);
+
+  // ---- 4. 首末次出现时间 -----------------------------------------------
   const prevById = new Map((previous?.products ?? []).map((p) => [p.id, p]));
   const now = new Date().toISOString();
-  for (const p of kept) {
+  for (const p of merged) {
     const prev = prevById.get(p.id);
     p.firstSeenAt = prev?.firstSeenAt ?? now;
     p.lastSeenAt = now;
   }
 
-  // ---- 4. 快照 ---------------------------------------------------------
-  const brands = [...new Set(kept.map((p) => p.brand))];
+  // ---- 5. 快照 ---------------------------------------------------------
+  // merged = 官网窗口内机型 + 用户数据层新增机型。用户显式 add-product 的机器
+  // 不过窗口过滤（显式收录），但「发布日期在未来」等闸门仍然拦它。
+  const brands = [...new Set(merged.map((p) => p.brand))];
   const snapshot = {
     generatedAt: now,
     windowStart: WINDOW_START,
@@ -126,40 +162,73 @@ function main() {
       'apple-official': {
         fetchedAt: now,
         note: `苹果官网规格页`,
-        ok: kept.some((p) => p.brand === 'apple'),
+        // 展示走语言包（2026-10-14 i18n 深扫）：note 是管线拼的中文串，
+        // 英文页会原样吐中文。noteKey + noteParams 让前端按语言渲染，
+        // 数字作为插值参数而不是写死在句子里（否则「64 条取证」没法双语）。
+        noteKey: 'about.sourceAppleOfficial',
+        ok: merged.some((p) => p.brand === 'apple'),
       },
       'huawei-official': {
         fetchedAt: now,
         note: `华为官网规格页`,
-        ok: kept.some((p) => p.brand === 'huawei'),
+        noteKey: 'about.sourceHuaweiOfficial',
+        ok: merged.some((p) => p.brand === 'huawei'),
       },
       'release-dates': {
         fetchedAt: releaseDates?.generatedAt ?? null,
         note: releaseDates
           ? `${releaseDates.entries?.length ?? 0} 条取证，${releaseDates.unresolved?.length ?? 0} 条未解决`
           : '缺失',
+        noteKey: releaseDates ? 'about.sourceReleaseDates' : 'about.sourceMissing',
+        noteParams: releaseDates
+          ? {
+              total: releaseDates.entries?.length ?? 0,
+              unresolved: releaseDates.unresolved?.length ?? 0,
+            }
+          : undefined,
         ok: Boolean(releaseDates),
+      },
+      'user-manual': {
+        fetchedAt: null,
+        note: overrides.entries?.length
+          ? `${overrides.entries.length} 条用户数据，本轮生效 ${overrideReport.applied.length} 条`
+          : '无用户数据',
+        noteKey: overrides.entries?.length ? 'about.sourceUserManual' : 'about.sourceUserEmpty',
+        noteParams: overrides.entries?.length
+          ? { total: overrides.entries.length, applied: overrideReport.applied.length }
+          : undefined,
+        ok: true,
       },
     },
     vendors: VENDORS.filter((v) => brands.includes(v.id)),
-    products: kept.sort((a, b) => a.id.localeCompare(b.id)),
+    products: merged.sort((a, b) => a.id.localeCompare(b.id)),
   };
 
-  // ---- 5. 闸门 ---------------------------------------------------------
-  const failures = validate(snapshot, previous);
+  // ---- 6. 闸门 ---------------------------------------------------------
+  // appliedIds：本层 add-product 已并入 snapshot 的 id。不传的话 validate 里的
+  // 用户数据层校验会拿 snapshot.products（已含新增机型）对比 add-product 的 id，
+  // 「自己冲突自己」永远误报（2026-10-13 实测踩过，修复见 overrides.mjs 的 excludeIds）。
+  const failures = validate(snapshot, previous, {
+    overrides,
+    appliedIds: overrideReport.added.map((a) => a.productId),
+  });
   const report = {
     generatedAt: now,
     windowStart: WINDOW_START,
-    kept: kept.length,
+    kept: merged.length,
     dropped,
     pending,
     notes,
     coverage: coverageReport(snapshot),
     failures,
+    overrides: overrideReport,
   };
   atomicWrite(join(WORK, 'sync-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 
-  console.log(`窗口 ${WINDOW_START} 起：收录 ${kept.length} 台，丢弃 ${dropped.length} 台`);
+  console.log(`窗口 ${WINDOW_START} 起：官网收录 ${kept.length} 台，丢弃 ${dropped.length} 台`);
+  if (overrideReport.added.length) {
+    console.log(`用户数据层新增 ${overrideReport.added.length} 台，最终在册 ${merged.length} 台`);
+  }
   console.log(`覆盖：${report.coverage.join(' | ')}`);
   if (notes.length) console.log(`注意：\n  - ${notes.join('\n  - ')}`);
   if (pending.length) {
@@ -176,6 +245,22 @@ function main() {
     process.exit(1);
   }
   console.log('✅ 闸门全部通过');
+
+  // 用户数据层生效明细：改了什么、盖掉了哪个官网值，全部可见（回查走 _work/sync-report.json）
+  if (overrideReport.applied.length) {
+    console.log(`用户数据层：生效 ${overrideReport.applied.length} 条`);
+    for (const r of overrideReport.replaced) {
+      console.log(
+        `  - ${r.productId} ${r.field}：${JSON.stringify(r.from)} → ${JSON.stringify(r.to)}（${r.id}）`,
+      );
+    }
+    for (const r of overrideReport.erased) {
+      console.log(`  - ${r.productId} ${r.field}：抹除官网值 ${JSON.stringify(r.from)}（${r.id}）`);
+    }
+    for (const c of overrideReport.conflicts) {
+      console.log(`  - 冲突：${c.productId} ${c.field} 多条覆盖，生效 ${c.winner}`);
+    }
+  }
 
   // ---- 6. 派生层（构建期产物，不入库） ---------------------------------
   const scales = buildScales(snapshot.products);
@@ -224,7 +309,9 @@ function main() {
       atomicWrite(queuePath, `${JSON.stringify(queue, null, 2)}\n`);
     } else if (existsSync(queuePath)) {
       rmSync(queuePath);
-      console.log('队列已清空（补齐发布日期或机型离开官网目录），已删除 data/discovery-pending.json');
+      console.log(
+        '队列已清空（补齐发布日期或机型离开官网目录），已删除 data/discovery-pending.json',
+      );
     }
     console.log(
       `已写入 data/products.json（${snapshot.products.length} 台）与 _work/derived.json` +

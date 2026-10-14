@@ -7,7 +7,7 @@
 import { onMounted, ref } from 'vue';
 import type { BoardTile } from './BoardCanvas.vue';
 
-const props = defineProps<{ tile: BoardTile }>();
+defineProps<{ tile: BoardTile }>();
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'open-image'): void;
@@ -50,11 +50,11 @@ onMounted(() => requestAnimationFrame(() => (shown.value = true)));
     </div>
 
     <div class="viewbox_actions">
-      <button class="viewbox_btn" @click="emit('goto', tile.id)">查看完整参数 →</button>
+      <button class="viewbox_btn" @click="emit('goto', tile.id)">{{ $t('board.fullSpecs') }}</button>
     </div>
 
     <div class="viewbox_return">
-      <button class="viewbox_return_btn" @click="emit('close')">[ 返回 ] :: close()</button>
+      <button class="viewbox_return_btn" @click="emit('close')">{{ $t('board.backClose') }}</button>
     </div>
   </div>
 </template>

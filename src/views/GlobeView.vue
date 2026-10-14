@@ -9,11 +9,13 @@
  */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import {
   EMPTY_FILTER,
   SORTS,
   applyFilter,
+  sortLabel,
   brandFacets,
   buildCanvasDocs,
   filterToQuery,
@@ -28,6 +30,7 @@ import {
 import GlobeCanvas from '../components/GlobeCanvas.vue';
 import PxIcon from '../components/PxIcon.vue';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds, err } = useDataset();
@@ -146,7 +149,7 @@ const canvasH = computed(
 <template>
   <div class="flex h-full flex-col">
     <div v-if="err" class="page-shell py-10 text-center" style="color: var(--color-east)">
-      加载失败：{{ err }}
+      {{ t('common.loadFailed', { err }) }}
     </div>
 
     <template v-else>
@@ -154,14 +157,14 @@ const canvasH = computed(
         <div class="pixel-panel mb-4 p-3">
           <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h1 class="pixel-outline font-pixel text-[24px] leading-[1.5]">设备球</h1>
+              <h1 class="pixel-outline font-pixel text-[24px] leading-[1.5]">{{ t('globe.title') }}</h1>
               <p
                 class="mt-1 flex flex-wrap items-center gap-2 text-[12px] leading-[1.5]"
                 style="color: var(--color-ink-soft)"
               >
-                <span>拖动转球 · 滚轮或双指捏合改视距 · 球面绕一圈回到原位</span>
+                <span>{{ t('globe.howto') }}</span>
                 <span class="pixel-chip px-1.5 py-0.5 text-[var(--color-gold)]">{{ shown }}</span>
-                <span>/ {{ total }} 台</span>
+                <span>{{ t('filter.matchedTotal', { shown, total }) }}</span>
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
@@ -169,7 +172,7 @@ const canvasH = computed(
                 class="pixel-button px-2.5 py-1.5 text-[12px] leading-[1.5]"
                 @click="toggleSpin()"
               >
-                {{ spinning ? '暂停自转' : '开始自转' }}
+                {{ spinning ? t('globe.spinPause') : t('globe.spinStart') }}
               </button>
               <button
                 class="pixel-button flex items-center gap-1 px-2.5 py-1.5 text-[12px] leading-[1.5]"
@@ -177,14 +180,14 @@ const canvasH = computed(
                 @click="clearAll"
               >
                 <PxIcon name="close" :size="12" />
-                清空筛选
+                {{ t('filter.reset') }}
               </button>
               <button
                 class="pixel-button flex items-center gap-1 px-2.5 py-1.5 text-[12px] leading-[1.5]"
                 @click="globe?.reset()"
               >
                 <PxIcon name="gear" :size="12" />
-                复位视角
+                {{ t('globe.resetView') }}
               </button>
             </div>
           </div>
@@ -192,7 +195,7 @@ const canvasH = computed(
           <div class="mt-3 space-y-2 border-t-2 border-[var(--color-ink)] pt-3">
             <div class="flex flex-wrap items-center gap-2">
               <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >品牌</span
+                >{{ t('facet.brand') }}</span
               >
               <button
                 v-for="f in brands"
@@ -201,14 +204,14 @@ const canvasH = computed(
                 :aria-pressed="filter.brand === f.value"
                 @click="setFilter({ brand: f.value })"
               >
-                {{ f.value ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value) : '全部' }}
+                {{ f.value ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value) : t('common.all') }}
                 {{ f.count }}
               </button>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
               <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >产品线</span
+                >{{ t('common.line') }}</span
               >
               <button
                 v-for="f in lines"
@@ -217,13 +220,13 @@ const canvasH = computed(
                 :aria-pressed="filter.line === f.value"
                 @click="setFilter({ line: f.value })"
               >
-                {{ f.value || '全部' }} {{ f.count }}
+                {{ f.value || t('common.all') }} {{ f.count }}
               </button>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
               <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >年份</span
+                >{{ t('facet.year') }}</span
               >
               <button
                 v-for="f in years.filter((y) => y.value)"
@@ -235,12 +238,12 @@ const canvasH = computed(
                 {{ f.value }} {{ f.count }}
               </button>
               <span class="ml-1 flex items-center gap-1">
-                <label class="sr-only" for="globe-q">在球面中搜索</label>
+                <label class="sr-only" for="globe-q">{{ t('globe.searchLabel') }}</label>
                 <input
                   id="globe-q"
                   :value="filter.q"
                   type="search"
-                  placeholder="球内搜索机型 / 芯片"
+                  :placeholder="t('globe.searchPlaceholder')"
                   class="pixel-input w-44 px-2 py-1 text-[12px] leading-[1.5]"
                   autocomplete="off"
                   @input="setFilter({ q: ($event.target as HTMLInputElement).value })"
@@ -252,7 +255,7 @@ const canvasH = computed(
                   style="color: var(--color-gold)"
                 >
                   <PxIcon name="sort" :size="12" />
-                  排序
+                  {{ t('sort.label') }}
                 </span>
                 <button
                   v-for="s in SORTS"
@@ -261,7 +264,7 @@ const canvasH = computed(
                   :aria-pressed="filter.sort === s.key"
                   @click="setSort(s.key)"
                 >
-                  {{ s.label }}
+                  {{ sortLabel(s.key) }}
                 </button>
               </span>
             </div>
@@ -281,13 +284,13 @@ const canvasH = computed(
         </div>
       </div>
 
-      <nav class="sr-only" aria-label="设备列表（球面的文本等价物）">
-        <h2>当前筛选下的设备（文本列表）</h2>
+      <nav class="sr-only" :aria-label="t('globe.a11yNavLabel')">
+        <h2>{{ t('canvas.a11yListTitle') }}</h2>
         <ol>
           <li v-for="p in items" :key="p.id">
             <RouterLink :to="`/product/${p.id}`">
               {{ p.brandZh }} {{ p.name }}（{{ p.line }}，{{
-                p.releaseDate.slice(0, 4) || '年份未公布'
+                p.releaseDate.slice(0, 4) || t('common.yearUnknown')
               }}）
             </RouterLink>
           </li>

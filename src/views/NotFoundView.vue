@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
 import PxIcon from '../components/PxIcon.vue';
+
+const { t } = useI18n();
 </script>
 
 <template>
@@ -8,14 +11,14 @@ import PxIcon from '../components/PxIcon.vue';
   >
     <h1 class="pixel-outline font-pixel text-[36px] leading-[1.4]">404</h1>
     <p class="text-[24px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-      这条街没有这间屋子。
+      {{ t('notFound.title') }}
     </p>
     <RouterLink
       to="/"
       class="pixel-button flex items-center gap-2 px-4 py-2 text-[12px] leading-[1.5]"
     >
       <PxIcon name="home" :size="12" />
-      返回广场
+      {{ t('brand.backToPlaza') }}
     </RouterLink>
   </div>
 </template>

@@ -1,0 +1,426 @@
+{
+  "meta": {
+    "title": "参数世界 · 选择更清楚",
+    "description": "参数世界（specworld）— 华为与苹果在售手机参数的可核查对比，让选择更清楚。数据全部来自厂商官网，缺失项标注「官方未公布」，不做估算。"
+  },
+  "brand": {
+    "name": "参数世界",
+    "tagline": "选择更清楚",
+    "notFound": "未找到该品牌。",
+    "backToPlaza": "返回广场",
+    "empty": "该筛选条件下没有机型 —— 放宽某个条件试试（每个维度的「全部」只清该维度）。",
+    "crossBrandBefore": "想跨品牌比较？去",
+    "crossBrandLink": "机型库对比页",
+    "crossBrandAfter": "，那里能筛全部 {n} 款并加入对比台。"
+  },
+  "nav": {
+    "label": "主导航",
+    "home": "广场",
+    "compare": "机型库",
+    "rankings": "榜单",
+    "timeline": "时间线",
+    "canvas": "画布",
+    "globe": "设备球",
+    "search": "搜索",
+    "searchLabel": "搜索机型",
+    "searchPlaceholder": "搜机型 / 芯片"
+  },
+  "footer": {
+    "label": "次要导航",
+    "about": "关于",
+    "search": "搜索",
+    "tagline": "参数世界 specworld · 数据来源：厂商官网规格 + 人工核查 · 选择更清楚",
+    "sourceCode": "源码",
+    "fontLicense": "字体许可",
+    "pixelFont": "像素字体"
+  },
+  "brandGroup": {
+    "count": "{name} · {n} 款",
+    "enter": "进入{name} · 可按系列筛选",
+    "moreBefore": "只列最新 {n} 台，其余 {m} 款在",
+    "morePageLink": "{name}页",
+    "moreAfter": "里可按系列筛选。"
+  },
+  "spotlight": {
+    "latest": "最新上架",
+    "priciest": "最贵",
+    "cheapest": "最便宜",
+    "empty": "暂无数据 —— 本站尚未收录{category}的在册机型。",
+    "released": "{date} 发布",
+    "fromPrice": "{price} 起",
+    "priceUnpublished": "官方未公布中国区售价"
+  },
+  "board": {
+    "dragTitle": "拖拽画面",
+    "dragSub": "浏览全部机型",
+    "wrapReady": "无限回绕已就绪",
+    "fullSpecs": "查看完整参数 →",
+    "backClose": "[ 返回 ] :: close()",
+    "imageviewTip": "+ 拖拽移动图片，滚轮 / 双指捏合缩放 +",
+    "canvasAriaLabel": "设备无限画布：拖拽平移，点瓦片看详情",
+    "emptyTitle": "画布上还没有设备",
+    "emptySub": "当前筛选没有命中任何机型，换个条件或清空看看全部。",
+    "hudCount": "{n} 台",
+    "hudWrap": "环面回绕 · 无限平移"
+  },
+  "home": {
+    "loadFailed": "数据加载失败：{err}",
+    "status": "{n} 款在册 · 更新于 {month} 月 {day} 日",
+    "statusUndated": "{n} 款在册",
+    "spotlightTitle": "最新 · 最贵 · 最便宜",
+    "spotlightNote": "价格取官方中国大陆起售价（多容量档取最低档）；官方未公布售价的机型不进价格榜。",
+    "championTitle": "各维度第一"
+  },
+  "filter": {
+    "matchedTotal": "/ {total} 款",
+    "picked": "已选对比 {n} 台",
+    "reset": "清空筛选",
+    "selected": "已选",
+    "clear": "清空",
+    "byDim": "按{name}筛选",
+    "remove": "移除 {name}",
+    "triggerOne": "{name}：{value}",
+    "triggerMore": "{name}：{value} 等{n}项",
+    "unknownTip": "官网未公布该字段的点，选它能把这些机型全部列出",
+    "zeroTip": "当前条件下该档 0 台"
+  },
+  "common": {
+    "yes": "是",
+    "no": "否",
+    "unpublished": "官方未公布",
+    "priceUnpublished": "官方未公布中国区售价",
+    "currencySymbol": "¥",
+    "detail": "详情",
+    "remove": "移除",
+    "countUnits": "{n} 台",
+    "models": "{n} 款",
+    "all": "全部",
+    "line": "产品线",
+    "unknown": "未知",
+    "other": "其它",
+    "yearUnknown": "年份未公布",
+    "loadFailed": "加载失败：{err}",
+    "loadFailedRaw": "数据加载失败："
+  },
+  "ability": {
+    "display": "屏幕",
+    "light": "轻薄",
+    "battery": "续航",
+    "camera": "影像"
+  },
+  "sort": {
+    "release": "最新发布",
+    "priceAsc": "价格 低→高",
+    "priceDesc": "价格 高→低",
+    "ppiAsc": "屏幕像素密度 低→高",
+    "ppiDesc": "屏幕像素密度 高→低",
+    "weightAsc": "机身重量 小→大",
+    "weightDesc": "机身重量 大→小",
+    "batteryAsc": "电池容量 小→大",
+    "batteryDesc": "电池容量 大→小",
+    "cameraAsc": "主摄像素 低→高",
+    "cameraDesc": "主摄像素 高→低",
+    "newToOld": "新→旧",
+    "oldToNew": "旧→新",
+    "name": "名称",
+    "ppi": "像素密度",
+    "label": "排序"
+  },
+  "spec": {
+    "brightnessBoth": "典型 {typical} / 峰值 {peak} nits",
+    "brightnessTypical": "典型 {typical} nits",
+    "videoHours": "{hours} 小时（视频）",
+    "cameraRole": {
+      "main": "主摄",
+      "ultrawide": "超广角",
+      "tele": "长焦",
+      "periscope": "潜望长焦"
+    }
+  },
+  "status": {
+    "onSale": "在售",
+    "upcoming": "即将发布",
+    "retired": "已退役"
+  },
+  "facet": {
+    "category": "品类",
+    "form": "形态",
+    "brand": "品牌",
+    "series": "系列",
+    "variant": "变体",
+    "chip": "芯片",
+    "ram": "内存",
+    "year": "年份",
+    "price": "价格",
+    "allCategory": "全部品类",
+    "allForm": "全部形态",
+    "allBrand": "全部品牌",
+    "allSeries": "全部系列",
+    "allVariant": "全部变体",
+    "allChip": "全部芯片",
+    "allRam": "全部内存",
+    "allYear": "全部年份",
+    "allPrice": "全部价格",
+    "allWith": "全部{name}",
+    "yes": "是",
+    "no": "否",
+    "formValue": {
+      "foldable": "折叠屏",
+      "bar": "直板"
+    }
+  },
+  "compare": {
+    "title": "机型库 · 筛选与对比",
+    "introBefore": "先筛出想要的机型，再勾左侧方块加入对比：勾 1 台看完整详情，勾 2 台以上并排对比，",
+    "introNoLimit": "不限台数",
+    "introAfter": "。条件与已选项都在网址里，可直接分享。",
+    "listAll": "全部机型",
+    "listFiltered": "筛选结果",
+    "empty": "没有符合条件的机型 —— 放宽某个条件试试（每个维度的「全部」只清该维度）。",
+    "panelTitle": "对比台",
+    "panelEmpty1": "勾选左侧机型加入对比。",
+    "panelEmpty2": "1 台看详情，2 台以上并排比。",
+    "removeAria": "从对比中移除 {name}",
+    "openDetail": "打开详情页",
+    "multiHint": "已选 {n} 台，往下看并排对比表。",
+    "matrixTitle": "并排对比 · {n} 台",
+    "display": "显示",
+    "allItems": "全部（{n} 项）",
+    "diffOnly": "只看差异（{n} 项）",
+    "highlightOn": "差异高亮 开",
+    "highlightOff": "差异高亮 关",
+    "modelHeader": "机型",
+    "noteDash": "「—」代表该机型官网未公布此参数，不是 0。",
+    "noteGoldBefore": "金色底 = 机型间",
+    "noteGold": "配置不同",
+    "noteLapisBefore": "；蓝色底 = ",
+    "noteLapis": "公布情况不同",
+    "noteA11y": "（有的官网没写）；左侧竖线 + 差异行加粗为同一标记的无障碍冗余，不依赖颜色也可辨。",
+    "noteNoVerdict": "本表只列差异、不评好坏——参数没有客观优劣（轻/重、大/小各有偏好），请按自己的需求判断。"
+  },
+  "rank": {
+    "title": "榜单 · 多级排序",
+    "introA": "榜单是",
+    "introSort": "排序",
+    "introB": "，不是筛选：它永远列出全部 {n} 台，按你排好的优先级链排序。",
+    "introC": "先加「一级排序」（如大电池），再加「二级排序」（如相机）—— 一级相同的机型才用二级区分。",
+    "quickAdd": "快捷加",
+    "priority": "排序优先级（从上到下，一级 → 末级）",
+    "clearSorts": "清空排序",
+    "noSorts": "未选择排序，默认按「最新发布」陈列。点上方能力标签或下方「添加排序」开始。",
+    "primary": "一级",
+    "asc": "升",
+    "desc": "降",
+    "toggleDir": "切换升/降序",
+    "promote": "提升优先级",
+    "demote": "降低优先级",
+    "removeSort": "移除该排序",
+    "addSort": "添加排序",
+    "dimPrice": "价格",
+    "dimPpi": "屏幕像素密度",
+    "dimWeight": "机身重量",
+    "dimBattery": "电池容量",
+    "dimCamera": "主摄像素",
+    "resultTitle": "排序结果 · {n} 台",
+    "noteA": "「未公布」= 官网未公布该参数，按纪律排在所有有值机型之后；不等于 0 或最小。",
+    "noteB": "榜单不减员，永远展示全部 {n} 台。"
+  },
+  "about": {
+    "title": "关于参数世界",
+    "subtitle": "选择更清楚 · Choose with Clarity",
+    "introTitle": "项目说明",
+    "introA": "参数世界（specworld）是一个把手机参数做成",
+    "introBold": "一眼看懂、可核查、不编造",
+    "introB": "的静态站点。首版范围刻意收窄，先把一条数据链路跑通：",
+    "scopeCategory": {
+      "label": "品类",
+      "value": "只做手机（链路跑通后再扩平板 / 手表 / 耳机）"
+    },
+    "scopeBrands": {
+      "label": "品牌",
+      "value": "华为 + 苹果"
+    },
+    "scopeModels": {
+      "label": "机型",
+      "value": "近 3 年在售（含已停售但属该窗口的机型，用状态区分）"
+    },
+    "scopeForm": {
+      "label": "形态",
+      "value": "纯静态站，零后端；可另发一份到 B 站 Toy"
+    },
+    "scopeData": {
+      "label": "数据",
+      "value": "厂商官网规格页为主源，可核实的缺口由人工核查补录"
+    },
+    "why": "为什么是这个形态：手机一年几场发布会、数据变更频率低，静态快照 + git 历史足够，前端零密钥、零运行时依赖；档位用「当前在售池」的分位而非绝对阈值，三年后也不会悄悄失效；文案由数据套模板生成、不调用 LLM，保证「这台是屏幕最亮的手机」之类结论可复现、可溯源。",
+    "dataTitle": "数据与原则",
+    "principleOne": {
+      "title": "数据来源：官网规格 + 人工核查",
+      "body": "主源是各厂商官方规格页；官网未公布的字段，凡能凭可独立核实的来源（监管进网许可、拆解报告、官方说明书）补录的，由人工核查补全并记入用户数据层。所有数据整体标注「来源于厂商官网与人工核查」，不逐条打标。"
+    },
+    "principleTwo": {
+      "title": "缺失项如实标注「官方未公布」",
+      "body": "既无法从官网取得、也无可靠独立来源可核实的字段，一律记为缺失、界面显示「官方未公布」，不做估算、不靠机型名反推。榜单只取真实可比字段的极值，不引入第三方跑分。"
+    },
+    "principleThree": {
+      "title": "数据诚信是铁律",
+      "body": "任何标注都必须有出处。折叠屏等形态判定必须有官网原文依据，绝不编造屏幕曲率之类数据源未写的属性；人工补录的字段同样要求注明来源与原因。"
+    },
+    "principleFour": {
+      "title": "判据是内容指纹，不是 git diff",
+      "body": "数据带着一串运行时刻字段，每次跑都在变。先剥掉这些字段再算指纹，保证只有「数据或模板真变了」才触发提交与发布，而不是每 12 小时制造一次空提交。"
+    },
+    "principleFive": {
+      "title": "自动化闸门挡在写盘前",
+      "body": "解析器、校验闸门、几何纯函数全部进自测（196 项），CI 第一个 job 拦截。闸门自身也被反向测试——故意注入违规必须报红、改回必须恢复绿灯，否则绿灯不可信。"
+    },
+    "snapshot": "数据快照",
+    "loading": "加载中…",
+    "dataFooter": "参数世界 specworld · 视觉基调参考 Terraria / Minecraft 的方块美学 · 数据诚信优先",
+    "licenseTitle": "许可与署名",
+    "licenseCode": {
+      "name": "源码与脚本",
+      "terms": "{license} 许可",
+      "body": "站点代码、数据管线、校验闸门、自测全部开源。"
+    },
+    "licenseLinkView": "查看许可证",
+    "licenseFont": {
+      "name": "站点字体",
+      "terms": "SIL OFL 1.1",
+      "body": "本站像素字体 {fontName}，是 Fusion Pixel Font 12px 的子集。子集化属上游定义的修改，故按 OFL 要求改名；许可证全文随字体一并分发。"
+    },
+    "licenseLinkFull": "许可证全文",
+    "licenseLinkUpstream": "上游项目",
+    "licenseData": {
+      "name": "机型数据",
+      "terms": "厂商官网事实数据 + 人工核查补录",
+      "body": "参数主源为各厂商官方规格页（属各自的事实性数据，本站不主张额外许可）；官网未公布但可由监管进网许可、拆解报告、官方说明书等独立来源核实的字段，由人工核查补全。无法核实的缺口标注「官方未公布」，不做推算。"
+    },
+    "licenseTrademark": {
+      "name": "机型名称与商标",
+      "terms": "仅作指称性使用",
+      "body": "页面出现的机型名称与商标归各自所有者所有，此处仅用于标识被描述的对象，不表示关联或背书。"
+    },
+    "artNote": "站内立绘由本仓库脚本在构建期生成，未使用第三方美术素材，因此无额外素材署名。",
+    "sourceAppleOfficial": "苹果官网规格页",
+    "sourceHuaweiOfficial": "华为官网规格页",
+    "sourceReleaseDates": "{total} 条取证，{unresolved} 条未解决",
+    "sourceUserManual": "{total} 条用户数据，本轮生效 {applied} 条",
+    "sourceUserEmpty": "无用户数据",
+    "sourceMissing": "缺失"
+  },
+  "search": {
+    "title": "搜索机型",
+    "count": "{n} / {total} 台",
+    "ariaLabel": "搜索机型",
+    "placeholder": "机型名 / 中文名 / 产品线 / 芯片，如 mate、Pura、nova、麒麟",
+    "looseHint": "已忽略大小写与空格做匹配 —— 你打的「{q}」按官方写法可能是 「{name}」",
+    "brandLabel": "品牌",
+    "allBrands": "全部 {n}",
+    "clear": "清空",
+    "tipA": "空格分多个词，全部命中才算匹配。可搜机型名、中文名、产品线、芯片。",
+    "tipBold": "大小写、空格、全角半角随意打",
+    "tipB": "——",
+    "tipConj": "与",
+    "tipC": "搜到同一批。",
+    "noResultTitle": "没有匹配的机型",
+    "noResultBody": "官网未公布的字段不进搜索索引。机型名请包含关键部分（如 Mate 60 Pro，或写成 mate60pro）。",
+    "clearConditions": "清空条件"
+  },
+  "product": {
+    "notFound": "未找到该机型。",
+    "fullSpecs": "完整参数",
+    "abilityBars": "能力横条",
+    "abilityNote": "条长为该字段在本站数据集内的相对位置，非绝对评分；缺失项显示「未公布」。",
+    "compareLink": "在对比页查看这台"
+  },
+  "timeline": {
+    "title": "发布时间线",
+    "note": "日期取自厂商官方发布；精度不足时按年/月展示。"
+  },
+  "notFound": {
+    "title": "这条街没有这间屋子。"
+  },
+  "canvas": {
+    "loadFailed": "加载失败：{err}",
+    "title": "无限画布",
+    "howto": "拖拽 / 滚轮平移 · 点瓦片看详情 · 环面无限回绕",
+    "resetView": "重置视图",
+    "exportPng": "导出 PNG",
+    "exporting": "导出中…",
+    "exportFilename": "参数世界-筛选结果-{n}台.png",
+    "noSpecs": "规格未公布",
+    "sortPrefix": "排序:{name}",
+    "allDevices": "全部设备",
+    "brand": "品牌",
+    "line": "产品线",
+    "year": "年份",
+    "all": "全部",
+    "searchLabel": "在画布中搜索",
+    "searchPlaceholder": "画布内搜索机型 / 芯片",
+    "a11yNavLabel": "设备列表（画布的文本等价物）",
+    "a11yListTitle": "当前筛选下的设备（文本列表）"
+  },
+  "globe": {
+    "title": "设备球",
+    "howto": "拖动转球 · 滚轮或双指捏合改视距 · 球面绕一圈回到原位",
+    "spinPause": "暂停自转",
+    "spinStart": "开始自转",
+    "resetView": "复位视角",
+    "searchLabel": "在球面中搜索",
+    "searchPlaceholder": "球内搜索机型 / 芯片",
+    "a11yNavLabel": "设备列表（球面的文本等价物）",
+    "canvasAria": "设备球：拖动可旋转球面，浏览全部设备",
+    "hud": "{n} 台 · 经度 {lon}° · 纬度 {lat}° · 视距 {dist}",
+    "empty": "球上一台设备都没有"
+  },
+  "feedback": {
+    "openButton": "纠错 / 补充数据",
+    "title": "纠错 / 补充数据",
+    "close": "关闭",
+    "loadFailed": "字段表加载失败：{err}。请稍后再试，或通过关于页联系渠道反馈。",
+    "fieldLabel": "要修正的参数",
+    "currentValue": "当前值：{value}　·　{hint}",
+    "correctValue": "正确的值",
+    "pleaseSelect": "请选择",
+    "placeholderArray": "如 8, 12, 16",
+    "placeholderScalar": "按上方类型提示填写",
+    "reasonLabel": "数据来源（必填）",
+    "reasonPlaceholder": "例如：厂商官网规格页 / 实机测量 / 评测文章（附链接更好）",
+    "nickLabel": "你的昵称（可选）",
+    "nickPlaceholder": "审核通过后会记录在数据来源里",
+    "submit": "提交纠错",
+    "submitting": "提交中…",
+    "noteQueue": "提交后进入人工审核队列，审核通过才会显示在站点上；官网数据更新不会覆盖人工核实值。",
+    "noteComplex": "结构复杂参数（如镜头组明细）暂不支持在线提交，请通过关于页联系渠道反馈。",
+    "rangeHint": "合理区间 {min}~{max}",
+    "groupOther": "其他",
+    "needReason": "请填写数据来源（例如：厂商官网 / 实机测量 / 评测文章链接）",
+    "validateFail": "值校验未过：{err}",
+    "submitted": "✅ {message}（编号 {id}）",
+    "submittedOk": "已提交",
+    "anonymous": "匿名",
+    "noBackend": "当前环境未连接数据服务（如 B 站 Toy 等纯静态托管页面）。请复制下方标准模板，通过私信/评论发给作者——作者导入审核通过后即生效，感谢纠错！"
+  },
+  "export": {
+    "noContext": "无法获取 2D 画布上下文",
+    "title": "参数世界 · 筛选结果",
+    "totalCount": "共 {n} 台",
+    "noImage": "(无图)",
+    "statusTitle": "状态分布",
+    "brandTitle": "品牌分布",
+    "priceTitle": "起售价合计（按品牌）",
+    "priceRow": "{name} {n} 台 · ¥{total}",
+    "priceMissing": "（{n} 台未公布售价）",
+    "priceTotal": "累计总计 ¥{total}"
+  },
+  "validate": {
+    "empty": "值不能为空",
+    "notNumber": "应为数值，收到「{raw}」",
+    "outOfRange": "{value} 超出合理区间 {range}{unit}",
+    "notBool": "应为 true / false",
+    "notInEnum": "「{raw}」不在可选值 {values} 内",
+    "badNumberArray": "应为逗号分隔的数值，如 8, 12, 16",
+    "needOneItem": "至少一项"
+  }
+}

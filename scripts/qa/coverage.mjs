@@ -22,6 +22,7 @@
  * 解析性缺口则是待修的队列。
  */
 
+import { pick } from '../lib/specs.mjs';
 import { REQUIRED_PATHS } from '../sync/validate.mjs';
 import { loadProducts, section, c, table, brandZh, pct, bar, ratioColor, verdict } from './lib.mjs';
 
@@ -35,17 +36,26 @@ const GAP_THRESHOLD = 0.9;
 const products = loadProducts();
 const brands = [...new Set(products.map((p) => p.brand))];
 
-const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+/** specs-first 取值：v2 读 specs 容器，v1 嵌套回退 */
+const get = pick;
 const has = (v) => v !== null && v !== undefined && !(Array.isArray(v) && v.length === 0);
 
 /**
  * 要体检的字段清单从数据里反推，而不是写死。
  * 写死的问题是：新增字段忘了加进清单，覆盖率报告就假装它不存在。
+ *
+ * v2 特判：`specs` 容器的键**就是完整字段路径**（`body.weightG`），
+ * 直接推出；不特判的话会拍出 `specs.body.weightG` 这种没人读的路径，
+ * 覆盖率报告对着一堆空路径演算。
  */
 function fieldsOf(product) {
   const out = [];
   for (const [k, v] of Object.entries(product)) {
     if (['id', 'slug', 'brand', 'line', 'name', 'provenance', 'sources'].includes(k)) continue;
+    if (k === 'specs') {
+      for (const k2 of Object.keys(v ?? {})) out.push(k2);
+      continue;
+    }
     if (v && typeof v === 'object' && !Array.isArray(v)) {
       for (const [k2, v2] of Object.entries(v)) {
         if (k2 === 'rear' && Array.isArray(v2)) {

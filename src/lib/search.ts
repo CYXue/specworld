@@ -1,4 +1,5 @@
 import type { Product, Vendor } from '../types';
+import { chipNameLabel } from './catalog';
 import {
   compact,
   loose,
@@ -32,7 +33,7 @@ import {
  *    可能排在 Mate 80 前面。这是**故障被习惯掩盖**：看久了就不觉得是 bug。
  */
 
-export interface SearchableDoc {
+interface SearchableDoc {
   product: Product;
   vendor: Vendor | undefined;
   /** NFKC + 小写、保留分隔符的检索串（含空格），避免每次按键都重建 */
@@ -76,7 +77,7 @@ export function buildDocs(products: Product[], vendors: Map<string, Vendor>): Se
   });
 }
 
-export interface SearchOpts {
+interface SearchOpts {
   /** 品牌过滤；空串表示不限 */
   brand?: string;
 }
@@ -142,8 +143,14 @@ export function search(docs: SearchableDoc[], q: string, opts: SearchOpts = {}):
 export function suggestions(docs: SearchableDoc[], limit = 8): string[] {
   const seen = new Set<string>();
   for (const d of docs) {
-    // 只收产品线与芯片名这类「短而准」的词，机型名太长不适合当建议
-    for (const raw of [d.product.line, d.product.chipset?.name, d.vendor?.nameZh]) {
+    // 只收产品线与芯片名这类「短而准」的词，机型名太长不适合当建议。
+    // 芯片名走 chipNameLabel：它是标识，有官方英文名就得用官方的（否则建议词
+    // 在英文页里是「麒麟9020」，点了还能搜到，但看着就是没做完的样子）。
+    for (const raw of [
+      d.product.line,
+      chipNameLabel(d.product.chipset?.name ?? ''),
+      d.vendor?.nameZh,
+    ]) {
       const v = (raw ?? '').trim();
       if (v && v.length <= 14) seen.add(v);
     }

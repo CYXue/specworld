@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { continentOf } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { champions } from '../lib/specs';
@@ -69,6 +70,7 @@ const bannerBackground = `linear-gradient(to bottom right, ${DIAG_BANDS.map((c, 
   return `${c} ${a}%, ${c} ${b}%`;
 }).join(', ')})`;
 
+const { t } = useI18n();
 const { ds, err } = useDataset();
 const derived = useDerived();
 
@@ -88,11 +90,12 @@ const groups = computed(() => {
     total: d.products.filter((p) => p.brand === v.id).length,
   }));
 });
-const updated = computed(() => {
-  const t = ds.value?.generatedAt;
-  if (!t) return '';
-  const d = new Date(t);
-  return `${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`;
+/** 更新日期的**两个分量**分开算：语言包自己决定怎么拼（中文「3 月 5 日」、英文「Mar 5」）。 */
+const updatedParts = computed(() => {
+  const ts = ds.value?.generatedAt;
+  if (!ts) return null;
+  const d = new Date(ts);
+  return { month: d.getUTCMonth() + 1, day: d.getUTCDate() };
 });
 const count = computed(() => ds.value?.products.length ?? 0);
 </script>
@@ -100,7 +103,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
 <template>
   <div>
     <div v-if="err" class="page-shell py-10 text-center" style="color: var(--color-east)">
-      数据加载失败：{{ err }}
+      {{ t('home.loadFailed', { err }) }}
     </div>
 
     <template v-else>
@@ -137,7 +140,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
         >
           <!-- 左：站名 + 读数区 -->
           <div class="min-w-0">
-            <h1 class="pixel-outline font-pixel text-[24px] leading-[1.4]">参数世界</h1>
+            <h1 class="pixel-outline font-pixel text-[24px] leading-[1.4]">{{ t('brand.name') }}</h1>
             <div class="mt-1.5 flex flex-wrap items-start gap-x-2 gap-y-1">
               <!--
                 副标题保留（用户2026-10-06 拍板）：它是品牌标语不是自我介绍。
@@ -146,7 +149,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
                 （页脚同样有它），不是罗列规模。规模数据在右边那枚读数里。
               -->
               <p class="font-pixel text-[12px] leading-[1.5] text-[var(--color-parchment-lit)]">
-                选择更清楚
+                {{ t('brand.tagline') }}
               </p>
               <!--
                 状态行做成「仪器读数」：细边框 + 半透底 + 呼吸灯。
@@ -166,7 +169,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
                   style="background: var(--color-west)"
                   aria-hidden
                 />
-                {{ count }} 款在册 · 更新于 {{ updated }}
+                {{ updatedParts ? t('home.status', { n: count, month: updatedParts.month, day: updatedParts.day }) : t('home.statusUndated', { n: count }) }}
               </p>
             </div>
           </div>
@@ -183,11 +186,15 @@ const count = computed(() => ds.value?.products.length ?? 0);
           放在各品牌村落**之前** —— 用户进广场先看到的是「眼下什么最强最贵最便宜」，
           而不是先滚过 60 台机型卡片。
         -->
-        <SectionFrame title="最新 · 最贵 · 最便宜" hud="var(--color-gold)" icon="trophy">
+        <SectionFrame
+          :title="t('home.spotlightTitle')"
+          hud="var(--color-gold)"
+          icon="trophy"
+        >
           <p
             class="pixel-note mb-4 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]"
           >
-            价格取官方中国大陆起售价（多容量档取最低档）；官方未公布售价的机型不进价格榜。
+            {{ t('home.spotlightNote') }}
           </p>
           <SpotlightStrip :spots="spots" :vendors="derived?.vendors ?? new Map()" />
         </SectionFrame>
@@ -208,7 +215,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
           「最新/最贵/最便宜」讲的是**新与价**，这里讲的是**单项能力极值**，两者不重合
           （屏幕最锐的机器未必最贵），所以都留着而不是二选一。
         -->
-        <SectionFrame title="各维度第一" hud="var(--color-gold)" icon="trophy">
+        <SectionFrame :title="t('home.championTitle')" hud="var(--color-gold)" icon="trophy">
           <div class="grid gap-3 sm:grid-cols-2">
             <ChampionRow
               v-for="c in champs"

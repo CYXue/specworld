@@ -23,20 +23,48 @@
 
 import { strict as assert } from 'node:assert';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+  mkdirSync,
+  rmSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // 必须在任何 `await import('../src/lib/*.ts')` 之前装好：search.ts / canvasFilter.ts
 // 内部用 Vite 约定写 `from './query'`（无扩展名），Node 默认解析不了，靠这个钩子补。
 installTsResolver();
-import { mapAppleSpecs, mapAppleCompare } from './normalize/brands/apple.mjs';
-import { mapHuawei } from './normalize/brands/huawei.mjs';
 import {
   ARCHIVE_TOP_FIELDS,
   ARCHIVE_VOLATILE_FIELDS,
   productFields,
   shapeOfArchive,
 } from './lib/archive-shape.mjs';
+import * as DERIVE from './lib/derive.mjs';
+import { assertUnlocked } from './lib/gates-lock.mjs';
+import * as I18N from './lib/i18n-keys.mjs';
+import { applyOverrides, loadOverrides, validateOverrides } from './lib/overrides.mjs';
+import {
+  fieldMap,
+  isRegisteredCategory,
+  loadCategories,
+  loadSchema,
+  quantifiableFields,
+  validateSchema,
+  validateSpecs,
+  validateSpecValue,
+  groupsOf,
+  fieldsByGroup,
+  valueStatus,
+  validateStatusMap,
+} from './lib/schema.mjs';
+import { expandSpecs, flattenSpecs, pick, setSpec } from './lib/specs.mjs';
+import { mapAppleSpecs, mapAppleCompare } from './normalize/brands/apple.mjs';
+import { mapHuawei } from './normalize/brands/huawei.mjs';
 import {
   stripInvisible,
   normalizeKey,
@@ -59,9 +87,14 @@ import {
   slugify,
 } from './normalize/parse.mjs';
 import * as WQ from './sync/queue.mjs';
-import { validate, LIMITS, REQUIRED_PATHS } from './sync/validate.mjs';
+import {
+  validate,
+  LIMITS,
+  REQUIRED_PATHS,
+  FIELD_LIMITS,
+  SCHEMA_RANGE_PATHS,
+} from './sync/validate.mjs';
 import { installTsResolver } from './ts-resolver.mjs';
-import { assertUnlocked } from './lib/gates-lock.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -92,6 +125,8 @@ function phone(over = {}) {
   return {
     id: 'test-x1',
     brand: 'apple',
+    // 闸门 11b 要求 category 必填且已注册（2026-10-13 审计 H1 起，缺失也拒）
+    category: 'phone',
     name: 'Test X1',
     releaseDate: '2026-01-15',
     provenance: {
@@ -520,6 +555,27 @@ check('健康数据通过', () => {
   assert.deepEqual(validate(fleet(), null), []);
 });
 
+// A4 收口（2026-10-13 审计 H1）：categoryOf() 对缺失品类静默回落 'phone'，
+// 上游闸门原先只拦「未注册值」不拦「缺失值」。真实数据 62 台全部带 category
+// （data/products.json 实测），管线必写、用户层 add-product 也已校验
+// （scripts/lib/overrides.mjs）——缺失只可能是解析器/合并层写漏，
+// 那正是必须显性失败、不许静默回落默认品类的形态。
+check('category 缺失被拦（缺失与未注册同样拒绝）', () => {
+  const f = validate(fleet({ category: undefined }), null);
+  assert.ok(
+    f.some((x) => x.includes('品类')),
+    'category 缺失必须报错，不许静默回落默认品类',
+  );
+});
+
+check('category 未注册被拦（原有闸门，防回归）', () => {
+  const f = validate(fleet({ category: 'watch' }), null);
+  assert.ok(
+    f.some((x) => x.includes('品类')),
+    '未注册品类必须报错',
+  );
+});
+
 check('机型数低于下限被拦', () => {
   const few = { products: Array.from({ length: 3 }, (_, i) => phone({ id: `x${i}` })) };
   assert.ok(validate(few, null).some((f) => f.includes('低于下限')));
@@ -687,8 +743,30 @@ check('零值不被当作缺数据混过（正数校验）', () => {
   );
 });
 
-check('REQUIRED_PATHS 与 LIMITS 自洽（配置本身没写错）', () => {
-  // 防的是：有人加了一条必填路径但闸门覆盖不到，或者区间上下界写反
+check('字段区间闸门接线自洽（FIELD_LIMITS ≡ schema.range，单一真源）', () => {
+  // 硬编码审计 A2 治理（2026-10-13）：区间真源已迁到 schema.range，validate 从 schema 派生。
+  // 本测试钉死接线：① 每个受控路径的闸门区间恒等于 schema.range；
+  // ② LIMITS 键集合钉死——只允许进程阈值 + refreshHz 字符串适配器，
+  //    防止有人把字段区间双源加回来（反向测：加回即红）。
+  const schema = loadSchema('phone');
+  const byPath = new Map(schema.fields.map((f) => [f.path, f]));
+  for (const path of SCHEMA_RANGE_PATHS) {
+    const f = byPath.get(path);
+    assert.ok(
+      f && Array.isArray(f.range),
+      `SCHEMA_RANGE_PATHS 里的 ${path} 应在 schema 且有 range`,
+    );
+    assert.deepEqual(
+      FIELD_LIMITS[path],
+      f.range,
+      `${path} 的闸门区间应恒等于 schema.range（单一真源被破坏）`,
+    );
+  }
+  assert.deepEqual(
+    Object.keys(LIMITS).sort(),
+    ['maxCoverageDrop', 'maxDropRatio', 'minProducts', 'refreshHz'],
+    'LIMITS 只允许进程阈值 + refreshHz 字符串适配器；字段区间一律走 schema.range（审计 A2）',
+  );
   for (const [key, range] of Object.entries(LIMITS)) {
     if (!Array.isArray(range)) continue;
     assert.ok(range.length === 2, `LIMITS.${key} 应为 [下界, 上界]，实得 ${range}`);
@@ -789,18 +867,27 @@ check('三类丢弃各归其位：缺日期入队、窗口外不入队、模糊�
 check('反向测：模糊边界必须按精度区分，两侧都试一遍', () => {
   // 只测「边界附近的收进来」会漏掉另一半：若某天有人把 fuzz 条件写成永远 true，
   // 2019 年的老机型会被全收进来。单测要能区分两个方向，所以造一组对照。
-  const near = WQ.classifyByWindow([P2025('near', { releaseDate: '2024-09', releaseDatePrecision: 'month' })], {
-    windowStart: '2024-09-01',
-  });
-  const far = WQ.classifyByWindow([P2025('far', { releaseDate: '2023-11', releaseDatePrecision: 'month' })], {
-    windowStart: '2024-09-01',
-  });
+  const near = WQ.classifyByWindow(
+    [P2025('near', { releaseDate: '2024-09', releaseDatePrecision: 'month' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
+  const far = WQ.classifyByWindow(
+    [P2025('far', { releaseDate: '2023-11', releaseDatePrecision: 'month' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
   assert.equal(near.kept.length, 1, '边界附近的应保留');
   assert.equal(far.kept.length, 0, '离边界远的应出局 —— 若此项也保留，fuzz 条件失效了');
   // 反向：精度到天但压在同一天之前 → 不走fuzz 分支（fuzz 只对精度不足生效）
-  const day = WQ.classifyByWindow([P2025('day', { releaseDate: '2024-08-20', releaseDatePrecision: 'day' })], {
-    windowStart: '2024-09-01',
-  });
+  const day = WQ.classifyByWindow(
+    [P2025('day', { releaseDate: '2024-08-20', releaseDatePrecision: 'day' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
   assert.equal(day.kept.length, 0, '精度到天的应严格按日期判定，不吃fuzz 豁免');
 });
 
@@ -824,21 +911,40 @@ check('待收录项带可执行的人工动作（不是一句「失败了」）'
 
 check('队列文件是纯数据的函数：同输入必须逐字节一致（反向：带时间戳必失败）', () => {
   const pending = [
-    { id: 'b', kind: 'missing-date', brand: 'apple', name: null, nameZh: null, slug: null, action: 'x' },
-    { id: 'a', kind: 'missing-date', brand: 'huawei', name: null, nameZh: null, slug: null, action: 'y' },
+    {
+      id: 'b',
+      kind: 'missing-date',
+      brand: 'apple',
+      name: null,
+      nameZh: null,
+      slug: null,
+      action: 'x',
+    },
+    {
+      id: 'a',
+      kind: 'missing-date',
+      brand: 'huawei',
+      name: null,
+      nameZh: null,
+      slug: null,
+      action: 'y',
+    },
   ];
   const s1 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
   const s2 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
   assert.equal(s1, s2, '同输入必须同字节 —— 否则 CI 每轮都判「队列变了」，制造空提交');
 
   // 反向测：顺序打乱也必须同字节（排序只认 id，不认传入顺序）
-  const s3 = JSON.stringify(WQ.buildQueueFile([...pending].reverse(), { windowStart: '2024-09-01' }));
+  const s3 = JSON.stringify(
+    WQ.buildQueueFile([...pending].reverse(), { windowStart: '2024-09-01' }),
+  );
   assert.equal(s1, s3, '顺序打乱后仍须一致 —— 说明排序生效');
 
   // 反向测：文件里不得含任何看起来像时间戳的字段。
   // 判据用字段名而不是值 —— 直接搜 2024-09-01 会误伤 windowStart（它是业务日期，该留）。
   const queue = WQ.buildQueueFile(pending, { windowStart: '2024-09-01' });
-  const VOLATILE = /generatedAt|firstSeenAt|lastSeenAt|fetchedAt|syncedAt|builtAt|snapshotAt|checkedAt|updatedAt/;
+  const VOLATILE =
+    /generatedAt|firstSeenAt|lastSeenAt|fetchedAt|syncedAt|builtAt|snapshotAt|checkedAt|updatedAt/;
   const walk = (n, p) => {
     if (Array.isArray(n)) return n.forEach((v, i) => walk(v, `${p}[${i}]`));
     if (n && typeof n === 'object') {
@@ -959,7 +1065,10 @@ check('队列指纹不参与站点指纹（用户看不到队列变化，不该�
     fp.siteFingerprint !== fp.pendingFingerprint || fp.pendingFingerprint === 'empty',
     '队列指纹与站点指纹不应是同一个值',
   );
-  assert.ok(fp.siteFingerprint && fp.dataFingerprint && fp.templateFingerprint, '三个指纹都必须有值');
+  assert.ok(
+    fp.siteFingerprint && fp.dataFingerprint && fp.templateFingerprint,
+    '三个指纹都必须有值',
+  );
 });
 
 check('入库指针 data/.fingerprint 必须记队列指纹（否则下一轮算不出变化）', () => {
@@ -994,7 +1103,10 @@ check('data/discovery-pending.json 若存在，必须是无时间戳的纯数据
   assert.equal(typeof q.count, 'number', 'count 必须是数字');
   assert.equal(q.count, q.items.length, 'count 必须与 items 长度一致');
   assert.equal(q.windowStart, '2024-09-01', 'windowStart 应与管线窗口一致');
-  assert.ok(!/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw), '队列文件含时间戳字段，会造成空提交');
+  assert.ok(
+    !/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw),
+    '队列文件含时间戳字段，会造成空提交',
+  );
   for (const it of q.items) {
     assert.equal(it.kind, 'missing-date', '队列里只该有缺发布日期这一类');
     assert.ok(it.action?.includes('release-dates.json'), '每条都要指明补哪张表');
@@ -1727,11 +1839,25 @@ const EXS = await import('../src/lib/exportSummary.ts');
   const byBrandSum = all.priceByBrand.reduce((a, b) => a + b.totalCny, 0);
   assert.equal(byBrandSum, all.priceTotalCny, '各品牌小计之和应等于累计总计');
 
-  // 单台基准：iPhone 16 起售价 5999；iPhone 17 多 SKU 应取最小 6799
+  // 单台基准：iPhone 16 起售价 5999；iPhone 17 多 SKU 应取最小 6799。
+  // 走 basePriceCny（price.ts 单一真身）：exportSummary 以前有自己的一份
+  // deviceStartPriceCny，判据少了 `> 0`，已经合并掉了 —— 这里测的是合并后的那一份。
   const ip16 = snap.products.find((p) => p.id === 'apple-iphone-16');
   const ip17 = snap.products.find((p) => p.id === 'apple-iphone-17');
-  assert.equal(EXS.deviceStartPriceCny(ip16), 5999, 'iPhone 16 起售价应为 5999');
-  assert.equal(EXS.deviceStartPriceCny(ip17), 6799, '多 SKU 应取最小价');
+  assert.equal(EXS.basePriceCny(ip16), 5999, 'iPhone 16 起售价应为 5999');
+  assert.equal(EXS.basePriceCny(ip17), 6799, '多 SKU 应取最小价');
+  // 口径对账：0 与负数不算价格（导出合计曾经会把它算进去，详情页却是「未公布」）
+  assert.equal(EXS.basePriceCny({ skus: [{ priceCny: 0 }] }), null, 'priceCny 为 0 应判未公布');
+  assert.equal(EXS.basePriceCny({ skus: [{ priceCny: -1 }] }), null, '负价不应计入起售价');
+  assert.equal(EXS.basePriceCny({ skus: [] }), null, '无 skus 应判未公布');
+  assert.equal(EXS.basePriceCny({}), null, '缺 skus 字段应判未公布');
+
+  // 单一真身（结构对账）：三处导出必须是**同一个函数引用**。
+  // 只测语义不够——语义测试各自都过得去，只有引用相等能挡住「又抄一份」。
+  const PRICE = await import('../src/lib/price.ts');
+  const CAT_PRICE = await import('../src/lib/catalog.ts');
+  assert.equal(EXS.basePriceCny, PRICE.basePriceCny, 'exportSummary 应转出 price.ts 的同一份实现');
+  assert.equal(CAT_PRICE.basePriceCny, PRICE.basePriceCny, 'catalog 应转出 price.ts 的同一份实现');
 
   // 分布之和守恒
   const stSum = all.status.onSale + all.status.upcoming + all.status.retired + all.status.other;
@@ -2400,9 +2526,13 @@ const C = await import('../src/lib/catalog.ts');
 const F = await import('../src/lib/facets.ts');
 
 const REAL = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
-const REAL_P = REAL.products;
+// v2 适配：REAL_P 与前端加载同路——data.ts 的 loadDataset 会过 toPhoneViews
+// （specs 容器 → 嵌套视图），这里同步过一遍，保证自测断言的就是前端真实形状，
+// 而不是管线内部形状。不过这层的话 facets/catalog 的嵌套读取会全数 undefined。
+const ADAPT = await import('../src/lib/adapt.ts');
+const REAL_P = ADAPT.toPhoneViews(REAL.products);
 const REAL_LABELS = new Map(REAL.vendors.map((v) => [v.id, v.nameZh]));
-const DIMS = F.DIMENSIONS.map((d) => d.key);
+const DIMS = [...F.DIMENSION_KEYS];
 
 /** 造一台最小机型，只带品类/系列/变体/价格判定用得到的字段 */
 function pdoc(over = {}) {
@@ -2622,7 +2752,7 @@ check('缺价机型返回 null 而非 0（0 会被「最便宜」榜当成真价
     '前置条件：确实缺价',
   );
   assert.equal(C.basePriceCny(p), null);
-  assert.equal(C.fmtPriceCny(null), '官方未公布');
+  assert.equal(C.fmtPriceCny(null), '官方未公布中国区售价');
 });
 
 check('三榜：最贵榜不出现缺价机型，且真的是有价里最贵', () => {
@@ -2680,7 +2810,10 @@ check('缺数据机型可被筛出来（无芯片 / 无内存的机型不是隐�
   const chipFacet = F.facetOf(REAL_P, 'chip', REAL_P).find((c) => c.id === C.UNKNOWN);
   assert.ok(chipFacet, '芯片分面必须有「未公布」档位，否则缺数据的机型无处可寻');
   assert.equal(noChip.length, chipFacet.count, '筛「未公布芯片」的结果必须与分面计数一致');
-  assert.ok(noChip.every((p) => !p.chipset?.name), '筛出来的必须真的没有芯片名');
+  assert.ok(
+    noChip.every((p) => !p.chipset?.name),
+    '筛出来的必须真的没有芯片名',
+  );
   const noRam = F.applyFilter(REAL_P, { ...F.emptyFilter(), ram: [C.UNKNOWN] });
   const ramFacet = F.facetOf(REAL_P, 'ram', REAL_P).find((c) => c.id === C.UNKNOWN);
   assert.ok(ramFacet, '内存分面必须有「未公布」档位');
@@ -2693,7 +2826,10 @@ check('分面计数联动但选项枚举看全集（0 计数灰显保留，选�
   // 京东式：所有档位常驻，不兼容的 0 计数灰显 —— 华为芯片还在列表里但 count=0
   const qilin = chips.filter((c) => c.id.includes('麒麟'));
   assert.ok(qilin.length > 0, '选苹果后麒麟芯片必须仍出现在分面里（否则无法反悔）');
-  assert.ok(qilin.every((c) => c.count === 0), '选苹果后麒麟芯片计数必须为 0（灰显依据）');
+  assert.ok(
+    qilin.every((c) => c.count === 0),
+    '选苹果后麒麟芯片计数必须为 0（灰显依据）',
+  );
   // 联动计数正确：苹果自己的芯片计数 = 苹果池内台数
   const a19 = chips.find((c) => c.id === 'A19Pro');
   assert.ok(a19 && a19.count > 0, '选苹果后 A19 Pro 必须还有计数');
@@ -2716,8 +2852,11 @@ check('反向测：选华为芯片后品牌分面仍含苹果（0 计数），�
   const apple = brands.find((b) => b.id === 'apple');
   assert.ok(apple, '苹果必须还在品牌分面里');
   assert.equal(apple?.count, 0, '苹果计数应为 0（灰显不可点）');
-  assert.equal(brands.find((b) => b.id === 'huawei')?.count, F.applyFilter(REAL_P, fa).length,
-    '华为计数 = 芯片筛选后命中台数');
+  assert.equal(
+    brands.find((b) => b.id === 'huawei')?.count,
+    F.applyFilter(REAL_P, fa).length,
+    '华为计数 = 芯片筛选后命中台数',
+  );
 });
 
 check('各维度分面计数之和 = 该维度池内台数', () => {
@@ -2812,7 +2951,10 @@ check('筛选：选某价格档只保留该档机型（反向测价格维度真�
 check('筛选：选「未公布」价格档只含无价机型', () => {
   const got = F.applyFilter(REAL_P, { ...F.emptyFilter(), price: [C.UNKNOWN] });
   for (const p of got) assert.equal(C.priceBucket(p), C.UNKNOWN);
-  assert.ok(got.every((p) => C.basePriceCny(p) == null), '有价机型混入说明价格维度失效');
+  assert.ok(
+    got.every((p) => C.basePriceCny(p) == null),
+    '有价机型混入说明价格维度失效',
+  );
 });
 
 check('价格分面：金额升序、未公布排最后', () => {
@@ -2874,12 +3016,7 @@ check('多级排序的反向测：优先级顺序必须生效（一级能压过�
     battery: { capacityMah: battery },
     camera: { rear: camera != null ? [{ role: 'main', mp: camera }] : [] },
   });
-  const arr = [
-    mk('a', 5000, 50),
-    mk('b', 5000, 80),
-    mk('c', 6000, 10),
-    mk('d', 4000, 99),
-  ];
+  const arr = [mk('a', 5000, 50), mk('b', 5000, 80), mk('c', 6000, 10), mk('d', 4000, 99)];
   const r = F.applyMultiSort(arr, ['camera-desc', 'battery-desc']);
   assert.deepEqual(
     r.map((p) => p.id),
@@ -2905,7 +3042,11 @@ check('多级排序：缺值一律排末尾（无论升/降序，且不因二级
     mk('i', 5000, 5), // 两级都有
   ];
   const r = F.applyMultiSort(arr, ['battery-desc', 'camera-desc']);
-  assert.deepEqual(r.map((p) => p.id), ['i', 'h', 'g'], '有电池的 i 第一；h 一级缺排第二；g 两级都缺垫底');
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['i', 'h', 'g'],
+    '有电池的 i 第一；h 一级缺排第二；g 两级都缺垫底',
+  );
 });
 
 check('空排序链 = 默认按发布日期倒序', () => {
@@ -2921,7 +3062,11 @@ check('空排序链 = 默认按发布日期倒序', () => {
   });
   const arr = [mk('x', '2025-01-01'), mk('y', '2025-03-01'), mk('z', '2025-02-01')];
   const r = F.applyMultiSort(arr, []);
-  assert.deepEqual(r.map((p) => p.id), ['y', 'z', 'x'], '无排序键时按发布日期倒序兜底');
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['y', 'z', 'x'],
+    '无排序键时按发布日期倒序兜底',
+  );
 });
 
 check('URL 往返：写什么就读回什么（多级排序用逗号分隔的 o）', () => {
@@ -2933,7 +3078,10 @@ check('URL 往返：写什么就读回什么（多级排序用逗号分隔的 o�
     chip: ['A19Pro'],
     year: ['2026'],
   };
-  const back = F.readFilter(new URLSearchParams(F.writeFilter(want, ['battery-desc', 'camera-desc'])), cat);
+  const back = F.readFilter(
+    new URLSearchParams(F.writeFilter(want, ['battery-desc', 'camera-desc'])),
+    cat,
+  );
   assert.deepEqual(back.filter.brand, ['apple']);
   assert.deepEqual(back.filter.series, ['标准']);
   assert.deepEqual(back.filter.chip, ['A19Pro']);
@@ -2991,12 +3139,12 @@ check('isFiltered 只认真实条件，不把排序当筛选', () => {
 });
 
 check('品类是筛选条的第一个维度（用户 2026-10-05 明确要求置顶）', () => {
-  assert.equal(F.DIMENSIONS[0].key, 'category', '品类必须排第一');
+  assert.equal(F.DIMENSION_KEYS[0], 'category', '品类必须排第一');
 });
 
 check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 纠正概念）', () => {
-  assert.equal(F.DIMENSIONS[1].key, 'form', '形态必须紧跟品类');
-  assert.ok(!F.DIMENSIONS.some((d) => d.key === 'category' && d.key === 'form'));
+  assert.equal(F.DIMENSION_KEYS[1], 'form', '形态必须紧跟品类');
+  assert.ok(F.DIMENSION_KEYS.includes('category') && F.DIMENSION_KEYS.includes('form'));
   const catFacets = F.facetOf(REAL_P, 'category', REAL_P);
   assert.deepEqual(
     catFacets.map((f) => f.id),
@@ -3023,7 +3171,7 @@ check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 �
 });
 
 check('形态条件经 URL 往返（参数 m）', () => {
-  const cat = F.buildCatalog(REAL_P, F.DIMENSIONS.map((d) => d.key));
+  const cat = F.buildCatalog(REAL_P, F.DIMENSION_KEYS);
   const want = { ...F.emptyFilter(), form: ['foldable'] };
   const back = F.readFilter(new URLSearchParams(F.writeFilter(want)), cat);
   assert.deepEqual(back.filter.form, ['foldable'], '形态条件必须能从 URL 完整读回');
@@ -3073,12 +3221,22 @@ check('立绘的折叠判据与前端同源（同一个真源，不是各写一�
 check('反向测：主屏够大不等于折叠（尺寸阈值是估算，官网写了才算）', () => {
   // 构造一台「大但官网没写折叠」的机器：8.3 英寸。若判据退回尺寸阈值，
   // 它会被误判成折叠机 —— 这条断言就是拦住那个退化的。
-  const fake = { rawOfficial: { '尺寸与重量': '220 mm | 130 mm | 6.1 mm' }, display: { sizeIn: 8.3 } };
+  const fake = {
+    rawOfficial: { 尺寸与重量: '220 mm | 130 mm | 6.1 mm' },
+    display: { sizeIn: 8.3 },
+  };
   assert.equal(FOLD.isFoldableOfficial(fake), false, '大屏平板没有折叠原文依据，不得判为折叠');
   assert.equal(SPRITE.layout(fake).foldable, false, '立绘与大屏平板的判据必须一致');
   // 反向：大屏但官网写了折叠 → 必须判为折叠（不是只认小屏）
-  const fakeFold = { rawOfficial: { '尺寸与重量': '展开态：220 mm | 折叠态：130 mm' }, display: { sizeIn: 6.1 } };
-  assert.equal(FOLD.isFoldableOfficial(fakeFold), true, '官网写了折叠就必须认，哪怕主屏只有 6.1 英寸');
+  const fakeFold = {
+    rawOfficial: { 尺寸与重量: '展开态：220 mm | 折叠态：130 mm' },
+    display: { sizeIn: 6.1 },
+  };
+  assert.equal(
+    FOLD.isFoldableOfficial(fakeFold),
+    true,
+    '官网写了折叠就必须认，哪怕主屏只有 6.1 英寸',
+  );
 });
 
 check('layout 几何自洽：画布内、不越界、圆角与厚度同向', () => {
@@ -3112,10 +3270,18 @@ check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）'
   // 厚机圆角能到 15 以上，钉死上限反而会把厚机误判成 bug。
   // 单调性才是设计契约：有人把符号写反（越薄越圆）时它会立刻报出。
   const probe = (mm) => {
-    const L = SPRITE.layout({ brand: 'apple', display: { sizeIn: 6.5 }, body: { thicknessMm: mm } });
+    const L = SPRITE.layout({
+      brand: 'apple',
+      display: { sizeIn: 6.5 },
+      body: { thicknessMm: mm },
+    });
     return { r: L.rect.r, sw: L.strokeW };
   };
-  for (const [lo, hi] of [[6, 7], [7, 9], [9, 12]]) {
+  for (const [lo, hi] of [
+    [6, 7],
+    [7, 9],
+    [9, 12],
+  ]) {
     const a = probe(lo);
     const b = probe(hi);
     assert.ok(b.r >= a.r, `厚度 ${lo}→${hi}mm 圆角应不减（${a.r.toFixed(2)} → ${b.r.toFixed(2)}）`);
@@ -3126,10 +3292,7 @@ check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）'
   }
   // 反向测：符号写反时（越薄越圆）必须被抓出来。构造一个「比 6mm 更薄」的对照，
   // 按公式圆角应更小；若实现反了，这里会报出。
-  assert.ok(
-    probe(5.5).r < probe(6.5).r,
-    '5.5mm 的圆角必须小于 6.5mm —— 若成立说明方向没写反',
-  );
+  assert.ok(probe(5.5).r < probe(6.5).r, '5.5mm 的圆角必须小于 6.5mm —— 若成立说明方向没写反');
 });
 
 /* ================================================================ *
@@ -3211,8 +3374,16 @@ check('归档体积在闸门内（超了会让版本库不可逆地膨胀）', (
 check('反向测：归档通道若漏一个，检查必须报出（否则「改了版却以为没改」会静默）', () => {
   // 造一个「归档里字段被改名」的形状，确认形状检查能区分改版前后。
   // 不去真改 data/raw/（那是真数据），只验判据本身能区分两个不同形状。
-  const before = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量': '6600 mAh' } }], skipped: [] };
-  const after = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量新写法': '6600 mAh' } }], skipped: [] };
+  const before = {
+    source: 'x',
+    products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量': '6600 mAh' } }],
+    skipped: [],
+  };
+  const after = {
+    source: 'x',
+    products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量新写法': '6600 mAh' } }],
+    skipped: [],
+  };
   assert.notEqual(
     JSON.stringify(before),
     JSON.stringify(after),
@@ -3250,7 +3421,10 @@ check('每个静态路由都必须有站内链接指向它（孤儿页零报错�
     name: m[2],
   }));
   const staticRoutes = routes.filter((r) => !r.path.includes('pathMatch') && !r.path.includes(':'));
-  assert.ok(staticRoutes.length >= 6, `解析到的静态路由只有 ${staticRoutes.length} 条，正则可能失效了`);
+  assert.ok(
+    staticRoutes.length >= 6,
+    `解析到的静态路由只有 ${staticRoutes.length} 条，正则可能失效了`,
+  );
 
   const orphans = [];
   for (const r of staticRoutes) {
@@ -3290,10 +3464,7 @@ check('页脚必须保留「关于」入口（它不在主导航里，删掉就�
     /to="\/about"/.test(footerFile) ||
     /to:\s*'\/about'/.test(footerFile) ||
     /["'`]\/about["'`]/.test(footerFile);
-  assert.ok(
-    hasAbout,
-    '页脚必须保留「关于」入口 —— 它不在主导航里了，删掉就成孤儿页',
-  );
+  assert.ok(hasAbout, '页脚必须保留「关于」入口 —— 它不在主导航里了，删掉就成孤儿页');
   // 顺带钉住当前页高亮：页脚链接不带 aria-current 的话，
   // 进到「关于」页看不出自己在哪。
   assert.ok(
@@ -3371,10 +3542,7 @@ check('顶栏导航必须用平面按钮（3px 立体投影撑高 6px，一排�
     USES_RAISED.test('class="pixel-button px-2"'),
     '判据失效：连明显的立体版都匹配不到，上面那条断言形同虚设',
   );
-  assert.ok(
-    !USES_RAISED.test('class="pixel-button-flat px-2"'),
-    '判据失效：flat 版被误判成立体版',
-  );
+  assert.ok(!USES_RAISED.test('class="pixel-button-flat px-2"'), '判据失效：flat 版被误判成立体版');
   // 必须真的定义了 flat 变体，不能只改 class 名
   assert.ok(
     /\.pixel-button-flat\s*\{/.test(HEADER_CSS),
@@ -3429,7 +3597,11 @@ check('hero 标题不得用 36px（与顶栏 logo 重复强调，24px 才是页�
 
 check('hero 副标题必须是 12px（标语，不是自我介绍的数据）', () => {
   assert.ok(
-    /选择更清楚/.test(homeView) && /text-\[12px\][^>]*>\s*\n?\s*选择更清楚/.test(homeView),
+    // ⚠️ 2026-10-13：这里原本直接匹配中文「选择更清楚」。文案抽进语言包之后
+    // 源码里只剩 `t('brand.tagline')`，若还按中文匹配就是典型的**闸门失效**：
+    // 正则永不命中 → 断言恒真 → 副标题改成 36px 也照样绿灯。改为匹配键。
+    /t\('brand.tagline'\)/.test(homeView) &&
+      /text-\[12px\][^>]*>\s*\n?\s*\{\{ t\('brand.tagline'\) \}\}/.test(homeView),
     'hero 副标题应为 12px',
   );
   // 高度不同的并排（副标题纯文字 vs 读数有边框）必须顶对齐：
@@ -3475,7 +3647,9 @@ check('首页顶栏 = 对角灰阶过渡，且是收窄的 HUD 而非标题海�
   );
 
   // 宽屏档的高度：抓 min-width:901px 那段里的 height 值
-  const wide = cssText.match(/@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.banner-h\s*\{[^}]*height:\s*(\d+)px/);
+  const wide = cssText.match(
+    /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.banner-h\s*\{[^}]*height:\s*(\d+)px/,
+  );
   assert.ok(wide, '宽屏档里读不到 height（格式应形如 `height: 80px`）');
 
   // ⚠️ 上下界都从**实测内容高度**推，不是拍脑袋的整数。
@@ -3530,7 +3704,10 @@ check('首页顶栏各断点高度不得让内容被裁（overflow-hidden 会静
 
   // 宽屏档 = min-width ≥ 901 的那条
   const wideKey = [...byBreakpoint.keys()].find((k) => /min-width:\s*9\d\dpx/.test(k));
-  assert.ok(wideKey, `找不到 min-width ≥900px 的宽屏档，现有：${[...byBreakpoint.keys()].join(' / ')}`);
+  assert.ok(
+    wideKey,
+    `找不到 min-width ≥900px 的宽屏档，现有：${[...byBreakpoint.keys()].join(' / ')}`,
+  );
   const wide = byBreakpoint.get(wideKey);
 
   assert.ok(
@@ -3549,7 +3726,11 @@ check('首页顶栏各断点高度不得让内容被裁（overflow-hidden 会静
   // 判据：`pt`（顶部内边距）必须与「高度 − 内容」一致，即三档都留 8px 底部。
   // 内容高度是 puppeteer 实测的，改 h1 字号/行高时这些数会一起过期 ⇒ 必须重量。
   const CONTENTS = { base: 106, tiny: 134, wide: 72 };
-  const actual = { base, wide, tiny: byBreakpoint.get([...byBreakpoint.keys()].find((k) => /max-width/.test(k))) };
+  const actual = {
+    base,
+    wide,
+    tiny: byBreakpoint.get([...byBreakpoint.keys()].find((k) => /max-width/.test(k))),
+  };
 
   const pt = Number((cssText.match(/row[\s\S]{0,200}?pt-(\d)/) || [])[1] || 8);
   for (const [name, content] of Object.entries(CONTENTS)) {
@@ -3669,7 +3850,6 @@ check('首页顶栏灰阶逐档递增、无死档、跨度足够，且对白字 
   );
 });
 
-
 // ------------------------------------------------------------------------
 // 天空色带（黑白太极）
 //
@@ -3755,7 +3935,10 @@ check('色带有「先升后降」的明度结构（中间亮、上下暗 = 太�
   const rising = L.slice(0, peak).every((v, i) => i === 0 || v > L[i - 1]);
   const falling = L.slice(peak).every((v, i) => i === 0 || v < L[peak + i - 1]);
   assert.ok(rising, '峰值之前必须是递增的 —— 当前' + L.map((v) => (v * 100).toFixed(0)).join('→'));
-  assert.ok(falling, '峰值之后必须是递减的 —— 当前 ' + L.map((v) => (v * 100).toFixed(0)).join('→'));
+  assert.ok(
+    falling,
+    '峰值之后必须是递减的 —— 当前 ' + L.map((v) => (v * 100).toFixed(0)).join('→'),
+  );
 });
 
 check('每档色带对白字对比度 ≥ 4.5:1（WCAG AA，标题压在色带上）', () => {
@@ -3831,19 +4014,12 @@ check('banner 上的文字必须自带可读底（不靠压小装饰来保证）
     /background:\s*rgb\(/.test(flat) && !/background:\s*transparent/.test(flat),
     '导航按钮必须有半透底 —— banner 上有底色变化，全透明会让文字读不清',
   );
-  assert.ok(
-    /bg-\[rgb\(/.test(navFile),
-    '逛玩法的弱化链接也要有半透底（它们同样压在色带上）',
-  );
+  assert.ok(/bg-\[rgb\(/.test(navFile), '逛玩法的弱化链接也要有半透底（它们同样压在色带上）');
   // 且不得再读导航位置来调整装饰
   const sky = readFileSync(join(SRC_DIR, 'components/Sky.vue'), 'utf8');
   const code = sky.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  assert.ok(
-    !/querySelector/.test(code),
-    'Sky 不该读导航/标题位置 —— 那是「用装饰迁就文字」',
-  );
+  assert.ok(!/querySelector/.test(code), 'Sky 不该读导航/标题位置 —— 那是「用装饰迁就文字」');
 });
-
 
 check('首页顶栏必须整条隐藏（站名与导航都进了 banner，否则同一句「参数世界」出现两次）', () => {
   const app = readFileSync(join(SRC_DIR, 'App.vue'), 'utf8');
@@ -3858,10 +4034,7 @@ check('首页顶栏必须整条隐藏（站名与导航都进了 banner，否则
   // 判据要问「首页会不会有两条导航」，答案是「header 没了就没有」，
   // 而不是「每个子节点都得自己再判一次」。
   const headerBlock = app.slice(app.indexOf('<header'), app.indexOf('</header>'));
-  assert.ok(
-    /<SiteNav/.test(headerBlock),
-    'App.vue 的 header 里应有 SiteNav —— 非首页页面需要它',
-  );
+  assert.ok(/<SiteNav/.test(headerBlock), 'App.vue 的 header 里应有 SiteNav —— 非首页页面需要它');
 });
 
 check('导航在 banner 里（首页唯一一条，且两端对齐）', () => {
@@ -3872,9 +4045,7 @@ check('导航在 banner 里（首页唯一一条，且两端对齐）', () => {
   );
   // class 写在多行上（prettier 会折行），且中间夹了 z-10（内容浮在太极之上），
   // 所以匹配不能假设 class 与 <div 同行、也不能假设 relative 紧跟 flex。
-  const bannerRow = homeView.match(
-    /<div\s+class="page-shell relative[^"]*flex flex-wrap[\s\S]*?"/,
-  );
+  const bannerRow = homeView.match(/<div\s+class="page-shell relative[^"]*flex flex-wrap[\s\S]*?"/);
   assert.ok(bannerRow, '找不到 banner 的左右分栏容器');
   assert.ok(
     /justify-between/.test(bannerRow[0]),
@@ -3930,8 +4101,8 @@ const FAVICON = FAVICON_RAW.replace(/<!--[\s\S]*?-->/g, '');
  *  不是本文件里的任何常数 —— 常数只用于**校验**，提取真源与校验真源必须分开，
  *  否则「改产物」和「改判据」会互相掩护（这正是 P16「判据多源」的变体）。
  */
-const FAV_FRAC = 1.0;   // 满幅：太极圆盘外切于画幅，不再有「圆外留白」
-const FAV_SKEW = 45;    // 背景斜分角（度）。0 = 上下对半，45 = 沿反对角线
+const FAV_FRAC = 1.0; // 满幅：太极圆盘外切于画幅，不再有「圆外留白」
+const FAV_SKEW = 45; // 背景斜分角（度）。0 = 上下对半，45 = 沿反对角线
 const FAV_COLORS = { ink: '#000000', paper: '#ffffff' }; // 2026-10-08：纯黑白，不再取 @theme
 
 /** 把 favicon 的行内 rect 还原成 N×N 布尔网格（True = 墨色）
@@ -3969,7 +4140,14 @@ check('favicon 必须是合法 XML（注释里不能出现连续两个连字符�
   const comments = [...FAVICON_RAW.matchAll(/<!--([\s\S]*?)-->/g)].map((m) => m[1]);
   const bad = [];
   comments.forEach((c, i) => {
-    if (c.includes('--')) bad.push(`第 ${i + 1} 段注释含 '--'：${c.split('\n').find((l) => l.includes('--'))?.trim().slice(0, 50)}`);
+    if (c.includes('--'))
+      bad.push(
+        `第 ${i + 1} 段注释含 '--'：${c
+          .split('\n')
+          .find((l) => l.includes('--'))
+          ?.trim()
+          .slice(0, 50)}`,
+      );
   });
   assert.equal(
     bad.length,
@@ -4009,7 +4187,9 @@ check('favicon 只能是纯黑白两色（2026-10-08 用户决策：对齐参考
   // 用户 2026-10-08 明确「完全照参考图」⇒ 纯 #000000 / #ffffff，
   // 此时再要求 theme 同源就是拿旧构图约束新构图 ⇒ 正确产物会被判错。
   // 但「两色」这件事本身要继续钉死 —— 见下一条（谁亮谁暗）。
-  const used = [...new Set((FAVICON.match(/#[0-9a-fA-F]{3,8}/g) ?? []).map((s) => s.toLowerCase()))];
+  const used = [
+    ...new Set((FAVICON.match(/#[0-9a-fA-F]{3,8}/g) ?? []).map((s) => s.toLowerCase())),
+  ];
   const allowed = new Set(Object.values(FAV_COLORS));
   const extra = used.filter((c) => !allowed.has(c));
   assert.equal(
@@ -4036,7 +4216,15 @@ check('favicon 墨段必须是暗色、纸必须是亮色（两色不能写反�
     const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255);
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   };
-  const runs = [...new Set([...FAVICON.matchAll(/<rect x="\d+" y="\d+" width="\d+" height="1"[^>]*fill="(#[0-9a-fA-F]+)"/g)].map((m) => m[1].toLowerCase()))];
+  const runs = [
+    ...new Set(
+      [
+        ...FAVICON.matchAll(
+          /<rect x="\d+" y="\d+" width="\d+" height="1"[^>]*fill="(#[0-9a-fA-F]+)"/g,
+        ),
+      ].map((m) => m[1].toLowerCase()),
+    ),
+  ];
   assert.ok(runs.length > 0, 'favicon 没有任何行内墨段');
   const brightRun = runs.find((c) => lum(c) > 0.5);
   assert.ok(
@@ -4105,7 +4293,10 @@ check('favicon 圆内是旋转对称的太极（180° 旋转后黑白互换）',
     bad.length,
     0,
     `${bad.length}/${n * n} 格与「旋转 180° 后的自己」同色 —— 满幅斜分背景 + 太极都应满足` +
-      `「180° 旋转后黑白互换」。前 5 处：${bad.slice(0, 5).map(([x, y]) => `(${x},${y})`).join(' ')}。` +
+      `「180° 旋转后黑白互换」。前 5 处：${bad
+        .slice(0, 5)
+        .map(([x, y]) => `(${x},${y})`)
+        .join(' ')}。` +
       `（这条抓的是「黑白画反了」：颠倒后深色占比与手性都不变，只有它能报）`,
   );
 });
@@ -4140,7 +4331,12 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
       while (stack.length) {
         const [cx, cy] = stack.pop();
         comp.push([cx, cy]);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
           const nx = cx + dx;
           const ny = cy + dy;
           if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
@@ -4156,14 +4352,22 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
       if (comp.length > n * n * 0.05) continue; // 太大的是鱼身/ 背景，不是眼
       const own = new Set(comp.map(([x, y]) => `${x},${y}`));
       // 必须**每一格四邻都是异色** ⇒ 是个「洞」而不是轮廓阶梯
-      if (!comp.every(([cx, cy]) =>
-        [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => {
-          const nx = cx + dx;
-          const ny = cy + dy;
-          if (nx < 0 || ny < 0 || nx >= n || ny >= n) return false;
-          return own.has(`${nx},${ny}`) || g[ny][nx] !== t;
-        }),
-      )) continue;
+      if (
+        !comp.every(([cx, cy]) =>
+          [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+          ].every(([dx, dy]) => {
+            const nx = cx + dx;
+            const ny = cy + dy;
+            if (nx < 0 || ny < 0 || nx >= n || ny >= n) return false;
+            return own.has(`${nx},${ny}`) || g[ny][nx] !== t;
+          }),
+        )
+      )
+        continue;
       eyes.push({ t, comp });
     }
   }
@@ -4181,8 +4385,8 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
   //  再判「white 应在左」—— 读起来像「白色的眼」，于是把期望方向钉反了
   //  （实测白鱼身上的黑眼在 x=10.5= 左侧，却被判成「未落在左侧」）。
   //  ⇒ 变量名带上**所属鱼**而不只是颜色，这是这类「同名不同义」的唯一防法。
-  const eyeOnWhiteFish = eyes.find((e) => e.t);       // 白鱼身上的眼 = 墨色块
-  const eyeOnBlackFish = eyes.find((e) => !e.t);       // 黑鱼身上的眼 = 浅色块
+  const eyeOnWhiteFish = eyes.find((e) => e.t); // 白鱼身上的眼 = 墨色块
+  const eyeOnBlackFish = eyes.find((e) => !e.t); // 黑鱼身上的眼 = 浅色块
   const centroidX = (e) => e.comp.reduce((a, [x]) => a + x + 0.5, 0) / e.comp.length;
   const wx = centroidX(eyeOnWhiteFish);
   const bx = centroidX(eyeOnBlackFish);
@@ -4196,7 +4400,7 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
   // 两只眼必须关于圆心中心对称 —— 这条与上一条独立：
   // 它抓的是「两眼画在同一侧」这类镜像**抓不到**的错。
   assert.ok(
-    Math.abs((wx + bx) - 2 * c) < 1.5,
+    Math.abs(wx + bx - 2 * c) < 1.5,
     `两只眼重心 x=${wx.toFixed(2)} / ${bx.toFixed(2)}，和 ${(wx + bx).toFixed(2)} 偏离圆心对称值 ${2 * c} —— ` +
       '太极的两只眼必须关于圆心中心对称。',
   );
@@ -4263,7 +4467,12 @@ check('favicon 的墨色连通成块（无游离碎片：白鱼被墨点咬掉�
       while (stack.length) {
         const [cx, cy] = stack.pop();
         comp.push([cx, cy]);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
           const nx = cx + dx;
           const ny = cy + dy;
           if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
@@ -4300,6 +4509,1414 @@ check('favicon 的墨色连通成块（无游离碎片：白鱼被墨点咬掉�
       '少一个说明鱼眼被墨色吞掉。',
   );
 });
+
+/* ================================================================ *
+ * v2 全品类目录：specs 容器 / 品类 schema / 用户数据层
+ *
+ * 这一节守的是 2026-10-13 全品类改造的三个新机制。它们共同的结构性风险是
+ * **「静默写错」**：字段路径拼错、值类型漂移、override 引用悬空——全部不报错，
+ * 只是让某个值安静地失效。所以每个机制都配反向测（注入违规必须报出）。
+ * ================================================================ */
+section('v2 全品类目录：specs 容器');
+
+check('flattenSpecs → expandSpecs 往返相等（拍平不丢字段）', () => {
+  // 往返是「拍平没丢字段」的唯一硬证据。少一个键，前端那个参数就恒为「未公布」。
+  const v1 = {
+    id: 'x',
+    brand: 'apple',
+    body: { weightG: 199, colors: ['黑'], folded: null },
+    display: { sizeIn: 6.3, resolutionPx: { w: 1206, h: 2622 }, refreshHz: '1-120' },
+    chipset: { name: 'A19', processNm: null },
+    memory: { ramGb: [8], storageGb: [256, 512] },
+    battery: { capacityMah: 4500, capacityCaliber: 'typical' },
+    camera: { rear: [{ role: 'main', mp: 48 }], front: { mp: 12 } },
+    connectivity: { fiveG: true, esim: null },
+    os: { launch: 'iOS 26', upgradableTo: null },
+  };
+  const specs = flattenSpecs(v1);
+  assert.equal(specs['body.weightG'], 199);
+  assert.equal(specs['display.sizeIn'], 6.3);
+  assert.deepEqual(specs['display.resolutionPx'], { w: 1206, h: 2622 }, '对象值整体存，不拆叶子');
+  assert.deepEqual(specs['memory.storageGb'], [256, 512], '数组值整体存');
+  assert.equal(specs['camera.rear'].length, 1);
+  assert.equal(specs['chipset.processNm'], null, 'null 是「未公布」的正确状态，照样搬');
+  assert.ok(!('body' in v1) === false, '拍平不改原对象');
+  const back = expandSpecs(specs);
+  for (const g of [
+    'body',
+    'display',
+    'chipset',
+    'memory',
+    'battery',
+    'camera',
+    'connectivity',
+    'os',
+  ]) {
+    assert.deepEqual(back[g], v1[g], `组 ${g} 往返后不一致`);
+  }
+});
+
+check('pick specs-first：v2 读容器，v1 回退嵌套（迁移期双兼容）', () => {
+  // 只读 specs 会让迁移后第一轮的覆盖率对比跌到 0 触发拒写；只读嵌套则用户修正永远不生效。
+  const v2 = { id: 'a', specs: { 'display.sizeIn': 6.9 }, display: { sizeIn: 6.1 } };
+  const v1 = { id: 'b', display: { sizeIn: 6.1 } };
+  assert.equal(pick(v2, 'display.sizeIn'), 6.9, 'specs 优先——用户修正必须赢过嵌套旧值');
+  assert.equal(pick(v1, 'display.sizeIn'), 6.1, 'v1 回退嵌套');
+  assert.equal(pick(v1, 'display.ppi'), undefined, '两处都没有就是 undefined（不是 0）');
+  const p = { id: 'c', specs: {} };
+  setSpec(p, 'body.weightG', 199);
+  assert.equal(pick(p, 'body.weightG'), 199);
+});
+
+check('真实快照的 specs 键全部在 phone schema 注册（防手改数据绕过管线）', () => {
+  // 管线有闸门拦未注册键，但直接手改 products.json 不过管线。这条断言让
+  // 「schema 漏登记」与「数据里多出幽灵键」两种漂移都在自测层现形。
+  if (!existsSync(join(ROOT, 'data/products.json'))) return;
+  const schema = loadSchema('phone');
+  assert.ok(schema, 'phone schema 必须可加载');
+  const fields = fieldMap(schema);
+  const snap = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+  for (const p of snap.products ?? []) {
+    for (const path of Object.keys(p.specs ?? {})) {
+      assert.ok(fields.has(path), `${p.id} 的 specs 键 "${path}" 未在 phone schema 注册`);
+    }
+  }
+  // 反向：schema 声明的每个字段至少要在一台真实机器上出现过（死字段 = 契约腐烂）
+  // 例外：rawOfficial 原文里没有、契约预留的字段允许零覆盖（如 measuredHours）。
+  // 2026-10-13 新增 haptic.motor / audio.speakers（用户要求马达/扬声器进比较）：
+  // 官网原文待解析器接入或人工补录（用户纠错链路），落数据前允许零覆盖。
+  const PREVIEW_ONLY = new Set([
+    'battery.measuredHours',
+    'display.protection',
+    'haptic.motor',
+    'audio.speakers',
+  ]);
+  const seen = new Set();
+  for (const p of snap.products ?? []) for (const k of Object.keys(p.specs ?? {})) seen.add(k);
+  for (const f of schema.fields) {
+    if (PREVIEW_ONLY.has(f.path)) continue;
+    assert.ok(seen.has(f.path), `schema 字段 ${f.path} 在真实数据里零出现（死字段或拼错）`);
+  }
+});
+
+/* 前端目录模块：对账断言用。必须在 check() 之前加载完——
+ * check 的 runner 是同步 try/catch，async 用例的断言失败会变成未捕获 rejection，
+ * 用例永远显示通过（比没写测试更糟）。所以这里顶层 await import，check 里只放同步回调。 */
+const CAT = await import('../src/lib/catalog.ts');
+const FIELDS_LIB = await import('../src/lib/fields.ts');
+const SPECS_LIB = await import('../src/lib/specs.ts');
+const FACETS_LIB = await import('../src/lib/facets.ts');
+const CMP = await import('../src/lib/compare.ts');
+
+/* 渲染对账闸门（2026-10-13 首建，同日升级为视图字典版）：specGroups 已重构为
+ * 「全声明式视图字典 + 泛化引擎」（data/view-phone.json），新字段默认自动出现。
+ * 本闸门升级为**双向对账**，豁免从硬编码 EXEMPT 变成视图字典的 hidden 数据：
+ * ① 正向：每个 schema 字段要么被视图引用、要么在 view.hidden（哨兵值实测、走与前端同一条链）；
+ * ② 反向：视图字典引用的每个 path 必须已在 schema 注册（视图也是数据，拼错也要被拦）。 */
+check('渲染对账（视图字典版）：schema↔视图双向对账（防页面静默丢字段/防视图拼错）', () => {
+  const schema = loadSchema('phone');
+  const fields = [...fieldMap(schema).values()];
+  const view = JSON.parse(readFileSync(join(ROOT, 'data', 'view-phone.json'), 'utf8'));
+  const referenced = new Set();
+  for (const g of view.groups) {
+    for (const r of g.rows) {
+      for (const p of r.fields ?? []) referenced.add(p);
+      if (r.field) referenced.add(r.field);
+      if (r.expand) referenced.add(r.expand);
+    }
+  }
+  const hidden = new Set(view.hidden ?? []);
+  const byPath = new Map(schema.fields.map((f) => [f.path, f]));
+
+  // ② 反向：视图引用必须已注册
+  for (const p of referenced) {
+    assert.ok(
+      byPath.has(p),
+      `视图字典 data/view-phone.json 引用了未注册字段 "${p}"——要么拼错了，要么先在 schema 注册`,
+    );
+  }
+
+  // ① 正向：哨兵实测。每字段塞**全局唯一**哨兵值（number 走 i*10 步进，object 的 h 用 +1
+  // 避让下一个字段），在引擎渲染输出文本里找哨兵——比按 label 找可靠（合并行）。
+  const specs = {};
+  const token = new Map();
+  fields.forEach((f, i) => {
+    const n = 100000 + i * 10;
+    let v;
+    let t;
+    if (f.type === 'number') {
+      v = n;
+      t = String(n);
+    } else if (f.type === 'array:number') {
+      v = [n];
+      t = String(n);
+    } else if (f.type === 'string') {
+      v = `ZQ${i}ZQ`;
+      t = v;
+    } else if (f.type === 'array:string') {
+      v = [`ZQ${i}ZQ`];
+      t = `ZQ${i}ZQ`;
+    } else if (f.type === 'object') {
+      v = { w: n, h: n + 1 };
+      t = String(n);
+    } else if (f.type === 'array:object') {
+      v = [{ role: 'main', mp: n, aperture: 'f/1.6', ois: true }];
+      t = String(n);
+    } else {
+      // boolean 哨兵 'true' 无唯一性——当前 schema 的 boolean 字段全部在 view.hidden；
+      // 新增非 hidden 的 boolean 字段时必须让它渲染成可唯一识别，否则闸门对它失明。
+      v = true;
+      t = 'true';
+    }
+    specs[f.path] = v;
+    token.set(f.path, t);
+  });
+  const rendered = FIELDS_LIB.specGroups({ id: 'selftest-render-gate', category: 'phone', specs })
+    .map((g) => g.rows.map((r) => r.value).join('\n'))
+    .join('\n');
+  for (const f of fields) {
+    if (hidden.has(f.path)) continue;
+    assert.ok(
+      rendered.includes(token.get(f.path)),
+      `schema 字段 ${f.path}（${f.label}）既未被视图字典引用、也未列入 view.hidden` +
+        `——详情页/对比台会静默不显示；请在 data/view-phone.json 加行（或加入 hidden 豁免）`,
+    );
+  }
+});
+
+/* ── 硬编码审计 A1 治理（2026-10-13）：榜单/能力字段表与 schema 对账 ──
+ * 此前「能力/榜单字段」存在三份定义：schema(dir/quantifiable 权威)、derive.mjs METRICS(后端
+ * 榜单)、specs.ts ABILITIES(前端能力条)，改 schema 时后两份静默漂移且无闸门。以下两条把
+ * 同步要求变成机器闸门：path 必须已注册；schema.dir 非空时方向语义必须一致。 */
+
+check('derive.mjs METRICS 与 phone schema 对账（path 已注册、dir 语义一致）', () => {
+  const schema = loadSchema('phone');
+  const byPath = new Map(schema.fields.map((f) => [f.path, f]));
+  for (const [key, m] of Object.entries(DERIVE.METRICS)) {
+    // 身份/SKU 派生指标不走 specs 字段表（skus/releaseDate 是顶层结构）
+    if (m.path === 'skus' || m.path === 'releaseDate') continue;
+    const f = byPath.get(m.path);
+    assert.ok(
+      f,
+      `METRICS.${key} 的 path "${m.path}" 未在 schema 注册——榜单会静默使用旧字段（审计 A1）`,
+    );
+    if (f && f.dir != null) {
+      assert.equal(
+        m.dir,
+        f.dir,
+        `METRICS.${key}.dir(${m.dir}) 与 schema.dir(${f.dir}) 不一致——方向真源是 schema`,
+      );
+    }
+    // schema.dir 为 null 的数组派生指标（如 storageMaxGb 取 max(storageGb)）允许指标层
+    // 显式自declared 方向——豁免理由：数组字段本身不可排序，派生值才有方向。
+  }
+});
+
+check('specs.ts ABILITIES 与 phone schema 对账（字段已注册、higherBetter ≡ dir）', () => {
+  const schema = loadSchema('phone');
+  const byPath = new Map(schema.fields.map((f) => [f.path, f]));
+  // 能力条消费的字段映射——specs.ts rawFor 改字段时必须同步此表（显性化，测试即文档）
+  const ABILITY_PATHS = {
+    display: 'display.ppi',
+    light: 'body.weightG',
+    battery: 'battery.capacityMah',
+    camera: 'camera.rear',
+  };
+  for (const a of SPECS_LIB.ABILITIES) {
+    const path = ABILITY_PATHS[a.key];
+    assert.ok(path, `ABILITIES 出现未知能力 key：${a.key}（需在 selftest 对账表登记）`);
+    const f = byPath.get(path);
+    assert.ok(f, `ABILITIES.${a.key} 的字段 ${path} 未在 schema 注册（审计 A1）`);
+    if (f && f.dir != null) {
+      assert.equal(
+        a.higherBetter,
+        f.dir === 'high',
+        `ABILITIES.${a.key}.higherBetter(${a.higherBetter}) 与 schema.dir(${f.dir}) 不一致——方向真源是 schema`,
+      );
+    }
+    // camera.rear 是数组（dir=null，主摄 MP 派生），与 METRICS.storageMaxGb 同一豁免逻辑
+  }
+});
+
+check('后台录入页在 admin/ 而非 public/（Q1：不随 dist 发布到线上）', () => {
+  // 2026-10-13 审计 Q1 裁决 B：overrides-editor.html 从 public/ 移至 admin/，
+  // 由 editor-server 直读。public/ 会被 vite 原样拷进 dist —— 放回去等于把管理后台
+  // 界面发布到 GitHub Pages / Toy 上（无后端写不进去，但界面与字段结构暴露）。
+  // 本条守「源」：有人挪回 public/ 时在最快的一道闸门红掉；
+  // verify-dist 的「dist 非入口 HTML」闸门守「产物」，两道互补。
+  assert.ok(
+    existsSync(join(ROOT, 'admin/overrides-editor.html')),
+    'admin/overrides-editor.html 应存在（editor-server 从那里读）',
+  );
+  assert.ok(
+    !existsSync(join(ROOT, 'public/overrides-editor.html')),
+    'public/ 下不得有 overrides-editor.html——会被 vite 拷进 dist 发布到线上',
+  );
+});
+
+check('editor.html 值校验类型集与 schema 弱对账（零构建拷贝的看守）', () => {
+  // 硬编码审计 A3：editor.html 无法 import 共享校验模块（零构建），保留手工拷贝。
+  // 本测试看守「类型集」不漂移：schema 出现新 type 而拷贝没跟 → default 分支静默放行 → 红。
+  const html = readFileSync(join(ROOT, 'admin/overrides-editor.html'), 'utf8');
+  const cases = new Set([...html.matchAll(/case '([a-z:]+)':/g)].map((m) => m[1]));
+  const schema = loadSchema('phone');
+  for (const f of schema.fields) {
+    assert.ok(
+      cases.has(f.type),
+      `schema 类型 "${f.type}"（${f.path}）在 overrides-editor.html 的 validateValue 里没有 case 分支` +
+        `——类型系统演进后该页会对它静默走 default，请同步手工拷贝`,
+    );
+  }
+});
+
+/* ── 硬编码审计 P2 治理（2026-10-13）：策展表外置对账 ──
+ * 变体/系列/多芯/价格档已从 catalog.ts 搬进 data/curated/facets.json（数据化策展）。
+ * 数据也要被闸门管：结构合法性 + 哨兵语义（「Pro Max 在 Pro 前」的长后缀优先即反向测）+
+ * 真实数据冒烟。加变体/调价格档/接新品牌 = 改 JSON，闸门在此确保改不坏。 */
+
+check('策展字典结构合法（id 唯一/正则可编译/长后缀优先/价格档升序衔接）', () => {
+  const dict = JSON.parse(readFileSync(join(ROOT, 'data', 'curated', 'facets.json'), 'utf8'));
+  const vIds = new Set();
+  const vLabels = new Set();
+  for (const v of dict.variants) {
+    assert.ok(!vIds.has(v.id), `变体 id 重复：${v.id}`);
+    assert.ok(!vLabels.has(v.label), `变体 label 重复：${v.label}`);
+    vIds.add(v.id);
+    vLabels.add(v.label);
+    assert.doesNotThrow(
+      () => new RegExp(v.match, v.flags ?? ''),
+      `变体 ${v.id} 的 match 不是合法正则`,
+    );
+  }
+  const idxPro = dict.variants.findIndex((v) => v.id === 'pro');
+  const idxProMax = dict.variants.findIndex((v) => v.id === 'pro-max');
+  assert.ok(
+    idxPro >= 0 && idxProMax >= 0 && idxProMax < idxPro,
+    'Pro Max 必须排在 Pro 之前（长后缀优先，否则分面计数少一台）',
+  );
+  for (const [brand, cfg] of Object.entries(dict.series.brands ?? {})) {
+    assert.ok(cfg.series.length >= 1, `${brand} 系列表不能为空`);
+    assert.ok(
+      cfg.series.some((s) => s.fallback),
+      `${brand} 系列表必须有 fallback 行（兜底「标准」）`,
+    );
+    for (const s of cfg.series) {
+      if (s.fallback) continue;
+      assert.doesNotThrow(
+        () => new RegExp(s.match ?? '', s.flags ?? ''),
+        `${brand} 系列规则「${s.label}」正则非法`,
+      );
+    }
+  }
+  const bIds = new Set();
+  dict.priceBuckets.forEach((b, i) => {
+    assert.ok(!bIds.has(b.id), `价格档 id 重复：${b.id}`);
+    bIds.add(b.id);
+    assert.ok(typeof b.min === 'number' && b.min >= 0, `价格档 ${b.id} 的 min 非法`);
+    const last = i === dict.priceBuckets.length - 1;
+    if (last) assert.ok(b.max === null, `最后一条价格档 ${b.id} 的 max 应为 null（无穷）`);
+    else {
+      assert.ok(typeof b.max === 'number' && b.max >= b.min, `价格档 ${b.id} 的 max 非法`);
+      if (i > 0) {
+        assert.ok(
+          b.min === dict.priceBuckets[i - 1].max + 1,
+          `价格档 ${b.id} 与上一档不衔接（会有价格静默落错档）`,
+        );
+      }
+    }
+  });
+});
+
+check('策展字典哨兵语义（变体长后缀优先/系列策略/多芯判据/价格档）', () => {
+  const fake = (brand, name) => ({
+    id: 't',
+    brand,
+    name,
+    line: brand === 'apple' ? 'iPhone' : name.split(' ')[0],
+    category: 'phone',
+  });
+  // 变体：长后缀优先——顺序被人调换时这些断言全红（反向测）
+  assert.equal(CAT.variantOf(fake('apple', 'iPhone 18 Pro Max')), 'Pro Max');
+  assert.equal(CAT.variantOf(fake('apple', 'iPhone 18 Pro')), 'Pro');
+  assert.equal(CAT.variantOf(fake('apple', 'iPhone 18')), '标准');
+  assert.equal(CAT.variantOf(fake('apple', 'iPhone 18 Plus')), 'Plus');
+  assert.equal(CAT.variantOf(fake('huawei', 'Mate 80 RS')), 'RS');
+  assert.equal(CAT.variantOf(fake('huawei', 'nova 14 Ultra')), 'Ultra');
+  assert.equal(CAT.variantOf(fake('huawei', 'nova 14 优享版')), '优享版');
+  assert.equal(CAT.variantOf(fake('huawei', '畅享 70 风驰版')), '风驰版');
+  // 苹果系列（from:'name' 策略）
+  assert.equal(CAT.seriesOf(fake('apple', 'iPhone Duo')), '折叠屏');
+  assert.equal(CAT.seriesOf(fake('apple', 'iPhone Air')), 'Air');
+  assert.equal(CAT.seriesOf(fake('apple', 'iPhone 17e')), 'SE');
+  assert.equal(CAT.seriesOf(fake('apple', 'iPhone 18 Pro Max')), '标准'); // Pro Max 是变体不是系列
+  assert.equal(CAT.seriesOf(fake('huawei', 'nova 14')), 'nova'); // 未配置品牌走 default:'line'
+  // foldVariant：形态即变体
+  assert.equal(CAT.variantOf(fake('apple', 'iPhone Duo')), '折叠双屏');
+  // 多芯判据（前缀出现两次）
+  assert.equal(CAT.isMultiChip('麒麟9020A麒麟9020B'), true);
+  assert.equal(CAT.isMultiChip('麒麟9030Pro'), false);
+  assert.equal(CAT.isMultiChip('A18A19'), true);
+  assert.equal(CAT.isMultiChip('A18Pro'), false);
+  assert.equal(CAT.isMultiChip('天玑9400天玑9300'), true);
+  assert.equal(CAT.isMultiChip('A18'), false);
+  // 价格档
+  const withPrice = (v) => ({ skus: [{ priceCny: v }] });
+  assert.equal(CAT.priceBucket(withPrice(599)), '0-1999');
+  assert.equal(CAT.priceBucket(withPrice(1999)), '0-1999');
+  assert.equal(CAT.priceBucket(withPrice(2000)), '2000-2999');
+  assert.equal(CAT.priceBucket(withPrice(15000)), '8000+');
+  assert.equal(CAT.priceBucket({ skus: [] }), CAT.UNKNOWN); // 缺价不编造
+});
+
+check('策展字典真实数据冒烟（62 台变体/系列解析 + 已知机型抽查）', () => {
+  if (!Array.isArray(REAL_P) || !REAL_P.length) return;
+  for (const p of REAL_P) {
+    const v = CAT.variantOf(p);
+    const s = CAT.seriesOf(p);
+    assert.ok(v && s, `${p.id} 变体/系列解析为空`);
+  }
+  const proMax = REAL_P.find((p) => p.id === 'apple-iphone-17-pro-max');
+  if (proMax) assert.equal(CAT.variantOf(proMax), 'Pro Max');
+  const pro = REAL_P.find((p) => p.id === 'huawei-mate70-pro');
+  if (pro) assert.equal(CAT.variantOf(pro), 'Pro');
+});
+
+check('多实例子字典深校验（camera.rear：mp 越界/role 拼错/多余键 → 拦）', () => {
+  // 最优解「两处结构升级」②：array:object 不再是无底洞——每项按子字典逐键校验。
+  const schema = loadSchema('phone');
+  const rear = (items) => ({ id: 't', specs: { 'camera.rear': items } });
+  // 正测：现有形态全合法（ois/sensorNote 等缺失 = null 语义）
+  assert.deepEqual(
+    validateSpecs(
+      rear([{ role: 'main', mp: 48, aperture: 'f/1.6', ois: true, sensorNote: null }]),
+      schema,
+    ),
+    [],
+  );
+  assert.deepEqual(validateSpecs(rear([{ role: 'main' }]), schema), []);
+  // 反测 ×3：数值越界 / 枚举拼错 / 多余键
+  const over = validateSpecs(rear([{ role: 'main', mp: 999 }]), schema);
+  assert.ok(
+    over.some((f) => f.includes('超出合理区间')),
+    `mp=999 应被子字典区间拦：${over.join('|')}`,
+  );
+  const badRole = validateSpecs(rear([{ role: 'foo', mp: 48 }]), schema);
+  assert.ok(
+    badRole.some((f) => f.includes('不在枚举')),
+    `role=foo 应被枚举拦：${badRole.join('|')}`,
+  );
+  const extra = validateSpecs(rear([{ role: 'main', mp: 48, zoom: '10x' }]), schema);
+  assert.ok(
+    extra.some((f) => f.includes('子字典注册')),
+    `多余键 zoom 应被拦（静默落盘没人读）：${extra.join('|')}`,
+  );
+  // schema 自身结构：phone.json 的 subfields 声明必须过 validateSchema
+  assert.deepEqual(validateSchema(schema), [], 'phone schema（含子字典声明）结构应合法');
+});
+
+check('参数级筛选（schema facet → 分面/相等类取值/URL 往返/非法值丢弃）', () => {
+  // 最优解相等类泛化：schema facet:true 的字段自动成为筛选维度（键=字段路径）
+  const mk = (id, specs) => ({
+    id,
+    category: 'phone',
+    brand: 'apple',
+    name: id,
+    line: 'iPhone',
+    releaseDate: '2026-01-01',
+    skus: [],
+    specs,
+  });
+  const products = [
+    mk('a', {
+      'connectivity.nfc': true,
+      'display.refreshHz': '120',
+      'haptic.motor': 'X 轴线性马达',
+    }),
+    mk('b', { 'connectivity.nfc': false, 'display.refreshHz': '60/90' }),
+    mk('c', {}), // 全缺 → 未公布（UNKNOWN）
+  ];
+  // 分面：boolean 三值 + 是/否标签
+  const nfc = FACETS_LIB.facetOf(products, 'connectivity.nfc', products);
+  assert.deepEqual(nfc.map((f) => f.id).sort(), ['false', 'true', '未公布'].sort());
+  assert.equal(nfc.find((f) => f.id === 'true')?.label, '是');
+  assert.equal(nfc.find((f) => f.id === 'false')?.label, '否');
+  // 相等类筛选生效
+  const filter = { ...FACETS_LIB.emptyFilter(), 'connectivity.nfc': ['true'] };
+  assert.deepEqual(
+    FACETS_LIB.applyFilter(products, filter).map((p) => p.id),
+    ['a'],
+  );
+  // URL 往返（参数维度键 = 字段路径）
+  const q = FACETS_LIB.writeFilter(filter, []);
+  assert.equal(q['connectivity.nfc'], 'true');
+  const catalog = {
+    filter: { ...FACETS_LIB.emptyFilter(), 'connectivity.nfc': ['true', 'false', '未公布'] },
+    sorts: [],
+  };
+  const back = FACETS_LIB.readFilter(new URLSearchParams('connectivity.nfc=true'), catalog);
+  assert.deepEqual(back.filter['connectivity.nfc'], ['true']);
+  // 反测：非法值丢弃（不产生永远 0 台的死条件）
+  const bad = FACETS_LIB.readFilter(new URLSearchParams('connectivity.nfc=maybe'), catalog);
+  assert.deepEqual(bad.filter['connectivity.nfc'], []);
+  // string 原文分面（刷新率官网原文形态）
+  const hz = FACETS_LIB.facetOf(products, 'display.refreshHz', products)
+    .map((f) => f.id)
+    .sort();
+  assert.deepEqual(hz, ['120', '60/90', '未公布'].sort());
+});
+
+check('orderDeriver 声明与注册表对账（序类适配器不游离）', () => {
+  // 最优解「序类引擎显式声明制」最小闭环：schema 声明名字 → 引擎注册表给实现。
+  const schema = loadSchema('phone');
+  let declared = 0;
+  for (const f of schema.fields) {
+    if (!f.orderDeriver) continue;
+    declared += 1;
+    const impl = FIELDS_LIB.orderDeriverFor(f.path);
+    assert.ok(
+      impl,
+      `${f.path} 声明了 orderDeriver "${f.orderDeriver}" 但 fields.ts 注册表没有该实现（拼错或漏注册）`,
+    );
+    // 反测：适配器对 null 返回 null（不产生 0 冒充「未公布」——类型漂移铁律）
+    assert.equal(impl(null), null, `${f.path} 的序类适配器应把 null 映射为 null`);
+    assert.equal(impl(undefined), null);
+  }
+  assert.ok(
+    declared >= 1,
+    'phone schema 应至少声明一个 orderDeriver（refreshHz），声明丢失说明被误删',
+  );
+});
+
+check('对比差异判定纯函数（准绳口径：缺失不参与值比较，缺失/不等分两类）', () => {
+  // 完整采用准绳方案（用户 2026-10-13 裁决）。对照准绳判据：
+  // 「有值 vs 缺失→标缺失色；双方都缺→不标；相等→不标；不等→标不等色」。
+  const S = CMP.compareRowState;
+  // 关键 case：缺失混入不污染相等判断——120 / — / 120 是「缺失差异」，不是「值不等」
+  assert.deepEqual(S(['120', '—', '120']), { different: false, missing: true });
+  assert.deepEqual(S(['120', '—', '200']), { different: true, missing: true });
+  assert.deepEqual(S(['120', '120', '120']), { different: false, missing: false });
+  assert.deepEqual(S(['120', '200']), { different: true, missing: false });
+  assert.deepEqual(S(['—', '—']), { different: false, missing: false }); // 全缺失不标
+  assert.deepEqual(S(['X 轴线性马达', '转子马达', '—']), { different: true, missing: true });
+  // 上浮入选条件：isDifferent || isMissing
+  assert.equal(CMP.isDiffRow(S(['120', '120'])), false);
+  assert.equal(CMP.isDiffRow(S(['120', '—'])), true);
+  assert.equal(CMP.isDiffRow(S(['120', '200'])), true);
+});
+
+section('v2 全品类目录：品类 schema 校验');
+
+check('schema 值校验：六种类型各放行一个合法值', () => {
+  const schema = loadSchema('phone');
+  const f = (path) => fieldMap(schema).get(path);
+  assert.equal(validateSpecValue(f('body.weightG'), 199, 't'), null);
+  assert.equal(validateSpecValue(f('body.weightG'), null, 't'), null, 'null 恒合法（未公布）');
+  assert.equal(validateSpecValue(f('battery.capacityCaliber'), 'typical', 't'), null);
+  assert.equal(validateSpecValue(f('connectivity.fiveG'), true, 't'), null);
+  assert.equal(validateSpecValue(f('memory.storageGb'), [256, 512], 't'), null);
+  assert.equal(validateSpecValue(f('camera.rear'), [{ role: 'main' }], 't'), null);
+  assert.equal(validateSpecValue(f('display.resolutionPx'), { w: 1, h: 2 }, 't'), null);
+  assert.equal(validateSpecValue(f('body.ipRating'), 'IP68', 't'), null);
+});
+
+check('反向测：类型漂移 / 区间越界 / 枚举越界都必须报出', () => {
+  // 每种报错对应一种真实故障：TS 声明 number 运行时进字符串（一排序就 NaN）、
+  // 官网改版把 PWM 频率写进刷新率（区间外）、口径值拼错。
+  const schema = loadSchema('phone');
+  const f = (path) => fieldMap(schema).get(path);
+  assert.ok(validateSpecValue(f('body.weightG'), '199', 't'), '字符串重量必须报错');
+  assert.ok(validateSpecValue(f('body.weightG'), 1990, 't'), '超区间重量必须报错');
+  assert.ok(validateSpecValue(f('battery.capacityCaliber'), 'typ', 't'), '枚举越界必须报错');
+  assert.ok(validateSpecValue(f('connectivity.fiveG'), 'yes', 't'), '布尔漂移成字符串必须报错');
+  assert.ok(validateSpecValue(f('memory.storageGb'), ['256'], 't'), '数组元素类型错必须报错');
+  assert.ok(validateSpecValue(f('display.resolutionPx'), [1, 2], 't'), '对象位进数组必须报错');
+});
+
+check('反向测：specs 未注册键整机报错（拼错字段名的唯一防线）', () => {
+  const schema = loadSchema('phone');
+  const bad = { id: 'ghost', category: 'phone', specs: { 'display.sizes': 6.9 } };
+  const errs = validateSpecs(bad, schema);
+  assert.equal(errs.length, 1, '未注册键必须报出');
+  assert.ok(/display\.sizes/.test(errs[0]), '错误信息要指出具体键名');
+  const good = { id: 'ok', category: 'phone', specs: { 'display.sizeIn': 6.9 } };
+  assert.deepEqual(validateSpecs(good, schema), [], '合法 specs 必须零报错');
+});
+
+check('品类注册表与前端 CATEGORY_ORDER 顺序对账（双真源防漂移）', () => {
+  // 注册表（data/categories.json）管「有哪些品类 → 哪个 schema」，
+  // 前端 CATEGORY_ORDER 管「页面展示顺序」。两个文件各写一份顺序，
+  // 不加这道对账迟早分叉——症状是页面品类 tabs 与数据里的品类对不上。
+  const reg = loadCategories();
+  assert.ok(reg, 'categories.json 必须存在');
+  assert.deepEqual(
+    reg.categories.map((c) => c.id),
+    CAT.CATEGORY_ORDER.map((c) => c.id),
+    '注册表顺序必须与前端 CATEGORY_ORDER 一致',
+  );
+  for (const c of reg.categories) {
+    assert.ok(isRegisteredCategory(c.id), `${c.id} 必须注册`);
+    if (c.builtin !== false) assert.ok(loadSchema(c.id), `已建设品类 ${c.id} 必须有 schema 文件`);
+  }
+  assert.ok(quantifiableFields(loadSchema('phone')).length > 0, 'phone 必须有可量化字段');
+
+  // 展示名也要对账，而不只是顺序：**以前这里只比 id 顺序**，
+  // 于是 catalog.ts 里那行注释「与 data/categories.json 的 label/labelEn 双字段同源
+  // （selftest 对账）」是句假话——把注册表的 labelEn 改成 'Tabl3t' 自测依旧 266 全绿。
+  // 注释比代码更会骗人：人会照着注释相信「改一处就够」，然后两处悄悄分叉
+  // （症状：筛选条显示英文、详情页显示中文，且零报错）。
+  for (const c of reg.categories) {
+    const front = CAT.CATEGORY_ORDER.find((x) => x.id === c.id);
+    assert.ok(front, `${c.id} 必须在前端 CATEGORY_ORDER 里`);
+    assert.equal(front.label, c.label, `${c.id} 的中文名两处必须一致`);
+    assert.equal(front.labelEn, c.labelEn, `${c.id} 的英文名两处必须一致`);
+  }
+});
+
+check('schema 结构校验：phone 无分组/字段错误', () => {
+  // 借鉴准绳 groups 表：字段必须归属到一个已注册分组，分组 id 不可重复。
+  const schema = loadSchema('phone');
+  assert.deepEqual(validateSchema(schema), [], 'phone schema 结构必须零报错');
+});
+
+check('反向测：schema 字段引用不存在的分组 / 分组 id 重复必须报出', () => {
+  const bad = JSON.parse(JSON.stringify(loadSchema('phone')));
+  bad.fields[0].group = 'ghost';
+  assert.ok(
+    validateSchema(bad).some((e) => /ghost/.test(e)),
+    '字段引用不存在的分组必须报出',
+  );
+  bad.groups.push({ id: 'body', name: 'dup', nameEn: 'dup', type: 'single' });
+  assert.ok(
+    validateSchema(bad).some((e) => /重复/.test(e)),
+    '分组 id 重复必须报出',
+  );
+});
+
+check('显式分组：groups 覆盖全部字段，无 orphan（前端分组不用再猜 path 前缀）', () => {
+  // 准绳用 groups 表驱动分面与详情分组，specworld 同样不让前端从 path 前缀隐式推导。
+  const schema = loadSchema('phone');
+  const byGroup = fieldsByGroup(schema);
+  assert.ok(byGroup.get('__orphan__').length === 0, '不允许有未分组字段');
+  const covered = [...byGroup.values()].reduce((n, arr) => n + arr.length, 0);
+  assert.equal(covered, schema.fields.length, '所有字段必须被某个分组覆盖');
+  // 分组顺序与 schema 声明一致，且包含 camera 这种 multi 型
+  const ids = groupsOf(schema).map((g) => g.id);
+  assert.ok(ids.includes('camera'), 'camera 分组必须存在');
+  assert.equal(groupsOf(schema).find((g) => g.id === 'camera').type, 'multi', '摄像头是多实例分组');
+});
+
+check(
+  '四态 valueStatus：present→available / absent→unknown / none→none / not_applicable→not_applicable',
+  () => {
+    // 准绳 value_status 的四条语义。valueStatus 映射只存 none/not_applicable 例外，其余靠 presence 推导。
+    const p = {
+      specs: { 'display.sizeIn': 6.1, 'body.weightG': 170 },
+      valueStatus: { 'body.weightG': 'none', 'display.type': 'not_applicable' },
+    };
+    assert.equal(valueStatus(p, 'display.sizeIn'), 'available', 'specs 有值 = available');
+    assert.equal(valueStatus(p, 'body.thicknessMm'), 'unknown', 'specs 缺键 = unknown');
+    assert.equal(valueStatus(p, 'body.weightG'), 'none', 'valueStatus none 覆盖 presence');
+    assert.equal(
+      valueStatus(p, 'display.type'),
+      'not_applicable',
+      'valueStatus not_applicable 覆盖 presence',
+    );
+    // 生命周期 status 字符串绝不被误当映射：valueStatus 缺省时只按 specs presence 推导
+    const q = { status: 'on-sale', specs: { 'display.sizeIn': 6.1 } };
+    assert.equal(valueStatus(q, 'display.sizeIn'), 'available', '生命周期 status 不得被当四态映射');
+    assert.equal(
+      valueStatus(q, 'body.weightG'),
+      'unknown',
+      '生命周期 status 不得被当四态映射（缺键=unknown）',
+    );
+  },
+);
+
+check('四态 valueStatus：specs 有键但值为 null/空数组 → unknown（官方未公布，不是已填）', () => {
+  // 本项目把「官方未公布」存成 specs 里的 null（如 display.refreshHz=null）或空数组
+  // （如 memory.ramGb=[]）。值不存在却按 available 算，会让填充率虚高、前端把 null 渲染成空白。
+  const p = {
+    specs: { 'display.refreshHz': null, 'memory.ramGb': [], 'body.weightG': 170 },
+    valueStatus: { 'display.refreshHz': 'none' },
+  };
+  // 显式 none 仍覆盖（即便值为 null，none 是人工判定「确实无」）
+  assert.equal(valueStatus(p, 'display.refreshHz'), 'none', '显式 none 覆盖 null 值');
+  assert.equal(valueStatus(p, 'memory.ramGb'), 'unknown', '空数组视为未公布 = unknown');
+  assert.equal(valueStatus(p, 'body.weightG'), 'available', '非 null 真值仍 = available');
+  // 既没有值、也没有 none/n_a 例外 → unknown（与缺键一致）
+  const q = { specs: { 'chipset.processNm': null } };
+  assert.equal(valueStatus(q, 'chipset.processNm'), 'unknown', 'null 值无例外 = unknown');
+});
+
+check(
+  '反向测：无效 valueStatus 键 / 非法 valueStatus 值必须被闸门拒绝（写错字段名会静默隐藏参数）',
+  () => {
+    // validateStatusMap 是闸门 11c 的底层；与 validateSpecs 同级，写错一样拒绝写盘。
+    const schema = loadSchema('phone');
+    const errGhost = validateStatusMap(
+      { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizes': 'none' } },
+      schema,
+    );
+    assert.ok(
+      errGhost.some((e) => /display\.sizes/.test(e)),
+      'valueStatus 引用未注册字段必须报出',
+    );
+    const errVal = validateStatusMap(
+      { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'maybe' } },
+      schema,
+    );
+    assert.ok(
+      errVal.some((e) => /maybe/.test(e)),
+      '非法 valueStatus 值必须报出',
+    );
+    assert.deepEqual(
+      validateStatusMap(
+        { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'none' } },
+        schema,
+      ),
+      [],
+      '合法 valueStatus 例外不误报',
+    );
+  },
+);
+
+check('闸门反向测：注入非法 valueStatus 必须拒绝写盘，合法 valueStatus 放行', () => {
+  const base = (valueStatus) => ({
+    generatedAt: '2026-10-13T00:00:00Z',
+    products: Array.from({ length: 20 }, (_, i) => ({
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
+      ...(i === 0 && valueStatus ? { valueStatus } : {}),
+    })),
+  });
+  assert.ok(
+    validate(base({ 'display.sizes': 'none' }), null).some((f) => /valueStatus/.test(f)),
+    '非法 valueStatus 键必须拒写',
+  );
+  assert.deepEqual(
+    validate(base({ 'display.sizeIn': 'none' }), null),
+    [],
+    '合法 valueStatus 例外必须放行',
+  );
+});
+
+section('v2 全品类目录：用户数据层');
+
+/** 构造一台最小合法产品（v2 形状），供 override 测试复用 */
+function makeProduct(id, over = {}) {
+  return {
+    id,
+    slug: id,
+    brand: 'apple',
+    category: 'phone',
+    name: id,
+    releaseDate: '2026-09-01',
+    specs: { 'display.sizeIn': 6.1, 'body.weightG': 170 },
+    provenance: { 'display.sizeIn': 'apple-official', 'body.weightG': 'apple-official' },
+    ...over,
+  };
+}
+
+check('set-field：值替换 + provenance 标 user-manual + 官网原值进 report', () => {
+  const products = [makeProduct('p1')];
+  const { products: out, report } = applyOverrides(products, {
+    entries: [
+      {
+        id: 'o1',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 6.9,
+        reason: '官网抓漏',
+        createdAt: '2026-10-13',
+        createdBy: '道友',
+      },
+    ],
+  });
+  assert.equal(pick(out[0], 'display.sizeIn'), 6.9, '用户值必须生效');
+  assert.equal(out[0].provenance['display.sizeIn'], 'user-manual', '必须标明被用户修正');
+  assert.equal(out[0].provenance['body.weightG'], 'apple-official', '没碰的字段 provenance 不动');
+  assert.equal(report.replaced.length, 1, '被覆盖的官网原值必须记录（可回查）');
+  assert.equal(report.replaced[0].from, 6.1);
+  assert.equal(products[0].specs['display.sizeIn'], 6.1, 'applyOverrides 不改原数组');
+});
+
+check('add-product：整机入池 + 身份字段兜底 + provenance 完整', () => {
+  const { products: out, report } = applyOverrides([makeProduct('p1')], {
+    entries: [
+      {
+        id: 'o2',
+        op: 'add-product',
+        createdAt: '2026-10-13',
+        product: {
+          id: 'u1',
+          brand: 'huawei',
+          category: 'phone',
+          name: '用户机',
+          releaseDate: '2026-08-01',
+          specs: { 'body.weightG': 180 },
+        },
+        reason: '官网没有但已上市',
+      },
+    ],
+  });
+  assert.equal(out.length, 2, '新产品必须入池');
+  const u = out.find((p) => p.id === 'u1');
+  assert.equal(u.status, 'on-sale', 'status 缺省 on-sale');
+  assert.equal(u.granularity, 'manual');
+  assert.equal(u.provenance['body.weightG'], 'user-manual', 'specs 全键标 user-manual');
+  assert.equal(
+    u.provenance.releaseDate,
+    'user-manual',
+    'releaseDate 有值也要 provenance（硬闸门）',
+  );
+  assert.equal(report.added.length, 1);
+});
+
+check('软删除与冲突：active=false 不生效；同目标多条后者赢', () => {
+  const products = [makeProduct('p1')];
+  const { products: out, report } = applyOverrides(products, {
+    entries: [
+      {
+        id: 'a',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 7.0,
+        reason: '先改',
+        createdAt: '2026-10-01',
+      },
+      {
+        id: 'b',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 7.2,
+        reason: '后改',
+        createdAt: '2026-10-02',
+      },
+      {
+        id: 'c',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'body.weightG',
+        value: 999,
+        reason: '作废',
+        createdAt: '2026-10-03',
+        active: false,
+      },
+    ],
+  });
+  assert.equal(pick(out[0], 'display.sizeIn'), 7.2, '同字段多条，createdAt 在后者生效');
+  assert.equal(pick(out[0], 'body.weightG'), 170, 'active=false 的条目不应用');
+  assert.equal(report.skipped.length, 1, '软删除要留痕');
+  assert.equal(report.conflicts.length, 1, '冲突要显式记录');
+  assert.equal(report.conflicts[0].winner, 'b');
+});
+
+check('反向测：引用悬空 / 字段未注册 / 值越界 / id 冲突 / 品牌未注册全部报错', () => {
+  // 五类错误对应五种手滑。任何一类被静默跳过，用户都会以为改好了而页面纹丝不动。
+  const products = [makeProduct('p1')];
+  const base = {
+    id: 'x',
+    op: 'set-field',
+    productId: 'p1',
+    field: 'display.sizeIn',
+    value: 6.9,
+    reason: 'r',
+    createdAt: '2026-10-13',
+  };
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, productId: 'ghost' }] }, products).length,
+    '引用不存在的机型必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, field: 'display.sizes' }] }, products).length,
+    '字段未注册必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, value: 69 }] }, products).length,
+    '值越界必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, reason: '' }] }, products).length,
+    '缺 reason 必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, createdAt: 'not-a-date' }] }, products).length,
+    'createdAt 非法必须报错',
+  );
+  assert.ok(
+    validateOverrides(
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('p1'),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
+      products,
+    ).length,
+    'add-product id 冲突必须报错',
+  );
+  assert.ok(
+    validateOverrides(
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('u9', { brand: 'nokia' }),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
+      products,
+    ).length,
+    '品牌未注册必须报错',
+  );
+  // 排除集合：add-product 已并入的 id 不构成「与现有产品冲突」（validate 二次校验踩过）
+  assert.deepEqual(
+    validateOverrides(
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('u9'),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
+      [...products, makeProduct('u9')],
+      { excludeIds: ['u9'] },
+    ),
+    [],
+    'excludeIds 里的 id 是用户层自己加的，不算冲突',
+  );
+});
+
+check('闸门反向测：v2 快照注入未注册键 / 越界值必须拒绝写盘', () => {
+  // validate 是新格式的唯一防线。反向测两步：注入违规 → 必须报出；改回 → 必须恢复绿灯。
+  // 注意 LIMITS.minProducts=20：夹具必须造够台数，否则第一道总量闸门先拦，
+  // 被测的 schema 闸门有没有生效反而看不出（夹具缺陷假装成闸门缺陷）。
+  const good = {
+    generatedAt: '2026-10-13T00:00:00Z',
+    products: Array.from({ length: 20 }, (_, i) => ({
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+        'memory.storageGb': [256],
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
+    })),
+  };
+  assert.deepEqual(validate(good, null), [], '合规 v2 快照必须零报错');
+
+  const ghost = JSON.parse(JSON.stringify(good));
+  ghost.products[0].specs['display.sizes'] = 6.9;
+  assert.ok(
+    validate(ghost, null).some((f) => /display\.sizes/.test(f)),
+    '未注册键必须被闸门拦下',
+  );
+
+  const oob = JSON.parse(JSON.stringify(good));
+  oob.products[0].specs['body.weightG'] = 1990;
+  assert.ok(
+    validate(oob, null).some((f) => /weightG/.test(f)),
+    '越界值必须被闸门拦下',
+  );
+
+  const badCat = JSON.parse(JSON.stringify(good));
+  badCat.products[0].category = 'toaster';
+  assert.ok(
+    validate(badCat, null).some((f) => /品类缺失或未注册/.test(f)),
+    '未注册品类必须被闸门拦下',
+  );
+
+  assert.deepEqual(validate(good, null), [], '改回后必须恢复绿灯（闸门没被反向测污染）');
+});
+
+check('用户数据层经闸门：注入违规的 override 必须拒绝写盘', () => {
+  // validate 的 overrides 参数把用户层校验并进闸门。这条守住「写错显性失败」。
+  const snapshot = {
+    generatedAt: '2026-10-13T00:00:00Z',
+    products: Array.from({ length: 20 }, (_, i) => ({
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+        'memory.storageGb': [256],
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
+    })),
+  };
+  const badOverride = {
+    entries: [
+      {
+        id: 'o',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizes',
+        value: 6.9,
+        reason: '手滑',
+        createdAt: '2026-10-13',
+      },
+    ],
+  };
+  const fail = validate(snapshot, null, { overrides: badOverride });
+  assert.ok(
+    fail.some((f) => /用户数据层/.test(f) && /display\.sizes/.test(f)),
+    'override 字段未注册必须拒绝写盘',
+  );
+  assert.deepEqual(validate(snapshot, null, { overrides: { entries: [] } }), [], '空用户层不误报');
+});
+
+check('data/overrides.json 入库文件自身合法（防手滑提交坏层）', () => {
+  const ovr = loadOverrides();
+  const snap = existsSync(join(ROOT, 'data/products.json'))
+    ? JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'))
+    : { products: [] };
+  const errs = validateOverrides(ovr, snap.products ?? []);
+  assert.deepEqual(errs, [], `入库的 overrides.json 必须合法：${errs.join('; ')}`);
+});
+
+/* ================================================================ *
+ * i18n 对账（B2 方案：全量抽取 + 中英双语 + 覆盖闸门）
+ * ------------------------------------------------------------------
+ * 反面教材是 DevEco Code：有 i18next 骨架、有语言切换对话框，实际覆盖约
+ * 16/719（3%）——用户切到中文「几乎没变化」。那种伤害不是「翻译没排期」，
+ * 而是**没有任何闸门知道翻译没做完**。以下五条把这件事变成红灯。
+ * ================================================================ */
+section('i18n 覆盖');
+
+check('i18n 双向对账：键集一致 / 引用↔定义 / 插值参数一致', () => {
+  const problems = I18N.checkI18n(ROOT);
+  assert.deepEqual(
+    problems,
+    [],
+    `i18n 对账未过（${problems.length} 项）：\n  - ${problems.slice(0, 12).join('\n  - ')}`,
+  );
+});
+
+check('i18n 数据侧双语：schema / 视图字典 / 策展字典 / 品类注册表 labelEn 齐全', () => {
+  const problems = I18N.checkDataBilingual(ROOT);
+  assert.deepEqual(
+    problems,
+    [],
+    `数据侧缺英文字段（${problems.length} 项）——英文页会混进中文：\n  - ${problems.join('\n  - ')}`,
+  );
+});
+
+check('i18n 缺键 = 抛错（不设 fallbackLocale，绝不静默回退到另一种语言）', () => {
+  // 直接读装配源码断言，避免为了测它而真的把 i18n 拉起来（selftest 跑在裸 node）
+  const src = readFileSync(join(ROOT, 'src/i18n/index.ts'), 'utf8');
+  assert.ok(/missing:/.test(src), 'src/i18n/index.ts 必须配置 missing handler');
+  assert.ok(/throw new Error/.test(src), 'missing handler 必须抛错而不是回退');
+  assert.ok(
+    !/fallbackLocale\s*:/.test(src),
+    '不应设 fallbackLocale —— 回退到另一种语言就是「切了没生效」的 DevEco 式背叛',
+  );
+});
+
+check('i18n 闸门自身被反向测试：四类注入必须报红，撤销后必须恢复绿灯', () => {
+  const base = join(tmpdir(), `specworld-i18n-rt-${Date.now()}`);
+  const write = (rel, obj) => {
+    const abs = join(base, rel);
+    mkdirSync(dirname(abs), { recursive: true });
+    writeFileSync(abs, typeof obj === 'string' ? obj : JSON.stringify(obj), 'utf8');
+  };
+  const clean = {
+    zh: { a: { b: '你好 {n}' }, c: { d: '已用' } },
+    en: { a: { b: 'hello {n}' }, c: { d: 'used' } },
+  };
+  const srcTs = "export const K = { x: 'c.d' };\nexport const f = () => t('a.b');\n";
+
+  const build = (zh, en, ts = srcTs) => {
+    rmSync(base, { recursive: true, force: true });
+    write('src/locales/zh.json', zh);
+    write('src/locales/en.json', en);
+    write('src/app.ts', ts);
+  };
+
+  // 0. 干净样本必须是绿灯（否则后面的红灯都不可信）
+  build(clean.zh, clean.en);
+  assert.deepEqual(I18N.checkI18n(base), [], '干净样本应当是绿灯');
+
+  // 1. en 缺键
+  build(clean.zh, { a: { b: 'hello {n}' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /en\.json 缺少键/.test(x)),
+    'en 缺键必须报红',
+  );
+
+  // 2. 引用了不存在的键
+  build(clean.zh, clean.en, srcTs + "export const g = () => t('a.nope');\n");
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /引用了不存在的键/.test(x)),
+    '引用不存在的键必须报红',
+  );
+
+  // 3. 僵尸键（译了没人用）
+  build({ ...clean.zh, zz: { q: '没用' } }, { ...clean.en, zz: { q: 'unused' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /无人引用/.test(x)),
+    '语言包里有未被引用的键必须报红',
+  );
+
+  // 4. 插值参数不一致
+  build({ a: { b: '你好 {n}' }, c: { d: 'x' } }, { a: { b: 'hello {m}' }, c: { d: 'x' } });
+  assert.ok(
+    I18N.checkI18n(base).some((x) => /插值参数不一致/.test(x)),
+    '中英插值参数不一致必须报红',
+  );
+
+  // 撤销后恢复绿灯（防「闸门一次性生效」的假绿）
+  build(clean.zh, clean.en);
+  assert.deepEqual(I18N.checkI18n(base), [], '撤销注入后应恢复绿灯');
+
+  rmSync(base, { recursive: true, force: true });
+});
+
+check('i18n 闸门看得见注释里的假键（剥注释不能省）', () => {
+  // 反向：注释里写 `t('a.b')` 不该被当成引用；若剥注释失效，这里会变成
+  // 「僵尸键」与「假引用」同时出现，正是本项目 2026-10-04 记下的闸门失效形态。
+  const zh = I18N.loadLocalePack(ROOT, 'zh.json');
+  const ns = I18N.namespacesOf(zh);
+  const used = I18N.collectUsedKeys(ROOT, ns);
+  assert.ok(used.size > 100, `引用键数量异常（${used.size}）——扫描器可能整体失灵`);
+  assert.ok(
+    !used.has('product.id'),
+    '注释/模板属性里的 product.id 不应被当成 i18n 键（剥注释或引号判定失效）',
+  );
+});
+
+/* i18n 装配：预装载后交给同步用例（⚠️ check() 是同步的，传 async 回调会让断言
+ * 失败变成未捕获的 Promise rejection —— 用例会显示通过，比没写测试更糟） */
+const I18NCFG = await import('../src/i18n/index.ts');
+const FIELDS_LIB_TOP = await import('../src/lib/fields.ts');
+const SPEC_TOP = await import('../src/lib/specs.ts');
+const CAT_TOP = await import('../src/lib/catalog.ts');
+
+const CJK = /[\u4e00-\u9fff]/;
+
+/** 切语言（同步），供下面的对账用例使用 */
+function withLocale(locale, fn) {
+  const prev = I18NCFG.currentLocale();
+  I18NCFG.setLocale(locale);
+  try {
+    return fn();
+  } finally {
+    I18NCFG.setLocale(prev);
+  }
+}
+
+check('i18n 运行时：语言包每个键都能解析（缺键必须抛错，不能静默回退）', () => {
+  const zh = I18N.loadLocalePack(ROOT, 'zh.json');
+  const keys = [...zh.keys()];
+  assert.ok(keys.length > 100, `键数量异常（${keys.length}）`);
+  const bad = [];
+  for (const k of keys) {
+    try {
+      // 插值参数全量喂一遍：占位符写错也在这里炸，而不是等用户切过去才炸
+      I18NCFG.i18n.global.t(k, { n: 1, total: 2, m: 3, err: 'e', name: 'N', value: 'V' });
+    } catch (e) {
+      bad.push(`${k}: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }
+  assert.deepEqual(bad, [], `以下键解析失败：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('i18n 反半吊子：切到英文后参数表/维度名/能力名不得残留中文', () => {
+  assert.ok(REAL_P.length > 0, '需要真实数据');
+  const probe = REAL_P[0];
+
+  const enBad = [];
+  withLocale('en', () => {
+    for (const g of FIELDS_LIB_TOP.specGroups(probe)) {
+      if (CJK.test(g.title)) enBad.push(`组标题 ${g.title}`);
+      for (const r of g.rows) if (CJK.test(r.label)) enBad.push(`行标签 ${r.label}`);
+    }
+    for (const k of F.DIMENSION_KEYS) {
+      if (CJK.test(F.dimLabel(k))) enBad.push(`维度名 ${k} → ${F.dimLabel(k)}`);
+      if (CJK.test(F.dimAllLabel(k))) enBad.push(`「全部」 ${k} → ${F.dimAllLabel(k)}`);
+    }
+    for (const a of SPEC_TOP.ABILITIES) {
+      if (CJK.test(SPEC_TOP.abilityLabel(a.key))) enBad.push(`能力名 ${a.key}`);
+    }
+    for (const s of F.SORTS) if (CJK.test(F.sortLabel(s.id))) enBad.push(`排序名 ${s.id}`);
+    for (const s of ['on-sale', 'upcoming', 'retired']) {
+      if (CJK.test(CAT_TOP.statusLabelOf(s))) enBad.push(`状态名 ${s}`);
+    }
+  });
+  assert.deepEqual(
+    enBad,
+    [],
+    `英文界面残留中文（这就是「切了没变化」的半吊子）：\n  - ${enBad.slice(0, 12).join('\n  - ')}`,
+  );
+
+  // 反向：中文下必须**有**中文，否则说明读的根本不是中文包（假绿）
+  const zhOk = withLocale('zh-CN', () => FIELDS_LIB_TOP.specGroups(probe).map((g) => g.title));
+  assert.ok(
+    zhOk.some((t) => CJK.test(t ?? '')),
+    '中文下参数表组标题应含中文（否则语言切换根本没生效）',
+  );
+});
+
+/* ================================================================ *
+ * 参数值官方术语表（data/curated/glossary.json）
+ * ================================================================ */
+
+const GLOSS = await import('../src/lib/glossary.ts');
+const GLOSS_JSON = JSON.parse(readFileSync(join(ROOT, 'data/curated/glossary.json'), 'utf8'));
+
+check('术语表：每条都有官方英文与可核验出处，且没把中文当英文填', () => {
+  const bad = [];
+  const sources = GLOSS_JSON._sources ?? {};
+  const evOk = (ev) => typeof ev === 'string' && ev in sources;
+
+  for (const [zh, e] of Object.entries(GLOSS_JSON.exact ?? {})) {
+    if (!e?.en) bad.push(`exact「${zh}」缺 en`);
+    else if (CJK.test(e.en)) bad.push(`exact「${zh}」的 en 仍是中文：${e.en}`);
+    else if (e.en === zh) bad.push(`exact「${zh}」en 与中文相同（复制粘贴？）`);
+    if (!evOk(e?.ev)) bad.push(`exact「${zh}」的 ev 不在 _sources 里（出处不可核验）`);
+  }
+  for (const p of GLOSS_JSON.patterns ?? []) {
+    if (!p?.en) bad.push(`pattern ${p?.re} 缺 en`);
+    else if (CJK.test(p.en)) bad.push(`pattern ${p.re} 的 en 仍是中文：${p.en}`);
+    if (!evOk(p?.ev)) bad.push(`pattern ${p.re} 的 ev 不在 _sources 里`);
+    try {
+      new RegExp(p.re);
+    } catch (err) {
+      bad.push(`pattern ${p.re} 不是合法正则：${err.message}`);
+    }
+  }
+  for (const p of GLOSS_JSON.prefixes ?? []) {
+    if (!p?.zh || !p?.en) bad.push(`prefix ${JSON.stringify(p)} 缺 zh/en`);
+    else if (CJK.test(p.en)) bad.push(`prefix「${p.zh}」的 en 仍是中文：${p.en}`);
+    if (!evOk(p?.ev)) bad.push(`prefix「${p?.zh}」的 ev 不在 _sources 里`);
+  }
+  assert.deepEqual(bad, [], `术语表不合法：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('术语表：中文界面原样返回，英文界面才动手（哨兵值）', () => {
+  const zh = '超视网膜 XDR 显示屏';
+  assert.equal(
+    withLocale('zh-CN', () => GLOSS.localizeSpecValue(zh)),
+    zh,
+    '中文下不许改写官网原文',
+  );
+  const en = withLocale('en', () => GLOSS.localizeSpecValue(zh));
+  assert.equal(en, 'Super Retina XDR display', '英文下应换成苹果官方用词');
+  assert.ok(!CJK.test(en), '翻译结果不该还有中文');
+  // 数值/英文原文零开销
+  assert.equal(
+    withLocale('en', () => GLOSS.localizeSpecValue('6.1 英寸')),
+    '6.1 英寸',
+  );
+});
+
+check('术语表：每台机器的芯片名在英文下都能拿到官方英文名（不许残留中文）', () => {
+  assert.ok(REAL_P.length > 0, '需要真实数据');
+  const bad = withLocale('en', () =>
+    REAL_P.filter((p) => p.chipset?.name)
+      .map((p) => ({ id: p.id, out: CAT_TOP.chipNameLabel(p.chipset.name) }))
+      .filter((x) => CJK.test(x.out) && !/（/.test(x.out)) // 括号内是官网脚注，属原文
+      .map((x) => `${x.id} → ${x.out}`),
+  );
+  assert.deepEqual(
+    bad,
+    [],
+    `芯片名仍是中文（芯片型号是标识，厂商有官方英文名就必须用）：\n  - ${bad.slice(0, 10).join('\n  - ')}`,
+  );
+});
+
+check('术语表覆盖率不下降（新增中文术语会把它压低，逼你去补官方译名）', () => {
+  const vals = new Set();
+  for (const p of REAL_P) {
+    for (const v of Object.values(p.specs ?? {})) {
+      if (typeof v === 'string' && CJK.test(v)) vals.add(v.trim());
+    }
+  }
+  assert.ok(vals.size > 50, `含中文的 specs 值太少（${vals.size}）——数据或扫描出了问题`);
+  const done = withLocale(
+    'en',
+    () => [...vals].filter((v) => !CJK.test(GLOSS.localizeSpecValue(v))).length,
+  );
+  const rate = done / vals.size;
+  // 基线 0.60：现行词表实测约 0.64，留 4 个百分点的余量给「新增机型带进来、
+  // 但确实查不到官方英文」的中国特有条目。跌破就是有人在偷懒或词表被删了。
+  assert.ok(
+    rate >= 0.6,
+    `术语表覆盖率 ${(rate * 100).toFixed(1)}%（${done}/${vals.size}）低于基线 60% ——` +
+      '要么新数据带进了没登记的术语（去 data/curated/glossary.json 补官方英文），' +
+      '要么词表被删改了。',
+  );
+});
+
+check('术语表闸门自身被反向测试：把官方英文改成中文必须报红', () => {
+  // 反向测的是「上面那条哨兵用例」的判据本身：如果判据写错（比如恒真），
+  // 这里就会安静地通过，然后词表失效时你也发现不了。
+  const real = GLOSS.GLOSSARY_EXACT['铝金属设计'];
+  assert.ok(real, '词表里应有「铝金属设计」');
+  const backup = real.en;
+  try {
+    real.en = '铝金属设计'; // 假装有人把 en 抄成了中文
+    const bad = CJK.test(real.en);
+    assert.ok(bad, '把 en 写成中文必须能被 CJK 判据抓到');
+  } finally {
+    real.en = backup;
+  }
+  assert.equal(real.en, 'Aluminum design', '反向测必须还原现场');
+});
+
+check('i18n 接线：详情参数表（specGroups）必须应用 localizeSpecValue，术语表能译的词不得残留中文', () => {
+  // 反向测：若有人把 specGroups 出口的 localizeSpecValue 调用删了（回到「中文官网原文直接吐」），
+  // 本条必红。只盯「术语表能译的词」——诚实保留的中国特有项（不在词表里）不算漏。
+  // 注意：wifi/卫星/出厂系统 这几个 path 在 view-phone.json 里是 hidden，详情页与分面都不渲染，
+  // 它们只会在 DataFeedback 纠错表单里以「当前值」出现（见下条），所以这里用真实可见字段验收接线。
+  const terms = new Set();
+  for (const k of Object.keys(GLOSS.GLOSSARY_EXACT)) if (CJK.test(k)) terms.add(k);
+  // 关键：pattern 的中文核心 = 剥掉数字/正则元字符后剩下的汉字串。旧写法把 `(\d+)`
+  // 这类捕获组剥成 `d`，导致「双 16 核神经网络引擎」「300Hz 触控采样率」这种嵌入式数字
+  // 术语根本查不到——闸门对它们「失明」，比没写还糟。改成提取每条 pattern 的汉字片段，
+  // EN 输出里任一段汉字残留都说明这条术语没被 localizeSpecValue 消化。
+  for (const p of GLOSS.GLOSSARY_PATTERNS) {
+    const literal = p.re.replace(/\\[dDsSwWbBeE.(){}[\]|*+?^$]/g, ' ');
+    for (const run of literal.match(/[㐀-䶿一-鿿豈-﫿]+/g) ?? []) {
+      // 只取 >=2 字的核心：单字（双/和/芯…）太泛，会误伤「双卡」这类与术语无关的中文。
+      if (run && run.length >= 2) terms.add(run);
+    }
+  }
+  for (const p of GLOSS_JSON.prefixes ?? []) if (CJK.test(p.zh)) terms.add(p.zh);
+  for (const k of Object.keys(GLOSS_JSON.screenLabels ?? {})) if (CJK.test(k)) terms.add(k);
+  const bad = withLocale('en', () => {
+    const out = [];
+    for (const p of REAL_P) {
+      for (const g of FIELDS_LIB_TOP.specGroups(p)) {
+        for (const r of g.rows) {
+          const v = r.value ?? '';
+          for (const term of terms) if (v.includes(term)) out.push(`${p.id} / ${r.label} → 含未译术语「${term}」：${v}`);
+        }
+      }
+    }
+    return out;
+  });
+  assert.deepEqual(
+    bad,
+    [],
+    `英文详情页残留术语表能译的中文（specGroups 没过 localizeSpecValue？）：\n  - ${bad.slice(0, 12).join('\n  - ')}`,
+  );
+});
+
+check('术语表：卫星/无线局域网/出厂系统 关键条目必须可译（删词条会报红）', () => {
+  // 反向测：删掉 glossary.json 里任意一条卫星/WLAN 词条，这里必红，
+  // 防止「DataFeedback 当前值英文化」靠的是词表、词表被删却无人发现。
+  const want = {
+    北斗卫星消息: 'Beidou satellite messaging',
+    天通卫星通信: 'Tiantong satellite communication',
+    天通卫星通话: 'Tiantong satellite calling',
+    卫星寻呼: 'satellite paging',
+    双向北斗卫星消息: 'two-way Beidou satellite messaging',
+    畅连北斗卫星消息: 'Link Beidou satellite messaging',
+    运营商北斗卫星短信: 'carrier Beidou satellite SMS',
+    '802.11be 无线局域网': '802.11be WLAN',
+    不支持: 'Not supported',
+    '鸿蒙操作系统 5.0': 'HarmonyOS 5.0',
+  };
+  const bad = withLocale('en', () =>
+    Object.entries(want)
+      .map(([zh, en]) => {
+        const got = GLOSS.localizeSpecValue(zh);
+        return got === en ? null : `${zh} → 期望「${en}」实得「${got}」`;
+      })
+      .filter(Boolean),
+  );
+  assert.deepEqual(bad, [], `术语表关键条目失效：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('i18n 接线：DataFeedback 当前值必须过 localizeSpecValue（英文用户不看中文原文）', () => {
+  // 来源级闸门：DataFeedback.vue 是组件，selftest 跑在裸 node 无法直接调用其 computed，
+  // 但它是「一行 wrap」的接线点——只要有人把那行改回直接返回 v，这里必红。
+  const src = readFileSync(join(ROOT, 'src/components/DataFeedback.vue'), 'utf8');
+  assert.ok(/localizeSpecValue/.test(src), 'DataFeedback.vue 必须调用 localizeSpecValue 本地化当前值');
+});
+
+// ── i18n: EN 残留词表不新增（与 scripts/i18n-residual-baseline.json 比对）──
+// 单一真源是 i18n-residual.mjs 的 collectResidualTokens：覆盖 specGroups + chipNameLabel
+// + facets 三个 localizeSpecValue 出口。基线是一份「当前已知不可核验、诚实保留」的残留清单；
+// 若未来数据新增了「能查到官方英文出处却忘了补术语表」的中文词，它会作为基线外的新词出现并判失败。
+section('i18n: EN 残留词表不新增');
+{
+  const { collectResidualTokens: scanResiduals } = await import('./i18n-residual.mjs');
+  const baseline = JSON.parse(
+    readFileSync(join(ROOT, 'scripts/i18n-residual-baseline.json'), 'utf8'),
+  );
+  const baselineSet = new Set(baseline.tokens ?? []);
+  const current = await scanResiduals();
+  const regression = current.filter((t) => !baselineSet.has(t));
+  check(`EN 残留词表不新增（当前 ${current.length} / 基线 ${baselineSet.size}）`, () => {
+    if (regression.length) {
+      throw new Error(
+        '新增未译中文词：' + regression.join('、') +
+          '\n（若系有意补登术语表后残留收窄，跑 `node scripts/i18n-residual.mjs --write-baseline` 更新基线）',
+      );
+    }
+  });
+}
 
 /* ================================================================ *
  * 汇总

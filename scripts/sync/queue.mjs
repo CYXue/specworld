@@ -25,7 +25,7 @@
  */
 
 /** 待收录队列只收这一类 */
-export const PENDING_KIND = 'missing-date';
+const PENDING_KIND = 'missing-date';
 
 /**
  * @param {Array<{id:string, brand:string, name?:string|null, nameZh?:string|null,

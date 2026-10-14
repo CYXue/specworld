@@ -36,7 +36,7 @@
  * 入库路径必须过 CI 的显式 pathspec（`grep -Ev '^data/'`）——
  * `data/raw/` 在 `data/` 之下，天然满足，不用改 workflow。
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CHANNELS, archiveShape } from './lib/archive-shape.mjs';

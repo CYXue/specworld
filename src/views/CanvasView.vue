@@ -12,11 +12,14 @@
  */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
+import { chipNameLabel } from '../lib/catalog';
 import {
   EMPTY_FILTER,
   SORTS,
   applyFilter,
+  sortLabel,
   brandFacets,
   buildCanvasDocs,
   filterToQuery,
@@ -34,6 +37,7 @@ import PxIcon from '../components/PxIcon.vue';
 import type { BoardTile } from '../components/BoardCanvas.vue';
 import BoardCanvas from '../components/BoardCanvas.vue';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds, err } = useDataset();
@@ -88,7 +92,8 @@ const prodById = computed(() => new Map((ds.value?.products ?? []).map((p) => [p
 function composeDetail(d: CanvasDoc): string {
   const p = prodById.value.get(d.id);
   const parts: string[] = [];
-  const chip = p?.chipset?.name;
+  // 走 chipNameLabel：芯片型号有官方英文名，短规格行在英文页里不能吐「A18 芯片」
+  const chip = p?.chipset?.name ? chipNameLabel(p.chipset.name) : '';
   if (chip) parts.push(chip);
   const size = p?.display?.sizeIn;
   if (size != null) parts.push(`${size}″`);
@@ -96,7 +101,7 @@ function composeDetail(d: CanvasDoc): string {
   if (hz != null) parts.push(`${hz}Hz`);
   const mah = p?.battery?.capacityMah;
   if (mah != null) parts.push(`${mah}mAh`);
-  return parts.join(' · ') || '规格未公布';
+  return parts.join(' · ') || t('canvas.noSpecs');
 }
 
 /** 喂给画布的瓦片：精灵图 + 品牌色 + 短规格文案 */
@@ -147,9 +152,9 @@ function buildFilterText(): string {
   if (filter.value.q.trim()) parts.push(`“${filter.value.q.trim()}”`);
   if (filter.value.sort !== 'newest') {
     const s = SORTS.find((x) => x.key === filter.value.sort);
-    if (s) parts.push(`排序:${s.label}`);
+    if (s) parts.push(t('canvas.sortPrefix', { name: sortLabel(s.key) }));
   }
-  return parts.length ? parts.join(' · ') : '全部设备';
+  return parts.length ? parts.join(' · ') : t('canvas.allDevices');
 }
 
 async function exportPng() {
@@ -169,7 +174,7 @@ async function exportPng() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `参数世界-筛选结果-${items.value.length}台.png`;
+      a.download = t('canvas.exportFilename', { n: items.value.length });
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -203,7 +208,7 @@ const canvasH = computed(() => {
 <template>
   <div class="flex h-full flex-col">
     <div v-if="err" class="page-shell py-10 text-center" style="color: var(--color-east)">
-      加载失败：{{ err }}
+      {{ t('canvas.loadFailed', { err }) }}
     </div>
 
     <template v-else>
@@ -212,14 +217,16 @@ const canvasH = computed(() => {
         <div class="pixel-panel mb-4 p-3">
           <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h1 class="pixel-outline font-pixel text-[24px] leading-[1.5]">无限画布</h1>
+              <h1 class="pixel-outline font-pixel text-[24px] leading-[1.5]">
+                {{ t('canvas.title') }}
+              </h1>
               <p
                 class="mt-1 flex flex-wrap items-center gap-2 text-[12px] leading-[1.5]"
                 style="color: var(--color-ink-soft)"
               >
-                <span>拖拽 / 滚轮平移 · 点瓦片看详情 · 环面无限回绕</span>
+                <span>{{ t('canvas.howto') }}</span>
                 <span class="pixel-chip px-1.5 py-0.5 text-[var(--color-gold)]">{{ shown }}</span>
-                <span>/ {{ total }} 台</span>
+                <span>{{ t('filter.matchedTotal', { shown, total }) }}</span>
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
@@ -229,14 +236,14 @@ const canvasH = computed(() => {
                 @click="clearAll"
               >
                 <PxIcon name="close" :size="12" />
-                清空筛选
+                {{ t('filter.reset') }}
               </button>
               <button
                 class="pixel-button flex items-center gap-1 px-2.5 py-1.5 text-[12px] leading-[1.5]"
                 @click="board?.reset()"
               >
                 <PxIcon name="gear" :size="12" />
-                重置视图
+                {{ t('canvas.resetView') }}
               </button>
               <button
                 class="pixel-button flex items-center gap-1 px-2.5 py-1.5 text-[12px] leading-[1.5]"
@@ -244,7 +251,7 @@ const canvasH = computed(() => {
                 @click="exportPng"
               >
                 <PxIcon name="image" :size="12" />
-                {{ exporting ? '导出中…' : '导出 PNG' }}
+                {{ exporting ? t('canvas.exporting') : t('canvas.exportPng') }}
               </button>
             </div>
           </div>
@@ -252,8 +259,10 @@ const canvasH = computed(() => {
           <!-- 三组分面：计数都是当前条件下的真实台数，随其它维度联动 -->
           <div class="mt-3 space-y-2 border-t-2 border-[var(--color-ink)] pt-3">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >品牌</span
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
+                >{{ t('canvas.brand') }}</span
               >
               <button
                 v-for="f in brands"
@@ -262,14 +271,20 @@ const canvasH = computed(() => {
                 :aria-pressed="filter.brand === f.value"
                 @click="setFilter({ brand: f.value })"
               >
-                {{ f.value ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value) : '全部' }}
+                {{
+                  f.value
+                    ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value)
+                    : t('canvas.all')
+                }}
                 {{ f.count }}
               </button>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >产品线</span
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
+                >{{ t('canvas.line') }}</span
               >
               <button
                 v-for="f in lines"
@@ -278,13 +293,15 @@ const canvasH = computed(() => {
                 :aria-pressed="filter.line === f.value"
                 @click="setFilter({ line: f.value })"
               >
-                {{ f.value || '全部' }} {{ f.count }}
+                {{ f.value || t('canvas.all') }} {{ f.count }}
               </button>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
-                >年份</span
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
+                >{{ t('canvas.year') }}</span
               >
               <button
                 v-for="f in years.filter((y) => y.value)"
@@ -296,12 +313,12 @@ const canvasH = computed(() => {
                 {{ f.value }} {{ f.count }}
               </button>
               <span class="ml-1 flex items-center gap-1">
-                <label class="sr-only" for="canvas-q">在画布中搜索</label>
+                <label class="sr-only" for="canvas-q">{{ t('canvas.searchLabel') }}</label>
                 <input
                   id="canvas-q"
                   :value="filter.q"
                   type="search"
-                  placeholder="画布内搜索机型 / 芯片"
+                  :placeholder="t('canvas.searchPlaceholder')"
                   class="pixel-input w-44 px-2 py-1 text-[12px] leading-[1.5]"
                   autocomplete="off"
                   @input="setFilter({ q: ($event.target as HTMLInputElement).value })"
@@ -313,7 +330,7 @@ const canvasH = computed(() => {
                   style="color: var(--color-gold)"
                 >
                   <PxIcon name="sort" :size="12" />
-                  排序
+                  {{ t('sort.label') }}
                 </span>
                 <button
                   v-for="s in SORTS"
@@ -322,7 +339,7 @@ const canvasH = computed(() => {
                   :aria-pressed="filter.sort === s.key"
                   @click="setSort(s.key)"
                 >
-                  {{ s.label }}
+                  {{ sortLabel(s.key) }}
                 </button>
               </span>
             </div>
@@ -342,13 +359,13 @@ const canvasH = computed(() => {
         这里给一份视觉隐藏、但可被读屏与 Tab 走到的线性列表 —— 画布类界面的标准做法。
         刻意不 display:none：那样读屏也读不到，等于没有。
       -->
-      <nav class="sr-only" aria-label="设备列表（画布的文本等价物）">
-        <h2>当前筛选下的设备（文本列表）</h2>
+      <nav class="sr-only" :aria-label="t('canvas.a11yNavLabel')">
+        <h2>{{ t('canvas.a11yListTitle') }}</h2>
         <ol>
           <li v-for="p in items" :key="p.id">
             <RouterLink :to="`/product/${p.id}`">
               {{ p.brandZh }} {{ p.name }}（{{ p.line }}，{{
-                p.releaseDate.slice(0, 4) || '年份未公布'
+                p.releaseDate.slice(0, 4) || t('common.yearUnknown')
               }}）
             </RouterLink>
           </li>

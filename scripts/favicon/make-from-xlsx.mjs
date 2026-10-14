@@ -24,9 +24,9 @@
  *
  * 用法: node scripts/favicon/make-from-xlsx.mjs <xlsx> [outSvg]
  */
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -76,7 +76,6 @@ function readGrid(xlsx, sheet) {
 
 /** 2026-10-08 用户决策：纯黑白（对齐参考图 #ffffff / #000000）。 */
 const INK = '#000000';
-const PAPER = '#ffffff';
 
 /** 产物头部说明。⚠️⚠️ 这里的每个字都会被 XML 解析器读，
  *  而 **XML 注释体内禁止出现连续两个连字符**（`--`）。

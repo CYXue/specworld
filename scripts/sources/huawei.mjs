@@ -106,12 +106,6 @@ function text(html) {
     .trim();
 }
 
-/** 从原始标签串里取属性值 */
-function attr(tag, name) {
-  const m = String(tag).match(new RegExp(`${name}\\s*=\\s*"([^"]*)"`, 'i'));
-  return m ? decodeEntities(m[1]) : null;
-}
-
 function sha256(s) {
   return crypto.createHash('sha256').update(s).digest('hex');
 }

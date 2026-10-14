@@ -1,0 +1,680 @@
+{
+  "_doc": "手机品类参数字段表（schema v2）。由 docs/DATA-CONTRACT.md 的 ProductRecord 逐字段推导，src/lib/types.ts 是其代码镜像。新增/修改字段必须三处同步：本文件、src/lib/types.ts、docs/DATA-CONTRACT.md。range 是闸门合理性区间（不是规格区间）；dir 只对可量化数值字段有意义（high=越大越好，low=越小越好）。groups 是显式参数分组（借鉴准绳/Baseline 的 groups 表：type=单值/多实例、guide 分组说明），前端分面与详情页分组直接吃，不再从 path 前缀隐式猜。value_status 四态（available/unknown/none/not_applicable）沿用了准绳：specs 有值=available；specs 缺该键=unknown（显示「—」）；products.valueStatus[path]='none' 显式标无（显示「无」）；='not_applicable' 显式标不适用（整行隐藏，跨品类关键）。products.valueStatus 只存 none/not_applicable 两种例外，其余靠 presence 推导。注意顶层 products.status（'on-sale'/'discontinued'）是「生命周期状态」，与四态映射 valueStatus 是不同字段，不要混淆。",
+  "id": "phone",
+  "label": "手机",
+  "labelEn": "Phone",
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build",
+      "type": "single",
+      "guide": "尺寸/重量/材质/防护/配色"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display",
+      "type": "single",
+      "guide": "尺寸/类型/分辨率/亮度/刷新/盖板"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance",
+      "type": "single",
+      "guide": "SoC/制程/核心数/GPU/NPU"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage",
+      "type": "single",
+      "guide": "RAM 档位/存储档位"
+    },
+    {
+      "id": "battery",
+      "name": "电池与电源",
+      "nameEn": "Battery & Power",
+      "type": "single",
+      "guide": "容量/充电/续航"
+    },
+    {
+      "id": "camera",
+      "name": "摄像头",
+      "nameEn": "Camera",
+      "type": "multi",
+      "guide": "前置+后置多摄"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio",
+      "type": "single",
+      "guide": "扬声器/麦克风/耳机孔（蓝图第 9 组）"
+    },
+    {
+      "id": "haptic",
+      "name": "振动马达",
+      "nameEn": "Haptics",
+      "type": "single",
+      "guide": "振动马达类型与量级（超出蓝图 16 组的手机扩展，先例 A.2）"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与通信",
+      "nameEn": "Network & Connectivity",
+      "type": "single",
+      "guide": "5G/WLAN/蓝牙/NFC/卫星/USB/SIM/eSIM"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software",
+      "type": "single",
+      "guide": "出厂系统/可升级"
+    }
+  ],
+  "fields": [
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        100,
+        200
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Height"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        50,
+        200
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "上界 200 为折叠机展开态留位（iPhone Duo 展开宽 164.6mm，实测 62 台最大值）",
+      "labelEn": "Width"
+    },
+    {
+      "path": "body.thicknessMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        2,
+        20
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Thickness"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        80,
+        400
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Weight"
+    },
+    {
+      "path": "body.ipRating",
+      "label": "防尘防水",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Dust & water resistance"
+    },
+    {
+      "path": "body.material",
+      "label": "机身材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Frame material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "body.folded",
+      "label": "折叠态尺寸",
+      "unit": null,
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Folded dimensions"
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        3,
+        12
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "Screen size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.type",
+      "label": "屏幕类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Display type"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": "px",
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Resolution"
+    },
+    {
+      "path": "display.ppi",
+      "label": "像素密度",
+      "unit": "ppi",
+      "type": "number",
+      "range": [
+        150,
+        1000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "Pixel density"
+    },
+    {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": "Hz",
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "facet": true,
+      "orderDeriver": "refreshHzNumber",
+      "note": "字符串类型：1-120（区间）/ 60/90（离散档）/ 120（单值）都是官网原文形态，强行转 number 会丢语义。排序/算术前用派生函数取代表值。orderDeriver=序类适配器声明（string 字段参与排序时的取代表值实现，注册表见 src/lib/fields.ts，selftest 对账）",
+      "labelEn": "Refresh rate"
+    },
+    {
+      "path": "display.brightnessTypicalNits",
+      "label": "典型亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        100,
+        10000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "Typical brightness"
+    },
+    {
+      "path": "display.brightnessPeakNits",
+      "label": "峰值亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        100,
+        10000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "与典型亮度永远分列，不合成「最高亮度」",
+      "labelEn": "Peak brightness"
+    },
+    {
+      "path": "display.protection",
+      "label": "盖板玻璃",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Cover glass"
+    },
+    {
+      "path": "chipset.name",
+      "label": "处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Processor"
+    },
+    {
+      "path": "chipset.processNm",
+      "label": "制程",
+      "unit": "nm",
+      "type": "number",
+      "range": [
+        1,
+        10
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "chipset",
+      "labelEn": "Process node"
+    },
+    {
+      "path": "chipset.cpuCores",
+      "label": "CPU 核心数",
+      "unit": "核",
+      "type": "number",
+      "range": [
+        1,
+        32
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "chipset",
+      "labelEn": "CPU cores",
+      "unitEn": "cores"
+    },
+    {
+      "path": "chipset.gpu",
+      "label": "GPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "GPU"
+    },
+    {
+      "path": "chipset.npu",
+      "label": "NPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "NPU"
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "内存档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "RAM options"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage options"
+    },
+    {
+      "path": "battery.capacityMah",
+      "label": "电池容量",
+      "unit": "mAh",
+      "type": "number",
+      "range": [
+        1000,
+        12000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "labelEn": "Battery capacity"
+    },
+    {
+      "path": "battery.capacityCaliber",
+      "label": "容量口径",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "typical",
+        "rated"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "labelEn": "Capacity caliber"
+    },
+    {
+      "path": "battery.wiredChargeW",
+      "label": "有线充电",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        300
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "labelEn": "Wired charging"
+    },
+    {
+      "path": "battery.wirelessChargeW",
+      "label": "无线充电",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        300
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "labelEn": "Wireless charging"
+    },
+    {
+      "path": "battery.vendorClaimedVideoHours",
+      "label": "厂商自报续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        1,
+        200
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "厂商自报，测试条件不一，只并列展示不参与排名",
+      "labelEn": "Vendor-claimed battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "battery.measuredHours",
+      "label": "实测续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        1,
+        200
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "labelEn": "Measured battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "camera.rear",
+      "label": "后置相机",
+      "unit": null,
+      "type": "array:object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "cardinality": "list",
+      "subfields": [
+        {
+          "path": "camera.rear.role",
+          "label": "镜头角色",
+          "unit": null,
+          "type": "enum",
+          "values": [
+            "main",
+            "ultrawide",
+            "tele",
+            "periscope",
+            "macro",
+            "depth"
+          ],
+          "labelEn": "Lens role"
+        },
+        {
+          "path": "camera.rear.mp",
+          "label": "像素",
+          "unit": "MP",
+          "type": "number",
+          "range": [
+            0.1,
+            250
+          ],
+          "labelEn": "Resolution"
+        },
+        {
+          "path": "camera.rear.aperture",
+          "label": "光圈",
+          "unit": null,
+          "type": "string",
+          "labelEn": "Aperture"
+        },
+        {
+          "path": "camera.rear.ois",
+          "label": "光学防抖",
+          "unit": null,
+          "type": "boolean",
+          "labelEn": "Optical image stabilization"
+        },
+        {
+          "path": "camera.rear.sensorNote",
+          "label": "传感器备注",
+          "unit": null,
+          "type": "string",
+          "labelEn": "Sensor note"
+        }
+      ],
+      "note": "多实例子字典（SCHEMA-EXTENSIBILITY 最优解「两处结构升级」②）：每颗镜头的子属性也走 schema 校验——mp 越界/role 拼错/多余键都被闸门拦（此前 array:object 不做深校验）。给镜头加新子属性 = subfields 加一行。子 path 约定：父 path + '.' + 子键（报错可读）",
+      "labelEn": "Rear camera"
+    },
+    {
+      "path": "camera.front",
+      "label": "前置相机",
+      "unit": null,
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "labelEn": "Front camera"
+    },
+    {
+      "path": "camera.videoMax",
+      "label": "最高视频规格",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "labelEn": "Max video spec"
+    },
+    {
+      "path": "audio.speakers",
+      "label": "扬声器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "官网原文形态（立体声双扬声器/双单元/单扬声器），不换算数量——转数字属自行加工。对比按原文异同标注差异，不判好坏",
+      "labelEn": "Speakers"
+    },
+    {
+      "path": "haptic.motor",
+      "label": "振动马达",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "haptic",
+      "facet": true,
+      "note": "官网原文形态（X 轴线性/Z 轴线性/转子等），厂商写法不一故不做 enum；苹果官网通常不标（unknown）。可量化优先级：马达尺寸/振动量级 mm³ 待有可靠来源再加",
+      "labelEn": "Haptic motor"
+    },
+    {
+      "path": "connectivity.fiveG",
+      "label": "5G",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "facet": true,
+      "labelEn": "5G"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "WLAN",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "WLAN"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.nfc",
+      "label": "NFC",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "facet": true,
+      "labelEn": "NFC"
+    },
+    {
+      "path": "connectivity.satellite",
+      "label": "卫星通信",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Satellite"
+    },
+    {
+      "path": "connectivity.usb",
+      "label": "USB",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "USB"
+    },
+    {
+      "path": "connectivity.sim",
+      "label": "SIM",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "SIM"
+    },
+    {
+      "path": "connectivity.esim",
+      "label": "eSIM",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "facet": true,
+      "labelEn": "eSIM"
+    },
+    {
+      "path": "os.launch",
+      "label": "出厂系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Shipped OS"
+    },
+    {
+      "path": "os.upgradableTo",
+      "label": "可升级至",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Upgradable to"
+    }
+  ]
+}

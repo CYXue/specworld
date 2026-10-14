@@ -28,9 +28,9 @@
  *
  * 用法：node scripts/verify-favicon-gates.mjs   （会临时改public/favicon.svg）
  */
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { tryLock, releaseLock } from './lib/gates-lock.mjs';
 

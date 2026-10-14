@@ -19,6 +19,7 @@
 | 「更新数据」 | `node scripts/pipeline.mjs --data-only` → 核对 `data/products.json` 的台数与覆盖率 → `npm run build` |
 | 「改解析器 / 闸门」 | **先写断言再改代码**。改完 `npm run selftest`，不通过不许往下走 |
 | 「改界面」 | `npm run build` → 起 dev → **真机拖一遍**（画布/球必须拖、必须点进详情页） |
+| 「加/改一台机器的参数」 | 编辑 `data/overrides.json`（条目格式见文件内 `_doc`）→ 跑一次 `--data-only`。用户层每次同步重新应用，**官网刷新不会冲掉用户数据**；写错会被闸门拒绝写盘（这是设计） |
 
 ---
 
@@ -26,6 +27,27 @@
 
 **这一节是本文件存在的理由。** 每条都是「不先跑就可能把脏数据发出去」或
 「测试全绿但页面是坏的」。
+
+### 改了 `data/schemas/*.json`（品类字段表）或 `data/overrides.json`（用户数据层）
+```bash
+npm run selftest          # schema 校验 / overrides 合并 / 闸门反向测全在这一层
+npm run quality           # 四态填充率 + 完整性校验（确定性，写 _work/quality-report.md）
+node scripts/pipeline.mjs --data-only   # 看真实数据过不过新 schema
+```
+v2 全品类目录（category + specs 扁平容器）的设计见 `docs/UNIVERSAL-CATALOG.md`，
+借鉴准绳（Baseline）的四态 `value_status` 与显式分组也在那篇文档里。
+「全品类」= 任何可量化产品（第一阶：用电/与电相关的电子产品；第二阶：行李箱等非电但可量化的实物，小米也有此品类）。
+新增非电品类与新增电子品类走**同一套零代码 recipe**（`categories.json` 加一行 + `schemas/<id>.json` 加字段表），
+电子专属分组（屏幕/电池/摄像头…）对非电品类标 `not_applicable` 即可，闸门/质量报告/编辑原型零差别。
+**身份字段对所有品类通用**（顶层、不进 specs）：`brand`（slug，显示名由 vendors 注册表派生）/ `line`（产品线）/ `name`（型号名称）/ `modelCode`（型号代码，如 `MRT-AL10`/`A3292`，官方来源填充禁编造）/ `releaseDate` / `status`。
+三条硬纪律：
+- **schema 的 range 必须覆盖全量真实数据 + 合理余量**。折叠机展开宽度 164.6mm
+  曾把按直板机猜的 `[50,100]` 闸门打挂——闸门误报一次，全链停摆。
+- **override 写错必须显性失败**。字段未注册 / 引用悬空 / 值越界 / id 冲突
+  全部拒绝写盘。静默跳过的后果是用户以为改好了而页面纹丝不动。
+- **「官方未公布」存成 specs 里的 `null`（或空数组）**，四态取值把它当 `unknown`（"—"），
+  不是 `available`。给字段填 `0` / 空串去「补覆盖」是数据诚信红线（见原则一）。
+  `unknown` 跨品牌一致集中在某字段 = 官网结构性事实；同品牌内部分化 = 解析器 bug。
 
 ### 改了 `scripts/normalize/parse.mjs`（解析器）
 ```bash
@@ -154,7 +176,9 @@ npm run conventions:check
 ## 四、目录与数据边界（越界就是设计错误）
 
 ```
-data/          唯一入库的数据源。只有顶层 *.json 会进版本库
+data/          唯一入库的数据源。顶层 *.json 与 schemas/*.json 进版本库
+               （categories.json 品类注册表 / schemas/<品类>.json 字段表 /
+                 overrides.json 用户手动数据层 / release-dates.json 取证表）
 _work/         中间产物与原始响应缓存 —— 不入库，CI 靠 actions/cache 恢复
 dist/          构建产物 —— 不入库
 public/data/   data/ 的构建期拷贝 —— 不入库（入库两份必然版本漂移）
@@ -176,6 +200,11 @@ data/sprites/  精灵图 —— 构建期生成，不入库
 
 - **`setPointerCapture` 拖过阈值（6px）才调**。在 `pointerdown` 里就调会劫持 click 的 target，
   症状是「能拖能缩但设备永远点不进去」，零报错。两个画布各中招过一次。
+- **取值一律 `pick(product, path)`（specs-first，`scripts/lib/specs.mjs`）**。
+  v2 起品类参数在扁平 specs 容器里（`specs['display.sizeIn']`），v1 嵌套回退。
+  只读 specs 会让迁移后第一轮的覆盖率对比跌到 0 触发拒写；只读嵌套则用户修正永远不生效。
+  拍平（sync 层 flattenSpecs）后**必须删掉旧嵌套组**——双真源比没有 specs 更危险：
+  用户改了 specs、嵌套里还是官网旧值，任何直接读嵌套的下游都拿到旧值且零报错。
 - **命令式注入的 DOM 拿不到 Vue scoped 样式** → 必须 `:deep()` 或全局样式。
   真 bug 症状：瓦片竖直堆叠。
 - **`vite preview` 只监听 `localhost`**（127.0.0.1 不通），smoke 的 `SMOKE_BASE` 写

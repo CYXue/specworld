@@ -271,8 +271,6 @@ function directDivs(html) {
 }
 
 const classOf = (openTag) => (openTag.match(/\bclass\s*=\s*"([^"]*)"/i) || [, ''])[1];
-const attrOf = (openTag, name) =>
-  (openTag.match(new RegExp(`\\b${name}\\s*=\\s*"([^"]*)"`, 'i')) || [, ''])[1];
 
 /**
  * 取单元格的原文。
@@ -302,7 +300,7 @@ function storeValueOf(el) {
 }
 
 /** 定位 `#backport-data` 并取出其正文（不依赖属性顺序） */
-export function sliceBackportData(html) {
+function sliceBackportData(html) {
   const attrAt = html.search(/\bid\s*=\s*"backport-data"/i);
   if (attrAt < 0) return null;
   const openAt = html.lastIndexOf('<div', attrAt);
@@ -322,7 +320,7 @@ export function sliceBackportData(html) {
  * 返回 `{ found, products, groups, warnings }`，其中 groups[i].rows[j] 形如
  * `{ label, key, cells: string[42] }`（`key` 见 `assignRowKeys`）。
  */
-export function parseCompareMatrix(html) {
+function parseCompareMatrix(html) {
   const warnings = [];
   const sliced = sliceBackportData(html);
   if (!sliced) {
@@ -407,7 +405,7 @@ export function parseCompareMatrix(html) {
  *
  * 键必须先在整张矩阵上算好再按列取值，否则「某机型这一格为空」会让后续行的序号漂移。
  */
-export function assignRowKeys(groups) {
+function assignRowKeys(groups) {
   const stats = { anonymous: 0, deduped: 0 };
   for (const g of groups) {
     const used = new Set();
@@ -458,7 +456,7 @@ const CN_NUM = {
  *   `iPhone SE (第三代)` → `iphone-se-3`（代际数字化成阿拉伯数字）
  *   `iPhone Air` → `iphone-air`；`iPhone Duo` → `iphone-duo`
  */
-export function slugForProductName(name) {
+function slugForProductName(name) {
   const clean = cleanText(name);
   const se = clean.match(
     /^iPhone\s+SE\s*[（(]?\s*第\s*([一二三四五六七八九十\d]+)\s*代\s*[)）]?\s*$/i,

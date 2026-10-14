@@ -27,6 +27,14 @@ function parseTheme(): [number, number, number] {
 }
 const [TR, TG, TB] = parseTheme();
 
+/**
+ * 减动效偏好（a11y：prefers-reduced-motion）。开启时「点亮」改为硬切：
+ * 满 alpha 一帧即灭、不做逐格淡出；且无活跃方块时 rAF 完全停止。
+ * 与 GlobeCanvas（自转/glide）、BoardCanvas（惯性）同一口径。
+ */
+const reduceMotion =
+  typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
+
 function resize() {
   const c = canvas.value;
   if (!c) return;
@@ -71,12 +79,15 @@ function trigger(cc: number, rr: number) {
       }
     }
   }
+  // 循环只在有活跃方块时驻留（见 draw 尾部）；这里负责唤醒
+  if (!rafId) rafId = requestAnimationFrame(draw);
 }
 
 function draw() {
   const c = canvas.value;
   if (!c || !ctx) return;
   ctx.clearRect(0, 0, c.width, c.height);
+  let anyActive = false;
   for (let r = 0; r < rows; r++) {
     for (let cc = 0; cc < cols; cc++) {
       const b = blocks[r][cc];
@@ -90,17 +101,28 @@ function draw() {
          * 这里用量化 alpha（4 档）代替浮点渐变 —— 淡出过程会看见一排半透明灰，
          * 那不是像素画该有的东西。
          */
-        ctx.strokeStyle = `rgba(${TR},${TG},${TB},${Math.ceil(b.alpha * 4) / 4})`;
-        b.alpha -= 0.03;
-        if (b.alpha <= 0) {
-          b.alpha = 0;
+        if (reduceMotion?.matches) {
+          // 减动效：硬切点亮、不淡出，本帧即灭（循环随之停止）
+          ctx.strokeStyle = `rgba(${TR},${TG},${TB},1)`;
           b.active = false;
+          b.alpha = 0;
+        } else {
+          ctx.strokeStyle = `rgba(${TR},${TG},${TB},${Math.ceil(b.alpha * 4) / 4})`;
+          b.alpha -= 0.03;
+          if (b.alpha <= 0) {
+            b.alpha = 0;
+            b.active = false;
+          }
         }
         ctx.strokeRect(ox, oy, blockSize, blockSize);
+        if (b.active) anyActive = true;
       }
     }
   }
-  rafId = requestAnimationFrame(draw);
+  // 没有活跃方块就停循环：减动效下一帧必停；常规态也省下一个常驻 rAF
+  // （原实现永不归零，鼠标不动时也在每帧重画同一张网格）。
+  if (anyActive) rafId = requestAnimationFrame(draw);
+  else rafId = 0;
 }
 
 function onMove(e: PointerEvent | MouseEvent | TouchEvent) {

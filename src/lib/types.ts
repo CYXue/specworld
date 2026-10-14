@@ -1,8 +1,13 @@
 /**
- * 手机参数站的数据契约。
+ * 手机参数站的数据契约（**管线侧镜像**）。
  *
  * 这份类型是 `docs/DATA-CONTRACT.md` 的代码镜像，两边必须同时改。
- * 管线（scripts/）写入的对象与前端读取的对象都以此为准。
+ * 分工（2026-10-13 审计修正，原文件头「前端读取的对象也以此为准」是假话）：
+ *   - **管线（scripts/）写入的对象以此为准**。scripts/ 不在 tsconfig 收录范围，
+ *     经 `scripts/sources/types.ts`（import BrandId/SourceId）与各适配器 /
+ *     validate.mjs 的 JSDoc 在类型层引用本文件；
+ *   - **前端读取的对象以 `src/types.ts`（前端视图模型）为准**。
+ * 两份是同一条契约的前后端镜像，共享的枚举/联合（如 status）必须同改。
  *
  * 三条铁律：
  *   1. 拿不到的字段写 null，绝不写 0、'-'、平均值或估算值；
@@ -10,7 +15,12 @@
  *   3. 成绩只以「分榜」形式存在，任何把两个 league 合成一个数的做法都是错的。
  */
 
-export type BrandId = 'apple' | 'huawei';
+/**
+ * 品牌 id。**真源 = scripts/brands.mjs 注册表**（isValidBrand 闸门按它拦截）。
+ * 2026-10-13 硬编码审计 A4 治理：不再写字面量联合（'apple'|'huawei'）——
+ * 那会让新品牌被类型系统挡在门外，而注册表本来就是数据。
+ */
+export type BrandId = string;
 
 export type SourceId =
   | 'apple-official' // 苹果官网·规格页（最细，35 个章节）
@@ -18,7 +28,8 @@ export type SourceId =
   | 'huawei-official'
   | 'geekbench-browser'
   | 'dxomark'
-  | 'manual'
+  | 'manual' // 人工取证（如 data/release-dates.json 的发布日期）
+  | 'user-manual' // 用户手动数据层修正（data/overrides.json，set-field / add-product）
   | 'derived';
 
 /**
@@ -73,14 +84,29 @@ export interface ProductRecord {
   id: string;
   slug: string;
   brand: BrandId;
+  /** v2 全品类目录：品类 id（phone / tablet / laptop / audio，注册表见 data/categories.json） */
+  category?: string;
   /** 产品线：iPhone / Mate / Pura / nova / Mate X */
   line: string;
   name: string;
   nameZh: string | null;
 
+  /**
+   * v2 全品类目录：品类参数容器。键 = 字段路径（'body.weightG' / 'display.sizeIn' / …），
+   * 值 = 官网值或用户修正值。字段定义（类型/区间/口径）按 category 查
+   * data/schemas/<category>.json；手机品类由管线在整合时从下方嵌套组拍平生成
+   * （scripts/lib/specs.mjs 的 flattenSpecs），前端由 adapt.ts 展开回嵌套视图。
+   */
+  specs?: Record<string, unknown>;
+
   releaseDate: string | null;
   releaseDatePrecision: 'day' | 'month' | 'year' | null;
-  status: 'upcoming' | 'on-sale' | 'discontinued';
+  /**
+   * 生命周期状态。⚠️ 权威枚举 = 'on-sale' | 'upcoming' | 'retired'（与 src/types.ts Product.status
+   * 一致——本文件是管线侧镜像、src/types.ts 是前端侧镜像，两份必须同改）。
+   * 历史漂移记录：此处曾写 'discontinued'（v1 残留），与前端 'retired' 打架，2026-10-13 审计统一为 'retired'。
+   */
+  status: 'upcoming' | 'on-sale' | 'retired';
   retiredAt: string | null;
 
   body: {

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import SectionFrame from '../components/SectionFrame.vue';
 import SpriteImg from '../components/SpriteImg.vue';
 
+const { t } = useI18n();
 const { ds } = useDataset();
 const derived = useDerived();
 
@@ -18,7 +20,7 @@ const byYear = computed(() => {
   const list = derived.value?.byRelease ?? [];
   const map = new Map<string, typeof list>();
   for (const p of list) {
-    const y = (p.releaseDate || '').slice(0, 4) || '未知';
+    const y = (p.releaseDate || '').slice(0, 4) || t('common.unknown');
     if (!map.has(y)) map.set(y, []);
     map.get(y)!.push(p);
   }
@@ -28,11 +30,11 @@ const byYear = computed(() => {
 
 <template>
   <div class="page-shell space-y-6 py-6">
-    <SectionFrame title="发布时间线" hud="var(--color-dawn)" icon="clock">
+    <SectionFrame :title="t('timeline.title')" hud="var(--color-dawn)" icon="clock">
       <p
         class="pixel-note mb-4 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]"
       >
-        日期取自厂商官方发布；精度不足时按年/月展示。
+        {{ t('timeline.note') }}
       </p>
 
       <!-- 年份轴：左侧一条竖直的像素轨道 + 年份方块，替代原来的纯文字小标题 -->
@@ -45,7 +47,7 @@ const byYear = computed(() => {
             {{ year }}
           </span>
           <span class="text-[12px] leading-[1.5] text-[var(--color-ink-soft)]">
-            {{ list.length }} 款
+            {{ t('common.models', { n: list.length }) }}
           </span>
           <span class="pixel-rule flex-1" />
         </h3>

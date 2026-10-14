@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { buildDocs, search, suggestions, tokenize } from '../lib/search';
 import { abilityRows } from '../lib/specs';
@@ -12,6 +13,7 @@ import SpriteImg from '../components/SpriteImg.vue';
 // q 与 brand 都写在 query 里（#/search?q=mate&brand=huawei），所以刷新、分享、
 // 浏览器前进后退都能还原同一份结果 —— hash 路由下这是唯一可靠的做法，
 // 拿组件内的 ref 存查询词会让「后退」直接失灵。
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();
@@ -107,15 +109,15 @@ function clearAll() {
 
 <template>
   <div class="page-shell space-y-6 py-6">
-    <SectionFrame title="搜索机型" hud="var(--color-crown)" icon="search">
-      <template #aside>{{ results.length }} / {{ docs.length }} 台</template>
+    <SectionFrame :title="t('search.title')" hud="var(--color-crown)" icon="search">
+      <template #aside>{{ t('search.count', { n: results.length, total: docs.length }) }}</template>
 
       <label class="block">
-        <span class="sr-only">搜索机型</span>
+        <span class="sr-only">{{ t('search.ariaLabel') }}</span>
         <input
           v-model="q"
           type="search"
-          placeholder="机型名 / 中文名 / 产品线 / 芯片，如 mate、Pura、nova、麒麟"
+          :placeholder="t('search.placeholder')"
           class="pixel-input w-full px-3 py-2 text-[12px] leading-[1.5]"
           autocomplete="off"
           @input="apply()"
@@ -133,20 +135,22 @@ function clearAll() {
         style="color: var(--color-dawn)"
       >
         <PxIcon name="search" :size="12" class="flex-none" />
-        已忽略大小写与空格做匹配 —— 你打的「{{ q }}」按官方写法可能是 「{{ looseHint }}」
+        {{ t('search.looseHint', { q, name: looseHint }) }}
       </p>
 
       <!-- 品牌过滤：只列数据里真实存在的品牌，台数是真实计数 -->
       <div class="mt-3 flex flex-wrap items-center gap-2">
-        <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-ink-soft)"
-          >品牌</span
+        <span
+          class="w-10 shrink-0 text-[12px] leading-[1.5]"
+          style="color: var(--color-ink-soft)"
+          >{{ t('search.brandLabel') }}</span
         >
         <button
           class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
           :aria-pressed="!brand"
           @click="apply(undefined, '')"
         >
-          全部 {{ docs.length }}
+          {{ t('search.allBrands', { n: docs.length }) }}
         </button>
         <button
           v-for="b in brands"
@@ -164,7 +168,7 @@ function clearAll() {
           style="color: var(--color-east)"
           @click="clearAll"
         >
-          清空
+          {{ t('search.clear') }}
         </button>
       </div>
     </SectionFrame>
@@ -172,10 +176,12 @@ function clearAll() {
     <!-- 未输入：给真实存在的建议词，而不是留白 -->
     <div v-if="!hasQuery" class="pixel-note pixel-stripe p-4">
       <p class="mb-3 text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-        空格分多个词，全部命中才算匹配。可搜机型名、中文名、产品线、芯片。
-        <b class="text-[var(--color-gold)]">大小写、空格、全角半角随意打</b> ——
-        <span style="color: var(--color-parchment)">nova 14 Ultra</span> 与
-        <span style="color: var(--color-parchment)">nova14ultra</span> 搜到同一批。
+        {{ t('search.tipA') }}
+        <b class="text-[var(--color-gold)]">{{ t('search.tipBold') }}</b>
+        {{ t('search.tipB') }}
+        <span style="color: var(--color-parchment)">nova 14 Ultra</span>
+        {{ t('search.tipConj') }}
+        <span style="color: var(--color-parchment)">nova14ultra</span> {{ t('search.tipC') }}
       </p>
       <div class="flex flex-wrap gap-2">
         <button
@@ -199,13 +205,13 @@ function clearAll() {
         class="pixel-outline font-pixel text-[24px] leading-[1.5]"
         style="color: var(--color-ember)"
       >
-        没有匹配的机型
+        {{ t('search.noResultTitle') }}
       </p>
       <p class="mt-3 text-[12px] leading-[1.5]" style="color: var(--color-ink-soft)">
-        官网未公布的字段不进搜索索引。机型名请包含关键部分（如 Mate 60 Pro，或写成 mate60pro）。
+        {{ t('search.noResultBody') }}
       </p>
       <button class="pixel-button mt-4 px-3 py-1.5 text-[12px] leading-[1.5]" @click="clearAll">
-        清空条件
+        {{ t('search.clearConditions') }}
       </button>
     </div>
 

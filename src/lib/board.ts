@@ -137,15 +137,6 @@ export function scaleNums(vpW: number, vpH: number): number {
   return vpH / 300 + vpW / 300;
 }
 
-/** 把视口尺寸按旧比例等比缩放（resize 时行列不变只缩放网格几何） */
-export function rescaleMovers(movers: Mover[], ratio: number): Mover[] {
-  for (const m of movers) {
-    m.x *= ratio;
-    m.y *= ratio;
-  }
-  return movers;
-}
-
 /**
  * 全环面遍历一轮后是否回到起点（无限回绕的自洽性硬验收）。
  * 逻辑：构造一个铺满 dataGrid 的 mover 集合，逐个沿 +x 推一个周期，

@@ -21,7 +21,11 @@
  *   installTsResolver();
  *   const m = await import('../src/lib/search.ts');
  *
- * ⚠️ 这个钩子只做一件事：把 `./query` 补成 `./query.ts`。
+ * ⚠️ 这个钩子只做两件事：`./query` → `./query.ts`，以及 `./dir` → `./dir/index.ts`。
+ *   （后一条是 2026-10-13 加的：i18n 引入 `src/i18n/index.ts` 后，`src/lib/*.ts`
+ *     用目录说明符 `from '../i18n'` 引用它，Node 报 ERR_UNSUPPORTED_DIR_IMPORT。
+ *     目录索引是**打包器的既有约定**，不是给写错路径兜底——`./dir` 下没有
+ *     `index.ts` 时仍然原样失败，不会静默。）
  *   它**不**做类型检查、不做转译（转译交给 Node 的 type-stripping），
  *   也**不**兜 `.js` → `.ts` 之类的其它映射 —— 那样就成了「什么都能解析」，
  *   写错路径也会被静默兜住，正好是本项目最讨厌的那类闸门失效。
@@ -54,6 +58,11 @@ export function installTsResolver() {
       const asTs = new URL(base.href + '.ts');
       if (existsSync(fileURLToPath(asTs))) {
         return { url: asTs.href, format: 'module-typescript', shortCircuit: true };
+      }
+      // 目录说明符 → index.ts（Vite/打包器约定；仅补索引文件，不做其它兜底）
+      const asDirIndex = new URL(base.href.replace(/\/?$/, '/') + 'index.ts');
+      if (existsSync(fileURLToPath(asDirIndex))) {
+        return { url: asDirIndex.href, format: 'module-typescript', shortCircuit: true };
       }
       return nextResolve(specifier, context);
     },

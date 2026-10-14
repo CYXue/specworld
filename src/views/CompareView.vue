@@ -1,21 +1,26 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { specGroups } from '../lib/fields';
 import { abilityRows } from '../lib/specs';
 import {
+  SERIES_FALLBACK,
+  UNKNOWN,
   basePriceCny,
   categoryOf,
   categoryLabel,
   chipNameLabel,
   fmtPriceCny,
   isFoldable,
+  seriesLabel,
   seriesOf,
+  variantLabel,
   variantOf,
 } from '../lib/catalog';
 import {
-  DIMENSIONS,
+  DIMENSION_KEYS,
   applyExcept,
   applyFilter,
   applySort,
@@ -28,6 +33,7 @@ import {
   writeFilter,
 } from '../lib/facets';
 import type { DimKey, FacetItem, FilterState, SortKey } from '../lib/facets';
+import { compareRowState } from '../lib/compare';
 import { continentOf } from '../types';
 import AbilityBars from '../components/AbilityBars.vue';
 import FilterBar from '../components/FilterBar.vue';
@@ -46,12 +52,13 @@ import VendorRoof from '../components/VendorRoof.vue';
  * 状态全在 URL 里：`?a=品类&b=品牌&s=系列&v=变体&c=芯片&r=内存&y=年份&o=排序&p=已选`
  * —— 刷新不丢，也能分享「苹果折叠屏里挑三台来比」这种链接。
  */
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();
 const derived = useDerived();
 
-const DIM_KEYS = DIMENSIONS.map((d) => d.key);
+const DIM_KEYS = [...DIMENSION_KEYS];
 const brandLabels = computed(() => new Map((ds.value?.vendors ?? []).map((v) => [v.id, v.nameZh])));
 const all = computed(() => ds.value?.products ?? []);
 
@@ -87,12 +94,42 @@ const picked = computed<string[]>(() => {
   return out;
 });
 
+/**
+ * 「只看差异」开关：状态进 URL（?d=1），与本页其他状态同原则——刷新不丢、可分享。
+ * 只标差异、**不判好坏**：参数没有客观优劣（轻/重、大/小各有偏好）。
+ */
+const diffOnly = computed(() => route.query.d === '1');
+
+/**
+ * 差异高亮总开关（完整采用准绳 diffHighlightOn）：默认开，?h=0 关——
+ * 关掉后是纯中性表格（无底色/竖线/加粗）。与「只看差异」正交：
+ * 「只看差异 + 高亮关」= 不带标记的差异行清单。
+ */
+const highlight = computed(() => route.query.h !== '0');
+
+function setDiffOnly(v: boolean) {
+  const q: Record<string, unknown> = { ...route.query };
+  if (v) q.d = '1';
+  else delete q.d;
+  router.replace({ path: '/compare', query: q });
+}
+
+function setHighlight(v: boolean) {
+  const q: Record<string, unknown> = { ...route.query };
+  if (v) delete q.h;
+  else q.h = '0';
+  router.replace({ path: '/compare', query: q });
+}
+
 function push(nextFilter: FilterState, nextPicked: string[], nextSorts: SortKey[] = []) {
   router.replace({
     path: '/compare',
     query: {
       ...writeFilter(nextFilter, nextSorts),
       ...(nextPicked.length ? { p: nextPicked.join(',') } : {}),
+      // 保留对比视图设置：切筛选/排序不应冲掉「只看差异」与「高亮」状态
+      ...(diffOnly.value ? { d: '1' } : {}),
+      ...(highlight.value ? {} : { h: '0' }),
     },
   });
 }
@@ -127,15 +164,16 @@ function clearPicked() {
  */
 const listed = computed(() => applySort(applyFilter(all.value, filter.value), sort.value));
 
-/** 结果区顶部轻量排序条（辅助，非主打）：单级即可，多级排序交给榜单页。 */
-const SORTS_LITE: Array<{ id: SortKey; label: string }> = [
-  { id: 'release', label: '最新' },
-  { id: 'price-asc', label: '价格 ↑' },
-  { id: 'price-desc', label: '价格 ↓' },
-  { id: 'battery-desc', label: '续航' },
-  { id: 'ppi-desc', label: '屏幕' },
-  { id: 'weight-asc', label: '轻薄' },
-  { id: 'camera-desc', label: '影像' },
+/** 结果区顶部轻量排序条（辅助，非主打）：单级即可，多级排序交给榜单页。
+ *  label 只存 locale 键——存中文就是闸门看不见的硬编码（同 `facets.SORTS` 纪律）。 */
+const SORTS_LITE: Array<{ id: SortKey; labelKey: string }> = [
+  { id: 'release', labelKey: 'sort.release' },
+  { id: 'price-asc', labelKey: 'sort.priceAsc' },
+  { id: 'price-desc', labelKey: 'sort.priceDesc' },
+  { id: 'battery-desc', labelKey: 'ability.battery' },
+  { id: 'ppi-desc', labelKey: 'ability.display' },
+  { id: 'weight-asc', labelKey: 'ability.light' },
+  { id: 'camera-desc', labelKey: 'ability.camera' },
 ];
 
 /**
@@ -169,8 +207,8 @@ const singleVendor = computed(() =>
 const matrix = computed(() => {
   const list = pickedProds.value;
   if (list.length < 2) return null;
-  const order: Array<{ group: string; label: string }> = [];
   const seen = new Set<string>();
+  const order: Array<{ group: string; label: string }> = [];
   const per = list.map((p) => {
     const m = new Map<string, string>();
     for (const grp of specGroups(p))
@@ -184,19 +222,76 @@ const matrix = computed(() => {
       }
     return m;
   });
+  // 差异判定：完整采用准绳口径（src/lib/compare.ts 纯函数，缺失不参与值比较）——
+  // **两种标记**：值不等（different）与 缺失差异（missing：有值 vs 未公布并存）是不同信息，
+  // 混成一种会让「官方未公布」被误读成「配置不同」（本数据集 40% 格子未公布）。
+  const rows = order.map((o) => {
+    const k = `${o.group}|${o.label}`;
+    const values = per.map((m) => m.get(k) ?? '—');
+    return { ...o, ...compareRowState(values) };
+  });
+  // 差异行上浮（准绳 sortDiffUp）：组内 isDifferent/isMissing 的行排前面，其余保持原序。
+  const floated = [...rows].sort(
+    (a, b) => Number(b.different || b.missing) - Number(a.different || a.missing),
+  );
   const groups: string[] = [];
-  for (const o of order) if (!groups.includes(o.group)) groups.push(o.group);
-  return { list, per, groups, order };
+  for (const o of floated) if (!groups.includes(o.group)) groups.push(o.group);
+  return {
+    list,
+    per,
+    groups,
+    order: floated,
+    diffCount: rows.filter((r) => r.different || r.missing).length,
+  };
 });
+
+/** 「只看差异」模式下实际渲染的行（准绳 sortDiffUp 入选条件：值不等或缺失差异）；
+ * 组内无差异行时整组隐藏。 */
+const visibleOrder = computed(() =>
+  !matrix.value
+    ? []
+    : diffOnly.value
+      ? matrix.value.order.filter((r) => r.different || r.missing)
+      : matrix.value.order,
+);
+const visibleGroups = computed(() =>
+  matrix.value
+    ? matrix.value.groups.filter((g) => visibleOrder.value.some((r) => r.group === g))
+    : [],
+);
+
+/**
+ * 行标记样式（2026-10-13 完整采用准绳三重标识：底色 + 左竖线 + 差异行加粗，不依赖颜色——
+ * 用户明确裁决「准绳做得更好，采用准绳建议」；此前单底色是协作铁律失守案例，已纠正）。
+ * 两种底色区分两种信息：金 = 配置不同；蓝(lapis) = 公布情况不同（有值 vs 未公布并存）。
+ * both 时随准绳取缺失色（missing 优先）。highlight 关 → 纯中性表格。
+ */
+function rowStyle(o: { different: boolean; missing: boolean }): Record<string, string> {
+  if (!highlight.value) return {};
+  if (o.missing) {
+    return {
+      background: 'rgba(74, 127, 212, 0.14)',
+      borderLeft: '3px solid var(--color-lapis)',
+    };
+  }
+  if (o.different) {
+    return {
+      background: 'rgba(242, 201, 76, 0.13)',
+      borderLeft: '3px solid var(--color-gold)',
+    };
+  }
+  return {};
+}
 
 /** 列表项副标题：系列 · 变体 · 形态 · 芯片，一行说清是谁。 */
 function subline(p: (typeof all.value)[number]): string {
   const chip = chipNameLabel(p.chipset?.name ?? '');
+  const v = variantOf(p);
   return [
-    seriesOf(p),
-    variantOf(p) === '标准' ? null : variantOf(p),
-    isFoldable(p) ? '折叠屏' : null,
-    chip === '未公布' ? null : chip,
+    seriesLabel(seriesOf(p)),
+    v === SERIES_FALLBACK ? null : variantLabel(v),
+    isFoldable(p) ? t('facet.formValue.foldable') : null,
+    chip === UNKNOWN ? null : chip,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -205,12 +300,13 @@ function subline(p: (typeof all.value)[number]): string {
 
 <template>
   <div class="page-shell py-6">
-    <SectionFrame title="机型库 · 筛选与对比" hud="var(--color-west)" icon="compare">
+    <SectionFrame :title="t('compare.title')" hud="var(--color-west)" icon="compare">
       <p
-        class="pixel-note mb-3 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)"
+        class="pixel-note mb-3 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]"
       >
-        先筛出想要的机型，再勾左侧方块加入对比：勾 1 台看完整详情，勾 2 台以上并排对比，
-        <span style="color: var(--color-gold)">不限台数</span>。条件与已选项都在网址里，可直接分享。
+        {{ t('compare.introBefore') }}
+        <span style="color: var(--color-gold)">{{ t('compare.introNoLimit') }}</span
+        >{{ t('compare.introAfter') }}
       </p>
 
       <FilterBar
@@ -239,13 +335,13 @@ function subline(p: (typeof all.value)[number]): string {
           <h2
             class="pixel-outline font-pixel text-[24px] leading-[1.5] text-[var(--color-parchment-lit)]"
           >
-            {{ isFiltered(filter) ? '筛选结果' : '全部机型' }}
+            {{ isFiltered(filter) ? t('compare.listFiltered') : t('compare.listAll') }}
           </h2>
           <!-- 结果区顶部轻量排序条（京东式，辅助非主打） -->
           <div class="flex flex-wrap items-center gap-1.5">
             <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
               <PxIcon name="sort" :size="12" />
-              排序
+              {{ t('sort.label') }}
             </span>
             <button
               v-for="s in SORTS_LITE"
@@ -254,7 +350,7 @@ function subline(p: (typeof all.value)[number]): string {
               :aria-pressed="sort === s.id"
               @click="onSort(s.id)"
             >
-              {{ s.label }}
+              {{ t(s.labelKey) }}
             </button>
           </div>
         </div>
@@ -263,7 +359,7 @@ function subline(p: (typeof all.value)[number]): string {
           class="pixel-note mt-3 px-4 py-8 text-center text-[12px] leading-[1.5]"
           style="color: var(--color-parchment-dim)"
         >
-          没有符合条件的机型 —— 放宽某个条件试试（每个维度的「全部」只清该维度）。
+          {{ t('compare.empty') }}
         </p>
         <ul v-else class="mt-3 space-y-1.5">
           <li v-for="p in listed" :key="p.id" class="pixel-row flex items-center gap-2 px-2 py-1.5">
@@ -307,7 +403,7 @@ function subline(p: (typeof all.value)[number]): string {
               :to="`/product/${p.id}`"
               class="pixel-button flex-none px-2 py-1 text-[12px] leading-[1.5]"
             >
-              详情
+              {{ t('common.detail') }}
             </RouterLink>
           </li>
         </ul>
@@ -320,20 +416,20 @@ function subline(p: (typeof all.value)[number]): string {
             <h2
               class="pixel-outline font-pixel text-[24px] leading-[1.5] text-[var(--color-parchment-lit)]"
             >
-              对比台
+              {{ t('compare.panelTitle') }}
             </h2>
             <span
               class="pixel-chip px-2 py-0.5 text-[12px] leading-[1.5]"
               style="color: var(--color-west)"
             >
-              {{ pickedProds.length }} 台
+              {{ t('common.countUnits', { n: pickedProds.length }) }}
             </span>
             <button
               v-if="pickedProds.length"
               class="pixel-button ml-auto px-2 py-1 text-[12px] leading-[1.5]"
               @click="clearPicked"
             >
-              清空
+              {{ t('filter.clear') }}
             </button>
           </div>
 
@@ -342,8 +438,8 @@ function subline(p: (typeof all.value)[number]): string {
             class="pixel-note px-3 py-4 text-center text-[12px] leading-[1.5]"
             style="color: var(--color-parchment-dim)"
           >
-            勾选左侧机型加入对比。<br />
-            1 台看详情，2 台以上并排比。
+            {{ t('compare.panelEmpty1') }}<br />
+            {{ t('compare.panelEmpty2') }}
           </p>
 
           <template v-else>
@@ -361,10 +457,10 @@ function subline(p: (typeof all.value)[number]): string {
                 </span>
                 <button
                   class="pixel-button flex-none px-1.5 py-0.5 text-[12px] leading-[1.5]"
-                  :aria-label="`从对比中移除 ${p.name}`"
+                  :aria-label="t('compare.removeAria', { name: p.name })"
                   @click="togglePick(p.id)"
                 >
-                  移除
+                  {{ t('common.remove') }}
                 </button>
               </li>
             </ul>
@@ -409,7 +505,7 @@ function subline(p: (typeof all.value)[number]): string {
                 :to="`/product/${single.id}`"
                 class="pixel-button mt-2 flex items-center justify-center gap-1 px-2 py-1 text-[12px] leading-[1.5]"
               >
-                打开详情页
+                {{ t('compare.openDetail') }}
                 <PxIcon name="arrow" :size="10" />
               </RouterLink>
             </template>
@@ -419,7 +515,7 @@ function subline(p: (typeof all.value)[number]): string {
               class="pixel-note px-3 py-3 text-center text-[12px] leading-[1.5]"
               style="color: var(--color-parchment-dim)"
             >
-              已选 {{ pickedProds.length }} 台，往下看并排对比表。
+              {{ t('compare.multiHint', { n: pickedProds.length }) }}
             </p>
           </template>
         </div>
@@ -429,10 +525,35 @@ function subline(p: (typeof all.value)[number]): string {
     <!-- 多选对比表：全宽展开（1 台时不存在） -->
     <div v-if="matrix" class="mt-6">
       <SectionFrame
-        :title="`并排对比 · ${matrix.list.length} 台`"
+        :title="t('compare.matrixTitle', { n: matrix.list.length })"
         hud="var(--color-west)"
         icon="compare"
       >
+        <div class="mb-3 flex flex-wrap items-center gap-2">
+          <span class="pixel-heading text-[12px] leading-[1.5]">{{ t('compare.display') }}</span>
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="!diffOnly"
+            @click="setDiffOnly(false)"
+          >
+            {{ t('compare.allItems', { n: matrix.order.length }) }}
+          </button>
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="diffOnly"
+            @click="setDiffOnly(true)"
+          >
+            {{ t('compare.diffOnly', { n: matrix.diffCount }) }}
+          </button>
+          <span class="mx-1 h-4 w-px" style="background: var(--color-ink)" />
+          <button
+            class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+            :aria-pressed="highlight"
+            @click="setHighlight(!highlight)"
+          >
+            {{ highlight ? t('compare.highlightOn') : t('compare.highlightOff') }}
+          </button>
+        </div>
         <div class="mb-3 overflow-x-auto">
           <table
             class="w-full border-collapse text-[12px]"
@@ -444,7 +565,7 @@ function subline(p: (typeof all.value)[number]): string {
                   class="sticky left-0 z-1 w-28 border-2 border-[var(--color-ink)] bg-[var(--color-panel-lit)] p-2 text-left"
                   style="color: var(--color-parchment-dim)"
                 >
-                  机型
+                  {{ t('compare.modelHeader') }}
                 </th>
                 <th
                   v-for="p in matrix.list"
@@ -466,16 +587,16 @@ function subline(p: (typeof all.value)[number]): string {
                     </span>
                     <button
                       class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"
-                      :aria-label="`从对比中移除 ${p.name}`"
+                      :aria-label="t('compare.removeAria', { name: p.name })"
                       @click="togglePick(p.id)"
                     >
-                      移除
+                      {{ t('common.remove') }}
                     </button>
                   </div>
                 </th>
               </tr>
             </thead>
-            <template v-for="g in matrix.groups" :key="g">
+            <template v-for="g in visibleGroups" :key="g">
               <tr>
                 <th
                   colspan="99"
@@ -485,10 +606,10 @@ function subline(p: (typeof all.value)[number]): string {
                   {{ g }}
                 </th>
               </tr>
-              <tr v-for="o in matrix.order.filter((x) => x.group === g)" :key="o.label">
+              <tr v-for="o in visibleOrder.filter((x) => x.group === g)" :key="o.label">
                 <td
                   class="sticky left-0 z-1 border-2 border-[var(--color-ink)] bg-[var(--color-panel)] px-2 py-1"
-                  style="color: var(--color-parchment-dim)"
+                  :style="rowStyle(o)"
                 >
                   {{ o.label }}
                 </td>
@@ -497,10 +618,12 @@ function subline(p: (typeof all.value)[number]): string {
                   :key="i"
                   class="border-2 border-[var(--color-ink)] bg-[var(--color-panel)] px-2 py-1"
                   :style="{
+                    ...rowStyle(o),
                     color:
                       m.get(`${o.group}|${o.label}`) === '—'
                         ? 'var(--color-ink-soft)'
                         : 'var(--color-parchment-lit)',
+                    fontWeight: highlight && o.different ? 600 : 400,
                   }"
                 >
                   {{ m.get(`${o.group}|${o.label}`) ?? '—' }}
@@ -509,8 +632,16 @@ function subline(p: (typeof all.value)[number]): string {
             </template>
           </table>
         </div>
-        <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)">
-          「—」代表该机型官网未公布此参数，不是 0。
+        <p class="pixel-note px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]">
+          {{ t('compare.noteDash') }}<br />
+          {{ t('compare.noteGoldBefore') }}<b style="color: var(--color-gold)">{{
+            t('compare.noteGold')
+          }}</b
+          >{{ t('compare.noteLapisBefore') }}<b style="color: var(--color-lapis)">{{
+            t('compare.noteLapis')
+          }}</b
+          >{{ t('compare.noteA11y') }}<br />
+          {{ t('compare.noteNoVerdict') }}
         </p>
       </SectionFrame>
     </div>

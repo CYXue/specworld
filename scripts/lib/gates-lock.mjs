@@ -5,7 +5,7 @@
  * ##真实事故（本项目踩过）
  * 一次把两条命令并行跑：
  *   - `npm run favicon:gates`  —— 正在原地改写 `public/favicon.svg`
- *   - `node scripts/verify-favicon.mjs` —— 同时读它做逐格对拍
+ *   - `node scripts/verify-favicon-gates.mjs` —— 同时读它做逐格对拍
  * 结果对拍报「源去掉 `<g transform>` ⇒ 抓到 **0 格**」。
  *单跑任何一条都是对的（gates 7/7、diff 5/5）。假 failure 的成因很清楚：
  * 七条注入里正好有一条是「整体左右镜像」，于是那一刻磁盘上的产物**就是镜像版**，

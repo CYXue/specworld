@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>参数世界 · 后台录入（overrides 写回）</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1a1d21; --ink2: #5b6168;
+    --line: #e4e7eb; --brand: #0f9d8b; --brand2: #e07a3f;
+    --danger: #c0392b; --ok: #1e7d4f; --warn: #b7791f;
+  }
+  [data-theme="dark"] {
+    --bg: #14171a; --card: #1d2126; --ink: #e7eaee; --ink2: #9aa2ab;
+    --line: #2b3138; --brand: #2bc0ab; --brand2: #f0925a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 14px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg); color: var(--ink); padding: 24px;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--ink2); margin: 0 0 20px; font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; margin-bottom: 18px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .field { flex: 1 1 220px; min-width: 200px; }
+  label { display: block; font-size: 12px; color: var(--ink2); margin-bottom: 4px; }
+  select, input, textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--ink); font: inherit;
+  }
+  textarea { min-height: 70px; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12px; }
+  button {
+    background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 9px 16px;
+    font: inherit; cursor: pointer; margin-top: 4px;
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  button.danger { background: transparent; color: var(--danger); border: 1px solid var(--line); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs button { background: transparent; color: var(--ink2); border: 1px solid var(--line); }
+  .tabs button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .msg { font-size: 13px; padding: 8px 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap; }
+  .msg.err { background: #fdecea; color: var(--danger); }
+  .msg.ok { background: #e7f6ee; color: var(--ok); }
+  .msg.warn { background: #fdf3e0; color: var(--warn); }
+  pre { background: #0e1114; color: #d6e2e8; padding: 14px; border-radius: 10px; overflow:auto; font-size:12px; }
+  .hint { font-size: 12px; color: var(--ink2); margin-top: 4px; }
+  .hidden { display: none; }
+  .pill { display:inline-block; background: var(--bg); border:1px solid var(--line); border-radius:999px; padding:1px 8px; font-size:11px; color:var(--ink2); }
+  table { width:100%; border-collapse: collapse; font-size:12px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align: top; }
+  th { color: var(--ink2); font-weight:600; }
+  .inactive { opacity:.5; }
+  .badge { font-size:11px; padding:1px 6px; border-radius:999px; background:var(--bg); border:1px solid var(--line); color:var(--ink2); }
+  .badge.off { color: var(--danger); border-color: var(--danger); }
+</style>
+</head>
+<body>
+  <h1>参数世界 · 后台录入</h1>
+  <p class="sub">
+    对齐准绳/Baseline 的 F009「数据纠错入口（本地记录版）」。本页直接写回
+    <code>data/overrides.json</code>：选机型 / 选字段 / 填值 / 保存即可，<b>无需手动复制粘贴</b>。<br>
+    <span class="pill">需本地服务</span> 由 <code>npm run editor</code> 启动（默认 http://127.0.0.1:5174/）。保存后跑
+    <code>npm run data</code> 同步，官网刷新也不会冲掉你填的值。
+    <span id="apiState"></span>
+  </p>
+
+  <div id="staticWarn" class="card hidden">
+    <p class="msg warn">⚠️ 未检测到本地录入服务（<code>/api/overrides</code> 无响应）。本页只能在
+    <code>npm run editor</code> 启动后使用；若以静态文件直接打开，则只能「生成 JSON 供手动复制」。</p>
+  </div>
+
+  <div class="tabs">
+    <button id="tabSet" class="active" onclick="switchOp('set')">✏️ 修改现有机型字段</button>
+    <button id="tabAdd" onclick="switchOp('add')">➕ 新增整机</button>
+  </div>
+
+  <div class="card" id="formSet">
+    <div class="row">
+      <div class="field"><label>目标机型</label><select id="setProduct"></select></div>
+      <div class="field"><label>字段（按分组）</label><select id="setField"></select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>新值</label><input id="setValue" placeholder="按字段类型输入" /></div>
+      <div class="field"><label>类型 / 单位 / 区间</label><input id="setUnit" disabled placeholder="自动带出" /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>修改原因（必填）</label><input id="setReason" placeholder="例如：官网抓漏 / 实测修正 / 监管进网许可补录" /></div>
+      <div class="field"><label>操作人</label><input id="setBy" placeholder="你的署名" /></div>
+    </div>
+    <button id="btnSet" onclick="genSet()">保存</button>
+    <div id="setMsg"></div>
+  </div>
+
+  <div class="card hidden" id="formAdd">
+    <div class="row">
+      <div class="field"><label>机型 id（唯一，如 test-xiaomi-17）</label><input id="addId" /></div>
+      <div class="field"><label>品牌（须已在注册表）</label><input id="addBrand" placeholder="apple / huawei ..." /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>品类</label><select id="addCategory"></select></div>
+      <div class="field"><label>名称</label><input id="addName" placeholder="小米 17" /></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>上市日期</label><input id="addDate" placeholder="2026-09-01" /></div>
+      <div class="field"><label>操作人</label><input id="addBy" /></div>
+    </div>
+    <div class="field" style="margin-bottom:12px"><label>字段值（仅填你要录入的，JSON 对象，键须为 schema 已注册 path）</label>
+      <textarea id="addSpecs" placeholder='{ "body.weightG": 190, "display.sizeIn": 6.3 }'></textarea>
+      <div class="hint">提示：可点下方「按 schema 生成空模板」再填。</div>
+    </div>
+    <div class="row">
+      <button id="btnAdd" onclick="genAdd()">保存</button>
+      <button class="ghost" onclick="fillSpecsTemplate()">按 schema 生成空模板</button>
+    </div>
+    <div class="field" style="margin-top:10px"><label>修改原因（必填）</label><input id="addReason" /></div>
+    <div id="addMsg"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 8px">当前用户数据层条目</h3>
+    <div id="listMsg" class="hint">加载中…</div>
+    <div id="listWrap" class="hidden">
+      <table>
+        <thead><tr><th>id</th><th>操作</th><th>目标 / 字段</th><th>值</th><th>原因</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 8px">用户提交审核（待审队列）</h3>
+    <p class="hint" style="margin:0 0 10px">
+      展示页「纠错/补充数据」表单的提交都进这里（<code>data/submissions.json</code>，status=pending）。
+      <b>采用</b>= 转为正式 override 写入 <code>data/overrides.json</code>（无需重写，跑 <code>npm run data</code> 即生效）；
+      <b>驳回</b>= 留痕不生效。提交内容来自公网网友，渲染已做 HTML 转义；采用前请核实来源。
+    </p>
+    <div class="row" style="align-items:center">
+      <button class="ghost" style="margin-top:0" onclick="loadSubs()">刷新</button>
+      <button class="ghost" style="margin-top:0" onclick="exportSubs()">导出全部（下载 JSON）</button>
+      <span class="hint" id="subsHint"></span>
+    </div>
+    <div class="row" style="align-items:flex-start;margin-top:10px">
+      <div class="field" style="flex:3 1 320px">
+        <label>导入用户发来的标准模板（B 站 Toy 等纯静态页面无法直连提交，用户复制模板私信发来后，粘贴到这里）</label>
+        <textarea id="importArea" style="min-height:56px" placeholder='粘贴 { "op": "set-field", … } 单条对象，或 [ … ] 数组（≤20 条）'></textarea>
+      </div>
+      <button style="margin-top:22px" onclick="importSubs()">校验并导入待审队列</button>
+    </div>
+    <div id="importMsg"></div>
+    <div id="subsMsg" class="hint">加载中…</div>
+    <div id="subsWrap" class="hidden">
+      <table>
+        <thead><tr><th>时间</th><th>机型 / 字段</th><th>提交值</th><th>来源说明</th><th>提交人</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="subsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card hidden" id="outCard">
+    <h3 style="margin:0 0 8px">最近提交</h3>
+    <pre id="out"></pre>
+  </div>
+
+<script>
+let CATS = null, PRODUCTS = null, SCHEMAS = {}, API = false;
+
+async function boot() {
+  // 先探测后端（决定 API 模式还是静态降级）
+  try {
+    const r = await fetch('/api/overrides', { cache: 'no-store' });
+    API = r.ok;
+  } catch { API = false; }
+  document.getElementById('apiState').innerHTML = API
+    ? ' <span class="pill" style="color:var(--ok);border-color:var(--ok)">已连接本地服务</span>'
+    : ' <span class="pill" style="color:var(--warn);border-color:var(--warn)">未连接</span>';
+  if (!API) document.getElementById('staticWarn').classList.remove('hidden');
+
+  try {
+    const [cj, dj] = await Promise.all([
+      fetch('/data/categories.json').then(r => r.json()),
+      fetch('/data/products.json').then(r => r.json()),
+    ]);
+    CATS = cj; PRODUCTS = dj;
+    initSetForm(); initAddForm();
+  } catch (e) {
+    document.getElementById('staticWarn').classList.remove('hidden');
+    document.getElementById('staticWarn').querySelector('.msg').textContent =
+      '加载 /data/*.json 失败：' + e.message + '（请通过 npm run editor 打开，不要 file:// 直接打开）';
+  }
+  if (API) { await loadList(); await loadSubs(); }
+}
+
+function products() { return PRODUCTS.products ?? PRODUCTS; }
+function categories() { return CATS.categories ?? CATS; }
+
+async function ensureSchema(cat) {
+  if (SCHEMAS[cat]) return SCHEMAS[cat];
+  const r = await fetch(`/data/schemas/${cat}.json`);
+  if (!r.ok) throw new Error(`品类 ${cat} 无 schema（${r.status}）`);
+  const s = await r.json();
+  SCHEMAS[cat] = s;
+  return s;
+}
+
+function initSetForm() {
+  const sp = document.getElementById('setProduct');
+  sp.innerHTML = products().map(p => `<option value="${p.id}">${p.name}（${p.id}）</option>`).join('');
+  sp.onchange = onProductChange;
+  document.getElementById('addCategory').innerHTML =
+    categories().map(c => `<option value="${c.id}">${c.label}（${c.id}）</option>`).join('');
+  onProductChange();
+}
+
+async function onProductChange() {
+  const pid = document.getElementById('setProduct').value;
+  const p = products().find(x => x.id === pid);
+  const sf = document.getElementById('setField');
+  try {
+    const schema = await ensureSchema(p.category);
+    sf.innerHTML = (schema.groups || []).map(g =>
+      `<optgroup label="${g.name}">` +
+      (schema.fields || []).filter(f => f.group === g.id).map(f =>
+        `<option value="${f.path}">${f.label} · ${f.path}${f.unit ? (' (' + f.unit + ')') : ''}</option>`).join('') +
+      `</optgroup>`).join('') ||
+      (schema.fields || []).map(f => `<option value="${f.path}">${f.label} · ${f.path}</option>`).join('');
+    sf.onchange = onFieldChange;
+    onFieldChange();
+  } catch (e) {
+    sf.innerHTML = `<option>无法加载 schema：${e.message}</option>`;
+  }
+}
+
+function onFieldChange() {
+  const sf = document.getElementById('setField');
+  const path = sf.value;
+  const p = products().find(x => x.id === document.getElementById('setProduct').value);
+  const schema = SCHEMAS[p.category] || {};
+  const f = (schema.fields || []).find(x => x.path === path);
+  const u = document.getElementById('setUnit');
+  u.value = f ? `${f.type}${f.unit ? (' · ' + f.unit) : ''}${f.range ? (' · 区间 ' + f.range.join('~')) : ''}${f.values ? (' · ' + f.values.join('/')) : ''}` : '';
+}
+
+function initAddForm() { /* 品类在 initSetForm 内已填充 */ }
+
+function switchOp(op) {
+  document.getElementById('formSet').classList.toggle('hidden', op !== 'set');
+  document.getElementById('formAdd').classList.toggle('hidden', op !== 'add');
+  document.getElementById('tabSet').classList.toggle('active', op === 'set');
+  document.getElementById('tabAdd').classList.toggle('active', op === 'add');
+}
+
+// 复用管线同款校验逻辑（与 scripts/lib/schema.mjs validateSpecValue 对齐）。
+// ⚠️ 本文件零构建、无法 import 共享模块，这份是**手工同步拷贝**（硬编码审计 A3）：
+// schema 类型系统演进（加 type / 改规则）时必须同步这里——selftest 有「类型集弱对账」看守，
+// 漏跟会红。浏览器侧可构建组件请一律 import src/lib/fieldValidate.ts，不要再抄。
+function validateValue(field, raw) {
+  if (raw === '' || raw === null || raw === undefined) return '值不能为空（未公布请用 unknown，不要填空字符串）';
+  switch (field.type) {
+    case 'number': {
+      const n = Number(raw);
+      if (!Number.isFinite(n)) return `应为数值，收到 ${JSON.stringify(raw)}`;
+      if (Array.isArray(field.range) && (n < field.range[0] || n > field.range[1]))
+        return `= ${n} 超出合理区间 ${field.range.join('~')}${field.unit ? (' ' + field.unit) : ''}`;
+      return null;
+    }
+    case 'boolean':
+      if (!['true', 'false'].includes(String(raw).toLowerCase())) return '应为 true/false';
+      return null;
+    case 'enum':
+      if (!field.values.includes(raw)) return `=${JSON.stringify(raw)} 不在枚举 ${field.values.join('/')} 内`;
+      return null;
+    case 'array:number': {
+      const arr = String(raw).split(/[，,]/).map(s => s.trim()).filter(Boolean).map(Number);
+      if (arr.some(n => !Number.isFinite(n))) return '应为逗号分隔的数值数组';
+      return null;
+    }
+    case 'array:string': {
+      const arr = String(raw).split(/[，,]/).map(s => s.trim()).filter(Boolean);
+      if (!arr.length) return '至少一项';
+      return null;
+    }
+    case 'string': case 'object': case 'array:object': return null;
+    default: return `未知 schema type：${field.type}`;
+  }
+}
+
+function coerce(field, raw) {
+  switch (field.type) {
+    case 'number': return Number(raw);
+    case 'boolean': return String(raw).toLowerCase() === 'true';
+    case 'array:number': return String(raw).split(/[，,]/).map(s => s.trim()).filter(Boolean).map(Number);
+    case 'array:string': return String(raw).split(/[，,]/).map(s => s.trim()).filter(Boolean);
+    default: return raw;
+  }
+}
+
+async function genSet() {
+  const msg = document.getElementById('setMsg'); msg.className = 'msg'; msg.textContent = '';
+  const pid = document.getElementById('setProduct').value;
+  const path = document.getElementById('setField').value;
+  const raw = document.getElementById('setValue').value;
+  const reason = document.getElementById('setReason').value.trim();
+  const by = document.getElementById('setBy').value.trim() || '匿名';
+  const p = products().find(x => x.id === pid);
+  const schema = SCHEMAS[p.category] || {};
+  const field = (schema.fields || []).find(x => x.path === path);
+  if (!reason) { msg.className = 'msg err'; msg.textContent = '修改原因必填（服务端也会拦）'; return; }
+  const verr = validateValue(field, raw);
+  if (verr) { msg.className = 'msg err'; msg.textContent = '值校验未过：' + verr; return; }
+  const entry = {
+    id: 'ovr-' + pid + '-' + path.replace(/\W+/g, '_') + '-' + Date.now(),
+    op: 'set-field',
+    productId: pid, field: path, value: coerce(field, raw),
+    reason, createdBy: by, createdAt: new Date().toISOString().slice(0, 10), active: true,
+  };
+  if (!API) { showOut(entry, msg, '⚠️ 未连接本地服务——以下 JSON 需手动复制进 data/overrides.json：'); return; }
+  const r = await fetch('/api/overrides/entry', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry),
+  });
+  const j = await r.json();
+  if (!r.ok || !j.ok) { msg.className = 'msg err'; msg.textContent = '服务端拒绝：\n' + (j.errors || [j.message]).join('\n'); return; }
+  msg.className = 'msg ok'; msg.textContent = '✅ ' + j.message;
+  showOut(j.entry, null);
+  await loadList();
+}
+
+function fillSpecsTemplate() {
+  const cat = document.getElementById('addCategory').value;
+  const schema = SCHEMAS[cat];
+  const t = {};
+  (schema?.fields || []).forEach(f => { t[f.path] = null; });
+  document.getElementById('addSpecs').value = JSON.stringify(t, null, 2);
+}
+
+async function genAdd() {
+  const msg = document.getElementById('addMsg'); msg.className = 'msg'; msg.textContent = '';
+  const id = document.getElementById('addId').value.trim();
+  const brand = document.getElementById('addBrand').value.trim();
+  const category = document.getElementById('addCategory').value;
+  const name = document.getElementById('addName').value.trim();
+  const date = document.getElementById('addDate').value.trim();
+  const by = document.getElementById('addBy').value.trim() || '匿名';
+  const reason = document.getElementById('addReason').value.trim();
+  const rawSpecs = document.getElementById('addSpecs').value.trim();
+  if (!id || !brand || !name || !date) { msg.className = 'msg err'; msg.textContent = 'id/品牌/名称/日期必填'; return; }
+  if (!reason) { msg.className = 'msg err'; msg.textContent = '修改原因必填（服务端也会拦）'; return; }
+  let specs;
+  try { specs = JSON.parse(rawSpecs || '{}'); }
+  catch (e) { msg.className = 'msg err'; msg.textContent = 'specs 不是合法 JSON：' + e.message; return; }
+  if (typeof specs !== 'object' || Array.isArray(specs)) { msg.className = 'msg err'; msg.textContent = 'specs 必须是对象'; return; }
+  const schema = SCHEMAS[category] || {};
+  for (const k of Object.keys(specs)) {
+    if (k === '_comment') continue;
+    const f = (schema.fields || []).find(x => x.path === k);
+    if (!f) { msg.className = 'msg err'; msg.textContent = `字段未注册：${k}（对照 data/schemas/${category}.json）`; return; }
+    if (f.type === 'object' || f.type === 'array:object') continue;
+    const verr = validateValue(f, specs[k]);
+    if (verr) { msg.className = 'msg err'; msg.textContent = `${k} ${verr}`; return; }
+  }
+  const entry = {
+    id: 'ovr-' + id,
+    op: 'add-product',
+    product: { id, brand, category, name, releaseDate: date, status: 'on-sale',
+      releaseDatePrecision: 'day', granularity: 'manual', specs,
+      skus: [], scores: [], provenance: Object.fromEntries(Object.keys(specs).map(k => [k, 'user-manual'])) },
+    reason, createdBy: by, createdAt: new Date().toISOString().slice(0, 10), active: true,
+  };
+  if (!API) { showOut(entry, msg, '⚠️ 未连接本地服务——以下 JSON 需手动复制进 data/overrides.json：'); return; }
+  const r = await fetch('/api/overrides/entry', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(entry),
+  });
+  const j = await r.json();
+  if (!r.ok || !j.ok) { msg.className = 'msg err'; msg.textContent = '服务端拒绝：\n' + (j.errors || [j.message]).join('\n'); return; }
+  msg.className = 'msg ok'; msg.textContent = '✅ ' + j.message;
+  showOut(j.entry, null);
+  await loadList();
+}
+
+function showOut(entry, msg, prefix) {
+  document.getElementById('outCard').classList.remove('hidden');
+  document.getElementById('out').textContent = (prefix ? prefix + '\n' : '') + JSON.stringify(entry, null, 2);
+}
+
+async function loadList() {
+  const listMsg = document.getElementById('listMsg');
+  const wrap = document.getElementById('listWrap');
+  const body = document.getElementById('listBody');
+  try {
+    const r = await fetch('/api/overrides', { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const ov = await r.json();
+    const entries = ov.entries || [];
+    if (!entries.length) { listMsg.textContent = '（暂无用户数据层条目）'; wrap.classList.add('hidden'); return; }
+    listMsg.classList.add('hidden'); wrap.classList.remove('hidden');
+    body.innerHTML = entries.map(e => {
+      const target = e.op === 'set-field' ? `${e.productId}<br><span class="badge">${e.field}</span>` : `新增：${e.product?.id || ''}`;
+      const val = e.op === 'set-field' ? JSON.stringify(e.value) : `${Object.keys(e.product?.specs || {}).length} 字段`;
+      const off = e.active === false;
+      return `<tr class="${off ? 'inactive' : ''}">
+        <td>${e.id}</td><td>${e.op}</td><td>${target}</td><td>${val}</td>
+        <td>${e.reason || ''}</td>
+        <td>${off ? '<span class="badge off">已停用</span>' : '<span class="badge">生效中</span>'}</td>
+        <td>${off ? '' : `<button class="danger" onclick="disableEntry('${e.id}')">停用</button>`}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    listMsg.textContent = '加载条目失败：' + e.message;
+  }
+}
+
+async function disableEntry(id) {
+  if (!confirm('确认停用该条目（软删除，原记录保留留痕）？')) return;
+  const r = await fetch(`/api/overrides/entry/${encodeURIComponent(id)}/disable`, { method: 'POST' });
+  const j = await r.json();
+  if (!r.ok || !j.ok) { alert('停用失败：' + (j.errors || [j.message]).join('\n')); return; }
+  await loadList();
+}
+
+/* ---------------- 用户提交审核（待审队列） ---------------- */
+
+// 用户提交来自公网，渲染前必须 HTML 转义（防存储型 XSS 打管理员后台）
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+async function loadSubs() {
+  const msgEl = document.getElementById('subsMsg');
+  const wrap = document.getElementById('subsWrap');
+  const body = document.getElementById('subsBody');
+  const hint = document.getElementById('subsHint');
+  try {
+    const r = await fetch('/api/submissions', { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    const subs = data.submissions || [];
+    const pending = subs.filter((s) => s.status === 'pending').length;
+    hint.textContent = `待审 ${pending} / 共 ${subs.length}`;
+    if (!subs.length) { msgEl.textContent = '（暂无用户提交）'; wrap.classList.add('hidden'); return; }
+    msgEl.classList.add('hidden'); wrap.classList.remove('hidden');
+    body.innerHTML = subs.map((s) => {
+      const badge = s.status === 'pending'
+        ? '<span class="badge" style="color:var(--warn);border-color:var(--warn)">待审</span>'
+        : s.status === 'approved'
+          ? '<span class="badge" style="color:var(--ok);border-color:var(--ok)">已采用</span>'
+          : '<span class="badge off">已驳回</span>';
+      const actions = s.status === 'pending'
+        ? `<button style="margin-top:0" onclick="approveSub('${esc(s.id)}')">采用</button>
+           <button class="danger" style="margin-top:0" onclick="rejectSub('${esc(s.id)}')">驳回</button>`
+        : (s.overrideId ? `<span class="pill">${esc(s.overrideId)}</span>` : '');
+      const reviewed = s.reviewedAt ? `<div class="hint">${esc(s.reviewNote || '')}</div>` : '';
+      return `<tr class="${s.status !== 'pending' ? 'inactive' : ''}">
+        <td>${esc(String(s.submittedAt || '').replace('T', ' ').slice(0, 16))}</td>
+        <td>${esc(s.productId)}<br><span class="badge">${esc(s.field)}</span></td>
+        <td><code>${esc(JSON.stringify(s.value))}</code></td>
+        <td>${esc(s.reason)}</td>
+        <td>${esc(s.submittedBy || '')}</td>
+        <td>${badge}${reviewed}</td>
+        <td>${actions}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    msgEl.textContent = '加载提交失败：' + e.message;
+  }
+}
+
+async function approveSub(id) {
+  const note = prompt('审核备注（可选；确定即采用并写入 overrides）：', '');
+  if (note === null) return;
+  const r = await fetch(`/api/submissions/${encodeURIComponent(id)}/approve`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ note }),
+  });
+  const j = await r.json();
+  if (!r.ok || !j.ok) { alert('采用失败：\n' + (j.errors || [j.message]).join('\n')); return; }
+  alert('✅ ' + j.message);
+  await Promise.all([loadSubs(), loadList()]);
+}
+
+async function rejectSub(id) {
+  const note = prompt('驳回原因（留痕，可空）：', '');
+  if (note === null) return;
+  const r = await fetch(`/api/submissions/${encodeURIComponent(id)}/reject`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ note }),
+  });
+  const j = await r.json();
+  if (!r.ok || !j.ok) { alert('驳回失败：' + (j.errors || [j.message]).join('\n')); return; }
+  await loadSubs();
+}
+
+async function importSubs() {
+  const msgEl = document.getElementById('importMsg');
+  msgEl.className = 'msg'; msgEl.textContent = '';
+  const raw = document.getElementById('importArea').value.trim();
+  if (!raw) { msgEl.className = 'msg err'; msgEl.textContent = '请先粘贴用户发来的模板 JSON'; return; }
+  let parsed;
+  try { parsed = JSON.parse(raw); }
+  catch (e) { msgEl.className = 'msg err'; msgEl.textContent = '粘贴内容不是合法 JSON：' + e.message; return; }
+  try {
+    const r = await fetch('/api/submissions/import', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(parsed),
+    });
+    const j = await r.json();
+    if (!r.ok || !j.ok) {
+      msgEl.className = 'msg err';
+      msgEl.textContent = '导入失败：\n' + (j.errors || []).join('\n') +
+        (Array.isArray(j.detail) && j.detail.length ? '\n' + j.detail.map((d) => `· ${d.item}：${d.why}`).join('\n') : '');
+      return;
+    }
+    msgEl.className = 'msg ok';
+    msgEl.textContent = '✅ ' + j.message +
+      (Array.isArray(j.skipped) && j.skipped.length ? '\n跳过明细：\n' + j.skipped.map((d) => `· ${d.item}：${d.why}`).join('\n') : '');
+    document.getElementById('importArea').value = '';
+    await loadSubs();
+  } catch (e) {
+    msgEl.className = 'msg err'; msgEl.textContent = '导入请求失败：' + e.message;
+  }
+}
+
+function exportSubs() {
+  // 相对解析出站点根：/editor、/overrides-editor.html、任意子路径部署下都指向正确的 /api 根。
+  //（产物闸门禁 href= / src= 形式的站点根绝对路径写法，导出地址必须动态拼出）
+  const p = location.pathname.replace(/\/+$/, '');
+  const base = p.slice(0, p.lastIndexOf('/') + 1) || '/';
+  location.assign(base + 'api/submissions/export');
+}
+
+boot();
+</script>
+</body>
+</html>

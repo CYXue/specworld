@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { continentOf } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
 import {
-  DIMENSIONS,
+  DIMENSION_KEYS,
   applyExcept,
   applyFilter,
   applySort,
@@ -30,6 +31,7 @@ import Ground from '../components/Ground.vue';
  *
  * 品牌维度在这页**恒定**（只有一个品牌），故不下发给 FilterBar。
  */
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();
@@ -40,7 +42,7 @@ const products = computed(() => derived.value?.byBrand(String(route.params.brand
 const bounds = computed(() => derived.value?.bounds);
 
 /** 品牌页上的维度（去掉 brand —— 它已由路由确定）。 */
-const DIM_KEYS = DIMENSIONS.filter((d) => d.key !== 'brand').map((d) => d.key);
+const DIM_KEYS = DIMENSION_KEYS.filter((d) => d !== 'brand');
 
 function toParams(q: Record<string, unknown>): URLSearchParams {
   const p = new URLSearchParams();
@@ -68,14 +70,14 @@ function push(next: FilterState, nextSorts: SortKey[] = []) {
 const shown = computed(() => applySort(applyFilter(products.value, filter.value), sort.value));
 
 /** 结果区顶部轻量排序条（辅助，非主打）。 */
-const SORTS_LITE: Array<{ id: SortKey; label: string }> = [
-  { id: 'release', label: '最新' },
-  { id: 'price-asc', label: '价格 ↑' },
-  { id: 'price-desc', label: '价格 ↓' },
-  { id: 'battery-desc', label: '续航' },
-  { id: 'ppi-desc', label: '屏幕' },
-  { id: 'weight-asc', label: '轻薄' },
-  { id: 'camera-desc', label: '影像' },
+const SORTS_LITE: Array<{ id: SortKey; labelKey: string }> = [
+  { id: 'release', labelKey: 'sort.release' },
+  { id: 'price-asc', labelKey: 'sort.priceAsc' },
+  { id: 'price-desc', labelKey: 'sort.priceDesc' },
+  { id: 'battery-desc', labelKey: 'ability.battery' },
+  { id: 'ppi-desc', labelKey: 'ability.display' },
+  { id: 'weight-asc', labelKey: 'ability.light' },
+  { id: 'camera-desc', labelKey: 'ability.camera' },
 ];
 
 function onSort(s: SortKey) {
@@ -98,9 +100,9 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
       class="page-shell py-16 text-center text-[24px] leading-[1.5]"
       style="color: var(--color-parchment-dim)"
     >
-      未找到该品牌。
+      {{ t('brand.notFound') }}
       <RouterLink to="/" class="pixel-button ml-2 px-3 py-1 text-[12px] text-[var(--color-gold)]"
-        >返回广场</RouterLink
+        >{{ t('brand.backToPlaza') }}</RouterLink
       >
     </div>
 
@@ -117,14 +119,14 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
             class="mt-1 flex items-center gap-2 text-[12px] leading-[1.5]"
             :style="{ color: vendor.accentColor }"
           >
-            {{ vendor.name }} · {{ products.length }} 款
+            {{ vendor.name }} · {{ t('common.models', { n: products.length }) }}
           </p>
         </div>
         <Ground />
       </section>
 
       <div class="page-shell py-6">
-        <!-- 品类排第一位（顺序由 FilterBar 内的 DIMENSIONS 决定） -->
+        <!-- 品类排第一位（顺序由 facets.ts 的 DIMENSION_KEYS 决定） -->
         <FilterBar
           class="mb-5"
           :filter="filter"
@@ -140,7 +142,7 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
         <div v-if="shown.length" class="mb-4 flex flex-wrap items-center gap-1.5">
           <span class="pixel-heading flex items-center gap-1 text-[12px] leading-[1.5]">
             <PxIcon name="sort" :size="12" />
-            排序
+            {{ t('sort.label') }}
           </span>
           <button
             v-for="s in SORTS_LITE"
@@ -149,7 +151,7 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
             :aria-pressed="sort === s.id"
             @click="onSort(s.id)"
           >
-            {{ s.label }}
+            {{ t(s.labelKey) }}
           </button>
         </div>
 
@@ -165,7 +167,7 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
           class="pixel-note px-4 py-8 text-center text-[12px] leading-[1.5]"
           style="color: var(--color-parchment-dim)"
         >
-          该筛选条件下没有机型 —— 放宽某个条件试试（每个维度的「全部」只清该维度）。
+          {{ t('brand.empty') }}
         </p>
 
         <p
@@ -173,9 +175,11 @@ const facets = computed<Record<string, FacetItem[]>>(() => {
           class="mt-4 text-[12px] leading-[1.5]"
           style="color: var(--color-ink-soft)"
         >
-          想跨品牌比较？去
-          <RouterLink to="/compare" style="color: var(--color-gold)">机型库对比页</RouterLink>
-          ，那里能筛全部 {{ ds?.products.length }} 款并加入对比台。
+          {{ t('brand.crossBrandBefore') }}
+          <RouterLink to="/compare" style="color: var(--color-gold)">{{
+            t('brand.crossBrandLink')
+          }}</RouterLink>
+          {{ t('brand.crossBrandAfter', { n: ds?.products.length ?? 0 }) }}
         </p>
       </div>
     </template>

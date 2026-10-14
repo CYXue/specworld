@@ -4,7 +4,6 @@
  */
 import {
   firstNumber as firstNum,
-  allNumbers as nums,
   parseCapacity,
   parseInch,
   parseMm,
@@ -14,7 +13,6 @@ import {
   parseStorageList,
   parseWatt,
   parseWeight,
-  sliceByVariants,
   stripInvisible,
 } from './parse.mjs';
 const HW = 'huawei-official';
@@ -580,8 +578,6 @@ export {
   pushOfficial,
   addNote,
   parseAperture,
-  parseOis,
-  cameraRole,
   parseLens,
   parseRearLenses,
   parseFront,
@@ -597,18 +593,13 @@ export {
   HW,
   AP,
   AC,
-  PLACEHOLDERS,
   firstNum,
-  nums,
   parseCapacity,
   parseInch,
   parseMm,
   parsePpi,
-  parseRefresh,
   parseResolution,
   parseStorageList,
-  parseWatt,
   parseWeight,
-  sliceByVariants,
   stripInvisible,
 };

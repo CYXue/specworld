@@ -25,6 +25,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brandMeta } from '../brands.mjs';
 import { isFoldableOfficial } from '../lib/foldable.mjs';
+import { pick } from '../lib/specs.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -45,10 +46,12 @@ export function layout(product) {
   const brand = product.brand;
   const pal = NEUTRAL[brand] ?? NEUTRAL.huawei;
 
-  const sizeIn = product.display?.sizeIn ?? 6.5;
-  const thicknessMm = product.body?.thicknessMm ?? 8;
-  const weightG = product.body?.weightG ?? 200;
-  const rear = (product.camera?.rear ?? []).length;
+  // specs-first 取值（scripts/lib/specs.mjs）：v2 读 specs 容器，v1 嵌套回退。
+  // 立绘由数据几何算出，读错字段 = 60 张图整体画错且零报错，所以取值必须与闸门同源。
+  const sizeIn = pick(product, 'display.sizeIn') ?? 6.5;
+  const thicknessMm = pick(product, 'body.thicknessMm') ?? 8;
+  const weightG = pick(product, 'body.weightG') ?? 200;
+  const rear = (pick(product, 'camera.rear') ?? []).length;
   const foldable = isFoldableOfficial(product);
 
   /* 对角线(英寸) → 像素，画布内留 12px 边距 */
@@ -104,7 +107,7 @@ export function layout(product) {
 }
 
 /** 把一台机器的立绘渲染成内联 SVG 字符串（正面 + 背面并排）。 */
-export function renderSprite(product, { scale = 1 } = {}) {
+function renderSprite(product, { scale = 1 } = {}) {
   const L = layout(product);
   const s = scale;
   const pad = 10 * s;
@@ -126,11 +129,6 @@ export function renderSprite(product, { scale = 1 } = {}) {
     ${caption('背面', L, s)}
   </g>
 </svg>`;
-}
-
-/** 画布内并排两个手机时的左右间距（与 renderSprite 保持一致） */
-export function padOf(scale = 1) {
-  return 10 * scale;
 }
 
 function drawFace(L, s, side) {

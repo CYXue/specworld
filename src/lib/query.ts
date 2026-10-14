@@ -137,7 +137,7 @@ function hitDigits(hay: string, t: string): boolean {
   }
 }
 
-export interface Matchable {
+interface Matchable {
   /** NFKC + 小写、保留分隔符的检索串 */
   haystack: string;
   /** 抹平分隔符后的检索串 */

@@ -1,5 +1,9 @@
+import { i18n } from '../i18n';
 import type { Dataset, Product, Vendor } from '../types';
+import { toPhoneViews } from './adapt';
 import { asset } from './assets';
+
+const t = (key: string) => i18n.global.t(key);
 
 let cache: Promise<Dataset> | null = null;
 
@@ -7,9 +11,15 @@ export function loadDataset(): Promise<Dataset> {
   if (cache) return cache;
   cache = fetch(asset('data/products.json'))
     .then((r) => {
-      if (!r.ok) throw new Error(`数据加载失败：HTTP ${r.status}`);
+      if (!r.ok) throw new Error(`${t('common.loadFailedRaw')} HTTP ${r.status}`);
       return r.json() as Promise<Dataset>;
     })
+    .then((d) => ({
+      ...d,
+      // v2 specs 容器 → 手机嵌套视图（见 adapt.ts）。展开只在这里做一次，
+      // 下游组件/facets 拿到的仍是有 display/body 的对象。
+      products: toPhoneViews(d.products ?? []),
+    }))
     .catch((e) => {
       cache = null; // 允许重试
       throw e;

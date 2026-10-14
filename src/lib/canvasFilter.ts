@@ -26,6 +26,7 @@
  *    强塞相关度反而会让「按名称排序」这种确定性行为变得不可预期。
  */
 
+import { i18n } from '../i18n';
 import { compact, loose, matchCompact, matchExact, queryTokens } from './query';
 
 /** 筛选/画布只用到这几个字段，刻意收窄 —— 画布不该关心电池容量 */
@@ -44,12 +45,19 @@ export interface CanvasDoc {
 
 export type SortKey = 'newest' | 'oldest' | 'name' | 'ppi';
 
-export const SORTS: Array<{ key: SortKey; label: string }> = [
-  { key: 'newest', label: '新→旧' },
-  { key: 'oldest', label: '旧→新' },
-  { key: 'name', label: '名称' },
-  { key: 'ppi', label: '像素密度' },
+/** 画布/设备球的排序项（与 facets.SORTS 是两套键空间，各自独立）。label 只存 locale 键。 */
+export const SORTS: Array<{ key: SortKey; labelKey: string }> = [
+  { key: 'newest', labelKey: 'sort.newToOld' },
+  { key: 'oldest', labelKey: 'sort.oldToNew' },
+  { key: 'name', labelKey: 'sort.name' },
+  { key: 'ppi', labelKey: 'sort.ppi' },
 ];
+
+/** 排序项展示名（语言感知） */
+export function sortLabel(key: SortKey | string): string {
+  const hit = SORTS.find((s) => s.key === key);
+  return hit ? i18n.global.t(hit.labelKey) : String(key);
+}
 
 export interface CanvasFilter {
   brand: string;
@@ -64,7 +72,7 @@ export const EMPTY_FILTER: CanvasFilter = { brand: '', line: '', year: '', q: ''
 /** 与全站搜索同口径的分词、归一化与匹配（唯一一份实现，见文件头口径 1） */
 export { tokenize } from './query';
 
-export interface FilterableDoc {
+interface FilterableDoc {
   doc: CanvasDoc;
   /** NFKC + 小写、保留分隔符的检索串 */
   haystack: string;
@@ -118,7 +126,7 @@ function passes(item: FilterableDoc, f: CanvasFilter, skip: string[], qOk: boole
 }
 
 /** 排序。缺失值一律排到末尾 —— 官网没公布的项不该混在有值的中段冒充数据 */
-export function sortCanvas(
+function sortCanvas(
   docs: CanvasDoc[],
   sort: SortKey,
   ppiOf?: (id: string) => number | null,
@@ -156,9 +164,14 @@ export function applyFilter(
   );
 }
 
-export interface Facet {
+/**
+ * 分面项。**没有 `label` 字段**——以前有，值就是 value（「全部」那项则写死中文
+ * '全部'），而 CanvasView / GlobeView 压根没读它，各自写 `f.value || t('canvas.all')`。
+ * 于是它在 lib 里既是死字段又是硬编码中文，双重负债，直接删。
+ * 展示名一律由调用方按语言给（`canvas.all` 键），lib 只管 value 与 count。
+ */
+interface Facet {
   value: string;
-  label: string;
   count: number;
 }
 
@@ -186,13 +199,9 @@ function facet(
     if (!v) continue;
     bucket.set(v, (bucket.get(v) ?? 0) + 1);
   }
-  const out: Facet[] = [...bucket.entries()].map(([value, count]) => ({
-    value,
-    label: value,
-    count,
-  }));
-  // 「全部」始终排第一
-  out.unshift({ value: '', label: '全部', count: total });
+  const out: Facet[] = [...bucket.entries()].map(([value, count]) => ({ value, count }));
+  // 空 value = 「全部」，始终排第一。它的展示名由调用方给（`t('canvas.all')`）。
+  out.unshift({ value: '', count: total });
   return out;
 }
 
@@ -213,8 +222,8 @@ export function yearFacets(docs: FilterableDoc[], f: CanvasFilter): Facet[] {
  * 且「#canvas」与「#canvas?sort=newest」指的是同一份画面（sort 是默认值）。
  * 未知取值（手改的链接、旧版本遗留）一律回落默认值，不抛错。 */
 
-export const FILTER_KEYS = ['brand', 'line', 'year', 'q', 'sort'] as const;
-export type FilterKey = (typeof FILTER_KEYS)[number];
+const FILTER_KEYS = ['brand', 'line', 'year', 'q', 'sort'] as const;
+type FilterKey = (typeof FILTER_KEYS)[number];
 
 const SORT_KEYS: SortKey[] = ['newest', 'oldest', 'name', 'ppi'];
 

@@ -2,6 +2,16 @@
 
 > ⚠️ **历史文档说明**：本文档写于 Vite 迁移前。文中出现的 `scripts/site/`、`scripts/preview/render.mjs`、`scripts/lib/analyze.mjs`、`scripts/publish/verify.mjs`、`scripts/site/lib/i18n.mjs` 均已在 **2026-10-04 死代码清理**中删除——站点生成改为 Vite 前端，发布校验改为 `scripts/publish/verify-dist.mjs`，分位/头衔派生改为 `scripts/lib/derive.mjs`。保留原文作为架构演化记录。
 
+> ⚠️ **v2 全品类目录（2026-10-13，`feature/universal-catalog` 分支）**：
+> 产品记录已从「手机专属嵌套结构」迁移为「身份字段在顶层 + 品类参数进扁平 specs 容器」
+> （`category` + `specs: Record<string, SpecValue>`），字段定义源移至
+> `data/schemas/phone.json`（本文第三节的字段表是其内容来源，改字段必须三处同步：
+> schema JSON、`src/lib/types.ts`、本文）。用户手动数据层见 `data/overrides.json`
+> 与 `scripts/lib/overrides.mjs`；访客公开纠错走 `data/submissions.json` 待审队列
+> （展示页「纠错/补充数据」提交，管理员在 `/editor` 审核采用后并入 overrides）。
+> 完整设计见 **`docs/UNIVERSAL-CATALOG.md`**。
+> 下文除明确标注「v2」的段落外，均为 v1 时期原文，保留作为设计依据。
+
 > 范围：**手机品类 · 华为 + 苹果 · 近 3 年在售机型**（首版）
 > 这份文件是全站唯一的字段定义源。管线写入、前端渲染、榜单计算都以此为准；
 > 改任何字段语义必须同步改这里和 `src/lib/types.ts`。
@@ -18,6 +28,12 @@
 4. **跨来源、跨口径的分数永不混算。** Geekbench 单核、多核、AnTuTu、DXOMARK 各成一榜，分位池按 `指标::口径::测量方` 分组。同一份榜单换套测试方法就能差几十分，合并成一个「综合分」等于编造。
 5. **档位用分位，不用绝对阈值。** 屏幕大小、重量、价格、性能档全部取「当前在售池里的分位」。三年后手机普遍更重更贵，绝对阈值会悄悄失效而不报错。
 6. **文案由结构化字段套模板生成，不调用 LLM。** 「这个价位里屏幕最亮的手机」这类句子必须可离线复现、可追溯到数据。
+
+**数据来源政策（整体声明，不逐条打标）**：本数据集整体来源于**厂商官方规格页**与**人工核查补录**两类。
+- 主源是各厂商官网规格页；`provenance` 据此记 `huawei-official` / `apple-official` 等。
+- 官网未公布、但可由**可独立核实的来源**（工信部进网许可、监管档案、官方说明书、权威拆解报告）补全的字段，由人工核查录入用户数据层（`data/overrides.json`，`provenance` 记 `user-manual`）。
+- 既无官网依据、也无可靠独立来源可核实的字段，一律按第 1 条记 `null`，界面显示「官方未公布」。
+- **不在界面逐条标注「手填 / 官方」角标**——统一以本声明说明数据构成，避免把溯源负担摊到每个单元格。但 `provenance` 字段仍保留在数据层，供审计与回查。
 
 ---
 
@@ -45,13 +61,14 @@
 | 字段 | 类型 | 说明 |
 |---|---|---|
 | `id` / `slug` | string | `apple-iphone-17-pro`，URL 与文件名共用 |
-| `brand` | `'apple' \| 'huawei'` | |
+| `brand` | `'apple' \| 'huawei'` | 品牌 **slug**；显示名（品牌名，如「苹果 / 华为」）由 `vendors` 注册表（scripts/brands.mjs）按 slug 派生，单一真源，不在此字段重复存 |
 | `line` | string | 产品线：`iPhone` / `Mate` / `Pura` / `nova` / `Mate X`（折叠） |
-| `name` | string | `iPhone 17 Pro` |
+| `name` | string | **型号名称**：`iPhone 17 Pro` / `nova 14 Ultra`（与 `line` 产品线、`modelCode` 型号代码三者区分） |
 | `nameZh` | string \| null | 中文名（华为有，苹果通常与英文同名） |
+| `modelCode` | string \| null | **型号代码**（监管 / 硬件型号）：如 HUAWEI `MRT-AL10`、iPhone `A3292`（国行 / 美版不同）。在 设置→关于手机→型号 或 工信部进网许可 查得。顶层身份字段，不进 specs；**只由官方来源填充，禁止编造** |
 | `releaseDate` | string \| null | ISO 日期；只有年月时记 `YYYY-MM` |
 | `releaseDatePrecision` | `'day'\|'month'\|'year'\|null` | **不许把年月补成 01 冒充精确** |
-| `status` | `'upcoming'\|'on-sale'\|'discontinued'` | |
+| `status` | `'upcoming'\|'on-sale'\|'retired'` | ⚠️ 权威枚举（2026-10-13 审计 A5 统一）：管线侧镜像 src/lib/types.ts 与前端侧 src/types.ts 必须同改；中文标签单一映射 = src/lib/catalog.ts STATUS_LABEL。历史：曾混用 'discontinued'（v1 残留，已废） |
 | `retiredAt` | string \| null | 官网产品线列表里消失的日期（与历史快照 diff 得出） |
 
 ### 3.2 机身
@@ -140,6 +157,17 @@ Mate XTS     原文「1440 Hz 高频 PWM 调光」→ 误得 "1440"
 ### 3.7 连接与系统
 
 `connectivity.{fiveG, wifi, bluetooth, nfc, satellite, usb, sim, esim}`、`os.{launch, upgradableTo}`
+
+### 3.7b 触感与声学（2026-10-13 新增，用户要求马达/扬声器也进比较）
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `haptic.motor` | string | 振动马达，**官网原文**（X 轴线性马达/Z 轴线性/转子…）。厂商写法不一，不做 enum（枚举不全会打挂闸门）；苹果官网通常不标 → unknown |
+| `audio.speakers` | string | 扬声器配置，**官网原文**（立体声双扬声器/双单元/单扬声器…）。不换算数量——转数字属自行加工，违反忠实限定词纪律 |
+
+> **比较纪律（用户 2026-10-13 定）**：对比视图**只标差异、不判好坏**——参数没有客观优劣
+> （轻/重、大/小各有偏好）。schema 的 `dir`（high/low）只供榜单排序方向，**永不进入对比
+> 视图做优劣暗示**。金色 ◆ 只表示「这几台在这里不一样」。
 
 ### 3.8 价格（挂 SKU）
 

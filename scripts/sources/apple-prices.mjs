@@ -231,8 +231,6 @@ function capacityToGb(text) {
   return /TB/i.test(m[2]) ? Math.round(n * 1024) : Math.round(n);
 }
 
-const MONTHS_ZH = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
-
 /* ------------------------------------------------------------------ */
 /* 小工具                                                              */
 /* ------------------------------------------------------------------ */
@@ -1268,4 +1266,4 @@ if (invokedDirectly) {
     });
 }
 
-export { HERE as ADAPTER_DIR, PRICING_ENDPOINT, COMPARE_URL, BUY_URL };
+export { HERE as ADAPTER_DIR, COMPARE_URL };

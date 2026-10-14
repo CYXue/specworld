@@ -10,7 +10,7 @@ export interface Vendor {
   country: string;
 }
 
-export interface Body {
+interface Body {
   heightMm: number | null;
   widthMm: number | null;
   thicknessMm: number | null;
@@ -42,7 +42,7 @@ export interface Display {
   protection: string | null;
 }
 
-export interface Chipset {
+interface Chipset {
   name: string | null;
   processNm: number | null;
   cpuCores: number | null;
@@ -50,12 +50,12 @@ export interface Chipset {
   npu: string | null;
 }
 
-export interface Memory {
+interface Memory {
   ramGb: number[];
   storageGb: number[];
 }
 
-export interface Battery {
+interface Battery {
   capacityMah: number | null;
   capacityCaliber: string | null;
   wiredChargeW: number | null;
@@ -75,13 +75,50 @@ export interface Camera {
   front?: Array<{ role: string; mp: number | null; aperture: string | null }>;
 }
 
+/**
+ * 一个在售档位（容量/内存组合）。
+ *
+ * `priceCny` 是**官方起售价（中国大陆，含增值税）**，官方没公布中国区售价就是 `null`
+ * —— 不是 0、也不是估算值：0 会被「最便宜」榜当成真价格排到榜首。
+ * 以前 Product 只靠索引签名 `[key: string]: unknown` 兜住 skus，于是 `p.skus ?? []`
+ * 被推断成 `{}`，取价的三处代码只能各自 `as` 强转（TS 报 'map' does not exist）。
+ * 现在补上真类型，强转全撤。
+ */
+export interface Sku {
+  storageGb: number | null;
+  ramGb: number | null;
+  priceCny: number | null;
+  priceNote?: string;
+  listedAt?: string;
+}
+
 export interface Product {
   id: string;
   slug: string;
   brand: string;
   line: string;
+  /**
+   * 型号代码（model code）：监管 / 硬件型号代码，**区别于 `name`（型号名称）与 `line`（产品线）**。
+   * 例：HUAWEI nova 14 Ultra 的型号名称 = 'nova 14 Ultra'（`name`），型号代码 = 'MRT-AL10'；
+   * iPhone 16 Pro 的型号代码 = 'A3292'（国行 / 美版不同，按数据来源标注）。
+   * 在 设置→关于手机→型号 或 工信部进网许可 查得。顶层身份字段，不进 specs。
+   * 可选以兼容历史记录；**只能由官方来源（官网 / 进网许可）填充，禁止编造**（无数据则留空，不写占位）。
+   */
+  modelCode?: string;
+  /** 型号名称（如 'nova 14 Ultra' / 'iPhone 16 Pro'），区别于 modelCode(型号代码) 与 line(产品线)。顶层身份字段 */
   name: string;
   nameZh: string | null;
+  /** v2 全品类目录：品类 id（phone / tablet / laptop / audio，见 data/categories.json）。旧快照没有此字段 */
+  category?: string;
+  /**
+   * v2 全品类目录：品类参数容器，键 = 字段路径（如 'display.sizeIn'），
+   * 值 = 官网值或用户修正值（provenance 标 'user-manual'）。
+   * 数据加载时 adapt.ts 会把它展开回 body/display 等嵌套形状，
+   * 所以现有组件读 product.display.sizeIn 不受影响；新品类页面直接消费它。
+   */
+  specs?: Record<string, unknown>;
+  /** 在售档位表（容量/内存/价格）。v1 老快照可能整段缺失 */
+  skus?: Sku[];
   releaseDate: string; // ISO date
   releaseDatePrecision: 'day' | 'month' | 'year' | string;
   status: 'on-sale' | 'upcoming' | 'retired' | string;

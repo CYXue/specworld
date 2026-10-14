@@ -15,6 +15,7 @@
  */
 import type { Product, Vendor } from '../types';
 import type { CanvasDoc } from './canvasFilter';
+import { basePriceCny } from './price';
 
 export interface ExportSummary {
   total: number;
@@ -36,18 +37,14 @@ const STATUS_KEY: Record<string, keyof ExportSummary['status']> = {
   retired: 'retired',
 };
 
-/** 单台起售价 = 其所有 SKU 中最小的 priceCny；无则 null（官方未公布） */
-export function deviceStartPriceCny(p: Product): number | null {
-  const skus = (p as unknown as { skus?: Array<{ priceCny?: unknown }> }).skus;
-  if (!Array.isArray(skus) || skus.length === 0) return null;
-  const nums: number[] = [];
-  for (const s of skus) {
-    const v = s?.priceCny;
-    if (typeof v === 'number' && Number.isFinite(v)) nums.push(v);
-  }
-  if (nums.length === 0) return null;
-  return Math.min(...nums);
-}
+/**
+ * 单台起售价 —— 判据在 price.ts，**全站只有那一份**。
+ *
+ * 这里以前抄了一份同样的循环，但只判 `Number.isFinite` 不判 `> 0`，
+ * 于是「priceCny 为 0」的档位在导出合计里算真价格、在详情页却显示「未公布」：
+ * 两份代码各自都测得过，只有交叉对账才看得见。现在转出同一份，口径不可能再分叉。
+ */
+export { basePriceCny };
 
 export function buildExportSummary(
   items: CanvasDoc[],
@@ -65,7 +62,7 @@ export function buildExportSummary(
     if (!p) continue;
     status[STATUS_KEY[p.status] ?? 'other']++;
     brandCount.set(d.brand, (brandCount.get(d.brand) ?? 0) + 1);
-    const price = deviceStartPriceCny(p);
+    const price = basePriceCny(p);
     if (price == null) {
       priceMissing++;
     } else {
