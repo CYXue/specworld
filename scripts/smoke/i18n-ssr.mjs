@@ -205,12 +205,24 @@ const server = await createServer({
 
 const { createApp } = await import('vue');
 const { renderToString } = await import('@vue/server-renderer');
-const { createRouter, createMemoryHistory } = await import('vue-router');
 const { default: App } = await server.ssrLoadModule('/src/App.vue');
 const { i18n, setLocale } = await server.ssrLoadModule('/src/i18n/index.ts');
 // 只取路由表，不取项目里那个 hash history 的 router —— 那玩意要 window.location/history，
 // SSR 里没有。用 memory history 重现同一张表，路由不会和测试脚本分叉。
 const { routes } = await server.ssrLoadModule('/src/router/index.ts');
+// ⚠️ vue-router 必须经**项目文件转手**（ssr-deps.ts），不能裸说明符直调
+// `ssrLoadModule('vue-router')`、更不能原生 import：这两条路径拿到的都与
+// App.vue 内部 import 的不是同一个模块实例（实测 routeLocationKey Symbol
+// 三方互不相等——vite 给直调路径解析到了另一份构建）。vue-router 的注入键
+// 按 Symbol identity 比较，实例分裂 → provide 的键 ≠ 组件注入的键 →
+// route 为 undefined、`route.name` 渲染期抛错，全路由红、零线索。
+// 与文件头部「两份 i18n 实例」是同一类坑的第三次复发（前两次：i18n 双实例、
+// 原生 import 直调），故固化为「转手文件 + 注入断言」双保险。
+// createApp / renderToString 留原生 import 无妨——它们只被本脚本用、
+// 不进组件注入链（最小复现实测混用可行）。
+const { createRouter, createMemoryHistory, routeLocationKey } = await server.ssrLoadModule(
+  '/scripts/smoke/ssr-deps.ts',
+);
 
 // 先把数据集灌进模块级 cache：useDataset 是在组件 setup 里发 fetch、异步回填单例 ref 的，
 // 而 SSR 不等 onMounted、也不等这个 promise，不预热的话首轮渲染出来的是空壳
@@ -237,6 +249,14 @@ async function renderRoute(route) {
   const app = createApp(App);
   app.use(router);
   app.use(i18n);
+  // 健全性检查（不是完整闸门，别误会它能拦实例分裂）：router 装了之后，
+  // 它自己实例的注入键必须落进 provides。拦的是「router 压根没装上」
+  // （use 顺序被改、install 被守卫挡掉之类）——那也会产出同一句看不懂的
+  // 「reading 'name'」。真正的实例分裂拦不住也正常：createRouter 与
+  // routeLocationKey 同源，符号永远自洽；跨实例的判据在下面 catch 的形态翻译。
+  if (!(routeLocationKey in app._context.provides)) {
+    throw new Error('router 注入键未生效：app.use(router) 没有 provide 成功（use 顺序/install 被挡？）');
+  }
   try {
     return await renderToString(app);
   } finally {
@@ -291,7 +311,16 @@ for (const locale of LOCALES) {
       html = await renderRoute(route);
     } catch (err) {
       if (process.env.SSR_SMOKE_TRACE) console.error(err);
-      problems.push(`${tag} 渲染抛错：${String(err?.message ?? err).split('\n')[0]}`);
+      const msg = String(err?.message ?? err).split('\n')[0];
+      // 形态翻译：这句报错历史上只由一件事产生——App.vue 里 `route` 为 undefined
+      // （useRoute() 注入失败），而根因是 router 与组件不是同一模块实例
+      // （vite SSR 下裸说明符直调 ssrLoadModule('vue-router') 会拿到另一份
+      // 构建，Symbol 不相等）。原句与根因零关联，第一次排查挖了半小时——
+      // 这里把结论直接写在脸上，后来者不用再挖一遍。
+      const hint = msg.includes("reading 'name'")
+        ? `${msg} ← App.vue 的 route 为 undefined：router 与组件模块实例分裂（见 scripts/smoke/ssr-deps.ts 头注）`
+        : msg;
+      problems.push(`${tag} 渲染抛错：${hint}`);
       continue;
     }
     if (html.length < 300) {

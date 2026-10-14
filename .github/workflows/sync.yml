@@ -160,6 +160,18 @@ jobs:
           npm ci
           npm run build
 
+      # i18n SSR 双语冒烟：整站 13 个路由 × zh/en 双语真渲染一遍（vite SSR 管线，
+      # 零网络零浏览器）。抓两类**零报错的静默故障**：
+      #   ① 缺键抛错 —— src/i18n 配了 missing: throw，只有渲染期才炸得出来；
+      #   ② 英文页界面残留中文 —— 抽键漏网的硬编码，静态检查看不出来。
+      # 它曾在 package.json 里注册（npm run smoke:i18n）却**没有任何 CI 调用**，
+      # 引入当天就是红的（router 模块实例分裂，见 scripts/smoke/ssr-deps.ts 头注），
+      # 一整天无人察觉。「注册≠调用」：不接进 CI 的闸门等于不存在。
+      # 位置放在构建之后：prebuild 已把 data/ 同步进 public/，冒烟从那里读数据集；
+      # 放在提交/发布之前：它红就不许发布。
+      - name: i18n SSR 双语冒烟
+        run: node scripts/smoke/i18n-ssr.mjs
+
       # 从指纹结果里取判断依据。注意看的是 changed，不是 git diff。
       - name: 判断内容是否变化
         id: fp
