@@ -14,10 +14,21 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import { installTsResolver } from '../ts-resolver.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..', '..');
 process.chdir(ROOT);
+
+// 白名单要拿术语表的真身来算，不能另抄一份切分/匹配逻辑（第二真源 = 白名单漂移）。
+//
+// ⚠️ 注意这里有两份 i18n 实例：ts-resolver 加载的（本文件用）和 vite ssrLoadModule
+// 加载的（下面渲染用）。两个 loader 各建一份模块注册表，setLocale 只影响自己那份。
+// 所以白名单算之前必须**用 ts-resolver 这一份的 setLocale** 切到 en，
+// 否则 localizeSpecValue 读到的还是默认语言、原文不动，白名单又变回「什么都放过」。
+installTsResolver();
+const { localizeSpecValue } = await import('../../src/lib/glossary.ts');
+const { setLocale: setLocaleForGlossary } = await import('../../src/i18n/index.ts');
 
 // ── 1. 数据白名单：数据里本来就有的中文不算泄漏 ────────────────────────────
 const CJK_RUN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
@@ -37,21 +48,32 @@ const CJK_RUN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
 const WHITELIST_FIELDS = ['name', 'nameZh', 'line', 'modelCode'];
 
 /**
- * 第二级白名单：**specs 容器里的官网原文值**。
- * 参数值（「铝金属设计」「超视网膜 XDR 显示屏」「最高支持 120 Hz 刷新率」）
- * 是从中文官网抓下来的原文，英文页显示它属于「数据只有中文版本」的客观事实，
- * 要治得让管线同时抓英文官网——那是数据工程，不是这里的界面漏翻。
+ * 第二级白名单：specs 里的官网原文值 —— 但**只放行术语表翻译后仍残留的中文**。
  *
- * ⚠️ 但 `chipset.name` **不放进白名单**：芯片型号有厂商公布的官方英文名
- * （麒麟 = Kirin），它是标识不是描述，必须翻译（curated/facets.json 的
- * chipPrefixEn 管这层）。把标识和描述分开，是这条白名单不沦为「什么都放过」的关键。
+ * 参数值是从中文官网抓下来的原文。英文页本来会整段显示中文，现在
+ * `src/lib/glossary.ts` 用「官方术语对照表」把能查到官方英文的词换掉
+ * （`超视网膜 XDR 显示屏` → `Super Retina XDR display`），查不到的保留原文。
+ *
+ * ⚠️ 所以白名单必须**用同一个函数算**，不能把 specs 原文整段扫进来：
+ * 整段扫等于把「铝金属设计」这类已经能翻译的词也洗白，术语表失效时冒烟照样绿
+ * —— 正是 P32 那个洞的翻版。喂 `localizeSpecValue()` 再收残留，白名单才会
+ * 自动跟着词表一起收窄：词表补一条，白名单瘦一圈，闸门紧一分。
+ *
+ * `chipset.name` 仍然整条排除：芯片型号有厂商官方英文名，是标识不是描述，
+ * 不许残留（curated/facets.json 的 chipPrefixEn 与 glossary 的 Kirin 规则管这层）。
  */
 const SPECS_WHITELIST_EXCLUDE = new Set(['chipset.name']);
+
+// 算白名单要在 en 语境下（localizeSpecValue 只在英文下动手）
+setLocaleForGlossary('en');
 
 function dataCjkWhitelist() {
   const out = new Set();
   const collect = (v) => {
-    if (typeof v === 'string') for (const m of v.matchAll(CJK_RUN)) out.add(m[0]);
+    if (typeof v === 'string') {
+      // 关键：先过术语表，只收「翻译完还是中文」的
+      for (const m of localizeSpecValue(v).matchAll(CJK_RUN)) out.add(m[0]);
+    }
   };
   const dir = join(ROOT, 'public', 'data');
   const stack = [dir];

@@ -2,6 +2,7 @@ import curatedFacets from '../../data/curated/facets.json' with { type: 'json' }
 import { isFoldableOfficial } from '../../scripts/lib/foldable.mjs';
 import { i18n, currentLocale, pickLocale } from '../i18n';
 import type { Product } from '../types';
+import { localizeSpecValue } from './glossary';
 import { basePriceCny } from './price';
 
 /**
@@ -40,12 +41,9 @@ interface CuratedDict {
     lineEn?: Record<string, string>;
   };
   chipMultiPrefixes: string[];
-  /**
-   * 芯片名前缀的官方英文名（麒麟 → Kirin）。
-   * **只登记厂商自己公布的英文命名**；查不到就保留原文——
-   * 数据诚信原则不允许编造译名。
-   */
-  chipPrefixEn?: Record<string, string>;
+  // 芯片名的官方英文名（麒麟 → Kirin、A18 芯片 → A18 chip）不在本字典里，
+  // 统一由 data/curated/glossary.json 管 —— 芯片名在参数表/分面/榜单/搜索建议/
+  // 画布短规格里都要显示，两处各写一份迟早分叉（2026-10-14 已合并）。
   priceBuckets: Array<{
     id: string;
     label: string;
@@ -396,16 +394,16 @@ export function chipName(p: Product): string {
  */
 export function chipNameLabel(name: string): string {
   if (name === UNKNOWN) return i18n.global.t('common.unpublished');
-  let s = name.replace(/(\d)(Pro)(?=$|[^A-Za-z0-9])/g, '$1 $2').trim();
-  // 中文芯片品牌名换官方英文名（麒麟 → Kirin）。以前这一层根本没有，
-  // 英文页的参数表/分面里直接吐「麒麟9020」——SSR 冒烟也没报，因为
-  // 「麒麟」二字在 products.json 的官网原文里出现过，被数据白名单放过了。
-  if (currentLocale() === 'en') {
-    for (const [zh, en] of Object.entries(CURATED.chipPrefixEn ?? {})) {
-      if (s.includes(zh)) s = s.split(zh).join(en);
-    }
-  }
-  return s;
+  const s = name.replace(/(\d)(Pro)(?=$|[^A-Za-z0-9])/g, '$1 $2').trim();
+  // 芯片型号是**标识**，不是描述 —— 厂商有官方英文名就必须用官方的
+  // （麒麟 → Kirin、A18 芯片 → A18 chip）。以前这一层根本没有，英文页的
+  // 参数表/分面/榜单里直接吐「麒麟9020」「A18 芯片」——SSR 冒烟也没报，因为
+  // 「麒麟」「芯片」在 products.json 的官网原文里出现过，被数据白名单放过了。
+  //
+  // 术语翻译统一走 glossary（`data/curated/glossary.json`），这里不另写一份替换表：
+  // 芯片名在参数表、分面、榜单、搜索建议、画布短规格里都要显示，两处各写一份
+  // 迟早分叉（这正是上一轮刚踩过的「两份真源」）。
+  return localizeSpecValue(s);
 }
 
 /**

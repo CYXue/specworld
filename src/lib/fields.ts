@@ -2,6 +2,7 @@ import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' 
 import phoneViewJson from '../../data/view-phone.json' with { type: 'json' };
 import { i18n, currentLocale, pickLocale } from '../i18n';
 import type { Product } from '../types';
+import { localizeSpecValue } from './glossary';
 
 /** 展示文案助手：语言只从全局来（口径见 `src/i18n/index.ts` 的 `currentLocale`） */
 const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
@@ -81,8 +82,7 @@ interface SpecGroup {
 const dash = (x: unknown): string => (x == null || x === '' ? '—' : String(x));
 
 /** 语言感知的标签/单位解析（数据侧 label/labelEn、unit/unitEn 双字段） */
-const labelOf = (f: { label: string; labelEn?: string }): string =>
-  pickLocale(f.label, f.labelEn);
+const labelOf = (f: { label: string; labelEn?: string }): string => pickLocale(f.label, f.labelEn);
 const unitOf = (f: SchemaFieldJson | undefined): string => {
   const u = pickLocale(f?.unit ?? '', f?.unitEn);
   return u ? ` ${u}` : '';
@@ -128,7 +128,10 @@ function unitFormat({ values, fields }: { values: unknown[]; fields: SchemaField
  * 展示格式化器注册表：**封闭可加**——视图字典用名字引用，新格式化器只在引擎里加实现。
  * 每个都是「展示语义」的落点（合并行/特殊口径），普通字段不需要。
  */
-const FORMATTERS: Record<string, (args: { values: unknown[]; fields: SchemaFieldJson[] }) => string> = {
+const FORMATTERS: Record<
+  string,
+  (args: { values: unknown[]; fields: SchemaFieldJson[] }) => string
+> = {
   plain: ({ values }) => dash(values[0]),
   unit: unitFormat,
   dimensions: ({ values }) => {
@@ -142,8 +145,7 @@ const FORMATTERS: Record<string, (args: { values: unknown[]; fields: SchemaField
   brightness: ({ values }) => {
     const [typ, peak] = values;
     // 「典型/峰值」是**文案**不是数据：抽到 locale 包，否则英文页会中英混排
-    if (typeof peak === 'number')
-      return t('spec.brightnessBoth', { typical: dash(typ), peak });
+    if (typeof peak === 'number') return t('spec.brightnessBoth', { typical: dash(typ), peak });
     if (typeof typ === 'number') return t('spec.brightnessTypical', { typical: typ });
     return '—';
   },
@@ -159,7 +161,10 @@ const CAMERA_ROLES: Array<{ role: string; labelKey: string }> = [
   { role: 'periscope', labelKey: 'spec.cameraRole.periscope' },
 ];
 
-function cameraRoleRows(path: string, specs: Record<string, unknown> | null | undefined): SpecRow[] {
+function cameraRoleRows(
+  path: string,
+  specs: Record<string, unknown> | null | undefined,
+): SpecRow[] {
   const rear = (specs?.[path] ?? []) as Array<{
     role?: string;
     mp?: number | null;
@@ -246,9 +251,20 @@ function buildSpecGroups(
   return out.map(({ title, rows }) => ({ title, rows })); // 内部 id 不外泄
 }
 
-/** 详情页/对比表共用入口（签名不变，消费方零改动） */
+/**
+ * 详情页/对比表共用入口（签名不变，消费方零改动）。
+ *
+ * 出口处统一过一遍术语本地化：specs 值是中文官网原文，英文界面下要把其中的
+ * 术语换成厂商官方英文（见 `./glossary`）。放在出口而不是每个 formatter 里，
+ * 是为了**只有一个接入口** —— 将来新增展示点不会漏挂。
+ */
 export function specGroups(p: Product): SpecGroup[] {
-  return buildSpecGroups(PHONE_SCHEMA, PHONE_VIEW, p.specs);
+  const groups = buildSpecGroups(PHONE_SCHEMA, PHONE_VIEW, p.specs);
+  if (currentLocale() !== 'en') return groups;
+  return groups.map((g) => ({
+    ...g,
+    rows: g.rows.map((r) => ({ ...r, value: localizeSpecValue(r.value) })),
+  }));
 }
 
 /**

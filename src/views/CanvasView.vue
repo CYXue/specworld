@@ -14,6 +14,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
+import { chipNameLabel } from '../lib/catalog';
 import {
   EMPTY_FILTER,
   SORTS,
@@ -91,7 +92,8 @@ const prodById = computed(() => new Map((ds.value?.products ?? []).map((p) => [p
 function composeDetail(d: CanvasDoc): string {
   const p = prodById.value.get(d.id);
   const parts: string[] = [];
-  const chip = p?.chipset?.name;
+  // 走 chipNameLabel：芯片型号有官方英文名，短规格行在英文页里不能吐「A18 芯片」
+  const chip = p?.chipset?.name ? chipNameLabel(p.chipset.name) : '';
   if (chip) parts.push(chip);
   const size = p?.display?.sizeIn;
   if (size != null) parts.push(`${size}″`);
@@ -257,7 +259,9 @@ const canvasH = computed(() => {
           <!-- 三组分面：计数都是当前条件下的真实台数，随其它维度联动 -->
           <div class="mt-3 space-y-2 border-t-2 border-[var(--color-ink)] pt-3">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
                 >{{ t('canvas.brand') }}</span
               >
               <button
@@ -267,13 +271,19 @@ const canvasH = computed(() => {
                 :aria-pressed="filter.brand === f.value"
                 @click="setFilter({ brand: f.value })"
               >
-                {{ f.value ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value) : t('canvas.all') }}
+                {{
+                  f.value
+                    ? (docs.find((d) => d.brand === f.value)?.brandZh ?? f.value)
+                    : t('canvas.all')
+                }}
                 {{ f.count }}
               </button>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
                 >{{ t('canvas.line') }}</span
               >
               <button
@@ -288,7 +298,9 @@ const canvasH = computed(() => {
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
+              <span
+                class="w-10 shrink-0 text-[12px] leading-[1.5]"
+                style="color: var(--color-gold)"
                 >{{ t('canvas.year') }}</span
               >
               <button

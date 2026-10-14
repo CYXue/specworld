@@ -5717,6 +5717,113 @@ check('i18n 反半吊子：切到英文后参数表/维度名/能力名不得残
 });
 
 /* ================================================================ *
+ * 参数值官方术语表（data/curated/glossary.json）
+ * ================================================================ */
+
+const GLOSS = await import('../src/lib/glossary.ts');
+const GLOSS_JSON = JSON.parse(readFileSync(join(ROOT, 'data/curated/glossary.json'), 'utf8'));
+
+check('术语表：每条都有官方英文与可核验出处，且没把中文当英文填', () => {
+  const bad = [];
+  const sources = GLOSS_JSON._sources ?? {};
+  const evOk = (ev) => typeof ev === 'string' && ev in sources;
+
+  for (const [zh, e] of Object.entries(GLOSS_JSON.exact ?? {})) {
+    if (!e?.en) bad.push(`exact「${zh}」缺 en`);
+    else if (CJK.test(e.en)) bad.push(`exact「${zh}」的 en 仍是中文：${e.en}`);
+    else if (e.en === zh) bad.push(`exact「${zh}」en 与中文相同（复制粘贴？）`);
+    if (!evOk(e?.ev)) bad.push(`exact「${zh}」的 ev 不在 _sources 里（出处不可核验）`);
+  }
+  for (const p of GLOSS_JSON.patterns ?? []) {
+    if (!p?.en) bad.push(`pattern ${p?.re} 缺 en`);
+    else if (CJK.test(p.en)) bad.push(`pattern ${p.re} 的 en 仍是中文：${p.en}`);
+    if (!evOk(p?.ev)) bad.push(`pattern ${p.re} 的 ev 不在 _sources 里`);
+    try {
+      new RegExp(p.re);
+    } catch (err) {
+      bad.push(`pattern ${p.re} 不是合法正则：${err.message}`);
+    }
+  }
+  for (const p of GLOSS_JSON.prefixes ?? []) {
+    if (!p?.zh || !p?.en) bad.push(`prefix ${JSON.stringify(p)} 缺 zh/en`);
+    else if (CJK.test(p.en)) bad.push(`prefix「${p.zh}」的 en 仍是中文：${p.en}`);
+    if (!evOk(p?.ev)) bad.push(`prefix「${p?.zh}」的 ev 不在 _sources 里`);
+  }
+  assert.deepEqual(bad, [], `术语表不合法：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('术语表：中文界面原样返回，英文界面才动手（哨兵值）', () => {
+  const zh = '超视网膜 XDR 显示屏';
+  assert.equal(
+    withLocale('zh-CN', () => GLOSS.localizeSpecValue(zh)),
+    zh,
+    '中文下不许改写官网原文',
+  );
+  const en = withLocale('en', () => GLOSS.localizeSpecValue(zh));
+  assert.equal(en, 'Super Retina XDR display', '英文下应换成苹果官方用词');
+  assert.ok(!CJK.test(en), '翻译结果不该还有中文');
+  // 数值/英文原文零开销
+  assert.equal(
+    withLocale('en', () => GLOSS.localizeSpecValue('6.1 英寸')),
+    '6.1 英寸',
+  );
+});
+
+check('术语表：每台机器的芯片名在英文下都能拿到官方英文名（不许残留中文）', () => {
+  assert.ok(REAL_P.length > 0, '需要真实数据');
+  const bad = withLocale('en', () =>
+    REAL_P.filter((p) => p.chipset?.name)
+      .map((p) => ({ id: p.id, out: CAT_TOP.chipNameLabel(p.chipset.name) }))
+      .filter((x) => CJK.test(x.out) && !/（/.test(x.out)) // 括号内是官网脚注，属原文
+      .map((x) => `${x.id} → ${x.out}`),
+  );
+  assert.deepEqual(
+    bad,
+    [],
+    `芯片名仍是中文（芯片型号是标识，厂商有官方英文名就必须用）：\n  - ${bad.slice(0, 10).join('\n  - ')}`,
+  );
+});
+
+check('术语表覆盖率不下降（新增中文术语会把它压低，逼你去补官方译名）', () => {
+  const vals = new Set();
+  for (const p of REAL_P) {
+    for (const v of Object.values(p.specs ?? {})) {
+      if (typeof v === 'string' && CJK.test(v)) vals.add(v.trim());
+    }
+  }
+  assert.ok(vals.size > 50, `含中文的 specs 值太少（${vals.size}）——数据或扫描出了问题`);
+  const done = withLocale(
+    'en',
+    () => [...vals].filter((v) => !CJK.test(GLOSS.localizeSpecValue(v))).length,
+  );
+  const rate = done / vals.size;
+  // 基线 0.60：现行词表实测约 0.64，留 4 个百分点的余量给「新增机型带进来、
+  // 但确实查不到官方英文」的中国特有条目。跌破就是有人在偷懒或词表被删了。
+  assert.ok(
+    rate >= 0.6,
+    `术语表覆盖率 ${(rate * 100).toFixed(1)}%（${done}/${vals.size}）低于基线 60% ——` +
+      '要么新数据带进了没登记的术语（去 data/curated/glossary.json 补官方英文），' +
+      '要么词表被删改了。',
+  );
+});
+
+check('术语表闸门自身被反向测试：把官方英文改成中文必须报红', () => {
+  // 反向测的是「上面那条哨兵用例」的判据本身：如果判据写错（比如恒真），
+  // 这里就会安静地通过，然后词表失效时你也发现不了。
+  const real = GLOSS.GLOSSARY_EXACT['铝金属设计'];
+  assert.ok(real, '词表里应有「铝金属设计」');
+  const backup = real.en;
+  try {
+    real.en = '铝金属设计'; // 假装有人把 en 抄成了中文
+    const bad = CJK.test(real.en);
+    assert.ok(bad, '把 en 写成中文必须能被 CJK 判据抓到');
+  } finally {
+    real.en = backup;
+  }
+  assert.equal(real.en, 'Aluminum design', '反向测必须还原现场');
+});
+
+/* ================================================================ *
  * 汇总
  * ================================================================ */
 console.log('');
