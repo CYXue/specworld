@@ -44,6 +44,7 @@ Thumbs.db
 
 # 工作助手本地目录（不入库）
 .workbuddy/
+.atomcode/
 
 # 像素风视觉核对截图（_smoke-pixel.cjs 的产物，随时可重跑生成，不入库）
 _shots-pixel/

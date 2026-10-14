@@ -151,22 +151,6 @@ export function categoryOf(p: Product): CategoryId {
   return (p.category as CategoryId | undefined) ?? 'phone';
 }
 
-/**
- * 各品类的在册台数。用于分面计数与「暂无数据」提示。
- *
- * 动态构建（2026-10-13 硬编码审计 A4 治理）：此前固定 phone/tablet/laptop/audio 四键，
- * 新品类注册后计数会被静默丢弃。现在：注册表内的品类全部出现（0 台也显示「暂无数据」），
- * 注册表外的意外品类也会出现（并应在 selftest 品类对账闸门里被拦下）。
- */
-export function categoryCounts(products: Product[]): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const c of CATEGORY_ORDER) out[c.id] = 0; // 注册表内：0 台也可见（「暂无数据」）
-  for (const p of products) {
-    const id = categoryOf(p);
-    out[id] = (out[id] ?? 0) + 1;
-  }
-  return out;
-}
 
 // ── 生命周期状态（权威枚举见 src/types.ts Product.status；标签单一映射）──
 

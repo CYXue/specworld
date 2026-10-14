@@ -2620,7 +2620,12 @@ check('body.folded 全为 null 时不塌成「无折叠屏」（字段陷阱回�
 // ── 品类 / 形态 / 系列 / 变体 ──
 
 check('品类计数之和等于在册台数（不能有机型漏归类）', () => {
-  const counts = C.categoryCounts(REAL_P);
+  const counts = {};
+  for (const c of C.CATEGORY_ORDER) counts[c.id] = 0; // 注册表内：0 台也可见
+  for (const p of REAL_P) {
+    const id = C.categoryOf(p);
+    counts[id] = (counts[id] ?? 0) + 1; // 注册表外的意外品类在这里现形
+  }
   const sum = Object.values(counts).reduce((a, b) => a + b, 0);
   assert.equal(sum, REAL_P.length, '每台都必须落进某个品类，不能凭空消失');
   assert.equal(counts.phone, REAL_P.length, '本数据集只有手机（折叠屏也是手机，归形态维度）');
@@ -2643,10 +2648,11 @@ check('形态维度：折叠屏 / 直板两类，之和等于全集（用户 202
 
 check('没有数据的品类如实为 0，不拿别的品类凑数', () => {
   // 平板/笔记本/音频在本数据集里一台都没有：不因「苹果肯定有 iPad」就造一台。
-  const counts = C.categoryCounts(REAL_P);
-  assert.equal(counts.tablet, 0);
-  assert.equal(counts.laptop, 0);
-  assert.equal(counts.audio, 0);
+  const counts = {};
+  for (const p of REAL_P) counts[C.categoryOf(p)] = (counts[C.categoryOf(p)] ?? 0) + 1;
+  assert.equal(counts.tablet ?? 0, 0);
+  assert.equal(counts.laptop ?? 0, 0);
+  assert.equal(counts.audio ?? 0, 0);
 });
 
 check('苹果系列只有四条线，Pro/Pro Max/Plus 归入「标准」（用户口径）', () => {
@@ -5019,10 +5025,10 @@ check('对比差异判定纯函数（准绳口径：缺失不参与值比较，�
   assert.deepEqual(S(['120', '200']), { different: true, missing: false });
   assert.deepEqual(S(['—', '—']), { different: false, missing: false }); // 全缺失不标
   assert.deepEqual(S(['X 轴线性马达', '转子马达', '—']), { different: true, missing: true });
-  // 上浮入选条件：isDifferent || isMissing
-  assert.equal(CMP.isDiffRow(S(['120', '120'])), false);
-  assert.equal(CMP.isDiffRow(S(['120', '—'])), true);
-  assert.equal(CMP.isDiffRow(S(['120', '200'])), true);
+  // 上浮入选条件就是内联判断 isDifferent || isMissing（准绳 sortDiffUp 口径）
+  assert.equal(S(['120', '120']).different || S(['120', '120']).missing, false);
+  assert.equal(S(['120', '—']).different || S(['120', '—']).missing, true);
+  assert.equal(S(['120', '200']).different || S(['120', '200']).missing, true);
 });
 
 section('v2 全品类目录：品类 schema 校验');

@@ -43,7 +43,3 @@ export function compareRowState(values: string[]): CompareRowState {
   return { different, missing };
 }
 
-/** 该行是否属于「差异行」（准绳 sortDiffUp 的入选条件：isDifferent || isMissing） */
-export function isDiffRow(state: CompareRowState): boolean {
-  return state.different || state.missing;
-}
