@@ -280,14 +280,8 @@ export function facetOf(
       return rank(a.id) - rank(b.id); // 按金额升序，未公布永远最后
     }
     if (dim === 'category') {
-      // 手机在前，与 catalog 的 CATEGORY_ORDER 一致
-      const rank: Record<string, number> = {
-        phone: 0,
-        tablet: 1,
-        laptop: 2,
-        audio: 3,
-      };
-      return (rank[a.id] ?? 9) - (rank[b.id] ?? 9);
+      // 与本文件 order.category 同一真源（catalog.ts CATEGORY_ORDER），不再写死表
+      return order.category(a.id, b.id);
     }
     if (dim === 'form') {
       // 折叠屏在前（少数派先曝光），直板在后
@@ -374,6 +368,20 @@ export const SORTS: Array<{ id: SortKey; labelKey: string }> = [
 export function sortLabel(id: SortKey | string): string {
   return i18n.global.t(SORTS.find((s) => s.id === id)?.labelKey ?? 'sort.release');
 }
+
+/**
+ * 轻量单级排序条（机型库/品牌页结果区顶部，辅助非主打）。
+ * 真源在这里：CompareView 与 BrandView 曾各抄一份，改一处漏一处就是静默分叉。
+ */
+export const SORTS_LITE: Array<{ id: SortKey; labelKey: string }> = [
+  { id: 'release', labelKey: 'sort.release' },
+  { id: 'price-asc', labelKey: 'sort.priceAsc' },
+  { id: 'price-desc', labelKey: 'sort.priceDesc' },
+  { id: 'battery-desc', labelKey: 'ability.battery' },
+  { id: 'ppi-desc', labelKey: 'ability.display' },
+  { id: 'weight-asc', labelKey: 'ability.light' },
+  { id: 'camera-desc', labelKey: 'ability.camera' },
+];
 
 /** 榜单页四条能力 → 排序键，供「点榜单进去看全部」下钻。 */
 export const ABILITY_SORT: Record<string, SortKey> = {

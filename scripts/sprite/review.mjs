@@ -107,22 +107,6 @@ async function main() {
     groups.get(r.group).push(r);
   }
 
-  const cards = rows
-    .map(({ p, L }) => {
-      const name = p.nameZh || p.name || p.id;
-      const dims = `${L.rect.w.toFixed(1)}×${L.rect.h.toFixed(1)}`;
-      return `<figure class="card">
-  <img src="${esc(p.id)}.svg" alt="${esc(name)}" width="${160 * SCALE}" height="${(320 + 28) * SCALE}">
-  <figcaption>
-    <b>${esc(name)}</b>
-    <span class="id">${esc(p.id)}</span>
-    <span class="facts">${esc(factsOf(L).join(' · '))}</span>
-    <span class="geom">画布内 ${dims}px · 圆角 ${L.rect.r.toFixed(1)} · 描边 ${L.strokeW.toFixed(1)}</span>
-  </figcaption>
-</figure>`;
-    })
-    .join('\n');
-
   const sections = [...groups.entries()]
     .map(([g, list]) => {
       const ids = new Set(list.map((r) => r.p.id));

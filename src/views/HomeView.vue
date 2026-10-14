@@ -60,9 +60,9 @@ const DIAG_BANDS = [
 ];
 
 /**
- * 把 6 档离散色带展开成 `linear-gradient` 的硬停点：
+ * 把 16 档离散色带展开成 `linear-gradient` 的硬停点：
  * 每档写两遍（起始位置 = 结束位置），于是每一档内部纯色、档与档之间是硬边。
- * `linear-gradient` 只是**承载阶梯的工具**，视觉结果是 6 条硬边斜带，不是渐变。
+ * `linear-gradient` 只是**承载阶梯的工具**，视觉结果是 16 条硬边斜带，不是渐变。
  */
 const bannerBackground = `linear-gradient(to bottom right, ${DIAG_BANDS.map((c, i) => {
   const a = ((i / DIAG_BANDS.length) * 100).toFixed(4);
@@ -126,7 +126,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
         两条规则是各自容器决定的，不是「统一风格」。
       -->
       <!--
-        首页顶栏 = 对角黑白灰阶过渡（6 档离散硬边色带，见上方 `bannerBackground`）。
+        首页顶栏 = 对角黑白灰阶过渡（16 档离散硬边色带，见上方 `bannerBackground`）。
         标题/导航浮在其上；不再用马赛克太极图，也不用 Sky 色带 + Ground 地层。
 
         结构沿用「HUD 而非标题海报」的判断：进站第一眼应该是这个世界，不是封面。

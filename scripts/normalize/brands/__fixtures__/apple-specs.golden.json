@@ -16,7 +16,10 @@
     "weightG": 254,
     "ipRating": "IP68",
     "material": "钛金属可折叠设计",
-    "colors": ["夜空色", "星光白色"],
+    "colors": [
+      "夜空色",
+      "星光白色"
+    ],
     "folded": null
   },
   "display": {
@@ -41,7 +44,12 @@
   },
   "memory": {
     "ramGb": [],
-    "storageGb": [256, 512, 1024, 2048]
+    "storageGb": [
+      256,
+      512,
+      1024,
+      2048
+    ]
   },
   "battery": {
     "capacityMah": null,
@@ -57,21 +65,21 @@
         "role": "main",
         "mp": 48,
         "aperture": "f/1.6",
-        "ois": false,
+        "ois": null,
         "sensorNote": null
       },
       {
         "role": "tele",
         "mp": 12,
         "aperture": "f/1.6",
-        "ois": false,
+        "ois": null,
         "sensorNote": null
       },
       {
         "role": "ultrawide",
         "mp": 48,
         "aperture": "f/2.2",
-        "ois": false,
+        "ois": null,
         "sensorNote": null
       }
     ],

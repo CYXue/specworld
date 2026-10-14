@@ -19,6 +19,7 @@ import { useI18n } from 'vue-i18n';
 import { asset } from '../lib/assets';
 import { coerceSpecValueClient as coerce, validateSpecValueClient as validate } from '../lib/fieldValidate';
 import { localizeSpecValue } from '../lib/glossary';
+import PxIcon from './PxIcon.vue';
 import type { Product } from '../types';
 
 interface SchemaField {
@@ -80,7 +81,10 @@ async function openModal() {
   loading.value = true;
   loadErr.value = '';
   try {
-    const r = await fetch(asset(`data/schemas/${props.product.category}.json`));
+    // v1 快照可能没有 category 字段：请求 undefined.json 会变成不可读的 HTTP 错误，
+    // 兜底 'phone' 与 lib/facets 的 categoryOf 同口径
+    const category = props.product.category || 'phone';
+    const r = await fetch(asset(`data/schemas/${category}.json`));
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const schema = (await r.json()) as { fields?: SchemaField[]; groups?: { id: string; name: string }[] };
     const fields = (schema.fields ?? []).filter((f) => SCALAR_TYPES.has(f.type));
@@ -183,7 +187,7 @@ async function submit() {
     style="color: var(--color-parchment-dim)"
     @click="openModal"
   >
-    ✎ {{ t('feedback.openButton') }}
+    <PxIcon name="pen" :size="12" /> {{ t('feedback.openButton') }}
   </button>
 
   <div
@@ -217,7 +221,7 @@ async function submit() {
           :aria-label="t('feedback.close')"
           @click="close"
         >
-          ✕
+          <PxIcon name="close" :size="12" />
         </button>
       </div>
 
@@ -268,7 +272,7 @@ async function submit() {
             currentField?.type === 'array:number'
               ? t('feedback.placeholderArray')
               : t('feedback.placeholderScalar')
-          ""
+          "
         />
 
         <label class="mb-1 block text-[12px]" style="color: var(--color-parchment-dim)">{{

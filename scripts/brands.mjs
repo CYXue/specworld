@@ -29,7 +29,6 @@ const BRANDS = Object.freeze({
     shortLabel: 'iPhone', // 苹果机型都是 iPhone，列表/定位里用这个短标签比「苹果」更准
     monogram: 'A',
     accentColor: '#0071e3',
-    accent: '#0071e3',
     accentSoft: 'rgba(0,113,227,.10)',
     accentLine: 'rgba(0,113,227,.32)',
     motif: 'apple',
@@ -45,7 +44,6 @@ const BRANDS = Object.freeze({
     shortLabel: '华为',
     monogram: 'H',
     accentColor: '#cf0a2c',
-    accent: '#cf0a2c',
     accentSoft: 'rgba(207,10,44,.10)',
     accentLine: 'rgba(207,10,44,.32)',
     motif: 'petal',

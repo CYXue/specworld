@@ -188,7 +188,7 @@ function subline(p: (typeof all.value)[number]): string {
   <div class="page-shell space-y-6 py-6">
     <SectionFrame :title="t('rank.title')" hud="var(--color-crown)" icon="trophy">
       <p
-        class="pixel-note mb-4 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)"
+        class="pixel-note mb-4 px-3 py-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]"
       >
         {{ t('rank.introA') }}<b style="color: var(--color-parchment-lit)">{{
           t('rank.introSort')
@@ -270,7 +270,13 @@ function subline(p: (typeof all.value)[number]): string {
                 :title="t('rank.toggleDir')"
                 @click="toggleDir(r.idx)"
               >
-                {{ r.asc ? '↑' : '↓' }}
+                <PxIcon
+                  name="arrowDown"
+                  :size="10"
+                  class="rotate-180"
+                  v-if="!r.asc"
+                />
+                <PxIcon name="arrowDown" :size="10" v-else />
               </button>
               <button
                 class="pixel-button px-1.5 py-0.5 text-[12px] leading-[1.5]"

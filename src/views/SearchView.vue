@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
-import { buildDocs, search, suggestions, tokenize } from '../lib/search';
+import { buildDocs, search, suggestions, tokenize, matchExact } from '../lib/search';
 import { abilityRows } from '../lib/specs';
 import PxIcon from '../components/PxIcon.vue';
 import SectionFrame from '../components/SectionFrame.vue';
@@ -60,14 +60,14 @@ const hint = computed(() => suggestions(docs.value));
 /**
  * 本次结果是不是靠「忽略大小写/空格」的容错通道兜出来的。
  *
- * 判据：**精确通道一个都没命中，但归一化通道有** —— 与 search() 的分级逻辑同源。
- * 用「用户输入去掉空格后是否等于原样」来判是错的：那只能覆盖连写这一种写法，
- * 漏掉大小写、全角、分隔符等等，而那些同样是容错生效的场景。
+ * 判据必须与 search() 的分级逻辑**同一份实现**（query.ts 的 matchExact）——
+ * 自己用 includes 重判会把「matchExact 其实能精确命中」的情形误报成容错命中
+ * （数字边界、compact 回落这些精确通道的特例它都看不见）。
  */
 const usedLooseMatch = computed(() => {
   const tokens = tokenize(q.value);
   if (!tokens.length) return false;
-  const byExact = docs.value.filter((d) => tokens.every((t) => (d.haystack ?? '').includes(t)));
+  const byExact = docs.value.filter((d) => matchExact(d, tokens));
   return byExact.length === 0 && results.value.length > 0;
 });
 
@@ -157,7 +157,7 @@ function clearAll() {
           :key="b.id"
           class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
           :aria-pressed="brand === b.id"
-          :style="brand === b.id ? undefined : { color: b.accent }"
+          :style="brand === b.id ? undefined : { color: b.accentColor }"
           @click="pickBrand(b.id)"
         >
           {{ b.nameZh }} {{ b.count }}

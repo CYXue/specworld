@@ -41,7 +41,7 @@
       "buySlug": "iphone-18-pro",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MJTA4",
         "cheapestPartNumber": "MJTA4CH/A",
         "cheapestProductName": "iPhone 18 Pro 256GB Glacier",
@@ -109,7 +109,7 @@
       "buySlug": "iphone-18-pro",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MJY94",
         "cheapestPartNumber": "MJY94CH/A",
         "cheapestProductName": "iPhone 18 Pro Max 256GB Glacier",
@@ -165,7 +165,7 @@
       "buySlug": "iphone-17",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MG714",
         "cheapestPartNumber": "MG714CH/A",
         "cheapestProductName": "iPhone 17 256GB Sage",
@@ -221,7 +221,7 @@
       "buySlug": "iphone-17e",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MHU64",
         "cheapestPartNumber": "MHU64CH/A",
         "cheapestProductName": "iPhone 17e 256GB Soft Pink",
@@ -283,7 +283,7 @@
       "buySlug": "iphone-air",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MG364",
         "cheapestPartNumber": "MG364CH/A",
         "cheapestProductName": "iPhone Air 256GB Sky Blue",
@@ -351,7 +351,7 @@
       "buySlug": "iphone-duo",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MK2M4",
         "cheapestPartNumber": "MK2M4CH/A",
         "cheapestProductName": "iPhone Duo 256GB Star White",
@@ -401,7 +401,7 @@
       "buySlug": "iphone-16",
       "evidence": {
         "buyPageStatus": 200,
-        "buyPageFromCache": false,
+        "buyPageFromCache": true,
         "cheapestSku": "MYEV3",
         "cheapestPartNumber": "MYEV3CH/A",
         "cheapestProductName": "iPhone 16 128GB Black",

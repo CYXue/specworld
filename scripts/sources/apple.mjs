@@ -891,9 +891,9 @@ export async function fetchAll(options = {}) {
       extractedAt: new Date().toISOString(),
     });
   };
-  const rememberPage = (slug, url, parsed, html) => {
+  const rememberPage = (slug, url, parsed, html, fromCache) => {
     for (const model of parsed.modelOrder) {
-      if (!pageIndex.has(model)) pageIndex.set(model, { slug, url, parsed, html });
+      if (!pageIndex.has(model)) pageIndex.set(model, { slug, url, parsed, html, fromCache });
     }
   };
 
@@ -962,7 +962,7 @@ export async function fetchAll(options = {}) {
     if (parsed.modelOrder.length > 1) {
       pushNote(notes, `${slug}: 该页同时包含 ${parsed.modelOrder.join(' / ')}，按列分别取值`);
     }
-    rememberPage(slug, url, parsed, page.html);
+    rememberPage(slug, url, parsed, page.html, page.fromCache);
     return { ok: true, slug, url, parsed, html: page.html, fromCache: page.fromCache };
   };
 
@@ -1057,7 +1057,8 @@ export async function fetchAll(options = {}) {
       id,
       sections: ex.sectionCount,
       fields: ex.fieldCount,
-      fromCache: true,
+      // 用来源页的真实缓存状态，不再硬编码 —— 页面可能刚从网络抓的
+      fromCache: Boolean(hit.fromCache),
       via: 'crosstab',
     });
   }
@@ -1210,7 +1211,8 @@ async function main() {
   };
 
   if (opts.out) {
-    const outPath = isAbsolute(opts.out) ? opts.out : resolve(process.cwd(), opts.out);
+    // 与 huawei.mjs 同一口径：相对路径按项目根解析，不随调用时的 cwd 漂移
+    const outPath = isAbsolute(opts.out) ? opts.out : resolve(HERE, '..', opts.out);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, `${JSON.stringify(result, null, 2)}\n`, 'utf8');
     process.stderr.write(`\n已写出 ${outPath}\n`);
@@ -1237,5 +1239,3 @@ if (invokedDirectly) {
       process.exitCode = 2;
     });
 }
-
-export { HERE as ADAPTER_DIR };

@@ -43,10 +43,12 @@ function copyOne(relFrom, relTo) {
   return true;
 }
 
-/** 内容是否一致（比 mtime 可靠：git checkout / 拷贝都会重置时间戳） */
-function sameSize(a, b) {
+/** 内容是否一致（比 mtime 可靠：git checkout / 拷贝都会重置时间戳）。
+ *  只比大小不够：内容变了但字节数相同（改值不改长度的 JSON）会静默不拷贝，
+ *  陈旧数据跟着进 dist —— 所以必须逐字节比。 */
+function sameContent(a, b) {
   try {
-    return statSync(a).size === statSync(b).size;
+    return readFileSync(a).equals(readFileSync(b));
   } catch {
     return false;
   }
@@ -71,7 +73,7 @@ function copyDir(relFrom, relTo, ext = '.svg') {
   for (const name of want) {
     const s = join(src, name);
     const d = join(dst, name);
-    if (existsSync(d) && sameSize(s, d)) continue; // 幂等：没变就不动它
+    if (existsSync(d) && sameContent(s, d)) continue; // 幂等：没变就不动它
     copyFileSync(s, d);
     copied++;
   }

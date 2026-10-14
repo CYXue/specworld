@@ -80,7 +80,10 @@ export async function collectResidualTokens() {
 }
 
 /** CLI：打印残留清单，或 `--write-baseline` 把当前残留写成基线文件。 */
-const IS_CLI = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+// 用 resolve 比对而不是 import.meta.url 严格相等：Windows 大小写/符号链接
+// 会让 pathToFileURL 逐字比较判不中，CLI 分支静默不执行。
+const IS_CLI =
+  process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
 if (IS_CLI) {
   const tokens = await collectResidualTokens();
   const now = new Date().toISOString();

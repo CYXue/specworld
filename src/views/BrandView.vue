@@ -15,6 +15,7 @@ import {
   readFilter,
   toggleValue,
   writeFilter,
+  SORTS_LITE,
 } from '../lib/facets';
 import type { DimKey, FacetItem, FilterState, SortKey } from '../lib/facets';
 import BrandGroup from '../components/BrandGroup.vue';
@@ -69,16 +70,7 @@ function push(next: FilterState, nextSorts: SortKey[] = []) {
 /** 纯筛选结果，默认按发布日期倒序陈列；可经结果区顶部轻量排序条单级调整。 */
 const shown = computed(() => applySort(applyFilter(products.value, filter.value), sort.value));
 
-/** 结果区顶部轻量排序条（辅助，非主打）。 */
-const SORTS_LITE: Array<{ id: SortKey; labelKey: string }> = [
-  { id: 'release', labelKey: 'sort.release' },
-  { id: 'price-asc', labelKey: 'sort.priceAsc' },
-  { id: 'price-desc', labelKey: 'sort.priceDesc' },
-  { id: 'battery-desc', labelKey: 'ability.battery' },
-  { id: 'ppi-desc', labelKey: 'ability.display' },
-  { id: 'weight-asc', labelKey: 'ability.light' },
-  { id: 'camera-desc', labelKey: 'ability.camera' },
-];
+/** 结果区顶部轻量排序条（辅助，非主打）。真源在 lib/facets 的 SORTS_LITE。 */
 
 function onSort(s: SortKey) {
   push(filter.value, [s]);

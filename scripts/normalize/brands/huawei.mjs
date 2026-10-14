@@ -251,7 +251,8 @@ function mapHuawei(rawProduct) {
   rec.connectivity.bluetooth = hwLookup(raw, '数据连接.蓝牙', name).value ?? null;
   rec.connectivity.usb = hwLookup(raw, '数据连接.数据线接口', name).value ?? null;
   rec.connectivity.sim = hwLookup(raw, 'SIM 卡类型', name).value ?? null;
-  rec.connectivity.nfc = nfcText ? /支持/.test(nfcText) : null;
+  // 「不支持」包含子串「支持」，必须先排除否定写法再判肯定
+  rec.connectivity.nfc = nfcText ? (!/不支持/.test(nfcText) && /支持/.test(nfcText)) : null;
   rec.connectivity.esim = esimText ? /^支持/.test(tidy(esimText)) : null;
   rec.connectivity.satellite = satText ?? null;
   // 华为规格页不写「5G」章节；只有少数机型明确只列 4G 网络制式，此时才记 false，

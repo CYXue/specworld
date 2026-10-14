@@ -60,7 +60,7 @@ const fields = (p: Product, v: Vendor | undefined): string[] =>
     v?.nameZh ?? '',
   ].filter(Boolean);
 
-export { compact, tokenize, splitRuns, queryTokens };
+export { compact, tokenize, splitRuns, queryTokens, matchExact };
 
 export function buildDocs(products: Product[], vendors: Map<string, Vendor>): SearchableDoc[] {
   return products.map((product) => {

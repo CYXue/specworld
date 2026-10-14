@@ -285,7 +285,9 @@ function parseOis(text) {
   const s = stripInvisible(text);
   if (/不支持光学防抖|无光学防抖/.test(s)) return false;
   if (/OIS|光学防抖|防抖/.test(s)) return true;
-  return false;
+  // 官网没提 ≠ 确认没有。返回 false 会把「没写」编造成「确认无防抖」，
+  // 且调用方依赖 ois === false 跳过回填，错误值会向下游传播。
+  return null;
 }
 
 /**
@@ -578,6 +580,7 @@ export {
   pushOfficial,
   addNote,
   parseAperture,
+  parseOis,
   parseLens,
   parseRearLenses,
   parseFront,

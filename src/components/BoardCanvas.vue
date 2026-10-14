@@ -264,6 +264,9 @@ function hideDragtip() {
 
 function onPointerDown(e: PointerEvent) {
   if (e.pointerType === 'mouse' && e.button !== 0) return;
+  // 多指防护：只跟第一根手指。两根手指各自累加 move() 会双倍速平移，
+  // 且没有捏合语义（GlobeCanvas 才有完整多指方案）；第二根手指直接忽略。
+  if (ifMovable) return;
   ifMovable = true;
   mouse.clickX = mouse.x = e.clientX;
   mouse.clickY = mouse.y = e.clientY;
@@ -291,6 +294,8 @@ function onPointerMove(e: PointerEvent) {
 }
 
 function onPointerUp(e: PointerEvent) {
+  // 捕获时只认同一根手指的 up：多指下另一根手指的 up 会提前结束拖拽
+  if (captured !== null && e.pointerId !== captured) return;
   if (!ifMovable) return;
   ifMovable = false;
   const movedTotal = Math.abs(e.clientX - mouse.clickX) + Math.abs(e.clientY - mouse.clickY);
@@ -364,7 +369,7 @@ defineExpose({ reset, focusCanvas });
     :class="{ 'is-ready': ready }"
     tabindex="0"
     role="application"
-    aria-label="$t('board.canvasAriaLabel')"
+    :aria-label="$t('board.canvasAriaLabel')"
     @pointerdown="onPointerDown"
     @pointermove="onPointerMove"
     @pointerup="onPointerUp"

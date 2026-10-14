@@ -391,7 +391,8 @@ function mapAppleSpecs(rawProduct) {
   rec.connectivity.wifi =
     (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
   rec.connectivity.bluetooth = (cell.match(/蓝牙\s*[\d.]+/) ?? [])[0] ?? null;
-  rec.connectivity.nfc = nfcLine ? /支持.*NFC|NFC/.test(nfcLine) : null;
+  // 「不支持 NFC」包含「NFC」子串，必须先排除否定写法再判肯定（与华为侧同一条纪律）
+  rec.connectivity.nfc = nfcLine ? (!/不支持/.test(nfcLine) && /NFC/.test(nfcLine)) : null;
   rec.connectivity.satellite = null; // 苹果规格页无卫星通信章节 → null，不凭「SOS 紧急联络」推断
   rec.connectivity.usb = apBlob(raw, '充电和外设扩展', ' | ') || null;
   rec.connectivity.sim = tidy(apBlob(raw, 'SIM 卡', ' | ')) || null;

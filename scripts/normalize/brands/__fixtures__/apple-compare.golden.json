@@ -41,7 +41,12 @@
   },
   "memory": {
     "ramGb": [],
-    "storageGb": [256, 512, 1024, 2048]
+    "storageGb": [
+      256,
+      512,
+      1024,
+      2048
+    ]
   },
   "battery": {
     "capacityMah": null,
@@ -57,7 +62,7 @@
         "role": "main",
         "mp": 48,
         "aperture": null,
-        "ois": false,
+        "ois": true,
         "sensorNote": "防抖原文：传感器位移式光学图像防抖功能 (融合式主摄)"
       },
       {

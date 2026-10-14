@@ -790,9 +790,13 @@ export async function fetchAll(options = {}) {
   const durations = diagnostics.filter((d) => d.ok);
   const fieldCounts = durations.map((d) => d.flatFields);
   const multiLayout = durations.filter((d) => d.layout && d.layout !== 'accordion');
+  // 全部被 skip 时 fieldCounts 为空，Math.min/max 会算出 ±Infinity
+  const fieldRange = fieldCounts.length
+    ? `${Math.min(...fieldCounts)}–${Math.max(...fieldCounts)}`
+    : '无';
   notes.push(
     `抓取完成：${products.length} 款成功 / ${skipped.length} 条跳过记录；` +
-      `扁平字段（含 _catalog./_notes./_source.）区间 ${Math.min(...fieldCounts)}–${Math.max(...fieldCounts)}；` +
+      `扁平字段（含 _catalog./_notes./_source.）区间 ${fieldRange}；` +
       `布局 B（multi-watchGt 变体块）机型 ${multiLayout.length} 款：${multiLayout.map((d) => d.slug).join(', ') || '无'}；` +
       `网络请求 ${netRequests} 次，缓存命中 ${cache.hits} / 未命中 ${cache.misses}；` +
       `耗时 ${((Date.now() - started) / 1000).toFixed(1)}s；请求间隔 ${DELAY_MS}ms 串行，超时 ${TIMEOUT_MS / 1000}s，重试 ${RETRIES} 次`,

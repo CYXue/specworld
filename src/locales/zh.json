@@ -342,7 +342,6 @@
     "title": "这条街没有这间屋子。"
   },
   "canvas": {
-    "loadFailed": "加载失败：{err}",
     "title": "无限画布",
     "howto": "拖拽 / 滚轮平移 · 点瓦片看详情 · 环面无限回绕",
     "resetView": "重置视图",
@@ -397,7 +396,7 @@
     "groupOther": "其他",
     "needReason": "请填写数据来源（例如：厂商官网 / 实机测量 / 评测文章链接）",
     "validateFail": "值校验未过：{err}",
-    "submitted": "✅ {message}（编号 {id}）",
+    "submitted": "{message}（编号 {id}）",
     "submittedOk": "已提交",
     "anonymous": "匿名",
     "noBackend": "当前环境未连接数据服务（如 B 站 Toy 等纯静态托管页面）。请复制下方标准模板，通过私信/评论发给作者——作者导入审核通过后即生效，感谢纠错！"

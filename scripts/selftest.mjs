@@ -86,6 +86,7 @@ import {
   sliceByVariants,
   slugify,
 } from './normalize/parse.mjs';
+import { parseOis } from './normalize/shared.mjs';
 import * as WQ from './sync/queue.mjs';
 import {
   validate,
@@ -816,6 +817,26 @@ check('苹果规格页映射 ↔ golden', () =>
 check('苹果对比页映射 ↔ golden', () =>
   assertGolden(mapAppleCompare, 'apple-compare.json', '苹果对比页'),
 );
+
+// 反向断言：NFC 的「不支持」包含子串「支持」，解析器必须先排除否定写法——
+// 否则官网写「不支持 NFC」会被发布成 nfc=true（把没有的能力说成有）。
+check('华为 NFC：明确写「不支持」必须解析为 false', () => {
+  const rec = mapHuawei({
+    id: 'test-nfc-no',
+    name: 'Test NFC No',
+    raw: { NFC: '不支持 NFC' },
+  });
+  assert.equal(rec.connectivity.nfc, false);
+});
+
+// 反向断言：官网没提防抖 ≠ 确认没有。parseOis 返回 false 会让
+// apple.mjs 的回填守卫（ois === false 才跳过）把「没写」的镜头钉死成无防抖。
+check('OIS：原文没提防抖必须返回 null（不编造「确认无」）', () => {
+  assert.equal(parseOis(''), null);
+  assert.equal(parseOis('5000 万像素，f/1.8 光圈'), null);
+  assert.equal(parseOis('支持 OIS 光学防抖'), true);
+  assert.equal(parseOis('不支持光学防抖'), false);
+});
 
 /* ================================================================ *
  * 11. 窗口过滤与待收录队列

@@ -966,10 +966,9 @@ export async function fetchAll(options = {}) {
       }));
 
     const cheapest = offers.reduce((a, b) => (b.priceCny < a.priceCny ? b : a), offers[0]);
+    // offers 项没有 baseName 字段（baseName 只存在于 A 通道），原先的中段兜底恒 undefined
     const name =
-      modelNameFromProductName(cheapest.productName, null) ||
-      cleanText(source.parsed.offers[0]?.baseName) ||
-      model.name;
+      modelNameFromProductName(cheapest.productName, null) || model.name;
 
     const agreement = offers.filter((o) => o.priceAgreement === false);
     const comparable = offers.filter((o) => o.priceAgreement !== null);
@@ -1266,4 +1265,3 @@ if (invokedDirectly) {
     });
 }
 
-export { HERE as ADAPTER_DIR, COMPARE_URL };

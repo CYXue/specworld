@@ -127,21 +127,24 @@ function main() {
     }
   }
 
+  const totalBytes = archived.reduce((n, a) => n + Buffer.byteLength(a.body), 0);
+
+  // 体积闸门必须在写盘**之前**：写完再退出 1，仓库已被撑爆且 git 里留下实打实的文件，
+  // 「版本库膨胀不可逆」的闸门就名存实亡了。
+  if (totalBytes > MAX_BYTES) {
+    console.error(`\n❌ 归档体积 ${(totalBytes / 1024).toFixed(1)} KB 超过闸门 ${(MAX_BYTES / 1024).toFixed(0)} KB，拒绝写入。`);
+    console.error('   理由：版本库膨胀是不可逆的。请先确认是否该改为「只归档变化了的字段名清单」。');
+    process.exit(1);
+  }
+
   for (const a of archived) {
     writeFileSync(join(RAW_DIR, a.out), a.body, 'utf8');
   }
 
-  const totalBytes = archived.reduce((n, a) => n + Buffer.byteLength(a.body), 0);
   const kb = (totalBytes / 1024).toFixed(1);
   const detail = archived
     .map((a) => `${a.out.replace('.json', '')} ${a.count} 台`)
     .join(' · ');
-
-  if (totalBytes > MAX_BYTES) {
-    console.error(`\n❌ 归档体积 ${kb} KB 超过闸门 ${(MAX_BYTES / 1024).toFixed(0)} KB，拒绝写入。`);
-    console.error('   理由：版本库膨胀是不可逆的。请先确认是否该改为「只归档变化了的字段名清单」。');
-    process.exit(1);
-  }
 
   console.log(`已归档 ${archived.length} 个通道 → data/raw/（共 ${kb} KB）`);
   console.log(`  ${detail}`);

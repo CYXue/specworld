@@ -31,6 +31,7 @@ import {
   readFilter,
   toggleValue,
   writeFilter,
+  SORTS_LITE,
 } from '../lib/facets';
 import type { DimKey, FacetItem, FilterState, SortKey } from '../lib/facets';
 import { compareRowState } from '../lib/compare';
@@ -166,16 +167,6 @@ const listed = computed(() => applySort(applyFilter(all.value, filter.value), so
 
 /** 结果区顶部轻量排序条（辅助，非主打）：单级即可，多级排序交给榜单页。
  *  label 只存 locale 键——存中文就是闸门看不见的硬编码（同 `facets.SORTS` 纪律）。 */
-const SORTS_LITE: Array<{ id: SortKey; labelKey: string }> = [
-  { id: 'release', labelKey: 'sort.release' },
-  { id: 'price-asc', labelKey: 'sort.priceAsc' },
-  { id: 'price-desc', labelKey: 'sort.priceDesc' },
-  { id: 'battery-desc', labelKey: 'ability.battery' },
-  { id: 'ppi-desc', labelKey: 'ability.display' },
-  { id: 'weight-asc', labelKey: 'ability.light' },
-  { id: 'camera-desc', labelKey: 'ability.camera' },
-];
-
 /**
  * 各维度分面。计数按「**其它维度已生效**」算，本维度自身不受限 ——
  * 否则选中「苹果」后芯片分面只剩苹果芯片，就没法改成华为了（一点就锁死）。
@@ -490,7 +481,7 @@ function subline(p: (typeof all.value)[number]): string {
                     class="pixel-chip px-1.5 py-0.5 text-[12px]"
                     style="color: var(--color-parchment-dim)"
                   >
-                    {{ seriesOf(single) }}
+                    {{ seriesLabel(seriesOf(single)) }}
                   </span>
                   <span
                     class="pixel-chip px-1.5 py-0.5 text-[12px]"

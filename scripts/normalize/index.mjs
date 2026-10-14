@@ -31,7 +31,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { WINDOW_START as windowStartFromLib } from '../lib/window.mjs';
+import { windowStartEffective } from '../lib/window.mjs';
 import { mapAppleSpecs, mapAppleCompare, APPLE_SHARED_MARK } from './brands/apple.mjs';
 import { mapHuawei } from './brands/huawei.mjs';
 import { sliceByVariants, stripInvisible } from './parse.mjs';
@@ -298,17 +298,19 @@ function main() {
    * 或 (b) 取证表里没有但名字能看出是 16 代及以后的。其余不进产出 ——
    * 它们注定会被 sync 的窗口过滤丢掉，留在中间文件里只会污染覆盖率表。
    */
-  // 真源在 lib/window.mjs —— 与 sync 闸门同一处定义，禁止写字面量副本
-  const WINDOW_START = windowStartFromLib;
+  // 真源在 lib/window.mjs —— 与 sync 闸门同一处定义，且同用 windowStartEffective()
+  // 吃 env 覆盖；只引默认值字面量的话，设了 WINDOW_START 会出现
+  // 「normalize 按默认窗口丢机型、sync 按 env 窗口放行」的静默分叉。
+  const WINDOW_START = windowStartEffective();
   // 取证表是 curated 数据，权威副本在 data/（入库）；_work/ 只是本地兼容路径
   const rdPath = [join(ROOT, 'data', 'release-dates.json'), join(WORK, 'release-dates.json')].find(
     (p) => existsSync(p),
   );
   const releaseDates = rdPath ? JSON.parse(readFileSync(rdPath, 'utf8')) : null;
   const dateById = new Map((releaseDates?.entries ?? []).map((e) => [e.id, e]));
-  /** 名字里能直接读出「16 代及以后」的写法，用于取证表缺失时的兜底判断 */
-  const nameInWindow = (n) =>
-    /\b(1[6-9]|2\d)(e| Plus| Pro| Pro Max| Air| mini)?\b/i.test(stripInvisible(n));
+  /** 名字里能直接读出「16 代及以后」的写法 —— 已废弃：用名字反推收录资格属于估算。
+   *  缺日期的机型不再在这里猜，直接放行交给 sync：sync 的窗口过滤会把它们
+   *  分类成 pending 并写入待收录队列（唯一正确的去向），而不是静默消失。 */
 
   let compare = null;
   let compareRecords = [];
@@ -320,11 +322,13 @@ function main() {
     const gapOnly = compare.products.filter((p) => !specIds.has(p.id));
     for (const p of gapOnly) {
       const dated = dateById.get(p.id);
-      const inWindow = dated?.date
-        ? Date.parse(dated.date) >= Date.parse(WINDOW_START)
-        : nameInWindow(p.name);
-      if (inWindow) compareRecords.push(mapAppleCompare(p));
-      else compareDropped.push({ id: p.id, name: p.name, date: dated?.date ?? null });
+      // 只有「有取证日期且明确落在窗口外」的才在这里剪掉；
+      // 缺日期的交给 sync 分类（missing-date → 待收录队列），不做名字估算。
+      const outOfWindow = dated?.date
+        ? Date.parse(dated.date) < Date.parse(WINDOW_START)
+        : false;
+      if (!outOfWindow) compareRecords.push(mapAppleCompare(p));
+      else compareDropped.push({ id: p.id, name: p.name, date: dated.date });
     }
     compareStatus =
       `就绪（矩阵 ${compare.products.length} 台；其中规格页没有的 ${gapOnly.length} 台，` +
@@ -516,4 +520,3 @@ function main() {
 
 main();
 
-export { mapHuawei, mapAppleSpecs, mapAppleCompare };

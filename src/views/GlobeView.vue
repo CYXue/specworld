@@ -118,7 +118,13 @@ const total = computed(() => docs.value.length);
 const shown = computed(() => items.value.length);
 const dirty = computed(() => isFiltered(filter.value));
 const globe = ref<InstanceType<typeof GlobeCanvas> | null>(null);
-const spinning = ref(true);
+// reduced-motion 下 startSpin 是 no-op：初值不能假定「在转」，
+// 否则按钮显示「暂停自转」而点击毫无反应（零报错的语义性故障）。
+const reduceMotion =
+  typeof window !== 'undefined' && window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : null;
+const spinning = ref(!reduceMotion?.matches);
 
 function toggleSpin() {
   spinning.value = !spinning.value;

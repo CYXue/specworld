@@ -40,8 +40,14 @@
     "npu": null
   },
   "memory": {
-    "ramGb": [12, 16],
-    "storageGb": [512, 1024]
+    "ramGb": [
+      12,
+      16
+    ],
+    "storageGb": [
+      512,
+      1024
+    ]
   },
   "battery": {
     "capacityMah": 6800,
@@ -64,7 +70,7 @@
         "role": "ultrawide",
         "mp": 40,
         "aperture": "f/2.2",
-        "ois": false,
+        "ois": null,
         "sensorNote": "RYYB"
       },
       {
@@ -78,7 +84,7 @@
         "role": "depth",
         "mp": null,
         "aperture": null,
-        "ois": false,
+        "ois": null,
         "sensorNote": null
       }
     ],

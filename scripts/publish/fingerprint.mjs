@@ -86,6 +86,7 @@ const VOLATILE_KEYS = new Set([
   'syncedAt',
   'builtAt',
   'snapshotAt',
+  'extractedAt',
 ]);
 
 /** 深拷贝并剥掉运行时刻字段。递归时重建对象，保证键序稳定（键序影响序列化结果） */
@@ -160,6 +161,21 @@ function collectOne(relPath) {
  */
 const RAW_DIR = join(ROOT, 'data/raw');
 
+/** 剥掉 raw 归档里的运行时字段再哈希。
+ *  `_source.fromCache` 随每次缓存命中翻转（false↔true），不剥的话
+ *  rawFingerprint 会被缓存状态搅动，制造与内容无关的指纹变化。 */
+function stripRawVolatile(text) {
+  try {
+    const parsed = JSON.parse(text);
+    for (const p of parsed.products ?? []) {
+      if (p.raw) delete p.raw['_source.fromCache'];
+    }
+    return JSON.stringify(parsed);
+  } catch {
+    return text;
+  }
+}
+
 function computeRawFingerprint() {
   if (!existsSync(RAW_DIR)) return { rawFingerprint: 'empty', rawBytes: 0 };
   const files = readdirSync(RAW_DIR)
@@ -170,7 +186,9 @@ function computeRawFingerprint() {
   for (const f of files) {
     const raw = readFileSync(join(RAW_DIR, f), 'utf8');
     bytes += Buffer.byteLength(raw);
-    parts.push(`${f}:${createHash('sha256').update(raw.replace(/\r\n/g, '\n')).digest('hex').slice(0, 16)}`);
+    parts.push(
+      `${f}:${createHash('sha256').update(stripRawVolatile(raw).replace(/\r\n/g, '\n')).digest('hex').slice(0, 16)}`,
+    );
   }
   return {
     rawFingerprint: createHash('sha256').update(parts.join('|')).digest('hex').slice(0, 16),

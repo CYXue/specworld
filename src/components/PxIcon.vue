@@ -63,6 +63,10 @@ const PATHS = {
     'M3 10h10v5H3z M6 11h4v4H6z',
   /** 信息「i」：关于页 / 项目说明入口 */
   info: 'M7 2h2v2H7z M7 6h2v8H7z',
+  /** 清单：机型库 / 结果列表 */
+  list: 'M2 2h2v2H2z M6 2h8v2H6z M2 7h2v2H2z M6 7h8v2H6z M2 12h2v2H2z M6 12h8v2H6z',
+  /** 笔：纠错 / 数据反馈入口 */
+  pen: 'M2 12h2v2h2v1H1v-3h1z M3 10h2v2H3z M5 8h2v2H5z M7 6h2v2H7z M9 4h2v2H9z M11 2h2v2h-2z M13 1h2v2h-2z',
 } as const;
 
 export type IconName = keyof typeof PATHS;

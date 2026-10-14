@@ -61,12 +61,9 @@ export function layout(product) {
   /* 宽高比：真实手机 ≈ 0.46–0.49。折叠机展开态更宽（≈0.72）。
      厚度/重量不参与宽高比（那是侧视图的事），只参与圆角与描边宽度。 */
   const ratio = foldable ? 0.72 : 0.47;
-  let w = (diagPx * ratio) / Math.sqrt(1 + ratio * ratio);
-  let h = ((diagPx * Math.sqrt(1 + ratio * ratio)) / Math.sqrt(1 + ratio * ratio)) * (1 / ratio);
-  /* 简化：w = diag * ratio / √(1+ratio²)，h = diag / √(1+ratio²) */
   const f = Math.sqrt(1 + ratio * ratio);
-  w = (diagPx / f) * ratio;
-  h = diagPx / f;
+  let w = (diagPx / f) * ratio;
+  let h = diagPx / f;
   /* 折叠机宽度超过画布就整体缩放，高度等比 */
   if (w > CANVAS.w - 24) {
     const s = (CANVAS.w - 24) / w;
@@ -275,12 +272,12 @@ async function main() {
     (await import('node:fs')).readFileSync(join(ROOT, 'data', 'products.json'), 'utf8'),
   );
   const products = data.products ?? data;
-  const outDir = join(
-    ROOT,
-    process.argv.includes('--out')
-      ? process.argv[process.argv.indexOf('--out') + 1]
-      : 'data/sprites',
-  );
+  const outIdx = process.argv.indexOf('--out');
+  if (outIdx > -1 && !process.argv[outIdx + 1]) {
+    console.error('❌ --out 需要一个目录参数，例如 --out data/sprites');
+    process.exit(1);
+  }
+  const outDir = join(ROOT, outIdx > -1 ? process.argv[outIdx + 1] : 'data/sprites');
   mkdirSync(outDir, { recursive: true });
   let n = 0;
   for (const p of products) {

@@ -342,7 +342,6 @@
     "title": "There is no such house on this street."
   },
   "canvas": {
-    "loadFailed": "Failed to load: {err}",
     "title": "Infinite canvas",
     "howto": "Drag / wheel to pan · click a tile for details · infinite torus wrap",
     "resetView": "Reset view",
@@ -397,7 +396,7 @@
     "groupOther": "Other",
     "needReason": "Please fill in the data source (e.g. official spec page / own measurement / review link)",
     "validateFail": "Validation failed: {err}",
-    "submitted": "✅ {message} (id {id})",
+    "submitted": "{message} (id {id})",
     "submittedOk": "Submitted",
     "anonymous": "Anonymous",
     "noBackend": "No data service is connected in this environment (e.g. a purely static host such as Bilibili Toy). Please copy the template below and send it to the author by DM or comment — once imported and approved it takes effect. Thanks for the correction!"

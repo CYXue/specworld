@@ -30,7 +30,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const PY = 'C:/Program Files/Python312/python.exe';
+// Python 解释器路径按机而异：env TOY_PYTHON / FAVICON_PYTHON 优先，再退 PATH 上的 python，
+// 最后才是写死的安装路径（换机器不至于直接崩）。
+const PY =
+  process.env.FAVICON_PYTHON || process.env.TOY_PYTHON || 'C:/Program Files/Python312/python.exe';
 const GRID_PY = path.join(ROOT, 'scripts/favicon/from-xlsx.py');
 
 const src = process.argv[2];

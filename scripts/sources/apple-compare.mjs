@@ -1011,4 +1011,3 @@ if (invokedDirectly) {
     });
 }
 
-export const ADAPTER_DIR = dirname(fileURLToPath(import.meta.url));

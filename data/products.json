@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-14T04:57:57.172Z",
+  "generatedAt": "2026-10-14T12:44:45.528Z",
   "windowStart": "2024-09-01",
   "sources": {
     "apple-official": {
-      "fetchedAt": "2026-10-14T04:57:57.172Z",
+      "fetchedAt": "2026-10-14T12:44:45.528Z",
       "note": "苹果官网规格页",
       "noteKey": "about.sourceAppleOfficial",
       "ok": true
     },
     "huawei-official": {
-      "fetchedAt": "2026-10-14T04:57:57.172Z",
+      "fetchedAt": "2026-10-14T12:44:45.528Z",
       "note": "华为官网规格页",
       "noteKey": "about.sourceHuaweiOfficial",
       "ok": true
@@ -132,7 +132,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
       "category": "phone",
       "specs": {
@@ -280,7 +280,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
       "category": "phone",
       "specs": {
@@ -418,7 +418,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
       "category": "phone",
       "specs": {
@@ -564,7 +564,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
       "category": "phone",
       "specs": {
@@ -707,7 +707,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/02/apple-debuts-iphone-16e/",
       "category": "phone",
       "specs": {
@@ -854,7 +854,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-debuts-iphone-17/",
       "category": "phone",
       "specs": {
@@ -1004,7 +1004,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
       "category": "phone",
       "specs": {
@@ -1149,7 +1149,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
       "category": "phone",
       "specs": {
@@ -1317,7 +1317,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/03/apple-introduces-iphone-17e/",
       "category": "phone",
       "specs": {
@@ -1499,7 +1499,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
       "category": "phone",
       "specs": {
@@ -1704,7 +1704,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
       "category": "phone",
       "specs": {
@@ -1900,7 +1900,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone/",
       "category": "phone",
       "specs": {
@@ -2082,7 +2082,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-unveils-iphone-duo/",
       "category": "phone",
       "specs": {
@@ -2226,7 +2226,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.cnstock.com/commonDetail/340710",
       "category": "phone",
       "specs": {
@@ -2360,7 +2360,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/0900550.htm",
       "category": "phone",
       "specs": {
@@ -2491,7 +2491,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.ithome.com/0/847/979.htm",
       "category": "phone",
       "specs": {
@@ -2626,7 +2626,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -2760,7 +2760,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -2892,7 +2892,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -3018,7 +3018,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-12T14:23:18.956Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://g.pconline.com.cn/x/2127/21276452.html",
       "category": "phone",
       "specs": {
@@ -3158,7 +3158,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -3326,7 +3326,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -3494,7 +3494,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -3658,7 +3658,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://tech.cnr.cn/techxp/20250905/t20250905_527351812.shtml",
       "category": "phone",
       "specs": {
@@ -3812,7 +3812,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -3974,7 +3974,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://ai.zol.com.cn/1076/10763772.html",
       "category": "phone",
       "specs": {
@@ -4137,7 +4137,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4302,7 +4302,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4464,7 +4464,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://ai.zol.com.cn/954/9543191_all.html",
       "category": "phone",
       "specs": {
@@ -4621,7 +4621,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4787,7 +4787,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -4955,7 +4955,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5123,7 +5123,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5296,7 +5296,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -5456,7 +5456,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5629,7 +5629,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -5796,7 +5796,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -5966,7 +5966,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -6134,7 +6134,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -6282,7 +6282,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6428,7 +6428,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-12T14:23:18.956Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://caijing.chinadaily.com.cn/a/202510/17/WS68f1f3f0a310c4deea5ecdcb.html",
       "category": "phone",
       "specs": {
@@ -6561,7 +6561,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6716,7 +6716,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6875,7 +6875,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7027,7 +7027,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7187,7 +7187,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7347,7 +7347,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7500,7 +7500,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7656,7 +7656,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://tech.ifeng.com/c/8vLTNjTHlpG",
       "category": "phone",
       "specs": {
@@ -7802,7 +7802,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7962,7 +7962,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/0958214.htm",
       "category": "phone",
       "specs": {
@@ -8106,7 +8106,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/863120.htm",
       "category": "phone",
       "specs": {
@@ -8269,7 +8269,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://www.xinhuanet.com/tech/20250321/109d362178b24e4e97f07de8db6ed04c/c.html",
       "category": "phone",
       "specs": {
@@ -8434,7 +8434,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -8597,7 +8597,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -8758,7 +8758,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -8919,7 +8919,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -9080,7 +9080,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -9240,7 +9240,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -9410,7 +9410,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -9575,7 +9575,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -9741,7 +9741,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T04:57:57.172Z",
+      "lastSeenAt": "2026-10-14T12:44:45.528Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {

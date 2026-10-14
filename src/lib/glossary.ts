@@ -54,7 +54,9 @@ interface GlossaryJson {
 
 const G = glossaryJson as unknown as GlossaryJson;
 
-const CJK = /[㐀-䶿一-鿿豈-﫿]/;
+// 区间一律用 \u 转义而非字面量字形：正则边界不渲染，
+// 字面量会要求字体子集带上永不显示的字形（font:check 会拦）。
+const CJK = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/;
 
 /**
  * 片段分隔符（`|` 是本站 array 分隔符，`,` `，` `、` 是官网原文的并列分隔符）。

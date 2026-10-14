@@ -24,8 +24,10 @@ defineProps<{
   vendors: Map<string, { id: string; nameZh: string; accentColor: string }>;
 }>();
 
-const { t, locale } = useI18n();
-const catLabel = (c: CategoryDef) => categoryLabel(c.id, locale.value);
+const { t } = useI18n();
+// 语言只从全局来（i18n/index.ts 纪律）：categoryLabel 内部走 currentLocale()，
+// 传 locale.value 是第二语言真源且签名不符（多传参静默被忽略）。
+const catLabel = (c: CategoryDef) => categoryLabel(c.id);
 
 const COLS: Array<{ key: 'latest' | 'priciest' | 'cheapest'; labelKey: string; icon: IconName }> = [
   { key: 'latest', labelKey: 'spotlight.latest', icon: 'clock' },

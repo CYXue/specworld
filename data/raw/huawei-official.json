@@ -79,7 +79,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate90-pro-max/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -153,7 +153,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate90-rs-ultimate-design/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -226,7 +226,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate90-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -299,7 +299,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate90/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -391,7 +391,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate-xt-2-ultimate-design/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -463,7 +463,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate80-pro-max-fengchiban/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -535,7 +535,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate80-pro-max/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -630,7 +630,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate-x7/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -703,7 +703,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate80-rs-ultimate-design/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -773,7 +773,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate-xts-ultimate-design/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -845,7 +845,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate80-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -917,7 +917,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate80/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -988,7 +988,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70-air/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1060,7 +1060,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70-pro-plus/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1131,7 +1131,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate-x6/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1203,7 +1203,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70-rs-ultimate-design/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1274,7 +1274,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1345,7 +1345,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70-pro-youxiangban/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1415,7 +1415,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "非凡旗舰",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/mate70/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1490,7 +1490,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura-x-view/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1565,7 +1565,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura90-pro-max/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1636,7 +1636,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura-x-max/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1710,7 +1710,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura90-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1782,7 +1782,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura90/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1854,7 +1854,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura80-pro-plus/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1926,7 +1926,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura80-ultra/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -1998,7 +1998,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura80-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2070,7 +2070,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura80/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2140,7 +2140,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "先锋影像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pura-x/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2203,7 +2203,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "美学新篇",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/pocket-2-youxiangban/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2271,7 +2271,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova16-ultra/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2339,7 +2339,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova16-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2407,7 +2407,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova16/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2474,7 +2474,7 @@
         "_catalog.label": "最新",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova16-se/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2541,7 +2541,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova16-z/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2608,7 +2608,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova15-ultra/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2674,7 +2674,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova15-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2740,7 +2740,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova15/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2800,7 +2800,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova14-ultra/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2860,7 +2860,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova14-huoliban/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2919,7 +2919,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova14-pro/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -2977,7 +2977,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "专业人像",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/nova14/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3036,7 +3036,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-90-pro-max/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3095,7 +3095,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-90-plus/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3154,7 +3154,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-90/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3213,7 +3213,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-80/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3270,7 +3270,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-70x-zunxiangban/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3324,7 +3324,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-90m-plus/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3380,7 +3380,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-70x/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     },
@@ -3443,7 +3443,7 @@
         "_catalog.catalogUrl": "https://consumer.huawei.com/cn/phones/",
         "_catalog.seriesSubtitle": "超能续航",
         "_source.finalUrl": "https://consumer.huawei.com/cn/phones/changxiang-70s/specs/",
-        "_source.fromCache": "false",
+        "_source.fromCache": "true",
         "_source.httpStatus": "200"
       }
     }

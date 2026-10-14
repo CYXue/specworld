@@ -208,7 +208,7 @@ const canvasH = computed(() => {
 <template>
   <div class="flex h-full flex-col">
     <div v-if="err" class="page-shell py-10 text-center" style="color: var(--color-east)">
-      {{ t('canvas.loadFailed', { err }) }}
+      {{ t('common.loadFailed', { err }) }}
     </div>
 
     <template v-else>

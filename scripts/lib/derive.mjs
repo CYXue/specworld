@@ -178,22 +178,30 @@ export function buildChampions(products, scales) {
 /**
  * 一句话定位：枚举「维度 × 限定域」，取这台机器排第一的最宽说法。
  * 纯查表 + 排序 + 字符串拼接，离线确定性可复现，不调用任何 LLM。
+ *
+ * 价格档（旗舰/中低价位）按本文件第 1 条规矩取**当前池内的分位**，
+ * 不写死金额阈值 —— 写死 5000 元不会报错，只会随通胀悄悄失效。
  */
+const PRICE_PCT_FLAGSHIP = 0.5; // 起售价高于池内一半机型 = 旗舰档
+
 const DOMAINS = [
   { id: 'all', label: '', filter: () => true, min: 8 },
   { id: 'brand', label: '{brand}', filter: (p, self) => p.brand === self.brand, min: 5 },
   {
     id: 'flagship',
     label: '旗舰里',
-    filter: (p) => (metricValue(p, 'priceCny') ?? 0) >= 5000,
+    filter: (p, _self, ctx) => {
+      const pct = ctx.pricePct.get(p.id);
+      return pct !== null && pct !== undefined && pct < PRICE_PCT_FLAGSHIP;
+    },
     min: 5,
   },
   {
     id: 'budget',
-    label: '五千元以内',
-    filter: (p) => {
-      const v = metricValue(p, 'priceCny');
-      return v !== null && v <= 5000;
+    label: '中低价位里',
+    filter: (p, _self, ctx) => {
+      const pct = ctx.pricePct.get(p.id);
+      return pct !== null && pct !== undefined && pct >= PRICE_PCT_FLAGSHIP;
     },
     min: 5,
   },
@@ -216,8 +224,12 @@ const DIMENSIONS = [
 
 export function buildPersona(product, products, scales) {
   const brandLabel = brandShortLabel(product.brand);
+  // 价格分位只算一次（dir=low：分位越低越贵），供 flagship/budget 两个限定域共用
+  const ctx = {
+    pricePct: new Map(products.map((p) => [p.id, percentileOf(scales, 'priceCny', p)])),
+  };
   for (const domain of DOMAINS) {
-    const pool = products.filter((p) => domain.filter(p, product));
+    const pool = products.filter((p) => domain.filter(p, product, ctx));
     if (pool.length < domain.min || !pool.some((p) => p.id === product.id)) continue;
     for (const dim of DIMENSIONS) {
       const scale = scales[dim.metric];

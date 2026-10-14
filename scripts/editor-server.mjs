@@ -28,7 +28,7 @@
  */
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { readFile, writeFile, rename } from 'node:fs/promises';
+import { readFile, writeFile, rename, copyFile } from 'node:fs/promises';
 import http from 'node:http';
 import { join, resolve, dirname, normalize, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -88,13 +88,26 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-/** 原子写回（overrides / submissions 通用）：备份当前 → .tmp → rename 覆盖 */
-async function writeJsonAtomic(file, next) {
+/** 原子写回（overrides / submissions 通用）：
+ *  1. 先把当前文件**复制**成 .bak（不能 rename——rename 会让主文件在写完前消失，
+ *     写失败/进程中断时所有读请求 404，只剩 .bak）；
+ *  2. 写 .tmp 后 rename 覆盖主文件（rename 在同一文件系统内是原子的）。 */
+async function writeJsonAtomicImpl(file, next) {
   if (existsSync(file)) {
-    await rename(file, file + '.bak').catch(() => {});
+    await copyFile(file, file + '.bak').catch(() => {});
   }
   await writeFile(file + '.tmp', JSON.stringify(next, null, 2) + '\n', 'utf8');
   await rename(file + '.tmp', file);
+}
+
+/** 进程内写互斥：两个并发 approve/直写会互相丢更新（last-write-wins 且无告警），
+ *  本地单进程服务用一条 promise 链串行化所有写盘就够。锁收在这一处，
+ *  所有调用方自动串行，不必逐个包。 */
+let writeChain = Promise.resolve();
+function writeJsonAtomic(file, next) {
+  const run = writeChain.then(() => writeJsonAtomicImpl(file, next));
+  writeChain = run.catch(() => {});
+  return run;
 }
 
 function readBody(req, limit = 20_000) {
@@ -136,7 +149,8 @@ function rateLimited(ip, max = 10, windowMs = 10 * 60_000) {
 }
 
 function genId(prefix) {
-  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`;
+  // 毫秒 + 12 位随机：4 位随机在批量写入时理论上可撞，且无重复校验
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 14)}`;
 }
 
 /** 公开提交：只收 set-field；服务端补 id/时间/来源/状态后全量校验 */

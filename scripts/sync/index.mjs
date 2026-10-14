@@ -94,6 +94,11 @@ function main() {
         );
         p.releaseDate = e.date;
         p.releaseDatePrecision = e.precision ?? 'day';
+        // 值被人工取证覆盖了，来源标注必须跟着改，否则 provenance 继续谎称官网来源
+        p.provenance = {
+          ...(p.provenance ?? {}),
+          releaseDate: e.source === 'apple-official' ? 'apple-official' : 'manual',
+        };
         p.releaseDateSourceUrl = e.sourceUrl ?? null;
       }
     }
@@ -103,7 +108,6 @@ function main() {
 
   // ---- 2. 窗口过滤 -----------------------------------------------------
   // 判据在 scripts/sync/queue.mjs（纯函数，自测直接 import 它）。
-  const windowStart = Date.parse(WINDOW_START);
   const { kept, dropped, pending } = classifyByWindow(products, {
     windowStart: WINDOW_START,
     windowFuzzDays: WINDOW_FUZZ_DAYS,

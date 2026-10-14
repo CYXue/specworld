@@ -80,11 +80,16 @@ function walk(dir, exts, out = []) {
   return out;
 }
 
+// 逐字符展开 —— 整份文件文本当一个元素塞进 Set 的话，求差集时只有每份文件的
+// 首字符参与判定，src/ 与 index.html 里的汉字会全部漏检（闸门假绿）。
 const chars = new Set();
+const addText = (text) => {
+  for (const ch of text) chars.add(ch);
+};
 for (const f of walk(join(ROOT, 'src'), ['.vue', '.ts', '.css'])) {
-  chars.add(readFileSync(f, 'utf8'));
+  addText(readFileSync(f, 'utf8'));
 }
-chars.add(readFileSync(join(ROOT, 'index.html'), 'utf8'));
+addText(readFileSync(join(ROOT, 'index.html'), 'utf8'));
 
 // data/*.json 里的所有字符串（机型名、中文名都是数据里的）
 const dataDir = join(ROOT, 'data');
