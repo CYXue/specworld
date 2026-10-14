@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "data": "node scripts/pipeline.mjs --data-only",
     "selftest": "node scripts/selftest.mjs",
+    "i18n:residual": "node scripts/i18n-residual.mjs",
     "smoke:i18n": "node scripts/smoke/i18n-ssr.mjs",
     "quality": "node scripts/report/quality.mjs",
     "editor": "node scripts/editor-server.mjs",

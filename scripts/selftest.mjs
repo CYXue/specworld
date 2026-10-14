@@ -5895,6 +5895,29 @@ check('i18n 接线：DataFeedback 当前值必须过 localizeSpecValue（英文�
   assert.ok(/localizeSpecValue/.test(src), 'DataFeedback.vue 必须调用 localizeSpecValue 本地化当前值');
 });
 
+// ── i18n: EN 残留词表不新增（与 scripts/i18n-residual-baseline.json 比对）──
+// 单一真源是 i18n-residual.mjs 的 collectResidualTokens：覆盖 specGroups + chipNameLabel
+// + facets 三个 localizeSpecValue 出口。基线是一份「当前已知不可核验、诚实保留」的残留清单；
+// 若未来数据新增了「能查到官方英文出处却忘了补术语表」的中文词，它会作为基线外的新词出现并判失败。
+section('i18n: EN 残留词表不新增');
+{
+  const { collectResidualTokens: scanResiduals } = await import('./i18n-residual.mjs');
+  const baseline = JSON.parse(
+    readFileSync(join(ROOT, 'scripts/i18n-residual-baseline.json'), 'utf8'),
+  );
+  const baselineSet = new Set(baseline.tokens ?? []);
+  const current = await scanResiduals();
+  const regression = current.filter((t) => !baselineSet.has(t));
+  check(`EN 残留词表不新增（当前 ${current.length} / 基线 ${baselineSet.size}）`, () => {
+    if (regression.length) {
+      throw new Error(
+        '新增未译中文词：' + regression.join('、') +
+          '\n（若系有意补登术语表后残留收窄，跑 `node scripts/i18n-residual.mjs --write-baseline` 更新基线）',
+      );
+    }
+  });
+}
+
 /* ================================================================ *
  * 汇总
  * ================================================================ */
