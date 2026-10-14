@@ -21,4 +21,11 @@ export default defineConfig({
       },
     },
   },
+  // 本地端口口径的**唯一真源**：README / AGENTS.md 与根目录 _smoke*.cjs 的默认值
+  // 都引用这两个数（dev 5183 / preview 4173）。不显式声明时 vite 回落默认
+  // 5173/4173，文档与冒烟脚本的默认值会集体连不上——曾实测 6 个脚本用了 4 个
+  // 不同端口（5183/5199/5203/4174）且 preview 系误用 127.0.0.1（preview 只监听
+  // localhost）。改端口只改这里，别处不许写死第二份。
+  server: { port: 5183 },
+  preview: { port: 4173 },
 });
