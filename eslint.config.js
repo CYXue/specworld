@@ -12,6 +12,10 @@ export default [
       // .dist-trash/ 是 clean-dist.mjs 的旧 dist 备份（压缩产物），不 lint——
       // 漏登它曾让 npm run lint 报出 8000+ 个打在 minified bundle 上的假 error
       '.dist-trash/**',
+      // .toy-pkg/ 是 scripts/publish/pack.mjs 的 Toy 送审包（dist 的压缩拷贝），
+      // 同理不 lint——漏登它让 lint 报出 467 个假 error，真实的 import/order
+      // warning 被全部淹没（2026-10-14 补登，与 .dist-trash 同一类坑）
+      '.toy-pkg/**',
       '_work/**',
       'data/**',
       'public/**',
