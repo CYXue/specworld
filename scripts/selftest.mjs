@@ -5823,6 +5823,78 @@ check('术语表闸门自身被反向测试：把官方英文改成中文必须�
   assert.equal(real.en, 'Aluminum design', '反向测必须还原现场');
 });
 
+check('i18n 接线：详情参数表（specGroups）必须应用 localizeSpecValue，术语表能译的词不得残留中文', () => {
+  // 反向测：若有人把 specGroups 出口的 localizeSpecValue 调用删了（回到「中文官网原文直接吐」），
+  // 本条必红。只盯「术语表能译的词」——诚实保留的中国特有项（不在词表里）不算漏。
+  // 注意：wifi/卫星/出厂系统 这几个 path 在 view-phone.json 里是 hidden，详情页与分面都不渲染，
+  // 它们只会在 DataFeedback 纠错表单里以「当前值」出现（见下条），所以这里用真实可见字段验收接线。
+  const terms = new Set();
+  for (const k of Object.keys(GLOSS.GLOSSARY_EXACT)) if (CJK.test(k)) terms.add(k);
+  // 关键：pattern 的中文核心 = 剥掉数字/正则元字符后剩下的汉字串。旧写法把 `(\d+)`
+  // 这类捕获组剥成 `d`，导致「双 16 核神经网络引擎」「300Hz 触控采样率」这种嵌入式数字
+  // 术语根本查不到——闸门对它们「失明」，比没写还糟。改成提取每条 pattern 的汉字片段，
+  // EN 输出里任一段汉字残留都说明这条术语没被 localizeSpecValue 消化。
+  for (const p of GLOSS.GLOSSARY_PATTERNS) {
+    const literal = p.re.replace(/\\[dDsSwWbBeE.(){}[\]|*+?^$]/g, ' ');
+    for (const run of literal.match(/[㐀-䶿一-鿿豈-﫿]+/g) ?? []) {
+      // 只取 >=2 字的核心：单字（双/和/芯…）太泛，会误伤「双卡」这类与术语无关的中文。
+      if (run && run.length >= 2) terms.add(run);
+    }
+  }
+  for (const p of GLOSS_JSON.prefixes ?? []) if (CJK.test(p.zh)) terms.add(p.zh);
+  for (const k of Object.keys(GLOSS_JSON.screenLabels ?? {})) if (CJK.test(k)) terms.add(k);
+  const bad = withLocale('en', () => {
+    const out = [];
+    for (const p of REAL_P) {
+      for (const g of FIELDS_LIB_TOP.specGroups(p)) {
+        for (const r of g.rows) {
+          const v = r.value ?? '';
+          for (const term of terms) if (v.includes(term)) out.push(`${p.id} / ${r.label} → 含未译术语「${term}」：${v}`);
+        }
+      }
+    }
+    return out;
+  });
+  assert.deepEqual(
+    bad,
+    [],
+    `英文详情页残留术语表能译的中文（specGroups 没过 localizeSpecValue？）：\n  - ${bad.slice(0, 12).join('\n  - ')}`,
+  );
+});
+
+check('术语表：卫星/无线局域网/出厂系统 关键条目必须可译（删词条会报红）', () => {
+  // 反向测：删掉 glossary.json 里任意一条卫星/WLAN 词条，这里必红，
+  // 防止「DataFeedback 当前值英文化」靠的是词表、词表被删却无人发现。
+  const want = {
+    北斗卫星消息: 'Beidou satellite messaging',
+    天通卫星通信: 'Tiantong satellite communication',
+    天通卫星通话: 'Tiantong satellite calling',
+    卫星寻呼: 'satellite paging',
+    双向北斗卫星消息: 'two-way Beidou satellite messaging',
+    畅连北斗卫星消息: 'Link Beidou satellite messaging',
+    运营商北斗卫星短信: 'carrier Beidou satellite SMS',
+    '802.11be 无线局域网': '802.11be WLAN',
+    不支持: 'Not supported',
+    '鸿蒙操作系统 5.0': 'HarmonyOS 5.0',
+  };
+  const bad = withLocale('en', () =>
+    Object.entries(want)
+      .map(([zh, en]) => {
+        const got = GLOSS.localizeSpecValue(zh);
+        return got === en ? null : `${zh} → 期望「${en}」实得「${got}」`;
+      })
+      .filter(Boolean),
+  );
+  assert.deepEqual(bad, [], `术语表关键条目失效：\n  - ${bad.slice(0, 10).join('\n  - ')}`);
+});
+
+check('i18n 接线：DataFeedback 当前值必须过 localizeSpecValue（英文用户不看中文原文）', () => {
+  // 来源级闸门：DataFeedback.vue 是组件，selftest 跑在裸 node 无法直接调用其 computed，
+  // 但它是「一行 wrap」的接线点——只要有人把那行改回直接返回 v，这里必红。
+  const src = readFileSync(join(ROOT, 'src/components/DataFeedback.vue'), 'utf8');
+  assert.ok(/localizeSpecValue/.test(src), 'DataFeedback.vue 必须调用 localizeSpecValue 本地化当前值');
+});
+
 /* ================================================================ *
  * 汇总
  * ================================================================ */

@@ -49,6 +49,7 @@ interface GlossaryJson {
   exact: Record<string, ExactEntry>;
   patterns: PatternEntry[];
   prefixes?: PrefixEntry[];
+  screenLabels?: Record<string, string>;
 }
 
 const G = glossaryJson as unknown as GlossaryJson;
@@ -61,23 +62,39 @@ const CJK = /[㐀-䶿一-鿿豈-﫿]/;
  */
 const SPLIT = /(\s*\|\s*|\s*,\s*|\s*，\s*|\s*、\s*)/;
 
-/** 编译期展开正则。写错的 pattern 会在模块加载时就炸，不会静默失效。 */
+/** 编译期展开正则。写错的 pattern 会在模块加载时就炸，不会静默失效。
+ * 注意：用非 global 标志——global 正则配 `test()` 会残留 lastIndex，在多次
+ * translateSegment 调用间串味导致漏匹配。需整段替换多处的（如全角冒号）走 split/join。 */
 const PATTERNS = G.patterns.map((p) => ({ re: new RegExp(p.re), en: p.en }));
 
 export const GLOSSARY_EXACT = G.exact;
 export const GLOSSARY_PATTERNS = G.patterns;
 export const GLOSSARY_SOURCES = G._sources;
 
-/** 单个片段：exact → pattern → 品牌前缀兜底 */
+/** 单个片段：exact → 逐 pattern（全部应用）→ 品牌前缀兜底 */
 function translateSegment(s: string): string {
   const e = G.exact[s];
   if (e) return e.en;
   let out = s;
+  // 内屏/外屏 是结构性标签，可能出现在片段**任意位置**：官网原文常把
+  // 「内屏：…」和「外屏：…」用空格拼在同一段（如 Mate X7 的 display.type），
+  // 锚定整片段的 pattern 抓不到。所以始终做全局子串替换，不依赖片段首尾。
+  // 必须在全角冒号归一化之前跑：否则「：」先被换成半角「: 」，这里的「内屏：」
+  // 就匹配不到了（实测把 内屏/外屏 漏成中文）。
+  for (const [zh, en] of Object.entries(G.screenLabels ?? {})) {
+    if (out.includes(zh)) out = out.split(zh).join(en);
+  }
+  // 全角冒号「：」在英文里应写成半角「: 」；它可能在一段里出现多次，且不属于术语，
+  // 故用 split/join 全局替换（不走会被 lastIndex 串味的 global 正则）。内屏/外屏标签里的
+  // 冒号已被上面的 screenLabels 一并换掉，这里只兜底其余的「：」。
+  if (out.includes('：')) out = out.split('：').join(': ');
+  // 必须**依次应用每一条匹配的 pattern**，不能命中第一条就 break：
+  // 官网原文常把多个术语叠在一个片段里（「外屏：第二代昆仑玻璃」= 外屏前缀 + 玻璃型号；
+  // 「内屏：可折叠柔性 OLED, …, 最高 240 Hz 触控采样率, 外屏：D 曲面 OLED」），
+  // 只换第一个就会把后面的术语漏掉——这正是上一轮深扫漏掉的「英文页残留中文」真因。
+  // 安全前提：每条 pattern 的 en 都是英文，替换后不会再被任何（匹配中文的）pattern 二次命中。
   for (const p of PATTERNS) {
-    if (p.re.test(s)) {
-      out = s.replace(p.re, p.en);
-      break;
-    }
+    if (p.re.test(out)) out = out.replace(p.re, p.en);
   }
   // 品牌/系列名可以在一行里出现多次（`麒麟 9020A 麒麟 9020B`），而 pattern 是
   // 锚定整片段的、`replace` 只换第一个。所以还剩中文时再做一次全局兜底。

@@ -21,6 +21,7 @@ import {
   yearOf,
 } from './catalog';
 import { PHONE_SCHEMA, facetFields } from './fields';
+import { localizeSpecValue } from './glossary';
 import type { AbilityKey } from './specs';
 import { abilityRaw } from './specs';
 
@@ -226,7 +227,11 @@ function facetLabel(dim: DimKey, id: string): string {
     if (id === 'true') return i18n.global.t('facet.yes');
     if (id === 'false') return i18n.global.t('facet.no');
   }
-  return id;
+  // 参数维度（wifi / 卫星 / 出厂系统 等 string 型分面）的取值是**中文官网原文**，
+  // 与详情页参数行同一纪律——英文界面必须过术语表，否则英文筛选条会吐「802.11be 无线局域网」
+  // /「北斗卫星消息」/「鸿蒙操作系统 5.0」。detail 行走 specGroups→localizeSpecValue，
+  // 这里必须同路，否则又出现「详情页英文、筛选条中文」的静默分叉。
+  return localizeSpecValue(id);
 }
 
 /**

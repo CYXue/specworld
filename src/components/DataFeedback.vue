@@ -18,6 +18,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { asset } from '../lib/assets';
 import { coerceSpecValueClient as coerce, validateSpecValueClient as validate } from '../lib/fieldValidate';
+import { localizeSpecValue } from '../lib/glossary';
 import type { Product } from '../types';
 
 interface SchemaField {
@@ -52,11 +53,13 @@ const fallbackJson = ref('');
 const allFields = computed(() => groups.value.flatMap((g) => g.fields));
 const currentField = computed(() => allFields.value.find((f) => f.path === fieldPath.value));
 
-/** 当前值：specs 是扁平 Record<path, value> 容器，直接按 path 取 */
+/** 当前值：specs 是扁平 Record<path, value> 容器，直接按 path 取。
+ * 英文界面下过术语表——这个值就是「官方原文」，否则英文用户看到「802.11be 无线局域网」
+ * 这类中文残留（与详情页参数行同一纪律，单一接入口 localizeSpecValue）。 */
 const currentValueText = computed(() => {
   const v = props.product?.specs?.[fieldPath.value];
   if (v === undefined || v === null) return t('common.unpublished');
-  return typeof v === 'string' ? v : JSON.stringify(v);
+  return typeof v === 'string' ? localizeSpecValue(v) : JSON.stringify(v);
 });
 
 const typeHint = computed(() => {
