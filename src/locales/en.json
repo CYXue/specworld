@@ -301,7 +301,13 @@
       "terms": "Nominative use only",
       "body": "Model names and trademarks on these pages belong to their respective owners and are used here only to identify the products being described; they imply no affiliation or endorsement."
     },
-    "artNote": "All sprites are generated at build time by scripts in this repository; no third-party art assets are used, so there are no additional asset credits."
+    "artNote": "All sprites are generated at build time by scripts in this repository; no third-party art assets are used, so there are no additional asset credits.",
+    "sourceAppleOfficial": "Apple official spec page",
+    "sourceHuaweiOfficial": "Huawei official spec page",
+    "sourceReleaseDates": "{total} evidenced, {unresolved} unresolved",
+    "sourceUserManual": "{total} user entries, {applied} applied this run",
+    "sourceUserEmpty": "No user data",
+    "sourceMissing": "Missing"
   },
   "search": {
     "title": "Search models",
@@ -315,6 +321,7 @@
     "tipA": "Separate words with spaces; all of them must match. Searchable: model name, Chinese name, product line, chip.",
     "tipBold": "Case, spaces, full- and half-width are all ignored",
     "tipB": "—",
+    "tipConj": "and",
     "tipC": "return the same results.",
     "noResultTitle": "No matching model",
     "noResultBody": "Fields the vendor does not publish are not indexed. Include the key part of the model name (e.g. \"Mate 60 Pro\", or write \"mate60pro\").",

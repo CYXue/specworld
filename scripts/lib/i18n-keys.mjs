@@ -22,6 +22,7 @@ import { join, relative } from 'node:path';
 
 export const LOCALES_DIR = 'src/locales';
 export const SRC_DIR = 'src';
+export const SCRIPTS_DIR = 'scripts';
 
 /** 扁平化：`{a:{b:'x'}}` → `Map { 'a.b' => 'x' }` */
 export function flatten(obj, prefix = '', out = new Map()) {
@@ -38,11 +39,19 @@ export function loadLocalePack(root, file) {
 }
 
 function walk(dir, out = []) {
-  for (const name of readdirSync(dir)) {
+  // 目录不存在就当空（selftest 的反向测试在 tmpdir 里造局部夹具，没有 scripts/）
+  let names;
+  try {
+    names = readdirSync(dir);
+  } catch {
+    return out;
+  }
+  for (const name of names) {
     const p = join(dir, name);
     const st = statSync(p);
+    // .mjs 是管线侧扩展名：sync/index.mjs 会把键名写进数据，必须一起扫
     if (st.isDirectory()) walk(p, out);
-    else if (/\.(ts|vue)$/.test(name)) out.push(p);
+    else if (/\.(ts|vue|mjs)$/.test(name)) out.push(p);
   }
   return out;
 }
@@ -77,8 +86,29 @@ function stripComments(text) {
  * ⚠️ 只认**单/双引号**，不认反引号：模板串里大量出现 `` `/product/${product.id}` ``
  * 这种路径，把反引号当引号会把路由路径误判成键。
  */
+/**
+ * 扩大扫描范围到 scripts/ 之后冒出来的两类噪声，逐条写明为什么不算引用：
+ * - `scripts/selftest.mjs` 自己：它断言的是**数据字段路径**（`product.id`），
+ *   不是界面键；把它算进来会让「注释里的假键」那条反向用例直接失去意义。
+ * - `scripts/sources/**`：取数适配器只碰官网 HTML 与文件名（`compare.html`），
+ *   不产出任何面向用户的文案。
+ * 排除的是「确定不写键的地方」，不是「看着不顺眼的地方」—— 剩下 scripts/ 里的
+ * .mjs 全在扫描范围内，管线写了不存在的键照样报红。
+ */
+function isScriptNoise(f) {
+  const p = f.replace(/\\/g, '/');
+  return p.endsWith('scripts/selftest.mjs') || p.includes('scripts/sources/');
+}
+
 export function collectUsedKeys(root, namespaces) {
-  const files = walk(join(root, SRC_DIR)).filter((f) => !f.includes(`${SRC_DIR}/locales/`));
+  // ⚠️ 扫描范围含 `scripts/`：管线会把**键名写进数据**（如 sync/index.mjs 给
+  // snapshot.sources 写 `noteKey: 'about.sourceAppleOfficial'`），前端再按语言渲染。
+  // 只扫 src/ 的话这类键会被当成「僵尸键」误报 —— 而反向的风险同样真实：
+  // 管线写了个语言包里不存在的键，运行时缺键抛错，闸门必须能提前看见。
+  const files = [
+    ...walk(join(root, SRC_DIR)).filter((f) => !f.includes(`${SRC_DIR}/locales/`)),
+    ...walk(join(root, SCRIPTS_DIR)).filter((f) => !isScriptNoise(f)),
+  ];
   const ns = namespaces.join('|');
   // ⚠️ 开引号前不能是 `=` / `.` / 标识符字符：Vue 模板里 `:id="product.id"`、
   // `:value="filter.q"` 这些**属性值**同样被引号包着，不加这条限制会把它们误判成键
@@ -173,7 +203,11 @@ export function checkDataBilingual(root) {
   const view = rd('data/view-phone.json');
   for (const g of view.groups) {
     if (!g.titleEn) problems.push(`view-phone.json 组 ${g.id}（${g.title}）缺 titleEn`);
-    assertBilingual(problems, `view-phone.json 组 ${g.id} rows`, g.rows.filter((r) => r.label));
+    assertBilingual(
+      problems,
+      `view-phone.json 组 ${g.id} rows`,
+      g.rows.filter((r) => r.label),
+    );
   }
 
   const curated = rd('data/curated/facets.json');

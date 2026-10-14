@@ -164,9 +164,14 @@ export function applyFilter(
   );
 }
 
+/**
+ * 分面项。**没有 `label` 字段**——以前有，值就是 value（「全部」那项则写死中文
+ * '全部'），而 CanvasView / GlobeView 压根没读它，各自写 `f.value || t('canvas.all')`。
+ * 于是它在 lib 里既是死字段又是硬编码中文，双重负债，直接删。
+ * 展示名一律由调用方按语言给（`canvas.all` 键），lib 只管 value 与 count。
+ */
 interface Facet {
   value: string;
-  label: string;
   count: number;
 }
 
@@ -194,13 +199,9 @@ function facet(
     if (!v) continue;
     bucket.set(v, (bucket.get(v) ?? 0) + 1);
   }
-  const out: Facet[] = [...bucket.entries()].map(([value, count]) => ({
-    value,
-    label: value,
-    count,
-  }));
-  // 「全部」始终排第一
-  out.unshift({ value: '', label: '全部', count: total });
+  const out: Facet[] = [...bucket.entries()].map(([value, count]) => ({ value, count }));
+  // 空 value = 「全部」，始终排第一。它的展示名由调用方给（`t('canvas.all')`）。
+  out.unshift({ value: '', count: total });
   return out;
 }
 

@@ -48,7 +48,20 @@ import * as DERIVE from './lib/derive.mjs';
 import { assertUnlocked } from './lib/gates-lock.mjs';
 import * as I18N from './lib/i18n-keys.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from './lib/overrides.mjs';
-import { fieldMap, isRegisteredCategory, loadCategories, loadSchema, quantifiableFields, validateSchema, validateSpecs, validateSpecValue, groupsOf, fieldsByGroup, valueStatus, validateStatusMap } from './lib/schema.mjs';
+import {
+  fieldMap,
+  isRegisteredCategory,
+  loadCategories,
+  loadSchema,
+  quantifiableFields,
+  validateSchema,
+  validateSpecs,
+  validateSpecValue,
+  groupsOf,
+  fieldsByGroup,
+  valueStatus,
+  validateStatusMap,
+} from './lib/schema.mjs';
 import { expandSpecs, flattenSpecs, pick, setSpec } from './lib/specs.mjs';
 import { mapAppleSpecs, mapAppleCompare } from './normalize/brands/apple.mjs';
 import { mapHuawei } from './normalize/brands/huawei.mjs';
@@ -557,7 +570,10 @@ check('category 缺失被拦（缺失与未注册同样拒绝）', () => {
 
 check('category 未注册被拦（原有闸门，防回归）', () => {
   const f = validate(fleet({ category: 'watch' }), null);
-  assert.ok(f.some((x) => x.includes('品类')), '未注册品类必须报错');
+  assert.ok(
+    f.some((x) => x.includes('品类')),
+    '未注册品类必须报错',
+  );
 });
 
 check('机型数低于下限被拦', () => {
@@ -736,7 +752,10 @@ check('字段区间闸门接线自洽（FIELD_LIMITS ≡ schema.range，单一�
   const byPath = new Map(schema.fields.map((f) => [f.path, f]));
   for (const path of SCHEMA_RANGE_PATHS) {
     const f = byPath.get(path);
-    assert.ok(f && Array.isArray(f.range), `SCHEMA_RANGE_PATHS 里的 ${path} 应在 schema 且有 range`);
+    assert.ok(
+      f && Array.isArray(f.range),
+      `SCHEMA_RANGE_PATHS 里的 ${path} 应在 schema 且有 range`,
+    );
     assert.deepEqual(
       FIELD_LIMITS[path],
       f.range,
@@ -848,18 +867,27 @@ check('三类丢弃各归其位：缺日期入队、窗口外不入队、模糊�
 check('反向测：模糊边界必须按精度区分，两侧都试一遍', () => {
   // 只测「边界附近的收进来」会漏掉另一半：若某天有人把 fuzz 条件写成永远 true，
   // 2019 年的老机型会被全收进来。单测要能区分两个方向，所以造一组对照。
-  const near = WQ.classifyByWindow([P2025('near', { releaseDate: '2024-09', releaseDatePrecision: 'month' })], {
-    windowStart: '2024-09-01',
-  });
-  const far = WQ.classifyByWindow([P2025('far', { releaseDate: '2023-11', releaseDatePrecision: 'month' })], {
-    windowStart: '2024-09-01',
-  });
+  const near = WQ.classifyByWindow(
+    [P2025('near', { releaseDate: '2024-09', releaseDatePrecision: 'month' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
+  const far = WQ.classifyByWindow(
+    [P2025('far', { releaseDate: '2023-11', releaseDatePrecision: 'month' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
   assert.equal(near.kept.length, 1, '边界附近的应保留');
   assert.equal(far.kept.length, 0, '离边界远的应出局 —— 若此项也保留，fuzz 条件失效了');
   // 反向：精度到天但压在同一天之前 → 不走fuzz 分支（fuzz 只对精度不足生效）
-  const day = WQ.classifyByWindow([P2025('day', { releaseDate: '2024-08-20', releaseDatePrecision: 'day' })], {
-    windowStart: '2024-09-01',
-  });
+  const day = WQ.classifyByWindow(
+    [P2025('day', { releaseDate: '2024-08-20', releaseDatePrecision: 'day' })],
+    {
+      windowStart: '2024-09-01',
+    },
+  );
   assert.equal(day.kept.length, 0, '精度到天的应严格按日期判定，不吃fuzz 豁免');
 });
 
@@ -883,21 +911,40 @@ check('待收录项带可执行的人工动作（不是一句「失败了」）'
 
 check('队列文件是纯数据的函数：同输入必须逐字节一致（反向：带时间戳必失败）', () => {
   const pending = [
-    { id: 'b', kind: 'missing-date', brand: 'apple', name: null, nameZh: null, slug: null, action: 'x' },
-    { id: 'a', kind: 'missing-date', brand: 'huawei', name: null, nameZh: null, slug: null, action: 'y' },
+    {
+      id: 'b',
+      kind: 'missing-date',
+      brand: 'apple',
+      name: null,
+      nameZh: null,
+      slug: null,
+      action: 'x',
+    },
+    {
+      id: 'a',
+      kind: 'missing-date',
+      brand: 'huawei',
+      name: null,
+      nameZh: null,
+      slug: null,
+      action: 'y',
+    },
   ];
   const s1 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
   const s2 = JSON.stringify(WQ.buildQueueFile(pending, { windowStart: '2024-09-01' }));
   assert.equal(s1, s2, '同输入必须同字节 —— 否则 CI 每轮都判「队列变了」，制造空提交');
 
   // 反向测：顺序打乱也必须同字节（排序只认 id，不认传入顺序）
-  const s3 = JSON.stringify(WQ.buildQueueFile([...pending].reverse(), { windowStart: '2024-09-01' }));
+  const s3 = JSON.stringify(
+    WQ.buildQueueFile([...pending].reverse(), { windowStart: '2024-09-01' }),
+  );
   assert.equal(s1, s3, '顺序打乱后仍须一致 —— 说明排序生效');
 
   // 反向测：文件里不得含任何看起来像时间戳的字段。
   // 判据用字段名而不是值 —— 直接搜 2024-09-01 会误伤 windowStart（它是业务日期，该留）。
   const queue = WQ.buildQueueFile(pending, { windowStart: '2024-09-01' });
-  const VOLATILE = /generatedAt|firstSeenAt|lastSeenAt|fetchedAt|syncedAt|builtAt|snapshotAt|checkedAt|updatedAt/;
+  const VOLATILE =
+    /generatedAt|firstSeenAt|lastSeenAt|fetchedAt|syncedAt|builtAt|snapshotAt|checkedAt|updatedAt/;
   const walk = (n, p) => {
     if (Array.isArray(n)) return n.forEach((v, i) => walk(v, `${p}[${i}]`));
     if (n && typeof n === 'object') {
@@ -1018,7 +1065,10 @@ check('队列指纹不参与站点指纹（用户看不到队列变化，不该�
     fp.siteFingerprint !== fp.pendingFingerprint || fp.pendingFingerprint === 'empty',
     '队列指纹与站点指纹不应是同一个值',
   );
-  assert.ok(fp.siteFingerprint && fp.dataFingerprint && fp.templateFingerprint, '三个指纹都必须有值');
+  assert.ok(
+    fp.siteFingerprint && fp.dataFingerprint && fp.templateFingerprint,
+    '三个指纹都必须有值',
+  );
 });
 
 check('入库指针 data/.fingerprint 必须记队列指纹（否则下一轮算不出变化）', () => {
@@ -1053,7 +1103,10 @@ check('data/discovery-pending.json 若存在，必须是无时间戳的纯数据
   assert.equal(typeof q.count, 'number', 'count 必须是数字');
   assert.equal(q.count, q.items.length, 'count 必须与 items 长度一致');
   assert.equal(q.windowStart, '2024-09-01', 'windowStart 应与管线窗口一致');
-  assert.ok(!/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw), '队列文件含时间戳字段，会造成空提交');
+  assert.ok(
+    !/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw),
+    '队列文件含时间戳字段，会造成空提交',
+  );
   for (const it of q.items) {
     assert.equal(it.kind, 'missing-date', '队列里只该有缺发布日期这一类');
     assert.ok(it.action?.includes('release-dates.json'), '每条都要指明补哪张表');
@@ -2757,7 +2810,10 @@ check('缺数据机型可被筛出来（无芯片 / 无内存的机型不是隐�
   const chipFacet = F.facetOf(REAL_P, 'chip', REAL_P).find((c) => c.id === C.UNKNOWN);
   assert.ok(chipFacet, '芯片分面必须有「未公布」档位，否则缺数据的机型无处可寻');
   assert.equal(noChip.length, chipFacet.count, '筛「未公布芯片」的结果必须与分面计数一致');
-  assert.ok(noChip.every((p) => !p.chipset?.name), '筛出来的必须真的没有芯片名');
+  assert.ok(
+    noChip.every((p) => !p.chipset?.name),
+    '筛出来的必须真的没有芯片名',
+  );
   const noRam = F.applyFilter(REAL_P, { ...F.emptyFilter(), ram: [C.UNKNOWN] });
   const ramFacet = F.facetOf(REAL_P, 'ram', REAL_P).find((c) => c.id === C.UNKNOWN);
   assert.ok(ramFacet, '内存分面必须有「未公布」档位');
@@ -2770,7 +2826,10 @@ check('分面计数联动但选项枚举看全集（0 计数灰显保留，选�
   // 京东式：所有档位常驻，不兼容的 0 计数灰显 —— 华为芯片还在列表里但 count=0
   const qilin = chips.filter((c) => c.id.includes('麒麟'));
   assert.ok(qilin.length > 0, '选苹果后麒麟芯片必须仍出现在分面里（否则无法反悔）');
-  assert.ok(qilin.every((c) => c.count === 0), '选苹果后麒麟芯片计数必须为 0（灰显依据）');
+  assert.ok(
+    qilin.every((c) => c.count === 0),
+    '选苹果后麒麟芯片计数必须为 0（灰显依据）',
+  );
   // 联动计数正确：苹果自己的芯片计数 = 苹果池内台数
   const a19 = chips.find((c) => c.id === 'A19Pro');
   assert.ok(a19 && a19.count > 0, '选苹果后 A19 Pro 必须还有计数');
@@ -2793,8 +2852,11 @@ check('反向测：选华为芯片后品牌分面仍含苹果（0 计数），�
   const apple = brands.find((b) => b.id === 'apple');
   assert.ok(apple, '苹果必须还在品牌分面里');
   assert.equal(apple?.count, 0, '苹果计数应为 0（灰显不可点）');
-  assert.equal(brands.find((b) => b.id === 'huawei')?.count, F.applyFilter(REAL_P, fa).length,
-    '华为计数 = 芯片筛选后命中台数');
+  assert.equal(
+    brands.find((b) => b.id === 'huawei')?.count,
+    F.applyFilter(REAL_P, fa).length,
+    '华为计数 = 芯片筛选后命中台数',
+  );
 });
 
 check('各维度分面计数之和 = 该维度池内台数', () => {
@@ -2889,7 +2951,10 @@ check('筛选：选某价格档只保留该档机型（反向测价格维度真�
 check('筛选：选「未公布」价格档只含无价机型', () => {
   const got = F.applyFilter(REAL_P, { ...F.emptyFilter(), price: [C.UNKNOWN] });
   for (const p of got) assert.equal(C.priceBucket(p), C.UNKNOWN);
-  assert.ok(got.every((p) => C.basePriceCny(p) == null), '有价机型混入说明价格维度失效');
+  assert.ok(
+    got.every((p) => C.basePriceCny(p) == null),
+    '有价机型混入说明价格维度失效',
+  );
 });
 
 check('价格分面：金额升序、未公布排最后', () => {
@@ -2951,12 +3016,7 @@ check('多级排序的反向测：优先级顺序必须生效（一级能压过�
     battery: { capacityMah: battery },
     camera: { rear: camera != null ? [{ role: 'main', mp: camera }] : [] },
   });
-  const arr = [
-    mk('a', 5000, 50),
-    mk('b', 5000, 80),
-    mk('c', 6000, 10),
-    mk('d', 4000, 99),
-  ];
+  const arr = [mk('a', 5000, 50), mk('b', 5000, 80), mk('c', 6000, 10), mk('d', 4000, 99)];
   const r = F.applyMultiSort(arr, ['camera-desc', 'battery-desc']);
   assert.deepEqual(
     r.map((p) => p.id),
@@ -2982,7 +3042,11 @@ check('多级排序：缺值一律排末尾（无论升/降序，且不因二级
     mk('i', 5000, 5), // 两级都有
   ];
   const r = F.applyMultiSort(arr, ['battery-desc', 'camera-desc']);
-  assert.deepEqual(r.map((p) => p.id), ['i', 'h', 'g'], '有电池的 i 第一；h 一级缺排第二；g 两级都缺垫底');
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['i', 'h', 'g'],
+    '有电池的 i 第一；h 一级缺排第二；g 两级都缺垫底',
+  );
 });
 
 check('空排序链 = 默认按发布日期倒序', () => {
@@ -2998,7 +3062,11 @@ check('空排序链 = 默认按发布日期倒序', () => {
   });
   const arr = [mk('x', '2025-01-01'), mk('y', '2025-03-01'), mk('z', '2025-02-01')];
   const r = F.applyMultiSort(arr, []);
-  assert.deepEqual(r.map((p) => p.id), ['y', 'z', 'x'], '无排序键时按发布日期倒序兜底');
+  assert.deepEqual(
+    r.map((p) => p.id),
+    ['y', 'z', 'x'],
+    '无排序键时按发布日期倒序兜底',
+  );
 });
 
 check('URL 往返：写什么就读回什么（多级排序用逗号分隔的 o）', () => {
@@ -3010,7 +3078,10 @@ check('URL 往返：写什么就读回什么（多级排序用逗号分隔的 o�
     chip: ['A19Pro'],
     year: ['2026'],
   };
-  const back = F.readFilter(new URLSearchParams(F.writeFilter(want, ['battery-desc', 'camera-desc'])), cat);
+  const back = F.readFilter(
+    new URLSearchParams(F.writeFilter(want, ['battery-desc', 'camera-desc'])),
+    cat,
+  );
   assert.deepEqual(back.filter.brand, ['apple']);
   assert.deepEqual(back.filter.series, ['标准']);
   assert.deepEqual(back.filter.chip, ['A19Pro']);
@@ -3150,12 +3221,22 @@ check('立绘的折叠判据与前端同源（同一个真源，不是各写一�
 check('反向测：主屏够大不等于折叠（尺寸阈值是估算，官网写了才算）', () => {
   // 构造一台「大但官网没写折叠」的机器：8.3 英寸。若判据退回尺寸阈值，
   // 它会被误判成折叠机 —— 这条断言就是拦住那个退化的。
-  const fake = { rawOfficial: { '尺寸与重量': '220 mm | 130 mm | 6.1 mm' }, display: { sizeIn: 8.3 } };
+  const fake = {
+    rawOfficial: { 尺寸与重量: '220 mm | 130 mm | 6.1 mm' },
+    display: { sizeIn: 8.3 },
+  };
   assert.equal(FOLD.isFoldableOfficial(fake), false, '大屏平板没有折叠原文依据，不得判为折叠');
   assert.equal(SPRITE.layout(fake).foldable, false, '立绘与大屏平板的判据必须一致');
   // 反向：大屏但官网写了折叠 → 必须判为折叠（不是只认小屏）
-  const fakeFold = { rawOfficial: { '尺寸与重量': '展开态：220 mm | 折叠态：130 mm' }, display: { sizeIn: 6.1 } };
-  assert.equal(FOLD.isFoldableOfficial(fakeFold), true, '官网写了折叠就必须认，哪怕主屏只有 6.1 英寸');
+  const fakeFold = {
+    rawOfficial: { 尺寸与重量: '展开态：220 mm | 折叠态：130 mm' },
+    display: { sizeIn: 6.1 },
+  };
+  assert.equal(
+    FOLD.isFoldableOfficial(fakeFold),
+    true,
+    '官网写了折叠就必须认，哪怕主屏只有 6.1 英寸',
+  );
 });
 
 check('layout 几何自洽：画布内、不越界、圆角与厚度同向', () => {
@@ -3189,10 +3270,18 @@ check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）'
   // 厚机圆角能到 15 以上，钉死上限反而会把厚机误判成 bug。
   // 单调性才是设计契约：有人把符号写反（越薄越圆）时它会立刻报出。
   const probe = (mm) => {
-    const L = SPRITE.layout({ brand: 'apple', display: { sizeIn: 6.5 }, body: { thicknessMm: mm } });
+    const L = SPRITE.layout({
+      brand: 'apple',
+      display: { sizeIn: 6.5 },
+      body: { thicknessMm: mm },
+    });
     return { r: L.rect.r, sw: L.strokeW };
   };
-  for (const [lo, hi] of [[6, 7], [7, 9], [9, 12]]) {
+  for (const [lo, hi] of [
+    [6, 7],
+    [7, 9],
+    [9, 12],
+  ]) {
     const a = probe(lo);
     const b = probe(hi);
     assert.ok(b.r >= a.r, `厚度 ${lo}→${hi}mm 圆角应不减（${a.r.toFixed(2)} → ${b.r.toFixed(2)}）`);
@@ -3203,10 +3292,7 @@ check('圆角与描边随厚度单调递增（越薄越方正、越厚越粗）'
   }
   // 反向测：符号写反时（越薄越圆）必须被抓出来。构造一个「比 6mm 更薄」的对照，
   // 按公式圆角应更小；若实现反了，这里会报出。
-  assert.ok(
-    probe(5.5).r < probe(6.5).r,
-    '5.5mm 的圆角必须小于 6.5mm —— 若成立说明方向没写反',
-  );
+  assert.ok(probe(5.5).r < probe(6.5).r, '5.5mm 的圆角必须小于 6.5mm —— 若成立说明方向没写反');
 });
 
 /* ================================================================ *
@@ -3288,8 +3374,16 @@ check('归档体积在闸门内（超了会让版本库不可逆地膨胀）', (
 check('反向测：归档通道若漏一个，检查必须报出（否则「改了版却以为没改」会静默）', () => {
   // 造一个「归档里字段被改名」的形状，确认形状检查能区分改版前后。
   // 不去真改 data/raw/（那是真数据），只验判据本身能区分两个不同形状。
-  const before = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量': '6600 mAh' } }], skipped: [] };
-  const after = { source: 'x', products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量新写法': '6600 mAh' } }], skipped: [] };
+  const before = {
+    source: 'x',
+    products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量': '6600 mAh' } }],
+    skipped: [],
+  };
+  const after = {
+    source: 'x',
+    products: [{ id: 'a', name: 'A', specsUrl: 'u', raw: { '电池.容量新写法': '6600 mAh' } }],
+    skipped: [],
+  };
   assert.notEqual(
     JSON.stringify(before),
     JSON.stringify(after),
@@ -3327,7 +3421,10 @@ check('每个静态路由都必须有站内链接指向它（孤儿页零报错�
     name: m[2],
   }));
   const staticRoutes = routes.filter((r) => !r.path.includes('pathMatch') && !r.path.includes(':'));
-  assert.ok(staticRoutes.length >= 6, `解析到的静态路由只有 ${staticRoutes.length} 条，正则可能失效了`);
+  assert.ok(
+    staticRoutes.length >= 6,
+    `解析到的静态路由只有 ${staticRoutes.length} 条，正则可能失效了`,
+  );
 
   const orphans = [];
   for (const r of staticRoutes) {
@@ -3367,10 +3464,7 @@ check('页脚必须保留「关于」入口（它不在主导航里，删掉就�
     /to="\/about"/.test(footerFile) ||
     /to:\s*'\/about'/.test(footerFile) ||
     /["'`]\/about["'`]/.test(footerFile);
-  assert.ok(
-    hasAbout,
-    '页脚必须保留「关于」入口 —— 它不在主导航里了，删掉就成孤儿页',
-  );
+  assert.ok(hasAbout, '页脚必须保留「关于」入口 —— 它不在主导航里了，删掉就成孤儿页');
   // 顺带钉住当前页高亮：页脚链接不带 aria-current 的话，
   // 进到「关于」页看不出自己在哪。
   assert.ok(
@@ -3448,10 +3542,7 @@ check('顶栏导航必须用平面按钮（3px 立体投影撑高 6px，一排�
     USES_RAISED.test('class="pixel-button px-2"'),
     '判据失效：连明显的立体版都匹配不到，上面那条断言形同虚设',
   );
-  assert.ok(
-    !USES_RAISED.test('class="pixel-button-flat px-2"'),
-    '判据失效：flat 版被误判成立体版',
-  );
+  assert.ok(!USES_RAISED.test('class="pixel-button-flat px-2"'), '判据失效：flat 版被误判成立体版');
   // 必须真的定义了 flat 变体，不能只改 class 名
   assert.ok(
     /\.pixel-button-flat\s*\{/.test(HEADER_CSS),
@@ -3556,7 +3647,9 @@ check('首页顶栏 = 对角灰阶过渡，且是收窄的 HUD 而非标题海�
   );
 
   // 宽屏档的高度：抓 min-width:901px 那段里的 height 值
-  const wide = cssText.match(/@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.banner-h\s*\{[^}]*height:\s*(\d+)px/);
+  const wide = cssText.match(
+    /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.banner-h\s*\{[^}]*height:\s*(\d+)px/,
+  );
   assert.ok(wide, '宽屏档里读不到 height（格式应形如 `height: 80px`）');
 
   // ⚠️ 上下界都从**实测内容高度**推，不是拍脑袋的整数。
@@ -3611,7 +3704,10 @@ check('首页顶栏各断点高度不得让内容被裁（overflow-hidden 会静
 
   // 宽屏档 = min-width ≥ 901 的那条
   const wideKey = [...byBreakpoint.keys()].find((k) => /min-width:\s*9\d\dpx/.test(k));
-  assert.ok(wideKey, `找不到 min-width ≥900px 的宽屏档，现有：${[...byBreakpoint.keys()].join(' / ')}`);
+  assert.ok(
+    wideKey,
+    `找不到 min-width ≥900px 的宽屏档，现有：${[...byBreakpoint.keys()].join(' / ')}`,
+  );
   const wide = byBreakpoint.get(wideKey);
 
   assert.ok(
@@ -3630,7 +3726,11 @@ check('首页顶栏各断点高度不得让内容被裁（overflow-hidden 会静
   // 判据：`pt`（顶部内边距）必须与「高度 − 内容」一致，即三档都留 8px 底部。
   // 内容高度是 puppeteer 实测的，改 h1 字号/行高时这些数会一起过期 ⇒ 必须重量。
   const CONTENTS = { base: 106, tiny: 134, wide: 72 };
-  const actual = { base, wide, tiny: byBreakpoint.get([...byBreakpoint.keys()].find((k) => /max-width/.test(k))) };
+  const actual = {
+    base,
+    wide,
+    tiny: byBreakpoint.get([...byBreakpoint.keys()].find((k) => /max-width/.test(k))),
+  };
 
   const pt = Number((cssText.match(/row[\s\S]{0,200}?pt-(\d)/) || [])[1] || 8);
   for (const [name, content] of Object.entries(CONTENTS)) {
@@ -3750,7 +3850,6 @@ check('首页顶栏灰阶逐档递增、无死档、跨度足够，且对白字 
   );
 });
 
-
 // ------------------------------------------------------------------------
 // 天空色带（黑白太极）
 //
@@ -3836,7 +3935,10 @@ check('色带有「先升后降」的明度结构（中间亮、上下暗 = 太�
   const rising = L.slice(0, peak).every((v, i) => i === 0 || v > L[i - 1]);
   const falling = L.slice(peak).every((v, i) => i === 0 || v < L[peak + i - 1]);
   assert.ok(rising, '峰值之前必须是递增的 —— 当前' + L.map((v) => (v * 100).toFixed(0)).join('→'));
-  assert.ok(falling, '峰值之后必须是递减的 —— 当前 ' + L.map((v) => (v * 100).toFixed(0)).join('→'));
+  assert.ok(
+    falling,
+    '峰值之后必须是递减的 —— 当前 ' + L.map((v) => (v * 100).toFixed(0)).join('→'),
+  );
 });
 
 check('每档色带对白字对比度 ≥ 4.5:1（WCAG AA，标题压在色带上）', () => {
@@ -3912,19 +4014,12 @@ check('banner 上的文字必须自带可读底（不靠压小装饰来保证）
     /background:\s*rgb\(/.test(flat) && !/background:\s*transparent/.test(flat),
     '导航按钮必须有半透底 —— banner 上有底色变化，全透明会让文字读不清',
   );
-  assert.ok(
-    /bg-\[rgb\(/.test(navFile),
-    '逛玩法的弱化链接也要有半透底（它们同样压在色带上）',
-  );
+  assert.ok(/bg-\[rgb\(/.test(navFile), '逛玩法的弱化链接也要有半透底（它们同样压在色带上）');
   // 且不得再读导航位置来调整装饰
   const sky = readFileSync(join(SRC_DIR, 'components/Sky.vue'), 'utf8');
   const code = sky.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  assert.ok(
-    !/querySelector/.test(code),
-    'Sky 不该读导航/标题位置 —— 那是「用装饰迁就文字」',
-  );
+  assert.ok(!/querySelector/.test(code), 'Sky 不该读导航/标题位置 —— 那是「用装饰迁就文字」');
 });
-
 
 check('首页顶栏必须整条隐藏（站名与导航都进了 banner，否则同一句「参数世界」出现两次）', () => {
   const app = readFileSync(join(SRC_DIR, 'App.vue'), 'utf8');
@@ -3939,10 +4034,7 @@ check('首页顶栏必须整条隐藏（站名与导航都进了 banner，否则
   // 判据要问「首页会不会有两条导航」，答案是「header 没了就没有」，
   // 而不是「每个子节点都得自己再判一次」。
   const headerBlock = app.slice(app.indexOf('<header'), app.indexOf('</header>'));
-  assert.ok(
-    /<SiteNav/.test(headerBlock),
-    'App.vue 的 header 里应有 SiteNav —— 非首页页面需要它',
-  );
+  assert.ok(/<SiteNav/.test(headerBlock), 'App.vue 的 header 里应有 SiteNav —— 非首页页面需要它');
 });
 
 check('导航在 banner 里（首页唯一一条，且两端对齐）', () => {
@@ -3953,9 +4045,7 @@ check('导航在 banner 里（首页唯一一条，且两端对齐）', () => {
   );
   // class 写在多行上（prettier 会折行），且中间夹了 z-10（内容浮在太极之上），
   // 所以匹配不能假设 class 与 <div 同行、也不能假设 relative 紧跟 flex。
-  const bannerRow = homeView.match(
-    /<div\s+class="page-shell relative[^"]*flex flex-wrap[\s\S]*?"/,
-  );
+  const bannerRow = homeView.match(/<div\s+class="page-shell relative[^"]*flex flex-wrap[\s\S]*?"/);
   assert.ok(bannerRow, '找不到 banner 的左右分栏容器');
   assert.ok(
     /justify-between/.test(bannerRow[0]),
@@ -4011,8 +4101,8 @@ const FAVICON = FAVICON_RAW.replace(/<!--[\s\S]*?-->/g, '');
  *  不是本文件里的任何常数 —— 常数只用于**校验**，提取真源与校验真源必须分开，
  *  否则「改产物」和「改判据」会互相掩护（这正是 P16「判据多源」的变体）。
  */
-const FAV_FRAC = 1.0;   // 满幅：太极圆盘外切于画幅，不再有「圆外留白」
-const FAV_SKEW = 45;    // 背景斜分角（度）。0 = 上下对半，45 = 沿反对角线
+const FAV_FRAC = 1.0; // 满幅：太极圆盘外切于画幅，不再有「圆外留白」
+const FAV_SKEW = 45; // 背景斜分角（度）。0 = 上下对半，45 = 沿反对角线
 const FAV_COLORS = { ink: '#000000', paper: '#ffffff' }; // 2026-10-08：纯黑白，不再取 @theme
 
 /** 把 favicon 的行内 rect 还原成 N×N 布尔网格（True = 墨色）
@@ -4050,7 +4140,14 @@ check('favicon 必须是合法 XML（注释里不能出现连续两个连字符�
   const comments = [...FAVICON_RAW.matchAll(/<!--([\s\S]*?)-->/g)].map((m) => m[1]);
   const bad = [];
   comments.forEach((c, i) => {
-    if (c.includes('--')) bad.push(`第 ${i + 1} 段注释含 '--'：${c.split('\n').find((l) => l.includes('--'))?.trim().slice(0, 50)}`);
+    if (c.includes('--'))
+      bad.push(
+        `第 ${i + 1} 段注释含 '--'：${c
+          .split('\n')
+          .find((l) => l.includes('--'))
+          ?.trim()
+          .slice(0, 50)}`,
+      );
   });
   assert.equal(
     bad.length,
@@ -4090,7 +4187,9 @@ check('favicon 只能是纯黑白两色（2026-10-08 用户决策：对齐参考
   // 用户 2026-10-08 明确「完全照参考图」⇒ 纯 #000000 / #ffffff，
   // 此时再要求 theme 同源就是拿旧构图约束新构图 ⇒ 正确产物会被判错。
   // 但「两色」这件事本身要继续钉死 —— 见下一条（谁亮谁暗）。
-  const used = [...new Set((FAVICON.match(/#[0-9a-fA-F]{3,8}/g) ?? []).map((s) => s.toLowerCase()))];
+  const used = [
+    ...new Set((FAVICON.match(/#[0-9a-fA-F]{3,8}/g) ?? []).map((s) => s.toLowerCase())),
+  ];
   const allowed = new Set(Object.values(FAV_COLORS));
   const extra = used.filter((c) => !allowed.has(c));
   assert.equal(
@@ -4117,7 +4216,15 @@ check('favicon 墨段必须是暗色、纸必须是亮色（两色不能写反�
     const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255);
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   };
-  const runs = [...new Set([...FAVICON.matchAll(/<rect x="\d+" y="\d+" width="\d+" height="1"[^>]*fill="(#[0-9a-fA-F]+)"/g)].map((m) => m[1].toLowerCase()))];
+  const runs = [
+    ...new Set(
+      [
+        ...FAVICON.matchAll(
+          /<rect x="\d+" y="\d+" width="\d+" height="1"[^>]*fill="(#[0-9a-fA-F]+)"/g,
+        ),
+      ].map((m) => m[1].toLowerCase()),
+    ),
+  ];
   assert.ok(runs.length > 0, 'favicon 没有任何行内墨段');
   const brightRun = runs.find((c) => lum(c) > 0.5);
   assert.ok(
@@ -4186,7 +4293,10 @@ check('favicon 圆内是旋转对称的太极（180° 旋转后黑白互换）',
     bad.length,
     0,
     `${bad.length}/${n * n} 格与「旋转 180° 后的自己」同色 —— 满幅斜分背景 + 太极都应满足` +
-      `「180° 旋转后黑白互换」。前 5 处：${bad.slice(0, 5).map(([x, y]) => `(${x},${y})`).join(' ')}。` +
+      `「180° 旋转后黑白互换」。前 5 处：${bad
+        .slice(0, 5)
+        .map(([x, y]) => `(${x},${y})`)
+        .join(' ')}。` +
       `（这条抓的是「黑白画反了」：颠倒后深色占比与手性都不变，只有它能报）`,
   );
 });
@@ -4221,7 +4331,12 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
       while (stack.length) {
         const [cx, cy] = stack.pop();
         comp.push([cx, cy]);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
           const nx = cx + dx;
           const ny = cy + dy;
           if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
@@ -4237,14 +4352,22 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
       if (comp.length > n * n * 0.05) continue; // 太大的是鱼身/ 背景，不是眼
       const own = new Set(comp.map(([x, y]) => `${x},${y}`));
       // 必须**每一格四邻都是异色** ⇒ 是个「洞」而不是轮廓阶梯
-      if (!comp.every(([cx, cy]) =>
-        [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => {
-          const nx = cx + dx;
-          const ny = cy + dy;
-          if (nx < 0 || ny < 0 || nx >= n || ny >= n) return false;
-          return own.has(`${nx},${ny}`) || g[ny][nx] !== t;
-        }),
-      )) continue;
+      if (
+        !comp.every(([cx, cy]) =>
+          [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+          ].every(([dx, dy]) => {
+            const nx = cx + dx;
+            const ny = cy + dy;
+            if (nx < 0 || ny < 0 || nx >= n || ny >= n) return false;
+            return own.has(`${nx},${ny}`) || g[ny][nx] !== t;
+          }),
+        )
+      )
+        continue;
       eyes.push({ t, comp });
     }
   }
@@ -4262,8 +4385,8 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
   //  再判「white 应在左」—— 读起来像「白色的眼」，于是把期望方向钉反了
   //  （实测白鱼身上的黑眼在 x=10.5= 左侧，却被判成「未落在左侧」）。
   //  ⇒ 变量名带上**所属鱼**而不只是颜色，这是这类「同名不同义」的唯一防法。
-  const eyeOnWhiteFish = eyes.find((e) => e.t);       // 白鱼身上的眼 = 墨色块
-  const eyeOnBlackFish = eyes.find((e) => !e.t);       // 黑鱼身上的眼 = 浅色块
+  const eyeOnWhiteFish = eyes.find((e) => e.t); // 白鱼身上的眼 = 墨色块
+  const eyeOnBlackFish = eyes.find((e) => !e.t); // 黑鱼身上的眼 = 浅色块
   const centroidX = (e) => e.comp.reduce((a, [x]) => a + x + 0.5, 0) / e.comp.length;
   const wx = centroidX(eyeOnWhiteFish);
   const bx = centroidX(eyeOnBlackFish);
@@ -4277,7 +4400,7 @@ check('favicon 的手性：白鱼眼必须在圆心左侧（镜像会把它甩�
   // 两只眼必须关于圆心中心对称 —— 这条与上一条独立：
   // 它抓的是「两眼画在同一侧」这类镜像**抓不到**的错。
   assert.ok(
-    Math.abs((wx + bx) - 2 * c) < 1.5,
+    Math.abs(wx + bx - 2 * c) < 1.5,
     `两只眼重心 x=${wx.toFixed(2)} / ${bx.toFixed(2)}，和 ${(wx + bx).toFixed(2)} 偏离圆心对称值 ${2 * c} —— ` +
       '太极的两只眼必须关于圆心中心对称。',
   );
@@ -4344,7 +4467,12 @@ check('favicon 的墨色连通成块（无游离碎片：白鱼被墨点咬掉�
       while (stack.length) {
         const [cx, cy] = stack.pop();
         comp.push([cx, cy]);
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        for (const [dx, dy] of [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ]) {
           const nx = cx + dx;
           const ny = cy + dy;
           if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
@@ -4394,7 +4522,8 @@ section('v2 全品类目录：specs 容器');
 check('flattenSpecs → expandSpecs 往返相等（拍平不丢字段）', () => {
   // 往返是「拍平没丢字段」的唯一硬证据。少一个键，前端那个参数就恒为「未公布」。
   const v1 = {
-    id: 'x', brand: 'apple',
+    id: 'x',
+    brand: 'apple',
     body: { weightG: 199, colors: ['黑'], folded: null },
     display: { sizeIn: 6.3, resolutionPx: { w: 1206, h: 2622 }, refreshHz: '1-120' },
     chipset: { name: 'A19', processNm: null },
@@ -4413,7 +4542,16 @@ check('flattenSpecs → expandSpecs 往返相等（拍平不丢字段）', () =>
   assert.equal(specs['chipset.processNm'], null, 'null 是「未公布」的正确状态，照样搬');
   assert.ok(!('body' in v1) === false, '拍平不改原对象');
   const back = expandSpecs(specs);
-  for (const g of ['body', 'display', 'chipset', 'memory', 'battery', 'camera', 'connectivity', 'os']) {
+  for (const g of [
+    'body',
+    'display',
+    'chipset',
+    'memory',
+    'battery',
+    'camera',
+    'connectivity',
+    'os',
+  ]) {
     assert.deepEqual(back[g], v1[g], `组 ${g} 往返后不一致`);
   }
 });
@@ -4645,17 +4783,29 @@ check('策展字典结构合法（id 唯一/正则可编译/长后缀优先/价�
     assert.ok(!vLabels.has(v.label), `变体 label 重复：${v.label}`);
     vIds.add(v.id);
     vLabels.add(v.label);
-    assert.doesNotThrow(() => new RegExp(v.match, v.flags ?? ''), `变体 ${v.id} 的 match 不是合法正则`);
+    assert.doesNotThrow(
+      () => new RegExp(v.match, v.flags ?? ''),
+      `变体 ${v.id} 的 match 不是合法正则`,
+    );
   }
   const idxPro = dict.variants.findIndex((v) => v.id === 'pro');
   const idxProMax = dict.variants.findIndex((v) => v.id === 'pro-max');
-  assert.ok(idxPro >= 0 && idxProMax >= 0 && idxProMax < idxPro, 'Pro Max 必须排在 Pro 之前（长后缀优先，否则分面计数少一台）');
+  assert.ok(
+    idxPro >= 0 && idxProMax >= 0 && idxProMax < idxPro,
+    'Pro Max 必须排在 Pro 之前（长后缀优先，否则分面计数少一台）',
+  );
   for (const [brand, cfg] of Object.entries(dict.series.brands ?? {})) {
     assert.ok(cfg.series.length >= 1, `${brand} 系列表不能为空`);
-    assert.ok(cfg.series.some((s) => s.fallback), `${brand} 系列表必须有 fallback 行（兜底「标准」）`);
+    assert.ok(
+      cfg.series.some((s) => s.fallback),
+      `${brand} 系列表必须有 fallback 行（兜底「标准」）`,
+    );
     for (const s of cfg.series) {
       if (s.fallback) continue;
-      assert.doesNotThrow(() => new RegExp(s.match ?? '', s.flags ?? ''), `${brand} 系列规则「${s.label}」正则非法`);
+      assert.doesNotThrow(
+        () => new RegExp(s.match ?? '', s.flags ?? ''),
+        `${brand} 系列规则「${s.label}」正则非法`,
+      );
     }
   }
   const bIds = new Set();
@@ -4668,14 +4818,23 @@ check('策展字典结构合法（id 唯一/正则可编译/长后缀优先/价�
     else {
       assert.ok(typeof b.max === 'number' && b.max >= b.min, `价格档 ${b.id} 的 max 非法`);
       if (i > 0) {
-        assert.ok(b.min === dict.priceBuckets[i - 1].max + 1, `价格档 ${b.id} 与上一档不衔接（会有价格静默落错档）`);
+        assert.ok(
+          b.min === dict.priceBuckets[i - 1].max + 1,
+          `价格档 ${b.id} 与上一档不衔接（会有价格静默落错档）`,
+        );
       }
     }
   });
 });
 
 check('策展字典哨兵语义（变体长后缀优先/系列策略/多芯判据/价格档）', () => {
-  const fake = (brand, name) => ({ id: 't', brand, name, line: brand === 'apple' ? 'iPhone' : name.split(' ')[0], category: 'phone' });
+  const fake = (brand, name) => ({
+    id: 't',
+    brand,
+    name,
+    line: brand === 'apple' ? 'iPhone' : name.split(' ')[0],
+    category: 'phone',
+  });
   // 变体：长后缀优先——顺序被人调换时这些断言全红（反向测）
   assert.equal(CAT.variantOf(fake('apple', 'iPhone 18 Pro Max')), 'Pro Max');
   assert.equal(CAT.variantOf(fake('apple', 'iPhone 18 Pro')), 'Pro');
@@ -4728,15 +4887,24 @@ check('多实例子字典深校验（camera.rear：mp 越界/role 拼错/多余�
   const rear = (items) => ({ id: 't', specs: { 'camera.rear': items } });
   // 正测：现有形态全合法（ois/sensorNote 等缺失 = null 语义）
   assert.deepEqual(
-    validateSpecs(rear([{ role: 'main', mp: 48, aperture: 'f/1.6', ois: true, sensorNote: null }]), schema),
+    validateSpecs(
+      rear([{ role: 'main', mp: 48, aperture: 'f/1.6', ois: true, sensorNote: null }]),
+      schema,
+    ),
     [],
   );
   assert.deepEqual(validateSpecs(rear([{ role: 'main' }]), schema), []);
   // 反测 ×3：数值越界 / 枚举拼错 / 多余键
   const over = validateSpecs(rear([{ role: 'main', mp: 999 }]), schema);
-  assert.ok(over.some((f) => f.includes('超出合理区间')), `mp=999 应被子字典区间拦：${over.join('|')}`);
+  assert.ok(
+    over.some((f) => f.includes('超出合理区间')),
+    `mp=999 应被子字典区间拦：${over.join('|')}`,
+  );
   const badRole = validateSpecs(rear([{ role: 'foo', mp: 48 }]), schema);
-  assert.ok(badRole.some((f) => f.includes('不在枚举')), `role=foo 应被枚举拦：${badRole.join('|')}`);
+  assert.ok(
+    badRole.some((f) => f.includes('不在枚举')),
+    `role=foo 应被枚举拦：${badRole.join('|')}`,
+  );
   const extra = validateSpecs(rear([{ role: 'main', mp: 48, zoom: '10x' }]), schema);
   assert.ok(
     extra.some((f) => f.includes('子字典注册')),
@@ -4749,19 +4917,27 @@ check('多实例子字典深校验（camera.rear：mp 越界/role 拼错/多余�
 check('参数级筛选（schema facet → 分面/相等类取值/URL 往返/非法值丢弃）', () => {
   // 最优解相等类泛化：schema facet:true 的字段自动成为筛选维度（键=字段路径）
   const mk = (id, specs) => ({
-    id, category: 'phone', brand: 'apple', name: id, line: 'iPhone', releaseDate: '2026-01-01', skus: [], specs,
+    id,
+    category: 'phone',
+    brand: 'apple',
+    name: id,
+    line: 'iPhone',
+    releaseDate: '2026-01-01',
+    skus: [],
+    specs,
   });
   const products = [
-    mk('a', { 'connectivity.nfc': true, 'display.refreshHz': '120', 'haptic.motor': 'X 轴线性马达' }),
+    mk('a', {
+      'connectivity.nfc': true,
+      'display.refreshHz': '120',
+      'haptic.motor': 'X 轴线性马达',
+    }),
     mk('b', { 'connectivity.nfc': false, 'display.refreshHz': '60/90' }),
     mk('c', {}), // 全缺 → 未公布（UNKNOWN）
   ];
   // 分面：boolean 三值 + 是/否标签
   const nfc = FACETS_LIB.facetOf(products, 'connectivity.nfc', products);
-  assert.deepEqual(
-    nfc.map((f) => f.id).sort(),
-    ['false', 'true', '未公布'].sort(),
-  );
+  assert.deepEqual(nfc.map((f) => f.id).sort(), ['false', 'true', '未公布'].sort());
   assert.equal(nfc.find((f) => f.id === 'true')?.label, '是');
   assert.equal(nfc.find((f) => f.id === 'false')?.label, '否');
   // 相等类筛选生效
@@ -4783,7 +4959,9 @@ check('参数级筛选（schema facet → 分面/相等类取值/URL 往返/非�
   const bad = FACETS_LIB.readFilter(new URLSearchParams('connectivity.nfc=maybe'), catalog);
   assert.deepEqual(bad.filter['connectivity.nfc'], []);
   // string 原文分面（刷新率官网原文形态）
-  const hz = FACETS_LIB.facetOf(products, 'display.refreshHz', products).map((f) => f.id).sort();
+  const hz = FACETS_LIB.facetOf(products, 'display.refreshHz', products)
+    .map((f) => f.id)
+    .sort();
   assert.deepEqual(hz, ['120', '60/90', '未公布'].sort());
 });
 
@@ -4803,7 +4981,10 @@ check('orderDeriver 声明与注册表对账（序类适配器不游离）', () 
     assert.equal(impl(null), null, `${f.path} 的序类适配器应把 null 映射为 null`);
     assert.equal(impl(undefined), null);
   }
-  assert.ok(declared >= 1, 'phone schema 应至少声明一个 orderDeriver（refreshHz），声明丢失说明被误删');
+  assert.ok(
+    declared >= 1,
+    'phone schema 应至少声明一个 orderDeriver（refreshHz），声明丢失说明被误删',
+  );
 });
 
 check('对比差异判定纯函数（准绳口径：缺失不参与值比较，缺失/不等分两类）', () => {
@@ -4877,6 +5058,18 @@ check('品类注册表与前端 CATEGORY_ORDER 顺序对账（双真源防漂移
     if (c.builtin !== false) assert.ok(loadSchema(c.id), `已建设品类 ${c.id} 必须有 schema 文件`);
   }
   assert.ok(quantifiableFields(loadSchema('phone')).length > 0, 'phone 必须有可量化字段');
+
+  // 展示名也要对账，而不只是顺序：**以前这里只比 id 顺序**，
+  // 于是 catalog.ts 里那行注释「与 data/categories.json 的 label/labelEn 双字段同源
+  // （selftest 对账）」是句假话——把注册表的 labelEn 改成 'Tabl3t' 自测依旧 266 全绿。
+  // 注释比代码更会骗人：人会照着注释相信「改一处就够」，然后两处悄悄分叉
+  // （症状：筛选条显示英文、详情页显示中文，且零报错）。
+  for (const c of reg.categories) {
+    const front = CAT.CATEGORY_ORDER.find((x) => x.id === c.id);
+    assert.ok(front, `${c.id} 必须在前端 CATEGORY_ORDER 里`);
+    assert.equal(front.label, c.label, `${c.id} 的中文名两处必须一致`);
+    assert.equal(front.labelEn, c.labelEn, `${c.id} 的英文名两处必须一致`);
+  }
 });
 
 check('schema 结构校验：phone 无分组/字段错误', () => {
@@ -4888,9 +5081,15 @@ check('schema 结构校验：phone 无分组/字段错误', () => {
 check('反向测：schema 字段引用不存在的分组 / 分组 id 重复必须报出', () => {
   const bad = JSON.parse(JSON.stringify(loadSchema('phone')));
   bad.fields[0].group = 'ghost';
-  assert.ok(validateSchema(bad).some((e) => /ghost/.test(e)), '字段引用不存在的分组必须报出');
+  assert.ok(
+    validateSchema(bad).some((e) => /ghost/.test(e)),
+    '字段引用不存在的分组必须报出',
+  );
   bad.groups.push({ id: 'body', name: 'dup', nameEn: 'dup', type: 'single' });
-  assert.ok(validateSchema(bad).some((e) => /重复/.test(e)), '分组 id 重复必须报出');
+  assert.ok(
+    validateSchema(bad).some((e) => /重复/.test(e)),
+    '分组 id 重复必须报出',
+  );
 });
 
 check('显式分组：groups 覆盖全部字段，无 orphan（前端分组不用再猜 path 前缀）', () => {
@@ -4906,21 +5105,32 @@ check('显式分组：groups 覆盖全部字段，无 orphan（前端分组不�
   assert.equal(groupsOf(schema).find((g) => g.id === 'camera').type, 'multi', '摄像头是多实例分组');
 });
 
-check('四态 valueStatus：present→available / absent→unknown / none→none / not_applicable→not_applicable', () => {
-  // 准绳 value_status 的四条语义。valueStatus 映射只存 none/not_applicable 例外，其余靠 presence 推导。
-  const p = {
-    specs: { 'display.sizeIn': 6.1, 'body.weightG': 170 },
-    valueStatus: { 'body.weightG': 'none', 'display.type': 'not_applicable' },
-  };
-  assert.equal(valueStatus(p, 'display.sizeIn'), 'available', 'specs 有值 = available');
-  assert.equal(valueStatus(p, 'body.thicknessMm'), 'unknown', 'specs 缺键 = unknown');
-  assert.equal(valueStatus(p, 'body.weightG'), 'none', 'valueStatus none 覆盖 presence');
-  assert.equal(valueStatus(p, 'display.type'), 'not_applicable', 'valueStatus not_applicable 覆盖 presence');
-  // 生命周期 status 字符串绝不被误当映射：valueStatus 缺省时只按 specs presence 推导
-  const q = { status: 'on-sale', specs: { 'display.sizeIn': 6.1 } };
-  assert.equal(valueStatus(q, 'display.sizeIn'), 'available', '生命周期 status 不得被当四态映射');
-  assert.equal(valueStatus(q, 'body.weightG'), 'unknown', '生命周期 status 不得被当四态映射（缺键=unknown）');
-});
+check(
+  '四态 valueStatus：present→available / absent→unknown / none→none / not_applicable→not_applicable',
+  () => {
+    // 准绳 value_status 的四条语义。valueStatus 映射只存 none/not_applicable 例外，其余靠 presence 推导。
+    const p = {
+      specs: { 'display.sizeIn': 6.1, 'body.weightG': 170 },
+      valueStatus: { 'body.weightG': 'none', 'display.type': 'not_applicable' },
+    };
+    assert.equal(valueStatus(p, 'display.sizeIn'), 'available', 'specs 有值 = available');
+    assert.equal(valueStatus(p, 'body.thicknessMm'), 'unknown', 'specs 缺键 = unknown');
+    assert.equal(valueStatus(p, 'body.weightG'), 'none', 'valueStatus none 覆盖 presence');
+    assert.equal(
+      valueStatus(p, 'display.type'),
+      'not_applicable',
+      'valueStatus not_applicable 覆盖 presence',
+    );
+    // 生命周期 status 字符串绝不被误当映射：valueStatus 缺省时只按 specs presence 推导
+    const q = { status: 'on-sale', specs: { 'display.sizeIn': 6.1 } };
+    assert.equal(valueStatus(q, 'display.sizeIn'), 'available', '生命周期 status 不得被当四态映射');
+    assert.equal(
+      valueStatus(q, 'body.weightG'),
+      'unknown',
+      '生命周期 status 不得被当四态映射（缺键=unknown）',
+    );
+  },
+);
 
 check('四态 valueStatus：specs 有键但值为 null/空数组 → unknown（官方未公布，不是已填）', () => {
   // 本项目把「官方未公布」存成 specs 里的 null（如 display.refreshHz=null）或空数组
@@ -4938,33 +5148,74 @@ check('四态 valueStatus：specs 有键但值为 null/空数组 → unknown（�
   assert.equal(valueStatus(q, 'chipset.processNm'), 'unknown', 'null 值无例外 = unknown');
 });
 
-check('反向测：无效 valueStatus 键 / 非法 valueStatus 值必须被闸门拒绝（写错字段名会静默隐藏参数）', () => {
-  // validateStatusMap 是闸门 11c 的底层；与 validateSpecs 同级，写错一样拒绝写盘。
-  const schema = loadSchema('phone');
-  const errGhost = validateStatusMap({ id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizes': 'none' } }, schema);
-  assert.ok(errGhost.some((e) => /display\.sizes/.test(e)), 'valueStatus 引用未注册字段必须报出');
-  const errVal = validateStatusMap({ id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'maybe' } }, schema);
-  assert.ok(errVal.some((e) => /maybe/.test(e)), '非法 valueStatus 值必须报出');
-  assert.deepEqual(
-    validateStatusMap({ id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'none' } }, schema),
-    [], '合法 valueStatus 例外不误报',
-  );
-});
+check(
+  '反向测：无效 valueStatus 键 / 非法 valueStatus 值必须被闸门拒绝（写错字段名会静默隐藏参数）',
+  () => {
+    // validateStatusMap 是闸门 11c 的底层；与 validateSpecs 同级，写错一样拒绝写盘。
+    const schema = loadSchema('phone');
+    const errGhost = validateStatusMap(
+      { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizes': 'none' } },
+      schema,
+    );
+    assert.ok(
+      errGhost.some((e) => /display\.sizes/.test(e)),
+      'valueStatus 引用未注册字段必须报出',
+    );
+    const errVal = validateStatusMap(
+      { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'maybe' } },
+      schema,
+    );
+    assert.ok(
+      errVal.some((e) => /maybe/.test(e)),
+      '非法 valueStatus 值必须报出',
+    );
+    assert.deepEqual(
+      validateStatusMap(
+        { id: 'p', category: 'phone', specs: {}, valueStatus: { 'display.sizeIn': 'none' } },
+        schema,
+      ),
+      [],
+      '合法 valueStatus 例外不误报',
+    );
+  },
+);
 
 check('闸门反向测：注入非法 valueStatus 必须拒绝写盘，合法 valueStatus 放行', () => {
   const base = (valueStatus) => ({
     generatedAt: '2026-10-13T00:00:00Z',
     products: Array.from({ length: 20 }, (_, i) => ({
-      id: `p${i}`, slug: `p${i}`, brand: 'apple', category: 'phone', name: `P${i}`,
-      releaseDate: '2026-09-01', status: 'on-sale',
-      specs: { 'display.sizeIn': 6.1, 'body.weightG': 170, 'display.resolutionPx': { w: 1206, h: 2622 } },
-      provenance: { 'display.sizeIn': 'apple-official', 'body.weightG': 'apple-official', releaseDate: 'apple-official', 'display.resolutionPx.w': 'apple-official' },
-      firstSeenAt: '2026-10-13T00:00:00Z', lastSeenAt: '2026-10-13T00:00:00Z',
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
       ...(i === 0 && valueStatus ? { valueStatus } : {}),
     })),
   });
-  assert.ok(validate(base({ 'display.sizes': 'none' }), null).some((f) => /valueStatus/.test(f)), '非法 valueStatus 键必须拒写');
-  assert.deepEqual(validate(base({ 'display.sizeIn': 'none' }), null), [], '合法 valueStatus 例外必须放行');
+  assert.ok(
+    validate(base({ 'display.sizes': 'none' }), null).some((f) => /valueStatus/.test(f)),
+    '非法 valueStatus 键必须拒写',
+  );
+  assert.deepEqual(
+    validate(base({ 'display.sizeIn': 'none' }), null),
+    [],
+    '合法 valueStatus 例外必须放行',
+  );
 });
 
 section('v2 全品类目录：用户数据层');
@@ -4989,8 +5240,14 @@ check('set-field：值替换 + provenance 标 user-manual + 官网原值进 repo
   const { products: out, report } = applyOverrides(products, {
     entries: [
       {
-        id: 'o1', op: 'set-field', productId: 'p1', field: 'display.sizeIn', value: 6.9,
-        reason: '官网抓漏', createdAt: '2026-10-13', createdBy: '道友',
+        id: 'o1',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 6.9,
+        reason: '官网抓漏',
+        createdAt: '2026-10-13',
+        createdBy: '道友',
       },
     ],
   });
@@ -5006,8 +5263,17 @@ check('add-product：整机入池 + 身份字段兜底 + provenance 完整', () 
   const { products: out, report } = applyOverrides([makeProduct('p1')], {
     entries: [
       {
-        id: 'o2', op: 'add-product', createdAt: '2026-10-13',
-        product: { id: 'u1', brand: 'huawei', category: 'phone', name: '用户机', releaseDate: '2026-08-01', specs: { 'body.weightG': 180 } },
+        id: 'o2',
+        op: 'add-product',
+        createdAt: '2026-10-13',
+        product: {
+          id: 'u1',
+          brand: 'huawei',
+          category: 'phone',
+          name: '用户机',
+          releaseDate: '2026-08-01',
+          specs: { 'body.weightG': 180 },
+        },
         reason: '官网没有但已上市',
       },
     ],
@@ -5017,7 +5283,11 @@ check('add-product：整机入池 + 身份字段兜底 + provenance 完整', () 
   assert.equal(u.status, 'on-sale', 'status 缺省 on-sale');
   assert.equal(u.granularity, 'manual');
   assert.equal(u.provenance['body.weightG'], 'user-manual', 'specs 全键标 user-manual');
-  assert.equal(u.provenance.releaseDate, 'user-manual', 'releaseDate 有值也要 provenance（硬闸门）');
+  assert.equal(
+    u.provenance.releaseDate,
+    'user-manual',
+    'releaseDate 有值也要 provenance（硬闸门）',
+  );
   assert.equal(report.added.length, 1);
 });
 
@@ -5025,9 +5295,34 @@ check('软删除与冲突：active=false 不生效；同目标多条后者赢', 
   const products = [makeProduct('p1')];
   const { products: out, report } = applyOverrides(products, {
     entries: [
-      { id: 'a', op: 'set-field', productId: 'p1', field: 'display.sizeIn', value: 7.0, reason: '先改', createdAt: '2026-10-01' },
-      { id: 'b', op: 'set-field', productId: 'p1', field: 'display.sizeIn', value: 7.2, reason: '后改', createdAt: '2026-10-02' },
-      { id: 'c', op: 'set-field', productId: 'p1', field: 'body.weightG', value: 999, reason: '作废', createdAt: '2026-10-03', active: false },
+      {
+        id: 'a',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 7.0,
+        reason: '先改',
+        createdAt: '2026-10-01',
+      },
+      {
+        id: 'b',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizeIn',
+        value: 7.2,
+        reason: '后改',
+        createdAt: '2026-10-02',
+      },
+      {
+        id: 'c',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'body.weightG',
+        value: 999,
+        reason: '作废',
+        createdAt: '2026-10-03',
+        active: false,
+      },
     ],
   });
   assert.equal(pick(out[0], 'display.sizeIn'), 7.2, '同字段多条，createdAt 在后者生效');
@@ -5040,22 +5335,65 @@ check('软删除与冲突：active=false 不生效；同目标多条后者赢', 
 check('反向测：引用悬空 / 字段未注册 / 值越界 / id 冲突 / 品牌未注册全部报错', () => {
   // 五类错误对应五种手滑。任何一类被静默跳过，用户都会以为改好了而页面纹丝不动。
   const products = [makeProduct('p1')];
-  const base = { id: 'x', op: 'set-field', productId: 'p1', field: 'display.sizeIn', value: 6.9, reason: 'r', createdAt: '2026-10-13' };
-  assert.ok(validateOverrides({ entries: [{ ...base, productId: 'ghost' }] }, products).length, '引用不存在的机型必须报错');
-  assert.ok(validateOverrides({ entries: [{ ...base, field: 'display.sizes' }] }, products).length, '字段未注册必须报错');
-  assert.ok(validateOverrides({ entries: [{ ...base, value: 69 }] }, products).length, '值越界必须报错');
-  assert.ok(validateOverrides({ entries: [{ ...base, reason: '' }] }, products).length, '缺 reason 必须报错');
+  const base = {
+    id: 'x',
+    op: 'set-field',
+    productId: 'p1',
+    field: 'display.sizeIn',
+    value: 6.9,
+    reason: 'r',
+    createdAt: '2026-10-13',
+  };
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, productId: 'ghost' }] }, products).length,
+    '引用不存在的机型必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, field: 'display.sizes' }] }, products).length,
+    '字段未注册必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, value: 69 }] }, products).length,
+    '值越界必须报错',
+  );
+  assert.ok(
+    validateOverrides({ entries: [{ ...base, reason: '' }] }, products).length,
+    '缺 reason 必须报错',
+  );
   assert.ok(
     validateOverrides({ entries: [{ ...base, createdAt: 'not-a-date' }] }, products).length,
     'createdAt 非法必须报错',
   );
   assert.ok(
-    validateOverrides({ entries: [{ id: 'n', op: 'add-product', product: makeProduct('p1'), reason: 'r', createdAt: '2026-10-13' }] }, products).length,
+    validateOverrides(
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('p1'),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
+      products,
+    ).length,
     'add-product id 冲突必须报错',
   );
   assert.ok(
     validateOverrides(
-      { entries: [{ id: 'n', op: 'add-product', product: makeProduct('u9', { brand: 'nokia' }), reason: 'r', createdAt: '2026-10-13' }] },
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('u9', { brand: 'nokia' }),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
       products,
     ).length,
     '品牌未注册必须报错',
@@ -5063,7 +5401,17 @@ check('反向测：引用悬空 / 字段未注册 / 值越界 / id 冲突 / 品�
   // 排除集合：add-product 已并入的 id 不构成「与现有产品冲突」（validate 二次校验踩过）
   assert.deepEqual(
     validateOverrides(
-      { entries: [{ id: 'n', op: 'add-product', product: makeProduct('u9'), reason: 'r', createdAt: '2026-10-13' }] },
+      {
+        entries: [
+          {
+            id: 'n',
+            op: 'add-product',
+            product: makeProduct('u9'),
+            reason: 'r',
+            createdAt: '2026-10-13',
+          },
+        ],
+      },
       [...products, makeProduct('u9')],
       { excludeIds: ['u9'] },
     ),
@@ -5079,22 +5427,44 @@ check('闸门反向测：v2 快照注入未注册键 / 越界值必须拒绝写�
   const good = {
     generatedAt: '2026-10-13T00:00:00Z',
     products: Array.from({ length: 20 }, (_, i) => ({
-      id: `p${i}`, slug: `p${i}`, brand: 'apple', category: 'phone', name: `P${i}`,
-      releaseDate: '2026-09-01', status: 'on-sale',
-      specs: { 'display.sizeIn': 6.1, 'body.weightG': 170, 'display.resolutionPx': { w: 1206, h: 2622 }, 'memory.storageGb': [256] },
-      provenance: { 'display.sizeIn': 'apple-official', 'body.weightG': 'apple-official', releaseDate: 'apple-official', 'display.resolutionPx.w': 'apple-official' },
-      firstSeenAt: '2026-10-13T00:00:00Z', lastSeenAt: '2026-10-13T00:00:00Z',
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+        'memory.storageGb': [256],
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
     })),
   };
   assert.deepEqual(validate(good, null), [], '合规 v2 快照必须零报错');
 
   const ghost = JSON.parse(JSON.stringify(good));
   ghost.products[0].specs['display.sizes'] = 6.9;
-  assert.ok(validate(ghost, null).some((f) => /display\.sizes/.test(f)), '未注册键必须被闸门拦下');
+  assert.ok(
+    validate(ghost, null).some((f) => /display\.sizes/.test(f)),
+    '未注册键必须被闸门拦下',
+  );
 
   const oob = JSON.parse(JSON.stringify(good));
   oob.products[0].specs['body.weightG'] = 1990;
-  assert.ok(validate(oob, null).some((f) => /weightG/.test(f)), '越界值必须被闸门拦下');
+  assert.ok(
+    validate(oob, null).some((f) => /weightG/.test(f)),
+    '越界值必须被闸门拦下',
+  );
 
   const badCat = JSON.parse(JSON.stringify(good));
   badCat.products[0].category = 'toaster';
@@ -5111,20 +5481,47 @@ check('用户数据层经闸门：注入违规的 override 必须拒绝写盘', 
   const snapshot = {
     generatedAt: '2026-10-13T00:00:00Z',
     products: Array.from({ length: 20 }, (_, i) => ({
-      id: `p${i}`, slug: `p${i}`, brand: 'apple', category: 'phone', name: `P${i}`,
-      releaseDate: '2026-09-01', status: 'on-sale',
-      specs: { 'display.sizeIn': 6.1, 'body.weightG': 170, 'display.resolutionPx': { w: 1206, h: 2622 }, 'memory.storageGb': [256] },
-      provenance: { 'display.sizeIn': 'apple-official', 'body.weightG': 'apple-official', releaseDate: 'apple-official', 'display.resolutionPx.w': 'apple-official' },
-      firstSeenAt: '2026-10-13T00:00:00Z', lastSeenAt: '2026-10-13T00:00:00Z',
+      id: `p${i}`,
+      slug: `p${i}`,
+      brand: 'apple',
+      category: 'phone',
+      name: `P${i}`,
+      releaseDate: '2026-09-01',
+      status: 'on-sale',
+      specs: {
+        'display.sizeIn': 6.1,
+        'body.weightG': 170,
+        'display.resolutionPx': { w: 1206, h: 2622 },
+        'memory.storageGb': [256],
+      },
+      provenance: {
+        'display.sizeIn': 'apple-official',
+        'body.weightG': 'apple-official',
+        releaseDate: 'apple-official',
+        'display.resolutionPx.w': 'apple-official',
+      },
+      firstSeenAt: '2026-10-13T00:00:00Z',
+      lastSeenAt: '2026-10-13T00:00:00Z',
     })),
   };
   const badOverride = {
     entries: [
-      { id: 'o', op: 'set-field', productId: 'p1', field: 'display.sizes', value: 6.9, reason: '手滑', createdAt: '2026-10-13' },
+      {
+        id: 'o',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.sizes',
+        value: 6.9,
+        reason: '手滑',
+        createdAt: '2026-10-13',
+      },
     ],
   };
   const fail = validate(snapshot, null, { overrides: badOverride });
-  assert.ok(fail.some((f) => /用户数据层/.test(f) && /display\.sizes/.test(f)), 'override 字段未注册必须拒绝写盘');
+  assert.ok(
+    fail.some((f) => /用户数据层/.test(f) && /display\.sizes/.test(f)),
+    'override 字段未注册必须拒绝写盘',
+  );
   assert.deepEqual(validate(snapshot, null, { overrides: { entries: [] } }), [], '空用户层不误报');
 });
 

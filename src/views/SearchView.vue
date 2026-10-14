@@ -140,7 +140,9 @@ function clearAll() {
 
       <!-- 品牌过滤：只列数据里真实存在的品牌，台数是真实计数 -->
       <div class="mt-3 flex flex-wrap items-center gap-2">
-        <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-ink-soft)"
+        <span
+          class="w-10 shrink-0 text-[12px] leading-[1.5]"
+          style="color: var(--color-ink-soft)"
           >{{ t('search.brandLabel') }}</span
         >
         <button
@@ -177,7 +179,8 @@ function clearAll() {
         {{ t('search.tipA') }}
         <b class="text-[var(--color-gold)]">{{ t('search.tipBold') }}</b>
         {{ t('search.tipB') }}
-        <span style="color: var(--color-parchment)">nova 14 Ultra</span> 与
+        <span style="color: var(--color-parchment)">nova 14 Ultra</span>
+        {{ t('search.tipConj') }}
         <span style="color: var(--color-parchment)">nova14ultra</span> {{ t('search.tipC') }}
       </p>
       <div class="flex flex-wrap gap-2">

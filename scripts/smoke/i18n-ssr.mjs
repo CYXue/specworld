@@ -22,17 +22,62 @@ process.chdir(ROOT);
 // ── 1. 数据白名单：数据里本来就有的中文不算泄漏 ────────────────────────────
 const CJK_RUN = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+/g;
 
+/**
+ * ⚠️ 白名单**只从真正会当「产品标识」展示的字段**抽，不能扫整个 JSON。
+ *
+ * 第一版图省事把 public/data/*.json 全文扫了一遍，结果 products.json 里的
+ * rawOfficial（官网原文，中文成段）把「全部」「与」「麒麟」这类常用字全变成了
+ * 白名单词——于是三处真的硬编码中文（画布分面的「全部」、搜索提示里的「与」、
+ * 芯片名「麒麟」）在英文页上堂而皇之地显示，冒烟却一直绿。
+ * **白名单越宽，闸门越像装饰品**：它当时放过的不是噪声，正是要抓的东西。
+ *
+ * 现在只认这几个字段：品牌名、机型名、中文机型名、产品线、型号代码。
+ * 其余（芯片名、系列名、变体名、状态、价格档）一律必须翻译，不许残留中文。
+ */
+const WHITELIST_FIELDS = ['name', 'nameZh', 'line', 'modelCode'];
+
+/**
+ * 第二级白名单：**specs 容器里的官网原文值**。
+ * 参数值（「铝金属设计」「超视网膜 XDR 显示屏」「最高支持 120 Hz 刷新率」）
+ * 是从中文官网抓下来的原文，英文页显示它属于「数据只有中文版本」的客观事实，
+ * 要治得让管线同时抓英文官网——那是数据工程，不是这里的界面漏翻。
+ *
+ * ⚠️ 但 `chipset.name` **不放进白名单**：芯片型号有厂商公布的官方英文名
+ * （麒麟 = Kirin），它是标识不是描述，必须翻译（curated/facets.json 的
+ * chipPrefixEn 管这层）。把标识和描述分开，是这条白名单不沦为「什么都放过」的关键。
+ */
+const SPECS_WHITELIST_EXCLUDE = new Set(['chipset.name']);
+
 function dataCjkWhitelist() {
   const out = new Set();
+  const collect = (v) => {
+    if (typeof v === 'string') for (const m of v.matchAll(CJK_RUN)) out.add(m[0]);
+  };
   const dir = join(ROOT, 'public', 'data');
   const stack = [dir];
   while (stack.length) {
     const cur = stack.pop();
     for (const ent of readdirSync(cur, { withFileTypes: true })) {
       const p = join(cur, ent.name);
-      if (ent.isDirectory()) stack.push(p);
-      else if (ent.name.endsWith('.json')) {
-        for (const m of readFileSync(p, 'utf8').matchAll(CJK_RUN)) out.add(m[0]);
+      if (ent.isDirectory()) {
+        stack.push(p);
+        continue;
+      }
+      if (!ent.name.endsWith('.json')) continue;
+      const json = JSON.parse(readFileSync(p, 'utf8'));
+      // vendors：品牌展示名
+      for (const v of json.vendors ?? []) {
+        for (const f of WHITELIST_FIELDS) collect(v?.[f]);
+      }
+      // products：机型标识字段 + specs 原文值（chipset.name 除外）
+      for (const prod of json.products ?? []) {
+        for (const f of WHITELIST_FIELDS) collect(prod?.[f]);
+        for (const [path, v] of Object.entries(prod?.specs ?? {})) {
+          if (SPECS_WHITELIST_EXCLUDE.has(path)) continue;
+          collect(v);
+          if (Array.isArray(v)) for (const item of v) collect(item);
+          else if (v && typeof v === 'object') for (const x of Object.values(v)) collect(x);
+        }
       }
     }
   }

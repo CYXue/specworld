@@ -344,7 +344,13 @@ npm run lint        # 只报告，CI 用
   展示层过 `seriesLabel()` / `variantLabel()` / `priceLabel()`。
   翻译 id 会让分享链接失效；
 - **切换器自身文案不进包**：`LocaleSwitch.vue` 各语言写自己的自称（中文 / English）。
-  切换器是给「看不懂当前语言」的人用的救命入口，译成另一种语言反而认不出来。
+  切换器是给「看不懂当前语言」的人用的救命入口，译成另一种语言反而认不出来；
+- **查表键要和调用方传进来的一致**：`seriesOf` / `variantOf` 返回的是 **label**，
+  `seriesLabel` / `variantLabel` 就必须按 `label` 查表。
+  `variantLabel` 曾经写成 `v.id === id`，于是中文变体（优享版 / 风驰版）永远查不到
+  `labelEn`、英文页直接吐中文 —— 而拉丁变体（Pro / Ultra）因为 label 与 labelEn
+  恰好相同而「看起来是对的」，故障藏了整整一轮。
+  **「看起来对」的那部分，正是最会掩护故障的部分。**
 
 ### 2.6.3 数据侧双语成对
 
@@ -354,7 +360,13 @@ npm run lint        # 只报告，CI 用
 |---|---|
 | `data/schemas/phone.json` | 49 个字段的 `labelEn`，中英不同形的单位补 `unitEn`（英寸→in、核→cores、小时→h） |
 | `data/view-phone.json` | 每个 `groups[].titleEn`、每个有 `label` 的行的 `labelEn` |
-| `data/curated/facets.json` | `variants[].labelEn`、品牌 `series[].labelEn`、`priceBuckets[].labelEn`、`fallbackLabelEn`、`lineEn` |
+| `data/curated/facets.json` | `variants[].labelEn`、品牌 `series[].labelEn`、`priceBuckets[].labelEn`、`fallbackLabelEn`、`lineEn`、`chipPrefixEn` |
+
+**管线写进数据的文案也要键化**，不能让管线拼中文串：
+`scripts/sync/index.mjs` 给 `snapshot.sources[].note` 写的是中文
+（「64 条取证，0 条未解决」），前端直接展示就会在英文页吐中文。
+现在同时写 `noteKey` + `noteParams`，前端按语言渲染，**数字走插值参数**而不是拼进句子。
+改了这里必须重跑 `node scripts/pipeline.mjs --data-only` 再生一次产物。
 
 ### 2.6.4 两道闸门（都必须能报红，已反向测过）
 
@@ -367,10 +379,26 @@ npm run lint        # 只报告，CI 用
 再匹配，开引号前不能是 `=` / `.` / 标识符 —— 否则 `product.id`、`filter.q`
 这类 Vue 模板属性与注释里的假键会淹出几百条假警（2026-10-13 实测：332 条）。
 
+扫描范围**含 `scripts/`**：管线会把键名写进数据（`noteKey: 'about.sourceAppleOfficial'`），
+只扫 `src/` 会把它们当成僵尸键误报。同时排除两处噪声源（写明理由，见脚本内注释）：
+`scripts/selftest.mjs` 自己（它断言的是数据字段路径，不是界面键）与
+`scripts/sources/**`（取数适配器只碰官网 HTML 与文件名，如 `compare.html`）。
+
 SSR 冒烟同理必须剥 `<!-- -->`：模板里大段中文「为什么这么写」的设计说明会被
 SSR 原样输出，不剥的话几百条假警会淹没真泄漏。
-它还有一份**数据白名单**（从 `public/data/*.json` 抽所有 CJK 连续段）——
-「华为 / 麒麟 / 鸿蒙 / 颜色名」本来就是数据，不算界面残留。
+
+**数据白名单要窄，越宽越像装饰品**（2026-10-14 实测教训）：
+第一版图省事把 `public/data/*.json` **全文**扫进去，于是官网原文（`rawOfficial`）
+里的常用字「全部 / 与 / 麒麟」全成了白名单词——三处真的硬编码
+（画布分面、搜索提示、芯片名）在英文页上堂而皇之地显示，冒烟一直绿。
+现在只认两级：① 产品标识字段（`name` / `nameZh` / `line` / `modelCode` / 品牌名）；
+② `specs` 里的官网原文值。**但 `chipset.name` 不进白名单** —— 芯片型号有厂商公布的
+官方英文名（麒麟 = Kirin），它是标识不是描述，必须翻译。把标识与描述分开，
+是这条白名单不沦为「什么都放过」的关键。
+
+**已知局限**（别把绿灯当成全覆盖）：SSR 只渲染首屏，交互后才出现的 DOM
+（下拉面板、浮层、错误提示）不在扫描范围内。画布分面那次就是这么漏的——
+它压根没渲染，所以「修没修好」都得靠人眼或补一条针对性断言。
 
 ---
 

@@ -43,7 +43,8 @@ const props = defineProps<{
   spin?: boolean;
 }>();
 
-const emit = defineEmits<{ (e: 'ready'): void }>();
+// 曾有个 `ready` 事件（挂载完成 emit 一下），但没有任何 @ready 监听 —— 死代码
+// （2026-10-14 深扫删除）。父组件要判断就绪用的是 ref 上的方法，不是这个事件。
 
 const host = ref<HTMLElement | null>(null);
 /** 视口尺寸 */
@@ -347,7 +348,6 @@ onMounted(() => {
   document.addEventListener('pointerup', onDocPointerEnd);
   document.addEventListener('pointercancel', onDocPointerEnd);
   startSpin();
-  emit('ready');
 });
 
 onBeforeUnmount(() => {
@@ -424,8 +424,14 @@ defineExpose({ reset, stopSpin, startSpin });
 
     <!-- HUD -->
     <div class="globe-hud">
-      {{ t('globe.hud', { n: documents.length, lon: Math.round(cam.lon), lat: Math.round(cam.lat), dist: cam.dist.toFixed(2) }) }}
-      
+      {{
+        t('globe.hud', {
+          n: documents.length,
+          lon: Math.round(cam.lon),
+          lat: Math.round(cam.lat),
+          dist: cam.dist.toFixed(2),
+        })
+      }}
     </div>
 
     <div v-if="!documents.length" class="globe-empty">{{ t('globe.empty') }}</div>

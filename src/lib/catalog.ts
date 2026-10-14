@@ -40,6 +40,12 @@ interface CuratedDict {
     lineEn?: Record<string, string>;
   };
   chipMultiPrefixes: string[];
+  /**
+   * 芯片名前缀的官方英文名（麒麟 → Kirin）。
+   * **只登记厂商自己公布的英文命名**；查不到就保留原文——
+   * 数据诚信原则不允许编造译名。
+   */
+  chipPrefixEn?: Record<string, string>;
   priceBuckets: Array<{
     id: string;
     label: string;
@@ -268,8 +274,8 @@ export function seriesOf(p: Product): string {
 }
 
 /** 系列 id → 展示名（语言感知）。查不到就原样返回（新品线不必先登记才能显示） */
-export function seriesLabel(id: string, locale = currentLocale()): string {
-  if (locale !== 'en') return id;
+export function seriesLabel(id: string): string {
+  if (currentLocale() !== 'en') return id;
   const cfg = CURATED.series;
   if (cfg.fallbackLabelEn?.[id]) return cfg.fallbackLabelEn[id];
   if (cfg.lineEn?.[id]) return cfg.lineEn[id];
@@ -292,15 +298,24 @@ export function variantOf(p: Product): string {
   return SERIES_FALLBACK;
 }
 
-/** 变体 id → 展示名（语言感知） */
-export function variantLabel(id: string, locale = currentLocale()): string {
-  if (locale !== 'en') return id;
-  return VARIANTS.find((v) => v.id === id)?.labelEn ?? seriesLabel(id, locale);
+/**
+ * 变体 id → 展示名（语言感知）。
+ *
+ * ⚠️ 查表键是 **label 不是 id**：`variantOf` 与 `seriesOf` 返回的都是 label
+ * （变体表/系列表用 label 作为分面值，见 `seriesLabel` 里同样的写法）。
+ * 这里曾经写成 `v.id === id`，于是中文变体（优享版 / 风驰版）永远查不到
+ * labelEn、英文页直接吐中文 —— 而拉丁变体（Pro / Ultra）因为 label 与 labelEn
+ * 恰好相同而「看起来是对的」，故障藏了整整一轮。
+ */
+export function variantLabel(id: string): string {
+  if (currentLocale() !== 'en') return id;
+  return VARIANTS.find((v) => v.label === id)?.labelEn ?? seriesLabel(id);
 }
 
 /** 系列/变体的兜底 id（两处共用一个常量，防止「标准」在两处写成不同字） */
 export const SERIES_FALLBACK = '标准';
-export const SERIES_OTHER = '其它';
+/** 同上，但只在**本文件内**使用（seriesOf 的返回值），故不 export */
+const SERIES_OTHER = '其它';
 
 /**
  * 某品牌下的系列分面（含计数），按「台数降序 → 名称」排。
@@ -381,7 +396,16 @@ export function chipName(p: Product): string {
  */
 export function chipNameLabel(name: string): string {
   if (name === UNKNOWN) return i18n.global.t('common.unpublished');
-  return name.replace(/(\d)(Pro)(?=$|[^A-Za-z0-9])/g, '$1 $2').trim();
+  let s = name.replace(/(\d)(Pro)(?=$|[^A-Za-z0-9])/g, '$1 $2').trim();
+  // 中文芯片品牌名换官方英文名（麒麟 → Kirin）。以前这一层根本没有，
+  // 英文页的参数表/分面里直接吐「麒麟9020」——SSR 冒烟也没报，因为
+  // 「麒麟」二字在 products.json 的官网原文里出现过，被数据白名单放过了。
+  if (currentLocale() === 'en') {
+    for (const [zh, en] of Object.entries(CURATED.chipPrefixEn ?? {})) {
+      if (s.includes(zh)) s = s.split(zh).join(en);
+    }
+  }
+  return s;
 }
 
 /**

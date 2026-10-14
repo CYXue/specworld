@@ -1,5 +1,5 @@
 {
-  "_doc": "筛选/分面策展字典（硬编码审计 P2 治理，2026-10-13）。与代码的分工：本文件管「厂商营销命名的识别规则」（变体/系列/多芯判据/价格档），src/lib/catalog.ts 只保留读字典的通用引擎——加变体/调价格档/接新品牌 = 改本文件，不改代码。纪律：① variants 顺序即匹配顺序，**长后缀必须在短后缀之前**（Pro Max 必须在 Pro 前，否则分面计数莫名少一台），selftest 哨兵看守；② match 是正则字符串（JSON 里 \\\\b 转义），flags 常用 'i'；series 的 fallback:true 行忽略 match 直接命中（放最后）；③ brands.<id>.from='name' 表示该品牌系列从机型名解析（苹果 line 全是 iPhone 只能自己判），未配置的品牌走 default:'line'（官网自己的产品线字段）；④ foldVariant = 该品牌「形态即变体」的特殊机型（如 iPhone Duo 双屏）；⑤ chipMultiPrefixes：官网把两颗芯片并列写一格的识别判据 = 归一后串里**同一芯片品牌前缀出现两次**；'A' 前缀覆盖苹果（A18A19），但单颗 A18Pro 不会误报（Pro 里无第二前缀）；⑥ priceBuckets：max:null 表示无穷（只允许最后一条），固定档是为了 URL 档 id 永远不错位（不要改成动态分桶）。selftest「策展表外置对账」双向看守：结构合法性 + 哨兵语义 + 真实数据冒烟。",
+  "_doc": "筛选/分面策展字典（硬编码审计 P2 治理，2026-10-13）。与代码的分工：本文件管「厂商营销命名的识别规则」（变体/系列/多芯判据/价格档），src/lib/catalog.ts 只保留读字典的通用引擎——加变体/调价格档/接新品牌 = 改本文件，不改代码。纪律：① variants 顺序即匹配顺序，**长后缀必须在短后缀之前**（Pro Max 必须在 Pro 前，否则分面计数莫名少一台），selftest 哨兵看守；② match 是正则字符串（JSON 里 \\\\b 转义），flags 常用 'i'；series 的 fallback:true 行忽略 match 直接命中（放最后）；③ brands.<id>.from='name' 表示该品牌系列从机型名解析（苹果 line 全是 iPhone 只能自己判），未配置的品牌走 default:'line'（官网自己的产品线字段）；④ foldVariant = 该品牌「形态即变体」的特殊机型（如 iPhone Duo 双屏）；⑤ chipMultiPrefixes：官网把两颗芯片并列写一格的识别判据 = 归一后串里**同一芯片品牌前缀出现两次**；'A' 前缀覆盖苹果（A18A19），但单颗 A18Pro 不会误报（Pro 里无第二前缀）；⑥ priceBuckets：max:null 表示无穷（只允许最后一条），固定档是为了 URL 档 id 永远不错位（不要改成动态分桶）。selftest「策展表外置对账」双向看守：结构合法性 + 哨兵语义 + 真实数据冒烟。 ⑦ chipPrefixEn：芯片名的中文前缀 → 官方英文名（麒麟 → Kirin）。只有**厂商自己公布的官方英文名**才登记，查不到就保留原文（数据诚信原则：不编造译名），保留的条目在 scripts/smoke/i18n-ssr.mjs 的「刻意保留」清单里写明理由。",
   "version": 1,
   "variants": [
     {
@@ -133,6 +133,9 @@
     "Exynos",
     "Tensor"
   ],
+  "chipPrefixEn": {
+    "麒麟": "Kirin"
+  },
   "priceBuckets": [
     {
       "id": "0-1999",

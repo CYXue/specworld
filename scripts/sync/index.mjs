@@ -162,11 +162,16 @@ function main() {
       'apple-official': {
         fetchedAt: now,
         note: `苹果官网规格页`,
+        // 展示走语言包（2026-10-14 i18n 深扫）：note 是管线拼的中文串，
+        // 英文页会原样吐中文。noteKey + noteParams 让前端按语言渲染，
+        // 数字作为插值参数而不是写死在句子里（否则「64 条取证」没法双语）。
+        noteKey: 'about.sourceAppleOfficial',
         ok: merged.some((p) => p.brand === 'apple'),
       },
       'huawei-official': {
         fetchedAt: now,
         note: `华为官网规格页`,
+        noteKey: 'about.sourceHuaweiOfficial',
         ok: merged.some((p) => p.brand === 'huawei'),
       },
       'release-dates': {
@@ -174,6 +179,13 @@ function main() {
         note: releaseDates
           ? `${releaseDates.entries?.length ?? 0} 条取证，${releaseDates.unresolved?.length ?? 0} 条未解决`
           : '缺失',
+        noteKey: releaseDates ? 'about.sourceReleaseDates' : 'about.sourceMissing',
+        noteParams: releaseDates
+          ? {
+              total: releaseDates.entries?.length ?? 0,
+              unresolved: releaseDates.unresolved?.length ?? 0,
+            }
+          : undefined,
         ok: Boolean(releaseDates),
       },
       'user-manual': {
@@ -181,6 +193,10 @@ function main() {
         note: overrides.entries?.length
           ? `${overrides.entries.length} 条用户数据，本轮生效 ${overrideReport.applied.length} 条`
           : '无用户数据',
+        noteKey: overrides.entries?.length ? 'about.sourceUserManual' : 'about.sourceUserEmpty',
+        noteParams: overrides.entries?.length
+          ? { total: overrides.entries.length, applied: overrideReport.applied.length }
+          : undefined,
         ok: true,
       },
     },
@@ -234,7 +250,9 @@ function main() {
   if (overrideReport.applied.length) {
     console.log(`用户数据层：生效 ${overrideReport.applied.length} 条`);
     for (const r of overrideReport.replaced) {
-      console.log(`  - ${r.productId} ${r.field}：${JSON.stringify(r.from)} → ${JSON.stringify(r.to)}（${r.id}）`);
+      console.log(
+        `  - ${r.productId} ${r.field}：${JSON.stringify(r.from)} → ${JSON.stringify(r.to)}（${r.id}）`,
+      );
     }
     for (const r of overrideReport.erased) {
       console.log(`  - ${r.productId} ${r.field}：抹除官网值 ${JSON.stringify(r.from)}（${r.id}）`);
@@ -291,7 +309,9 @@ function main() {
       atomicWrite(queuePath, `${JSON.stringify(queue, null, 2)}\n`);
     } else if (existsSync(queuePath)) {
       rmSync(queuePath);
-      console.log('队列已清空（补齐发布日期或机型离开官网目录），已删除 data/discovery-pending.json');
+      console.log(
+        '队列已清空（补齐发布日期或机型离开官网目录），已删除 data/discovery-pending.json',
+      );
     }
     console.log(
       `已写入 data/products.json（${snapshot.products.length} 台）与 _work/derived.json` +

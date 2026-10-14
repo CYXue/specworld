@@ -301,7 +301,13 @@
       "terms": "仅作指称性使用",
       "body": "页面出现的机型名称与商标归各自所有者所有，此处仅用于标识被描述的对象，不表示关联或背书。"
     },
-    "artNote": "站内立绘由本仓库脚本在构建期生成，未使用第三方美术素材，因此无额外素材署名。"
+    "artNote": "站内立绘由本仓库脚本在构建期生成，未使用第三方美术素材，因此无额外素材署名。",
+    "sourceAppleOfficial": "苹果官网规格页",
+    "sourceHuaweiOfficial": "华为官网规格页",
+    "sourceReleaseDates": "{total} 条取证，{unresolved} 条未解决",
+    "sourceUserManual": "{total} 条用户数据，本轮生效 {applied} 条",
+    "sourceUserEmpty": "无用户数据",
+    "sourceMissing": "缺失"
   },
   "search": {
     "title": "搜索机型",
@@ -315,6 +321,7 @@
     "tipA": "空格分多个词，全部命中才算匹配。可搜机型名、中文名、产品线、芯片。",
     "tipBold": "大小写、空格、全角半角随意打",
     "tipB": "——",
+    "tipConj": "与",
     "tipC": "搜到同一批。",
     "noResultTitle": "没有匹配的机型",
     "noResultBody": "官网未公布的字段不进搜索索引。机型名请包含关键部分（如 Mate 60 Pro，或写成 mate60pro）。",

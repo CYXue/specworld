@@ -33,8 +33,17 @@ const scope = computed(() =>
   SCOPE.map((r) => ({ key: r.key, label: t(r.labelKey), value: t(r.valueKey) })),
 );
 
+/**
+ * 数据来源行。`note` 是管线拼好的中文串，**不能直接展示**（英文页会吐中文）——
+ * 展示走管线同时写下的 `noteKey` + `noteParams`（2026-10-14 i18n 深扫修）。
+ * 老快照没有 noteKey 时回落到 note：宁可显示中文，也不要整行空掉。
+ */
 const sources = computed(() =>
-  Object.entries(ds.value?.sources ?? {}).map(([key, v]) => ({ key, note: v.note, ok: v.ok })),
+  Object.entries(ds.value?.sources ?? {}).map(([key, v]) => ({
+    key,
+    note: v.noteKey ? t(v.noteKey, v.noteParams ?? {}) : v.note,
+    ok: v.ok,
+  })),
 );
 
 /**
@@ -129,11 +138,7 @@ const licenses = computed(() =>
         {{ t('about.introB') }}
       </p>
       <ul class="grid gap-2 sm:grid-cols-2">
-        <li
-          v-for="row in scope"
-          :key="row.key"
-          class="pixel-panel px-3 py-2"
-        >
+        <li v-for="row in scope" :key="row.key" class="pixel-panel px-3 py-2">
           <span class="pixel-heading text-[12px] leading-[1.5]">{{ row.label }}</span>
           <span class="ml-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]">{{
             row.value

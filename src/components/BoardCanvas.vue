@@ -46,7 +46,9 @@ export interface BoardTile {
 }
 
 const props = defineProps<{ tiles: BoardTile[] }>();
-const emit = defineEmits<{ (e: 'count', n: number): void }>();
+// 曾经有个 `count` 事件（渲染完把瓦片数 emit 出去），但全站没有任何 @count 监听
+// —— 声明了、emit 了、没人接，就是死代码（2026-10-14 深扫删除）。
+// 台数父组件自己是知道的（tiles.length），这个事件从来就是多余的。
 
 const router = useRouter();
 
@@ -194,7 +196,6 @@ function build() {
     div.dataset.id = t?.id ?? '';
     movers.push({ ...p, ele: div, img, tip, idx });
   }
-  emit('count', n);
 }
 
 // ── 尺寸 ──
