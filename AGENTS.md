@@ -1,8 +1,9 @@
 # 参数世界（specworld）— 给接手的 AI
 
 动手之前先读 **`docs/PITFALLS.md`**，它回答「这个项目的故障长什么样」：
-16 条已被工具抓出的真 bug + 8 条页面结构假设 + 一棵排查决策树。
+34 条坑（P1–P34，多为零报错的静默故障）+ 8 条页面结构假设（A1–A8）+ 一棵排查决策树。
 再读 `docs/DATA-CONTRACT.md`（唯一字段定义源）与 `docs/PRINCIPLES.md`（不可违背原则）。
+另有两轮全库审计存档备查：`docs/HARDCODE-AUDIT.md`、`docs/AUDIT-REPORT-2026-10-13.md`。
 
 本项目已经重构过一轮（手写多页 HTML → Vite + Vue3 + TS + Tailwind v4），
 文档里凡是提到 `scripts/site/`、`scripts/preview/`、`ui.mjs`、`build.mjs` 的段落均为历史记载，
@@ -51,7 +52,7 @@ v2 全品类目录（category + specs 扁平容器）的设计见 `docs/UNIVERSA
 
 ### 改了 `scripts/normalize/parse.mjs`（解析器）
 ```bash
-npm run selftest          # 211 项，不联网，1 秒
+npm run selftest          # 275 项，不联网，1 秒
 node scripts/pipeline.mjs --data-only   # 再看真实数据有没有变
 ```
 解析器出错**不会抛异常**，它会安静地把 PWM 调光频率当刷新率、把分辨率当屏幕尺寸，
@@ -80,9 +81,9 @@ node scripts/qa/index.mjs          # 回答「为什么这台是榜首」「影�
 ```bash
 node scripts/selftest.mjs      # layout 纯函数 + 与前端的判据同源
 npm run sprites:review          # 出审查表，人眼核对
-node _smoke-pixel.cjs# 像素风扫描（需 preview 已起）
+node _smoke-pixel.cjs# 像素风扫描（需 preview 已起：npm run build && npm run preview，端口 4173 只监听 localhost）
 ```
-立绘每一根线都由数据算出，改一个阈值就是改**全部 60 张图**，
+立绘每一根线都由数据算出，改一个阈值就是改**全部 62 张图**，
 而单测、产物闸门、像素风扫描**三者都抓不到「画错了但完全合规」**。
 所以改完必须打开 `_work/sprite-review/index.html` 看一眼：
 **同组的机器必须长得非常像**（折叠档里混进直板机 = 判据坏了）。
@@ -115,7 +116,7 @@ sRGB 低亮度端被严重压缩，按通道值等差会出现「两档肉眼完
 ### 改了 `src/lib/board.ts` / `globe.ts`（几何）
 ```bash
 npm run selftest          # 含不变量 + 暴力对拍，不是 golden 快照
-node _smoke-canvas.cjs    # 需先 npm run dev（端口 5183）
+node _smoke-canvas.cjs    # 需先 npm run dev（端口 5183，与 vite.config.ts 的 server.port 同源）
 node _smoke-globe.cjs
 ```
 几何是「错了也不报错、只会静默画错」的地方：回绕边界算错会瞬移、双模漏负值会取到 `undefined`。
@@ -123,10 +124,17 @@ node _smoke-globe.cjs
 画面照样完整渲染，但指针事件全落空（拖不动、点不进、零报错）。
 **交互组件必须真机拖一遍，smoke 脚本不许省。**
 
+⚠️ **根目录 7 个 `_smoke*.cjs` 依赖 puppeteer，而它刻意不进 package.json**
+（本地工具、CI 不需要浏览器）。本机一次性安装：`npm i puppeteer --no-save`。
+注意 `npm install` / `npm ci` 会把它当 extraneous 删掉——2026-10-14 就这么静默发生过一次，
+7 个脚本全部 MODULE_NOT_FOUND。删了重装即可，不是代码问题。
+端口口径已统一收在 `vite.config.ts`（dev 5183 / preview 4173），脚本默认值引用它；
+preview 只监听 localhost（127.0.0.1 不通，实测过）。
+
 ### 改了界面文案 / 字体
 ```bash
 npm run font:check
-node _smoke-pixel.cjs     # 需 preview 已起
+node _smoke-pixel.cjs     # 需 preview 已起（npm run preview，端口 4173 只监听 localhost；端口真源在 vite.config.ts）
 ```
 字体缺字形是**静默**的：同一句话里有些字像素、有些字圆滑，浏览器静默回退系统字体。
 唯一权威判据是字体 cmap，`font:check` 查的就是生成期落下的 `coverage.json`。

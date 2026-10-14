@@ -6,11 +6,11 @@
 
 | 项 | 决定 |
 |---|---|
-| 品类 | **只做手机**（先把一条链路跑通，再考虑平板/手表/耳机） |
+| 品类 | **手机**（当前唯一已建设品类）；目录架构已泛化为全品类（v2，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`），tablet/laptop/audio 为预注册未建设 |
 | 品牌 | **华为 + 苹果** |
-| 机型 | **近 3 年在售**（含已停售但属该窗口的机型，用状态区分） |
-| 形态 | 纯静态站（零后端），可另发一份到 B 站 Toy |
-| 数据 | 厂商官网规格页为主源，第三方公开榜单为成绩源，缺数据一律 `null` |
+| 机型 | **2024-09 起在售**（收录窗口 `WINDOW_START`，含已停售但属该窗口的机型，用状态区分） |
+| 形态 | 纯静态站（零后端），已送审 B 站 Toy（slug=specworld） |
+| 数据 | 厂商官网规格页为主源，**不做跑分/成绩分**（无可公开核查的第三方成绩源），缺数据一律 `null` |
 
 ## 为什么是这个形态
 
@@ -29,8 +29,11 @@ docs/PRINCIPLES.md      不可违背原则（数据诚信 / 闸门 / 指纹 / �
 docs/COMPARE-DESIGN.md  对比页信息设计定稿（主表/折叠/高亮阈值）
 docs/PROBE-FINDINGS.md  官网取数通道探针（华为/苹果可解析性证据）
 docs/AUTOMATION-RECIPE.md 自动化发布配方（Actions + Pages + 指纹去重，可迁移到其他项目）
-docs/PITFALLS.md 踩过的坑与页面结构假设（取不到时怎么查：8 条结构假设 + 21 条坑 + 排查决策树）
+docs/PITFALLS.md 踩过的坑与页面结构假设（取不到时怎么查：8 条结构假设 + 34 条坑（P1–P34）+ 排查决策树）
 docs/BENCHMARK-VS-AMW.md 与 ai-model-world 的架构对标（差距在哪、缺什么、为什么不迁 Next.js）
+docs/UNIVERSAL-CATALOG.md v2 全品类目录设计（四态 value_status / 显式分组 / 零代码扩品类 recipe）
+docs/HARDCODE-AUDIT.md 第一轮全库审计（硬编码/散落字面量）
+docs/AUDIT-REPORT-2026-10-13.md 第二轮全库审计（死代码/构建副产品生命周期/导出卫生，修复已入库）
 
 # 规范化文档体系（三份，按需查阅）
 docs/SPEC-AI-MODEL-WORLD.md 参考项目规范提炼（ai-model-world：5 条不可违背原则 + 护栏三层）
@@ -38,22 +41,28 @@ docs/SPEC-PARAMETER-WORLD.md 本项目规范提炼（架构三硬规矩 + 指纹
 docs/MIGRATION-HANDBOOK.md **迁移手册**（两项目交集：七条骨架 + 领域无关判据 + 10 条实施踩坑 + 可复制骨架代码）
 src/types.ts            前端视图模型（与 data/products.json 对齐）
 src/lib/types.ts        管线侧数据契约（Node 侧；与上面同名不同职责，见 CONVENTIONS §1.3）
+src/locales/            zh/en 界面语言包（vue-i18n；参数值官方术语表在 data/curated/glossary.json）
 src/lib/                渲染层逻辑：数据装载、规格分组、能力横条、搜索
-src/components/         像素风组件（Sky/Ground/ProductRoom/SpecTable/…）
-src/views/              8 个页面（广场/机型详情/品牌/对比/榜单/时间线/搜索/关于）
+src/components/         23 个像素风组件（Sky/Ground/ProductRoom/SpecTable/…）
+src/views/              11 个页面（广场/画布/设备球/机型详情/品牌/对比/榜单/时间线/搜索/关于 + 404）
 src/router/index.ts     hash 路由（Toy 挂在子路径下，history 模式会失效）
 scripts/pipeline.mjs    数据层编排（取数→规范化→闸门→精灵图→指纹）
 scripts/sources/        四个官网取数适配器
 scripts/normalize/      官网字段 → 契约字段（含纯函数解析层）
 scripts/sync/           窗口过滤 + 校验闸门 + 原子写
-scripts/sprite/         数据驱动的像素立绘生成（60 张 SVG）
- *review.mjs             像素立绘审查表（按几何分组，肉眼核对改阈值后的画法）
+scripts/editor-server.mjs 后台录入服务（npm run editor；页面在 admin/，不随站点发布）
+scripts/sprite/         数据驱动的像素立绘生成（62 张 SVG）
+scripts/sprite/review.mjs 像素立绘审查表（按几何分组，肉眼核对改阈值后的画法）
 scripts/lib/foldable.mjs 折叠屏判据**全站唯一真源**（前端与立绘共用）
 scripts/archive.mjs     官网原始响应归档（→ data/raw/，供解析器离线回放）
 scripts/sync/queue.mjs  窗口过滤 + 待收录队列（纯函数，自测直接 import）
 scripts/sync-public.mjs 构建期把 data/ 同步进 public/（prebuild 自动跑）
 scripts/publish/        内容指纹、产物闸门 verify-dist、依赖源规范化 normalize-lock
 .github/workflows/      每 12 小时自动同步 + 每日 Toy 送审
+admin/                  后台编辑器（overrides 录入/审核；刻意不放 public/，dist 不携带）
+data/categories.json    品类注册表（全品类目录入口：id → schemas/<id>.json）
+data/schemas/           各品类字段表（当前仅 phone.json；新增品类 = 加一行 + 加一份字段表）
+data/curated/           人工策展数据（facets 分面档位 / glossary 参数值官方术语表）
 data/products.json      唯一数据契约产物（提交入库）
 data/release-dates.json 发布日期取证表（**curated 数据**，人工核对，必须入库）
 data/discovery-pending.json 待收录队列（**curated 数据**，缺发布日期的机型，只在非空时存在）
@@ -82,7 +91,7 @@ npm ci && npm run build           # = prebuild(sync-public) + vite build + postb
 ## 改解析器之前先跑这个
 
 ```bash
-node scripts/selftest.mjs           # 211 项断言，不联网，1 秒
+node scripts/selftest.mjs           # 275 项断言，不联网，1 秒
 node scripts/selftest.mjs --verbose # 逐项打印
 ```
 
@@ -113,7 +122,7 @@ node scripts/selftest.mjs --verbose # 逐项打印
 ## 真机交互验证：构建成功 ≠ 画布能用
 
 ```bash
-node _smoke-canvas.cjs   # 环面画布 23 项，需先 npm run dev（端口 5183）
+node _smoke-canvas.cjs   # 环面画布 23 项，需先 npm run dev（端口 5183，见 vite.config.ts）
 node _smoke-globe.cjs    # 设备球 25 项，同一端口（含触摸手势与捏合）
 ```
 
@@ -367,12 +376,12 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 | 路由 | 组件 | 内容 |
 |---|---|---|
 | `#/` | `HomeView` | 广场：最新/最贵/最便宜（按品类各取一台）+ 各品牌最新几台 + 各维度第一 |
-| `#/globe` | `GlobeView` | **设备球**：60 台贴在球壳上，拖动转球，绕一圈精确复原（真循环，仿地球仪） |
+| `#/globe` | `GlobeView` | **设备球**：62 台贴在球壳上，拖动转球，绕一圈精确复原（真循环，仿地球仪） |
 | `#/canvas` | `CanvasView` | **无限画布**：机型瓦片铺成一张环面（torus），拖拽/滚轮任意方向无限平移、越界回绕换图；点瓦片进详情浮层。按品牌/产品线/年份/画布内搜索筛选 |
 | `#/brand/:brand` | `BrandView` | 品牌页：按**品类 → 形态 → 系列 → 变体 → 芯片 → 内存 → 年份 → 价格段**筛选（品类置顶、形态第二——折叠屏不是品类是形态，与机型库同一套 `facets.ts` 口径）。苹果系列只分 标准/Air/SE/折叠屏，Pro/Pro Max/Plus 归入变体层；结果区顶部同样有轻量排序条 |
 | `#/product/:id` | `ProductView` | 详情页：完整规格 + 能力横条 |
-| `#/compare` | `CompareView` | **机型库 + 对比台合一（筛选 = AND 组合，可减员到一排）**：默认列全部 60 台，按 品类/形态（折叠屏7·直板53，曲屏直屏数据源无原文暂不做）/品牌/系列/变体/芯片/内存/年份/**价格段（京东式 ¥0-1999…¥8000+）** AND 组合筛选；顶部有「已选条件」汇总条（可逐个删/一键清空）、京东「高级筛选」式下拉选择器（选定即收起）、计数为 0 的档灰显；勾选加入对比台，勾 1 台看详情、≥2 台并排对比不限台数；结果区顶部另有**轻量单级排序条**（最新/价格/续航/屏幕/轻薄/影像，辅助非主打）。条件/已选/排序全在 URL |
-| `#/rankings` | `RankingsView` | **榜单 = 多级排序器（与筛选是两件事）**：对所有 60 台按**优先级链**排序（如「优先大电池 → 再加相机二级排」），永远不减员；四个能力维度一键加为排序级，可增删 / 调优先级 / 切升降序；排序链写进 URL `o` |
+| `#/compare` | `CompareView` | **机型库 + 对比台合一（筛选 = AND 组合，可减员到一排）**：默认列全部 62 台，按 品类/形态（折叠屏7·直板55，曲屏直屏数据源无原文暂不做）/品牌/系列/变体/芯片/内存/年份/**价格段（京东式 ¥0-1999…¥8000+）** AND 组合筛选；顶部有「已选条件」汇总条（可逐个删/一键清空）、京东「高级筛选」式下拉选择器（选定即收起）、计数为 0 的档灰显；勾选加入对比台，勾 1 台看详情、≥2 台并排对比不限台数；结果区顶部另有**轻量单级排序条**（最新/价格/续航/屏幕/轻薄/影像，辅助非主打）。条件/已选/排序全在 URL |
+| `#/rankings` | `RankingsView` | **榜单 = 多级排序器（与筛选是两件事）**：对所有 62 台按**优先级链**排序（如「优先大电池 → 再加相机二级排」），永远不减员；四个能力维度一键加为排序级，可增删 / 调优先级 / 切升降序；排序链写进 URL `o` |
 | `#/timeline` | `TimelineView` | 全部机型按发布月份铺开的发布史 |
 | `#/search` | `SearchView` | 顶栏搜索：分词 AND，只搜机型名/中文名/产品线/芯片/厂商 |
 | `#/about` | `AboutView` | **关于页**：项目说明 + 数据与原则（含动态数据快照时间与数据源状态）；原每页底部的「数据与原则」面板已收敛到此页，footer 只留品牌署名 |
@@ -380,7 +389,7 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 
 ### 两个「循环」界面：球面 vs 环面（两套几何，别互相套用）
 
-**设备球 `#/globe`** 是「转地球仪」：60 台贴在半径 R 的球壳上，拖动 = 转球，
+**设备球 `#/globe`** 是「转地球仪」：62 台贴在半径 R 的球壳上，拖动 = 转球，
 绕完整圈**精确复原**。**无限画布 `#/canvas`** 是「环面回绕」：瓦片铺在平面环面上，
 任意方向无限平移、越界即从对侧接回。两者都叫「循环」，但一个是**曲面本身无边界**、
 一个是**平面模运算回绕**，结论不能互相套用。
@@ -390,7 +399,7 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 | 几何 | 球面透视投影（经纬度相机） | 平面环面（torus）回绕 |
 | 「无限」来自 | **曲面本身没有边界** | **环面回绕**：越界瓦片从对侧回来 |
 | 循环 | **真循环**（转 360° 精确复原，实测偏差 `0px`） | 真回绕（平移一个周期后相位复原） |
-| 渲染 | 60 台全渲染，按深度排序 | **DOM 瓦片恒定 = 视口网格数**，滚动只搬 transform + 换图 |
+| 渲染 | 62 台全渲染，按深度排序 | **DOM 瓦片恒定 = 视口网格数**，滚动只搬 transform + 换图 |
 | 缩放 | 改相机视距 `dist`（近大远小） | 无缩放（滚轮/拖拽都是平移） |
 | 背面 | **半透明可见**（线框球，opacity ≥ 0.22） | 不适用 |
 
@@ -401,7 +410,7 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 - **视距恒大于球半径**（`DIST_MIN = 1.55 > R = 1`）。透视分母是 `dist - z`，
   一旦过零或变负，投影会翻到屏幕另一侧 —— 表现为「转着转着设备突然镜像」。
 - **纬度不到 ±90**（`LAT_LIMIT = 85`）。到极点时经线汇聚成一点，画面会突然翻转。
-- **背面不剔除**。线框球口径：60 台始终在画面上，背面只是变暗到 `BACK_OPACITY = 0.22`。
+- **背面不剔除**。线框球口径：62 台始终在画面上，背面只是变暗到 `BACK_OPACITY = 0.22`。
   若剔除背面就退化成实心球，信息密度腰斩。
 
 品牌分区不需要额外的几何代码：Fibonacci 分布的 index 与纬度线性相关，
@@ -438,7 +447,7 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
   不足的格循环复用第 1 张 —— 与参考站 `complete_data` 同款行为。
   质数（如 13）找不到除数会 `count++` 直到 14=2×7，绝不退化成 1×1（早期实现就在这栽过）。
 - **DOM 瓦片恒定 = 视口网格数**：`viewportGrid()` 按**容器**尺寸算行列；滚动时**不增删节点**，
-  只改 `transform` + 换 `img.src`。所以数据 60 台还是 600 台，DOM 始终 ~30~50 个。
+  只改 `transform` + 换 `img.src`。所以数据 62 台还是 600 台，DOM 始终 ~30~50 个。
 - **越界回绕**：`wrap()` 把滚出一侧的瓦片从对侧接回来、同步修正逻辑行列，O(1)/瓦片。
 - **逻辑 ↔ 像素解耦**：像素 (x,y) 只管渲染；逻辑 (col,row) 经 `dataIndex()` 双模
   `((col%C)+C)%C` 决定「这张是什么图」，防负索引。
@@ -460,7 +469,7 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
   **全部不命中** —— 瓦片掉进普通流竖直堆成一列，画面大面积空白地板。修法是用 `:deep()` 让规则
   编译成 `.board-host[data-v-x] .board-mover`。**凡命令式创建的 DOM，其样式必须 `:deep()` 或全局。**
 
-实测填充率（60 台）：390px→92%、1440px→95%、1920px→95.5%，纵向溢出可拖拽。
+实测填充率（62 台）：390px→92%、1440px→95%、1920px→95.5%，纵向溢出可拖拽。
 
 
 
@@ -519,17 +528,17 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
         ↓
 规范化（scripts/normalize）  官网字段 → 契约字段，口径判定 + 逐字段 provenance
         ↓
-发布日期取证（data/release-dates.json） 61 条人工核对，100% 日精度，**入库**
+发布日期取证（data/release-dates.json） 64 条人工核对，100% 日精度，**入库**
         ↓
 整合（scripts/sync）        窗口过滤 + 发布日期回填 + 校验闸门 + 原子写
         ↓
-data/products.json          60 台（华为 47 / 苹果 13）
+data/products.json          62 台（华为 49 / 苹果 13）
         ↓
-精灵图（scripts/sprite）    由数据几何算出机身宽高比与镜头数，60 张 SVG
+精灵图（scripts/sprite）    由数据几何算出机身宽高比与镜头数，62 张 SVG
         ↓
 同步（scripts/sync-public）  构建期拷进 public/（真源只有 data/，拷贝不入库）
         ↓
-渲染（Vite + Vue3 + TS）    8 个页面 + 13 个像素风组件，Tailwind v4 设计令牌
+渲染（Vite + Vue3 + TS）    11 个页面 + 23 个像素风组件，Tailwind v4 设计令牌
         ↓
 产物闸门（verify-dist）     入口存在 · 引用全相对 · 零外链 · < 50 MB
         ↓
@@ -544,9 +553,9 @@ data/products.json          60 台（华为 47 / 苹果 13）
 - [x] 覆盖口径决策：**窗口 2024-09 之后**（两家官网都只保留在售机型规格页，归档站不可达）
 - [x] 范围决策：**不做跑分评分**（手机圈无可公开核查的第三方成绩源），只做客观参数
 - [x] 四个适配器：华为 50 台（0 跳过）、苹果规格页 7 台、苹果对比页矩阵 42 列 × 25 组、苹果价格 7 台
-- [x] 发布日期取证：61 条，100% 日精度（`data/release-dates.json`，curated 数据入库）
+- [x] 发布日期取证：64 条，100% 日精度（`data/release-dates.json`，curated 数据入库）
 - [x] 规范化层：官网字段 → 契约字段，含机型拆分、口径判定、逐字段 provenance
-- [x] 跑通管线产出真实 `data/products.json`（60 台）并通过全部校验闸门
+- [x] 跑通管线产出真实 `data/products.json`（62 台）并通过全部校验闸门
 - [x] 修复 `refreshHz` 解析污染：旧实现把 PWM 调光频率（1440/2160）与分辨率（2622）当成刷新率，
       已改为子句级解析 + 排除调光/采样 + 区分区间/离散/单值，并在 `sync/validate.mjs` 加了 `[48,240]` 闸门
 - [x] 派生层：分位标尺、首页头衔、一句话定位（`scripts/lib/derive.mjs`）
@@ -554,7 +563,7 @@ data/products.json          60 台（华为 47 / 苹果 13）
       遵循 Bilibili Toy 官方推荐栈，`base:'./'` + hash 路由，产物 0.79 MB
 - [x] 像素世界设计语言落地：`src/style.css` 用 Tailwind v4 `@theme` 承载全部令牌，
       破晓渐变天空 + 像素天际线 + 内阴影描边面板 + 16-bit 像素字体
-- [x] 13 个组件 / 8 个页面：广场、机型详情、品牌、对比、榜单、时间线、搜索、关于（关于页承载原 footer 的「数据与原则」）
+- [x] 23 个组件 / 11 个页面：广场、画布、设备球、机型详情、品牌、对比、榜单、时间线、搜索、关于（关于页承载原 footer 的「数据与原则」）
 - [x] **无限画布（环面回绕）**（`src/lib/board.ts` + `BoardCanvas.vue` + `BoardView.vue` + 组件群）：
       完全复刻参考站「机型瓦片铺成环面、拖拽/滚轮无限平移、越界回绕换图」的交互模型；
       DOM 瓦片数 = 视口网格数（命令式创建 + 只改 `transform`/`img.src`，节点数恒定），
@@ -575,11 +584,11 @@ data/products.json          60 台（华为 47 / 苹果 13）
 - [x] **设备球**（`src/lib/globe.ts` + `GlobeCanvas.vue` + `GlobeView.vue`，路由 `/globe`）：
       球面透视投影 + 经纬度相机 + 自动自转，绕一圈**精确复原**（实测偏差 0px）、
       背面半透明可见、品牌自动分到不同纬度带。与环面画布复用同一套筛选层（`canvasFilter.ts`）
-- [x] 画布几何数学纳入自测：**211 项**断言，环面含回绕不变量（索引集合守恒 / 模周期位置均匀 /
+- [x] 画布几何数学纳入自测：**275 项**断言，环面含回绕不变量（索引集合守恒 / 模周期位置均匀 /
       整圈双射 / `torusIsConsistent`），球面含循环复原 / 透视分母安全 / 深度单调 / 分布均匀
 - [x] 真机交互验证 `_smoke-canvas.cjs`（25 项）：抓出「`:deep()` 命令式 DOM 拿不到 scoped 样式、
       瓦片掉进普通流竖直堆叠、可见仅 3 块、包围盒 maxX 卡在视口左半」——这类故障构建成功、单测全绿、
-      截图看着都对，只有真的去拖才抓得到；另验证窄屏 354×570 不塌、筛选华为 47 台且瓦片皆 h 开头
+      截图看着都对，只有真的去拖才抓得到；另验证窄屏 354×570 不塌、筛选华为 49 台且瓦片皆 h 开头
 - [x] **全站搜索**（`src/lib/search.ts` + `SearchView.vue`）：空格分词 AND 匹配，
       查机型名/中文名/产品线/芯片 + 品牌过滤，查询词进 URL query（刷新与分享可还原）
 - [x] 全部旧多页 HTML 产物下线：`pipeline.mjs --data-only` 跳过建站层，
@@ -590,7 +599,7 @@ data/products.json          60 台（华为 47 / 苹果 13）
       前端改一个字会正确触发 Pages 重发
 - [x] `package-lock.json` 的 125 条 `resolved` 全部从 npmmirror 换回 registry.npmjs.org
       （GitHub runner 不在国内镜像后面；integrity 是 tarball 哈希，两镜像字节相同故不变）
-- [x] 211 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
+- [x] 275 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
       两次刷新率事故各固化成一条断言，CI 第一个 job
 - [x] 全链路编排 `scripts/pipeline.mjs`：一条命令跑通，失败即停不写盘
 - [x] 内容指纹 `scripts/publish/fingerprint.mjs`：剥掉运行时刻字段后再算，
@@ -599,9 +608,9 @@ data/products.json          60 台（华为 47 / 苹果 13）
 - [x] 自动发布 GitHub Pages：零凭据，站点内容有变化才发（`sync.yml` 的 `deploy` job）
 - [x] 自动送审 B 站 Toy `toy.yml`：每天一次 + 指纹去重 + 缺凭据安静跳过 + 失败开 issue
 - [x] 体检脚本 `scripts/qa/`：只读、离线、确定性，回答「为什么是这个结果」
-- [x] 像素立绘：60 张 SVG 生成器保留，**当前未接入任何页面**（曾按产品侧意见移除）
+- [x] 像素立绘：62 张 SVG 由数据几何生成（机身宽高比与镜头数），经 `SpriteImg.vue` 接入对比/详情/榜单/搜索/时间线等页面（早期曾整体移除，后随 universal-catalog 重新接线）
 - [ ] 扩品牌（小米/OPPO/vivo/荣耀/三星/Google）—— 需要各写一个官网取数适配器
-- [ ] 首次发布到 B 站 Toy（需要你本机 `toy login` 拿到 token，填进仓库 Secret）
+- [x] 首次送审 B 站 Toy（slug=specworld，2026-10-12 打包送审，审核中）；后续由 toy.yml 每日指纹去重自动送审
 
 ## 数据侧的两个结构性缺口（不是 bug，是官网决定的）
 
