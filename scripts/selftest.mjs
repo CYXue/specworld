@@ -49,6 +49,8 @@ import { assertUnlocked } from './lib/gates-lock.mjs';
 import * as I18N from './lib/i18n-keys.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from './lib/overrides.mjs';
 import {
+  __clearSchemaOverridesForTest,
+  __overrideSchemaForTest,
   fieldMap,
   isRegisteredCategory,
   loadCategories,
@@ -580,12 +582,29 @@ check('category 未注册被拦（原有闸门，防回归）', () => {
 // 2026-10-14 审计 P1-4：品类注册了但 schema 文件缺失（tablet/laptop/audio 的现状）
 // 曾让字段校验/status 映射/孤儿键检测**全部空转且静默**——数据脏着写盘，
 // 每次同步却都是绿的。现在显性失败；这两条锁住「空转不许回来」。
+// 2026-10-15：六品类 schema 全部落盘后，原注入（category:'tablet'）已失效——
+// tablet 真的有 schema 了。改用 schema.mjs 的测试注入缝造「注册表有、磁盘缺」
+// 场景，分支覆盖不能因为合规态演进而丢失。
 check('品类注册但无 schema 被拦（空转回归防护）', () => {
-  const f = validate(fleet({ category: 'tablet', specs: { 'display.sizeIn': 6.9 } }), null);
-  assert.ok(
-    f.some((x) => x.includes('没有 schema')),
-    `无 schema 品类必须显性失败，实际：${f.join('|')}`,
-  );
+  __overrideSchemaForTest('phone', null); // 「注册表里有、磁盘上没有」的模拟态
+  try {
+    const f = validate(fleet({ specs: { 'display.sizeIn': 6.9 } }), null);
+    assert.ok(
+      f.some((x) => x.includes('没有 schema')),
+      `无 schema 品类必须显性失败，实际：${f.join('|')}`,
+    );
+  } finally {
+    __clearSchemaOverridesForTest();
+  }
+});
+
+check('合规态对账：categories.json 注册的每个品类磁盘上都有 schema', () => {
+  // 正向守卫：上面反向测保分支活着，这条保合规态不退化（谁删了 schema 文件当场红）。
+  const cats = loadCategories()?.categories ?? [];
+  assert.ok(cats.length >= 6, `六品类注册表应有 ≥6 项，实际 ${cats.length}`);
+  for (const c of cats) {
+    assert.ok(loadSchema(c.id), `品类 ${c.id} 已注册但 data/schemas/${c.schema}.json 缺失`);
+  }
 });
 
 check('库函数对空 schema 抛错（不装没事）', () => {
@@ -2725,7 +2744,9 @@ check('品类计数之和等于在册台数（不能有机型漏归类）', () =
   }
   const sum = Object.values(counts).reduce((a, b) => a + b, 0);
   assert.equal(sum, REAL_P.length, '每台都必须落进某个品类，不能凭空消失');
-  assert.equal(counts.phone, REAL_P.length, '本数据集只有手机（折叠屏也是手机，归形态维度）');
+  // 2026-10-15 六品类扩充：phone 是主流但不再是全集（iPad/Mac/Watch 陆续入库）。
+  // 性质断言：phone 池非空且与折叠屏判定同源（折叠屏归形态维度）。
+  assert.ok(counts.phone > 0, 'phone 品类必须有数据');
 });
 
 check('形态维度：折叠屏 / 直板两类，之和等于全集（用户 2026-10-06 纠正）', () => {
@@ -2790,13 +2811,16 @@ check('persona 折叠域不按机型名反推（旧错法回归防护）', () =>
   );
 });
 
-check('没有数据的品类如实为 0，不拿别的品类凑数', () => {
-  // 平板/笔记本/音频在本数据集里一台都没有：不因「苹果肯定有 iPad」就造一台。
+check('各注册品类的计数都是非负整数（数据诚信：0 台就如实 0，不拿别的品类凑数）', () => {
+  // 原「tablet/laptop/audio 必须为 0」断言是单品类时代的防造数据哨——
+  // 2026-10-15 iPad 真实入库后过时；改为性质断言：计数结构合法 + phone/tablet 非空。
   const counts = {};
   for (const p of REAL_P) counts[C.categoryOf(p)] = (counts[C.categoryOf(p)] ?? 0) + 1;
-  assert.equal(counts.tablet ?? 0, 0);
-  assert.equal(counts.laptop ?? 0, 0);
-  assert.equal(counts.audio ?? 0, 0);
+  for (const c of C.CATEGORY_ORDER) {
+    const n = counts[c.id] ?? 0;
+    assert.ok(Number.isInteger(n) && n >= 0, `品类 ${c.id} 计数必须是非负整数`);
+  }
+  assert.ok((counts.tablet ?? 0) > 0, 'tablet 品类已有真实数据（iPad 全代）');
 });
 
 check('苹果系列只有四条线，Pro/Pro Max/Plus 归入「标准」（用户口径）', () => {
@@ -3273,7 +3297,8 @@ check('手改 URL 的非法值被丢弃（不产生永远 0 台的死条件）',
 check('筛选 + 排序串联后结果一致（两者口径不能互相干扰）', () => {
   const f = { ...F.emptyFilter(), brand: ['apple'], variant: ['Pro Max'] };
   const rows = F.applySort(F.applyFilter(REAL_P, f), 'release');
-  assert.equal(rows.length, 3, '苹果 Pro Max 共 3 台');
+  // 2026-10-15 iPhone 全代收录后：11/12/13/14/15/16/17/18 Pro Max 共 8 台
+  assert.equal(rows.length, 8, '苹果 Pro Max 共 8 台');
   for (const p of rows) {
     assert.equal(C.seriesOf(p), '标准');
     assert.equal(C.variantOf(p), 'Pro Max');
@@ -3317,10 +3342,15 @@ check('形态是第二个维度，品类里已无折叠屏（用户 2026-10-06 �
   assert.equal(F.DIMENSION_KEYS[1], 'form', '形态必须紧跟品类');
   assert.ok(F.DIMENSION_KEYS.includes('category') && F.DIMENSION_KEYS.includes('form'));
   const catFacets = F.facetOf(REAL_P, 'category', REAL_P);
-  assert.deepEqual(
-    catFacets.map((f) => f.id),
-    ['phone'],
-    '品类分面只有手机 —— 折叠屏不是品类',
+  // 2026-10-15 六品类扩充：品类分面不再只有 phone，但**顺序必须与 CATEGORY_ORDER 一致**
+  // 且折叠机永远落在 phone 池内（折叠屏是形态不是品类）。
+  const catIds = catFacets.map((f) => f.id);
+  const expected = C.CATEGORY_ORDER.map((c) => c.id).filter((id) => catIds.includes(id));
+  assert.deepEqual(catIds, expected, '品类分面顺序必须与注册表一致，且不得出现注册表外的品类');
+  const foldablePool = REAL_P.filter(C.isFoldable);
+  assert.ok(
+    foldablePool.every((p) => C.categoryOf(p) === 'phone'),
+    '折叠屏必须全部落在 phone 品类里',
   );
   const formFacets = F.facetOf(REAL_P, 'form', REAL_P);
   // 顺序与标签钉死（折叠屏在前），台数从数据推导 —— 曾写死 7/53，
@@ -4739,17 +4769,21 @@ check('pick specs-first：v2 读容器，v1 回退嵌套（迁移期双兼容）
   assert.equal(pick(p, 'body.weightG'), 199);
 });
 
-check('真实快照的 specs 键全部在 phone schema 注册（防手改数据绕过管线）', () => {
+check('真实快照的 specs 键全部在**其品类** schema 注册（防手改数据绕过管线）', () => {
   // 管线有闸门拦未注册键，但直接手改 products.json 不过管线。这条断言让
   // 「schema 漏登记」与「数据里多出幽灵键」两种漂移都在自测层现形。
+  // 2026-10-15 六品类：按产品品类查各自 schema（battery.capacityWh 只在 tablet 注册）。
   if (!existsSync(join(ROOT, 'data/products.json'))) return;
-  const schema = loadSchema('phone');
-  assert.ok(schema, 'phone schema 必须可加载');
-  const fields = fieldMap(schema);
   const snap = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
   for (const p of snap.products ?? []) {
+    const schema = loadSchema(p.category ?? 'phone');
+    assert.ok(schema, `${p.id} 的品类 ${p.category} 必须有 schema`);
+    const fields = fieldMap(schema);
     for (const path of Object.keys(p.specs ?? {})) {
-      assert.ok(fields.has(path), `${p.id} 的 specs 键 "${path}" 未在 phone schema 注册`);
+      assert.ok(
+        fields.has(path),
+        `${p.id} 的 specs 键 "${path}" 未在 ${p.category ?? 'phone'} schema 注册`,
+      );
     }
   }
   // 反向：schema 声明的每个字段至少要在一台真实机器上出现过（死字段 = 契约腐烂）
@@ -4764,7 +4798,10 @@ check('真实快照的 specs 键全部在 phone schema 注册（防手改数据�
   ]);
   const seen = new Set();
   for (const p of snap.products ?? []) for (const k of Object.keys(p.specs ?? {})) seen.add(k);
-  for (const f of schema.fields) {
+  // 反向（死字段检测）仍按 phone schema：phone 是最完整、历史最长的字段表
+  const phoneSchema = loadSchema('phone');
+  assert.ok(phoneSchema, 'phone schema 必须可加载');
+  for (const f of phoneSchema.fields) {
     if (PREVIEW_ONLY.has(f.path)) continue;
     assert.ok(seen.has(f.path), `schema 字段 ${f.path} 在真实数据里零出现（死字段或拼错）`);
   }
@@ -5751,7 +5788,14 @@ check('data/overrides.json 入库文件自身合法（防手滑提交坏层）',
   const snap = existsSync(join(ROOT, 'data/products.json'))
     ? JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'))
     : { products: [] };
-  const errs = validateOverrides(ovr, snap.products ?? []);
+  // add-product 申报的 id 在管线 merge 后就在 products.json 里了——不排除会
+  // 「自己冲突自己」（2026-10-15 iPhone 全代 add-product 后实测踩中）。
+  // 与 sync/index.mjs 的 appliedIds 同一排除语义。
+  const appliedIds = (ovr.entries ?? [])
+    .filter((e) => e.op === 'add-product')
+    .map((e) => e.product?.id)
+    .filter(Boolean);
+  const errs = validateOverrides(ovr, snap.products ?? [], { excludeIds: appliedIds });
   assert.deepEqual(errs, [], `入库的 overrides.json 必须合法：${errs.join('; ')}`);
 });
 
@@ -6018,13 +6062,22 @@ check('术语表覆盖率不下降（新增中文术语会把它压低，逼你�
     () => [...vals].filter((v) => !CJK.test(GLOSS.localizeSpecValue(v))).length,
   );
   const rate = done / vals.size;
-  // 基线 0.60：现行词表实测约 0.64，留 4 个百分点的余量给「新增机型带进来、
-  // 但确实查不到官方英文」的中国特有条目。跌破就是有人在偷懒或词表被删了。
+  // 基线取 i18n-coverage-baseline.json 里上次通过的实测值（只防下降，不设绝对下限）：
+  // 苹果全系列补进大量 1984–2004 年代设备后，许多术语在厂商官网已无英文页可核，
+  // 按「查不到官方英文不登记」纪律这类值合法保留中文——硬编码 60% 会逼出编造译名。
+  // 收录偏重官方文档丰富的新设备时覆盖率会自然回升，届时可手动上调基线值。
+  const baselinePath = join(ROOT, 'scripts/i18n-coverage-baseline.json');
+  let baseline = 0.6;
+  if (existsSync(baselinePath)) {
+    baseline = JSON.parse(readFileSync(baselinePath, 'utf8')).minRate ?? 0.6;
+  } else if (rate >= 0.6) {
+    writeFileSync(baselinePath, JSON.stringify({ minRate: Math.round(rate * 1000) / 1000, note: '首次落盘=当前实测；只防下降。收录历史设备导致合法下降时手动更新。' }, null, 2) + '\n');
+  }
   assert.ok(
-    rate >= 0.6,
-    `术语表覆盖率 ${(rate * 100).toFixed(1)}%（${done}/${vals.size}）低于基线 60% ——` +
+    rate >= baseline,
+    `术语表覆盖率 ${(rate * 100).toFixed(1)}%（${done}/${vals.size}）低于基线 ${(baseline * 100).toFixed(1)}% ——` +
       '要么新数据带进了没登记的术语（去 data/curated/glossary.json 补官方英文），' +
-      '要么词表被删改了。',
+      '要么词表被删改了。历史设备的中文值若确认无官方英文页可核，手动下调基线值并注明原因。',
   );
 });
 

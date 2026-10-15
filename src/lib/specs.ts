@@ -1,5 +1,6 @@
 import { i18n } from '../i18n';
 import type { Product } from '../types';
+import { CATEGORY_ORDER, categoryOf } from './catalog';
 
 /** 展示文案助手（语言只从全局来，口径见 `src/i18n/index.ts`） */
 const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
@@ -88,6 +89,28 @@ export function computeBounds(products: Product[]): Record<AbilityKey, Bounds | 
   return out;
 }
 
+/**
+ * 分品类 bounds（2026-10-15 六品类扩充）。
+ *
+ * 为什么按品类分池：AbilityKey 口径是手机参数路径，而平板同名同单位
+ * （body.weightG 克 / display.sizeIn 英寸）——全池 min/max 会被 13 英寸 iPad
+ * 拉爆，手机的能力横条全部缩成 1/3，**静默失真**（数字没错，视觉撒谎）。
+ * abilityRows 内部按产品的品类取对应 bounds。
+ */
+export function computeBoundsByCategory(
+  products: Product[],
+): Record<string, Record<AbilityKey, Bounds | null>> {
+  const out: Record<string, Record<AbilityKey, Bounds | null>> = {};
+  for (const cat of CATEGORY_ORDER.map((c) => c.id)) {
+    const pool = products.filter((p) => categoryOf(p) === cat);
+    if (pool.length) out[cat] = computeBounds(pool);
+  }
+  return out;
+}
+
+/** 能力横条的 bounds 容器（分品类）。abilityRows / BrandGroup / ProductRoom 共用 */
+export type BoundsByCategory = Record<string, Record<AbilityKey, Bounds | null>>;
+
 function abilityRow(p: Product, def: AbilityDef, b: Bounds | null): AbilityRow {
   const raw = rawFor(p, def.key);
   if (raw == null || !b || b.max === b.min) {
@@ -112,8 +135,9 @@ function abilityRow(p: Product, def: AbilityDef, b: Bounds | null): AbilityRow {
   };
 }
 
-export function abilityRows(p: Product, bounds: Record<AbilityKey, Bounds | null>): AbilityRow[] {
-  return ABILITIES.map((def) => abilityRow(p, def, bounds[def.key]));
+export function abilityRows(p: Product, bounds: BoundsByCategory): AbilityRow[] {
+  const catBounds = bounds[categoryOf(p)] ?? bounds.phone ?? {};
+  return ABILITIES.map((def) => abilityRow(p, def, catBounds[def.key]));
 }
 
 // 导出取原始值，供榜单页使用
@@ -132,6 +156,29 @@ export interface Champion {
   label: string;
   product: Product;
   display: string;
+}
+
+export interface CategoryChampions {
+  category: string;
+  champions: Champion[];
+}
+
+/**
+ * 分品类头衔（2026-10-15 六品类扩充）。
+ *
+ * 为什么按品类分池：AbilityKey 的口径是手机参数路径（body.weightG 克 /
+ * display.sizeIn 英寸），而平板品类**同名同单位**——混池会让「屏幕最大」
+ * 静默颁给 iPad Pro 13 而首页语境是手机站。分品类后每个品类各自发奖杯，
+ * 与 SpotlightStrip 的品类 spotlight 同构。
+ */
+export function championsByCategory(products: Product[]): CategoryChampions[] {
+  const out: CategoryChampions[] = [];
+  for (const cat of CATEGORY_ORDER.map((c) => c.id)) {
+    const pool = products.filter((p) => categoryOf(p) === cat);
+    if (!pool.length) continue;
+    out.push({ category: cat, champions: champions(pool) });
+  }
+  return out;
 }
 
 export function champions(products: Product[]): Champion[] {

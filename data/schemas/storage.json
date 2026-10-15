@@ -1,0 +1,180 @@
+{
+  "_doc": "外置存储设备 schema（2026-10-15 macDB 对账批建表）。覆盖 Disk II 软驱（1978）→ Apple ProFile 硬盘 → AppleCD 光驱 → Xserve RAID 磁盘阵列 → USB SuperDrive（2008）。结构性区别于 network（服务器/路由）与 accessory（电源适配器）：本体的「容量 + 介质 + 接口」才是产品参数，无屏幕、无系统、无电池。区间按全量真实数据设定：Disk II 单面 140KB（0.00014GB）到 Xserve RAID 满配 10.5TB（10752GB），重量 280g 到 3U 机架 24kg。",
+  "version": 1,
+  "groups": [
+    { "id": "body", "name": "机身", "nameEn": "Build" },
+    { "id": "storage", "name": "存储", "nameEn": "Storage" },
+    { "id": "connectivity", "name": "接口与连接", "nameEn": "Connectivity" },
+    { "id": "power", "name": "供电", "nameEn": "Power" },
+    { "id": "os", "name": "系统要求", "nameEn": "System Requirements" }
+  ],
+  "fields": [
+    {
+      "path": "body.widthMm",
+      "label": "宽",
+      "unit": "mm",
+      "type": "number",
+      "range": [40, 900],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高",
+      "unit": "mm",
+      "type": "number",
+      "range": [15, 500],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Height",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深",
+      "unit": "mm",
+      "type": "number",
+      "range": [40, 750],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Depth",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [100, 30000],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "Disk II 控制器卡级别到 Xserve RAID 机架满配 24kg",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.material",
+      "label": "机身材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "storage.type",
+      "label": "设备类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "storage",
+      "note": "软盘驱动器 / 硬盘 / 光盘驱动器 / 磁盘阵列",
+      "labelEn": "Device type"
+    },
+    {
+      "path": "storage.medium",
+      "label": "存储介质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "storage",
+      "note": "5.25 英寸软盘 / 3.5 英寸软盘 / CD-ROM / 硬盘",
+      "labelEn": "Medium"
+    },
+    {
+      "path": "storage.capacityGb",
+      "label": "容量档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "storage",
+      "note": "统一折算为 GB：140KB 软盘记 0.00014，Xserve RAID 满配 10752",
+      "labelEn": "Capacity options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "storage.bays",
+      "label": "盘位",
+      "unit": "个",
+      "type": "number",
+      "range": [1, 14],
+      "dir": null,
+      "quantifiable": false,
+      "group": "storage",
+      "note": "仅磁盘阵列适用（Xserve RAID 14 盘位）",
+      "labelEn": "Drive bays",
+      "unitEn": "bays"
+    },
+    {
+      "path": "connectivity.type",
+      "label": "接口",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "Disk II 扩展卡 / SCSI / USB / FireWire / 光纤通道",
+      "labelEn": "Interface"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "端口",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "power.source",
+      "label": "供电方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "主机总线供电 / 外接电源 / 内置电源",
+      "labelEn": "Power source"
+    },
+    {
+      "path": "os.launch",
+      "label": "首发系统要求",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Launch system requirement"
+    }
+  ]
+}

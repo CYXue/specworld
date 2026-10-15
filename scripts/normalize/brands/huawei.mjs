@@ -147,7 +147,14 @@ function mapHuawei(rawProduct) {
   // 华为规格页不公布屏幕亮度（nits），这两个字段保持 null —— 这是官网真没有
 
   /* ---- 处理器 ---------------------------------------------------------- */
-  const cpu = firstOf(raw, ['处理器', '处理器.CPU 型号', '处理器.CPU'], name);
+  // 候选键放宽：不同机型/时期的官网把芯片放在不同键下（「处理器」「处理器.CPU
+  // 型号」「处理器.芯片」「芯片」「SOC」等），只认前两个会漏掉其余键下的旗舰芯片。
+  // 纯加法：仅当首个有值的键被采用，已正确取值的机型不受影响。
+  const cpu = firstOf(
+    raw,
+    ['处理器', '处理器.CPU 型号', '处理器.CPU', '处理器.芯片', '处理器.处理器型号', '芯片', 'SOC'],
+    name,
+  );
   const gpu = firstOf(raw, ['处理器.GPU'], name);
   if (cpu.value) {
     // `麒麟9050 Pro 麒麟9050` 是「主型号 + 变体型号」并列，取第一个完整型号名
@@ -297,7 +304,16 @@ function mapHuawei(rawProduct) {
     ];
     rec.body.ipRating = ips.length ? ips.join('/') : null;
   }
-  rec.body.material = hwLookup(raw, '中框', name).value ?? null;
+  // 材质：华为规格页把机身材质放在不同键下（「中框」「机身材质」「材质」「外壳」
+  // 「后盖」等），只认「中框」会漏掉绝大多数机型。两级回退，取第一个有值者；
+  // 已正确取值的机型不受影响（首个 hwLookup 即有值）。
+  rec.body.material =
+    hwLookup(raw, '中框', name).value ??
+    hwLookup(raw, '机身材质', name).value ??
+    hwLookup(raw, '材质', name).value ??
+    hwLookup(raw, '外壳', name).value ??
+    hwLookup(raw, '后盖', name).value ??
+    null;
   const colors = hwLookup(raw, '颜色', name).value;
   if (colors)
     rec.body.colors = colors

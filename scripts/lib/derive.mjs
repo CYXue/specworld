@@ -73,21 +73,53 @@ export function metricValue(product, key) {
 export function buildScales(products) {
   const scales = {};
   for (const key of Object.keys(METRICS)) {
-    const pairs = products
-      .map((p) => ({ id: p.id, v: metricValue(p, key) }))
-      .filter((x) => x.v !== null);
-    const values = pairs.map((x) => x.v).sort((a, b) => a - b);
-    scales[key] = {
-      ...METRICS[key],
-      values,
-      byId: new Map(pairs.map((x) => [x.id, x.v])),
-      coverage: products.length ? pairs.length / products.length : 0,
-      enough:
-        pairs.length >= TITLE_MIN_POOL &&
-        pairs.length / Math.max(products.length, 1) >= TITLE_COVERAGE,
-    };
+    scales[key] = buildOneScale(products, key);
   }
   return scales;
+}
+
+/** 单个指标的标尺（分品类构建的公共件） */
+function buildOneScale(products, key) {
+  const pairs = products.map((p) => ({ id: p.id, v: metricValue(p, key) })).filter((x) => x.v !== null);
+  const values = pairs.map((x) => x.v).sort((a, b) => a - b);
+  return {
+    ...METRICS[key],
+    values,
+    byId: new Map(pairs.map((x) => [x.id, x.v])),
+    coverage: products.length ? pairs.length / products.length : 0,
+    enough:
+      pairs.length >= TITLE_MIN_POOL &&
+      pairs.length / Math.max(products.length, 1) >= TITLE_COVERAGE,
+  };
+}
+
+/**
+ * 分品类标尺（2026-10-15 六品类扩充）。
+ *
+ * 为什么必须分品类：METRICS 的手机口径指标（body.weightG=克 / display.sizeIn=英寸）
+ * 在平板品类同名同单位（body.weightG / display.sizeIn）——**跨品类混算会让
+ * "最轻手机"的池子里混进 293g 的 iPad mini**，而它零报错、静默地拿走头衔。
+ * 笔记本的重量是 body.weightKg（千克）、台式无电池——单位/键名不同天然隔离，
+ * 但 phone 与 tablet 共用键名的那几个维度必须显式分池。
+ */
+export function buildScalesByCategory(products) {
+  const byCat = new Map();
+  for (const p of products) {
+    const cat = p.category ?? 'phone';
+    if (!byCat.has(cat)) byCat.set(cat, []);
+    byCat.get(cat).push(p);
+  }
+  const out = {};
+  for (const [cat, list] of byCat) {
+    out[cat] = {};
+    for (const key of Object.keys(METRICS)) out[cat][key] = buildOneScale(list, key);
+  }
+  return out;
+}
+
+/** 取「同品类」的标尺组（未知品类回退 phone，保证调用方不炸） */
+function scalesOf(scalesByCategory, category) {
+  return scalesByCategory?.[category ?? 'phone'] ?? scalesByCategory?.phone ?? {};
 }
 
 /** 某台机器在某个指标上的分位（0–1，已按方向校正：1 = 最好） */
@@ -136,44 +168,57 @@ const TITLES = [
 
 /**
  * 首页头衔。数据不足时**不发奖杯**，返回 insufficient 让界面如实说明。
- * @returns {Array<{id,title,productId,value,why,insufficient,coverage,pool}>}
+ *
+ * 2026-10-15：分品类产出（`{ [category]: [title...] }`）——跨品类排名会把
+ * "屏幕最大"颁给 iPad Pro 而首页语境是手机站；按品类分组后每个品类各自发奖杯，
+ * 覆盖率门槛也在各品类池内独立判定（平板自有其密度）。
+ *
+ * @param products 全池产品
+ * @param scalesByCategory buildScalesByCategory 的产物（nested）
+ * @returns {Object<string, Array<{id,title,productId,value,why,insufficient,coverage,pool}>>}
  */
-export function buildChampions(products, scales) {
-  return TITLES.map((t) => {
-    const scale = scales[t.metric];
-    const base = {
-      id: t.id,
-      title: t.title,
-      metric: t.metric,
-      coverage: scale?.coverage ?? 0,
-      pool: scale?.values.length ?? 0,
-    };
-    if (!scale?.enough) {
+export function buildChampions(products, scalesByCategory) {
+  const out = {};
+  for (const cat of new Set(products.map((p) => p.category ?? 'phone'))) {
+    const pool = products.filter((p) => (p.category ?? 'phone') === cat);
+    const scales = scalesOf(scalesByCategory, cat);
+    out[cat] = TITLES.map((t) => {
+      const scale = scales[t.metric];
+      const base = {
+        id: t.id,
+        title: t.title,
+        metric: t.metric,
+        coverage: scale?.coverage ?? 0,
+        pool: scale?.values.length ?? 0,
+      };
+      if (!scale?.enough) {
+        return {
+          ...base,
+          productId: null,
+          value: null,
+          why: null,
+          insufficient: `官方公布该参数的机型只有 ${base.pool}/${pool.length} 台（需 ≥${Math.ceil(
+            TITLE_COVERAGE * pool.length,
+          )} 台），本站不排名`,
+        };
+      }
+      const best = pool.reduce((acc, p) => {
+        const v = metricValue(p, t.metric);
+        if (v === null) return acc;
+        if (!acc) return { p, v };
+        const better = scale.dir === 'low' ? v < acc.v : v > acc.v;
+        return better ? { p, v } : acc;
+      }, null);
       return {
         ...base,
-        productId: null,
-        value: null,
-        why: null,
-        insufficient: `官方公布该参数的机型只有 ${base.pool}/${products.length} 台（需 ≥${Math.ceil(
-          TITLE_COVERAGE * products.length,
-        )} 台），本站不排名`,
+        productId: best.p.id,
+        value: best.v,
+        why: t.why(best.v, scale.unit),
+        insufficient: null,
       };
-    }
-    const best = products.reduce((acc, p) => {
-      const v = metricValue(p, t.metric);
-      if (v === null) return acc;
-      if (!acc) return { p, v };
-      const better = scale.dir === 'low' ? v < acc.v : v > acc.v;
-      return better ? { p, v } : acc;
-    }, null);
-    return {
-      ...base,
-      productId: best.p.id,
-      value: best.v,
-      why: t.why(best.v, scale.unit),
-      insufficient: null,
-    };
-  });
+    });
+  }
+  return out;
 }
 
 /**
@@ -234,14 +279,18 @@ const DIMENSIONS = [
   { metric: 'batteryMah', text: (v, s) => `电池最大（${v} ${s.unit}）` },
 ];
 
-export function buildPersona(product, products, scales) {
+export function buildPersona(product, products, scalesByCategory) {
   const brandLabel = brandShortLabel(product.brand);
+  // 2026-10-15：限定域一律先收窄到**同品类**池。phone 与 tablet 共用
+  // body.weightG（克）口径，跨品类混池会让 iPad mini 静默拿走「Apple 里最轻」。
+  const sameCat = products.filter((p) => (p.category ?? 'phone') === (product.category ?? 'phone'));
   // 价格分位只算一次（dir=low：分位越低越贵），供 flagship/budget 两个限定域共用
+  const scales = scalesOf(scalesByCategory, product.category);
   const ctx = {
-    pricePct: new Map(products.map((p) => [p.id, percentileOf(scales, 'priceCny', p)])),
+    pricePct: new Map(sameCat.map((p) => [p.id, percentileOf(scales, 'priceCny', p)])),
   };
   for (const domain of DOMAINS) {
-    const pool = products.filter((p) => domain.filter(p, product, ctx));
+    const pool = sameCat.filter((p) => domain.filter(p, product, ctx));
     if (pool.length < domain.min || !pool.some((p) => p.id === product.id)) continue;
     for (const dim of DIMENSIONS) {
       const scale = scales[dim.metric];

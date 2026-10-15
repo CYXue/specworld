@@ -300,12 +300,14 @@
       "type": "number",
       "range": [
         1,
-        10
+        100
       ],
       "dir": "low",
       "quantifiable": true,
       "group": "chipset",
-      "labelEn": "Process node"
+      "note": "上界 100 为老 A 系列留位（2026-10-15 iPhone 全代收录：A6 32nm、A7 28nm、A8 20nm、A9 16nm——原 [1,10] 只覆盖当代机型，闸门误报拦截全代数据）",
+      "labelEn": "Process node",
+      "unitEn": "nm"
     },
     {
       "path": "chipset.cpuCores",
@@ -437,6 +439,22 @@
       "group": "battery",
       "note": "厂商自报，测试条件不一，只并列展示不参与排名",
       "labelEn": "Vendor-claimed battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "battery.vendorClaimedAudioHours",
+      "label": "音频续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        5,
+        120
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "note": "官网音频播放口径（iPod touch 系 22–40h；手机多无此口径记 null）",
+      "labelEn": "Audio playback",
       "unitEn": "h"
     },
     {

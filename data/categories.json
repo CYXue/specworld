@@ -1,5 +1,5 @@
 {
-  "_doc": "品类注册表（全品类目录的入口）。每个品类引用 data/schemas/<id>.json 定义其可量化参数字段。新增品类 = 加一行 + 加一份 schema 文件，管线、闸门、前端分面自动识别。注意：前端展示顺序另有 src/lib/catalog.ts 的 CATEGORY_ORDER，两处顺序必须一致（selftest 有对账断言）。",
+  "_doc": "品类注册表（全品类目录的入口）。每个品类引用 data/schemas/<id>.json 定义其可量化参数字段。新增品类 = 加一行 + 加一份 schema 文件，管线、闸门、前端分面自动识别。注意：前端展示顺序另有 src/lib/catalog.ts 的 CATEGORY_ORDER，两处顺序必须一致（selftest 有对账断言）。2026-10-15 苹果全产品线扩充：激活 tablet/laptop/audio（苹果 iPad/Mac/AirPods），新增 desktop（iMac/Mac mini/Mac Studio/Mac Pro——与笔记本分开，屏幕/电池组结构性不适用）与 wearable（Apple Watch）。 2026-10-15 晚批：新增 display（Studio Display 系列外接显示器——与 desktop 结构性分开：显示器无芯片算力主体/无电池，屏幕参数是本体而非外设）。 2026-10-15 收官批：新增 headset（Apple Vision Pro——空间计算头显，双芯片 M+R1 结构性区别于任何既有品类）与 home（智能家居设备：Apple TV 4K 机顶盒起，未来 HomeView 带屏中枢同品类——无电池、常供电、以服务为中心的设备族）。 2026-10-15 全系列批（用户决策）：新增 media（多媒体播放器——iPod classic/nano/shuffle 等 MP3/MP4 类）与 tracker（定位器——AirTag）。iPod touch 归 phone（有屏有 iOS，无蜂窝字段 null）。 2026-10-15 补全批（用户决策）：新增 network（AirPort 路由器/Time Capsule/Xserve 服务器——无屏无系统 UI 的网络基础设施设备族）。 2026-10-15 vintage 批：新增 pda（Newton MessagePad 手写掌上电脑——笔输入+手写识别，结构性区别于任何既有品类）。 2026-10-15 补全批二（用户决策）：新增 input（键盘/鼠标/触控板）、printer（LaserWriter/ImageWriter/StyleWriter）、accessory（电源适配器/iSight/遥控器）三品类——外围配件成体系。 2026-10-15 macDB 对账批：新增 storage（外置存储设备——Disk II 软驱/ProFile 硬盘/AppleCD 光驱/Xserve RAID 磁盘阵列/USB SuperDrive，本体是「容量+介质+接口」，与 network 服务器、accessory 配件结构性分开）。",
   "version": 1,
   "categories": [
     {
@@ -14,21 +14,112 @@
       "label": "平板",
       "labelEn": "Tablet",
       "schema": "tablet",
-      "builtin": false
+      "builtin": true
     },
     {
       "id": "laptop",
       "label": "笔记本",
       "labelEn": "Laptop",
       "schema": "laptop",
-      "builtin": false
+      "builtin": true
+    },
+    {
+      "id": "desktop",
+      "label": "台式电脑",
+      "labelEn": "Desktop",
+      "schema": "desktop",
+      "builtin": true
+    },
+    {
+      "id": "display",
+      "label": "显示器",
+      "labelEn": "Display",
+      "schema": "display",
+      "builtin": true
+    },
+    {
+      "id": "wearable",
+      "label": "可穿戴",
+      "labelEn": "Wearable",
+      "schema": "wearable",
+      "builtin": true
+    },
+    {
+      "id": "headset",
+      "label": "头显",
+      "labelEn": "Headset",
+      "schema": "headset",
+      "builtin": true
+    },
+    {
+      "id": "home",
+      "label": "智能家居",
+      "labelEn": "Smart Home",
+      "schema": "home",
+      "builtin": true
     },
     {
       "id": "audio",
       "label": "音频",
       "labelEn": "Audio",
       "schema": "audio",
-      "builtin": false
+      "builtin": true
+    },
+    {
+      "id": "media",
+      "label": "多媒体播放器",
+      "labelEn": "Media Player",
+      "schema": "media",
+      "builtin": true
+    },
+    {
+      "id": "tracker",
+      "label": "定位器",
+      "labelEn": "Tracker",
+      "schema": "tracker",
+      "builtin": true
+    },
+    {
+      "id": "network",
+      "label": "网络设备",
+      "labelEn": "Networking",
+      "schema": "network",
+      "builtin": true
+    },
+    {
+      "id": "pda",
+      "label": "掌上电脑",
+      "labelEn": "PDA",
+      "schema": "pda",
+      "builtin": true
+    },
+    {
+      "id": "input",
+      "label": "输入设备",
+      "labelEn": "Input Device",
+      "schema": "input",
+      "builtin": true
+    },
+    {
+      "id": "printer",
+      "label": "打印机",
+      "labelEn": "Printer",
+      "schema": "printer",
+      "builtin": true
+    },
+    {
+      "id": "storage",
+      "label": "存储设备",
+      "labelEn": "Storage",
+      "schema": "storage",
+      "builtin": true
+    },
+    {
+      "id": "accessory",
+      "label": "配件",
+      "labelEn": "Accessory",
+      "schema": "accessory",
+      "builtin": true
     }
   ]
 }

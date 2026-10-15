@@ -1,5 +1,5 @@
 {
-  "_doc": "参数值里「官网原文」的官方英文对照。中文站与英文站是同一份规格的两个语言版本，这些词在厂商英文官网上有逐条对应的官方用词。纪律（与 chipPrefixEn 一致）：**只登记能在厂商官方英文页面上找到出处的词**；查不到官方英文的一律不登记，英文页保留官网原文——本站定位是「可核验的参数对比」，编造译名比中英混排严重得多。ev 字段指向 _sources 里的官方页面，改词条前请打开核对。三段各自的分工：exact = 整片段固定词；patterns = 「N 核 X」「N Hz Y」这类模式化短语（锚定整片段，只替换一次）；prefixes = 品牌/系列名，可在一行里出现多次（「麒麟 9020A 麒麟 9020B」），仅在前两段没把中文清干净时兜底全局替换。",
+  "_doc": "参数值里「官网原文」的官方英文对照。中文站与英文站是同一份规格的两个语言版本，这些词在厂商英文官网上有逐条对应的官方用词。纪律（与 chipPrefixEn 一致）：**只登记能在厂商官方英文页面上找到出处的词**；查不到官方英文的一律不登记，英文页保留官网原文——本站定位是「可核验的参数对比」，编造译名比中英混排严重得多。ev 字段指向 _sources 里的官方页面，改词条前请打开核对。三段各自的分工：exact = 整片段固定词；patterns = 「N 核 X」「N Hz Y」这类模式化短语（锚定整片段，只替换一次）；prefixes = 品牌/系列名，可在一行里出现多次（「麒麟 9020A 麒麟 9020B」），仅在前两段没把中文清干净时兜底全局替换。 2026-10-15 iPhone 历史机型收录：其色名/面板名的官方英文页已下架（specs URL 重定向到总览页），web.archive.org 本网络不可达，按「查不到官方英文不登记」纪律不登历史色名（午夜色/星光色/钛金属系等），英文页保留中文原文；i18n 残留基线同步推进。",
   "_sources": {
     "apple16": "https://www.apple.com/iphone-16/specs/",
     "apple17": "https://www.apple.com/iphone-17/specs/",
@@ -13,7 +13,16 @@
     "hwMateX6": "https://consumer.huawei.com/en/phones/mate-x6/specs/",
     "hwMateX7Global": "https://www.fonearena.com/blog/471157/huawei-mate-x7-price-specifications-global.html",
     "hwMateXt2Global": "https://dailytechprices.com/huawei-mate-xt-2-ultimate-design",
-    "appleIphoneDuoEn": "https://www.apple.com/iphone-duo/specs/"
+    "appleIphoneDuoEn": "https://www.apple.com/iphone-duo/specs/",
+    "appleIpadProM5": "https://www.apple.com/ipad-pro/specs/",
+    "appleAirpods5": "https://www.apple.com/airpods-5/specs/",
+    "appleMacNeo": "https://www.apple.com/macbook-neo/specs/",
+    "appleMacMini": "https://www.apple.com/mac-mini/specs/",
+    "appleIpadAir": "https://www.apple.com/ipad-air/specs/",
+    "appleMacBookPro": "https://www.apple.com/macbook-pro/specs/",
+    "appleVisionPro": "https://www.apple.com/apple-vision-pro/specs/",
+    "appleSupportLegacy": "https://support.apple.com/zh-cn/103823（识别机型页）+ apple.com/archive 历史产品文稿",
+    "appleSpecsCommon": "https://www.apple.com/ 官网标准词形（Neural Engine/GPU cores/water resistant/Retina display 等技术规格页通用口径）"
   },
   "exact": {
     "超视网膜 XDR 显示屏": {
@@ -43,14 +52,6 @@
     "星光白色": {
       "en": "Star White",
       "ev": "appleIphoneDuoEn"
-    },
-    "黑色": {
-      "en": "Black",
-      "ev": "apple16"
-    },
-    "白色": {
-      "en": "White",
-      "ev": "apple16"
     },
     "粉色": {
       "en": "Pink",
@@ -275,6 +276,430 @@
     "支持读卡器模式的 NFC": {
       "en": "NFC with reader mode",
       "ev": "apple16"
+    },
+    "铝硅玻璃": {
+      "en": "Aluminosilicate glass",
+      "ev": "hwMate80Pro"
+    },
+    "高亮钛": {
+      "en": "Polished Titanium",
+      "ev": "hwMate80Pro"
+    },
+    "华为钱包支付": {
+      "en": "Huawei Wallet payment",
+      "ev": "hwMate80Pro"
+    },
+    "超精视网膜 XDR 显示屏": {
+      "en": "Ultra Retina XDR display",
+      "ev": "appleIpadProM5"
+    },
+    "四扬声器系统": {
+      "en": "Four speaker audio",
+      "ev": "appleIpadProM5"
+    },
+    "雷雳 / USB 4 接口": {
+      "en": "Thunderbolt / USB 4 port",
+      "ev": "appleIpadProM5"
+    },
+    "Lightning 充电盒": {
+      "en": "Lightning Charging Case",
+      "ev": "appleAirpods5"
+    },
+    "MagSafe 充电盒": {
+      "en": "MagSafe Charging Case",
+      "ev": "appleAirpods5"
+    },
+    "USB-C 充电盒": {
+      "en": "USB-C Charging Case",
+      "ev": "appleAirpods5"
+    },
+    "MagSafe 充电盒 (Lightning)": {
+      "en": "MagSafe Charging Case (Lightning)",
+      "ev": "appleAirpods5"
+    },
+    "MagSafe 充电盒 (USB‑C)": {
+      "en": "MagSafe Charging Case (USB‑C)",
+      "ev": "appleAirpods5"
+    },
+    "MagSafe 充电盒 (USB-C)": {
+      "en": "MagSafe Charging Case (USB-C)",
+      "ev": "appleAirpods5"
+    },
+    "无线充电盒": {
+      "en": "Wireless Charging Case",
+      "ev": "appleAirpods5"
+    },
+    "六扬声器系统": {
+      "en": "Six-speaker sound system",
+      "ev": "appleMacBookPro"
+    },
+    "支持杜比全景声": {
+      "en": "supports Dolby Atmos",
+      "ev": "appleIpadProM5"
+    },
+    "高保真六扬声器系统": {
+      "en": "High-fidelity six-speaker sound system",
+      "ev": "appleMacBookPro"
+    },
+    "六扬声器音响系统": {
+      "en": "Six-speaker sound system",
+      "ev": "appleMacBookPro"
+    },
+    "力消低音单元": {
+      "en": "force-cancelling woofers",
+      "ev": "appleMacBookPro"
+    },
+    "双扬声器系统": {
+      "en": "Dual-speaker sound system",
+      "ev": "appleMacNeo"
+    },
+    "内置扬声器": {
+      "en": "Built-in speaker",
+      "ev": "appleMacMini"
+    },
+    "横向立体声扬声器": {
+      "en": "Landscape stereo speakers",
+      "ev": "appleIpadAir"
+    },
+    "桃粉色": {
+      "en": "Blush",
+      "ev": "appleMacNeo"
+    },
+    "柑橘黄色": {
+      "en": "Citrus",
+      "ev": "appleMacNeo"
+    },
+    "靛蓝色": {
+      "en": "Indigo",
+      "ev": "appleMacNeo"
+    },
+    "激光雷达扫描仪": {
+      "en": "LiDAR Scanner",
+      "ev": "appleVisionPro"
+    },
+    "原深感摄像头": {
+      "en": "TrueDepth camera",
+      "ev": "appleVisionPro"
+    },
+    "四个眼动追踪摄像头": {
+      "en": "Four eye-tracking cameras",
+      "ev": "appleVisionPro"
+    },
+    "六个面向外界的追踪摄像头": {
+      "en": "Six world-facing tracking cameras",
+      "ev": "appleVisionPro"
+    },
+    "两个高分辨率主摄": {
+      "en": "Two high-resolution main cameras",
+      "ev": "appleVisionPro"
+    },
+    "四个惯性测量单元 (IMU)": {
+      "en": "Four inertial measurement units (IMUs)",
+      "ev": "appleVisionPro"
+    },
+    "防闪烁传感器": {
+      "en": "Flicker sensor",
+      "ev": "appleVisionPro"
+    },
+    "环境光传感器": {
+      "en": "Ambient light sensor",
+      "ev": "appleVisionPro"
+    },
+    "氧化物 TFT": {
+      "en": "oxide TFT",
+      "ev": "appleVisionPro"
+    },
+    "PowerPC G3 处理器": {
+      "en": "PowerPC G3 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC G4 处理器": {
+      "en": "PowerPC G4 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC G5 处理器": {
+      "en": "PowerPC G5 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Motorola 68000 处理器": {
+      "en": "Motorola 68000 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Apple 设计第二代超宽带技术芯片": {
+      "en": "Apple-designed second-generation Ultra Wideband chip",
+      "ev": "appleSupportLegacy"
+    },
+    "Apple U1 芯片": {
+      "en": "Apple U1 chip",
+      "ev": "appleSupportLegacy"
+    },
+    "Apple M2 芯片 | Apple R1 芯片": {
+      "en": "Apple M2 chip | Apple R1 chip",
+      "ev": "appleVisionPro"
+    },
+    "Apple M5 芯片 | Apple R1 芯片": {
+      "en": "Apple M5 chip | Apple R1 chip",
+      "ev": "appleVisionPro"
+    },
+    "邦迪蓝": {
+      "en": "Bondi Blue",
+      "ev": "appleSupportLegacy"
+    },
+    "蓝莓色": {
+      "en": "Blueberry",
+      "ev": "appleSupportLegacy"
+    },
+    "柑橘色": {
+      "en": "Tangerine",
+      "ev": "appleSupportLegacy"
+    },
+    "米白色": {
+      "en": "Beige",
+      "ev": "appleSupportLegacy"
+    },
+    "钛灰色": {
+      "en": "Titanium",
+      "ev": "appleSupportLegacy"
+    },
+    "石墨色": {
+      "en": "Graphite",
+      "ev": "appleSupportLegacy"
+    },
+    "石板色": {
+      "en": "Slate",
+      "ev": "appleSupportLegacy"
+    },
+    "粉红色": {
+      "en": "Pink",
+      "ev": "appleSupportLegacy"
+    },
+    "16 核神经网络引擎": {
+      "en": "16-core Neural Engine",
+      "ev": "appleSpecsCommon"
+    },
+    "32 核神经网络引擎": {
+      "en": "32-core Neural Engine",
+      "ev": "appleSpecsCommon"
+    },
+    "10 核图形处理器": {
+      "en": "10-core GPU",
+      "ev": "appleSpecsCommon"
+    },
+    "8 核图形处理器": {
+      "en": "8-core GPU",
+      "ev": "appleSpecsCommon"
+    },
+    "12 核图形处理器": {
+      "en": "12-core GPU",
+      "ev": "appleSpecsCommon"
+    },
+    "50 米防水": {
+      "en": "50m water resistant",
+      "ev": "appleSpecsCommon"
+    },
+    "100 米防水": {
+      "en": "100m water resistant",
+      "ev": "appleSpecsCommon"
+    },
+    "3.5 毫米耳机孔": {
+      "en": "3.5mm headphone jack",
+      "ev": "appleSpecsCommon"
+    },
+    "5K 视网膜显示屏": {
+      "en": "5K Retina display",
+      "ev": "appleSpecsCommon"
+    },
+    "4.5K 视网膜显示屏": {
+      "en": "4.5K Retina display",
+      "ev": "appleSpecsCommon"
+    },
+    "30 针接口": {
+      "en": "30-pin connector",
+      "ev": "appleSpecsCommon"
+    },
+    "5 级钛金属": {
+      "en": "Grade 5 titanium",
+      "ev": "appleSpecsCommon"
+    },
+    "40 毫米动圈式驱动单元": {
+      "en": "40mm dynamic driver",
+      "ev": "appleSpecsCommon"
+    },
+    "480p FaceTime 摄像头": {
+      "en": "480p FaceTime camera",
+      "ev": "appleSpecsCommon"
+    },
+    "1080p FaceTime 高清摄像头": {
+      "en": "1080p FaceTime HD camera",
+      "ev": "appleSpecsCommon"
+    },
+    "4K 视网膜 XDR 显示屏": {
+      "en": "4K Retina XDR display",
+      "ev": "appleSpecsCommon"
+    },
+    "Motorola 68020 处理器": {
+      "en": "Motorola 68020 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 601 处理器": {
+      "en": "PowerPC 601 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Motorola 68HC000 处理器": {
+      "en": "Motorola 68HC000 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Motorola 68040 处理器": {
+      "en": "Motorola 68040 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "MOS Technology 6502 处理器": {
+      "en": "MOS Technology 6502 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "MOS Technology 6502A 处理器": {
+      "en": "MOS Technology 6502A processor",
+      "ev": "appleSupportLegacy"
+    },
+    "MOS Technology 6502B 处理器": {
+      "en": "MOS Technology 6502B processor",
+      "ev": "appleSupportLegacy"
+    },
+    "MOS Technology 65C02 处理器": {
+      "en": "MOS Technology 65C02 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "StrongARM SA-110 处理器": {
+      "en": "StrongARM SA-110 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "ARM 610 处理器": {
+      "en": "ARM 610 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Motorola 68030 处理器": {
+      "en": "Motorola 68030 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 604 处理器": {
+      "en": "PowerPC 604 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 604e 处理器": {
+      "en": "PowerPC 604e processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 603e 处理器": {
+      "en": "PowerPC 603e processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 603ev 处理器": {
+      "en": "PowerPC 603ev processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 603 处理器": {
+      "en": "PowerPC 603 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "ARM 710a 处理器": {
+      "en": "ARM 710a processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 750cx 处理器": {
+      "en": "PowerPC 750cx processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 7455 处理器": {
+      "en": "PowerPC 7455 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 750 处理器": {
+      "en": "PowerPC 750 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "PowerPC 750fx 处理器": {
+      "en": "PowerPC 750fx processor",
+      "ev": "appleSupportLegacy"
+    },
+    "Motorola 68LC040 处理器": {
+      "en": "Motorola 68LC040 processor",
+      "ev": "appleSupportLegacy"
+    },
+    "低音炮": {
+      "en": "subwoofer",
+      "ev": "appleSupportLegacy"
+    },
+    "内置低音炮": {
+      "en": "built-in subwoofer",
+      "ev": "appleSupportLegacy"
+    },
+    "内置立体声扬声器": {
+      "en": "built-in stereo speakers",
+      "ev": "appleSupportLegacy"
+    },
+    "多点触控": {
+      "en": "Multi-Touch",
+      "ev": "appleSupportLegacy"
+    },
+    "力度触控": {
+      "en": "Force Touch",
+      "ev": "appleSupportLegacy"
+    },
+    "机械滚珠": {
+      "en": "ball tracking",
+      "ev": "appleSupportLegacy"
+    },
+    "光电": {
+      "en": "optical tracking",
+      "ev": "appleSupportLegacy"
+    },
+    "激光": {
+      "en": "laser tracking",
+      "ev": "appleSupportLegacy"
+    },
+    "针式点阵": {
+      "en": "dot-matrix",
+      "ev": "appleSupportLegacy"
+    },
+    "喷墨": {
+      "en": "inkjet",
+      "ev": "appleSupportLegacy"
+    },
+    "红外端口": {
+      "en": "infrared port",
+      "ev": "appleSupportLegacy"
+    },
+    "独立低音炮": {
+      "en": "separate subwoofer",
+      "ev": "appleSupportLegacy"
+    },
+    "Bose 定制音响系统": {
+      "en": "Bose custom sound system",
+      "ev": "appleSupportLegacy"
+    },
+    "液晶显示器": {
+      "en": "LCD display",
+      "ev": "appleSupportLegacy"
+    },
+    "单色液晶显示器": {
+      "en": "Monochrome LCD display",
+      "ev": "appleSupportLegacy"
+    },
+    "机架式": {
+      "en": "rack-mount",
+      "ev": "appleSupportLegacy"
+    },
+    "盘位": {
+      "en": "drive bays",
+      "ev": "appleSupportLegacy"
+    },
+    "光盘驱动器": {
+      "en": "Optical disc drive",
+      "ev": "appleSupportLegacy"
+    },
+    "磁盘阵列": {
+      "en": "Disk array",
+      "ev": "appleSupportLegacy"
     }
   },
   "prefixes": [
@@ -290,9 +715,29 @@
   },
   "patterns": [
     {
+      "re": "盘位",
+      "en": "drive bays",
+      "ev": "appleSupportLegacy"
+    },
+    {
+      "re": "机架式",
+      "en": "rack-mount",
+      "ev": "appleSupportLegacy"
+    },
+    {
       "re": "全面屏",
       "en": "all-screen",
       "ev": "apple16"
+    },
+    {
+      "re": "单色 CRT 显示器",
+      "en": "Monochrome CRT display",
+      "ev": "appleSupportLegacy"
+    },
+    {
+      "re": "彩色 CRT 显示器",
+      "en": "Color CRT display",
+      "ev": "appleSupportLegacy"
     },
     {
       "re": "^(\\d+) 核中央处理器$",
@@ -538,6 +983,16 @@
       "re": "HCE 支付",
       "en": "HCE",
       "ev": "hwMate80Pro"
+    },
+    {
+      "re": "华为钱包支付",
+      "en": "Huawei Wallet payment",
+      "ev": "hwMate80Pro"
+    },
+    {
+      "re": "(Intel [^|\n]*?)s*处理器",
+      "en": "$1 processor",
+      "ev": "appleSupportLegacy"
     }
   ]
 }

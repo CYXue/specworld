@@ -353,6 +353,94 @@ jobs:
               core.info(`已新建 issue #${created.number}`);
             }
 
+  # 覆盖率看门狗：纯本地、零网络、零依赖（只读已入库的 data/products.json），
+  # 复用 selftest 的护栏定位。不拦发布（覆盖率低 ≠ 数据错），但**异常必须有人看见**——
+  # 出现未审查的「同品牌内部分化 / 全站皆零」缺口（疑似解析器漏分支）时开/更新 issue；
+  # 闸门恢复绿后自动关闭，杜绝「永远红的 issue 没人理」。
+  # 失败判据见 scripts/qa/coverage.mjs 的 KNOWN_FACTS 白名单：白名单内（官网确不公布 /
+  # null by design）放行，白名单外才视为缺陷。
+  qa-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: selftest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 覆盖率体检
+        id: cov
+        run: |
+          node scripts/qa/coverage.mjs | tee coverage.log || true
+          if grep -q "COVERAGE_FAIL" coverage.log; then
+            echo "status=fail" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+          fi
+      - name: 覆盖率异常开 issue
+        if: steps.cov.outputs.status == 'fail'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const title = '数据覆盖率异常';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            let body = '本次运行未产出明细，请直接看运行日志。';
+            try {
+              const log = fs.readFileSync('coverage.log', 'utf8');
+              const lines = log.split('\n').filter((l) => /❌|COVERAGE_FAIL|覆盖\s|缺\s/.test(l));
+              body = [...lines, '', `运行链接：${runUrl}`].join('\n');
+            } catch (e) {
+              body += `\n\n（读取日志时出错：${String(e)}）`;
+            }
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.find((i) => i.title === title && !i.pull_request);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `### 覆盖率仍异常 · ${new Date().toISOString()}\n\n${body}`,
+              });
+              core.info(`已在 issue #${existing.number} 追加评论`);
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body: `数据覆盖率体检（scripts/qa/coverage.mjs）发现疑似解析器缺陷。\n\n${body}\n\n每次异常都会在此 issue 下追加评论；修复后闸门恢复绿会自动关闭。`,
+              });
+              core.info('已新建 issue');
+            }
+      - name: 恢复后关 issue
+        if: steps.cov.outputs.status == 'ok'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = issues.find((i) => i.title === '数据覆盖率异常' && !i.pull_request);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                state: 'closed',
+              });
+              core.info(`覆盖率恢复，已关闭 issue #${existing.number}`);
+            }
+
   # 发布到 GitHub Pages。零凭据：不需要配任何 Secret，
   # 只要在仓库 Settings → Pages 把 Source 切成 GitHub Actions。
   #

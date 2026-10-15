@@ -3,8 +3,8 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { continentOf } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
-import { champions } from '../lib/specs';
-import { latestN, spotlights } from '../lib/catalog';
+import { championsByCategory } from '../lib/specs';
+import { categoryLabel, latestN, spotlights } from '../lib/catalog';
 import BrandGroup from '../components/BrandGroup.vue';
 import ChampionRow from '../components/ChampionRow.vue';
 import SectionFrame from '../components/SectionFrame.vue';
@@ -74,7 +74,7 @@ const { t } = useI18n();
 const { ds, err } = useDataset();
 const derived = useDerived();
 
-const champs = computed(() => (ds.value ? champions(ds.value.products) : []));
+const champs = computed(() => (ds.value ? championsByCategory(ds.value.products) : []));
 const spots = computed(() => (ds.value ? spotlights(ds.value.products) : []));
 const groups = computed(() => {
   const d = ds.value;
@@ -223,16 +223,26 @@ const count = computed(() => ds.value?.products.length ?? 0);
           各维度第一：放在品牌村落之后。
           「最新/最贵/最便宜」讲的是**新与价**，这里讲的是**单项能力极值**，两者不重合
           （屏幕最锐的机器未必最贵），所以都留着而不是二选一。
+          2026-10-15 六品类扩充：按品类分开发奖杯（口径同单位的手机/平板混池会让
+          iPad 静默拿走手机头衔），与 SpotlightStrip 的品类 spotlight 同构。
         -->
         <SectionFrame :title="t('home.championTitle')" hud="var(--color-gold)" icon="trophy">
-          <div class="grid gap-3 sm:grid-cols-2">
-            <ChampionRow
-              v-for="c in champs"
-              :key="c.key + c.product.id"
-              :champion="c"
-              :accent="derived?.vendors.get(c.product.brand)?.accentColor"
-              :vendors="derived?.vendors ?? new Map()"
-            />
+          <div v-for="cg in champs" :key="cg.category" class="mb-4 last:mb-0">
+            <h3
+              class="mb-2 px-1 text-[12px] leading-[1.5]"
+              style="color: var(--color-parchment-dim)"
+            >
+              {{ categoryLabel(cg.category as Parameters<typeof categoryLabel>[0]) }}
+            </h3>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <ChampionRow
+                v-for="c in cg.champions"
+                :key="c.key + c.product.id"
+                :champion="c"
+                :accent="derived?.vendors.get(c.product.brand)?.accentColor"
+                :vendors="derived?.vendors ?? new Map()"
+              />
+            </div>
           </div>
         </SectionFrame>
       </div>

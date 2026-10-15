@@ -17,7 +17,12 @@ import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { VENDORS } from '../brands.mjs';
-import { buildChampions, buildPersona, buildScales, percentileOf } from '../lib/derive.mjs';
+import {
+  buildChampions,
+  buildPersona,
+  buildScalesByCategory,
+  percentileOf,
+} from '../lib/derive.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from '../lib/overrides.mjs';
 import { flattenSpecs, SPEC_GROUPS } from '../lib/specs.mjs';
 import { WINDOW_FUZZ_DAYS, windowStartEffective } from '../lib/window.mjs';
@@ -108,7 +113,7 @@ function main() {
 
   // ---- 2. 窗口过滤 -----------------------------------------------------
   // 判据在 scripts/sync/queue.mjs（纯函数，自测直接 import 它）。
-  const { kept, dropped, pending } = classifyByWindow(products, {
+  const { kept, dropped, pending: rawPending } = classifyByWindow(products, {
     windowStart: WINDOW_START,
     windowFuzzDays: WINDOW_FUZZ_DAYS,
   });
@@ -145,6 +150,13 @@ function main() {
     process.exit(1);
   }
   const { products: merged, report: overrideReport } = applyOverrides(kept, overrides);
+
+  // 待收录队列只列「还没上站」的：用户层 add-product 显式收录的机型（即使缺发布日期）
+  // 已经在册。不过滤的话队列会诱导人工去补 release-dates 取证，而那会让管线也产出
+  // 同 id 机型，与 add-product 撞 id —— 双真源比没有数据更危险。
+  // （2026-10-15 iPhone 全代 add-product 后实测：29 台老机型被重复列入队列。）
+  const inCatalog = new Set(merged.map((p) => p.id));
+  const pending = rawPending.filter((q) => !inCatalog.has(q.id));
 
   // ---- 4. 首末次出现时间 -----------------------------------------------
   const prevById = new Map((previous?.products ?? []).map((p) => [p.id, p]));
@@ -267,30 +279,42 @@ function main() {
   }
 
   // ---- 6. 派生层（构建期产物，不入库） ---------------------------------
-  const scales = buildScales(snapshot.products);
+  // 2026-10-15 六品类扩充：标尺/头衔/分位全部按品类分池（derive.mjs 的
+  // buildScalesByCategory 说明：phone 与 tablet 共用克/英寸口径，混池会让
+  // iPad mini 静默拿走手机头衔）。
+  const scalesByCategory = buildScalesByCategory(snapshot.products);
+  const catOf = (p) => p.category ?? 'phone';
   const derived = {
     generatedAt: now,
     scales: Object.fromEntries(
-      Object.entries(scales).map(([k, s]) => [
-        k,
-        {
-          label: s.label,
-          unit: s.unit,
-          dir: s.dir,
-          coverage: Number(s.coverage.toFixed(3)),
-          pool: s.values.length,
-          enough: s.enough,
-        },
+      Object.entries(scalesByCategory).map(([cat, scales]) => [
+        cat,
+        Object.fromEntries(
+          Object.entries(scales).map(([k, s]) => [
+            k,
+            {
+              label: s.label,
+              unit: s.unit,
+              dir: s.dir,
+              coverage: Number(s.coverage.toFixed(3)),
+              pool: s.values.length,
+              enough: s.enough,
+            },
+          ]),
+        ),
       ]),
     ),
-    champions: buildChampions(snapshot.products, scales),
-    products: snapshot.products.map((p) => ({
-      id: p.id,
-      persona: buildPersona(p, snapshot.products, scales),
-      percentiles: Object.fromEntries(
-        Object.keys(scales).map((k) => [k, percentileOf(scales, k, p)]),
-      ),
-    })),
+    champions: buildChampions(snapshot.products, scalesByCategory),
+    products: snapshot.products.map((p) => {
+      const catScales = scalesByCategory[catOf(p)] ?? {};
+      return {
+        id: p.id,
+        persona: buildPersona(p, snapshot.products, scalesByCategory),
+        percentiles: Object.fromEntries(
+          Object.keys(catScales).map((k) => [k, percentileOf(catScales, k, p)]),
+        ),
+      };
+    }),
   };
 
   if (dry) {
@@ -323,13 +347,16 @@ function main() {
     );
   }
 
-  console.log('\n首页头衔：');
-  for (const c of derived.champions) {
-    console.log(
-      c.insufficient
-        ? `  ${c.title}：数据不足 —— ${c.insufficient}`
-        : `  ${c.title}：${c.productId}（${c.why}）`,
-    );
+  console.log('\n首页头衔（分品类）：');
+  for (const [cat, list] of Object.entries(derived.champions)) {
+    console.log(`  [${cat}]`);
+    for (const c of list) {
+      console.log(
+        c.insufficient
+          ? `    ${c.title}：数据不足 —— ${c.insufficient}`
+          : `    ${c.title}：${c.productId}（${c.why}）`,
+      );
+    }
   }
 }
 

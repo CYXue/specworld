@@ -249,7 +249,12 @@ function assert(name, ok, detail = '') {
     await page.waitForSelector('.globe-cell')
     await sleep(900)
     const s = await snap()
-    assert('筛选苹果后只剩 13 台', s.n === 13, `${s.n} 个`)
+    // 台数从数据推导，不钉当期值（本硬编码已两次过期：13→53→94）——
+    // 断言性质：筛选苹果后的球面格子数 === 在册数据里的苹果台数。
+    const appleCount = JSON.parse(
+      (await import('node:fs')).readFileSync('data/products.json', 'utf8'),
+    ).products.filter((p) => p.brand === 'apple').length;
+    assert('筛选苹果后台数与在册数据一致', s.n === appleCount, `${s.n} 个（数据 ${appleCount}）`)
     await page.screenshot({ path: `${OUT}/globe-5-apple.png` })
   }
 
@@ -269,7 +274,10 @@ function assert(name, ok, detail = '') {
   {
     await page.setViewport({ width: 390, height: 844, hasTouch: true, isMobile: true })
     await page.goto(BASE, { waitUntil: 'domcontentloaded' })
-    await page.waitForSelector('.globe-cell')
+    await page.evaluate(() => window.scrollTo(0, 0))
+      await page.setViewport({ width: 390, height: 844, hasTouch: true, isMobile: true })
+      await page.goto(BASE, { waitUntil: 'domcontentloaded' })
+      await page.waitForSelector('.globe-cell')
     await sleep(800)
     const mb = await (await page.$('.globe-host')).boundingBox()
     assert('窄屏画布仍有高度', mb.height > 100, `${Math.round(mb.width)}×${Math.round(mb.height)}`)
@@ -348,23 +356,38 @@ function assert(name, ok, detail = '') {
   // ── 12. 单纯点击仍能进详情（确认上面的守卫没把真点击也吃掉）──
   {
     await page.setViewport({ width: 1440, height: 900 })
+    // goto 相同 hash URL 是同文档导航（不重载，query 拼在 # 后也只进路由）：
+    // 上一段的捏合会把视距 clamp 到近景（1.55），近景下选中节点会被 HUD 遮挡、
+    // 点击落空 —— 是状态残留不是产品缺陷。reload 强制完整加载拿回默认视距。
     await page.goto(BASE, { waitUntil: 'domcontentloaded' })
+    await page.reload({ waitUntil: 'domcontentloaded' })
     await page.waitForSelector('.globe-cell')
     await sleep(700)
     await page.evaluate(() => {
       ;[...document.querySelectorAll('button')].find((b) => b.textContent.includes('暂停自转'))?.click()
     })
     await sleep(1000)
+    // 452 台后球面节点变密，「opacity>0.9 的第一个 cell」可能整体在视口外
+    // （2026-10-15 实测 y=1075 > 视口 900，点击落空）—— 只选视口内且
+    // elementFromPoint 确认可命中的 cell（产品无缺陷：视口外的节点拖转即见）。
     const t = await page.evaluate(() => {
       const cells = [...document.querySelectorAll('.globe-cell')]
-      const el = cells.find((c) => Number(getComputedStyle(c).opacity) > 0.9) ?? cells[0]
-      const b = el.getBoundingClientRect()
-      return {
-        x: Math.round(b.left + b.width / 2),
-        y: Math.round(b.top + b.height / 2),
-        href: el.getAttribute('href'),
+      for (const el of cells) {
+        const b = el.getBoundingClientRect()
+        const x = b.left + b.width / 2
+        const y = b.top + b.height / 2
+        if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) continue
+        const hit = document.elementFromPoint(x, y)
+        if (!hit || !(hit === el || el.contains(hit))) continue
+        return {
+          x: Math.round(x),
+          y: Math.round(y),
+          href: el.getAttribute('href'),
+        }
       }
+      return null
     })
+    assert('能找到视口内可点击的球面节点', !!t, '全部节点都在视口外或被遮挡')
     await page.mouse.click(t.x, t.y)
     await sleep(700)
     const hash = await page.evaluate(() => location.hash)

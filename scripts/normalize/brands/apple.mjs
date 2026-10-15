@@ -42,12 +42,50 @@ const APPLE_SHARED_MARK = /两种机型均具备|机型均具备/;
  * specsUrl 相同），这里只把公共段标记出来供两个变体共享 —— **切不开就不切**。
  * 真正调用 sliceByVariants 的自证在 main() 里，用于证明「公共段确实按机型名分得开」。
  */
+/**
+ * 2026-10-15 官网改版适配：各段从「一行一键」变成「单键整段」——
+ * 值内用 ` | ` 拼接全部行（如 `芯片.芯片 => "A19 Pro 芯片 | 6 核中央处理器… | …"`）。
+ * 按行解析的逻辑（find(/芯片$/)、find(/中央处理器/)、firstNum 等）对整段全面失灵：
+ * name 匹配不到（null）、firstNum 把芯片型号数字（A19→19）当核心数、gpu/npu 塞整段
+ * （2026-10-15 实测已把坏值写进 products.json：iPhone 16 cpuCores=18、Air/17 =19）。
+ *
+ * 这里把「组内唯一键且值含 ` | `」的整段拆回多行键（`sec.sub`、`sec.sub(2)`、`sec.sub(3)`…，
+ * 与旧结构的命名模式一致，apRows 的 order 解析兼容），让新旧两种页面结构走同一条
+ * 按行解析路径。不逐字段打补丁——拆行是无损的（apBlob 拼回后文本与原序一致），
+ * 且对旧分行结构零影响（组内多键不动；单键无 ` | ` 也不动）。
+ */
+function unwrapMergedRows(raw) {
+  const groups = new Map();
+  for (const k of Object.keys(raw)) {
+    const sec = apKeyBody(k).split('.')[0];
+    if (!groups.has(sec)) groups.set(sec, []);
+    groups.get(sec).push(k);
+  }
+  const out = {};
+  for (const [k, v] of Object.entries(raw)) {
+    const sec = apKeyBody(k).split('.')[0];
+    const single = groups.get(sec).length === 1;
+    const parts = typeof v === 'string' ? v.split(/\s*\|\s*/) : null;
+    if (!single || !parts || parts.length < 2) {
+      out[k] = v;
+      continue;
+    }
+    const [prefix, base] = apKeyBody(k).split('.');
+    const pfx = k.startsWith('_shared:') ? '_shared:' : '';
+    const cleaned = parts.filter((t) => t !== '');
+    cleaned.forEach((t, i) => {
+      out[pfx + prefix + '.' + base + (i === 0 ? '' : `(${i + 1})`)] = t;
+    });
+  }
+  return out;
+}
+
 function splitApplePage(rawProduct) {
   const merged = {};
   for (const [k, v] of Object.entries(rawProduct.raw)) {
     merged[k.startsWith('_shared:') ? k : APPLE_SHARED_MARK.test(k) ? `_shared:${k}` : k] = v;
   }
-  return merged;
+  return unwrapMergedRows(merged);
 }
 
 /**
@@ -243,7 +281,16 @@ function mapAppleSpecs(rawProduct) {
   const battJoin = battRows.join(' | ');
   // 视频播放时长（厂商自报）。Duo/Air 有多条「内屏/外屏/搭配 MagSafe 电池」，
   // 取与「视频播放」同行的那条基准值，其余记 note。
-  const videoLine = battRows.find((t) => /视频播放/.test(t));
+  // 2026-10-15 拆行后：「最长可达 N 小时」与「视频播放」分成相邻两行（Duo/18 Pro Max 实测）——
+  // 「视频播放」行本身无数字，取它**前面最近的一行**里的数字。
+  let videoLine = battRows.find((t) => /视频播放/.test(t) && /小时/.test(t));
+  if (!videoLine) {
+    // 拆行后两种行序都存在：Duo 是「最长可达 24 小时」在「视频播放」**前**（典型使用场景引导），
+    // 16/17/Air 是「视频播放」在前、「最长可达 22 小时」在后 —— 双向找最近相邻行。
+    const vi = battRows.findIndex((t) => /视频播放/.test(t));
+    if (vi > 0 && /最长可达/.test(battRows[vi - 1])) videoLine = battRows[vi - 1];
+    else if (vi > -1 && /最长可达/.test(battRows[vi + 1] ?? '')) videoLine = battRows[vi + 1];
+  }
   if (videoLine) {
     rec.battery.vendorClaimedVideoHours = firstNum(
       (videoLine.match(/最长可达\s*(\d+(?:\.\d+)?)\s*小时/) ?? [])[1] ?? '',
@@ -329,19 +376,31 @@ function mapAppleSpecs(rawProduct) {
    * （单摄机型 iPhone Air / 17e 的第二段写成「同时支持 1200 万像素…长焦功能：…」，同样命中。）
    */
   const realLensSegs = (t) => lensSegs(t).filter(looksLikeLens);
+  /**
+   * 2026-10-15 官网整段拆行后：摄像头段的行不再含 `|`（lensSegs 对无 `|` 的行返回 []），
+   * 「找一行含 ≥2 段镜头」的判据落空 → 全部机型 rear=[]（16/17/Air/Duo 实测）。
+   * 改为**跨行收集**：全部行拍平成段序列（无 `|` 的行整行算一段），再过滤镜头段。
+   * 段序 = 拆行后的行序 = 旧单行的段序，光圈按 index 对齐的旧契约不变；
+   * 旧结构（一行含多段）仍走 lensRow 路径（compare 通道兼容）。
+   */
   const lensRow = camRows.find((t) => realLensSegs(t).length >= 2) ?? '';
-  const rear = realLensSegs(lensRow).map((s) => parseLens(s));
+  const rearSegs =
+    realLensSegs(lensRow).length >= 2
+      ? realLensSegs(lensRow)
+      : camRows.flatMap((t) => (lensSegs(t).length ? lensSegs(t) : [tidy(t)])).filter(looksLikeLens);
+  const rear = rearSegs.map((s) => parseLens(s));
   rec.camera.rear = rear;
   /**
    * 光圈：有的页面把光圈写在镜头清单行内（`4800 万像素融合式超广角：13 毫米焦距，ƒ/2.2 光圈…`），
    * 有的单独成行（`ƒ/1.48、ƒ/1.8、ƒ/2.8、ƒ/4.0 或 ƒ/1.78`）。两处都试，缺哪个补哪个。
    * 注意官网的斜杠有三种写法：`ƒ/1.6`、`ƒ／1.6`(全角)、`ƒ1.6`，正则必须都能吃。
    */
-  if (lensRow) {
-    const segs = realLensSegs(lensRow);
+  if (rearSegs.length) {
+    // 2026-10-15：光圈按 rearSegs（与 rear 同序的镜头段序列）逐位对齐；
+    // 拆行后每段自带「ƒ/x 光圈」，parseAperture 从段内取值。
     rear.forEach((cam, i) => {
       if (cam.aperture) return;
-      const ap = segs[i] ? parseAperture(segs[i]) : null;
+      const ap = rearSegs[i] ? parseAperture(rearSegs[i]) : null;
       if (ap) cam.aperture = ap;
     });
   }
@@ -373,9 +432,12 @@ function mapAppleSpecs(rawProduct) {
       .join('；');
   }
 
-  const frontRows = apRows(raw, '前置摄像头').map((x) => x.value);
-  const frontMp = frontRows.find((t) => /万像素/.test(t));
-  const frontAperture = frontRows.find((t) => /光圈/.test(t));
+  // 前摄段组名两种：多数机型「前置摄像头」，iPhone 16 页叫「原深感摄像头」（2026-10-15 实测）
+  let frontRows = apRows(raw, '前置摄像头');
+  if (!frontRows.length) frontRows = apRows(raw, '原深感摄像头');
+  const frontVals = frontRows.map((x) => x.value);
+  const frontMp = frontVals.find((t) => /万像素/.test(t));
+  const frontAperture = frontVals.find((t) => /光圈/.test(t));
   rec.camera.front =
     frontMp || frontAperture
       ? {
@@ -424,7 +486,7 @@ function mapAppleSpecs(rawProduct) {
   pushOfficial(rec, '容量', capacityRows.join(' | '));
   pushOfficial(rec, '电源和电池', battJoin);
   pushOfficial(rec, '摄像头', camRows.slice(0, 2).join(' | '));
-  pushOfficial(rec, '前置摄像头', frontRows.slice(0, 2).join(' | '));
+  pushOfficial(rec, '前置摄像头', frontVals.slice(0, 2).join(' | '));
   pushOfficial(rec, '防溅、抗水、防尘', ipText);
   pushOfficial(rec, '蜂窝网络和无线连接', cell);
   pushOfficial(rec, 'MagSafe 和无线充电', magsafe);

@@ -1,7 +1,13 @@
+import audioSchemaJson from '../../data/schemas/audio.json' with { type: 'json' };
+import desktopSchemaJson from '../../data/schemas/desktop.json' with { type: 'json' };
+import laptopSchemaJson from '../../data/schemas/laptop.json' with { type: 'json' };
 import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' };
+import tabletSchemaJson from '../../data/schemas/tablet.json' with { type: 'json' };
+import wearableSchemaJson from '../../data/schemas/wearable.json' with { type: 'json' };
 import phoneViewJson from '../../data/view-phone.json' with { type: 'json' };
 import { i18n, currentLocale, pickLocale } from '../i18n';
 import type { Product } from '../types';
+import { categoryOf } from './catalog';
 import { localizeSpecValue } from './glossary';
 
 /** 展示文案助手：语言只从全局来（口径见 `src/i18n/index.ts` 的 `currentLocale`） */
@@ -70,6 +76,31 @@ interface ViewDict {
 export const PHONE_SCHEMA = phoneSchemaJson as unknown as SchemaJson;
 const PHONE_VIEW = phoneViewJson as unknown as ViewDict;
 
+/**
+ * 品类 → schema 字段表（2026-10-15 苹果全产品线扩充，六品类齐备）。
+ *
+ * 与 data/categories.json 注册表同源（selftest 对账）。specGroups 按
+ * `categoryOf(p)` 选表——非手机品类没有 view 字典（phone 专属的
+ * 展示语义），传空 view 走引擎的「自动补挂」路径：schema 的 groups
+ * 直接成为参数表分组，字段按 schema 顺序展示。这正是引擎
+ * 「schema 加一行，页面自动出现」设计对新品类的默认工作方式。
+ */
+const SCHEMAS: Record<string, SchemaJson> = {
+  phone: PHONE_SCHEMA,
+  tablet: tabletSchemaJson as unknown as SchemaJson,
+  laptop: laptopSchemaJson as unknown as SchemaJson,
+  desktop: desktopSchemaJson as unknown as SchemaJson,
+  wearable: wearableSchemaJson as unknown as SchemaJson,
+  audio: audioSchemaJson as unknown as SchemaJson,
+};
+
+const EMPTY_VIEW: ViewDict = { groups: [], hidden: [] };
+
+/** 品类 → schema 字段表（未知品类回退手机表，保证渲染不炸） */
+export function schemaForCategory(category: string): SchemaJson {
+  return SCHEMAS[category] ?? PHONE_SCHEMA;
+}
+
 interface SpecRow {
   label: string;
   value: string;
@@ -103,11 +134,36 @@ function defaultFormat(field: SchemaFieldJson | undefined, v: unknown): string {
       // 枚举顿号「、」是中文特有；英文用逗号 + 空格（不是「顺手留着」的半吊子）
       return Array.isArray(v) && v.length ? v.join(currentLocale() === 'en' ? ', ' : '、') : '—';
     case 'object':
+      return objectSummary(v, unit);
     case 'array:object':
-      return typeof v === 'object' ? JSON.stringify(v) : dash(v);
+      return Array.isArray(v) && v.length
+        ? v.map((x) => objectSummary(x, unit)).join(' · ')
+        : '—';
     default:
       return dash(v); // string / enum：官网原文，不加工
   }
+}
+
+/**
+ * 对象/对象数组的**形状驱动**缺省渲染（2026-10-15 新品类自动补挂路径用）。
+ *
+ * 不认具体字段名（引擎纪律），只认数据形状：
+ *   - `{ w, h }` → `2388×1668`（分辨率通用形状）
+ *   - `{ mp, aperture?, ois? }` → `48 MP · ƒ/1.78 · OIS`（相机镜头通用形状）
+ *   - 其余 → JSON 兜底（保证不炸，比静默返回「—」更诚实）
+ */
+function objectSummary(v: unknown, unit: string): string {
+  if (v == null || typeof v !== 'object') return dash(v);
+  const o = v as Record<string, unknown>;
+  if (typeof o.w === 'number' && typeof o.h === 'number') return `${o.w}×${o.h}${unit}`;
+  const bits: string[] = [];
+  if (typeof o.mp === 'number') bits.push(`${o.mp}${unit || ' MP'}`);
+  if (typeof o.aperture === 'string') bits.push(o.aperture);
+  if (o.ois === true) bits.push('OIS');
+  if (typeof o.note === 'string' && o.note) bits.push(o.note);
+  if (bits.length) return bits.join(' · ');
+  if (Object.keys(o).length === 0) return '—';
+  return JSON.stringify(o);
 }
 
 /**
@@ -282,7 +338,10 @@ function buildSpecGroups(
  * 是为了**只有一个接入口** —— 将来新增展示点不会漏挂。
  */
 export function specGroups(p: Product): SpecGroup[] {
-  const groups = buildSpecGroups(PHONE_SCHEMA, PHONE_VIEW, p.specs);
+  const category = categoryOf(p);
+  const schema = schemaForCategory(category);
+  const view = category === 'phone' ? PHONE_VIEW : EMPTY_VIEW;
+  const groups = buildSpecGroups(schema, view, p.specs);
   if (currentLocale() !== 'en') return groups;
   return groups.map((g) => ({
     ...g,

@@ -1,0 +1,299 @@
+{
+  "_doc": "音频设备品类参数字段表（schema v2）。覆盖 AirPods 全系（AirPods/AirPods Pro/AirPods Max）与 HomePod。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图「音频」组推导：单耳重量 g 与充电盒重量 g 分列（苹果官网口径）；主动降噪/空间音频是布尔筛选维度（facet）；续航分「单次」与「含充电盒总续航」两字段（苹果官网口径）。苹果不公布电池容量 mAh → 不建容量字段。range 按 AirPods/HomePod 全系真实数据 + 余量设定（AirPods Max 头戴 384.8g，上界放宽到 500）。",
+  "id": "audio",
+  "label": "音频",
+  "labelEn": "Audio",
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build",
+      "type": "single",
+      "guide": "单耳重量/充电盒重量/材质/配色/防水"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio",
+      "type": "single",
+      "guide": "驱动单元/主动降噪/空间音频"
+    },
+    {
+      "id": "battery",
+      "name": "电池与续航",
+      "nameEn": "Battery",
+      "type": "single",
+      "guide": "单次续航/总续航"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity",
+      "type": "single",
+      "guide": "蓝牙"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features",
+      "type": "single",
+      "guide": "充电方式"
+    }
+  ],
+  "fields": [
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        260
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "HomePod 立式机身（168mm）与耳机盒（AirPods Max 智能盒）通用；耳塞本体不适用记 null",
+      "labelEn": "Height",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.diameterMm",
+      "label": "直径",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        16,
+        160
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "HomePod mini 90mm、HomePod 138–142mm；耳机不适用记 null",
+      "labelEn": "Diameter",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "整机重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        5,
+        8000
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "下限由 iPhone Bluetooth Headset 10g 撑起；上限由 iPod Hi-Fi 6.6kg 撑起（2026-10-15 macDB 对账批）",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.budWeightG",
+      "label": "单耳重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        2,
+        500
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "AirPods 单只约 4.3g，AirPods Max 头戴 384.8g；HomePod 不适用记 null",
+      "labelEn": "Weight (each bud)",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.caseWeightG",
+      "label": "充电盒重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        20,
+        100
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "AirPods Max 智能充电盒无电池、不参与续航计算，重量仍录",
+      "labelEn": "Charging case weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.material",
+      "label": "材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "body.waterResistance",
+      "label": "防水等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "官网原文（抗汗抗水 IPX4），不折算 IP",
+      "labelEn": "Water resistance"
+    },
+    {
+      "path": "audio.driverUnit",
+      "label": "驱动单元",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "官网原文（HomePod「高振幅低音单元搭配振幅达 20 毫米的电动机」）；AirPods 官网不公布 → null",
+      "labelEn": "Driver unit"
+    },
+    {
+      "path": "audio.anc",
+      "label": "主动降噪",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "facet": true,
+      "labelEn": "Active noise cancellation"
+    },
+    {
+      "path": "audio.spatialAudio",
+      "label": "空间音频",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "facet": true,
+      "note": "官网口径：支持动态头部追踪的空间音频",
+      "labelEn": "Spatial audio"
+    },
+    {
+      "path": "battery.budHours",
+      "label": "单次续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        2,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "厂商自报，测试条件不一，只并列展示不参与排名",
+      "labelEn": "Battery life (single charge)",
+      "unitEn": "h"
+    },
+    {
+      "path": "battery.withCaseHours",
+      "label": "总续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        10,
+        60
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "搭配充电盒总续航；AirPods Max 无充电盒供电 → null",
+      "labelEn": "Battery life (with case)",
+      "unitEn": "h"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.thread",
+      "label": "Thread",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "智能家居互联协议（HomePod 起支持）",
+      "labelEn": "Thread"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "WLAN",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "HomePod 智能音箱需要（802.11ac 等）；AirPods 经手机联网不适用 → null",
+      "labelEn": "WLAN"
+    },
+    {
+      "path": "chipset.name",
+      "label": "芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "Apple W1/H1/H2/S 芯片官网公布的录（AirPods 2 起「H1 芯片」）；HomePod 芯片官网不列 → null",
+      "labelEn": "Chip"
+    },
+    {
+      "path": "features.charging",
+      "label": "充电方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "官网原文（MagSafe 充电盒/USB-C/闪电）",
+      "labelEn": "Charging"
+    },
+    {
+      "path": "os.launch",
+      "label": "首发系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "note": "HomePod 走 homeOS；耳机不适用记 null",
+      "labelEn": "OS at launch"
+    }
+  ]
+}

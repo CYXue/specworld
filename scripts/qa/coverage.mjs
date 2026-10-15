@@ -33,6 +33,32 @@ const GAPS_ONLY = argv.includes('--gaps-only');
 /** 低于此覆盖率视为「值得查」 */
 const GAP_THRESHOLD = 0.9;
 
+/**
+ * 已审查的「官网确不公布 / null by design」字段白名单。
+ *
+ * 这些字段出现在数据里（适配器显式写 `null`，或某品牌从不公布），覆盖率低是
+ * **事实**而不是解析缺陷——闸门不应因此失败。新增条目前，先去官网确认该品牌
+ * 确实不公布，并写下证据/理由（见各条目注释）。
+ *
+ * 闸门失败判据（见文末）：出现「同品牌内部分化」(partial) 或「全站皆零」(nobody)
+ * 缺口，且**不在本白名单** → 视为未审查的疑似解析器缺陷，必须查清或补进白名单。
+ * 这正是 2026-10-14 审计 B15 翻车的反面：当年把所有 partial 当事实、exit 0，
+ * 于是真缺陷（华为旗舰 chipset.name 漏取等）永远没人看。
+ */
+const KNOWN_FACTS = new Map([
+  ['retiredAt', '下市日期：当前机型均未下市，恒为 null（设计如此）'],
+  ['scores', '跑分：暂无基准测试数据，恒为 null'],
+  ['body.folded', '折叠态：非折叠屏机型恒为 null；适配器显式置 null（见 lib/foldable.mjs 判据）'],
+  ['chipset.processNm', '制程 nm：华为规格页不给 → null；苹果部分机型亦未明示制程'],
+  ['battery.measuredHours', '续航实测小时：无实测数据，恒为 null'],
+  ['connectivity.irBlaster', '红外：苹果从不列 → null(unknown)；华为有则解析'],
+  ['os.upgradableTo', '可升级到：两家官网规格页均不给出 → null'],
+  ['connectivity.cellularBands', '频段：华为只给网络制式不列频段 → null；苹果解析覆盖有限'],
+  ['battery.wirelessChargeW', '无线充电功率：不支持无线充电的机型本就无此值（事实，非缺）'],
+  ['display.protection', '防护玻璃：入门线（华为畅享等）官网不单列 → 部分缺失为事实'],
+  ['body.ipRating', '防水等级：入门线官网不标 IP 等级 → 部分缺失为事实'],
+]);
+
 const products = loadProducts();
 const brands = [...new Set(products.map((p) => p.brand))];
 
@@ -315,21 +341,52 @@ if (anyMissing.length) {
   console.log(c.dim('  但「一直缺这几台」不会触发它——那是官网事实，不是回归。'));
 }
 
-// 结尾语义（2026-10-14 审计 B15 顺手修）：「同品牌内部分化」是**数据观察**
-// （官网只给部分机型公布某字段），不是缺陷 —— 曾经走 verdict() 对它 exit 1，
-// 于是这个脚本永远是红的，而「永远红」的脚本没有人敢接进 CI，
-// 「红灯没人看」换了个形式又出现一次。分化只打印；真错误（读不到数据）
-// 早在上方就抛异常退出了，到不了这里。
+/* ---------------- 已知事实白名单（已审查，官网确不公布 / null by design）---------------- */
+
+const acceptedFacts = [...partial, ...nobody].filter((g) => KNOWN_FACTS.has(g.f));
+const failures = [...partial, ...nobody].filter((g) => !KNOWN_FACTS.has(g.f));
+
 console.log('');
-if (partial.length === 0) {
-  console.log(c.green('✅ 没有「同品牌内部分化」的字段，解析器未见失手'));
-} else {
+console.log(
+  c.dim(
+    `已知事实白名单 ${KNOWN_FACTS.size} 条（官网确不公布 / null by design，不拦截）：` +
+      [...KNOWN_FACTS.keys()].join('、'),
+  ),
+);
+if (acceptedFacts.length) {
   console.log(
-    c.yellow(
-      `ℹ️ ${partial.length} 个字段在同一品牌内部分化（见上方 ③）——` +
-        '这是「官网只公布部分机型」的事实记录，不是解析器缺陷，不拦截任何流程。',
+    c.green(
+      `✅ ${acceptedFacts.length} 个缺口命中白名单，按「事实」处理：` +
+        acceptedFacts.map((g) => g.f).join('、'),
+    ),
+  );
+}
+
+/* ---------------- 失败判据 ---------------- */
+
+// partial / nobody 缺口若不在白名单，就是「未审查的疑似解析器缺陷」——
+// 解析器对某几种页面写法漏了分支。这正是该闸门要拦的真问题。
+console.log('');
+if (failures.length === 0) {
+  console.log(c.green('✅ 无未审查的覆盖率缺口，解析器未见失手（结构性缺口为官网事实，已上方记录）'));
+  console.log('');
+  process.exit(0);
+}
+
+console.log(c.red(`❌ 覆盖率异常（疑似解析器缺陷，需修复或补进白名单）：${failures.length} 个`));
+console.log(c.red('COVERAGE_FAIL'));
+for (const g of failures) {
+  console.log(
+    c.red(
+      `  ${g.f.padEnd(28)} 覆盖 ${pct(g.cov).padStart(6)}  缺 ${g.ids.length} 台` +
+        (g.ids.length ? `：${g.ids.slice(0, 8).join(', ')}${g.ids.length > 8 ? ` …共 ${g.ids.length} 台` : ''}` : ''),
     ),
   );
 }
 console.log('');
-process.exit(0);
+console.log(
+  c.dim('应对：看这批机型的 raw 原文与能解析出来的有何不同（通常一眼看出页面写法差异），'),
+);
+console.log(c.dim('      修解析器；若确认是官网真不公布，则把字段加进 KNOWN_FACTS 白名单并写明理由。'));
+console.log('');
+process.exit(1);

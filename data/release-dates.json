@@ -640,6 +640,26 @@
       "source": "manual",
       "sourceUrl": "https://caijing.chinadaily.com.cn/a/202510/17/WS68f1f3f0a310c4deea5ecdcb.html",
       "note": "中国日报财经 2025-10-17 稿「nova 14 活力版正式发布……当日开启预售」；中关村在线记「国内发布时间 2025年10月17日」；2025-10-24 全渠道正式开售。原 unresolved 记「发布时间未见可靠来源」，实为漏查 —— 中国日报发布稿与 ZOL 双源在案"
+    },
+    {
+      "id": "apple-iphone-se-2",
+      "name": "iPhone SE (第二代)",
+      "brand": "apple",
+      "date": "2020-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "2020-04-15（美西）官网新闻稿官宣，全球媒体通写口径；北京时间为 4-16 凌晨。04-24 正式开售。官网新闻稿 URL 待补，日期可独立核验"
+    },
+    {
+      "id": "apple-iphone-se-3",
+      "name": "iPhone SE (第三代)",
+      "brand": "apple",
+      "date": "2022-03-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "2022-03-08（美西）官网新闻稿官宣，全球媒体通写口径；北京时间为 03-09 凌晨。03-11 预购、03-18 开售。官网新闻稿 URL 待补，日期可独立核验"
     }
   ],
   "unresolved": []

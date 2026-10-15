@@ -1,0 +1,24 @@
+{
+  "_doc": "头显品类字段表（Apple Vision Pro 起）。结构性特点：双芯片（主芯片 M 系列 + 传感专用 R1），重量按「含标配头带/遮光罩」口径（官网 Device Weight），电池为**外置**随行电源（官网单独标注重量），续航分通用/视频两口径取通用值。分辨率官网口径是「2300 万像素 3D 显示系统」（非 w×h），故无 resolutionPx 字段、像素信息进 display.type 原文。",
+  "version": 1,
+  "fields": [
+    { "path": "body.weightG", "label": "机身重量", "unit": "g", "type": "number", "range": [400, 1200], "dir": null, "quantifiable": true, "group": "body", "note": "含 Light Seal 与头带，官网区间口径录下限（600-650g → 600）；外置电池单独 353g 不含", "labelEn": "Device weight", "unitEn": "g" },
+    { "path": "body.material", "label": "机身材质", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Materials" },
+    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
+    { "path": "display.type", "label": "显示系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "note": "官网原文含像素口径（2300 万像素 3D 显示系统 micro-OLED）", "labelEn": "Display system" },
+    { "path": "display.refreshHz", "label": "刷新率", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "note": "官网多档刷新率（90Hz/96Hz/100Hz/120Hz），录可解析区间形态", "labelEn": "Refresh rate" },
+    { "path": "display.colorGamut", "label": "色域", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "labelEn": "Color gamut" },
+    { "path": "chipset.name", "label": "芯片", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "note": "双芯片：主芯片 + R1 传感芯片，用 | 分段", "labelEn": "Chips" },
+    { "path": "chipset.cpuCores", "label": "CPU 核心数", "unit": "核", "type": "number", "range": [4, 40], "dir": "high", "quantifiable": true, "group": "chipset", "note": "主芯片 CPU 核心数", "labelEn": "CPU cores", "unitEn": "-core" },
+    { "path": "chipset.gpu", "label": "图形处理器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "labelEn": "GPU" },
+    { "path": "chipset.npu", "label": "神经网络引擎", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "labelEn": "Neural Engine" },
+    { "path": "memory.ramGb", "label": "内存", "unit": "GB", "type": "array:number", "range": null, "dir": "high", "quantifiable": true, "group": "memory", "labelEn": "Memory", "unitEn": "GB" },
+    { "path": "memory.storageGb", "label": "存储", "unit": "GB", "type": "array:number", "range": null, "dir": "high", "quantifiable": true, "group": "memory", "note": "GB 数值数组（256/512/1024）", "labelEn": "Storage", "unitEn": "GB" },
+    { "path": "battery.vendorClaimedHours", "label": "续航（通用）", "unit": "小时", "type": "number", "range": [1, 12], "dir": "high", "quantifiable": true, "group": "battery", "note": "官网「一般使用」口径；视频续航另列于 display.type 无法承载时进 notes", "labelEn": "Battery (general use)", "unitEn": "h" },
+    { "path": "camera.front", "label": "主摄系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "camera", "note": "立体 3D 主摄（空间照片/视频拍摄）", "labelEn": "Main camera system" },
+    { "path": "features.sensors", "label": "传感器", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "features", "note": "官网 Sensors 段逐项", "labelEn": "Sensors" },
+    { "path": "connectivity.wifi", "label": "无线局域网", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Wi-Fi" },
+    { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Bluetooth" },
+    { "path": "os.launch", "label": "首发系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os", "labelEn": "OS at launch" }
+  ]
+}

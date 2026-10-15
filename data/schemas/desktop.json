@@ -1,0 +1,430 @@
+{
+  "_doc": "台式电脑品类参数字段表（schema v2）。覆盖 iMac / Mac mini / Mac Studio / Mac Pro。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图推导：外观为三维尺寸（宽×高×深 mm）+ 重量 kg；屏幕组仅 iMac 适用，无屏机型（Mac mini/Studio/Pro）逐台标 not_applicable；接口是多实例（array:string 官网原文）。单位不互换算：电池组整组不建（台式机官网不公布电池参数）。range 按 Mac 全系真实数据 + 余量设定（Mac Pro 2023 重 14.9kg、iMac 27 英寸宽 525mm）。",
+  "id": "desktop",
+  "label": "台式电脑",
+  "labelEn": "Desktop",
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build",
+      "type": "single",
+      "guide": "三维尺寸/重量/材质/配色"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display",
+      "type": "single",
+      "guide": "尺寸/类型/分辨率/亮度/刷新（仅一体机适用）"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance",
+      "type": "single",
+      "guide": "SoC/架构/核心数/GPU/NPU"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage",
+      "type": "single",
+      "guide": "内存档位/类型/存储档位/类型"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与接口",
+      "nameEn": "Network & Ports",
+      "type": "single",
+      "guide": "WLAN/蓝牙/接口配置"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio",
+      "type": "single",
+      "guide": "扬声器/耳机孔"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software",
+      "type": "single",
+      "guide": "出厂系统"
+    }
+  ],
+  "fields": [
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        80,
+        650
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        650
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Height",
+      "unitEn": "mm",
+      "note": "Mac mini 3.6cm 起、Mac Pro 塔式 45–53cm、iMac 52–65cm（2026-10-15 Mac 全代收录）"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        80,
+        750
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Depth",
+      "unitEn": "mm",
+      "note": "上限由 Xserve 1U 机架式机身 711mm 撑起（2026-10-15 macDB 对账批收录，此前 700mm 会误拦真数据）"
+    },
+    {
+      "path": "body.weightKg",
+      "label": "重量",
+      "unit": "kg",
+      "type": "number",
+      "range": [
+        0.5,
+        25
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "Mac mini 1.18kg 起，Mac Pro (2023) 14.9kg 封顶",
+      "labelEn": "Weight",
+      "unitEn": "kg"
+    },
+    {
+      "path": "body.material",
+      "label": "机身材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Body material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        8,
+        32
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "一体机内置屏（iMac G3 15 英寸 CRT 起）；无内置屏的 Mac mini/Studio/Pro 记 null（2026-10-15 早期 Mac 收录放宽下限）",
+      "labelEn": "Screen size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.type",
+      "label": "屏幕类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Display type"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": "px",
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Resolution",
+      "unitEn": "px"
+    },
+    {
+      "path": "display.brightnessNits",
+      "label": "屏幕亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        200,
+        800
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "iMac 官网只公布单一亮度口径（500 尼特），不拆典型/峰值",
+      "labelEn": "Brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "display.ppi",
+      "label": "像素密度",
+      "unit": "ppi",
+      "type": "number",
+      "range": [
+        90,
+        420
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "iMac 4K 21.5 英寸 401ppi 封顶；老 CRT 92–129ppi（2026-10-15 补全批放宽上限）",
+      "labelEn": "Pixel density",
+      "unitEn": "ppi"
+    },
+    {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": "Hz",
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Refresh rate",
+      "unitEn": "Hz"
+    },
+    {
+      "path": "chipset.name",
+      "label": "处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Processor"
+    },
+    {
+      "path": "chipset.arch",
+      "label": "处理器架构",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Processor architecture"
+    },
+    {
+      "path": "chipset.processNm",
+      "label": "制程",
+      "unit": "nm",
+      "type": "number",
+      "range": [
+        3,
+        100
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "chipset",
+      "note": "Intel Xeon 65–14nm 与 Apple 芯片 5/3nm 通用（2026-10-15 Mac 全代收录）",
+      "labelEn": "Process node",
+      "unitEn": "nm"
+    },
+    {
+      "path": "chipset.cpuCores",
+      "label": "CPU 核心数",
+      "unit": "核",
+      "type": "number",
+      "range": [
+        1,
+        32
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "chipset",
+      "note": "PowerPC G4 单核起步，M2 Ultra 24 核封顶（2026-10-15 Mac 全代收录）",
+      "labelEn": "CPU cores",
+      "unitEn": "cores"
+    },
+    {
+      "path": "chipset.gpu",
+      "label": "GPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "官网原文（「40 核图形处理器」/Intel Radeon Pro），不拆核数",
+      "labelEn": "GPU"
+    },
+    {
+      "path": "chipset.npu",
+      "label": "NPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "NPU"
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "内存档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "RAM options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "memory.ramType",
+      "label": "内存类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "RAM type"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "memory.storageType",
+      "label": "存储类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage type"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "WLAN",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "WLAN"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "接口配置",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "多实例：官网原文数组（雷雳 5 ×3、USB-A ×2、HDMI、2.5Gb 以太网、SD 卡卡槽）",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "camera.front",
+      "label": "前置摄像头",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "iMac 2020 起内置 1080p FaceTime 摄像头；Mac mini/Studio/Pro 不适用记 null",
+      "labelEn": "Front camera"
+    },
+    {
+      "path": "audio.speakers",
+      "label": "扬声器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "iMac 为六扬声器系统；Mac mini/Mac Studio 无内置扬声器记 null",
+      "labelEn": "Speakers"
+    },
+    {
+      "path": "audio.jack",
+      "label": "音频接口",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "labelEn": "Audio jack"
+    },
+    {
+      "path": "os.launch",
+      "label": "出厂系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Shipped OS"
+    }
+  ]
+}

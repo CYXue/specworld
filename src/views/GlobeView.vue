@@ -73,28 +73,66 @@ function toggleSpin() {
  * 内层 h-full 参照塌陷父级，实际高度是 0 —— 画面照样渲染，但指针事件全落空。
  */
 const vh = ref(typeof window !== 'undefined' ? window.innerHeight : 800);
+
+/**
+ * 球面容器**自己**的顶边到视口底还剩多少（2026-10-15）。
+ *
+ * 与 /canvas 同源的故障：品类增到 17、机型到 913 台后，年份/产品线 chips 换行变多，
+ * 桌面端筛选面板长到 578px，把球面顶到 y=620..1228（1440×900 视口外）——
+ * 拖拽、缩放、点击全部落空，且零报错。移动端曾因同一原因踩过一次（top=898），
+ * 当时只修了 order，没修「高度不随上方内容变」，所以桌面端这次照样中招。
+ *
+ * 量**球面自身顶边**而不是「筛选面板底边」：桌面端筛选在上、移动端球面在上，
+ * 两种顺序下这一条判据都成立。
+ */
+const globeShell = ref<HTMLElement | null>(null);
+const availBelow = ref(0);
+function measureAvail() {
+  const el = globeShell.value;
+  if (!el) return;
+  const b = el.getBoundingClientRect();
+  const top = Math.max(0, Math.min(b.top, vh.value));
+  availBelow.value = Math.max(0, vh.value - top);
+}
 let onResize: (() => void) | null = null;
+let ro: ResizeObserver | null = null;
 onMounted(() => {
-  onResize = () => (vh.value = window.innerHeight);
+  onResize = () => {
+    vh.value = window.innerHeight;
+    measureAvail();
+  };
   window.addEventListener('resize', onResize);
+  measureAvail();
+  if (globeShell.value && typeof ResizeObserver !== 'undefined') {
+    ro = new ResizeObserver(() => measureAvail());
+    ro.observe(globeShell.value);
+  }
 });
 onBeforeUnmount(() => {
   if (onResize) window.removeEventListener('resize', onResize);
+  ro?.disconnect();
 });
 
-const canvasH = computed(
-  () => `${Math.max(320, Math.round(vh.value * (vh.value < 620 ? 0.56 : 0.68)))}px`,
-);
+const canvasH = computed(() => {
+  const wanted = Math.round(vh.value * (vh.value < 620 ? 0.56 : 0.68));
+  const capped = availBelow.value > 0 ? Math.min(wanted, Math.round(availBelow.value - 20)) : wanted;
+  return `${Math.max(320, capped)}px`;
+});
 </script>
 
 <template>
-  <div class="flex h-full flex-col">
+  <!-- 桌面端（lg）左右分栏：筛选做侧栏、球面占满右侧整列高度。
+       竖向堆叠时筛选 chips 一换行就把球面往下顶，球面只能拿到「剩下的那点高度」
+       （1440×900 下只剩 340px，球直径被压到 306px，横向跨度判据直接不过）。 -->
+  <div class="flex h-full flex-col lg:flex-row">
     <div v-if="err" class="page-shell py-10 text-center" style="color: var(--color-east)">
       {{ t('common.loadFailed', { err }) }}
     </div>
 
     <template v-else>
-      <div class="page-shell pt-5 pb-3">
+      <div
+        class="page-shell pt-5 pb-3 order-2 lg:order-1 lg:w-[340px] lg:shrink-0 lg:overflow-y-auto lg:pb-5"
+      >
         <div class="pixel-panel mb-4 p-3">
           <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -133,7 +171,10 @@ const canvasH = computed(
             </div>
           </div>
 
-          <div class="mt-3 space-y-2 border-t-2 border-[var(--color-ink)] pt-3">
+          <!-- 分面区自身限高滚动（与 /canvas 同）：chips 换行不能无限长高把球面顶出首屏 -->
+          <div
+            class="mt-3 max-h-[38vh] space-y-2 overflow-y-auto border-t-2 border-[var(--color-ink)] pt-3"
+          >
             <div class="flex flex-wrap items-center gap-2">
               <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
                 >{{ t('facet.brand') }}</span
@@ -213,7 +254,15 @@ const canvasH = computed(
         </div>
       </div>
 
-      <div class="page-shell pb-5">
+      <!--
+        移动端球面在前（order-1），筛选面板在后：筛选 chips 随产品线增多会换行加高，
+        曾把球面整个推出 844px 首屏（2026-10-15 实测 top=898 > 视口），触摸全部落空。
+        桌面端（lg:）保持原顺序：标题/按钮/筛选在上，球在下。
+      -->
+      <div
+        ref="globeShell"
+        class="page-shell pb-5 order-1 lg:order-2 lg:min-w-0 lg:flex-1"
+      >
         <div class="pixel-panel" :style="{ height: canvasH }">
           <GlobeCanvas
             ref="globe"

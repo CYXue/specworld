@@ -1,0 +1,171 @@
+{
+  "_doc": "配件 schema（电源适配器/iSight 摄像头/遥控器等）。2026-10-15 建表。口径：输出功率与接口形态是本体。5W「五福一安」横跨 iPhone 3G–11 十一年，是苹果生态最具标志性的适配器。",
+  "fields": [
+    {
+      "path": "body.heightMm",
+      "label": "高",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        200
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "上限由 Apple Pencil 166mm 与 Siri Remote 136mm 撑起；下限由 MagSafe 电池 11mm 级别撑起（2026-10-15 macDB 对账批）",
+      "labelEn": "Height",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        120
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "下限由 Apple Pencil 直径 9mm 撑起（2026-10-15 macDB 对账批收录触控笔）",
+      "labelEn": "Width",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "厚",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        120
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "下限由 MagSafe 外接电池 11mm 撑起（2026-10-15 macDB 对账批收录）",
+      "labelEn": "Depth",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        10,
+        1500
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "适配器 25–160g、iSight 63.5g",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "accessory.type",
+      "label": "配件类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "accessory",
+      "note": "电源适配器/摄像头/遥控器",
+      "labelEn": "Type"
+    },
+    {
+      "path": "power.outputW",
+      "label": "输出功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        3,
+        140
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "power",
+      "note": "5W 五福一安到 140W MagSafe 3",
+      "labelEn": "Output power",
+      "unitEn": "W"
+    },
+    {
+      "path": "power.outputSpec",
+      "label": "输出档位",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "官网口径如 5V1A、9V2.22A",
+      "labelEn": "Output spec"
+    },
+    {
+      "path": "power.protocol",
+      "label": "充电协议",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "Apple 1.0A/USB PD 等",
+      "labelEn": "Charging protocol"
+    },
+    {
+      "path": "connectivity.type",
+      "label": "接口",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "USB-A/USB-C/Lightning/FireWire 400/红外",
+      "labelEn": "Connector"
+    },
+    {
+      "path": "camera.mp",
+      "label": "摄像头像素",
+      "unit": "MP",
+      "type": "number",
+      "range": [
+        0.1,
+        12
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "camera",
+      "note": "iSight 0.3MP；非摄像头配件记 null",
+      "labelEn": "Camera",
+      "unitEn": "MP"
+    },
+    {
+      "path": "os.launch",
+      "label": "首发系统要求",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "OS requirement"
+    }
+  ]
+}

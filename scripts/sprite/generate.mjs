@@ -280,7 +280,6 @@ function escAttr(v) {
 }
 
 /** 把一台机器的立绘写成独立 .svg 文件（列表页用）。 */
-/** 把一台机器的立绘写成独立 .svg 文件（列表页用）。 */
 export function writeSpriteFile(product, outPath, { scale = 1 } = {}) {
   const s = scale;
   const totalW = CANVAS.w * s + 10 * s + CANVAS.w * s + 16 * s;
@@ -291,6 +290,32 @@ export function writeSpriteFile(product, outPath, { scale = 1 } = {}) {
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${totalH}" width="${totalW}" height="${totalH}">
 ${inner}
+</svg>
+`;
+  mkdirSync(dirname(outPath), { recursive: true });
+  writeFileSync(outPath, svg, 'utf8');
+  return outPath;
+}
+
+/**
+ * 品牌图标（非手机品类的立绘）：品牌色圆角块 + monogram 字母。
+ *
+ * 画布与手机立绘同构（160×320 + 28 caption 空间），列表页并排时高度一致。
+ * 内容只有品牌元数据（brandMeta 的 accentColor / monogram），**没有任何
+ * 产品几何** —— 它不是「产品的画」，是「本品类暂无产品立绘」的牌子。
+ * 与 UNKNOWN 占位几何同一设计定位：占位必须显性，不能冒充真数据。
+ */
+export function writeBrandIconFile(product, outPath) {
+  const meta = brandMeta(product.brand) ?? { monogram: '?', accentColor: '#8a8f98' };
+  const block = 88;
+  const x = (CANVAS.w - block) / 2;
+  const y = (CANVAS.h - block) / 2;
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${CANVAS.w} ${CANVAS.h + 28}" width="${CANVAS.w}" height="${CANVAS.h + 28}">
+  <rect x="${x}" y="${y}" width="${block}" height="${block}" rx="14" fill="${meta.accentColor}"/>
+  <text x="${CANVAS.w / 2}" y="${y + block / 2 + 14}" text-anchor="middle"
+      font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
+      font-size="42" font-weight="700" fill="#ffffff">${escAttr(meta.monogram)}</text>
 </svg>
 `;
   mkdirSync(dirname(outPath), { recursive: true });
@@ -312,11 +337,40 @@ async function main() {
   const outDir = join(ROOT, outIdx > -1 ? process.argv[outIdx + 1] : 'data/sprites');
   mkdirSync(outDir, { recursive: true });
   let n = 0;
+  let brandIcons = 0;
   for (const p of products) {
+    // 立绘分两路（2026-10-15 用户决策）：phone 画产品外形（几何由参数算出）；
+    // 非 phone 品类（平板/笔记本/台式/手表/耳机）**统一画品牌图标**——
+    // 给 iPad 画一张手机形 SVG 是「看起来合理但取错形态」的静默错误
+    // （本项目最怕的故障类型），而品牌图标是「本品类暂无产品立绘」的
+    // 显性表达（与 UNKNOWN 占位几何同一设计定位：不编造，不冒充）。
+    // 判据取 v2 契约的 category 字段（真实数据全部带；历史记录缺省按 phone）。
+    if ((p.category ?? 'phone') !== 'phone') {
+      writeBrandIconFile(p, join(outDir, `${p.id}.svg`));
+      brandIcons += 1;
+      continue;
+    }
     writeSpriteFile(p, join(outDir, `${p.id}.svg`));
     n += 1;
   }
-  console.log(`已生成 ${n} 张立绘 → ${outDir}`);
+  console.log(
+    `已生成 ${n} 张手机立绘 + ${brandIcons} 张品牌图标 → ${outDir}`,
+  );
+  // 孤儿对账：目录里不属于现役产品的 SVG 一律删除（改 id / 退出官网目录的产品
+  // 会留下永不再被引用的陈旧产物——引用体检抓不到它，人眼更看不见）。
+  // 逐文件 unlink 不经过批量删除保护；单文件失败只警告（保洁不炸构建）。
+  const live = new Set(products.map((p) => `${p.id}.svg`));
+  let removed = 0;
+  for (const f of (await import('node:fs')).readdirSync(outDir)) {
+    if (!f.endsWith('.svg') || live.has(f)) continue;
+    try {
+      (await import('node:fs')).unlinkSync(join(outDir, f));
+      removed += 1;
+    } catch (err) {
+      console.warn(`  ⚠️ 孤儿 ${f} 删除失败（${err.code ?? err.message}），跳过`);
+    }
+  }
+  if (removed) console.log(`  已清理 ${removed} 张孤儿立绘（产品已不在册）`);
   // 「没数据」必须出现在人眼前：列出按占位几何画出来的机型。
   // 否则一个好看的默认值会把数据缺口悄悄抹平（原则一）。
   if (UNKNOWN.hits.length) {

@@ -15,6 +15,7 @@ import { isValidBrand } from '../brands.mjs';
 import { validateOverrides } from '../lib/overrides.mjs';
 import {
   isRegisteredCategory,
+  loadCategories,
   loadSchema,
   validateSpecs,
   validateStatusMap,
@@ -67,7 +68,26 @@ function schemaFieldLimits() {
   }
   return out;
 }
+/**
+ * 六品类前的区间真源快照（phone schema）。仍导出供 selftest 的覆盖断言引用；
+ * **闸门第 4 条已不再使用它**——同一 schema path（body.weightG / display.ppi…）在
+ * phone/tablet/wearable 各有不同 range，按产品品类查各自 schema 才是单一真源
+ * （2026-10-15 实测：iPad 用 phone 的 [80,400]g 区间被误拦 46 项）。
+ */
 const FIELD_LIMITS = schemaFieldLimits();
+
+/** path → 注册该字段的品类 id 列表（带缓存；品类感知的必填覆盖率用） */
+const registeredCache = new Map();
+function registeredIn(path) {
+  if (registeredCache.has(path)) return registeredCache.get(path);
+  const cats = [];
+  for (const c of loadCategories()?.categories ?? []) {
+    const s = loadSchema(c.id);
+    if ((s?.fields ?? []).some((f) => f.path === path)) cats.push(c.id);
+  }
+  registeredCache.set(path, cats);
+  return cats;
+}
 export { FIELD_LIMITS, SCHEMA_RANGE_PATHS };
 
 /** 必填字段：这些字段的覆盖率是数据质量的体温计 */
@@ -117,16 +137,26 @@ export function validate(snapshot, previous, options = {}) {
     ids.add(p.id);
   }
 
-  // 3. 必填覆盖率
+  // 3. 必填覆盖率（品类感知：字段注册在哪些品类，就只在那些品类的池内算——
+  //    body.weightG 对 laptop/desktop 不存在（kg 口径），混进全池会把覆盖率稀释成假警报。
+  //    顶层身份字段（releaseDate 等）不在任何 schema fields 里 → 回退全池必填）
   const coverage = {};
   for (const path of REQUIRED_PATHS) {
-    coverage[path] = ps.length ? ps.filter((p) => has(get(p, path))).length / ps.length : 0;
+    const cats = registeredIn(path);
+    const pool = cats.length ? ps.filter((p) => cats.includes(p.category ?? 'phone')) : ps;
+    coverage[path] = pool.length
+      ? pool.filter((p) => has(get(p, path))).length / pool.length
+      : 0;
   }
 
-  // 4. 数值合理性（区间真源 = schema 的 range，见 FIELD_LIMITS）
+  // 4. 数值合理性（区间真源 = **产品自身品类** schema 的 range——同一 path 在不同品类
+  //    有不同区间，phone/tablet/wearable 的 body.weightG 口径各异）
   for (const p of ps) {
-    const checks = SCHEMA_RANGE_PATHS.map((path) => [path, FIELD_LIMITS[path]]);
-    for (const [path, range] of checks) {
+    const catSchema = loadSchema(p.category ?? 'phone');
+    for (const path of SCHEMA_RANGE_PATHS) {
+      const f = (catSchema?.fields ?? []).find((x) => x.path === path);
+      const range = f && Array.isArray(f.range) ? f.range : null;
+      if (!range) continue;
       const v = get(p, path);
       if (v === null || v === undefined) continue;
       if (!inRange(v, range))
@@ -270,12 +300,23 @@ export function validate(snapshot, previous, options = {}) {
       );
     }
     for (const path of REQUIRED_PATHS) {
-      const prev = previous.products.length
-        ? previous.products.filter((p) => has(get(p, path))).length / previous.products.length
+      // 退化检测改为**同机型对比**（2026-10-15 六品类后必改）：旧版按全池算，
+      // 新增品类的「从无到有」（如 Watch 重量大面积未采集）会把池内覆盖率稀释成假退化。
+      // 真正要防的是「已有数据被改坏」——所以只在两版**共有的机型**上对比覆盖率。
+      const cats = registeredIn(path);
+      const inCats = (p) => (cats.length ? cats.includes(p.category ?? 'phone') : true);
+      const poolPrev = previous.products.filter(inCats);
+      const prevIds = new Set(poolPrev.map((p) => p.id));
+      const poolCurrSame = ps.filter((p) => prevIds.has(p.id) && inCats(p));
+      const prev = poolPrev.length
+        ? poolPrev.filter((p) => has(get(p, path))).length / poolPrev.length
         : 0;
-      if (prev - coverage[path] > LIMITS.maxCoverageDrop) {
+      const curr = poolCurrSame.length
+        ? poolCurrSame.filter((p) => has(get(p, path))).length / poolCurrSame.length
+        : 0;
+      if (prev - curr > LIMITS.maxCoverageDrop) {
         fail.push(
-          `${path} 覆盖率从 ${(prev * 100).toFixed(1)}% 跌到 ${(coverage[path] * 100).toFixed(1)}%`,
+          `${path} 覆盖率从 ${(prev * 100).toFixed(1)}% 跌到 ${(curr * 100).toFixed(1)}%（同机型对比）`,
         );
       }
     }

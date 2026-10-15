@@ -1,0 +1,17 @@
+{
+  "_doc": "定位器品类字段表（AirTag 起，用户 2026-10-15 决策命名）。设备形态极简：无屏幕、无系统、纽扣电池供电、以 UWB/蓝牙 Find My 网络为核心。字段刻意精简——官网公布的参数本来就少，缺失即 null。",
+  "version": 1,
+  "fields": [
+    { "path": "body.heightMm", "label": "高度", "unit": "mm", "type": "number", "range": [5, 60], "dir": null, "quantifiable": true, "group": "body", "labelEn": "Height", "unitEn": "mm" },
+    { "path": "body.diameterMm", "label": "直径", "unit": "mm", "type": "number", "range": [15, 80], "dir": null, "quantifiable": true, "group": "body", "labelEn": "Diameter", "unitEn": "mm" },
+    { "path": "body.weightG", "label": "重量", "unit": "g", "type": "number", "range": [1, 100], "dir": null, "quantifiable": true, "group": "body", "labelEn": "Weight", "unitEn": "g" },
+    { "path": "body.material", "label": "材质", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Materials" },
+    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
+    { "path": "chipset.name", "label": "芯片", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "note": "U1（一代）/ 二代 UWB（AirTag 2）", "labelEn": "Chip" },
+    { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Bluetooth" },
+    { "path": "connectivity.uwb", "label": "超宽带", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "精确查找能力口径（Precision Finding）", "labelEn": "Ultra Wideband" },
+    { "path": "features.speaker", "label": "扬声器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "features", "note": "发声查找能力", "labelEn": "Speaker" },
+    { "path": "features.batteryType", "label": "电池", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "features", "note": "CR2032 可更换纽扣电池及续航口径", "labelEn": "Battery" },
+    { "path": "features.waterResistance", "label": "防水", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "features", "labelEn": "Water resistance" }
+  ]
+}

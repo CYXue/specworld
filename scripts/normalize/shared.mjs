@@ -78,7 +78,15 @@ function parseAppleAppearance(look) {
     : [];
 
   const designSeg = segs.find((s) => /(金属|超瓷晶|玻璃|面板)/.test(s) && !/[（）()]/.test(s));
-  const material = designSeg ?? null;
+  let material = designSeg ?? null;
+  // 兜底：外观段里含材质关键词但被括号过滤掉的片段（如「钛金属（哑光）」「陶瓷」），
+  // 仅在原解析为空时补取，绝不覆盖已正确取到的值。
+  if (!material) {
+    const fb = segs.find(
+      (s) => /(钛|陶瓷|素皮|塑料|不锈钢|铝|金属|玻璃|玻纤|超瓷晶)/.test(s) && s.length <= 24 && !/。/.test(s),
+    );
+    material = fb ?? null;
+  }
 
   const panelSegs = segs.filter((s) => /超瓷晶面板/.test(s) && /[（(]/.test(s));
   const protection = panelSegs.length

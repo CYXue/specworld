@@ -80,7 +80,7 @@ function makeNameTest(rule: {
  *
  * 数据诚信（本项目铁律，违反即全站口径错）
  * ----------------------------------------
- * 1. **不做估算**：没有数据就是没有。平板 / 笔记本 / 音频在当前数据集里一台都没有，
+ * 1. **不做估算**：没有数据就是没有。任一品类当前数据集里一台都没有时，
  *    `CATEGORY_ORDER` 里照样留着位置，`categoryCounts()` 返回 0，页面显示「暂无数据」。
  *    **绝不**因为「苹果肯定有 iPad」就凭空造一台。
  * 2. **折叠屏只认官网原文**：`rawOfficial` 的尺寸段出现「折叠态 / 展开态 / 三屏态」
@@ -97,7 +97,24 @@ function makeNameTest(rule: {
  * 把它和「手机」平级放在品类里，等于拿形态维度冒充品类维度 ——
  * 未来接入平板后「折叠平板」会更没处放。形态另见 `formOf`（折叠屏/直板）。
  */
-type CategoryId = 'phone' | 'tablet' | 'laptop' | 'audio';
+type CategoryId =
+  | 'phone'
+  | 'tablet'
+  | 'laptop'
+  | 'desktop'
+  | 'display'
+  | 'wearable'
+  | 'headset'
+  | 'home'
+  | 'audio'
+  | 'media'
+  | 'tracker'
+  | 'network'
+  | 'pda'
+  | 'input'
+  | 'printer'
+  | 'storage'
+  | 'accessory';
 
 export interface CategoryDef {
   id: CategoryId;
@@ -110,8 +127,21 @@ export const CATEGORY_ORDER: CategoryDef[] = [
   { id: 'phone', label: '手机', labelEn: 'Phone' },
   { id: 'tablet', label: '平板', labelEn: 'Tablet' },
   { id: 'laptop', label: '笔记本', labelEn: 'Laptop' },
+  { id: 'desktop', label: '台式电脑', labelEn: 'Desktop' },
+  { id: 'display', label: '显示器', labelEn: 'Display' },
+  { id: 'wearable', label: '可穿戴', labelEn: 'Wearable' },
+  { id: 'headset', label: '头显', labelEn: 'Headset' },
+  { id: 'home', label: '智能家居', labelEn: 'Smart Home' },
   { id: 'audio', label: '音频', labelEn: 'Audio' },
-];
+  { id: 'media', label: '多媒体播放器', labelEn: 'Media Player' },
+  { id: 'tracker', label: '定位器', labelEn: 'Tracker' },
+  { id: 'network', label: '网络设备', labelEn: 'Networking' },
+  { id: 'pda', label: '掌上电脑', labelEn: 'PDA' },
+  { id: 'input', label: '输入设备', labelEn: 'Input Device' },
+  { id: 'printer', label: '打印机', labelEn: 'Printer' },
+  { id: 'storage', label: '存储设备', labelEn: 'Storage' },
+  { id: 'accessory', label: '配件', labelEn: 'Accessory' },
+]
 
 /**
  * 品类展示名（语言感知）。

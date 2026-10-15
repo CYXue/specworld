@@ -127,17 +127,54 @@ async function exportPng() {
  * 矮屏（横屏手机、Toy 横屏）少留点，别把筛选条挤出屏幕。
  */
 const vh = ref(typeof window !== 'undefined' ? window.innerHeight : 800);
+
+/**
+ * 筛选条下面还剩多少可视高度（2026-10-15）。
+ *
+ * 为什么要量：品类从 16 增到 17、机型到 913 台后，年份/产品线 chips 换行变多，
+ * 筛选条从 ~400px 长到 578px —— 画布被整块顶到首屏之外（1440×900 下
+ * board-host 落在 y=620..1228），鼠标/触摸全落在屏幕外，表现为「拖不动、滚不动、
+ * 点不进」。这与 globe 移动端「chips 变高把球面推出首屏」是同一类故障。
+ *
+ * 所以光给画布一个 vh 比例不够（比例不随上方内容变化），必须按**实测剩余空间**兜住。
+ */
+const filterShell = ref<HTMLElement | null>(null);
+const availBelow = ref(0);
+function measureAvail() {
+  const el = filterShell.value;
+  if (!el) return;
+  const b = el.getBoundingClientRect();
+  // b.bottom 是视口相对值：元素在视口下方/上方都要夹住，不能拿去减出负数。
+  const bottom = Math.max(0, Math.min(b.bottom, vh.value));
+  availBelow.value = Math.max(0, vh.value - bottom);
+}
 let onResize: (() => void) | null = null;
+let ro: ResizeObserver | null = null;
 onMounted(() => {
-  onResize = () => (vh.value = window.innerHeight);
+  onResize = () => {
+    vh.value = window.innerHeight;
+    measureAvail();
+  };
   window.addEventListener('resize', onResize);
+  measureAvail();
+  // chips 数量随筛选联动变化（换品类/品牌后行数不同）→ 高度要跟着量，不能只量一次
+  if (filterShell.value && typeof ResizeObserver !== 'undefined') {
+    ro = new ResizeObserver(() => measureAvail());
+    ro.observe(filterShell.value);
+  }
 });
 onBeforeUnmount(() => {
   if (onResize) window.removeEventListener('resize', onResize);
+  ro?.disconnect();
 });
 
 const canvasH = computed(() => {
-  return `${Math.max(320, Math.round(vh.value * (vh.value < 620 ? 0.56 : 0.68)))}px`;
+  const ratio = vh.value < 620 ? 0.56 : 0.68;
+  const wanted = Math.round(vh.value * ratio);
+  // 上方筛选条实测占掉之后，剩下的空间才给画布（留 20px 下边距）。
+  // 剩余不足 320px 时不硬压（矮屏宁可让用户滚一点，也不要把画布压成一条缝）。
+  const capped = availBelow.value > 0 ? Math.min(wanted, Math.round(availBelow.value - 20)) : wanted;
+  return `${Math.max(320, capped)}px`;
 });
 </script>
 
@@ -149,7 +186,7 @@ const canvasH = computed(() => {
 
     <template v-else>
       <!-- 筛选条：品牌 / 产品线 / 年份 / 排序 -->
-      <div class="page-shell pt-5 pb-3">
+      <div ref="filterShell" class="page-shell pt-5 pb-3">
         <div class="pixel-panel mb-4 p-3">
           <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -193,7 +230,11 @@ const canvasH = computed(() => {
           </div>
 
           <!-- 三组分面：计数都是当前条件下的真实台数，随其它维度联动 -->
-          <div class="mt-3 space-y-2 border-t-2 border-[var(--color-ink)] pt-3">
+          <!-- 分面区自身限高滚动：品类/年份 chips 换行后不能无限长高，
+               否则会把下面整块画布顶出首屏（canvasH 的 availBelow 兜底是第二道防线） -->
+          <div
+            class="mt-3 max-h-[38vh] space-y-2 overflow-y-auto border-t-2 border-[var(--color-ink)] pt-3"
+          >
             <div class="flex flex-wrap items-center gap-2">
               <span
                 class="w-10 shrink-0 text-[12px] leading-[1.5]"

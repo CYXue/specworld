@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Continent, Product, Vendor } from '../types';
-import type { AbilityKey, Bounds } from '../lib/specs';
+import type { AbilityKey, BoundsByCategory } from '../lib/specs';
 import { abilityRows } from '../lib/specs';
 import AbilityBars from './AbilityBars.vue';
 import SpriteImg from './SpriteImg.vue';
@@ -12,7 +12,7 @@ const props = defineProps<{
   product: Product;
   vendor: Vendor | undefined;
   continent: Continent;
-  bounds: Record<AbilityKey, Bounds | null>;
+  bounds: BoundsByCategory;
   highlight?: AbilityKey | null;
 }>();
 

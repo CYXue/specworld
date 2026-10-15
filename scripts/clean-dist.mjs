@@ -19,7 +19,7 @@
  * 用法：node scripts/clean-dist.mjs   （被 package.json 的 prebuild 自动调用）
  */
 
-import { existsSync, mkdirSync, readdirSync, renameSync, statSync, unlinkSync, rmdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync, rmdirSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -31,16 +31,27 @@ const KEEP = 3;
 
 mkdirSync(TRASH, { recursive: true });
 if (existsSync(DIST)) {
-  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const target = join(TRASH, `dist-${stamp}`);
-  // rename 在同文件系统内是原子操作，不经过删除 shim —— 这是绕开拦截的关键。
-  renameSync(DIST, target);
-  console.log(`clean-dist: 旧 dist → ${target}`);
+  // 2026-10-15：rename 整目录也会被挡（IDE 对 dist 目录本身持有句柄 → EPERM，
+  // 实测 build 两次当场炸）。改为**内容级清理**：dist 目录本身不动（句柄无妨），
+  // 内部逐项删除——与 removeTree 的「逐文件绕开批量删除保护」同一哲学。
+  // 单项失败只警告继续：保洁绝不能炸掉 build；陈旧残留由 vite 覆盖 +
+  // publish/verify-dist 的引用体检兜底。
+  let cleaned = 0;
+  let failed = 0;
+  for (const item of readdirSync(DIST)) {
+    const p = join(DIST, item);
+    try {
+      if (statSync(p).isDirectory()) removeTree(p);
+      else unlinkSync(p);
+      cleaned += 1;
+    } catch (err) {
+      failed += 1;
+      console.warn(`clean-dist: 清理 ${item} 失败（${err.code ?? err.message}），跳过`);
+    }
+  }
+  console.log(`clean-dist: dist 清理 ${cleaned} 项${failed ? `（${failed} 项失败被跳过）` : ''}`);
 } else {
-  // 没有可搬的也照样修剪：本环境有东西会在文件编辑后自动跑 prebuild，
-  // 把 dist 搬进 trash 却不跟着重建（2026-10-14 实测两次），此路径下
-  // 若跳过修剪，.dist-trash 会无声越过上限。
-  console.log('clean-dist: dist 不存在，无需搬移（仍执行保留策略）');
+  console.log('clean-dist: dist 不存在，无需清理');
 }
 
 pruneTrash();

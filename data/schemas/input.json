@@ -1,0 +1,17 @@
+{
+  "_doc": "输入设备 schema（键盘/鼠标/触控板）。2026-10-15 建表。口径：键盘三维按 高×宽×深；鼠标按 高×宽×长。供电与连接方式是本品类核心参数（ADB→USB→蓝牙→USB-C 四代接口史）。键数只在官方公布时录（MacDB 键数口径）。",
+  "fields": [
+    { "path": "body.heightMm", "label": "高", "unit": "mm", "type": "number", "range": [5, 60], "dir": "low", "quantifiable": true, "group": "body", "note": "键盘 11–44mm、鼠标 21–35mm", "labelEn": "Height", "unitEn": "mm" },
+    { "path": "body.widthMm", "label": "宽", "unit": "mm", "type": "number", "range": [50, 500], "dir": null, "quantifiable": false, "group": "body", "note": "鼠标 57–61mm、键盘 279–479mm", "labelEn": "Width", "unitEn": "mm" },
+    { "path": "body.depthMm", "label": "深/长", "unit": "mm", "type": "number", "range": [50, 250], "dir": null, "quantifiable": false, "group": "body", "note": "鼠标 100–114mm、键盘 109–196mm", "labelEn": "Depth", "unitEn": "mm" },
+    { "path": "body.weightG", "label": "重量", "unit": "g", "type": "number", "range": [40, 1500], "dir": "low", "quantifiable": true, "group": "body", "note": "鼠标 99–132g、键盘 231–1200g", "labelEn": "Weight", "unitEn": "g" },
+    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
+    { "path": "input.buttons", "label": "按键/按钮数", "unit": "个", "type": "number", "range": [0, 120], "dir": null, "quantifiable": false, "group": "input", "note": "鼠标 1–4 按钮；键盘为总键数 76–109", "labelEn": "Buttons / keys", "unitEn": null },
+    { "path": "input.tracking", "label": "追踪方式", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "input", "note": "机械滚珠/光电/激光/多点触控/力度触控", "labelEn": "Tracking" },
+    { "path": "connectivity.type", "label": "连接方式", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "ADB/USB/蓝牙/蓝牙+USB-C 四代接口史", "labelEn": "Connection" },
+    { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Bluetooth" },
+    { "path": "power.type", "label": "供电", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "power", "note": "USB 总线/内置锂电/AA 电池/串口直供", "labelEn": "Power" },
+    { "path": "power.batteryLifeMonths", "label": "电池续航", "unit": "月", "type": "number", "range": [1, 10], "dir": "high", "quantifiable": true, "group": "power", "note": "官网口径「约一个月或更长」按 1 记；2003 键盘宣称 9 个月", "labelEn": "Battery life", "unitEn": "months" },
+    { "path": "os.launch", "label": "首发系统要求", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os", "note": "官方系统要求口径", "labelEn": "OS requirement" }
+  ]
+}

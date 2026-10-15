@@ -124,10 +124,11 @@ node _smoke-globe.cjs
 画面照样完整渲染，但指针事件全落空（拖不动、点不进、零报错）。
 **交互组件必须真机拖一遍，smoke 脚本不许省。**
 
-⚠️ **根目录 7 个 `_smoke*.cjs` 依赖 puppeteer，而它刻意不进 package.json**
-（本地工具、CI 不需要浏览器）。本机一次性安装：`npm i puppeteer --no-save`。
-注意 `npm install` / `npm ci` 会把它当 extraneous 删掉——2026-10-14 就这么静默发生过一次，
-7 个脚本全部 MODULE_NOT_FOUND。删了重装即可，不是代码问题。
+⚠️ **根目录 7 个 `_smoke*.cjs` 依赖 `puppeteer-core`，它已在 `devDependencies` 中**
+（CI 不需要浏览器，本地用本机已装的系统 Chrome）。无需手动 `npm i puppeteer`。
+早期版本曾依赖未入库的 `puppeteer`（`npm i puppeteer --no-save`），`npm ci` 会静默删掉它、
+导致 7 个脚本全部 MODULE_NOT_FOUND——2026-10-14 就这么发生过一次。现已迁到 `puppeteer-core`，
+`npm ci` 会按 lock 正常装回，不再有「装了又被删」的回归。
 端口口径已统一收在 `vite.config.ts`（dev 5183 / preview 4173），脚本默认值引用它；
 preview 只监听 localhost（127.0.0.1 不通，实测过）。
 

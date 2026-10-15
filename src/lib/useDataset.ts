@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import type { Dataset } from '../types';
 import { loadDataset, productById, productsByBrand, sortedByRelease, vendorMap } from './data';
-import { computeBounds } from './specs';
+import { computeBoundsByCategory } from './specs';
 
 // 全站共享的单例数据源：products.json 只 fetch 一次。
 const ds = ref<Dataset | null>(null);
@@ -24,7 +24,7 @@ export function useDerived() {
     if (!d) return null;
     return {
       vendors: vendorMap(d),
-      bounds: computeBounds(d.products),
+      bounds: computeBoundsByCategory(d.products),
       byBrand: (b: string) => productsByBrand(d, b),
       byId: (id: string) => productById(d, id),
       byRelease: sortedByRelease(d),

@@ -26,7 +26,7 @@ const BRANDS = Object.freeze({
     id: 'apple',
     name: 'Apple',
     nameZh: '苹果',
-    shortLabel: 'iPhone', // 苹果机型都是 iPhone，列表/定位里用这个短标签比「苹果」更准
+    shortLabel: 'Apple', // 2026-10-15 六品类扩充前是 'iPhone'（当时苹果只有手机）；现在苹果有手机/平板/电脑/手表/耳机，定位句必须用品牌级短标签
     monogram: 'A',
     accentColor: '#0071e3',
     accentSoft: 'rgba(0,113,227,.10)',

@@ -1,0 +1,237 @@
+{
+  "_doc": "显示器品类字段表（外接显示器，Studio Display 系列起）。与 desktop 的结构性区别：显示器没有芯片算力主体与电池，屏幕参数是本体而非外设；机身三维按「含标配支架」口径（官网 Size and Weight 第一行），可配 VESA/升降支架的差异进 note。区间按外接显示器通则设计（未来覆盖 LG/戴尔等可复用）。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        150,
+        700
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "含标配支架口径；VESA 裸屏更矮，不混录",
+      "labelEn": "Height (with stand)",
+      "unitEn": "mm",
+      "note": "下限由 Apple IIc 平板显示器 220mm 撑起（2026-10-15 早期显示器收录）"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        200,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm",
+      "note": "下限由 Apple IIc 平板显示器 260mm 撑起（2026-10-15 早期显示器收录）"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        15,
+        600
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "CRT 显示器纵深可达 500mm；VESA 裸屏更薄",
+      "labelEn": "Depth",
+      "unitEn": "mm",
+      "note": "上限由 Macintosh 21 英寸彩色显示器 520mm 撑起（2026-10-15 早期显示器收录）"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        1000,
+        30000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "含标配支架",
+      "labelEn": "Weight (with stand)",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        9,
+        80
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "下限由 Apple Monitor II/III 12 英寸与 Apple IIc 平板显示器 9 英寸撑起（2026-10-15 macDB 对账批收录早期显示器，原 15 英寸下限会误拦真数据）",
+      "labelEn": "Screen size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.type",
+      "label": "面板类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Panel type"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": null,
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Resolution"
+    },
+    {
+      "path": "display.ppi",
+      "label": "像素密度",
+      "unit": "ppi",
+      "type": "number",
+      "range": [
+        80,
+        300
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "Pixel density",
+      "unitEn": "ppi"
+    },
+    {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Refresh rate"
+    },
+    {
+      "path": "display.brightnessTypicalNits",
+      "label": "典型亮度",
+      "unit": "尼特",
+      "type": "number",
+      "range": [
+        200,
+        2000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "SDR 持续亮度",
+      "labelEn": "Typical brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "display.brightnessPeakNits",
+      "label": "峰值亮度",
+      "unit": "尼特",
+      "type": "number",
+      "range": [
+        200,
+        4000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "HDR 峰值（XDR 机型的 2000 尼特口径）",
+      "labelEn": "Peak brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "display.colorGamut",
+      "label": "色域",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Color gamut"
+    },
+    {
+      "path": "camera.front",
+      "label": "前置摄像头",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "内置摄像头（12MP Center Stage）；无内置记 null",
+      "labelEn": "Front camera"
+    },
+    {
+      "path": "audio.speakers",
+      "label": "扬声器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Speakers"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "接口",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文分段（雷雳 5 / USB-C），不互换算",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "connectivity.hostCharging",
+      "label": "主机供电",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "上行雷雳口给 Mac 的回充功率（96W/140W）",
+      "labelEn": "Host charging"
+    }
+  ]
+}

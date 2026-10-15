@@ -69,11 +69,19 @@ setLocaleForGlossary('en');
 
 function dataCjkWhitelist() {
   const out = new Set();
-  const collect = (v) => {
-    if (typeof v === 'string') {
-      // 关键：先过术语表，只收「翻译完还是中文」的
-      for (const m of localizeSpecValue(v).matchAll(CJK_RUN)) out.add(m[0]);
-    }
+  /**
+   * ⚠️ 两类字段必须分开算，混在一起会让这条闸门自己失效（2026-10-15 实测）：
+   *   - specs 值：英文页过 `localizeSpecValue`，所以只收「翻译完还是中文」的残留；
+   *   - 机型标识字段（name/nameZh/line/modelCode）：**页面原样显示，不过术语表**
+   *     （专有名词，没有官方英文就不该译）。若也按「翻译后」收，一旦某个名字里的
+   *     词恰好被术语表新增词条译掉（如「机架式」→ rack-mount），该词就被剔出白名单，
+   *     而页面还在原样显示它 —— 闸门立刻误报「界面残留中文」。
+   *     实测正是这个词让 6 条路由同时误红：Mac Pro（2023 机架式）是机型名，不是泄漏。
+   */
+  const collect = (v, raw = false) => {
+    if (typeof v !== 'string') return;
+    const text = raw ? v : localizeSpecValue(v);
+    for (const m of text.matchAll(CJK_RUN)) out.add(m[0]);
   };
   const dir = join(ROOT, 'public', 'data');
   const stack = [dir];
@@ -89,11 +97,11 @@ function dataCjkWhitelist() {
       const json = JSON.parse(readFileSync(p, 'utf8'));
       // vendors：品牌展示名
       for (const v of json.vendors ?? []) {
-        for (const f of WHITELIST_FIELDS) collect(v?.[f]);
+        for (const f of WHITELIST_FIELDS) collect(v?.[f], true);
       }
       // products：机型标识字段 + specs 原文值（chipset.name 除外）
       for (const prod of json.products ?? []) {
-        for (const f of WHITELIST_FIELDS) collect(prod?.[f]);
+        for (const f of WHITELIST_FIELDS) collect(prod?.[f], true);
         for (const [path, v] of Object.entries(prod?.specs ?? {})) {
           if (SPECS_WHITELIST_EXCLUDE.has(path)) continue;
           collect(v);
@@ -336,6 +344,19 @@ for (const locale of LOCALES) {
       problems.push(
         `${tag} 疑似界面残留中文（${leaks.length} 段）：${leaks.slice(0, 10).join(' / ')}`,
       );
+      // 排查用：光报「哪个词」不够定位「哪个字段没过术语表」，设 I18N_LEAK_CONTEXT=1
+      // 额外打印该词在页面里的上下文（含相邻标签），直接指出漏渲染的出口。
+      if (process.env.I18N_LEAK_CONTEXT) {
+        for (const leak of leaks) {
+          const at = visible.indexOf(leak);
+          if (at < 0) continue;
+          console.log(
+            `   ↳ 「${leak}」上下文：…${visible
+              .slice(Math.max(0, at - 120), at + leak.length + 60)
+              .replace(/\s+/g, ' ')}…`,
+          );
+        }
+      }
     }
     if (locale === 'zh-CN' && runs.length === 0) {
       // 反向防假绿：中文页必须有中文，否则说明 t() 根本没接上

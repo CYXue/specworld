@@ -1,0 +1,493 @@
+{
+  "_doc": "笔记本电脑品类参数字段表（schema v2）。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图「笔记本适用列」从 phone.json 推导：外观/屏幕/芯片/内存/存储/电池/相机/音频/接口/系统通用；手机专属组（振动马达/NFC/卫星/SIM/eSIM）不建。单位不互换算（蓝图原则 4）：重量用 kg（笔记本级），电池用 Wh（苹果官网口径）。接口是多实例分组（array:string 官网原文数组）。range 是闸门合理性区间，按 MacBook 全系真实数据 + 余量设定（含 2006-2012 老机型：17 英寸 MacBook Pro 重 2.99kg）。",
+  "id": "laptop",
+  "label": "笔记本",
+  "labelEn": "Laptop",
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build",
+      "type": "single",
+      "guide": "厚度/重量/材质/配色"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display",
+      "type": "single",
+      "guide": "尺寸/类型/分辨率/刷新/亮度/色域"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance",
+      "type": "single",
+      "guide": "SoC/架构/核心数/GPU/NPU"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage",
+      "type": "single",
+      "guide": "内存档位/类型/存储档位/类型"
+    },
+    {
+      "id": "battery",
+      "name": "电池与电源",
+      "nameEn": "Battery & Power",
+      "type": "single",
+      "guide": "容量(Wh)/续航"
+    },
+    {
+      "id": "camera",
+      "name": "摄像头",
+      "nameEn": "Camera",
+      "type": "single",
+      "guide": "前置摄像头"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio",
+      "type": "single",
+      "guide": "扬声器/耳机孔"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与接口",
+      "nameEn": "Network & Ports",
+      "type": "single",
+      "guide": "WLAN/蓝牙/接口配置"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features",
+      "type": "single",
+      "guide": "键盘"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software",
+      "type": "single",
+      "guide": "出厂系统"
+    }
+  ],
+  "fields": [
+    {
+      "path": "body.thicknessMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        5,
+        110
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "现代 11–18mm；PowerBook G4 26mm；iBook G3 蛤壳 46mm；PowerBook 3400c 61mm；上限由 Macintosh Portable 104mm 撑起（2026-10-15 macDB 对账批，区间必须覆盖真实数据）",
+      "labelEn": "Thickness",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightKg",
+      "label": "重量",
+      "unit": "kg",
+      "type": "number",
+      "range": [
+        0.7,
+        8
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "MacBook (12 英寸) 0.92kg 起，MacBook Pro 17 英寸 2.99kg 封顶",
+      "labelEn": "Weight",
+      "unitEn": "kg"
+    },
+    {
+      "path": "body.material",
+      "label": "机身材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Body material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        8,
+        18
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "PowerBook 100 9 英寸起步（2026-10-15 早期笔记本放宽下限）",
+      "labelEn": "Screen size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.type",
+      "label": "屏幕类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Display type"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": "px",
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Resolution",
+      "unitEn": "px"
+    },
+    {
+      "path": "display.ppi",
+      "label": "像素密度",
+      "unit": "ppi",
+      "type": "number",
+      "range": [
+        80,
+        300
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "Retina 220–254ppi 封顶，老 LCD 98–147 起步（2026-10-15 Mac 全代收录）",
+      "labelEn": "Pixel density",
+      "unitEn": "ppi"
+    },
+    {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": "Hz",
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "字符串：官网原文形态（ProMotion 自适应刷新率/60Hz）。排序/算术前用 refreshHzNumber 取代表值",
+      "labelEn": "Refresh rate",
+      "unitEn": "Hz"
+    },
+    {
+      "path": "display.brightnessTypicalNits",
+      "label": "典型亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        200,
+        1600
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "Typical brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "display.brightnessPeakNits",
+      "label": "峰值亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        200,
+        2000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "XDR 显示屏峰值 1600 尼特 (HDR)，与典型亮度分列",
+      "labelEn": "Peak brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "display.colorGamut",
+      "label": "色域",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "官网原文（P3 广色域），不换算覆盖率",
+      "labelEn": "Color gamut"
+    },
+    {
+      "path": "chipset.name",
+      "label": "处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Processor"
+    },
+    {
+      "path": "chipset.arch",
+      "label": "处理器架构",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "官网口径：ARM（Apple 芯片）/ x86（Intel 芯片），跨代可比轴",
+      "labelEn": "Processor architecture"
+    },
+    {
+      "path": "chipset.processNm",
+      "label": "制程",
+      "unit": "nm",
+      "type": "number",
+      "range": [
+        3,
+        250
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "chipset",
+      "note": "Intel 65–14nm 与 Apple 5/3nm；PowerPC 时代 250–130nm（2026-10-15 放宽上限）",
+      "labelEn": "Process node",
+      "unitEn": "nm"
+    },
+    {
+      "path": "chipset.cpuCores",
+      "label": "CPU 核心数",
+      "unit": "核",
+      "type": "number",
+      "range": [
+        1,
+        32
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "chipset",
+      "labelEn": "CPU cores",
+      "unitEn": "cores"
+    },
+    {
+      "path": "chipset.gpu",
+      "label": "GPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "官网原文（「20 核图形处理器」/Intel Iris Plus），不拆核数",
+      "labelEn": "GPU"
+    },
+    {
+      "path": "chipset.npu",
+      "label": "NPU",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "NPU"
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "内存档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "RAM options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "memory.ramType",
+      "label": "内存类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": "官网口径（统一内存/LPDDR5/DDR4）",
+      "labelEn": "RAM type"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "memory.storageType",
+      "label": "存储类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage type"
+    },
+    {
+      "path": "battery.capacityWh",
+      "label": "电池容量",
+      "unit": "Wh",
+      "type": "number",
+      "range": [
+        25,
+        120
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "note": "苹果官网以 Wh 公布；MacBook (12 英寸) 41.4Wh 起，MacBook Pro 16 英寸 100Wh 封顶",
+      "labelEn": "Battery capacity",
+      "unitEn": "Wh"
+    },
+    {
+      "path": "battery.vendorClaimedHours",
+      "label": "续航时间",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        3,
+        24
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "现代 10–24h；PowerBook 100 仅 3.5h（2026-10-15 放宽下限）",
+      "labelEn": "Vendor-claimed battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "camera.front",
+      "label": "前置相机",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "note": "官网原文（1080p FaceTime 高清摄像头），不换算 MP",
+      "labelEn": "Front camera"
+    },
+    {
+      "path": "audio.speakers",
+      "label": "扬声器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "官网原文（四扬声器系统/六扬声器系统），不换算数量",
+      "labelEn": "Speakers"
+    },
+    {
+      "path": "audio.jack",
+      "label": "音频接口",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "labelEn": "Audio jack"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "WLAN",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "WLAN"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "接口配置",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "多实例：官网原文数组（雷雳 4 ×2、USB-C ×1、HDMI、SD 卡卡槽、MagSafe 3）",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "features.keyboard",
+      "label": "键盘",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "官网原文（背光妙控键盘/秒控键盘）",
+      "labelEn": "Keyboard"
+    },
+    {
+      "path": "os.launch",
+      "label": "出厂系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Shipped OS"
+    }
+  ]
+}

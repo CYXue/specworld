@@ -1,0 +1,193 @@
+{
+  "_doc": "网络设备品类字段表（AirPort 路由器 / Time Capsule / Xserve 服务器起）。结构性特点：无屏、无用户系统 UI、常供电；核心参数是无线规格（802.11 代际）/以太网口数/存储（Time Capsule 内置硬盘）/机架规格（Xserve 1U）。三维按主机口径。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        5,
+        720
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "路由器 20–170mm；Xserve 1U 机架 43.7mm",
+      "labelEn": "Height",
+      "unitEn": "mm",
+      "note": "下限由 AirPort Extreme Card 扩展卡撑起（2026-10-15 macDB 对账批收录）"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        50,
+        500
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm",
+      "note": "下限由 AirPort Express 84mm 撑起（2026-10-15 macDB 对账批收录）"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        700
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Depth",
+      "unitEn": "mm",
+      "note": "下限由 AirPort Express 84mm 撑起（2026-10-15 macDB 对账批收录）"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        10,
+        15000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Weight",
+      "unitEn": "g",
+      "note": "下限由 AirPort Card / AirPort Extreme Card 撑起（2026-10-15 macDB 对账批收录）"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "chipset.name",
+      "label": "芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Chip"
+    },
+    {
+      "path": "chipset.arch",
+      "label": "架构",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Architecture"
+    },
+    {
+      "path": "chipset.cpuCores",
+      "label": "CPU 核心数",
+      "unit": "核",
+      "type": "number",
+      "range": [
+        1,
+        40
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "chipset",
+      "labelEn": "CPU cores",
+      "unitEn": "-core"
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "内存",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "memory",
+      "note": "Xserve 服务器内存；路由器记 null",
+      "labelEn": "Memory",
+      "unitEn": "GB"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "memory",
+      "note": "Time Capsule 内置硬盘（500GB–3TB）；纯路由器记 null",
+      "labelEn": "Storage",
+      "unitEn": "GB"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "无线规格",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "802.11 代际与频段口径",
+      "labelEn": "Wireless"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "接口",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "以太网口数、USB 口等，官网原文分段",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "features.backup",
+      "label": "备份功能",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "Time Machine 自动备份（Time Capsule 特性）",
+      "labelEn": "Backup"
+    },
+    {
+      "path": "features.rack",
+      "label": "机架规格",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "Xserve 1U 机架；路由器记 null",
+      "labelEn": "Rack unit"
+    }
+  ]
+}

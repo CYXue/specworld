@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AbilityKey, Bounds } from '../lib/specs';
+import type { BoundsByCategory } from '../lib/specs';
 import type { Continent, Product, Vendor } from '../types';
 import PxIcon from './PxIcon.vue';
 import ProductRoom from './ProductRoom.vue';
@@ -14,7 +14,7 @@ const props = defineProps<{
   vendor: Vendor;
   continent: Continent;
   products: Product[];
-  bounds: Record<AbilityKey, Bounds | null>;
+  bounds: BoundsByCategory;
   /** 0 = 全列；>0 = 只列前 N 台（调用方应已按发布日期降序排好） */
   limit?: number;
 }>();

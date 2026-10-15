@@ -192,10 +192,17 @@ function assert(name, ok, detail = '') {
   const target = await page.evaluate(() => {
     const host = document.querySelector('.board-host').getBoundingClientRect()
     const els = [...document.querySelectorAll('.board-mover')]
+    // ⚠️ 判据必须同时落在「host 内」和「视口内」：913 台之后 host 比视口高得多，
+    // 只按 host 边界选会挑到屏幕下方的瓦片（elementFromPoint 命中 null，点击落空）。
     const el = els.find((e) => {
       const b = e.getBoundingClientRect()
-      return b.width > 60 && b.height > 60 && b.left > host.left + 40 && b.right < host.right - 40 &&
-        b.top > host.top + 40 && b.bottom < host.bottom - 40
+      const cx = b.left + b.width / 2
+      const cy = b.top + b.height / 2
+      return b.width > 60 && b.height > 60 &&
+        b.left > host.left + 40 && b.right < host.right - 40 &&
+        b.top > host.top + 40 && b.bottom < host.bottom - 40 &&
+        cy > 40 && cy < window.innerHeight - 40 && cx > 40 && cx < window.innerWidth - 40 &&
+        e.contains(document.elementFromPoint(cx, cy))
     }) ?? els[0]
     const b = el.getBoundingClientRect()
     return { x: Math.round(b.left + b.width / 2), y: Math.round(b.top + b.height / 2), id: el.dataset.id }
@@ -306,8 +313,14 @@ function assert(name, ok, detail = '') {
       const b = [...document.querySelectorAll('button')].find((x) => x.textContent.includes('导出'))
       b.click()
     })
-    await sleep(1800)
-    const blobType = await page.evaluate(() => window.__blobType)
+    
+    // 452 台后导出画布渲染 + toBlob 超过固定 1.8s（2026-10-15 实测）：
+    // 改轮询等待生成完成，超时 10s（大画布异步导出的稳定等待策略）。
+    let blobType = null
+    for (let i = 0; i < 50 && blobType !== 'image/png'; i++) {
+      await sleep(200)
+      blobType = await page.evaluate(() => window.__blobType)
+    }
     assert('点击导出生成 image/png', blobType === 'image/png', String(blobType))
   }
   await page.screenshot({ path: `${OUT}/canvas-9-export.png` })

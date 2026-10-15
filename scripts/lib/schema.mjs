@@ -30,6 +30,26 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const categoryCache = new Map();
 const schemaCache = new Map();
 
+/**
+ * 测试注入缝（仅供 selftest 反向测）：临时把某品类的 schema 换成任意值
+ * （含 null =「注册表有、磁盘缺」）。传 undefined 恢复真实磁盘读取。
+ *
+ * 为什么需要它：2026-10-15 六品类 schema 全部落盘后，「注册了但没 schema」
+ * 这一分支在**合规态下永远走不到**——反向测原来靠注入 `category:'tablet'`
+ * （当时 tablet 确实没 schema），现在 tablet 有了，注入即失效。
+ * 没有这条缝，那条闸门分支就再也没有测试覆盖，等于回归防护空转
+ * （PITFALLS：永远绿的闸门等于不存在）。用完必须 restore，别留污染。
+ */
+const schemaOverrides = new Map();
+export function __overrideSchemaForTest(categoryId, schema) {
+  schemaOverrides.set(categoryId, schema);
+  schemaCache.delete(categoryId);
+}
+export function __clearSchemaOverridesForTest() {
+  schemaOverrides.clear();
+  schemaCache.clear();
+}
+
 /** 品类注册表。缺文件时返回 null（调用方决定是报错还是走空目录） */
 export function loadCategories() {
   if (categoryCache.has('__root__')) return categoryCache.get('__root__');
@@ -59,6 +79,10 @@ function categoryDef(id) {
  * @param {string} categoryId 品类 id（如 'phone'）
  */
 export function loadSchema(categoryId) {
+  if (schemaOverrides.has(categoryId)) {
+    schemaCache.set(categoryId, schemaOverrides.get(categoryId));
+    return schemaCache.get(categoryId);
+  }
   if (schemaCache.has(categoryId)) return schemaCache.get(categoryId);
   const def = categoryDef(categoryId);
   if (!def?.schema) {
