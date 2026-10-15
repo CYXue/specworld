@@ -52,7 +52,7 @@ v2 全品类目录（category + specs 扁平容器）的设计见 `docs/UNIVERSA
 
 ### 改了 `scripts/normalize/parse.mjs`（解析器）
 ```bash
-npm run selftest          # 275 项，不联网，1 秒
+npm run selftest          # 285 项，不联网，1 秒
 node scripts/pipeline.mjs --data-only   # 再看真实数据有没有变
 ```
 解析器出错**不会抛异常**，它会安静地把 PWM 调光频率当刷新率、把分辨率当屏幕尺寸，

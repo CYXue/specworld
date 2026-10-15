@@ -151,11 +151,12 @@ export function validate(snapshot, previous, options = {}) {
         }
       }
     }
-    // 5. 负值/零值
-    for (const path of ['body.weightG', 'body.thicknessMm', 'display.sizeIn']) {
-      const v = get(p, path);
-      if (typeof v === 'number' && v <= 0) fail.push(`${p.id} 的 ${path} 非正数：${v}`);
-    }
+    // （原闸门 5「负值/零值」已删除：它判的 weightG/thicknessMm/sizeIn 三条路径
+    // 的 schema range 下界均 > 0，非正值必先被闸门 4 以「超出合理区间」抓到 ——
+    // 双写同一判据不是深度防御，是**死闸门**：永远独立不触发，只会让人误以为
+    // 「零值有专门防线」。2026-10-14 审计 P2-1。真要防回归，锁的是
+    // 「这三条路径必须在 SCHEMA_RANGE_PATHS 里」（见 selftest 的接线自洽用例），
+    // 而不是在下面再抄一遍判据。）
     // 6. 价格非正
     for (const sku of p.skus ?? []) {
       if (sku.priceCny !== null && sku.priceCny <= 0)
@@ -229,10 +230,25 @@ export function validate(snapshot, previous, options = {}) {
     }
     if (p.specs) {
       const schema = loadSchema(p.category);
-      for (const e of validateSpecs(p, schema)) fail.push(e);
-      // 11c. status 例外映射（四态 none/not_applicable）必须引用已注册字段、取值合法。
-      // 防的故障：用户层把 not_applicable 写错字段名，导致该字段被静默隐藏或从不隐藏。
-      for (const e of validateStatusMap(p, schema)) fail.push(e);
+      // 11b-ii. 品类注册了但 schema 文件不存在 → **显性失败**。
+      // 曾经的写法是 validateSpecs / validateStatusMap 内部 `if (!schema) return []`
+      // （注释：「无 schema 的品类不阻塞写入」）——那意味着字段校验、status 映射、
+      // 孤儿键检测对该品类**全部空转且静默**：数据脏着写盘，页面按缺失的字段表
+      // 渲染或直接崩，而每一次同步都是绿的。
+      // 现在：没有字段表的品类不许写入。接新品类（平板/笔记本/音频）的正确顺序是
+      // 先建 data/schemas/<id>.json，再让数据流进来——闸门替所有人记住这个顺序。
+      if (!schema) {
+        fail.push(
+          `${p.id} 的品类 "${p.category}" 已注册但没有 schema 文件` +
+            `（data/schemas/${p.category}.json）——没有字段表，字段校验/status 映射/孤儿键` +
+            `检测会全部空转。请先建 schema，或从 data/categories.json 移除该品类注册。`,
+        );
+      } else {
+        for (const e of validateSpecs(p, schema)) fail.push(e);
+        // 11c. status 例外映射（四态 none/not_applicable）必须引用已注册字段、取值合法。
+        // 防的故障：用户层把 not_applicable 写错字段名，导致该字段被静默隐藏或从不隐藏。
+        for (const e of validateStatusMap(p, schema)) fail.push(e);
+      }
     }
   }
 

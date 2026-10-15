@@ -232,6 +232,10 @@ function emptyRecord({ id, brand, line, name, nameZh, granularity, firstSeenAt, 
       wifi: null,
       bluetooth: null,
       nfc: null,
+      nfcDetail: null,
+      irBlaster: null,
+      cellularBands: null,
+      wlanBands: null,
       satellite: null,
       usb: null,
       sim: null,
@@ -564,7 +568,141 @@ function hwMemory(raw, productName) {
   };
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+ * 6. 连接方式细分（2026-10-14 新增：NFC 程度 / 红外遥控 / 蜂窝频段 / WLAN 频段）
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/** 官网原文里的连字符有 ASCII '-' 与 U+2010–U+2015 两种写法混用（苹果就是这样） */
+const DASH = '[-\u2010-\u2015]';
+/** 括号同样半角/全角混用 */
+const ParenL = '[（(]';
+const ParenR = '[）)]';
+
+/** 苹果「蜂窝网络和无线连接」原文 → 结构化蜂窝频段 */
+const BAND_RULES = [
+  { key: 'nrFdd', re: new RegExp(`FDD${DASH}?\\s*5G\\s*NR\\s*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+  { key: 'nrTdd', re: new RegExp(`TDD${DASH}?\\s*5G\\s*NR\\s*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+  { key: 'lteFdd', re: new RegExp(`FDD${DASH}?\\s*LTE\\s*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+  { key: 'lteTdd', re: new RegExp(`TDD${DASH}?\\s*LTE\\s*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+  { key: 'umts', re: new RegExp(`UMTS[^（）()]*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+  { key: 'gsm', re: new RegExp(`GSM[^（）()]*${ParenL}([^（）()]*)${ParenR}`, 'i') },
+];
+
+/**
+ * 括号内的频段清单 → 数组。
+ * ⚠️ 原文是 `(频段 n1、n2、n3…)`：**「频段」这个标签只在第一项出现**，
+ * 若不做剥离就会得到 `['频段 n1', 'n2', 'n3']` —— 首项混着标签，既不好看也不可比。
+ * UMTS/GSM 的形态是 `(850、900… MHz)`，本来就没有标签，剥离是幂等的。
+ */
+const splitBandList = (inner) =>
+  inner
+    .split(/[、,，]/)
+    .map((s) => tidy(s).replace(/^频段\s*/, ''))
+    .filter(Boolean);
+
+/**
+ * 苹果规格页「蜂窝网络和无线连接」整段 → `{ nrFdd[], nrTdd[], lteFdd[], lteTdd[], umts[], gsm[], modelNote }`。
+ *
+ * 三条纪律（都是「静默取错」的坑，闸门挡不住）：
+ *   ① **「5G (sub-6 GHz)，具备 4x4 MIMO 技术」是制式描述，不是频段列表** —— 判据必须
+ *      锚定 `(频段 …)` / `(… MHz)` 括号，那句制式描述虽然也有括号，但内容不是频段号，
+ *      且上面六条规则的左边界（FDD-5G NR / FDD-LTE / UMTS / GSM）不会命中它。
+ *   ② 段首的「A3721 型号**」「A3715 和 A3718 型号**」是**机型型号**，归 modelNote，不是频段。
+ *      官网一个机型只给一段（多台型号共用同一段时写在一起），不存在「多型号各一段」的歧义。
+ *   ③ UMTS/GSM 的 MHz 只在最后一项出现（`850、900、1700/2100、1900、2100 MHz`）——
+ *      **不补齐单位**（补齐属自行加工），原样切分，展示即官网原文形态。
+ */
+function parseCellularBands(text) {
+  if (text === null || text === undefined) return null;
+  const t = tidy(text);
+  if (!t) return null;
+  const out = {
+    nrFdd: [],
+    nrTdd: [],
+    lteFdd: [],
+    lteTdd: [],
+    umts: [],
+    gsm: [],
+    modelNote: null,
+  };
+  let hit = false;
+  for (const rule of BAND_RULES) {
+    const m = t.match(rule.re);
+    if (!m) continue;
+    const list = splitBandList(m[1]);
+    if (!list.length) continue;
+    out[rule.key] = list;
+    hit = true;
+  }
+  const mm = t.match(/(A\d{4}(?:\s*和\s*A\d{4})*)\s*型号/);
+  if (mm) out.modelNote = tidy(mm[0]);
+  return hit ? out : null;
+}
+
+/**
+ * 「2.4 GHz 和 5 GHz」→ `['2.4 GHz', '5 GHz']`。
+ *
+ * ⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)，具备 4x4 MIMO 技术」含 GHz 字样，
+ * 若把整段蜂窝原文喂进来、按 GHz 关键字取值，会把它当成 WLAN 频段（静默误取）。
+ * 所以这里先剔除一切「制式 + 括号」结构（`5G (sub-6 GHz)`、`5G NR (频段 n1…)`、
+ * `GSM/EDGE (850… MHz)`），剩下的 GHz 才是 WLAN 频段。
+ * 调用方仍应优先锚定官网的「WLAN 频段」键，不要整段喂。
+ */
+function parseWlanBands(text) {
+  if (text === null || text === undefined) return null;
+  const t = tidy(text);
+  if (!t) return null;
+  const cleaned = t
+    .replace(/\d+G\s*N?R?\s*[（(][^（）()]*[）)]/gi, ' ')
+    .replace(/[A-Za-z/]+\s*[（(][^（）()]*MHz[^（）()]*[）)]/gi, ' ');
+  const bands = [];
+  for (const m of cleaned.matchAll(/(\d+(?:\.\d+)?)\s*GHz/gi)) {
+    const b = `${m[1]} GHz`;
+    if (!bands.includes(b)) bands.push(b);
+  }
+  return bands.length ? bands : null;
+}
+
+/**
+ * 从「蜂窝网络和无线连接」整段里切出 **NFC 那一句**。
+ *
+ * ⚠️ 不能拿整段当 nfcDetail：苹果规格页把蜂窝、Wi-Fi、蓝牙、NFC 全塞在**一行**里
+ * （用 ` | ` 连成一长串），按「含 NFC 的行」取到的是整段（`A3721 型号** | FDD-5G NR (频段 n1…) …`），
+ * 那是蜂窝频段不是 NFC 程度。必须再按 `|` 切成句，只取含 NFC 的那一句。
+ * 对比页矩阵里 NFC 本来就是独立一行，切分对它是幂等的。
+ */
+function pickNfcPhrase(text) {
+  if (text === null || text === undefined) return null;
+  const t = tidy(text);
+  if (!t) return null;
+  const seg = t.split(/\s*[|｜]\s*/).find((s) => /NFC/i.test(s));
+  return seg ? tidy(seg) : null;
+}
+
+/**
+ * 红外遥控（智能遥控）判定。
+ *
+ * ⚠️ **「红外遥控」与「红外传感器」完全不是同一件事**：前者是主动发射器件（遥控家电），
+ * 后者是传感器清单里的一项（接近检测 / 人脸解锁补光），被动器件。华为 raw 的传感器清单里
+ * 大量出现「红外传感器」——按「红外」二字取值会静默把传感器发布成遥控功能，
+ * 而闸门挡不住（布尔值本身合法，看起来完全合理）。
+ * 因此：**只认键名/文本里明确的「遥控」语义**，并显式排除「传感器」字样。
+ * 官网不写 = null（unknown），绝不判 false —— 「没写」不等于「没有」。
+ */
+function parseIrBlaster(text) {
+  if (text === null || text === undefined) return null;
+  const t = tidy(text);
+  if (!t) return null;
+  if (/传感器/.test(t)) return null; // 传感器清单里的「红外传感器」不是遥控发射
+  if (/不支持/.test(t)) return false;
+  return /遥控/.test(t) ? true : null;
+}
+
 export {
+  parseCellularBands,
+  parseWlanBands,
+  parseIrBlaster,
+  pickNfcPhrase,
   tidy,
   realValue,
   wattOf,

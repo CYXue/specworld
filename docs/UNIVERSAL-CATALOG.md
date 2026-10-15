@@ -51,7 +51,7 @@
 data/
   categories.json        品类注册表：id → schema 文件（新增品类的入口）
   schemas/
-    phone.json           手机字段表：42 个字段（path/label/unit/type/range/dir/quantifiable）
+    phone.json           手机字段表：48 个字段（path/label/unit/type/range/dir/quantifiable）
     tablet.json …        其他品类预留（builtin: false，尚未建设）
   products.json          唯一数据契约，v2 形状（见下）
   overrides.json         用户手动数据层（set-field / add-product）

@@ -167,6 +167,35 @@ export function matchExact(d: Matchable, tokens: string[]): boolean {
 }
 
 /**
+ * 字面通道 —— **「用户写法是否就等于官方写法」的唯一判据**。
+ *
+ * 只做两件不丢信息的归一化：小写化、连续空白折叠为单个空格。
+ * **保留分隔符，且不做 NFKC** —— 这两条是它区别于 matchExact 的全部要点：
+ *
+ *   · 保留分隔符 ⇒ `nova14ultra` 匹配不到 `nova 14 ultra`（缺空格 = 写法不同）
+ *   · 不做 NFKC  ⇒ `ＮＯＶＡ　１４` 匹配不到半角原文（全角 = 输入法状态不对）
+ *
+ * ⚠️ 这条通道**只用于展示**（要不要弹容错提示），**绝不能用于检索**。
+ *    检索必须用 matchExact —— 它在本通道之上再叠加了分隔符与全角容错，
+ *    否则用户打紧凑写法会直接零结果。
+ *
+ * ⚠️ 反过来，**判提示时绝不能用 matchExact**（2026-10-14 审计 P0-1 抓到的正是这个）：
+ *    matchExact 内部含 `compact(t)` 回落，会把「靠抹掉空格才命中」也算成精确命中，
+ *    于是 `byExact.length === 0` 恒不成立 ⇒ **容错提示条永远不显示**，
+ *    而这个脚本（_smoke-search.cjs）当时既没进 CI 也没注册 npm script，
+ *    连着 14 项红灯没有任何一次自动运行看得见。
+ *    selftest 里有两条用例分别钉住「检索要容错」与「提示要严格」这两个相反方向。
+ */
+export function matchLiteral(d: Matchable, tokens: string[]): boolean {
+  return tokens.every((t) => {
+    if (!t) return true; // 空词（如纯输入空格）不参与，也不许靠它恒命中
+    // 纯数字词守边界，且**不回落**（见 hitDigits 注释）
+    if (PURE_DIGITS.test(t)) return hitDigits(d.haystack, t);
+    return d.haystack.includes(t);
+  });
+}
+
+/**
  * 归一化通道：整个查询抹平成一串，在归一化检索串里找。
  *
  * 为什么是「整串」而不是「分词后每词各自归一化」：用户不加分词时

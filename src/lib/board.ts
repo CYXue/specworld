@@ -121,8 +121,15 @@ export function wrap(mover: Mover, m: MoverMetrics, vp: BoardGrid): Mover {
 /**
  * 逻辑坐标 → 数据索引。双模运算防负索引（参考站 `((col%C)+C)%C`）。
  * 返回 [0, n) 内的索引，喂给 tiles 数组。
+ *
+ * ⚠️ n <= 0 时返回 **0 而不是 NaN**：`% 0` 得 NaN，NaN 索引喂给数组得
+ * undefined，而 `undefined` 会一路骗过 `?? ''` 兜底——更糟的是调用方
+ * 拿它跟上一帧索引比大小，NaN != NaN 恒成立，「索引变了」每帧误判，
+ * 动画/惯性全部失效且零报错（2026-10-14 审计 B2）。没有瓦片就没有画布，
+ * 调用方本就该在 n=0 时整块不渲染。
  */
 export function dataIndex(col: number, row: number, g: BoardGrid, n: number): number {
+  if (!Number.isFinite(n) || n <= 0) return 0;
   const d = ((col % g.cols) + g.cols) % g.cols;
   const r = ((row % g.rows) + g.rows) % g.rows;
   return (((r * g.cols + d) % n) + n) % n;

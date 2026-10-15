@@ -1,4 +1,5 @@
 import { brandShortLabel } from '../brands.mjs';
+import { isFoldableOfficial } from './foldable.mjs';
 import { pick } from './specs.mjs';
 
 /**
@@ -184,7 +185,13 @@ export function buildChampions(products, scales) {
  */
 const PRICE_PCT_FLAGSHIP = 0.5; // 起售价高于池内一半机型 = 旗舰档
 
-const DOMAINS = [
+/**
+ * 限定域表。导出是为了让自测直接钉判据（与 sync/queue.mjs 同一模式：
+ * 纯数据 + 纯函数，测试 import 本体而不是复刻一份）—— 尤其 foldable 域的
+ * filter 曾与 foldable.mjs 分叉过（按机型名反推 vs 官网原文），
+ * 分叉是静默的：persona 照样产出合法字符串，没有任何测试会红。
+ */
+export const DOMAINS = [
   { id: 'all', label: '', filter: () => true, min: 8 },
   { id: 'brand', label: '{brand}', filter: (p, self) => p.brand === self.brand, min: 5 },
   {
@@ -208,7 +215,12 @@ const DOMAINS = [
   {
     id: 'foldable',
     label: '折叠机型里',
-    filter: (p) => /折叠|Mate X|Pocket|Flip/i.test(`${p.line} ${p.name}`),
+    // 判据同源：isFoldableOfficial（foldable.mjs，官网原文「折叠/展开」）。
+    // 曾经的 `/折叠|Mate X|Pocket|Flip/i.test(line + name)` 是**按机型名反推形态**，
+    // 正是 foldable.mjs 头注明文否定的做法（「不猜、不按机型名反推」）——
+    // 名字里带 Flip 的未发布机型、或名字不含这些词的折叠机都会判错，
+    // 且错得静默。这里与 sprite/generate.mjs、src/lib/catalog.ts 用同一函数。
+    filter: (p) => isFoldableOfficial(p),
     min: 3,
   },
 ];

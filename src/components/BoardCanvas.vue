@@ -237,6 +237,12 @@ onMounted(() => {
     ro = new ResizeObserver(onResize);
     ro.observe(host.value);
   }
+  // document 级 pointerup/cancel 兜底（与 GlobeCanvas 同一坑）：
+  // 只在宿主元素上收 up，拖出窗口 / 切后台 / 浏览器吞事件时 ifMovable 卡在 true、
+  // captured 不释放 —— 下一次按下直接被判为「移动中」，画布像粘住一样。
+  // 症状零报错，只是「拖不动了」（2026-10-14 审计 B5）。
+  document.addEventListener('pointerup', onDocPointerEnd);
+  document.addEventListener('pointercancel', onDocPointerEnd);
   requestAnimationFrame(() => (ready.value = true));
 });
 
@@ -244,6 +250,8 @@ onBeforeUnmount(() => {
   stopInertia();
   ro?.disconnect();
   if (dragtipTimer) clearTimeout(dragtipTimer);
+  document.removeEventListener('pointerup', onDocPointerEnd);
+  document.removeEventListener('pointercancel', onDocPointerEnd);
 });
 
 watch(
@@ -317,6 +325,23 @@ function onPointerUp(e: PointerEvent) {
     if (id) openViewbox(id);
   }
   // movedTotal > 6：松手不主动停，让 ease 残速自然衰减成惯性
+}
+
+/**
+ * 指针在宿主外结束时的兜底清理（拖出窗口、切后台、浏览器吞掉 pointerup）。
+ * 与 GlobeCanvas.onDocPointerEnd 同一模式：不清理的话 ifMovable 卡在 true、
+ * captured 不释放，下一次按下直接被判为「移动中」，画布像粘住一样。
+ */
+function onDocPointerEnd(e: PointerEvent) {
+  // 非捕获中的指针不管：避免误清别人（多指场景下第二根手指的正常 up）
+  if (captured !== null && e.pointerId === captured) {
+    ifMovable = false;
+    captured = null;
+    return;
+  }
+  if (!ifMovable) return;
+  // 未捕获但 ifMovable 还挂着 = 宿主确实漏收了这次 up
+  ifMovable = false;
 }
 
 function onWheel(e: WheelEvent) {

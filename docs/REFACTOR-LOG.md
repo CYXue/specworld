@@ -35,8 +35,8 @@
 - **数据零回退**：`data/products.json` 经语义级比对——剥除
   `generatedAt` / `fetchedAt` / `firstSeenAt` / `lastSeenAt` / `skus.listedAt` / `provenance`
   后两份 JSON **逐字段全等**；324 行 diff 仅易变时间戳 + 本次 `display.resolutionPx` provenance 修复
-  （补登记父路径与 `.h` 子路径，修掉了 60 台全报"缺 provenance"的漏报）。价格 / 规格 / 尺寸全部未变。
-- **全链路**：`node scripts/pipeline.mjs --offline` 跑通，60 台、闸门放行、76 页自包含零外链；
+  （补登记父路径与 `.h` 子路径，修掉了 当时 60 台全报"缺 provenance"的漏报）。价格 / 规格 / 尺寸全部未变。
+- **全链路**：`node scripts/pipeline.mjs --offline` 跑通，当时 60 台、闸门放行、76 页自包含零外链；
   线上重抓同样通过发布校验（0 外链 / 0 死链 / 0 内容问题）。
 
 ## 遗留

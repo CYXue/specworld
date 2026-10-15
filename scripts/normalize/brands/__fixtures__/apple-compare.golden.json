@@ -84,6 +84,10 @@
     "wifi": "802.11be 无线局域网",
     "bluetooth": "蓝牙 6",
     "nfc": true,
+    "nfcDetail": "支持读卡器模式的 NFC",
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
     "satellite": null,
     "usb": "USB-C 接口 | 支持 USB 3 (最高可达 10Gb/s)",
     "sim": "双 eSIM | 可激活两个 eSIM | 采用先进的 eSIM 技术，更简便也更安全 (不兼容实体 SIM 卡) | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -141,6 +145,7 @@
     "connectivity.wifi": "apple-compare",
     "connectivity.bluetooth": "apple-compare",
     "connectivity.nfc": "apple-compare",
+    "connectivity.nfcDetail": "apple-compare",
     "connectivity.usb": "apple-compare",
     "connectivity.sim": "apple-compare",
     "connectivity.esim": "apple-compare"

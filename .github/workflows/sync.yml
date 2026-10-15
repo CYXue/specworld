@@ -99,6 +99,14 @@ jobs:
       - name: 规范自检
         run: node scripts/publish/check-conventions.mjs
 
+      # 模板级类型检查（vue-tsc）：tsc --noEmit 只看 .ts，**.vue 模板里的
+      # 未定义标识符/错误 prop 它一个都看不见** —— 2026-10-14 重构画布页时
+      # 实测连踩两刀（删 import 删出 ref/onMounted 未定义、模板引用已删的 err），
+      # tsc 全绿而页面白屏，全靠冒烟脚本兜住。类型谎言（ComputedRef cast 成
+      # 数组）也是同一天被它抓出来的。这条闸门让那类回归在本地就跑红。
+      - name: 模板类型检查（vue-tsc）
+        run: npm run type-check
+
       # 字形覆盖闸门：字体缺字形时浏览器**静默**回退系统字体，零报错，
       # 症状是「同一句话里有些字像素、有些字圆滑」—— 风格不统一最隐蔽的成因。
       # 历史教训：旧字体只覆盖项目实需汉字的 45%，而所有基于样式声明的检查都是绿的。

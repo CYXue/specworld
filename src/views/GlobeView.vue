@@ -7,74 +7,34 @@
  *
  * URL 即状态（#/globe?brand=huawei&line=Mate&year=2025&sort=ppi），同 /canvas。
  */
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useDataset, useDerived } from '../lib/useDataset';
-import {
-  EMPTY_FILTER,
-  SORTS,
-  applyFilter,
-  sortLabel,
-  brandFacets,
-  buildCanvasDocs,
-  filterToQuery,
-  isFiltered,
-  lineFacets,
-  parseFilter,
-  yearFacets,
-  type CanvasDoc,
-  type CanvasFilter,
-  type SortKey,
-} from '../lib/canvasFilter';
+import { useDataset } from '../lib/useDataset';
+import { useCanvasFilter } from '../lib/useCanvasFilter';
+import { SORTS, sortLabel } from '../lib/canvasFilter';
 import GlobeCanvas from '../components/GlobeCanvas.vue';
 import PxIcon from '../components/PxIcon.vue';
 
 const { t } = useI18n();
-const route = useRoute();
-const router = useRouter();
-const { ds, err } = useDataset();
-const derived = useDerived();
+const { ds } = useDataset();
 
-const filter = ref<CanvasFilter>(parseFilter(route.query as Record<string, unknown>));
-
-watch(
-  () => route.query,
-  (q) => {
-    filter.value = parseFilter(q as Record<string, unknown>);
-  },
-);
-
-const docs = computed<CanvasDoc[]>(() =>
-  (ds.value?.products ?? []).map((p) => ({
-    id: p.id,
-    name: p.name,
-    nameZh: p.nameZh ?? null,
-    line: p.line ?? '',
-    brand: p.brand,
-    brandZh: derived.value?.vendors.get(p.brand)?.nameZh ?? p.brand,
-    releaseDate: p.releaseDate ?? '',
-    releaseDatePrecision: p.releaseDatePrecision ?? '',
-    status: p.status ?? '',
-  })),
-);
-
-const filterable = computed(() => buildCanvasDocs(docs.value));
-
-const ppiOf = computed(() => {
-  const by = new Map<string, number | null>();
-  for (const p of ds.value?.products ?? []) by.set(p.id, p.display?.ppi ?? null);
-  return (id: string) => by.get(id) ?? null;
-});
-
-const items = computed(() => applyFilter(filterable.value, filter.value, ppiOf.value));
-
-const brands = computed(() => brandFacets(filterable.value, filter.value));
-const lines = computed(() => lineFacets(filterable.value, filter.value));
-const years = computed(() => yearFacets(filterable.value, filter.value));
-
-const accentOf = (brand: string) =>
-  derived.value?.vendors.get(brand)?.accentColor ?? 'var(--color-gold)';
+// 筛选 → 瓦片数据的公共管线（与 /canvas 同源，见 useCanvasFilter 头注）
+const {
+  filter,
+  docs,
+  items,
+  brands,
+  lines,
+  years,
+  accentOf,
+  setFilter,
+  setSort,
+  clearAll,
+  total,
+  shown,
+  dirty,
+  err,
+} = useCanvasFilter('/globe');
 
 /**
  * 品牌分组台数 → 球面纬度带。
@@ -92,31 +52,6 @@ const groups = computed<number[]>(() => {
   return out.map((g) => g.n);
 });
 
-function setFilter(patch: Partial<CanvasFilter>) {
-  const next = { ...filter.value, ...patch };
-  if (patch.brand !== undefined && next.brand !== filter.value.brand) {
-    const stillValid = lines.value.some((l) => l.value === next.line);
-    if (!stillValid) next.line = '';
-  }
-  if (patch.year !== undefined || patch.q !== undefined || patch.brand !== undefined) {
-    if (next.year && !years.value.some((y) => y.value === next.year)) next.year = '';
-  }
-  filter.value = next;
-  router.replace({ path: '/globe', query: filterToQuery(next) });
-}
-
-function setSort(sort: SortKey) {
-  setFilter({ sort });
-}
-
-function clearAll() {
-  filter.value = { ...EMPTY_FILTER };
-  router.replace({ path: '/globe', query: {} });
-}
-
-const total = computed(() => docs.value.length);
-const shown = computed(() => items.value.length);
-const dirty = computed(() => isFiltered(filter.value));
 const globe = ref<InstanceType<typeof GlobeCanvas> | null>(null);
 // reduced-motion 下 startSpin 是 no-op：初值不能假定「在转」，
 // 否则按钮显示「暂停自转」而点击毫无反应（零报错的语义性故障）。

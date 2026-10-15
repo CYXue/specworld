@@ -4,7 +4,7 @@
  * 点图进全屏查看器（open-image），点「查看完整参数」跳产品页（goto）。
  * 入场用 CSS 过渡（opacity + 装饰线滑入），不依赖 WAAPI。
  */
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import type { BoardTile } from './BoardCanvas.vue';
 
 defineProps<{ tile: BoardTile }>();
@@ -15,11 +15,26 @@ const emit = defineEmits<{
 }>();
 
 const shown = ref(false);
-onMounted(() => requestAnimationFrame(() => (shown.value = true)));
+onMounted(() => {
+  requestAnimationFrame(() => (shown.value = true));
+  // Esc 关闭 + 模态语义（2026-10-14 审计 B7）：监听挂 document ——
+  // 焦点不在浮层内时 keydown 到不了它，键盘用户关不掉。
+  document.addEventListener('keydown', onKey);
+});
+onBeforeUnmount(() => document.removeEventListener('keydown', onKey));
+function onKey(e: KeyboardEvent) {
+  if (e.key === 'Escape') emit('close');
+}
 </script>
 
 <template>
-  <div class="viewbox" :class="{ viewbox_show: shown }" @click.self="emit('close')">
+  <div
+    class="viewbox"
+    :class="{ viewbox_show: shown }"
+    role="dialog"
+    aria-modal="true"
+    @click.self="emit('close')"
+  >
     <div class="viewbox_imagebox">
       <!--
         原版这里有个 filter: blur(2rem) 的同图放大版当辉光底。

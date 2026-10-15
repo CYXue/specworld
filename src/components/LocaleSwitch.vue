@@ -27,7 +27,13 @@ function pick(l: Locale) {
     >
       中文
     </button>
-    <span class="mx-0.5 text-[var(--color-stone)]" aria-hidden="true">/</span>
+    <!-- 字号必须显式：父级链上没有 text-[Npx] 时会一路继承到 body 的 14px，
+         而像素风纪律是「只认 12 的整数倍」—— 漏一个类就静默破坏点阵
+         （2026-10-14 审计 P2-5：这个 span 曾因漏写 fontSize 让 13 个页面
+         各报一处 14px，而闸门只打印不计数，谁都没看见）。 -->
+    <span class="mx-0.5 text-[12px] leading-[1.5] text-[var(--color-stone)]" aria-hidden="true"
+      >/</span
+    >
     <button
       type="button"
       class="pixel-button-flat px-1.5 py-0.5 text-[12px] leading-[1.5]"

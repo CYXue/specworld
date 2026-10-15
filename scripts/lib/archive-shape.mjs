@@ -99,9 +99,15 @@ export function shapeOfArchive(file) {
  *
  * 只取该形状允许的键：规格通道取 id/name/specsUrl/raw，
  * 价格通道取 14 个价格字段。其余（brand / extractedAt / _source / notes…）
- * 一律丢弃。缺的键补默认值（specsUrl ?? ''、raw ?? {}），
- * 保证「归档件的键集合只由形状决定」—— 缺字段时 JSON.stringify
- * 会静默丢 undefined 键，形状就不稳了。
+ * 一律丢弃。
+ *
+ * ⚠️ **规格通道的 specsUrl / raw 不许补默认值**（2026-10-14 审计 B14）：
+ * 曾经的 `specsUrl ?? ''` / `raw ?? {}` 把「缺失」抹成「空值」，而形状判据
+ * （selftest 的键集合断言）只看键在不在 —— `specsUrl: ''` 照样通过。
+ * 于是一台**抓取失败、没有 URL 无法回放**的规格件会静默地成为合法归档件，
+ * 回放验证对它自欺欺人。归档的存在意义就是回放：缺原文 = 直接抛错，
+ * 让生成阶段就炸，而不是留一个长得像回放素材的空壳。
+ * 价格通道没有这两个键（它的原文是价格字段），不适用本条。
  */
 export function archiveShape(result, shape = 'spec') {
   const fields = shape === 'price' ? PRICE_PRODUCT_FIELDS : SPEC_PRODUCT_FIELDS;
@@ -110,9 +116,25 @@ export function archiveShape(result, shape = 'spec') {
     products: (result.products ?? []).map((p) => {
       const out = {};
       for (const f of fields) {
-        if (f === 'specsUrl') out[f] = p[f] ?? '';
-        else if (f === 'raw') out[f] = p[f] ?? {};
-        else out[f] = p[f] ?? null;
+        if (shape === 'spec' && f === 'specsUrl') {
+          if (typeof p[f] !== 'string' || !p[f]) {
+            throw new Error(
+              `归档拒绝：规格通道 ${p.id ?? '?'} 缺 specsUrl —— 没有 URL 的归档件无法回放，` +
+                `不许用空串冒充（见 archive-shape.mjs 头注，2026-10-14 审计 B14）`,
+            );
+          }
+          out[f] = p[f];
+        } else if (shape === 'spec' && f === 'raw') {
+          if (!p[f] || typeof p[f] !== 'object' || !Object.keys(p[f]).length) {
+            throw new Error(
+              `归档拒绝：规格通道 ${p.id ?? '?'} 缺 raw 原文 —— 没有页面原文的归档件` +
+                `无法回放，不许用空对象冒充（2026-10-14 审计 B14）`,
+            );
+          }
+          out[f] = p[f];
+        } else {
+          out[f] = p[f] ?? null;
+        }
       }
       return out;
     }),

@@ -195,6 +195,34 @@
         }
       ],
       "titleEn": "Haptics"
+    },
+    {
+      "id": "connectivity",
+      "title": "网络与通信",
+      "rows": [
+        {
+          "label": "NFC 支持程度",
+          "field": "connectivity.nfcDetail",
+          "labelEn": "NFC capability"
+        },
+        {
+          "label": "红外遥控",
+          "field": "connectivity.irBlaster",
+          "labelEn": "IR blaster"
+        },
+        {
+          "label": "蜂窝频段",
+          "field": "connectivity.cellularBands",
+          "format": "bands",
+          "labelEn": "Cellular bands"
+        },
+        {
+          "label": "WLAN 频段",
+          "field": "connectivity.wlanBands",
+          "labelEn": "WLAN bands"
+        }
+      ],
+      "titleEn": "Network & Connectivity"
     }
   ],
   "hidden": [

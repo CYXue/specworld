@@ -3,9 +3,9 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ABILITIES, abilityLabel, abilityRaw, fmtAbility } from '../lib/specs';
-import type { AbilityKey } from '../lib/specs';
 import { useDataset } from '../lib/useDataset';
 import {
+  ABILITY_OF_DIM,
   ABILITY_SORT,
   SORTS,
   applyMultiSort,
@@ -16,12 +16,11 @@ import {
 } from '../lib/facets';
 import type { SortKey } from '../lib/facets';
 import {
-  UNKNOWN,
   basePriceCny,
   categoryLabel,
   categoryOf,
-  chipNameLabel,
   fmtPriceCny,
+  productSubline,
   seriesLabel,
   seriesOf,
 } from '../lib/catalog';
@@ -67,13 +66,6 @@ const ranked = computed(() => applyMultiSort(all.value, sorts.value));
 // ── 排序键解析 ──
 
 const SORT_LABEL = new Map(SORTS.map((s) => [s.id, s.labelKey]));
-
-const ABILITY_OF_DIM: Record<string, AbilityKey> = {
-  ppi: 'display',
-  weight: 'light',
-  battery: 'battery',
-  camera: 'camera',
-};
 
 /** 维度 → 默认排序键（添加时用的方向）。 */
 const DEFAULT_SORT: Record<string, SortKey> = {
@@ -178,10 +170,7 @@ function cell(p: (typeof all.value)[number], sort: SortKey): { text: string; mis
     : { text: fmtAbility(ak, raw), missing: false };
 }
 
-function subline(p: (typeof all.value)[number]): string {
-  const chip = chipNameLabel(p.chipset?.name ?? '');
-  return [seriesLabel(seriesOf(p)), chip === UNKNOWN ? null : chip].filter(Boolean).join(' · ');
-}
+// 副标题已下沉 catalog.ts 的 productSubline（曾与 CompareView 各写一份且答案不同）
 </script>
 
 <template>
@@ -375,7 +364,7 @@ function subline(p: (typeof all.value)[number]): string {
                       {{ p.name }}
                     </RouterLink>
                     <span class="block truncate text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
-                      {{ categoryLabel(categoryOf(p)) }} · {{ subline(p) }}
+                      {{ categoryLabel(categoryOf(p)) }} · {{ productSubline(p) }}
                     </span>
                   </div>
                 </div>

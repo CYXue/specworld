@@ -79,6 +79,10 @@ const CONTRACT_PATHS = [
   'connectivity.wifi',
   'connectivity.bluetooth',
   'connectivity.nfc',
+  'connectivity.nfcDetail',
+  'connectivity.irBlaster',
+  'connectivity.cellularBands',
+  'connectivity.wlanBands',
   'connectivity.satellite',
   'connectivity.usb',
   'connectivity.sim',
@@ -182,6 +186,10 @@ const COVERAGE_FIELDS = [
   'connectivity.wifi',
   'connectivity.bluetooth',
   'connectivity.nfc',
+  'connectivity.nfcDetail',
+  'connectivity.irBlaster',
+  'connectivity.cellularBands',
+  'connectivity.wlanBands',
   'connectivity.satellite',
   'connectivity.usb',
   'connectivity.sim',
@@ -422,6 +430,30 @@ function main() {
     }
   }
 
+  /* --- 品类声明 ---
+   * 数据源层显式声明品类：本文件是**手机专用通道**（华为/苹果官网），产出即 phone。
+   *
+   * 曾经这行兜底写在 sync/index.mjs 的拍平循环里，而 validate() 的
+   * 「品类缺失或未注册」闸门在那之后才跑 —— 兜底先于闸门 ⇒ 闸门永远看不到
+   * 缺失值，validate.mjs 注释白纸黑字「缺失也拒绝」而实现静默放行：
+   * 一个忘了声明品类的机型会被按 phone 的字段表渲染，参数表直接崩，零报错。
+   *
+   * 现在各司其职：品类由数据源声明（本行），缺失与否由闸门校验
+   * （validate.mjs 的 isRegisteredCategory），同步层不再和稀泥。 */
+  for (const p of products) p.category = 'phone';
+
+  /* --- 自检不过不写盘 ---
+   * 曾经的顺序是「先 writeFileSync，最后才打印 problems 并置 exitCode=1」——
+   * 坏产出已经落盘，_work/normalized.json 是脏的；exitCode 而不是 exit()，
+   * 调用方一旦不检查退出码，脏文件就静默留在那里被下一轮用
+   * （2026-10-14 审计 B13）。纪律：**没过的检查不许有产物**。 */
+  if (problems.length) {
+    console.error(`\n❌ 规范化层自检发现 ${problems.length} 个问题，拒绝写盘：`);
+    for (const x of problems.slice(0, 30)) console.error(`  - ${x}`);
+    console.error(`\n（未写出 ${outPath.replace(ROOT, '.')}，旧文件原样保留）`);
+    process.exit(1);
+  }
+
   /* --- 写盘 --- */
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(products, null, 2)}\n`, 'utf8');
@@ -494,10 +526,11 @@ function main() {
   printCoverage(products);
 
   console.log(`\n${'═'.repeat(72)}`);
+  // problems 已在写盘前拦掉（不过不写盘），到这里必然是 0 —— 保留分支只是
+  // 防将来有人把检查挪回后面，它一绿就说明顺序又坏了。
   if (problems.length) {
-    console.log(`❌ 自检发现 ${problems.length} 个问题：`);
-    for (const x of problems.slice(0, 30)) console.log(`  - ${x}`);
-    process.exitCode = 1;
+    console.log(`❌ 自检发现 ${problems.length} 个问题（不应到达这里：写盘前已拦截）`);
+    process.exit(1);
   } else {
     console.log('✅ 自检通过：id 唯一、releaseDate 留空待 sync 回填、口径与 provenance 齐全');
   }

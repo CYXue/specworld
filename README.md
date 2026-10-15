@@ -95,7 +95,7 @@ npm ci && npm run build           # = prebuild(sync-public) + vite build + postb
 ## 改解析器之前先跑这个
 
 ```bash
-node scripts/selftest.mjs           # 275 项断言，不联网，1 秒
+node scripts/selftest.mjs           # 285 项断言，不联网，1 秒
 node scripts/selftest.mjs --verbose # 逐项打印
 ```
 
@@ -588,7 +588,7 @@ data/products.json          62 台（华为 49 / 苹果 13）
 - [x] **设备球**（`src/lib/globe.ts` + `GlobeCanvas.vue` + `GlobeView.vue`，路由 `/globe`）：
       球面透视投影 + 经纬度相机 + 自动自转，绕一圈**精确复原**（实测偏差 0px）、
       背面半透明可见、品牌自动分到不同纬度带。与环面画布复用同一套筛选层（`canvasFilter.ts`）
-- [x] 画布几何数学纳入自测：**275 项**断言，环面含回绕不变量（索引集合守恒 / 模周期位置均匀 /
+- [x] 画布几何数学纳入自测：**285 项**断言，环面含回绕不变量（索引集合守恒 / 模周期位置均匀 /
       整圈双射 / `torusIsConsistent`），球面含循环复原 / 透视分母安全 / 深度单调 / 分布均匀
 - [x] 真机交互验证 `_smoke-canvas.cjs`（25 项）：抓出「`:deep()` 命令式 DOM 拿不到 scoped 样式、
       瓦片掉进普通流竖直堆叠、可见仅 3 块、包围盒 maxX 卡在视口左半」——这类故障构建成功、单测全绿、
@@ -603,7 +603,7 @@ data/products.json          62 台（华为 49 / 苹果 13）
       前端改一个字会正确触发 Pages 重发
 - [x] `package-lock.json` 的 125 条 `resolved` 全部从 npmmirror 换回 registry.npmjs.org
       （GitHub runner 不在国内镜像后面；integrity 是 tarball 哈希，两镜像字节相同故不变）
-- [x] 275 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
+- [x] 285 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
       两次刷新率事故各固化成一条断言，CI 第一个 job
 - [x] 全链路编排 `scripts/pipeline.mjs`：一条命令跑通，失败即停不写盘
 - [x] 内容指纹 `scripts/publish/fingerprint.mjs`：剥掉运行时刻字段后再算，

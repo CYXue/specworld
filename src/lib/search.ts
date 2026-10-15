@@ -5,6 +5,7 @@ import {
   loose,
   matchCompact,
   matchExact,
+  matchLiteral,
   queryTokens,
   splitRuns,
   tokenize,
@@ -137,6 +138,45 @@ export function search(docs: SearchableDoc[], q: string, opts: SearchOpts = {}):
     docs.filter((d) => brandOk(d) && matchCompact(d, qTrim)),
     qTrim,
   );
+}
+
+export interface SearchOutcome {
+  /** 命中的结果（与 search() 完全同一套排序） */
+  results: SearchableDoc[];
+  /**
+   * 这批结果是不是靠「忽略大小写 / 分隔符 / 全角」的容错通道兜出来的。
+   *
+   * ⚠️ 判据只能用 **matchLiteral（字面通道）**，不能用 matchExact。
+   *    matchExact 内部含 `compact(t)` 回落，会把「靠抹掉空格才命中」也当成
+   *    精确命中 ⇒ 本式恒为 false ⇒ 容错提示条永不显示。
+   *    （2026-10-14 审计 P0-1：该脚本连着 14 项红灯，却因未接 CI 无人发现。）
+   *    纪律的另一半写在 `query.ts` 的 matchLiteral 上方。
+   */
+  usedLooseMatch: boolean;
+}
+
+/**
+ * 带元信息的搜索：结果与「是否走了容错通道」**一次性算出**。
+ *
+ * 为什么合在一个函数里：组件里若自己拿 search() 的结果再重判一次，
+ * 两个判据迟早分叉 —— 要么提示永不出现，要么正常写法也乱弹提示。
+ * 派生事实一律下沉 lib，组件只负责渲染。
+ */
+export function searchWithMeta(
+  docs: SearchableDoc[],
+  q: string,
+  opts: SearchOpts = {},
+): SearchOutcome {
+  const results = search(docs, q, opts);
+  const tokens = tokenize(q);
+  if (!tokens.length) return { results, usedLooseMatch: false };
+
+  // ⚠️ brand 过滤必须一起算：只按品牌筛、没打关键词时，字面通道看似「没命中」
+  //    是因为关键词为空，不是因为写法不同 —— 漏掉这层会让提示乱弹。
+  const brandOk = (d: SearchableDoc) => !opts.brand || d.brand === opts.brand;
+  const byLiteral = docs.filter((d) => brandOk(d) && matchLiteral(d, tokens));
+
+  return { results, usedLooseMatch: byLiteral.length === 0 && results.length > 0 };
 }
 
 /** 搜索框下方的建议词：取数据里真实存在的值，不编造 */

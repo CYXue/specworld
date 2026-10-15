@@ -120,7 +120,7 @@ if (!WRITE) {
 
 for (const o of offenders) packages[o.pkgPath].resolved = o.to;
 
-// 保持缩进与结尾换行，避免整个文件被重排成一大坨难看的 diff。
+// 保持缩进与结尾换行，避免整个文件被重排成一大片难看的 diff。
 writeFileSync(LOCK, JSON.stringify(lock, null, 2) + '\n', 'utf8');
 
 // 改完必须重新 parse 一遍：写出去的东西自己要先能读。

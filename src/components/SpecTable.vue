@@ -23,7 +23,7 @@ const groups = computed(() => specGroups(props.product));
       <div class="pixel-row-flat">
         <div
           v-for="(r, i) in g.rows"
-          :key="r.label"
+          :key="`${g.title}:${r.label}:${i}`"
           class="grid grid-cols-[7rem_1fr] items-baseline gap-2 px-3 py-1 text-[12px] leading-[1.5]"
           :style="{
             background: i % 2 === 1 ? 'rgb(0 0 0 / 0.18)' : 'transparent',

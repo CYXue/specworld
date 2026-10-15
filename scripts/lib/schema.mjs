@@ -214,7 +214,15 @@ export function validateSchema(schema) {
  */
 export function validateStatusMap(product, schema) {
   const errors = [];
-  if (!schema) return errors;
+  // 无 schema = 调用方漏了检查（正确顺序见 validate.mjs 11b-ii：先确认 schema 非空，
+  // 缺失是显性失败）。曾经的 `return []` 让漏检查变成静默空转——
+  // 字段校验看起来跑过了，其实一条都没判。编程错误必须炸，不许装没事。
+  if (!schema) {
+    throw new Error(
+      '[schema] validateStatusMap 收到空 schema：调用方必须先确认 loadSchema() 非空' +
+        '（品类注册了但 schema 文件缺失属于显性失败，见 sync/validate.mjs 11b-ii）',
+    );
+  }
   const fields = fieldMap(schema);
   const status = product?.valueStatus ?? {};
   if (!status || typeof status !== 'object' || Array.isArray(status)) {
@@ -322,7 +330,14 @@ function validateListField(field, item, at) {
  */
 export function validateSpecs(product, schema) {
   const errors = [];
-  if (!schema) return errors; // 无 schema 的品类（未建设的音频等）不阻塞写入
+  // 同 validateStatusMap：空 schema 是调用方漏检，抛错不装没事
+  // （曾经的 `return []` 是无 schema 品类校验空转的根因，2026-10-14 审计 P1-4）。
+  if (!schema) {
+    throw new Error(
+      '[schema] validateSpecs 收到空 schema：调用方必须先确认 loadSchema() 非空' +
+        '（品类注册了但 schema 文件缺失属于显性失败，见 sync/validate.mjs 11b-ii）',
+    );
+  }
   const fields = fieldMap(schema);
   const specs = product?.specs ?? {};
   for (const [path, value] of Object.entries(specs)) {

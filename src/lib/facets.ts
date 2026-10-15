@@ -399,7 +399,12 @@ export function isSortKey(v: unknown): v is SortKey {
  * 排序键格式 `维度-方向`（`price-asc`、`ppi-desc`…），这里按维度取原始值，方向由调用方解析。
  * `release` 不含维度，走发布日期兜底。
  */
-const ABILITY_OF_DIM: Record<string, AbilityKey> = {
+/**
+ * 维度 id → 能力键。**导出**：RankingsView 曾自己抄了一份一模一样的
+ * （2026-10-14 审计 P2-4）——抄的那份不会随这里改而改，而它错时的症状是
+ * 「榜单按这个维度排，取值的却是另一个能力」，静默且没有测试会红。
+ */
+export const ABILITY_OF_DIM: Record<string, AbilityKey> = {
   ppi: 'display',
   weight: 'light',
   battery: 'battery',

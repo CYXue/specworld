@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { specGroups } from '../lib/fields';
 import { abilityRows } from '../lib/specs';
+import type { Product } from '../types';
 import {
-  SERIES_FALLBACK,
-  UNKNOWN,
   basePriceCny,
   categoryOf,
   categoryLabel,
-  chipNameLabel,
   fmtPriceCny,
-  isFoldable,
+  productSubline,
   seriesLabel,
   seriesOf,
-  variantLabel,
-  variantOf,
 } from '../lib/catalog';
 import {
   DIMENSION_KEYS,
@@ -109,14 +105,16 @@ const diffOnly = computed(() => route.query.d === '1');
 const highlight = computed(() => route.query.h !== '0');
 
 function setDiffOnly(v: boolean) {
-  const q: Record<string, unknown> = { ...route.query };
+  // LocationQueryRaw 而不是 Record<string, unknown>：后者的 unknown 值
+  // 过不了 router.replace 的 query 类型（vue-tsc 2026-10-14 抓出）
+  const q: LocationQueryRaw = { ...route.query };
   if (v) q.d = '1';
   else delete q.d;
   router.replace({ path: '/compare', query: q });
 }
 
 function setHighlight(v: boolean) {
-  const q: Record<string, unknown> = { ...route.query };
+  const q: LocationQueryRaw = { ...route.query };
   if (v) delete q.h;
   else q.h = '0';
   router.replace({ path: '/compare', query: q });
@@ -183,9 +181,14 @@ const bounds = computed(() => derived.value?.bounds);
 
 // ── 对比台 ──
 
+// 类型谓词收窄，不用 cast：曾经的 `as Product[]` 把 ComputedRef 强转成数组，
+// 是「类型是承诺、数据是事实」的反例——cast 之后 .value 全部报错只是症状，
+// 根因是那一刻起 TS 看到的 pickedProds 已经不是它本来的样子（vue-tsc 2026-10-14 抓出）。
 const pickedProds = computed(() =>
-  picked.value.map((id) => derived.value?.byId(id)).filter(Boolean),
-) as NonNullable<ReturnType<NonNullable<typeof derived.value>['byId']>>[];
+  picked.value
+    .map((id) => derived.value?.byId(id))
+    .filter((p): p is Product => Boolean(p)),
+);
 
 const single = computed(() => (pickedProds.value.length === 1 ? pickedProds.value[0] : null));
 const singleRows = computed(() =>
@@ -274,19 +277,7 @@ function rowStyle(o: { different: boolean; missing: boolean }): Record<string, s
   return {};
 }
 
-/** 列表项副标题：系列 · 变体 · 形态 · 芯片，一行说清是谁。 */
-function subline(p: (typeof all.value)[number]): string {
-  const chip = chipNameLabel(p.chipset?.name ?? '');
-  const v = variantOf(p);
-  return [
-    seriesLabel(seriesOf(p)),
-    v === SERIES_FALLBACK ? null : variantLabel(v),
-    isFoldable(p) ? t('facet.formValue.foldable') : null,
-    chip === UNKNOWN ? null : chip,
-  ]
-    .filter(Boolean)
-    .join(' · ');
-}
+// 副标题已下沉 catalog.ts 的 productSubline（曾与 RankingsView 各写一份且答案不同）
 </script>
 
 <template>
@@ -380,7 +371,7 @@ function subline(p: (typeof all.value)[number]): string {
                   class="block truncate text-[12px] leading-[1.5]"
                   style="color: var(--color-parchment-dim)"
                 >
-                  {{ subline(p) }} · {{ p.releaseDate }}
+                  {{ productSubline(p) }} · {{ p.releaseDate }}
                 </span>
               </span>
               <span

@@ -577,6 +577,46 @@ check('category 未注册被拦（原有闸门，防回归）', () => {
   );
 });
 
+// 2026-10-14 审计 P1-4：品类注册了但 schema 文件缺失（tablet/laptop/audio 的现状）
+// 曾让字段校验/status 映射/孤儿键检测**全部空转且静默**——数据脏着写盘，
+// 每次同步却都是绿的。现在显性失败；这两条锁住「空转不许回来」。
+check('品类注册但无 schema 被拦（空转回归防护）', () => {
+  const f = validate(fleet({ category: 'tablet', specs: { 'display.sizeIn': 6.9 } }), null);
+  assert.ok(
+    f.some((x) => x.includes('没有 schema')),
+    `无 schema 品类必须显性失败，实际：${f.join('|')}`,
+  );
+});
+
+check('库函数对空 schema 抛错（不装没事）', () => {
+  assert.throws(
+    () => validateSpecs({ id: 'x', specs: { 'display.sizeIn': 6.9 } }, null),
+    /空 schema/,
+    'validateSpecs(null) 必须抛错，不许 return []',
+  );
+  assert.throws(
+    () => validateStatusMap({ id: 'x', valueStatus: {} }, null),
+    /空 schema/,
+    'validateStatusMap(null) 必须抛错，不许 return []',
+  );
+});
+
+// 2026-10-14 审计 P1-3：上面两条只证明「闸门会拦」，但拦不拦得到还取决于
+// **调用顺序**——曾经的 sync/index.mjs 在 validate() 之前就把缺失 category
+// 兜底成 'phone'，闸门注释写「缺失也拒绝」而实现永远等不到那一天。
+// 这条断言锁住数据侧契约：真源里每条产品都必须**显式**带 category，
+// 不靠任何下游兜底。normalize 出口已显式声明（手机通道即 'phone'）。
+check('数据契约：products.json 每条产品显式声明 category', () => {
+  const list = JSON.parse(readFileSync(join(ROOT, 'data/products.json'), 'utf8'));
+  const products = list.products ?? list;
+  const missing = products.filter((p) => !p.category).map((p) => p.id);
+  assert.equal(
+    missing.length,
+    0,
+    `这些产品缺 category（数据源漏声明，不许靠同步层兜底）：${missing.slice(0, 10).join(', ')}`,
+  );
+});
+
 check('机型数低于下限被拦', () => {
   const few = { products: Array.from({ length: 3 }, (_, i) => phone({ id: `x${i}` })) };
   assert.ok(validate(few, null).some((f) => f.includes('低于下限')));
@@ -736,12 +776,27 @@ check('同一赛制两种量纲被拦（跨赛制分数永不混算）', () => {
   );
 });
 
+// 2026-10-14 审计 P2-1：原用例断言输出含「非正数」，但那条消息出自**死闸门**
+// （判据与闸门 4 的 schema 区间完全重叠，永不独立触发）。0 值真实的拦截路径
+// 是闸门 4 的「超出合理区间」（schema range 下界 > 0）——断言必须指向
+// **真正跑的那条路径**，否则删掉死闸门后用例才红，保护的是幻觉。
 check('零值不被当作缺数据混过（正数校验）', () => {
   assert.ok(
     validate(fleet({ body: { weightG: 0, thicknessMm: 8 } }), null).some((f) =>
-      f.includes('非正数'),
+      f.includes('超出合理区间'),
     ),
+    'weightG=0 必须被 schema 区间闸门拦（下界 > 0）',
   );
+});
+
+// 反向测：删掉 SCHEMA_RANGE_PATHS 里这三条 = 零值/负值彻底没防线，必须红。
+check('非正值防线依赖 SCHEMA_RANGE_PATHS 覆盖（死闸门回归防护）', () => {
+  for (const path of ['body.weightG', 'body.thicknessMm', 'display.sizeIn']) {
+    assert.ok(
+      SCHEMA_RANGE_PATHS.includes(path),
+      `${path} 不在 SCHEMA_RANGE_PATHS —— 它的非正值/越界就再没有防线了`,
+    );
+  }
 });
 
 check('字段区间闸门接线自洽（FIELD_LIMITS ≡ schema.range，单一真源）', () => {
@@ -2299,6 +2354,48 @@ check('搜索：分词 AND 语义不因容错而丢失', () => {
   assert.equal(S.search(DOCS, 'nova 芯片').length, 0, '不存在的词不能被容错成命中');
 });
 
+// 下面两条钉的是 2026-10-14 审计 P0-1 的故障原型：
+// 「要不要弹容错提示」曾复用检索用的 matchExact（内部含 compact 回落），
+// 于是「靠抹掉空格才命中」也被算作精确命中 ⇒ usedLooseMatch 恒 false
+// ⇒ 提示条永不显示；而承载这条需求的 _smoke-search.cjs 既没进 CI 也没注册
+// npm script，连着 14 项红灯没有任何一次自动运行看得见。
+// 教训：判据一旦合并，某一方向必然静默失效 —— 这里两个方向同时钉死。
+
+check('容错提示判据：字面通道必须严格（紧凑写法判为「写法不同」）', () => {
+  const d = { haystack: 'huawei nova 14 ultra', compact: 'huaweinova14ultra' };
+  // 走真实调用路径（与 SearchView 一致：tokenize → matchLiteral）
+  assert.equal(
+    Q.matchLiteral(d, Q.tokenize('nova 14 ultra')),
+    true,
+    '与官方写法一致（含空格）⇒ 字面命中',
+  );
+  assert.equal(
+    Q.matchLiteral(d, Q.tokenize('nova14ultra')),
+    false,
+    '紧凑写法缺空格 ⇒ 字面必须判否，否则提示条永不显示（P0-1 故障原型）',
+  );
+  assert.equal(
+    Q.matchLiteral(d, Q.tokenize('nova   14   ultra')),
+    true,
+    '空白数量差异不算写法不同（分词时已折叠）',
+  );
+});
+
+check('容错提示判据：检索通道必须宽松（与字面通道不许合并）', () => {
+  const d = { haystack: 'huawei nova 14 ultra', compact: 'huaweinova14ultra' };
+  assert.equal(
+    Q.matchExact(d, ['nova14ultra']),
+    true,
+    '检索必须容错：用户打紧凑写法也要能搜到',
+  );
+  // 反向测：两条通道若被「顺手合并」成同一份实现，上面两条用例必有一条变红。
+  assert.notEqual(
+    Q.matchLiteral(d, ['nova14ultra']),
+    Q.matchExact(d, ['nova14ultra']),
+    '字面与检索必须是两个判据 —— 合并其一，必有一方向静默失效',
+  );
+});
+
 check('搜索：缺失字段不参与匹配（空串被 any query 命中的老故障）', () => {
   // 文档 d 的 chipset 为 null，若参与匹配，空串会让任何查询都命中它
   assert.ok(!names('任意查询').includes('d'), '官网未公布的字段不能被匹配');
@@ -2644,6 +2741,53 @@ check('形态维度：折叠屏 / 直板两类，之和等于全集（用户 202
   for (const p of REAL_P) {
     assert.equal(C.formOf(p) === 'foldable', C.isFoldable(p), `${p.name} 形态与折叠判据不一致`);
   }
+});
+
+// ── persona 限定域与折叠判据同源（2026-10-14 审计 P2-2）──
+// derive.mjs 的 foldable 域 filter 曾按机型名反推（/折叠|Mate X|Pocket|Flip/i），
+// 与唯一真源 foldable.mjs（官网原文「折叠/展开」）分叉——分叉是静默的：
+// persona 照样产出合法字符串，没有任何现成测试会红。现在 filter 直接引
+// isFoldableOfficial，这两条把同源钉死。
+check('persona 折叠域与 isFoldable 判据严格同源（真实数据逐台比对）', () => {
+  const foldableDomain = DERIVE.DOMAINS.find((d) => d.id === 'foldable');
+  assert.ok(foldableDomain, 'DOMAINS 里应有 foldable 域');
+  for (const p of REAL_P) {
+    assert.equal(
+      foldableDomain.filter(p),
+      C.isFoldable(p),
+      `${p.name}：persona 折叠域与 isFoldable 判据不一致`,
+    );
+  }
+});
+
+check('persona 折叠域不按机型名反推（旧错法回归防护）', () => {
+  // 名字带 Flip / Mate X 但官网原文没写「折叠/展开」⇒ 必须判否。
+  // 旧实现 /折叠|Mate X|Pocket|Flip/i.test(line+name) 会把它算进折叠池 ——
+  // 名字反推形态正是 foldable.mjs 头注明文否定的做法。
+  const foldableDomain = DERIVE.DOMAINS.find((d) => d.id === 'foldable');
+  const fake = pdoc({
+    id: 'fake-flip',
+    name: 'HUAWEI Pocket Flip 90',
+    line: 'Pocket',
+    rawOfficial: { 尺寸与重量: '162.9 mm | 75.3 mm | 7.2 mm' },
+  });
+  assert.equal(
+    foldableDomain.filter(fake),
+    false,
+    '官网原文没写折叠/展开 ⇒ 不许按机型名判成折叠屏',
+  );
+  // 反向：名字平平无奇但官网原文含「折叠」⇒ 必须判是（防改过头）
+  const plain = pdoc({
+    id: 'fake-fold',
+    name: 'HUAWEI Mate 90',
+    line: 'Mate',
+    rawOfficial: { 尺寸与重量: '折叠：73.78 mm | 展开：144.04 mm' },
+  });
+  assert.equal(
+    foldableDomain.filter(plain),
+    true,
+    '官网原文写了折叠 ⇒ 必须判为折叠屏（判据落在语义最小单位上）',
+  );
 });
 
 check('没有数据的品类如实为 0，不拿别的品类凑数', () => {
@@ -4654,6 +4798,19 @@ check('渲染对账（视图字典版）：schema↔视图双向对账（防页�
   }
   const hidden = new Set(view.hidden ?? []);
   const byPath = new Map(schema.fields.map((f) => [f.path, f]));
+  /*
+   * 视图字典给某些行配了**专用格式化器**（resolution / bands / dimensions…），
+   * 通用 object 哨兵 `{w,h}` 对它们不生效 —— bands 只认制式分组键，喂 `{w:1,h:2}`
+   * 会渲染成「—」，闸门于是误报「字段没上页面」，而下意识的处理又是「塞进 hidden」。
+   * 所以哨兵要按该行声明的 format 定制：格式化器认什么键，就往什么键里塞哨兵。
+   */
+  const fmtByPath = new Map();
+  for (const g of view.groups) {
+    for (const r of g.rows) {
+      if (!r.format) continue;
+      for (const p of r.fields ?? (r.field ? [r.field] : [])) fmtByPath.set(p, r.format);
+    }
+  }
 
   // ② 反向：视图引用必须已注册
   for (const p of referenced) {
@@ -4684,7 +4841,10 @@ check('渲染对账（视图字典版）：schema↔视图双向对账（防页�
       v = [`ZQ${i}ZQ`];
       t = `ZQ${i}ZQ`;
     } else if (f.type === 'object') {
-      v = { w: n, h: n + 1 };
+      v =
+        fmtByPath.get(f.path) === 'bands'
+          ? { nrFdd: [`n${n}`], nrTdd: [], lteFdd: [], lteTdd: [], umts: [], gsm: [] }
+          : { w: n, h: n + 1 };
       t = String(n);
     } else if (f.type === 'array:object') {
       v = [{ role: 'main', mp: n, aperture: 'f/1.6', ois: true }];
@@ -4701,12 +4861,46 @@ check('渲染对账（视图字典版）：schema↔视图双向对账（防页�
   const rendered = FIELDS_LIB.specGroups({ id: 'selftest-render-gate', category: 'phone', specs })
     .map((g) => g.rows.map((r) => r.value).join('\n'))
     .join('\n');
+  const boolFields = [];
   for (const f of fields) {
     if (hidden.has(f.path)) continue;
+    // boolean 走下面的专用判据（哨兵 'true' 对它不成立）
+    if (f.type === 'boolean') {
+      boolFields.push(f);
+      continue;
+    }
     assert.ok(
       rendered.includes(token.get(f.path)),
       `schema 字段 ${f.path}（${f.label}）既未被视图字典引用、也未列入 view.hidden` +
         `——详情页/对比台会静默不显示；请在 data/view-phone.json 加行（或加入 hidden 豁免）`,
+    );
+  }
+
+  /*
+   * ② boolean 专用判据（2026-10-14 补，原闸门对它失明）。
+   * boolean 的哨兵 true 被渲染成「有」而不是字面 'true'，`rendered.includes('true')`
+   * **恒为 false** —— 只要出现一个非 hidden 的 boolean 字段（本次新增的 irBlaster 就是），
+   * 闸门立刻误报，而误报的下一步通常是「把它塞进 hidden 了事」，
+   * 于是这个字段真的永远不上页面，闸门还显示绿灯。
+   * 改成：只给这一个字段置 true（其余字段全部缺省），渲染结果里必须**有行不是「—」**。
+   * 唯一性来自「全场只有一个字段有值」，与「有/无」的本地化文案无关。
+   *
+   * ⚠️ 诚实的边界：本条**抓不到**「视图字典没引用该字段」—— 自动补挂会把未引用的字段
+   * 照样渲染出来（实测：摘掉 view-phone.json 里 irBlaster 那行，本条仍全绿）。
+   * 它真正守的是「boolean 必须渲染成非「—」」这件事，即 defaultFormat 的 boolean 分支
+   * 没被改坏：把那个分支改成恒返回「—」，本条立刻报红（反向测做过）。
+   */
+  for (const f of boolFields) {
+    const rows = FIELDS_LIB.specGroups({
+      id: 'selftest-render-gate',
+      category: 'phone',
+      specs: { [f.path]: true },
+    }).flatMap((g) => g.rows.map((r) => r.value));
+    const shown = rows.filter((v) => v && v !== '—');
+    assert.ok(
+      shown.length >= 1,
+      `schema 字段 ${f.path}（${f.label}）置 true 后页面没有任何一行显示它` +
+        `——请在 data/view-phone.json 加行（或加入 hidden 豁免）`,
     );
   }
 });
@@ -5857,17 +6051,19 @@ check('i18n 接线：详情参数表（specGroups）必须应用 localizeSpecVal
   // 它们只会在 DataFeedback 纠错表单里以「当前值」出现（见下条），所以这里用真实可见字段验收接线。
   const terms = new Set();
   for (const k of Object.keys(GLOSS.GLOSSARY_EXACT)) if (CJK.test(k)) terms.add(k);
-  // 关键：pattern 的中文核心 = 剥掉数字/正则元字符后剩下的汉字串。旧写法把 `(\d+)`
-  // 这类捕获组剥成 `d`，导致「双 16 核神经网络引擎」「300Hz 触控采样率」这种嵌入式数字
-  // 术语根本查不到——闸门对它们「失明」，比没写还糟。改成提取每条 pattern 的汉字片段，
-  // EN 输出里任一段汉字残留都说明这条术语没被 localizeSpecValue 消化。
-  for (const p of GLOSS.GLOSSARY_PATTERNS) {
-    const literal = p.re.replace(/\\[dDsSwWbBeE.(){}[\]|*+?^$]/g, ' ');
-    for (const run of literal.match(/[㐀-䶿一-鿿豈-﫿]+/g) ?? []) {
-      // 只取 >=2 字的核心：单字（双/和/芯…）太泛，会误伤「双卡」这类与术语无关的中文。
-      if (run && run.length >= 2) terms.add(run);
-    }
-  }
+  /*
+   * pattern 的汉字片段**不再**进 terms —— 旧写法用「值里出现了这个汉字片段」判定可译，
+   * 于是 `^支持 (\d+) Hz 刷新率$` 这类**上下文锚定**的 pattern 会贡献出通用前缀「支持」，
+   * 任何含「支持」二字的官网原文（如 NFC 原文「支持读卡器模式的 NFC」）都被判成漏译 —— 误报。
+   * 误报的下场几乎总是「把字段塞进 hidden 了事」，字段就真的永远不上页面了。
+   *
+   * ⚠️ 诚实的边界：pattern 级漏译**不为它单独造判据**。实测过——把 specGroups 出口的
+   * localizeSpecValue 摘掉，可见行里没有任何一段能被某条 pattern 完整匹配（真实数据里
+   * 那 738 处匹配全在 hidden 字段上），所以「完整匹配」式判据在这里恒绿、等于假闸门。
+   * 反向测能力由上面的 exact / prefixes / screenLabels 的 terms 承担：摘掉出口调用后
+   * 本条确实变红（已验证），只是报的是「含未译术语」而不是「pattern 未命中」。
+   */
+  for (const p of GLOSS_JSON.prefixes ?? []) if (CJK.test(p.zh)) terms.add(p.zh);
   for (const p of GLOSS_JSON.prefixes ?? []) if (CJK.test(p.zh)) terms.add(p.zh);
   for (const k of Object.keys(GLOSS_JSON.screenLabels ?? {})) if (CJK.test(k)) terms.add(k);
   const bad = withLocale('en', () => {
@@ -5877,6 +6073,7 @@ check('i18n 接线：详情参数表（specGroups）必须应用 localizeSpecVal
         for (const r of g.rows) {
           const v = r.value ?? '';
           for (const term of terms) if (v.includes(term)) out.push(`${p.id} / ${r.label} → 含未译术语「${term}」：${v}`);
+
         }
       }
     }

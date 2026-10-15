@@ -61,7 +61,8 @@
     "emptyTitle": "画布上还没有设备",
     "emptySub": "当前筛选没有命中任何机型，换个条件或清空看看全部。",
     "hudCount": "{n} 台",
-    "hudWrap": "环面回绕 · 无限平移"
+    "hudWrap": "环面回绕 · 无限平移",
+    "imageTitle": "全屏图片查看器：拖拽移动，滚轮或双指捏合缩放"
   },
   "home": {
     "loadFailed": "数据加载失败：{err}",

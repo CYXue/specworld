@@ -65,7 +65,7 @@
       "name": "网络与通信",
       "nameEn": "Network & Connectivity",
       "type": "single",
-      "guide": "5G/WLAN/蓝牙/NFC/卫星/USB/SIM/eSIM"
+      "guide": "5G/WLAN/蓝牙/NFC/红外遥控/蜂窝频段/WLAN 频段/卫星/USB/SIM/eSIM"
     },
     {
       "id": "os",
@@ -608,6 +608,55 @@
       "group": "connectivity",
       "facet": true,
       "labelEn": "NFC"
+    },
+    {
+      "path": "connectivity.nfcDetail",
+      "label": "NFC 支持程度",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文（苹果「支持读卡器模式的 NFC」/ 华为「支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）」）。⚠️ 各品牌官网措辞口径不对称：苹果只写读卡器模式（其卡模拟能力官网不表述），华为写全模式 → 跨品牌不可比。因此只存原文、并列展示、标注差异，不参与排名、不做分面筛选、不折算成模式数量。nfc=false（官网明确写「不支持」）时本字段留 null，避免「无」与原文重复",
+      "labelEn": "NFC capability (as stated)"
+    },
+    {
+      "path": "connectivity.irBlaster",
+      "label": "红外遥控",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "facet": true,
+      "note": "红外遥控发射（智能遥控，遥控家电），是主动发射器件。⚠️ 与「红外传感器」完全不是同一件事——后者是传感器清单里的一项（接近检测/人脸补光用），被动器件。解析判据必须显式排除「红外传感器」字样，否则会静默把传感器当遥控发布出去，而闸门挡不住（布尔值本身合法）。官网不写 = unknown（null），绝不判 false——「没写」不等于「没有」",
+      "labelEn": "IR blaster"
+    },
+    {
+      "path": "connectivity.cellularBands",
+      "label": "蜂窝网络频段",
+      "unit": null,
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "按制式分组的蜂窝频段：{ nrFdd[], nrTdd[], lteFdd[], lteTdd[], umts[], gsm[], modelNote }。苹果独立规格页有完整频段串（如「FDD-5G NR (频段 n1、n2…)」）；苹果对比页矩阵与华为规格页均不列蜂窝频段 → null（unknown，不是「没有」）。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)，具备 4x4 MIMO 技术」是制式描述而非频段列表，别把它解析进来；同段开头的「A3721 型号**」是机型型号，归到 modelNote",
+      "labelEn": "Cellular bands"
+    },
+    {
+      "path": "connectivity.wlanBands",
+      "label": "WLAN 频段",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "WLAN 工作频段（如 [\"2.4 GHz\",\"5 GHz\"]）。华为规格页有「WLAN 频段」条目；苹果官网不列 → null。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)」不是 WLAN 频段——按 GHz 关键字取值会误命中它，判据必须锚定「WLAN 频段」键或 WLAN 段落",
+      "labelEn": "WLAN bands"
     },
     {
       "path": "connectivity.satellite",

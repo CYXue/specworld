@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-14T12:44:45.528Z",
+  "generatedAt": "2026-10-14T15:49:19.064Z",
   "windowStart": "2024-09-01",
   "sources": {
     "apple-official": {
-      "fetchedAt": "2026-10-14T12:44:45.528Z",
+      "fetchedAt": "2026-10-14T15:49:19.064Z",
       "note": "苹果官网规格页",
       "noteKey": "about.sourceAppleOfficial",
       "ok": true
     },
     "huawei-official": {
-      "fetchedAt": "2026-10-14T12:44:45.528Z",
+      "fetchedAt": "2026-10-14T15:49:19.064Z",
       "note": "华为官网规格页",
       "noteKey": "about.sourceHuaweiOfficial",
       "ok": true
@@ -123,6 +123,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -132,7 +134,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
       "category": "phone",
       "specs": {
@@ -181,21 +183,21 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "ultrawide",
             "mp": 12,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -208,6 +210,82 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75",
+            "n76"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3288 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口，支持： | 充电 | DisplayPort | USB 2 (最高可达 480Mb/s)",
         "connectivity.sim": "双卡 (nano‑SIM 卡)",
@@ -274,13 +352,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-introduces-iphone-16-iphone-16-plus/",
       "category": "phone",
       "specs": {
@@ -325,7 +404,7 @@
             "role": "main",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": "防抖原文：传感器位移式光学图像防抖功能 (融合式主摄)"
           },
           {
@@ -345,6 +424,10 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 2",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -412,13 +495,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
       "category": "phone",
       "specs": {
@@ -464,7 +548,7 @@
             "role": "main",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": "防抖原文：第二代传感器位移式光学图像防抖功能 (融合式主摄) | 3D 传感器位移式光学图像防抖功能 (长焦)"
           },
           {
@@ -478,7 +562,7 @@
             "role": "tele",
             "mp": 12,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": null
           }
         ],
@@ -491,6 +575,10 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -558,13 +646,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2024/09/apple-debuts-iphone-16-pro-iphone-16-pro-max/",
       "category": "phone",
       "specs": {
@@ -609,7 +698,7 @@
             "role": "main",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": "防抖原文：第二代传感器位移式光学图像防抖功能 (融合式主摄) | 3D 传感器位移式光学图像防抖功能 (长焦)"
           },
           {
@@ -623,7 +712,7 @@
             "role": "tele",
             "mp": 12,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": null
           }
         ],
@@ -636,6 +725,10 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -701,13 +794,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/02/apple-debuts-iphone-16e/",
       "category": "phone",
       "specs": {
@@ -757,6 +851,10 @@
         "connectivity.wifi": "802.11ax 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 2",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -846,6 +944,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -854,7 +954,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-debuts-iphone-17/",
       "category": "phone",
       "specs": {
@@ -904,21 +1004,21 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "ultrawide",
             "mp": 48,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -931,6 +1031,81 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3521 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口，支持： | 充电 | DisplayPort | USB 2 (最高可达 480Mb/s)",
         "connectivity.sim": "双卡 (nano‑SIM 卡)",
@@ -998,13 +1173,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
       "category": "phone",
       "specs": {
@@ -1049,7 +1225,7 @@
             "role": "main",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": "防抖原文：第二代传感器位移式光学图像防抖功能 (融合式主摄) | 3D 传感器位移式光学图像防抖功能 (融合式长焦)"
           },
           {
@@ -1063,7 +1239,7 @@
             "role": "tele",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": null
           }
         ],
@@ -1076,6 +1252,10 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -1143,13 +1323,14 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "connectivity.usb": "apple-compare",
         "connectivity.sim": "apple-compare",
         "connectivity.esim": "apple-compare",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/apple-unveils-iphone-17-pro-and-iphone-17-pro-max-cn/",
       "category": "phone",
       "specs": {
@@ -1195,7 +1376,7 @@
             "role": "main",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": "防抖原文：第二代传感器位移式光学图像防抖功能 (融合式主摄) | 3D 传感器位移式光学图像防抖功能 (融合式长焦)"
           },
           {
@@ -1209,7 +1390,7 @@
             "role": "tele",
             "mp": 48,
             "aperture": null,
-            "ois": false,
+            "ois": true,
             "sensorNote": null
           }
         ],
@@ -1222,6 +1403,10 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口 | 支持 USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (nano-SIM 卡)",
@@ -1277,7 +1462,7 @@
         "苹果官网从不公布电池容量(mAh)、RAM 与有线充电峰值功率 → 对应字段为 null，属官网真没有",
         "矩阵只给出「30 分钟最多可充至 50% 电量，需使用 20 瓦或更大功率的电源适配器 (另外有售) 并搭配 USB-C 充电线」——其中瓦数是**电源适配器要求**，不是手机有线充电峰值功率，故 battery.wiredChargeW 记 null",
         "该机型官网已无独立规格页，数据来自对比页矩阵（粒度更粗，字段更少）",
-        "以下字段规格页没有、由对比页矩阵补位（provenance=apple-compare）：chipset.name、connectivity.fiveG、connectivity.wifi、connectivity.bluetooth、connectivity.nfc"
+        "以下字段规格页没有、由对比页矩阵补位（provenance=apple-compare）：chipset.name、connectivity.fiveG、connectivity.wifi、connectivity.bluetooth、connectivity.nfc、connectivity.nfcDetail"
       ],
       "provenance": {
         "body.heightMm": "apple-official",
@@ -1313,11 +1498,12 @@
         "connectivity.wifi": "apple-compare",
         "connectivity.bluetooth": "apple-compare",
         "connectivity.nfc": "apple-compare",
+        "connectivity.nfcDetail": "apple-compare",
         "skus": "apple-official",
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/03/apple-introduces-iphone-17e/",
       "category": "phone",
       "specs": {
@@ -1365,14 +1551,14 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -1385,6 +1571,10 @@
         "connectivity.wifi": "802.11ax 无线局域网",
         "connectivity.bluetooth": "蓝牙 5.3",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口，支持： | 充电 | USB 2 (最高可达 480Mb/s)",
         "connectivity.sim": "双卡 (nano‑SIM 卡和 eSIM) | 支持双 eSIM | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -1490,6 +1680,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -1499,7 +1691,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
       "category": "phone",
       "specs": {
@@ -1550,35 +1742,35 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.48、f/1.8、f/2.8、f/4.0",
-            "ois": false,
+            "ois": null,
             "sensorNote": "可变光圈"
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "ultrawide",
             "mp": 48,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 48,
             "aperture": "f/2.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/2.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -1591,6 +1783,82 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66",
+            "106"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3715 和 A3718 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB‑C 接口，支持： | 充电 | DisplayPort | USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (两个 nano-SIM 卡，或一个 nano-SIM 卡和一个 eSIM，或激活两个 eSIM)、 | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -1692,6 +1960,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -1704,7 +1974,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/",
       "category": "phone",
       "specs": {
@@ -1755,35 +2025,35 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.48、f/1.8、f/2.8、f/4.0",
-            "ois": false,
+            "ois": null,
             "sensorNote": "可变光圈"
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "ultrawide",
             "mp": 48,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 48,
             "aperture": "f/2.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/2.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -1796,6 +2066,82 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66",
+            "106"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3715 和 A3718 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB‑C 接口，支持： | 充电 | DisplayPort | USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双卡 (两个 nano-SIM 卡，或一个 nano-SIM 卡和一个 eSIM，或激活两个 eSIM)、 | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -1892,6 +2238,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -1900,7 +2248,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2025/09/introducing-iphone-air-a-powerful-new-iphone/",
       "category": "phone",
       "specs": {
@@ -1950,14 +2298,14 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -1970,6 +2318,81 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3518 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB-C 接口，支持： | 充电 | USB 2 (最高可达 480Mb/s)",
         "connectivity.sim": "双 eSIM (可激活两个 eSIM) | iPhone Air 采用先进的 eSIM 技术，更简便也更安全 (不兼容实体 SIM 卡)。 | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -2070,6 +2493,8 @@
         "connectivity.wifi": "apple-official",
         "connectivity.bluetooth": "apple-official",
         "connectivity.nfc": "apple-official",
+        "connectivity.nfcDetail": "apple-official",
+        "connectivity.cellularBands": "apple-official",
         "connectivity.usb": "apple-official",
         "connectivity.sim": "apple-official",
         "connectivity.esim": "apple-official",
@@ -2082,7 +2507,7 @@
         "releaseDate": "apple-official"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.apple.com.cn/newsroom/2026/09/apple-unveils-iphone-duo/",
       "category": "phone",
       "specs": {
@@ -2131,21 +2556,21 @@
             "role": "main",
             "mp": 48,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "tele",
             "mp": 12,
             "aperture": "f/1.6",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "ultrawide",
             "mp": 48,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2158,6 +2583,82 @@
         "connectivity.wifi": "802.11be 无线局域网",
         "connectivity.bluetooth": "蓝牙 6",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式的 NFC",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": {
+          "nrFdd": [
+            "n1",
+            "n2",
+            "n3",
+            "n5",
+            "n7",
+            "n8",
+            "n12",
+            "n20",
+            "n25",
+            "n26",
+            "n28",
+            "n30",
+            "n66",
+            "n70",
+            "n75"
+          ],
+          "nrTdd": [
+            "n38",
+            "n40",
+            "n41",
+            "n48",
+            "n77",
+            "n78",
+            "n79"
+          ],
+          "lteFdd": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "7",
+            "8",
+            "12",
+            "13",
+            "17",
+            "18",
+            "19",
+            "20",
+            "25",
+            "26",
+            "28",
+            "30",
+            "32",
+            "66",
+            "106"
+          ],
+          "lteTdd": [
+            "34",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "48"
+          ],
+          "umts": [
+            "850",
+            "900",
+            "1700/2100",
+            "1900",
+            "2100 MHz"
+          ],
+          "gsm": [
+            "850",
+            "900",
+            "1800",
+            "1900 MHz"
+          ],
+          "modelNote": "A3721 型号"
+        },
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB‑C 接口，支持： | 充电 | DisplayPort | USB 3 (最高可达 10Gb/s)",
         "connectivity.sim": "双 eSIM (可激活两个 eSIM) | iPhone Duo 采用先进的 eSIM 技术，更简便也更安全 (不兼容实体 SIM 卡)。 | 进一步了解 eSIM | 了解如何在出境旅行时使用 eSIM",
@@ -2221,12 +2722,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.cnstock.com/commonDetail/340710",
       "category": "phone",
       "specs": {
@@ -2271,14 +2774,14 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": 2,
             "aperture": "f/2.4",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2291,6 +2794,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac",
         "connectivity.bluetooth": "Bluetooth 5.1，支持低功耗蓝牙，支持 SBC、AAC",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -2355,12 +2865,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/0900550.htm",
       "category": "phone",
       "specs": {
@@ -2404,14 +2916,14 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": 2,
             "aperture": "f/2.4",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2424,6 +2936,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac",
         "connectivity.bluetooth": "Bluetooth 5.1，支持低功耗蓝牙，支持 SBC、AAC",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C, 支持 USB 2.0",
         "connectivity.sim": null,
@@ -2485,13 +3004,14 @@
         "connectivity.fiveG": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.ithome.com/0/847/979.htm",
       "category": "phone",
       "specs": {
@@ -2536,7 +3056,7 @@
             "role": "main",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2548,7 +3068,14 @@
         "connectivity.fiveG": false,
         "connectivity.wifi": null,
         "connectivity.bluetooth": "Bluetooth 5.1，支持低功耗蓝牙，支持 SBC、AAC",
-        "connectivity.nfc": true,
+        "connectivity.nfc": false,
+        "connectivity.nfcDetail": null,
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -2620,13 +3147,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -2670,7 +3198,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2682,7 +3210,14 @@
         "connectivity.fiveG": null,
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax/be",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC",
-        "connectivity.nfc": true,
+        "connectivity.nfc": false,
+        "connectivity.nfcDetail": null,
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C, 支持 USB 2.0",
         "connectivity.sim": null,
@@ -2754,13 +3289,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -2804,7 +3340,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -2816,7 +3352,14 @@
         "connectivity.fiveG": null,
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax/be",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC",
-        "connectivity.nfc": true,
+        "connectivity.nfc": false,
+        "connectivity.nfcDetail": null,
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -2886,13 +3429,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -2937,7 +3482,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           }
         ],
@@ -2950,6 +3495,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -3014,11 +3566,12 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-12T14:23:18.956Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://g.pconline.com.cn/x/2127/21276452.html",
       "category": "phone",
       "specs": {
@@ -3062,7 +3615,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.8",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -3074,7 +3627,14 @@
         "connectivity.fiveG": null,
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax/be",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC",
-        "connectivity.nfc": true,
+        "connectivity.nfc": false,
+        "connectivity.nfcDetail": null,
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -3151,6 +3711,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -3158,7 +3720,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -3211,7 +3773,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -3225,7 +3787,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -3238,6 +3800,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax，2 × 2 MIMO，HE160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "HUAWEI Mate X6：北斗卫星消息 | HUAWEI Mate X6 典藏版：天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C ，USB 3.1 GEN1",
         "connectivity.sim": null,
@@ -3319,6 +3888,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -3326,7 +3897,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -3385,7 +3956,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -3405,6 +3976,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "蓝牙 6.0 支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 GEN1，支持 DP 1.2",
         "connectivity.sim": null,
@@ -3486,6 +4064,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.esim": "huawei-official",
@@ -3494,7 +4074,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -3548,7 +4128,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -3562,7 +4142,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -3575,6 +4155,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通话、卫星寻呼、双向北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -3651,6 +4238,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -3658,7 +4247,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://tech.cnr.cn/techxp/20250905/t20250905_527351812.shtml",
       "category": "phone",
       "specs": {
@@ -3712,7 +4301,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -3726,7 +4315,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -3739,6 +4328,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11 a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1，支持 DP1.2",
         "connectivity.sim": null,
@@ -3806,13 +4402,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -3866,7 +4464,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -3880,7 +4478,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -3893,6 +4491,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax，2 × 2 MIMO，HE160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -3967,6 +4572,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -3974,7 +4581,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://ai.zol.com.cn/1076/10763772.html",
       "category": "phone",
       "specs": {
@@ -4035,14 +4642,14 @@
             "role": "ultrawide",
             "mp": 8,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -4055,6 +4662,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付、SIM 卡支付、HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星通信",
         "connectivity.usb": "USB Type-C，USB 2.0",
         "connectivity.sim": null,
@@ -4130,6 +4744,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -4137,7 +4753,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4192,7 +4808,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -4206,7 +4822,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -4219,6 +4835,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax，2 × 2 MIMO，HE160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -4295,6 +4918,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -4302,7 +4927,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4355,7 +4980,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -4369,7 +4994,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -4382,6 +5007,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -4457,6 +5089,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -4464,7 +5098,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://ai.zol.com.cn/954/9543191_all.html",
       "category": "phone",
       "specs": {
@@ -4518,7 +5152,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -4532,7 +5166,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -4545,6 +5179,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax，2 × 2 MIMO，HE160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -4615,13 +5256,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20241127/44aee0b23e084b9bbbeb0db8874d4dd2/c.html",
       "category": "phone",
       "specs": {
@@ -4674,7 +5317,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -4688,7 +5331,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -4701,6 +5344,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -4778,6 +5428,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -4787,7 +5439,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -4841,7 +5493,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -4855,7 +5507,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -4868,6 +5520,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -4946,6 +5605,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -4955,7 +5616,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5010,7 +5671,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5024,7 +5685,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -5037,6 +5698,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -5114,6 +5782,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5123,7 +5793,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5176,7 +5846,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5197,7 +5867,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -5210,6 +5880,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -5287,6 +5964,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5296,7 +5975,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20260323/1705c97a39d44ea69565439ea5547c61/c.html",
       "category": "phone",
       "specs": {
@@ -5349,7 +6028,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5369,6 +6048,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11 a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡1：nano SIM 卡 | SIM 卡2：nano SIM 卡",
@@ -5447,6 +6133,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5456,7 +6144,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "http://tech.cnr.cn/techgd/20251125/t20251125_527441290.shtml",
       "category": "phone",
       "specs": {
@@ -5509,7 +6197,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5530,7 +6218,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -5543,6 +6231,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11 a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -5620,6 +6315,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5629,7 +6326,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -5683,7 +6380,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5697,7 +6394,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -5710,6 +6407,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -5787,6 +6491,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5796,7 +6502,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -5851,7 +6557,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -5865,7 +6571,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -5878,6 +6584,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -5957,6 +6670,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -5966,7 +6681,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -6020,7 +6735,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -6034,7 +6749,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -6047,6 +6762,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -6125,6 +6847,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -6134,7 +6858,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-mate-90-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -6188,7 +6912,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -6202,7 +6926,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -6215,6 +6939,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -6277,12 +7008,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6326,7 +7059,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -6340,7 +7073,7 @@
             "role": "ultrawide",
             "mp": 8,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -6353,6 +7086,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax，2 × 2 MIMO，HE160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -6422,13 +7162,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-12T14:23:18.956Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://caijing.chinadaily.com.cn/a/202510/17/WS68f1f3f0a310c4deea5ecdcb.html",
       "category": "phone",
       "specs": {
@@ -6472,14 +7214,14 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "ultrawide",
             "mp": 8,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -6492,6 +7234,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11 a/b/g/n/ac/ax，2 × 2 MIMO，HE160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -6556,12 +7305,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6620,14 +7371,14 @@
             "role": "ultrawide",
             "mp": 8,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色镜头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -6640,6 +7391,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，HE160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -6710,13 +7468,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.news.cn/tech/20250519/0861a885ef8e497f982423b62b756423/c.html",
       "category": "phone",
       "specs": {
@@ -6775,14 +7535,14 @@
             "role": "ultrawide",
             "mp": 13,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色镜头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -6795,6 +7555,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，HE160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -6869,13 +7636,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -6919,7 +7688,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -6933,7 +7702,7 @@
             "role": "depth",
             "mp": null,
             "aperture": "f/2.4",
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色镜头（F2.4 光圈」——非像素指标，故 mp 记 null"
           }
         ],
@@ -6946,6 +7715,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7021,13 +7797,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7085,14 +7863,14 @@
             "role": "ultrawide",
             "mp": 13,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": "f/2.4",
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色镜头（F2.4 光圈」——非像素指标，故 mp 记 null"
           }
         ],
@@ -7105,6 +7883,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7181,13 +7966,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2025/nova-15-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7246,14 +8033,14 @@
             "role": "ultrawide",
             "mp": 50,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": "f/2.4",
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色镜头（F2.4 光圈」——非像素指标，故 mp 记 null"
           }
         ],
@@ -7266,6 +8053,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7341,13 +8135,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7391,7 +8187,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -7405,7 +8201,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -7418,6 +8214,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "蓝牙 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付、SIM 卡支付、HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7494,13 +8297,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7559,14 +8364,14 @@
             "role": "ultrawide",
             "mp": 50,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -7579,6 +8384,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "蓝牙 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付、SIM 卡支付、HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7651,12 +8463,14 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://tech.ifeng.com/c/8vLTNjTHlpG",
       "category": "phone",
       "specs": {
@@ -7700,14 +8514,14 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -7720,6 +8534,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80，1024QAM",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7796,13 +8617,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/nova-16-series-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -7861,14 +8684,14 @@
             "role": "ultrawide",
             "mp": 50,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -7881,6 +8704,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "蓝牙 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付、SIM 卡支付、HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -7956,13 +8786,15 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
         "skus": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/0958214.htm",
       "category": "phone",
       "specs": {
@@ -8006,7 +8838,7 @@
             "role": "main",
             "mp": 50,
             "aperture": "f/1.9",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -8020,7 +8852,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -8033,6 +8865,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT80",
         "connectivity.bluetooth": "蓝牙 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付、SIM 卡支付、HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，支持 USB 2.0",
         "connectivity.sim": null,
@@ -8102,11 +8941,12 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
         "connectivity.usb": "huawei-official",
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://m.ithome.com/html/863120.htm",
       "category": "phone",
       "specs": {
@@ -8159,7 +8999,7 @@
             "role": "ultrawide",
             "mp": 12,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -8173,7 +9013,7 @@
             "role": "depth",
             "mp": 2,
             "aperture": "f/2.0",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -8186,6 +9026,10 @@
         "connectivity.wifi": "802.11 a/b/g/n/ac/ax，2 × 2 MIMO，HE160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": null,
         "connectivity.satellite": null,
         "connectivity.usb": "USB Type-C，USB 2.0",
         "connectivity.sim": null,
@@ -8262,6 +9106,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -8269,7 +9115,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://www.xinhuanet.com/tech/20250321/109d362178b24e4e97f07de8db6ed04c/c.html",
       "category": "phone",
       "specs": {
@@ -8322,7 +9168,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -8336,7 +9182,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -8349,6 +9195,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，1024 QAM，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "蓝牙 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "HUAWEI Pura X：不支持 | HUAWEI Pura X 典藏版：天通卫星通信",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -8426,6 +9279,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.esim": "huawei-official",
@@ -8434,7 +9289,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -8487,7 +9342,7 @@
             "role": "ultrawide",
             "mp": 12.5,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": "RYYB"
           },
           {
@@ -8501,7 +9356,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -8514,6 +9369,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "蓝牙 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "HUAWEI Pura X Max：不支持 | HUAWEI Pura X Max 典藏版：畅连北斗卫星消息、运营商北斗卫星短信",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -8588,6 +9450,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -8597,7 +9461,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/harmonyos-7-and-huawei-mate-xt-2-and-all-scenario-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -8651,7 +9515,7 @@
             "role": "ultrawide",
             "mp": 8,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -8665,7 +9529,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -8678,6 +9542,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -8751,6 +9622,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -8758,7 +9631,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -8819,14 +9692,14 @@
             "role": "ultrawide",
             "mp": 13,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -8839,6 +9712,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式,卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 2.0",
         "connectivity.sim": null,
@@ -8912,6 +9792,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -8919,7 +9801,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -8980,14 +9862,14 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -9000,6 +9882,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式,卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -9073,6 +9962,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -9080,7 +9971,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -9140,14 +10031,14 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -9160,6 +10051,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式,卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -9233,6 +10131,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -9240,7 +10140,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/news/2025/huawei-launches-huawei-pura80-series/",
       "category": "phone",
       "specs": {
@@ -9307,14 +10207,14 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": "官网原文标注「150 万多光谱通道红枫原色摄像头」——非像素指标，故 mp 记 null"
           }
         ],
@@ -9327,6 +10227,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式,卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "天通卫星通信、北斗卫星消息",
         "connectivity.usb": "USB Type-C，USB 3.1 Gen 1",
         "connectivity.sim": null,
@@ -9403,6 +10310,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "os.launch": "huawei-official",
@@ -9410,7 +10319,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -9464,7 +10373,7 @@
             "role": "ultrawide",
             "mp": 12.5,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -9478,7 +10387,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -9491,6 +10400,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式,卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C",
         "connectivity.sim": null,
@@ -9566,6 +10482,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -9575,7 +10493,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -9630,7 +10548,7 @@
             "role": "ultrawide",
             "mp": 12.5,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -9644,7 +10562,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -9657,6 +10575,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -9732,6 +10657,8 @@
         "connectivity.wifi": "huawei-official",
         "connectivity.bluetooth": "huawei-official",
         "connectivity.nfc": "huawei-official",
+        "connectivity.nfcDetail": "huawei-official",
+        "connectivity.wlanBands": "huawei-official",
         "connectivity.satellite": "huawei-official",
         "connectivity.usb": "huawei-official",
         "connectivity.sim": "huawei-official",
@@ -9741,7 +10668,7 @@
         "releaseDate": "manual"
       },
       "firstSeenAt": "2026-10-02T12:26:34.327Z",
-      "lastSeenAt": "2026-10-14T12:44:45.528Z",
+      "lastSeenAt": "2026-10-14T15:49:19.064Z",
       "releaseDateSourceUrl": "https://consumer.huawei.com/cn/press/events/2026/huawei-pura-90-series-and-new-product-launch-event/",
       "category": "phone",
       "specs": {
@@ -9796,7 +10723,7 @@
             "role": "ultrawide",
             "mp": 40,
             "aperture": "f/2.2",
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           },
           {
@@ -9810,7 +10737,7 @@
             "role": "depth",
             "mp": null,
             "aperture": null,
-            "ois": false,
+            "ois": null,
             "sensorNote": null
           }
         ],
@@ -9823,6 +10750,13 @@
         "connectivity.wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
         "connectivity.bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
         "connectivity.nfc": true,
+        "connectivity.nfcDetail": "支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+        "connectivity.irBlaster": null,
+        "connectivity.cellularBands": null,
+        "connectivity.wlanBands": [
+          "2.4 GHz",
+          "5 GHz"
+        ],
         "connectivity.satellite": "北斗卫星消息",
         "connectivity.usb": "USB Type-C",
         "connectivity.sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",

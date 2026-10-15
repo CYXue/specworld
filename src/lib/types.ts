@@ -167,6 +167,28 @@ export interface ProductRecord {
     wifi: string | null;
     bluetooth: string | null;
     nfc: boolean | null;
+    /** NFC 支持程度：官网原文。跨品牌口径不对称 → 只并列展示，不参与排名 */
+    nfcDetail: string | null;
+    /**
+     * 红外遥控发射（智能遥控）。与「红外传感器」不是同一件事——
+     * 后者是传感器清单里的被动器件，解析时必须排除。官网不写 = null（unknown，非 false）
+     */
+    irBlaster: boolean | null;
+    /**
+     * 蜂窝频段，按制式分组。苹果规格页可得，对比页与华为规格页均不列 → null
+     */
+    cellularBands: {
+      nrFdd: string[];
+      nrTdd: string[];
+      lteFdd: string[];
+      lteTdd: string[];
+      umts: string[];
+      gsm: string[];
+      /** 官网标注的机型型号（如「A3721 型号」），频段归属说明 */
+      modelNote: string | null;
+    } | null;
+    /** WLAN 工作频段（如 ['2.4 GHz', '5 GHz']）。苹果官网不列 → null */
+    wlanBands: string[] | null;
     satellite: string | null;
     usb: string | null;
     sim: string | null;

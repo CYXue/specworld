@@ -114,7 +114,16 @@ export function validateOverrides(overrides, products, options = {}) {
       if (!isRegisteredCategory(p.category))
         errors.push(`${e.id} 的品类未注册：${JSON.stringify(p.category)}`);
       const schema = loadSchema(p.category);
-      if (schema) {
+      if (!schema) {
+        // 与 set-field 分支（上方）同一纪律：没有字段表的品类不许过校验。
+        // 曾经的 `if (schema) { ... }` 让无 schema 品类的 specs 校验**静默跳过**，
+        // 用户层往一个没有字段表的品类里写什么都能进 —— 与 validate.mjs 11b-ii
+        // 修掉的是同一个空转（2026-10-14 审计 P1-4）。
+        errors.push(
+          `${e.id} 的机型品类 "${p.category}" 没有 schema，无法校验字段` +
+            `（请先建 data/schemas/${p.category}.json）`,
+        );
+      } else {
         // specs 逐键过 schema：未注册键 / 类型 / 区间
         const fields = fieldMap(schema);
         for (const [path, value] of Object.entries(p.specs ?? {})) {

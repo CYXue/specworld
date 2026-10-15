@@ -923,7 +923,15 @@ export async function fetchAll(options = {}) {
       } catch {
         memo = null;
       }
-      if (memo && memo.reason) return { skip: true, reason: memo.reason };
+      // TTL：曾经的「凭 memo.reason 永久 skip」让官网**恢复**某个 slug 后
+      // 它永远不再被探到——没有报错、没有提示，那台新机静默地不进库
+      // （2026-10-14 审计 B12）。超过 TTL 的结论作废，重新探一次；
+      // 作废不等于删文件，探完会用新结论覆盖。
+      const PROBE_TTL_DAYS = 30;
+      const fresh =
+        memo?.checkedAt &&
+        Date.now() - new Date(memo.checkedAt).getTime() < PROBE_TTL_DAYS * 86400000;
+      if (memo && memo.reason && fresh) return { skip: true, reason: memo.reason };
     }
 
     const page = await fetchPage(url, { cacheFile: `${slug}.html`, kind: 'specs' });

@@ -14,6 +14,13 @@
     "selftest": "node scripts/selftest.mjs",
     "i18n:residual": "node scripts/i18n-residual.mjs",
     "smoke:i18n": "node scripts/smoke/i18n-ssr.mjs",
+    "smoke": "node _smoke.cjs",
+    "smoke:pixel": "node _smoke-pixel.cjs",
+    "smoke:font": "node _smoke-font.cjs",
+    "smoke:search": "node _smoke-search.cjs",
+    "smoke:canvas": "node _smoke-canvas.cjs",
+    "smoke:globe": "node _smoke-globe.cjs",
+    "smoke:all": "npm run selftest && npm run smoke:i18n && npm run smoke && npm run smoke:font && npm run smoke:pixel && npm run smoke:search && npm run smoke:canvas && npm run smoke:globe",
     "quality": "node scripts/report/quality.mjs",
     "editor": "node scripts/editor-server.mjs",
     "sprites:review": "node scripts/sprite/review.mjs",
@@ -22,11 +29,13 @@
     "lock:check": "node scripts/publish/normalize-lock.mjs",
     "lock:fix": "node scripts/publish/normalize-lock.mjs --write",
     "conventions:check": "node scripts/publish/check-conventions.mjs",
+    "type-check": "vue-tsc --noEmit",
     "font:check": "node scripts/publish/check-font-coverage.mjs",
     "favicon:gates": "node scripts/verify-favicon-gates.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "qa:coverage": "node scripts/qa/coverage.mjs"
   },
   "dependencies": {
     "vue": "^3.5.13",
@@ -42,9 +51,11 @@
     "eslint-plugin-import": "^2.32.0",
     "globals": "^14.0.0",
     "prettier": "^3.9.9",
+    "puppeteer-core": "^23.11.1",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.6.0",
     "typescript-eslint": "^8.71.0",
-    "vite": "^6.0.0"
+    "vite": "^6.0.0",
+    "vue-tsc": "^2.2.12"
   }
 }

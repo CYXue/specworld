@@ -99,6 +99,13 @@
     "wifi": "2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160，8 Spatial-stream Sounding MU-MIMO",
     "bluetooth": "Bluetooth 6.0，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
     "nfc": true,
+    "nfcDetail": "支持读卡器模式，卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）",
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": [
+      "2.4 GHz",
+      "5 GHz"
+    ],
     "satellite": "北斗卫星消息",
     "usb": "USB Type-C，USB 3.1 Gen 1",
     "sim": "SIM 卡 1：nano SIM 卡 | SIM 卡 2：nano SIM 卡",
@@ -168,6 +175,8 @@
     "connectivity.wifi": "huawei-official",
     "connectivity.bluetooth": "huawei-official",
     "connectivity.nfc": "huawei-official",
+    "connectivity.nfcDetail": "huawei-official",
+    "connectivity.wlanBands": "huawei-official",
     "connectivity.satellite": "huawei-official",
     "connectivity.usb": "huawei-official",
     "connectivity.sim": "huawei-official",

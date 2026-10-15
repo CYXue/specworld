@@ -19,6 +19,8 @@ import {
   parseAperture,
   parseLens,
   parseVideoMax,
+  parseCellularBands,
+  pickNfcPhrase,
   parseMm,
   parseWeight,
   parseInch,
@@ -393,6 +395,18 @@ function mapAppleSpecs(rawProduct) {
   rec.connectivity.bluetooth = (cell.match(/蓝牙\s*[\d.]+/) ?? [])[0] ?? null;
   // 「不支持 NFC」包含「NFC」子串，必须先排除否定写法再判肯定（与华为侧同一条纪律）
   rec.connectivity.nfc = nfcLine ? (!/不支持/.test(nfcLine) && /NFC/.test(nfcLine)) : null;
+  // NFC 支持程度 = 官网原文（如「支持读卡器模式的 NFC」）。跨品牌口径不对称
+  // （苹果只写读卡器模式，华为写全模式）→ 只存原文并列展示，不折算、不排名。
+  // nfc=false 时留 null，避免「无」与原文重复表达同一件事。
+  // ⚠️ 规格页把蜂窝/蓝牙/NFC 全塞在同一行，nfcLine 可能是整段 → 必须再切出 NFC 那一句
+  rec.connectivity.nfcDetail = rec.connectivity.nfc === true ? pickNfcPhrase(nfcLine) : null;
+  // 蜂窝频段：只有独立规格页才给完整频段串（对比页矩阵没有）→ 那里自然为 null
+  rec.connectivity.cellularBands = parseCellularBands(cell);
+  // 红外遥控：苹果官网从不列 → null（unknown）。「没写」不等于「没有」，绝不判 false
+  rec.connectivity.irBlaster = null;
+  // WLAN 频段：苹果官网不列。⚠️ 蜂窝段里的「5G (sub-6 GHz)」是制式不是 WLAN 频段，
+  // 按 GHz 关键字扫全文会误命中它 → 这里明确不给值
+  rec.connectivity.wlanBands = null;
   rec.connectivity.satellite = null; // 苹果规格页无卫星通信章节 → null，不凭「SOS 紧急联络」推断
   rec.connectivity.usb = apBlob(raw, '充电和外设扩展', ' | ') || null;
   rec.connectivity.sim = tidy(apBlob(raw, 'SIM 卡', ' | ')) || null;
@@ -442,7 +456,20 @@ function mapAppleSpecs(rawProduct) {
   put(rec, 'camera.rear', rec.camera.rear, ap);
   put(rec, 'camera.front.mp', rec.camera.front?.mp ?? null, ap);
   put(rec, 'camera.videoMax', rec.camera.videoMax, ap);
-  for (const k of ['fiveG', 'wifi', 'bluetooth', 'nfc', 'satellite', 'usb', 'sim', 'esim']) {
+  for (const k of [
+    'fiveG',
+    'wifi',
+    'bluetooth',
+    'nfc',
+    'nfcDetail',
+    'irBlaster',
+    'cellularBands',
+    'wlanBands',
+    'satellite',
+    'usb',
+    'sim',
+    'esim',
+  ]) {
     put(rec, `connectivity.${k}`, rec.connectivity[k], ap);
   }
   put(rec, 'os.launch', rec.os.launch, ap);
@@ -635,7 +662,20 @@ function mapAppleCompare(rawProduct) {
   rec.connectivity.wifi =
     (cell.match(/(?:802\.11\w+|Wi-?Fi)[^|｜，,；;]*/) ?? [])[0]?.trim() ?? null;
   rec.connectivity.bluetooth = (cell.match(/蓝牙\s*[\d.]+/) ?? [])[0] ?? null;
-  rec.connectivity.nfc = /NFC/.test(cell) ? true : null;
+  // 「不支持 NFC」包含「NFC」子串，必须先排除否定写法再判肯定 ——
+  // 与规格页 :397、华为侧同一条纪律。否则会把「官网明确否认」编造成「确认有」，
+  // 而闸门挡不住（true 是合法布尔值，区间 / 类型校验全过）。
+  // 当前苹果 raw 里只有「支持读卡器模式的 NFC」一种写法，所以看不出来；
+  // 官网改版或接入新数据源时会立刻产出假数据。
+  const nfcPhrase = pickNfcPhrase(cell);
+  rec.connectivity.nfc = nfcPhrase ? !/不支持/.test(nfcPhrase) : null;
+  // NFC 支持程度 = 官网原文。跨品牌口径不对称（苹果只写读卡器模式，华为写全模式）
+  // → 只存原文并列展示，不折算成模式数量、不参与排名。
+  rec.connectivity.nfcDetail = rec.connectivity.nfc === true ? nfcPhrase : null;
+  // 对比页矩阵不含频段串 → 解析为 null；将来官网若补上，这条能自动接住
+  rec.connectivity.cellularBands = parseCellularBands(cell);
+  rec.connectivity.irBlaster = null; // 苹果官网从不列红外遥控 → unknown，不判 false
+  rec.connectivity.wlanBands = null; // 苹果官网不列 WLAN 频段（sub-6 GHz 是蜂窝制式，别误取）
   rec.connectivity.satellite = null;
   rec.connectivity.usb = apBlob(raw, '连接端口', ' | ') || apFirst(raw, '速览.连接') || null;
   rec.connectivity.sim = tidy(apBlob(raw, 'SIM 卡', ' | ')) || null;
@@ -695,7 +735,20 @@ function mapAppleCompare(rawProduct) {
   put(rec, 'camera.rear', rec.camera.rear, AC);
   put(rec, 'camera.front.mp', rec.camera.front?.mp ?? null, AC);
   put(rec, 'camera.videoMax', rec.camera.videoMax, AC);
-  for (const k of ['fiveG', 'wifi', 'bluetooth', 'nfc', 'satellite', 'usb', 'sim', 'esim']) {
+  for (const k of [
+    'fiveG',
+    'wifi',
+    'bluetooth',
+    'nfc',
+    'nfcDetail',
+    'irBlaster',
+    'cellularBands',
+    'wlanBands',
+    'satellite',
+    'usb',
+    'sim',
+    'esim',
+  ]) {
     put(rec, `connectivity.${k}`, rec.connectivity[k], AC);
   }
 

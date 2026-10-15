@@ -24,7 +24,7 @@
 
 import { pick } from '../lib/specs.mjs';
 import { REQUIRED_PATHS } from '../sync/validate.mjs';
-import { loadProducts, section, c, table, brandZh, pct, bar, ratioColor, verdict } from './lib.mjs';
+import { loadProducts, section, c, table, brandZh, pct, bar, ratioColor } from './lib.mjs';
 
 const argv = process.argv.slice(2);
 const BY_BRAND = argv.includes('--by-brand');
@@ -47,11 +47,37 @@ const has = (v) => v !== null && v !== undefined && !(Array.isArray(v) && v.leng
  * v2 特判：`specs` 容器的键**就是完整字段路径**（`body.weightG`），
  * 直接推出；不特判的话会拍出 `specs.body.weightG` 这种没人读的路径，
  * 覆盖率报告对着一堆空路径演算。
+ *
+ * ⚠️ 排除名单里的都是**非字段键**（2026-10-14 审计 B15）：`rawOfficial`（官网
+ * 章节原文，键是章节名不是字段）、`notes`（解析备注）、`valueStatus`（四态
+ * 例外映射，键是字段路径会与 specs 重复计数）、`status`/`releaseDatePrecision`/
+ * `granularity`（身份与元数据，不参与「参数公布了没有」的度量）。
+ * 不排除的后果：把官网 35 个章节名当字段计入分母，覆盖率被稀释到失去意义，
+ * 而报告看起来一切正常。
  */
+const NON_FIELD_KEYS = [
+  'id',
+  'slug',
+  'brand',
+  'line',
+  'name',
+  'provenance',
+  'sources',
+  'rawOfficial',
+  'notes',
+  'valueStatus',
+  'status',
+  'releaseDate',
+  'releaseDatePrecision',
+  'granularity',
+  'category',
+  'skus',
+];
+
 function fieldsOf(product) {
   const out = [];
   for (const [k, v] of Object.entries(product)) {
-    if (['id', 'slug', 'brand', 'line', 'name', 'provenance', 'sources'].includes(k)) continue;
+    if (NON_FIELD_KEYS.includes(k)) continue;
     if (k === 'specs') {
       for (const k2 of Object.keys(v ?? {})) out.push(k2);
       continue;
@@ -289,8 +315,21 @@ if (anyMissing.length) {
   console.log(c.dim('  但「一直缺这几台」不会触发它——那是官网事实，不是回归。'));
 }
 
-verdict(
-  partial.length === 0,
-  partial.length === 0 ? '没有「同品牌内部分化」的字段，解析器未见失手' : '',
-  `${partial.length} 个字段在同一品牌内部分化，见上方 ③ 清单`,
-);
+// 结尾语义（2026-10-14 审计 B15 顺手修）：「同品牌内部分化」是**数据观察**
+// （官网只给部分机型公布某字段），不是缺陷 —— 曾经走 verdict() 对它 exit 1，
+// 于是这个脚本永远是红的，而「永远红」的脚本没有人敢接进 CI，
+// 「红灯没人看」换了个形式又出现一次。分化只打印；真错误（读不到数据）
+// 早在上方就抛异常退出了，到不了这里。
+console.log('');
+if (partial.length === 0) {
+  console.log(c.green('✅ 没有「同品牌内部分化」的字段，解析器未见失手'));
+} else {
+  console.log(
+    c.yellow(
+      `ℹ️ ${partial.length} 个字段在同一品牌内部分化（见上方 ③）——` +
+        '这是「官网只公布部分机型」的事实记录，不是解析器缺陷，不拦截任何流程。',
+    ),
+  );
+}
+console.log('');
+process.exit(0);

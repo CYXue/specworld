@@ -154,11 +154,57 @@ function stripLineComments(text) {
   }
 }
 
+/* ---- 数据管线契约：品类不许在同步层兜底 ---- */
+{
+  // 2026-10-14 审计 P1-3。曾经的写法：
+  //   sync/index.mjs 拍平循环里 `if (!p.category) p.category = 'phone'`
+  // 它发生在 validate() **之前**，于是「品类缺失或未注册」闸门永远看不到缺失值 ——
+  // 闸门注释声称「缺失也拒绝」，实现却静默放行，违约机型按错误字段表渲染、零报错。
+  // 修法：品类由数据源层显式声明（normalize/index.mjs 出口），本层删兜底。
+  //
+  // 这条守卫防回归：谁再把兜底写回 sync 层，当天就被拦。
+  // ⚠️ 必须剥掉**行注释与块注释**再匹配：修法注释里就引用着那行历史代码
+  // （「曾经的 `if (!p.category) p.category = 'phone'`」），不剥就会自己误报自己 ——
+  // 「闸门被注释骗」的变体，项目在 §1.4 已经踩过一次。
+  const syncPath = resolve(ROOT, 'scripts/sync/index.mjs');
+  if (existsSync(syncPath)) {
+    // 逐行剥注释（行注释 + 跨行块注释），**保持行号不变**——
+    // 报错时给的行号必须能直接在编辑器里跳过去，剥完再 join 会整体错行。
+    const lines = readFileSync(syncPath, 'utf8').split('\n');
+    let inBlock = false;
+    lines.forEach((line, i) => {
+      let t = line;
+      if (inBlock) {
+        const end = t.indexOf('*/');
+        if (end < 0) return; // 整行仍在块注释内
+        t = t.slice(end + 2);
+        inBlock = false;
+      }
+      t = t.replace(/\/\*[\s\S]*?\*\//g, '');
+      const open = t.indexOf('/*');
+      if (open >= 0) {
+        t = t.slice(0, open);
+        inBlock = true;
+      }
+      const c = t.indexOf('//');
+      if (c >= 0) t = t.slice(0, c);
+      if (/\.category\s*=\s*['"]phone['"]/.test(t)) {
+        fail(
+          'scripts/sync/index.mjs',
+          i + 1,
+          '管线契约 §品类',
+          "同步层不许兜底 category='phone'（兜底先于闸门 ⇒ 缺失永远看不到）；品类由 normalize 出口显式声明",
+        );
+      }
+    });
+  }
+}
+
 /* ---- 报告 ---- */
 for (const n of notes) console.log(`⚠ ${n}`);
 
 if (failures.length === 0) {
-  console.log('✅ 规范自检通过：Toy base/hash 路由、零调试日志、命令式 DOM 样式、依赖源纯度');
+  console.log('✅ 规范自检通过：Toy base/hash 路由、零调试日志、命令式 DOM 样式、依赖源纯度、管线品类契约');
   process.exit(0);
 }
 

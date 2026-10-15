@@ -151,6 +151,29 @@ const FORMATTERS: Record<
   },
   videoHours: ({ values }) =>
     typeof values[0] === 'number' ? t('spec.videoHours', { hours: values[0] }) : '—',
+  /**
+   * 蜂窝频段：按制式分组展示（`NR FDD n1/n3/… · NR TDD n38/…`），只列有值的组。
+   *
+   * ⚠️ 不能走 object 的缺省渲染（`JSON.stringify`）—— 那会把 6 组几十个频段号
+   * 挤成一团 JSON：读不出制式归属，也没法跟别的机型逐项比。
+   * 组名用 3GPP 通用缩写（NR/LTE/UMTS/GSM + FDD/TDD），中英同形，无需翻译。
+   */
+  bands: ({ values }) => {
+    const v = values[0] as Record<string, unknown> | null | undefined;
+    if (!v || typeof v !== 'object') return '—';
+    const groups: Array<[string, unknown]> = [
+      ['NR FDD', v.nrFdd],
+      ['NR TDD', v.nrTdd],
+      ['LTE FDD', v.lteFdd],
+      ['LTE TDD', v.lteTdd],
+      ['UMTS', v.umts],
+      ['GSM', v.gsm],
+    ];
+    const parts = groups
+      .filter(([, list]) => Array.isArray(list) && list.length > 0)
+      .map(([name, list]) => `${name} ${(list as unknown[]).join('/')}`);
+    return parts.length ? parts.join(' · ') : '—';
+  },
 };
 
 /** 后置相机展开：每颗镜头一行（官网按角色分列的忠实呈现）。角色名走 locale 键。 */

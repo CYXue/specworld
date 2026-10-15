@@ -14,6 +14,9 @@ import {
   parseRearLenses,
   parseFront,
   parseVideoMax,
+  parseCellularBands,
+  parseWlanBands,
+  parseIrBlaster,
   multiPartValue,
   refreshText,
   derivePpi,
@@ -253,8 +256,29 @@ function mapHuawei(rawProduct) {
   rec.connectivity.sim = hwLookup(raw, 'SIM 卡类型', name).value ?? null;
   // 「不支持」包含子串「支持」，必须先排除否定写法再判肯定
   rec.connectivity.nfc = nfcText ? (!/不支持/.test(nfcText) && /支持/.test(nfcText)) : null;
+  // NFC 支持程度 = 官网原文（如「支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）」）。
+  // 与苹果口径不对称（苹果只写读卡器模式）→ 只存原文并列展示，不折算模式数量、不排名。
+  rec.connectivity.nfcDetail = rec.connectivity.nfc === true ? tidy(nfcText) : null;
   rec.connectivity.esim = esimText ? /^支持/.test(tidy(esimText)) : null;
   rec.connectivity.satellite = satText ?? null;
+  // 红外遥控（智能遥控）：华为规格页目前无此条目 → null（unknown）。
+  // ⚠️ 判据只认「遥控」语义并显式排除「红外传感器」——后者在华为传感器清单里大量出现，
+  // 是接近检测/人脸补光的被动器件，与遥控发射完全是两回事（parseIrBlaster 内守这条）。
+  const irText = firstOf(raw, ['红外遥控', '数据连接.红外遥控', '遥控'], name).value;
+  rec.connectivity.irBlaster = parseIrBlaster(irText);
+  // WLAN 频段：优先取独立条目「WLAN 频段」。
+  // ⚠️ 华为多数机型（50 台里 47 台）把频段写在「WLAN」条目的第一段
+  // （原文「2.4 GHz 和 5 GHz | IEEE 802.11a/b/g/n/ac/ax/be，2 × 2 MIMO，EHT160…」），
+  // 只有极少数机型另给独立的「WLAN 频段」键 —— 只认那个键会静默漏掉 45 台，
+  // 而「少取一个值」是闸门唯一完全挡不住的错误类型。故做两级回退。
+  const wlanText =
+    hwLookup(raw, '数据连接.WLAN 频段', name).value ??
+    hwLookup(raw, '数据连接.WLAN', name).value ??
+    null;
+  rec.connectivity.wlanBands = parseWlanBands(wlanText);
+  // 蜂窝频段：华为规格页只给「网络制式」（4G/3G/2G 运营商制式），不列蜂窝频段 → null。
+  // 不拿网络制式冒充频段，也不从第三方补 —— 官网没列就是 unknown。
+  rec.connectivity.cellularBands = null;
   // 华为规格页不写「5G」章节；只有少数机型明确只列 4G 网络制式，此时才记 false，
   // 其余留 null —— 「官网没写」不等于「没有 5G」，绝不替官网下结论。
   const netMode = hwLookup(raw, '网络制式', name).value;
@@ -387,7 +411,20 @@ function mapHuawei(rawProduct) {
   put(rec, 'camera.rear', rec.camera.rear, HW);
   put(rec, 'camera.front.mp', rec.camera.front?.mp ?? null, HW);
   put(rec, 'camera.videoMax', rec.camera.videoMax, HW);
-  for (const k of ['fiveG', 'wifi', 'bluetooth', 'nfc', 'satellite', 'usb', 'sim', 'esim']) {
+  for (const k of [
+    'fiveG',
+    'wifi',
+    'bluetooth',
+    'nfc',
+    'nfcDetail',
+    'irBlaster',
+    'cellularBands',
+    'wlanBands',
+    'satellite',
+    'usb',
+    'sim',
+    'esim',
+  ]) {
     put(rec, `connectivity.${k}`, rec.connectivity[k], HW);
   }
   put(rec, 'os.launch', rec.os.launch, HW);

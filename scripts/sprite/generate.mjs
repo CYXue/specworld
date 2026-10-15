@@ -32,6 +32,22 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 /** 画布固定 160×320，让所有立绘并排时不会忽大忽小 */
 const CANVAS = { w: 160, h: 320 };
 
+/**
+ * 「官网未公布尺寸」时的**几何占位** —— ⚠️ 这三个不是估算值。
+ *
+ * 这里曾经写的是 `?? 6.5` / `?? 8` / `?? 200`：三个像模像样的「典型手机」数值。
+ * 后果是一张看起来尺寸精确的立绘，底下是编的数 —— 而它零报错，闸门也拦不住
+ * （数值本身完全合法，区间校验一路绿灯）。这直接违反原则一。
+ *
+ * 现在的做法：
+ *   ① 缺值走**固定的未知几何**（画布中位，不随品牌 / 系列变化，不会被读成某台真机）；
+ *   ② 尺寸未知时在 caption 上显式标「?」，让用户看得出这张图没依据；
+ *   ③ 重量缺值给 null（不画、不写），而不是塞 200；
+ *   ④ 缺值机型记进 UNKNOWN.hits，构建结束打印台数 —— 让「没数据」这件事
+ *      出现在人眼前，而不是被一个好看的默认值悄悄抹平。
+ */
+export const UNKNOWN = { sizeIn: 6.9, thicknessMm: 9, hits: [] };
+
 /** 品牌中性色（数据没配色时兜底，不算编造——它是「未公布配色」的视觉表达） */
 const NEUTRAL = {
   apple: { back: '#d6d9de', backEdge: '#9aa0a8', screen: '#1c1e21', screenGlow: '#2a2d31' },
@@ -47,10 +63,21 @@ export function layout(product) {
   const pal = NEUTRAL[brand] ?? NEUTRAL.huawei;
 
   // specs-first 取值（scripts/lib/specs.mjs）：v2 读 specs 容器，v1 嵌套回退。
-  // 立绘由数据几何算出，读错字段 = 60 张图整体画错且零报错，所以取值必须与闸门同源。
-  const sizeIn = pick(product, 'display.sizeIn') ?? 6.5;
-  const thicknessMm = pick(product, 'body.thicknessMm') ?? 8;
-  const weightG = pick(product, 'body.weightG') ?? 200;
+  // 立绘由数据几何算出，读错字段 = 全站立绘整体画错且零报错，所以取值必须与闸门同源。
+  const rawSizeIn = pick(product, 'display.sizeIn');
+  const rawThicknessMm = pick(product, 'body.thicknessMm');
+  const rawWeightG = pick(product, 'body.weightG');
+
+  // ⚠️ 缺值不估算：不拿典型值 / 同系列值 / 平均值顶上。
+  //    尺寸未知 → 固定占位几何 + caption 标「?」；重量未知 → null（不显示）。
+  const sizeKnown = Number.isFinite(rawSizeIn);
+  const thicknessKnown = Number.isFinite(rawThicknessMm);
+  if (!sizeKnown || !thicknessKnown) UNKNOWN.hits.push(product.id);
+
+  const sizeIn = sizeKnown ? rawSizeIn : UNKNOWN.sizeIn;
+  const thicknessMm = thicknessKnown ? rawThicknessMm : UNKNOWN.thicknessMm;
+  const weightG = Number.isFinite(rawWeightG) ? rawWeightG : null;
+
   const rear = (pick(product, 'camera.rear') ?? []).length;
   const foldable = isFoldableOfficial(product);
 
@@ -100,6 +127,9 @@ export function layout(product) {
     thicknessMm,
     weightG,
     rear,
+    // 供 caption 判断要不要标「?」—— 尺寸缺值必须让用户看得见
+    sizeKnown,
+    thicknessKnown,
   };
 }
 
@@ -232,11 +262,13 @@ function drawFace(L, s, side) {
 }
 
 function caption(text, L, s) {
+  // 缺值一律显式标注，不用默认值掩盖 —— 用户看到的「?」比一个假数字诚实。
   const note = L.camUnknown ? '（后摄数未公布）' : '';
+  const unk = L.sizeKnown === false || L.thicknessKnown === false ? '（尺寸未公布）' : '';
   const fold = L.foldable ? ' · 折叠' : '';
   return `<text x="${(CANVAS.w * s) / 2}" y="${CANVAS.h * s + 14 * s}" text-anchor="middle"
       font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif"
-      font-size="${11 * s}" fill="#8a8f98">${text}${fold}${note}</text>`;
+      font-size="${11 * s}" fill="#8a8f98">${text}${fold}${unk}${note}</text>`;
 }
 
 function escAttr(v) {
@@ -285,6 +317,12 @@ async function main() {
     n += 1;
   }
   console.log(`已生成 ${n} 张立绘 → ${outDir}`);
+  // 「没数据」必须出现在人眼前：列出按占位几何画出来的机型。
+  // 否则一个好看的默认值会把数据缺口悄悄抹平（原则一）。
+  if (UNKNOWN.hits.length) {
+    console.log(`⚠️  其中 ${UNKNOWN.hits.length} 台缺尺寸或厚度，已按「未知」占位几何绘制：`);
+    console.log('   ' + UNKNOWN.hits.join('\n   '));
+  }
   /* 抽 3 台自证几何正确 */
   for (const id of ['apple-iphone-18-pro', 'huawei-mate90-pro', 'huawei-mate-x7']) {
     const p = products.find((x) => x.id === id);
@@ -297,5 +335,10 @@ async function main() {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main();
+  // ⚠️ 必须 catch：main 是 async，未接住的 rejection 在管道外的调用里会丢栈，
+  // 表现为「没输出、也没报错」。对照 scripts/sprite/review.mjs 的写法。
+  main().catch((err) => {
+    console.error('❌ 立绘生成失败：', err?.stack ?? err);
+    process.exit(1);
+  });
 }

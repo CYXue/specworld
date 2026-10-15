@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
-import { buildDocs, search, suggestions, tokenize, matchExact } from '../lib/search';
+import { buildDocs, searchWithMeta, suggestions } from '../lib/search';
 import { abilityRows } from '../lib/specs';
 import PxIcon from '../components/PxIcon.vue';
 import SectionFrame from '../components/SectionFrame.vue';
@@ -38,7 +38,7 @@ const docs = computed(() => {
 });
 
 const brands = computed(() => {
-  const seen = new Map<string, { id: string; nameZh: string; count: number; accent: string }>();
+  const seen = new Map<string, { id: string; nameZh: string; count: number; accentColor: string }>();
   for (const doc of docs.value) {
     const cur = seen.get(doc.brand);
     if (cur) cur.count += 1;
@@ -47,29 +47,19 @@ const brands = computed(() => {
         id: doc.brand,
         nameZh: doc.vendor?.nameZh ?? doc.brand,
         count: 1,
-        accent: doc.vendor?.accentColor ?? 'var(--color-parchment)',
+        accentColor: doc.vendor?.accentColor ?? 'var(--color-parchment)',
       });
   }
   return [...seen.values()].sort((a, b) => b.count - a.count);
 });
 
-const results = computed(() => search(docs.value, q.value, { brand: brand.value }));
+// 结果与「是否走了容错通道」一次算出（判据下沉在 lib/search.ts，
+// 组件里不自己重判 —— 两个判据迟早分叉）。
+const outcome = computed(() => searchWithMeta(docs.value, q.value, { brand: brand.value }));
+const results = computed(() => outcome.value.results);
+const usedLooseMatch = computed(() => outcome.value.usedLooseMatch);
 const hasQuery = computed(() => q.value.trim().length > 0 || brand.value.length > 0);
 const hint = computed(() => suggestions(docs.value));
-
-/**
- * 本次结果是不是靠「忽略大小写/空格」的容错通道兜出来的。
- *
- * 判据必须与 search() 的分级逻辑**同一份实现**（query.ts 的 matchExact）——
- * 自己用 includes 重判会把「matchExact 其实能精确命中」的情形误报成容错命中
- * （数字边界、compact 回落这些精确通道的特例它都看不见）。
- */
-const usedLooseMatch = computed(() => {
-  const tokens = tokenize(q.value);
-  if (!tokens.length) return false;
-  const byExact = docs.value.filter((d) => matchExact(d, tokens));
-  return byExact.length === 0 && results.value.length > 0;
-});
 
 /** 容错提示里给出的「官方写法」参考：取第一条结果的机型名 */
 const looseHint = computed(() => results.value[0]?.product.name ?? '');

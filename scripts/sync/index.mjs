@@ -119,11 +119,12 @@ function main() {
   // （scripts/lib/specs.mjs 的 flattenSpecs），品类无关的身份字段留顶层。
   // 这样 normalize 一千七百行不用动，而 products.json 落盘即为 v2 全品类形状。
   //
-  // category：当前数据集全部是手机（详见 src/lib/catalog.ts 的 categoryOf 注释），
-  // normalize 产出不带这个字段，这里默认 'phone'。未来接平板数据源时由对应
-  // normalize 通道直接写 category，本行不再兜底。
+  // category：由数据源层声明（normalize/index.mjs 出口，手机通道即 'phone'），
+  // 本层不再兜底。曾经的 `if (!p.category) p.category = 'phone'` 写在闸门之前，
+  // 让 validate.mjs 的「品类缺失或未注册」永远看不到缺失值 —— 闸门注释声称
+  // 「缺失也拒绝」，实现却静默放行，违约机型会按错误的字段表渲染且零报错。
+  // 现在：normalize 漏声明 ⇒ 闸门拦 ⇒ 拒绝写盘，错误当场可见。
   for (const p of kept) {
-    if (!p.category) p.category = 'phone';
     p.specs = flattenSpecs(p);
     // 拍平后**删掉旧的嵌套组**。双真源比没有 specs 更危险：
     // 用户改了 specs['display.sizeIn']，而顶层 display.sizeIn 还是官网旧值——

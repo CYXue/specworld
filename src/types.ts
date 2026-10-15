@@ -136,7 +136,15 @@ export interface Product {
 export interface Dataset {
   generatedAt: string;
   windowStart: string;
-  sources: Record<string, { fetchedAt: string; note: string; ok: boolean }>;
+  /**
+   * 数据来源行。noteKey/noteParams 是管线写下的**键化文案**
+   * （2026-10-14 i18n 深扫：note 是中文串不能直接展示，英文页会吐中文）；
+   * 老快照没有这两个字段，展示回落到 note —— 故都是可选。
+   */
+  sources: Record<
+    string,
+    { fetchedAt: string; note: string; ok: boolean; noteKey?: string; noteParams?: Record<string, string | number> }
+  >;
   vendors: Vendor[];
   products: Product[];
 }

@@ -487,7 +487,12 @@ export function priceBucket(p: Product): string {
   const v = basePriceCny(p);
   if (v == null) return UNKNOWN;
   for (const b of PRICE_BUCKETS) if (v >= b.min && v <= b.max) return b.id;
-  return PRICE_BUCKETS[PRICE_BUCKETS.length - 1].id; // 兜底到最高档（如数据出现超高价）
+  // 兜底到最高档。⚠️ 必须先判空：PRICE_BUCKETS 来自 curated 数据
+  // （data/curated/facets.json），字典被清空/读失败时 `[len-1]` 是 undefined，
+  // `.id` 当场抛错 —— 而价格档参与分面与首页，一抛全页白屏。
+  // 空字典返回 UNKNOWN：没有档位定义就不该硬编一个（2026-10-14 审计 B1）。
+  const last = PRICE_BUCKETS[PRICE_BUCKETS.length - 1];
+  return last ? last.id : UNKNOWN;
 }
 
 /** 价格档 id → 显示名（分面用，语言感知：档位名在 data/curated/facets.json 双语） */
@@ -551,4 +556,35 @@ export function spotlights(products: Product[]): Spotlight[] {
 /** 指定品类内「最新 N 台」，用于首页每个品牌只列最新几台。 */
 export function latestN(products: Product[], n: number): Product[] {
   return [...products].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate)).slice(0, n);
+}
+
+/**
+ * 机型副标题：系列 · 变体 · 形态 · 芯片，一行说清「是谁」。
+ *
+ * 下沉理由（2026-10-14 审计 P2-4）：CompareView 与 RankingsView 曾各写一份，
+ * 且**答案不同**——对比页含变体与形态，榜单页只有系列+芯片。同一台机在两个
+ * 页面身份说明不一致，而两边产出的都是合法字符串，没有任何测试会红。
+ *
+ * 文案纪律与全文件一致：lib 只做 id→键映射（FORM_LABEL_KEY），
+ * 具体文字经 i18n.global.t 取（chipNameLabel 同样如此），不硬编码中文。
+ *
+ * @param opts.variant 含变体档（Pro / Ultra / 优享版…），默认 true
+ * @param opts.form    含形态（折叠屏），默认 true
+ */
+export function productSubline(
+  p: Product,
+  opts: { variant?: boolean; form?: boolean } = {},
+): string {
+  const withVariant = opts.variant !== false;
+  const withForm = opts.form !== false;
+  const chip = chipNameLabel(p.chipset?.name ?? '');
+  const v = variantOf(p);
+  return [
+    seriesLabel(seriesOf(p)),
+    withVariant && v !== SERIES_FALLBACK ? variantLabel(v) : null,
+    withForm && isFoldable(p) ? i18n.global.t(FORM_LABEL_KEY.foldable) : null,
+    chip === UNKNOWN ? null : chip,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 }

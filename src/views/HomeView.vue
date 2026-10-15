@@ -74,12 +74,16 @@ const { t } = useI18n();
 const { ds, err } = useDataset();
 const derived = useDerived();
 
-const bounds = computed(() => derived.value?.bounds);
 const champs = computed(() => (ds.value ? champions(ds.value.products) : []));
 const spots = computed(() => (ds.value ? spotlights(ds.value.products) : []));
 const groups = computed(() => {
   const d = ds.value;
-  if (!d) return [];
+  // bounds 随 groups 一起下发：曾经模板写 `:bounds="bounds!"`，靠「ds 非空时
+  // derived 必然算完」这条**推理链**保证 —— 推理不在类型里，加载时序一变就是
+  // null 传进子组件。现在 groups 空转（数据未就绪）时整块不渲染，
+  // 非空由数据结构保证，不需要 `!`（2026-10-14 审计 B4）。
+  const b = derived.value?.bounds;
+  if (!d || !b) return [];
   return d.vendors.map((v) => ({
     vendor: v,
     continent: continentOf(v),
@@ -88,6 +92,7 @@ const groups = computed(() => {
       BRAND_PREVIEW,
     ),
     total: d.products.filter((p) => p.brand === v.id).length,
+    bounds: b,
   }));
 });
 /** 更新日期的**两个分量**分开算：语言包自己决定怎么拼（中文「3 月 5 日」、英文「Mar 5」）。 */
@@ -95,6 +100,10 @@ const updatedParts = computed(() => {
   const ts = ds.value?.generatedAt;
   if (!ts) return null;
   const d = new Date(ts);
+  // 非法时间戳不能让 NaN 流到模板：`new Date('胡说')` 不抛错，
+  // getUTCMonth() 返回 NaN ⇒ 页面渲染「NaN 月 NaN 日」（2026-10-14 审计 B8）。
+  // 解析失败视为「没有更新日期」，整块不显示，不显示半个坏行。
+  if (Number.isNaN(d.getTime())) return null;
   return { month: d.getUTCMonth() + 1, day: d.getUTCDate() };
 });
 const count = computed(() => ds.value?.products.length ?? 0);
@@ -206,7 +215,7 @@ const count = computed(() => ds.value?.products.length ?? 0);
           :vendor="g.vendor"
           :continent="g.continent"
           :products="g.products"
-          :bounds="bounds!"
+          :bounds="g.bounds"
           :limit="BRAND_PREVIEW"
         />
 

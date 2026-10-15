@@ -61,7 +61,8 @@
     "emptyTitle": "No devices on the canvas",
     "emptySub": "The current filter matched nothing. Try another condition or clear to see all.",
     "hudCount": "{n} devices",
-    "hudWrap": "Torus wrap · infinite pan"
+    "hudWrap": "Torus wrap · infinite pan",
+    "imageTitle": "Full-screen image viewer: drag to pan, wheel or pinch to zoom"
   },
   "home": {
     "loadFailed": "Failed to load data: {err}",

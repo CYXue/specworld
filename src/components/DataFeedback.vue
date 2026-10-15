@@ -68,15 +68,24 @@ const typeHint = computed(() => {
   if (!f) return '';
   const parts = [f.type];
   if (f.unit) parts.push(f.unit);
-  if (f.range) parts.push(t('feedback.rangeHint', { min: f.range[0], max: f.range[1] }));
+  // range 必须两个端点在位：schema 的 range 理论上是 [lo, hi]，但手写/迁移的
+  // 数据完全可能只给一个元素 —— `f.range[1]` 取到 undefined 时提示行渲染出
+  // 「区间 undefined–xxx」（2026-10-14 审计 B3）。
+  if (Array.isArray(f.range) && f.range.length >= 2) {
+    parts.push(t('feedback.rangeHint', { min: f.range[0], max: f.range[1] }));
+  }
   if (f.values) parts.push(f.values.join(' / '));
   return parts.join(' · ');
 });
 
-async function openModal() {
+  async function openModal() {
   open.value = true;
   msg.value = null;
   fallbackJson.value = '';
+  // Esc 关闭（document 级，不依赖浮层获得焦点——打开后焦点还在触发按钮上，
+  // 元素级 keydown 收不到；2026-10-14 审计 B7）。打开时挂、关闭时摘，
+  // 避免浮层关着还占一个全局监听。
+  document.addEventListener('keydown', onKey);
   if (groups.value.length || loading.value || !props.product) return;
   loading.value = true;
   loadErr.value = '';
@@ -109,6 +118,12 @@ async function openModal() {
 
 function close() {
   open.value = false;
+  document.removeEventListener('keydown', onKey);
+}
+
+/** Esc 关闭纠错浮层（打开时挂监听，见 openModal） */
+function onKey(e: KeyboardEvent) {
+  if (e.key === 'Escape') close();
 }
 
 /** 值校验/类型转换已抽到 src/lib/fieldValidate.ts（硬编码审计 A3 治理：浏览器侧单一共享模块，
@@ -194,7 +209,10 @@ async function submit() {
     v-if="open"
     class="fixed inset-0 z-50 flex items-center justify-center p-4"
     style="background: rgba(11, 16, 32, 0.72)"
+    role="dialog"
+    aria-modal="true"
     @click.self="close"
+    @keydown.esc="close"
   >
     <div
       class="w-full max-w-lg rounded-lg p-5"
