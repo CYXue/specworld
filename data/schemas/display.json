@@ -14,10 +14,9 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "含标配支架口径；VESA 裸屏更矮，不混录",
+      "note": "下限由 Apple IIc 平板显示器 220mm 撑起（2026-10-15 早期显示器收录）",
       "labelEn": "Height (with stand)",
-      "unitEn": "mm",
-      "note": "下限由 Apple IIc 平板显示器 220mm 撑起（2026-10-15 早期显示器收录）"
+      "unitEn": "mm"
     },
     {
       "path": "body.widthMm",
@@ -47,10 +46,9 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "CRT 显示器纵深可达 500mm；VESA 裸屏更薄",
+      "note": "上限由 Macintosh 21 英寸彩色显示器 520mm 撑起（2026-10-15 早期显示器收录）",
       "labelEn": "Depth",
-      "unitEn": "mm",
-      "note": "上限由 Macintosh 21 英寸彩色显示器 520mm 撑起（2026-10-15 早期显示器收录）"
+      "unitEn": "mm"
     },
     {
       "path": "body.weightG",
@@ -232,6 +230,88 @@
       "group": "connectivity",
       "note": "上行雷雳口给 Mac 的回充功率（96W/140W）",
       "labelEn": "Host charging"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "power.adapterW",
+      "label": "电源功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        10,
+        2000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "labelEn": "Power supply",
+      "unitEn": "W",
+      "note": "随附电源适配器或整机功耗（如 iMac 143 瓦）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    },
+    {
+      "id": "power",
+      "name": "供电",
+      "nameEn": "Power"
     }
   ]
 }

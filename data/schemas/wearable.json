@@ -4,33 +4,367 @@
   "label": "可穿戴",
   "labelEn": "Wearable",
   "groups": [
-    { "id": "body", "name": "外观与机身", "nameEn": "Appearance & Build", "type": "single", "guide": "表壳尺寸/厚度/重量/材质/配色/防水" },
-    { "id": "display", "name": "屏幕显示", "nameEn": "Display", "type": "single", "guide": "类型/亮度" },
-    { "id": "chipset", "name": "处理器与性能", "nameEn": "Processor & Performance", "type": "single", "guide": "SiP 芯片" },
-    { "id": "memory", "name": "存储", "nameEn": "Storage", "type": "single", "guide": "存储档位" },
-    { "id": "battery", "name": "电池与续航", "nameEn": "Battery", "type": "single", "guide": "续航时间（官网口径）" },
-    { "id": "features", "name": "功能特性", "nameEn": "Features", "type": "single", "guide": "健康传感器" },
-    { "id": "connectivity", "name": "网络与连接", "nameEn": "Network & Connectivity", "type": "single", "guide": "WLAN/蓝牙/蜂窝/NFC/定位" },
-    { "id": "os", "name": "系统与软件", "nameEn": "OS & Software", "type": "single", "guide": "出厂系统" }
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build",
+      "type": "single",
+      "guide": "表壳尺寸/厚度/重量/材质/配色/防水"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display",
+      "type": "single",
+      "guide": "类型/亮度"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance",
+      "type": "single",
+      "guide": "SiP 芯片"
+    },
+    {
+      "id": "memory",
+      "name": "存储",
+      "nameEn": "Storage",
+      "type": "single",
+      "guide": "存储档位"
+    },
+    {
+      "id": "battery",
+      "name": "电池与续航",
+      "nameEn": "Battery",
+      "type": "single",
+      "guide": "续航时间（官网口径）"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features",
+      "type": "single",
+      "guide": "健康传感器"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity",
+      "type": "single",
+      "guide": "WLAN/蓝牙/蜂窝/NFC/定位"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software",
+      "type": "single",
+      "guide": "出厂系统"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    },
+    {
+      "id": "security",
+      "name": "安全",
+      "nameEn": "Security"
+    }
   ],
   "fields": [
-    { "path": "body.caseSizeMm", "label": "表壳尺寸", "unit": "mm", "type": "number", "range": [28, 60], "dir": null, "quantifiable": false, "group": "body", "note": "官网口径：38/40/41/42/44/45/46/49 毫米，多尺寸机型按主力尺寸录", "labelEn": "Case size", "unitEn": "mm" },
-    { "path": "body.thicknessMm", "label": "厚度", "unit": "mm", "type": "number", "range": [4, 20], "dir": "low", "quantifiable": true, "group": "body", "labelEn": "Thickness", "unitEn": "mm" },
-    { "path": "body.weightG", "label": "重量", "unit": "g", "type": "number", "range": [15, 120], "dir": "low", "quantifiable": true, "group": "body", "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶", "labelEn": "Weight", "unitEn": "g" },
-    { "path": "body.material", "label": "表壳材质", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Case material" },
-    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
-    { "path": "body.waterResistance", "label": "防水等级", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "body", "note": "官网原文（50 米防水/100 米防水，WR 口径），不折算 IP", "labelEn": "Water resistance" },
-    { "path": "display.type", "label": "屏幕类型", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "labelEn": "Display type" },
-    { "path": "display.brightnessNits", "label": "屏幕亮度", "unit": "nits", "type": "number", "range": [200, 3500], "dir": "high", "quantifiable": true, "group": "display", "note": "苹果只公布单一亮度口径（1000/2000/3000 尼特），不拆典型/峰值", "labelEn": "Brightness", "unitEn": "nits" },
-    { "path": "chipset.name", "label": "处理器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "note": "官网口径（S10 SiP）", "labelEn": "Processor" },
-    { "path": "memory.storageGb", "label": "存储档位", "unit": "GB", "type": "array:number", "range": null, "dir": null, "quantifiable": false, "group": "memory", "labelEn": "Storage options", "unitEn": "GB" },
-    { "path": "battery.vendorClaimedHours", "label": "续航时间", "unit": "小时", "type": "number", "range": [12, 72], "dir": null, "quantifiable": false, "group": "battery", "note": "厂商自报（最长 18/36/72 小时），测试条件不一，只并列展示不参与排名；苹果不公布电池容量", "labelEn": "Vendor-claimed battery life", "unitEn": "h" },
-    { "path": "features.healthSensors", "label": "健康传感器", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "features", "note": "多实例：官网原文（心率、血氧、体温、心电图、睡眠）", "labelEn": "Health sensors" },
-    { "path": "connectivity.wifi", "label": "WLAN", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "WLAN" },
-    { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Bluetooth" },
-    { "path": "connectivity.cellular", "label": "蜂窝网络", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "官网原文（LTE 和 UMTS）；GPS 版记 null（unknown，不是「没有」）", "labelEn": "Cellular" },
-    { "path": "connectivity.nfc", "label": "NFC", "unit": null, "type": "boolean", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "facet": true, "note": "Apple Pay 支持", "labelEn": "NFC" },
-    { "path": "connectivity.gnss", "label": "定位", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Positioning" },
-    { "path": "os.launch", "label": "出厂系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os", "labelEn": "Shipped OS" }
+    {
+      "path": "body.caseSizeMm",
+      "label": "表壳尺寸",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        28,
+        60
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "官网口径：38/40/41/42/44/45/46/49 毫米，多尺寸机型按主力尺寸录",
+      "labelEn": "Case size",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.thicknessMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        4,
+        20
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Thickness",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        15,
+        120
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.material",
+      "label": "表壳材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Case material"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "body.waterResistance",
+      "label": "防水等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "note": "官网原文（50 米防水/100 米防水，WR 口径），不折算 IP",
+      "labelEn": "Water resistance"
+    },
+    {
+      "path": "display.type",
+      "label": "屏幕类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Display type"
+    },
+    {
+      "path": "display.brightnessNits",
+      "label": "屏幕亮度",
+      "unit": "nits",
+      "type": "number",
+      "range": [
+        200,
+        3500
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "苹果只公布单一亮度口径（1000/2000/3000 尼特），不拆典型/峰值",
+      "labelEn": "Brightness",
+      "unitEn": "nits"
+    },
+    {
+      "path": "chipset.name",
+      "label": "处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "官网口径（S10 SiP）",
+      "labelEn": "Processor"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "labelEn": "Storage options",
+      "unitEn": "GB"
+    },
+    {
+      "path": "battery.vendorClaimedHours",
+      "label": "续航时间",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        12,
+        72
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "厂商自报（最长 18/36/72 小时），测试条件不一，只并列展示不参与排名；苹果不公布电池容量",
+      "labelEn": "Vendor-claimed battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "features.healthSensors",
+      "label": "健康传感器",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "多实例：官网原文（心率、血氧、体温、心电图、睡眠）",
+      "labelEn": "Health sensors"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "WLAN",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "WLAN"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.cellular",
+      "label": "蜂窝网络",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文（LTE 和 UMTS）；GPS 版记 null（unknown，不是「没有」）",
+      "labelEn": "Cellular"
+    },
+    {
+      "path": "connectivity.nfc",
+      "label": "NFC",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "facet": true,
+      "note": "Apple Pay 支持",
+      "labelEn": "NFC"
+    },
+    {
+      "path": "connectivity.gnss",
+      "label": "定位",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Positioning"
+    },
+    {
+      "path": "os.launch",
+      "label": "出厂系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "Shipped OS"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "security.chip",
+      "label": "安全芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "security",
+      "labelEn": "Security chip",
+      "unitEn": null,
+      "note": "Secure Enclave / 专用安全协处理器"
+    },
+    {
+      "path": "battery.chargingMethods",
+      "label": "充电方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "labelEn": "Charging methods",
+      "unitEn": null,
+      "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
+    }
   ]
 }

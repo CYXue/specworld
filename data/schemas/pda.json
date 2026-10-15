@@ -287,6 +287,97 @@
       "quantifiable": false,
       "group": "os",
       "labelEn": "OS at launch"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    }
+  ],
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity"
+    },
+    {
+      "id": "camera",
+      "name": "摄像头",
+      "nameEn": "Camera"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
     }
   ]
 }

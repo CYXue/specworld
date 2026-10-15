@@ -2,29 +2,380 @@
   "_doc": "智能家居品类字段表（Apple TV 4K 第 4 代起；未来 HomeView 带屏中枢同品类）。结构性特点：无电池、常供电（内置电源/外置适配器）、以服务为中心——屏幕字段对无屏设备（机顶盒）记 null，带屏设备（HomeView）才填。三维按主机口径（遥控器不入 body）。",
   "version": 1,
   "fields": [
-    { "path": "body.heightMm", "label": "高度", "unit": "mm", "type": "number", "range": [10, 300], "dir": null, "quantifiable": true, "group": "body", "note": "主机口径", "labelEn": "Height", "unitEn": "mm" },
-    { "path": "body.widthMm", "label": "宽度", "unit": "mm", "type": "number", "range": [30, 400], "dir": null, "quantifiable": true, "group": "body", "labelEn": "Width", "unitEn": "mm" },
-    { "path": "body.depthMm", "label": "厚度", "unit": "mm", "type": "number", "range": [8, 200], "dir": null, "quantifiable": true, "group": "body", "labelEn": "Depth", "unitEn": "mm" },
-    { "path": "body.weightG", "label": "重量", "unit": "g", "type": "number", "range": [50, 3000], "dir": null, "quantifiable": true, "group": "body", "note": "主机口径（Apple TV 217g、HomeView 更重）", "labelEn": "Weight", "unitEn": "g" },
-    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
-    { "path": "display.sizeIn", "label": "屏幕尺寸", "unit": "英寸", "type": "number", "range": [3, 32], "dir": "high", "quantifiable": true, "group": "display", "note": "仅带屏设备（HomeView 7 英寸）；无屏设备记 null", "labelEn": "Screen size", "unitEn": "in" },
-    { "path": "display.type", "label": "屏幕类型", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "display", "labelEn": "Display type" },
-    { "path": "display.resolutionPx", "label": "分辨率", "unit": null, "type": "object", "range": null, "dir": null, "quantifiable": false, "group": "display", "labelEn": "Resolution" },
-    { "path": "chipset.name", "label": "芯片", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "labelEn": "Chip" },
-    { "path": "chipset.cpuCores", "label": "CPU 核心数", "unit": "核", "type": "number", "range": [
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        300
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "主机口径",
+      "labelEn": "Height",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        400
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "厚度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "labelEn": "Depth",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        50,
+        3000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "主机口径（Apple TV 217g、HomeView 更重）",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        3,
+        32
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "仅带屏设备（HomeView 7 英寸）；无屏设备记 null",
+      "labelEn": "Screen size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.type",
+      "label": "屏幕类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Display type"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": null,
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "labelEn": "Resolution"
+    },
+    {
+      "path": "chipset.name",
+      "label": "芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Chip"
+    },
+    {
+      "path": "chipset.cpuCores",
+      "label": "CPU 核心数",
+      "unit": "核",
+      "type": "number",
+      "range": [
         1,
         40
-      ], "dir": "high", "quantifiable": true, "group": "chipset", "note": "下限由 Apple TV 第 1 代（单核 Pentium M）与第 2/3 代（Apple A4/A5 单核）撑起（2026-10-15 macDB 对账批收录）", "labelEn": "CPU cores", "unitEn": "-core" },
-    { "path": "chipset.gpu", "label": "图形处理器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "labelEn": "GPU" },
-    { "path": "chipset.npu", "label": "神经网络引擎", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "chipset", "labelEn": "Neural Engine" },
-    { "path": "memory.storageGb", "label": "存储", "unit": "GB", "type": "array:number", "range": null, "dir": "high", "quantifiable": true, "group": "memory", "note": "GB 数值数组", "labelEn": "Storage", "unitEn": "GB" },
-    { "path": "connectivity.wifi", "label": "无线局域网", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Wi-Fi" },
-    { "path": "connectivity.bluetooth", "label": "蓝牙", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "labelEn": "Bluetooth" },
-    { "path": "connectivity.thread", "label": "Thread", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "智能家居互联协议（智能家居中枢设备特性）", "labelEn": "Thread" },
-    { "path": "connectivity.ports", "label": "接口", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "官网原文分段", "labelEn": "Ports" },
-    { "path": "audio.speakers", "label": "扬声器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "audio", "note": "带屏中枢的内置扬声器；纯机顶盒无扬声器记 null", "labelEn": "Speakers" },
-    { "path": "camera.front", "label": "摄像头", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "camera", "note": "带屏中枢的内置摄像头（FaceTime/家庭监控）；无记 null", "labelEn": "Camera" },
-    { "path": "features.remote", "label": "遥控器", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "features", "note": "随附遥控器（第几代 Siri Remote）", "labelEn": "Remote" },
-    { "path": "os.launch", "label": "首发系统", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os", "labelEn": "OS at launch" }
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "chipset",
+      "note": "下限由 Apple TV 第 1 代（单核 Pentium M）与第 2/3 代（Apple A4/A5 单核）撑起（2026-10-15 macDB 对账批收录）",
+      "labelEn": "CPU cores",
+      "unitEn": "-core"
+    },
+    {
+      "path": "chipset.gpu",
+      "label": "图形处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "GPU"
+    },
+    {
+      "path": "chipset.npu",
+      "label": "神经网络引擎",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Neural Engine"
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "memory",
+      "note": "GB 数值数组",
+      "labelEn": "Storage",
+      "unitEn": "GB"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "无线局域网",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Wi-Fi"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "labelEn": "Bluetooth"
+    },
+    {
+      "path": "connectivity.thread",
+      "label": "Thread",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "智能家居互联协议（智能家居中枢设备特性）",
+      "labelEn": "Thread"
+    },
+    {
+      "path": "connectivity.ports",
+      "label": "接口",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文分段",
+      "labelEn": "Ports"
+    },
+    {
+      "path": "audio.speakers",
+      "label": "扬声器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "带屏中枢的内置扬声器；纯机顶盒无扬声器记 null",
+      "labelEn": "Speakers"
+    },
+    {
+      "path": "camera.front",
+      "label": "摄像头",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "note": "带屏中枢的内置摄像头（FaceTime/家庭监控）；无记 null",
+      "labelEn": "Camera"
+    },
+    {
+      "path": "features.remote",
+      "label": "遥控器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "随附遥控器（第几代 Siri Remote）",
+      "labelEn": "Remote"
+    },
+    {
+      "path": "os.launch",
+      "label": "首发系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "OS at launch"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "security.chip",
+      "label": "安全芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "security",
+      "labelEn": "Security chip",
+      "unitEn": null,
+      "note": "Secure Enclave / 专用安全协处理器"
+    }
+  ],
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build"
+    },
+    {
+      "id": "display",
+      "name": "屏幕显示",
+      "nameEn": "Display"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio"
+    },
+    {
+      "id": "camera",
+      "name": "摄像头",
+      "nameEn": "Camera"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    },
+    {
+      "id": "security",
+      "name": "安全",
+      "nameEn": "Security"
+    }
   ]
 }

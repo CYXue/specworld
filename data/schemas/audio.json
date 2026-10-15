@@ -38,6 +38,16 @@
       "nameEn": "Features",
       "type": "single",
       "guide": "充电方式"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
     }
   ],
   "fields": [
@@ -294,6 +304,58 @@
       "group": "os",
       "note": "HomePod 走 homeOS；耳机不适用记 null",
       "labelEn": "OS at launch"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "battery.chargingMethods",
+      "label": "充电方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "labelEn": "Charging methods",
+      "unitEn": null,
+      "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
     }
   ]
 }

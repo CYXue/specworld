@@ -2,11 +2,36 @@
   "_doc": "外置存储设备 schema（2026-10-15 macDB 对账批建表）。覆盖 Disk II 软驱（1978）→ Apple ProFile 硬盘 → AppleCD 光驱 → Xserve RAID 磁盘阵列 → USB SuperDrive（2008）。结构性区别于 network（服务器/路由）与 accessory（电源适配器）：本体的「容量 + 介质 + 接口」才是产品参数，无屏幕、无系统、无电池。区间按全量真实数据设定：Disk II 单面 140KB（0.00014GB）到 Xserve RAID 满配 10.5TB（10752GB），重量 280g 到 3U 机架 24kg。",
   "version": 1,
   "groups": [
-    { "id": "body", "name": "机身", "nameEn": "Build" },
-    { "id": "storage", "name": "存储", "nameEn": "Storage" },
-    { "id": "connectivity", "name": "接口与连接", "nameEn": "Connectivity" },
-    { "id": "power", "name": "供电", "nameEn": "Power" },
-    { "id": "os", "name": "系统要求", "nameEn": "System Requirements" }
+    {
+      "id": "body",
+      "name": "机身",
+      "nameEn": "Build"
+    },
+    {
+      "id": "storage",
+      "name": "存储",
+      "nameEn": "Storage"
+    },
+    {
+      "id": "connectivity",
+      "name": "接口与连接",
+      "nameEn": "Connectivity"
+    },
+    {
+      "id": "power",
+      "name": "供电",
+      "nameEn": "Power"
+    },
+    {
+      "id": "os",
+      "name": "系统要求",
+      "nameEn": "System Requirements"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    }
   ],
   "fields": [
     {
@@ -14,7 +39,10 @@
       "label": "宽",
       "unit": "mm",
       "type": "number",
-      "range": [40, 900],
+      "range": [
+        40,
+        900
+      ],
       "dir": null,
       "quantifiable": false,
       "group": "body",
@@ -26,7 +54,10 @@
       "label": "高",
       "unit": "mm",
       "type": "number",
-      "range": [15, 500],
+      "range": [
+        15,
+        500
+      ],
       "dir": null,
       "quantifiable": false,
       "group": "body",
@@ -38,7 +69,10 @@
       "label": "深",
       "unit": "mm",
       "type": "number",
-      "range": [40, 750],
+      "range": [
+        40,
+        750
+      ],
       "dir": null,
       "quantifiable": false,
       "group": "body",
@@ -50,7 +84,10 @@
       "label": "重量",
       "unit": "g",
       "type": "number",
-      "range": [100, 30000],
+      "range": [
+        100,
+        30000
+      ],
       "dir": "low",
       "quantifiable": true,
       "group": "body",
@@ -122,7 +159,10 @@
       "label": "盘位",
       "unit": "个",
       "type": "number",
-      "range": [1, 14],
+      "range": [
+        1,
+        14
+      ],
       "dir": null,
       "quantifiable": false,
       "group": "storage",
@@ -175,6 +215,45 @@
       "quantifiable": false,
       "group": "os",
       "labelEn": "Launch system requirement"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     }
   ]
 }

@@ -14,10 +14,9 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "路由器 20–170mm；Xserve 1U 机架 43.7mm",
+      "note": "下限由 AirPort Extreme Card 扩展卡撑起（2026-10-15 macDB 对账批收录）",
       "labelEn": "Height",
-      "unitEn": "mm",
-      "note": "下限由 AirPort Extreme Card 扩展卡撑起（2026-10-15 macDB 对账批收录）"
+      "unitEn": "mm"
     },
     {
       "path": "body.widthMm",
@@ -188,6 +187,77 @@
       "group": "features",
       "note": "Xserve 1U 机架；路由器记 null",
       "labelEn": "Rack unit"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    }
+  ],
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build"
+    },
+    {
+      "id": "chipset",
+      "name": "处理器与性能",
+      "nameEn": "Processor & Performance"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
     }
   ]
 }

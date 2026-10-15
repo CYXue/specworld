@@ -73,6 +73,21 @@
       "nameEn": "OS & Software",
       "type": "single",
       "guide": "出厂系统"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    },
+    {
+      "id": "security",
+      "name": "安全",
+      "nameEn": "Security"
+    },
+    {
+      "id": "power",
+      "name": "供电",
+      "nameEn": "Power"
     }
   ],
   "fields": [
@@ -488,6 +503,129 @@
       "quantifiable": false,
       "group": "os",
       "labelEn": "Shipped OS"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "chipset.cpuClocks",
+      "label": "核心频率配置",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "labelEn": "Core clocks",
+      "unitEn": null,
+      "note": "性能核/能效核的频率与数量（如 4.93GHz × 2 + 2.64GHz × 4）"
+    },
+    {
+      "path": "battery.chargingMethods",
+      "label": "充电方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "labelEn": "Charging methods",
+      "unitEn": null,
+      "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
+    },
+    {
+      "path": "security.chip",
+      "label": "安全芯片",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "security",
+      "labelEn": "Security chip",
+      "unitEn": null,
+      "note": "Secure Enclave / 专用安全协处理器"
+    },
+    {
+      "path": "security.unlock",
+      "label": "解锁方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "security",
+      "labelEn": "Authentication",
+      "unitEn": null,
+      "note": "生物识别 + 密码的组合方式（面容 ID / 触控 ID / 侧边按钮）"
+    },
+    {
+      "path": "display.brightnessHdrNits",
+      "label": "HDR 亮度",
+      "unit": "nit",
+      "type": "number",
+      "range": [
+        100,
+        20000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "labelEn": "HDR brightness",
+      "unitEn": "nit",
+      "note": "HDR 内容的典型亮度；与典型亮度、峰值亮度是三个不同口径"
+    },
+    {
+      "path": "power.adapterW",
+      "label": "电源功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        10,
+        2000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "labelEn": "Power supply",
+      "unitEn": "W",
+      "note": "随附电源适配器或整机功耗（如 iMac 143 瓦）"
     }
   ]
 }

@@ -1,17 +1,233 @@
 {
   "_doc": "打印机 schema（LaserWriter/ImageWriter/StyleWriter）。2026-10-15 建表。口径：打印技术与分辨率是本体（PostScript 激光/针式/喷墨），速度 ppm（页每分）。LaserWriter 初代 1985 与 Macintosh 组成的桌面出版系统改变了印刷业。",
   "fields": [
-    { "path": "body.heightMm", "label": "高", "unit": "mm", "type": "number", "range": [80, 500], "dir": null, "quantifiable": false, "group": "body", "labelEn": "Height", "unitEn": "mm" },
-    { "path": "body.widthMm", "label": "宽", "unit": "mm", "type": "number", "range": [250, 700], "dir": null, "quantifiable": false, "group": "body", "labelEn": "Width", "unitEn": "mm" },
-    { "path": "body.depthMm", "label": "深", "unit": "mm", "type": "number", "range": [250, 700], "dir": null, "quantifiable": false, "group": "body", "labelEn": "Depth", "unitEn": "mm" },
-    { "path": "body.weightG", "label": "重量", "unit": "g", "type": "number", "range": [1500, 35000], "dir": "low", "quantifiable": true, "group": "body", "note": "喷墨 2–3kg、激光 7–20kg", "labelEn": "Weight", "unitEn": "g" },
-    { "path": "body.colors", "label": "配色", "unit": null, "type": "array:string", "range": null, "dir": null, "quantifiable": false, "group": "body", "labelEn": "Colors" },
-    { "path": "printer.tech", "label": "打印技术", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "printer", "note": "激光（PostScript）/针式点阵/喷墨", "labelEn": "Printing technology" },
-    { "path": "printer.color", "label": "打印色彩", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "printer", "note": "黑白/彩色", "labelEn": "Color" },
-    { "path": "printer.dpi", "label": "打印分辨率", "unit": "dpi", "type": "number", "range": [70, 1200], "dir": "high", "quantifiable": true, "group": "printer", "note": "针式 144dpi、激光 300–600dpi、喷墨 360–720dpi", "labelEn": "Print resolution", "unitEn": "dpi" },
-    { "path": "printer.speedPpm", "label": "打印速度", "unit": "页/分", "type": "number", "range": [0.5, 40], "dir": "high", "quantifiable": true, "group": "printer", "note": "激光 8ppm 起（1985 年已是奇迹）", "labelEn": "Print speed", "unitEn": "ppm" },
-    { "path": "printer.paperSize", "label": "纸张规格", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "printer", "labelEn": "Paper size" },
-    { "path": "connectivity.type", "label": "连接方式", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "connectivity", "note": "串口/LocalTalk/并口/USB/以太网", "labelEn": "Connection" },
-    { "path": "os.launch", "label": "首发系统要求", "unit": null, "type": "string", "range": null, "dir": null, "quantifiable": false, "group": "os", "labelEn": "OS requirement" }
+    {
+      "path": "body.heightMm",
+      "label": "高",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        80,
+        500
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Height",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        250,
+        700
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Width",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        250,
+        700
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Depth",
+      "unitEn": "mm"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        1500,
+        35000
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "body",
+      "note": "喷墨 2–3kg、激光 7–20kg",
+      "labelEn": "Weight",
+      "unitEn": "g"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body",
+      "labelEn": "Colors"
+    },
+    {
+      "path": "printer.tech",
+      "label": "打印技术",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "printer",
+      "note": "激光（PostScript）/针式点阵/喷墨",
+      "labelEn": "Printing technology"
+    },
+    {
+      "path": "printer.color",
+      "label": "打印色彩",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "printer",
+      "note": "黑白/彩色",
+      "labelEn": "Color"
+    },
+    {
+      "path": "printer.dpi",
+      "label": "打印分辨率",
+      "unit": "dpi",
+      "type": "number",
+      "range": [
+        70,
+        1200
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "printer",
+      "note": "针式 144dpi、激光 300–600dpi、喷墨 360–720dpi",
+      "labelEn": "Print resolution",
+      "unitEn": "dpi"
+    },
+    {
+      "path": "printer.speedPpm",
+      "label": "打印速度",
+      "unit": "页/分",
+      "type": "number",
+      "range": [
+        0.5,
+        40
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "printer",
+      "note": "激光 8ppm 起（1985 年已是奇迹）",
+      "labelEn": "Print speed",
+      "unitEn": "ppm"
+    },
+    {
+      "path": "printer.paperSize",
+      "label": "纸张规格",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "printer",
+      "labelEn": "Paper size"
+    },
+    {
+      "path": "connectivity.type",
+      "label": "连接方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "串口/LocalTalk/并口/USB/以太网",
+      "labelEn": "Connection"
+    },
+    {
+      "path": "os.launch",
+      "label": "首发系统要求",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "os",
+      "labelEn": "OS requirement"
+    },
+    {
+      "path": "device.identifier",
+      "label": "机型标识符",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model identifier",
+      "unitEn": null,
+      "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
+    },
+    {
+      "path": "device.modelCodes",
+      "label": "型号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "Model numbers",
+      "unitEn": null,
+      "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
+    },
+    {
+      "path": "device.fccIds",
+      "label": "FCC ID",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "labelEn": "FCC ID",
+      "unitEn": null,
+      "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    }
+  ],
+  "groups": [
+    {
+      "id": "body",
+      "name": "外观与机身",
+      "nameEn": "Appearance & Build"
+    },
+    {
+      "id": "printer",
+      "name": "打印",
+      "nameEn": "Printing"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接",
+      "nameEn": "Network & Connectivity"
+    },
+    {
+      "id": "os",
+      "name": "系统与软件",
+      "nameEn": "OS & Software"
+    },
+    {
+      "id": "device",
+      "name": "型号标识",
+      "nameEn": "Model ID"
+    }
   ]
 }
