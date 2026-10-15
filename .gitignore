@@ -30,8 +30,12 @@ public/sprites/
 # Toy 送审包（dist 的拷贝，随打包重建，不入库）
 .toy-pkg/
 
-# 本地冒烟验证脚本（puppeteer，依赖本机 Chrome，非 CI 用例，不入库）
-_smoke*.cjs
+# 真机冒烟脚本**入库**（2026-10-14 审计 P0-3 改）。
+# 原先这里把 `_smoke*.cjs` 排除在外，理由是「依赖本机 Chrome、非 CI 用例」；
+# 后果是这些脚本只活在某一台机器上，换机器即失传，而且它们当时连着 14 项红灯，
+# 却又不在 CI 里 —— 没有任何一次自动运行看得见。「注册≠调用」的教科书案例。
+# 现在 puppeteer 已进 devDependencies（npm ci 可复现），脚本随仓库走，
+# 由 CI 的 smoke job 执行；本机手跑同样可用。
 # 同上：favicon 的真实浏览器截图核对（写死本机 Chrome 路径的手动工具，
 # 2026-10-13 审计下架——零引用的孤本，留在本地用即可）
 scripts/favicon/browsershot.cjs
