@@ -226,6 +226,71 @@
       "labelEn": "FCC ID",
       "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "device.firmware",
+      "label": "固件",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": null,
+      "labelEn": "Firmware",
+      "unitEn": null
+    },
+    {
+      "path": "memory.storageInterface",
+      "label": "硬盘接口",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": "如 Ultra ATA/66 (ATA-5)、SATA",
+      "labelEn": "Storage interface",
+      "unitEn": null
+    },
+    {
+      "path": "memory.expansionSlots",
+      "label": "扩展插槽",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": null,
+      "labelEn": "Expansion slots",
+      "unitEn": null
+    },
+    {
+      "path": "memory.opticalDrive",
+      "label": "媒体驱动器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": "光驱/软驱配置，官网原文",
+      "labelEn": "Optical drive",
+      "unitEn": null
+    },
+    {
+      "path": "chipset.gpuMemory",
+      "label": "图形内存",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": null,
+      "labelEn": "Graphics memory",
+      "unitEn": null
     }
   ],
   "groups": [

@@ -274,6 +274,58 @@
       "labelEn": "Security chip",
       "unitEn": null,
       "note": "Secure Enclave / 专用安全协处理器"
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
+    },
+    {
+      "path": "chipset.coprocessor",
+      "label": "协处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "如 Apple R1（定位协处理器）",
+      "labelEn": "Coprocessor",
+      "unitEn": null
+    },
+    {
+      "path": "features.input",
+      "label": "输入方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "（macdb 以 / 分隔的多项清单，存为数组）",
+      "labelEn": "Input methods",
+      "unitEn": null
+    },
+    {
+      "path": "audio.system",
+      "label": "音频系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "麦克风阵列/空间音频等官网原文",
+      "labelEn": "Audio system",
+      "unitEn": null
     }
   ],
   "groups": [
@@ -331,6 +383,13 @@
       "id": "security",
       "name": "安全",
       "nameEn": "Security"
+    },
+    {
+      "id": "audio",
+      "name": "音频",
+      "nameEn": "Audio",
+      "type": "single",
+      "guide": "音频系统"
     }
   ]
 }

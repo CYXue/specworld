@@ -365,6 +365,58 @@
       "labelEn": "Charging methods",
       "unitEn": null,
       "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
+    },
+    {
+      "path": "chipset.coprocessor",
+      "label": "协处理器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "如 Apple R1（定位协处理器）",
+      "labelEn": "Coprocessor",
+      "unitEn": null
+    },
+    {
+      "path": "features.sensors",
+      "label": "传感器",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
+      "labelEn": "Sensors",
+      "unitEn": null
+    },
+    {
+      "path": "features.input",
+      "label": "输入方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "（macdb 以 / 分隔的多项清单，存为数组）",
+      "labelEn": "Input methods",
+      "unitEn": null
     }
   ]
 }

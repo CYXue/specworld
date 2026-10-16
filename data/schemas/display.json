@@ -285,6 +285,32 @@
       "labelEn": "Power supply",
       "unitEn": "W",
       "note": "随附电源适配器或整机功耗（如 iMac 143 瓦）"
+    },
+    {
+      "path": "device.codename",
+      "label": "开发代号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": null,
+      "labelEn": "Codename",
+      "unitEn": null
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
     }
   ],
   "groups": [

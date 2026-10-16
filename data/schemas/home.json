@@ -319,6 +319,32 @@
       "labelEn": "Security chip",
       "unitEn": null,
       "note": "Secure Enclave / 专用安全协处理器"
+    },
+    {
+      "path": "features.videoFormats",
+      "label": "视频格式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": null,
+      "labelEn": "Video formats",
+      "unitEn": null
+    },
+    {
+      "path": "features.audioFormats",
+      "label": "音频格式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": null,
+      "labelEn": "Audio formats",
+      "unitEn": null
     }
   ],
   "groups": [

@@ -254,6 +254,19 @@
       "labelEn": "FCC ID",
       "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "device.orderNumbers",
+      "label": "订购编号",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列",
+      "labelEn": "Order numbers",
+      "unitEn": null
     }
   ]
 }

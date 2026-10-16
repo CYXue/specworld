@@ -309,6 +309,71 @@
       "labelEn": "FCC ID",
       "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
+    },
+    {
+      "path": "features.controls",
+      "label": "控制方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": "（macdb 以 / 分隔的多项清单，存为数组）",
+      "labelEn": "Controls",
+      "unitEn": null
+    },
+    {
+      "path": "features.videoFormats",
+      "label": "视频格式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": null,
+      "labelEn": "Video formats",
+      "unitEn": null
+    },
+    {
+      "path": "features.photoFormats",
+      "label": "照片格式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": null,
+      "labelEn": "Photo formats",
+      "unitEn": null
+    },
+    {
+      "path": "features.audioFormats",
+      "label": "音频格式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "features",
+      "note": null,
+      "labelEn": "Audio formats",
+      "unitEn": null
     }
   ],
   "groups": [
@@ -361,6 +426,13 @@
       "id": "device",
       "name": "型号标识",
       "nameEn": "Model ID"
+    },
+    {
+      "id": "features",
+      "name": "功能特性",
+      "nameEn": "Features",
+      "type": "single",
+      "guide": "传感器/输入/格式"
     }
   ]
 }

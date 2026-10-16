@@ -626,6 +626,32 @@
       "labelEn": "Power supply",
       "unitEn": "W",
       "note": "随附电源适配器或整机功耗（如 iMac 143 瓦）"
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
+    },
+    {
+      "path": "memory.opticalDrive",
+      "label": "媒体驱动器",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": "光驱/软驱配置，官网原文",
+      "labelEn": "Optical drive",
+      "unitEn": null
     }
   ]
 }

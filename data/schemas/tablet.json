@@ -721,6 +721,64 @@
       "labelEn": "HDR brightness",
       "unitEn": "nit",
       "note": "HDR 内容的典型亮度；与典型亮度、峰值亮度是三个不同口径"
+    },
+    {
+      "path": "chipset.config",
+      "label": "芯片配置",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）",
+      "labelEn": "Chip configuration",
+      "unitEn": null
+    },
+    {
+      "path": "battery.vendorClaimedWebHours",
+      "label": "无线上网续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        1,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "厂商自报（浏览网页口径），只并列展示不参与排名",
+      "labelEn": "Web battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "battery.vendorClaimedCellularHours",
+      "label": "蜂窝网络续航",
+      "unit": "小时",
+      "type": "number",
+      "range": [
+        1,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "厂商自报（蜂窝网络口径），只并列展示不参与排名",
+      "labelEn": "Cellular battery life",
+      "unitEn": "h"
+    },
+    {
+      "path": "audio.system",
+      "label": "音频系统",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "audio",
+      "note": "麦克风阵列/空间音频等官网原文",
+      "labelEn": "Audio system",
+      "unitEn": null
     }
   ]
 }

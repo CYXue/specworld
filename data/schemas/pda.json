@@ -269,12 +269,12 @@
       "path": "features.input",
       "label": "输入方式",
       "unit": null,
-      "type": "string",
+      "type": "array:string",
       "range": null,
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "手写识别（Calligraphy/Print Recognizer）、屏幕软键盘",
+      "note": "手写识别（Calligraphy/Print Recognizer）、屏幕软键盘（macdb 以 / 分隔的多项清单，存为数组）",
       "labelEn": "Input"
     },
     {

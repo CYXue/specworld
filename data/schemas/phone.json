@@ -888,6 +888,45 @@
       "labelEn": "HDR brightness",
       "unitEn": "nit",
       "note": "HDR 内容的典型亮度；与典型亮度、峰值亮度是三个不同口径"
+    },
+    {
+      "path": "device.specUrl",
+      "label": "技术规格链接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "官方技术规格页链接（macdb 收录）",
+      "labelEn": "Tech specs URL",
+      "unitEn": null
+    },
+    {
+      "path": "chipset.config",
+      "label": "芯片配置",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）",
+      "labelEn": "Chip configuration",
+      "unitEn": null
+    },
+    {
+      "path": "camera.rearMain",
+      "label": "主摄",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "camera",
+      "note": "主摄像头官网原文（多摄详情仍以 camera.rear 为准）",
+      "labelEn": "Main camera",
+      "unitEn": null
     }
   ]
 }
