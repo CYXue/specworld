@@ -190,7 +190,7 @@
       "unit": "ppi",
       "type": "number",
       "range": [
-        80,
+        60,
         300
       ],
       "dir": "high",

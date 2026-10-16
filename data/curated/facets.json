@@ -86,7 +86,7 @@
         "series": [
           {
             "label": "折叠屏",
-            "match": "\\bDuo\\b",
+            "match": "iPhone\\s*Duo",
             "flags": "i",
             "labelEn": "Foldable"
           },
@@ -109,7 +109,7 @@
           }
         ],
         "foldVariant": {
-          "match": "\\bDuo\\b",
+          "match": "iPhone\\s*Duo",
           "flags": "i",
           "label": "折叠双屏",
           "labelEn": "Dual-screen Fold"

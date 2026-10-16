@@ -89,7 +89,7 @@
       "unit": "g",
       "type": "number",
       "range": [
-        5,
+        3,
         8000
       ],
       "dir": null,

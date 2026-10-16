@@ -216,7 +216,7 @@
       "unit": "ppi",
       "type": "number",
       "range": [
-        90,
+        60,
         420
       ],
       "dir": "high",
