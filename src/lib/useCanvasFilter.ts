@@ -81,6 +81,21 @@ export function useCanvasFilter(path: string) {
   const lines = computed(() => lineFacets(filterable.value, filter.value));
   const years = computed(() => yearFacets(filterable.value, filter.value));
 
+  /**
+   * 月份下拉项：全部出现过的 YYYY-MM，降序。
+   * 与年份联动 —— 选了某年后只列该年的月份，避免「年份2025 + 月份2026-10」这种
+   * 必然为空的无效组合（否则用户会看到「0 台」还不知道为什么）。
+   */
+  const months = computed(() => {
+    const set = new Set<string>();
+    for (const d of filterable.value) {
+      if (!d.ym) continue;
+      if (filter.value.year && d.year !== filter.value.year) continue;
+      set.add(d.ym);
+    }
+    return [...set].sort().reverse();
+  });
+
   const accentOf = (brand: string) =>
     derived.value?.vendors.get(brand)?.accentColor ?? 'var(--color-gold)';
 
@@ -90,10 +105,14 @@ export function useCanvasFilter(path: string) {
       const stillValid = lines.value.some((l) => l.value === next.line);
       if (!stillValid) next.line = '';
     }
-    if (patch.year !== undefined || patch.q !== undefined || patch.brand !== undefined) {
-      if (next.year && !years.value.some((y) => y.value === next.year)) next.year = '';
-    }
-    filter.value = next;
+  if (patch.year !== undefined || patch.q !== undefined || patch.brand !== undefined) {
+    if (next.year && !years.value.some((y) => y.value === next.year)) next.year = '';
+  }
+  // 年份变了且月份不再属于新年份 → 清掉月份，避免空结果
+  if (patch.year !== undefined && next.year && next.month && next.month.slice(0, 4) !== next.year) {
+    next.month = '';
+  }
+  filter.value = next;
     router.replace({ path, query: filterToQuery(next) });
   };
 
@@ -116,6 +135,7 @@ export function useCanvasFilter(path: string) {
     brands,
     lines,
     years,
+    months,
     accentOf,
     setFilter,
     setSort,

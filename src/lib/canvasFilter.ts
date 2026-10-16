@@ -63,11 +63,13 @@ export interface CanvasFilter {
   brand: string;
   line: string;
   year: string;
+  /** 发布月份 YYYY-MM；空串=不按月份筛选。年份维度变化时共用管线会联动收窄 */
+  month: string;
   q: string;
   sort: SortKey;
 }
 
-export const EMPTY_FILTER: CanvasFilter = { brand: '', line: '', year: '', q: '', sort: 'newest' };
+export const EMPTY_FILTER: CanvasFilter = { brand: '', line: '', year: '', month: '', q: '', sort: 'newest' };
 
 /** 与全站搜索同口径的分词、归一化与匹配（唯一一份实现，见文件头口径 1） */
 export { tokenize } from './query';
@@ -80,6 +82,8 @@ interface FilterableDoc {
   compact: string;
   /** 发布年份，从 releaseDate 前四位切；日期缺失时为空串（不参与年份筛选） */
   year: string;
+  /** 发布月份 YYYY-MM，从 releaseDate 前七位切；日期缺失时为空串（不参与月份筛选） */
+  ym: string;
 }
 
 export function buildCanvasDocs(docs: CanvasDoc[]): FilterableDoc[] {
@@ -93,6 +97,7 @@ export function buildCanvasDocs(docs: CanvasDoc[]): FilterableDoc[] {
       haystack: loose(joined),
       compact: compact(joined),
       year: (doc.releaseDate || '').slice(0, 4),
+      ym: (doc.releaseDate || '').slice(0, 7),
     };
   });
 }
@@ -122,6 +127,7 @@ function passes(item: FilterableDoc, f: CanvasFilter, skip: string[], qOk: boole
   if (f.brand && !skip.includes('brand') && item.doc.brand !== f.brand) return false;
   if (f.line && !skip.includes('line') && item.doc.line !== f.line) return false;
   if (f.year && !skip.includes('year') && item.year !== f.year) return false;
+  if (f.month && !skip.includes('month') && item.ym !== f.month) return false;
   return qOk;
 }
 
@@ -222,7 +228,7 @@ export function yearFacets(docs: FilterableDoc[], f: CanvasFilter): Facet[] {
  * 且「#canvas」与「#canvas?sort=newest」指的是同一份画面（sort 是默认值）。
  * 未知取值（手改的链接、旧版本遗留）一律回落默认值，不抛错。 */
 
-const FILTER_KEYS = ['brand', 'line', 'year', 'q', 'sort'] as const;
+const FILTER_KEYS = ['brand', 'line', 'year', 'month', 'q', 'sort'] as const;
 type FilterKey = (typeof FILTER_KEYS)[number];
 
 const SORT_KEYS: SortKey[] = ['newest', 'oldest', 'name', 'ppi'];
@@ -238,6 +244,7 @@ export function parseFilter(query: Record<string, unknown>): CanvasFilter {
     brand: get('brand'),
     line: get('line'),
     year: get('year'),
+    month: get('month'),
     q: get('q'),
     sort: (SORT_KEYS as string[]).includes(sort) ? (sort as SortKey) : 'newest',
   };
@@ -248,11 +255,12 @@ export function filterToQuery(f: CanvasFilter): Record<string, string> {
   if (f.brand) q.brand = f.brand;
   if (f.line) q.line = f.line;
   if (f.year) q.year = f.year;
+  if (f.month) q.month = f.month;
   if (f.q.trim()) q.q = f.q.trim();
   if (f.sort !== 'newest') q.sort = f.sort;
   return q;
 }
 
 export function isFiltered(f: CanvasFilter): boolean {
-  return Boolean(f.brand || f.line || f.year || f.q.trim());
+  return Boolean(f.brand || f.line || f.year || f.month || f.q.trim());
 }

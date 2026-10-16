@@ -26,6 +26,7 @@ const {
   brands,
   lines,
   years,
+  months,
   accentOf,
   setFilter,
   setSort,
@@ -35,6 +36,21 @@ const {
   dirty,
   err,
 } = useCanvasFilter('/globe');
+
+/**
+ * 当前年月（运行时本地月份），用于「当月」快捷筛选。
+ * 点击「当月」写入确定性的字面量（如 '2026-10'），URL 可序列化、可分享，
+ * 不把「动态当前月」写进链接（否则 11 月打开 10 月的分享链接会错位）。
+ */
+const nowYM = (() => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+})();
+function toggleMonth() {
+  // 当月隐含「不限年份」：同时清掉 year，避免 year=2025 + month=2026-10 这种空组合
+  if (filter.value.month === nowYM) setFilter({ month: '', year: '' });
+  else setFilter({ month: nowYM, year: '' });
+}
 
 /**
  * 品牌分组台数 → 球面纬度带。
@@ -249,6 +265,27 @@ const canvasH = computed(() => {
                   {{ sortLabel(s.key) }}
                 </button>
               </span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="w-10 shrink-0 text-[12px] leading-[1.5]" style="color: var(--color-gold)"
+                >{{ t('facet.month') }}</span
+              >
+              <button
+                class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+                :aria-pressed="filter.month === nowYM"
+                @click="toggleMonth()"
+              >
+                {{ t('globe.monthCurrent') }}
+              </button>
+              <select
+                :value="filter.month"
+                class="pixel-input w-auto px-1 py-1 text-[12px] leading-[1.5]"
+                @change="setFilter({ month: ($event.target as HTMLSelectElement).value })"
+              >
+                <option value="">{{ t('common.all') }}</option>
+                <option v-for="m in months" :key="m" :value="m">{{ m }}</option>
+              </select>
             </div>
           </div>
         </div>

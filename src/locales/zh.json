@@ -152,6 +152,7 @@
     "chip": "芯片",
     "ram": "内存",
     "year": "年份",
+    "month": "月份",
     "price": "价格",
     "allCategory": "全部品类",
     "allForm": "全部形态",
@@ -372,7 +373,8 @@
     "a11yNavLabel": "设备列表（球面的文本等价物）",
     "canvasAria": "设备球：拖动可旋转球面，浏览全部设备",
     "hud": "{n} 台 · 经度 {lon}° · 纬度 {lat}° · 视距 {dist}",
-    "empty": "球上一台设备都没有"
+    "empty": "球上一台设备都没有",
+    "monthCurrent": "当月"
   },
   "feedback": {
     "openButton": "纠错 / 补充数据",

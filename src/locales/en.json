@@ -152,6 +152,7 @@
     "chip": "Chip",
     "ram": "RAM",
     "year": "Year",
+    "month": "Month",
     "price": "Price",
     "allCategory": "All categories",
     "allForm": "All forms",
@@ -372,7 +373,8 @@
     "a11yNavLabel": "Device list (text equivalent of the globe)",
     "canvasAria": "Device globe: drag to rotate the sphere and browse all devices",
     "hud": "{n} devices · lon {lon}° · lat {lat}° · dist {dist}",
-    "empty": "No devices on the globe"
+    "empty": "No devices on the globe",
+    "monthCurrent": "This month"
   },
   "feedback": {
     "openButton": "Report an error / add data",

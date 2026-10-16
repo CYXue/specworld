@@ -1753,7 +1753,7 @@ check('排序：四种档位各自正确，缺失值排末尾', () => {
 });
 
 check('URL 序列化：只写非默认值，且能原样往返', () => {
-  const f = { brand: 'huawei', line: 'Mate', year: '2025', q: '  70  ', sort: 'ppi' };
+  const f = { brand: 'huawei', line: 'Mate', year: '2025', month: '', q: '  70  ', sort: 'ppi' };
   const query = filterToQuery(f);
   assert.deepEqual(
     query,
@@ -1765,6 +1765,23 @@ check('URL 序列化：只写非默认值，且能原样往返', () => {
   // 默认态不写任何键 —— 分享链接才短，且 #canvas 与 #canvas?sort=newest 同义
   assert.deepEqual(filterToQuery(EMPTY_FILTER), {}, '默认态不该写 query');
   assert.deepEqual(parseFilter({}), EMPTY_FILTER, '空 query 应解析成默认筛选');
+});
+
+check('月份筛选：按 YYYY-MM 过滤，且经 URL 往返一致', () => {
+  const docs = buildCanvasDocs([
+    { id: 'a', name: 'A', nameZh: null, line: '', brand: 'apple', brandZh: 'Apple', releaseDate: '2026-10-01', releaseDatePrecision: 'day', status: '' },
+    { id: 'b', name: 'B', nameZh: null, line: '', brand: 'apple', brandZh: 'Apple', releaseDate: '2026-09-15', releaseDatePrecision: 'day', status: '' },
+    { id: 'c', name: 'C', nameZh: null, line: '', brand: 'apple', brandZh: 'Apple', releaseDate: '', releaseDatePrecision: '', status: '' },
+  ]);
+  const hit = applyFilter(docs, { ...EMPTY_FILTER, month: '2026-10' }, () => null);
+  assert.equal(hit.length, 1, '只为 2026-10 命中');
+  assert.equal(hit[0].id, 'a');
+  // 默认 month='' 不过滤
+  assert.equal(applyFilter(docs, EMPTY_FILTER, () => null).length, 3, '默认态不过滤月份');
+  // URL 往返
+  const q = filterToQuery({ ...EMPTY_FILTER, month: '2026-10' });
+  assert.deepEqual(q, { month: '2026-10' }, '月份非空应写入 query');
+  assert.equal(parseFilter(q).month, '2026-10', '月份应经 URL 还原');
 });
 
 check('手改的非法 query 回落默认值，不抛错', () => {
@@ -2848,6 +2865,27 @@ check('变体判定长后缀优先：Pro Max 不落进 Pro 档', () => {
   assert.equal(v['iPhone 16 Plus'], 'Plus');
   assert.equal(v['iPhone 16'], '标准');
   assert.equal(v['iPhone Duo'], '折叠双屏');
+});
+
+check('反向测：名字含「Core 2 Duo / Core Duo / PowerBook Duo」的苹果 Mac 不得判成折叠屏（处理器多核 ≠ 折叠屏）', () => {
+  // 真实 bug：苹果系列/foldVariant 的 name 匹配曾写 `\\bDuo\\b`，
+  // 命中了产品名里的「Core 2 Duo / Core Duo / PowerBook Duo」（处理器双核命名），
+  // 把一整批 1990s–2000s 的 Mac/PowerBook 误判成「折叠屏」系列 +「折叠双屏」变体。
+  // 折叠屏是形态（iPhone Duo），处理器叫多核和折叠毫无关系。
+  const apple = REAL_P.filter((p) => p.brand === 'apple');
+  const bySeries = Object.fromEntries(apple.map((p) => [p.name, C.seriesOf(p)]));
+  const byVariant = Object.fromEntries(apple.map((p) => [p.name, C.variantOf(p)]));
+  const misnamed = apple.filter(
+    (p) => /\bDuo\b/i.test(p.name) && !/iPhone\s*Duo/i.test(p.name),
+  );
+  assert.ok(misnamed.length > 0, '应存在名字含 Duo 但非 iPhone Duo 的机型（真 bug 回归防护）');
+  for (const p of misnamed) {
+    assert.notEqual(bySeries[p.name], '折叠屏', `${p.name}：处理器双核命名不得判为折叠屏系列`);
+    assert.notEqual(byVariant[p.name], '折叠双屏', `${p.name}：处理器双核命名不得判为折叠双屏变体`);
+  }
+  // 反向：真折叠机仍必须判对（防改过头）
+  assert.equal(bySeries['iPhone Duo'], '折叠屏', 'iPhone Duo 必须仍是折叠屏系列');
+  assert.equal(byVariant['iPhone Duo'], '折叠双屏', 'iPhone Duo 必须仍是折叠双屏变体');
 });
 
 check('系列分面计数之和等于品牌台数（不能有机型漏分系列）', () => {
