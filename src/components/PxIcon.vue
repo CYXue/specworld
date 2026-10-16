@@ -44,10 +44,6 @@ const PATHS = {
   image: 'M1 2h14v12H1z M2 3v8l3-3 2 2 3-4 4 5V3z M10 4h3v2h-3z',
   /** 排序：上下箭头 */
   sort: 'M3 2h2v8H3z M3 12h2v2H3z M6 5h6v2H6z M6 9h6v2H6z M12 2h2v8h-2z M12 12h2v2h-2z',
-  /** 地球经纬：设备球 */
-  globe: 'M4 1h8v1h2v2h1v8h-1v2h-2v1H4v-1H2v-2H1V4h1V2h2z ' + 'M3 6h10v4H3z M6 2v12h4V2z',
-  /** 网格：无限画布 */
-  grid: 'M1 1h6v6H1z M9 1h6v6H9z M1 9h6v6H1z M9 9h6v6H9z',
   /** 时钟：时间线 */
   clock:
     'M6 1h4v1h2v2h1v2h1v4h-1v2h-1v2h-2v1H6v-1H4v-2H3v-2H2V6h1V4h1V2h2z ' + 'M7 4v5h2V7h1v1H8v2H7z',

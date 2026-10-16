@@ -19,8 +19,6 @@
     "compare": "机型库",
     "rankings": "榜单",
     "timeline": "时间线",
-    "canvas": "画布",
-    "globe": "设备球",
     "search": "搜索",
     "searchLabel": "搜索机型",
     "searchPlaceholder": "搜机型 / 芯片"
@@ -49,20 +47,6 @@
     "released": "{date} 发布",
     "fromPrice": "{price} 起",
     "priceUnpublished": "官方未公布中国区售价"
-  },
-  "board": {
-    "dragTitle": "拖拽画面",
-    "dragSub": "浏览全部机型",
-    "wrapReady": "无限回绕已就绪",
-    "fullSpecs": "查看完整参数 →",
-    "backClose": "[ 返回 ] :: close()",
-    "imageviewTip": "+ 拖拽移动图片，滚轮 / 双指捏合缩放 +",
-    "canvasAriaLabel": "设备无限画布：拖拽平移，点瓦片看详情",
-    "emptyTitle": "画布上还没有设备",
-    "emptySub": "当前筛选没有命中任何机型，换个条件或清空看看全部。",
-    "hudCount": "{n} 台",
-    "hudWrap": "环面回绕 · 无限平移",
-    "imageTitle": "全屏图片查看器：拖拽移动，滚轮或双指捏合缩放"
   },
   "home": {
     "loadFailed": "数据加载失败：{err}",
@@ -95,11 +79,7 @@
     "remove": "移除",
     "countUnits": "{n} 台",
     "models": "{n} 款",
-    "all": "全部",
-    "line": "产品线",
     "unknown": "未知",
-    "other": "其它",
-    "yearUnknown": "年份未公布",
     "loadFailed": "加载失败：{err}",
     "loadFailedRaw": "数据加载失败："
   },
@@ -121,10 +101,6 @@
     "batteryDesc": "电池容量 大→小",
     "cameraAsc": "主摄像素 低→高",
     "cameraDesc": "主摄像素 高→低",
-    "newToOld": "新→旧",
-    "oldToNew": "旧→新",
-    "name": "名称",
-    "ppi": "像素密度",
     "label": "排序"
   },
   "spec": {
@@ -152,7 +128,6 @@
     "chip": "芯片",
     "ram": "内存",
     "year": "年份",
-    "month": "月份",
     "price": "价格",
     "allCategory": "全部品类",
     "allForm": "全部形态",
@@ -343,39 +318,6 @@
   "notFound": {
     "title": "这条街没有这间屋子。"
   },
-  "canvas": {
-    "title": "无限画布",
-    "howto": "拖拽 / 滚轮平移 · 点瓦片看详情 · 环面无限回绕",
-    "resetView": "重置视图",
-    "exportPng": "导出 PNG",
-    "exporting": "导出中…",
-    "exportFilename": "参数世界-筛选结果-{n}台.png",
-    "noSpecs": "规格未公布",
-    "sortPrefix": "排序:{name}",
-    "allDevices": "全部设备",
-    "brand": "品牌",
-    "line": "产品线",
-    "year": "年份",
-    "all": "全部",
-    "searchLabel": "在画布中搜索",
-    "searchPlaceholder": "画布内搜索机型 / 芯片",
-    "a11yNavLabel": "设备列表（画布的文本等价物）",
-    "a11yListTitle": "当前筛选下的设备（文本列表）"
-  },
-  "globe": {
-    "title": "设备球",
-    "howto": "拖动转球 · 滚轮或双指捏合改视距 · 球面绕一圈回到原位",
-    "spinPause": "暂停自转",
-    "spinStart": "开始自转",
-    "resetView": "复位视角",
-    "searchLabel": "在球面中搜索",
-    "searchPlaceholder": "球内搜索机型 / 芯片",
-    "a11yNavLabel": "设备列表（球面的文本等价物）",
-    "canvasAria": "设备球：拖动可旋转球面，浏览全部设备",
-    "hud": "{n} 台 · 经度 {lon}° · 纬度 {lat}° · 视距 {dist}",
-    "empty": "球上一台设备都没有",
-    "monthCurrent": "当月"
-  },
   "feedback": {
     "openButton": "纠错 / 补充数据",
     "title": "纠错 / 补充数据",
@@ -403,18 +345,6 @@
     "submittedOk": "已提交",
     "anonymous": "匿名",
     "noBackend": "当前环境未连接数据服务（如 B 站 Toy 等纯静态托管页面）。请复制下方标准模板，通过私信/评论发给作者——作者导入审核通过后即生效，感谢纠错！"
-  },
-  "export": {
-    "noContext": "无法获取 2D 画布上下文",
-    "title": "参数世界 · 筛选结果",
-    "totalCount": "共 {n} 台",
-    "noImage": "(无图)",
-    "statusTitle": "状态分布",
-    "brandTitle": "品牌分布",
-    "priceTitle": "起售价合计（按品牌）",
-    "priceRow": "{name} {n} 台 · ¥{total}",
-    "priceMissing": "（{n} 台未公布售价）",
-    "priceTotal": "累计总计 ¥{total}"
   },
   "validate": {
     "empty": "值不能为空",

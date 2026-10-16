@@ -1,3 +1,5 @@
+> ⚠️ **历史引用声明（2026-10-16 补）**：本文提及的「画布 / 设备球」可视化探索页及其组件（已下线的 CanvasView / GlobeView / BoardCanvas / BoardImageview / BoardViewbox / BoardBackground / GlobeCanvas、已下线的 board.ts / globe.ts / canvasFilter.ts 等）已于 **2026-10-16 随对应页面下线而移除**，相关源码与脚本均已删除。文中所有 `组件:行号` 引用均为当时快照，非当前代码。
+
 # 全库审计 · 2026-10-14（第三轮）
 
 > 范围：`docs/` 18 篇 · `scripts/` 50 个 mjs · `src/` 26 ts + 35 vue + locales · `data/` 13 json ·
@@ -18,7 +20,7 @@
 | 层级 | 状态 |
 |---|---|
 | 工具链自测 | ✅ selftest **277 项全绿** · lint **0 problems** · build **92 文件 / 1.19 MB** · conventions 过 · font:check 过 · lock 干净（355 包全 npmjs） |
-| 真机冒烟 | ⚠️ `smoke:i18n` ✅ 26 渲染 · `_smoke.cjs` ✅ 零运行时错误 · `_smoke-pixel.cjs` ✅ · **`_smoke-search.cjs` ❌ 14 项失败** · **`_smoke-canvas/globe` ❌ 台数期望过期** |
+| 真机冒烟 | ⚠️ `smoke:i18n` ✅ 26 渲染 · `_smoke.cjs` ✅ 零运行时错误 · `_smoke-pixel.cjs` ✅ · **`_smoke-search.cjs` ❌ 14 项失败** · **`_smoke-canvas/已下线的 globe` ❌ 台数期望过期** |
 | 数据诚信 | 🔴 3 条确证（立绘估算兜底 / 苹果对比页 NFC 否定式 / 品类回落先于闸门） |
 | 文档 | 🔴 全库数字大面积过期（台数 60→62、自测 275→277、字段 42/49→44、维度 7→9…） |
 
@@ -38,11 +40,11 @@
 | P1-1 | 立绘对缺值估算 | `sprite/generate.mjs` `?? 6.5/?? 8/?? 200` → `UNKNOWN` 占位几何 + caption 标「?」+ 构建打印缺值台数 | 构建通过 |
 | P1-2 | 苹果对比页 NFC 丢否定式 | `apple.mjs:665` 对齐规格页 `:397` 的否定式判据 | 构建通过 |
 
-> 注：`BoardCanvas.vue:44` 的 `accent` 是画布内部 props 名，与 P0-2 无关，**不要顺手改名**。
+> 注：`已下线的 BoardCanvas.vue:44` 的 `accent` 是画布内部 props 名，与 P0-2 无关，**不要顺手改名**。
 
 ### ⏳ 未完成
 
-`P1-3` 品类回落下沉 · `P1-4` 无 schema 品类显性失败 · `P2-1` 死闸门第 5 条 · `P2-2` 折叠池判据同源 · `P2-3` BoardImageview 拖拽阈值 · `P2-4` 派生下沉（subline / Canvas-Globe 重复段 / ABILITY_OF_DIM）· `P2-5` 字号闸门消除告警疲劳 · `P3-1` 文档数字刷新 · `P3-2` DATA-CONTRACT 闸门清单重写 · `P3-3` 边界兜底 B1–B15 · **CI 里加 smoke job**。
+`P1-3` 品类回落下沉 · `P1-4` 无 schema 品类显性失败 · `P2-1` 死闸门第 5 条 · `P2-2` 折叠池判据同源 · `P2-3` 已下线的 BoardImageview 拖拽阈值 · `P2-4` 派生下沉（subline / 已下线的 Canvas-Globe 重复段 / ABILITY_OF_DIM）· `P2-5` 字号闸门消除告警疲劳 · `P3-1` 文档数字刷新 · `P3-2` DATA-CONTRACT 闸门清单重写 · `P3-3` 边界兜底 B1–B15 · **CI 里加 smoke job**。
 
 ---
 
@@ -193,16 +195,16 @@ if (a.badSize.length) console.log('   字号:', ...);   // ← 只打印，不 b
 `accent` 字段**从未被任何地方读取**，而模板读的 `accentColor` 在该对象上不存在。
 → **搜索页 13 个品牌筛选按钮的品牌色全部失效**，而 `BrandView.vue:112` / `ChampionRow.vue:35` 等其它页面正常 → 跨页视觉不一致，零报错。
 
-### 4.2 `BoardImageview` 在 pointerdown 里无条件 `setPointerCapture`
-`src/components/BoardImageview.vue:38-42`，无拖拽阈值。
-对照已确立的纪律：`BoardCanvas.vue:284-292`（`movedTotal > 6` 才捕获）、`GlobeCanvas.vue:234-241`（`moved > DRAG_SLOP`）+ `:162-165` 注释「不能在 pointerdown 里就捕获」。
+### 4.2 `已下线的 BoardImageview` 在 pointerdown 里无条件 `setPointerCapture`
+`src/components/已下线的 BoardImageview.vue:38-42`，无拖拽阈值。
+对照已确立的纪律：`已下线的 BoardCanvas.vue:284-292`（`movedTotal > 6` 才捕获）、`已下线的 GlobeCanvas.vue:234-241`（`moved > DRAG_SLOP`）+ `:162-165` 注释「不能在 pointerdown 里就捕获」。
 本组件内暂无可劫持的点击目标故未爆，但纪律已破——一旦往浮层里加按钮就会复现「能拖能缩但永远点不进去」。
 
 ### 4.3 派生事实散落在组件里（3 处重复/分叉）
 | 位置 | 问题 |
 |---|---|
 | `CompareView.vue:278-289` vs `RankingsView.vue:181-184` | 各写一份 `subline()`，一个取「系列·变体·形态·芯片」四项，一个只取「系列·芯片」两项 → **同一语义两个答案** |
-| `CanvasView.vue:46-136` vs `GlobeView.vue:39-152` | 派生 + URL 同步近乎整段复制约 90 行，改一处必漏一处 |
+| `已下线的 CanvasView.vue:46-136` vs `已下线的 GlobeView.vue:39-152` | 派生 + URL 同步近乎整段复制约 90 行，改一处必漏一处 |
 | `RankingsView.vue:71-76` | 手写 `ABILITY_OF_DIM` 映射表，而 `src/lib/facets.ts:402-407` 已有同名字同内容的表 |
 
 违反「派生事实一律下沉 `lib/`，不许在组件里现算」。
@@ -218,7 +220,7 @@ if (a.badSize.length) console.log('   字号:', ...);   // ← 只打印，不 b
 另 `src/types.ts:133` 的 `[key: string]: unknown` 索引签名会吃掉**全部**属性拼写检查（文件头 `:78-86` 自称已撤强转，但签名仍在）。
 
 ### 4.5 死代码（src 与 scripts 双向 grep 均无引用）
-`glossary.ts:72-74`（3 个导出）、`fields.ts:289 orderDeriverFor` + `:307 refreshHzNumber`、`i18n/index.ts:27 LOCALE_STORAGE_KEY`、`lib/types.ts` 中 6 个类型（`Granularity/BenchScore/ProductRecord/VendorRecord/PoolKey/ProductDerived`）、`FilterBar.vue:70 displayLabel` 首参恒未用、`BoardCanvas.vue:89-96 webSvg()` 生成的 `<line>` 被 `:532 :deep(...){display:none}` 全隐藏（生成即死）。
+`glossary.ts:72-74`（3 个导出）、`fields.ts:289 orderDeriverFor` + `:307 refreshHzNumber`、`i18n/index.ts:27 LOCALE_STORAGE_KEY`、`lib/types.ts` 中 6 个类型（`Granularity/BenchScore/ProductRecord/VendorRecord/PoolKey/ProductDerived`）、`FilterBar.vue:70 displayLabel` 首参恒未用、`已下线的 BoardCanvas.vue:89-96 webSvg()` 生成的 `<line>` 被 `:532 :deep(...){display:none}` 全隐藏（生成即死）。
 
 ---
 
@@ -227,12 +229,12 @@ if (a.badSize.length) console.log('   字号:', ...);   // ← 只打印，不 b
 | ID | 位置 | 问题 |
 |---|---|---|
 | B1 | `src/lib/catalog.ts:490` | `PRICE_BUCKETS[len-1].id` — 字典为空时 `undefined.id` 抛错 |
-| B2 | `src/lib/board.ts:128` | `n=0` 时返回 `NaN`；`BoardCanvas.vue:135/192` 用 `props.tiles[NaN]`（靠 `?? ''` 兜住，但 `mv.idx` 恒 NaN 会让 `step()` 每帧误判「索引变了」） |
+| B2 | `src/lib/已下线的 board.ts:128` | `n=0` 时返回 `NaN`；`已下线的 BoardCanvas.vue:135/192` 用 `props.tiles[NaN]`（靠 `?? ''` 兜住，但 `mv.idx` 恒 NaN 会让 `step()` 每帧误判「索引变了」） |
 | B3 | `DataFeedback.vue:71` | `f.range[1]` — range 只给 1 个元素时 `max` 为 `undefined` |
 | B4 | 共 5 处 | 非空断言 `!`：`HomeView.vue:209`、`RankingsView.vue:115`、`SpotlightStrip.vue:72-91`、`lib/fields.ts:241`、`TimelineView.vue:25` |
-| B5 | `BoardCanvas.vue:296-320` | 只在宿主元素收 `pointerup/cancel`，未像 `GlobeCanvas.vue:320-326` 挂 `document` 兜底 → 切后台/浏览器吞事件时 `ifMovable` 卡住 |
-| B6 | `BoardImageview.vue:56-61` | 双指抬起一根后 `sx/sy` 未重置 → 单指续拖瞬移一个两指间距（`GlobeCanvas.vue:261-263` 已处理同款） |
-| B7 | 3 个浮层 | `BoardImageview` / `BoardViewbox:22` / `DataFeedback:193-198` 均无 Esc 关闭、无 `role="dialog"`/`aria-modal`、无焦点陷阱 |
+| B5 | `已下线的 BoardCanvas.vue:296-320` | 只在宿主元素收 `pointerup/cancel`，未像 `已下线的 GlobeCanvas.vue:320-326` 挂 `document` 兜底 → 切后台/浏览器吞事件时 `ifMovable` 卡住 |
+| B6 | `已下线的 BoardImageview.vue:56-61` | 双指抬起一根后 `sx/sy` 未重置 → 单指续拖瞬移一个两指间距（`已下线的 GlobeCanvas.vue:261-263` 已处理同款） |
+| B7 | 3 个浮层 | `已下线的 BoardImageview` / `已下线的 BoardViewbox:22` / `DataFeedback:193-198` 均无 Esc 关闭、无 `role="dialog"`/`aria-modal`、无焦点陷阱 |
 | B8 | `HomeView.vue:97-98` | `new Date(ts).getUTCMonth()+1`，`generatedAt` 非法时渲染「NaN 月 NaN 日」 |
 | B11 | `SpecTable.vue:26` | `:key="r.label"` — 同组标签重复会触发 Vue 重复 key |
 | B12 | 苹果预检 `sources/apple.mjs:906-925` | probe 落盘后只凭 `memo.reason` 永久 skip，无 TTL / 无 schema 版本 → 官网恢复后该 slug 永久跳过且不报错 |
@@ -299,7 +301,7 @@ node -e "const d=require('./data/products.json');console.log((d.products||d).len
 |---|---|
 | 苹果对比页 NFC 否定式（`:638`）**污染了数据** | ❌ 查 raw 归档：含 NFC 原文仅 1 种「支持读卡器模式的 NFC」，**0 种否定式** → 未触发，属潜伏风险 |
 | Compare 页 `imgsOk:32/62` 图片加载失败 | ❌ `SpriteImg.vue:17` 是 `loading="lazy"`，视口外不加载，正常 |
-| `_smoke-canvas/globe` HUD 台数不符 = 功能退化 | ❌ 脚本里**硬编码**了 `60` / `47` 台期望值，实际 62 / 49；筛选功能本身 ✅（「筛选后瓦片都是华为机型」通过） |
+| `_smoke-canvas/已下线的 globe` HUD 台数不符 = 功能退化 | ❌ 脚本里**硬编码**了 `60` / `47` 台期望值，实际 62 / 49；筛选功能本身 ✅（「筛选后瓦片都是华为机型」通过） |
 | 缺 `memory.ramGb` 的数据有 30 台 | ⚠️ 我的第一版统计脚本直接读嵌套路径，得出 0 台——**我自己踩了「取值必须 pick specs-first」的坑**；改用 `pick()` 并计入空数组后为 **32 台** |
 | i18n 键不对齐 | ❌ 实测 zh/en 各 337 键，双向差集**为空** |
 
@@ -320,7 +322,7 @@ node -e "const d=require('./data/products.json');console.log((d.products||d).len
 | **P2** | 字号闸门要么白名单要么 `bad++`（消除告警疲劳） | `_smoke-pixel.cjs:124` | 小 |
 | **P2** | 折叠池 filter 与 `formOf` 同源，并加断言 | `derive.mjs:211` | 小 |
 | **P2** | 删除死闸门第 5 条，或改判字符串型脏值 | `validate.mjs:155` | 小 |
-| **P2** | `BoardImageview` 补拖拽阈值（对齐另两个画布） | `BoardImageview.vue:38-42` | 小 |
+| **P2** | `已下线的 BoardImageview` 补拖拽阈值（对齐另两个画布） | `已下线的 BoardImageview.vue:38-42` | 小 |
 | **P2** | 派生下沉：subline / Canvas-Globe 重复段 / ABILITY_OF_DIM | 4 处组件 | 中 |
 | **P3** | 文档数字全量刷新（台数 62、自测 277、字段 44/组 10、维度 9） | 十余处 | 小 |
 | **P3** | `DATA-CONTRACT.md` 闸门清单重写（删 6 条虚构、补 7 条实存） | `DATA-CONTRACT.md:227-238` | 小 |
@@ -333,7 +335,7 @@ node -e "const d=require('./data/products.json');console.log((d.products||d).len
 1. **本项目最大的风险不是「有 bug」，是「红灯没人看」**。本轮最严重的三个发现（搜索容错 14 红、字号 13 处告警、6 个 npm 脚本 0 调用）全都属于这一类。
 2. **别信静态 grep 的「0 引用」**。本轮多起假阳性：动态拼接（`assets.ts` 的 `sprites/${id}.svg`）、类型导入、跨 scripts/src 边界。
 3. **统计覆盖率必须用 `pick()`（specs-first）**。我第一版脚本直接读嵌套，把「32 台缺内存」算成「0 台缺」——差一点就把一个真问题写成没问题。
-4. `_smoke-globe.cjs` 存在随机 `networkidle2` 超时（两次分别挂在 :268 与 :348），核心功能 12 项全绿，判定为脚本稳定性问题，接 CI 前需先换成更稳的等待策略，否则会制造随机红。
+4. `_smoke-已下线的 globe.cjs` 存在随机 `networkidle2` 超时（两次分别挂在 :268 与 :348），核心功能 12 项全绿，判定为脚本稳定性问题，接 CI 前需先换成更稳的等待策略，否则会制造随机红。
 
 ---
 
@@ -352,7 +354,7 @@ node -e "const d=require('./data/products.json');console.log((d.products||d).len
 | P1-4 | 无 schema 品类显性失败（validate 拦 + 库函数抛错 + overrides 同步） | `validate.mjs` / `schema.mjs` / `overrides.mjs` | 新增 2 条断言 |
 | P2-1 | 删死闸门 5；用例改断真实拦截路径 + SCHEMA_RANGE_PATHS 覆盖断言 | `validate.mjs` / `selftest.mjs` | selftest 285 |
 | P2-2 | 折叠池判据同源（isFoldableOfficial）；DOMAINS 导出供测 | `derive.mjs` | 逐台同源 + 反向测（名字带 Flip 官网没写 → 判否） |
-| P2-3 | BoardImageview 补 DRAG_SLOP=6（含双指抬手基准重置 = B6） | `BoardImageview.vue` | 画布冒烟 25/25 |
+| P2-3 | 已下线的 BoardImageview 补 DRAG_SLOP=6（含双指抬手基准重置 = B6） | `已下线的 BoardImageview.vue` | 画布冒烟 25/25 |
 | P2-4 | 派生下沉：`productSubline` / `ABILITY_OF_DIM` 导出 / `useCanvasFilter.ts` 收编两页 90 行 | `catalog.ts` / `facets.ts` / 新文件 / 4 组件 | tsc 0 · 两页冒烟全绿 |
 | P2-5 | 字号违规 `bad++`；根因修复（LocaleSwitch 漏 `text-[12px]` 继承 body 14px） | `_smoke-pixel.cjs` / `LocaleSwitch.vue` | 像素风 12 页字号全合规 |
 | P3-1 | 文档数字刷新（台数 62 / 自测 285 / 字段 48 / 维度 15 / 脚本名 / 行数 2767） | README · AGENTS · CONVENTIONS · 等 7 篇 | grep 清零 |

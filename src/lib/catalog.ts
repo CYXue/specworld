@@ -42,8 +42,8 @@ interface CuratedDict {
   };
   chipMultiPrefixes: string[];
   // 芯片名的官方英文名（麒麟 → Kirin、A18 芯片 → A18 chip）不在本字典里，
-  // 统一由 data/curated/glossary.json 管 —— 芯片名在参数表/分面/榜单/搜索建议/
-  // 画布短规格里都要显示，两处各写一份迟早分叉（2026-10-14 已合并）。
+  // 统一由 data/curated/glossary.json 管 —— 芯片名在参数表/分面/榜单/搜索建议里都要显示，
+  // 两处各写一份迟早分叉（2026-10-14 已合并）。
   priceBuckets: Array<{
     id: string;
     label: string;
@@ -415,7 +415,7 @@ export function chipNameLabel(name: string): string {
   // 「麒麟」「芯片」在 products.json 的官网原文里出现过，被数据白名单放过了。
   //
   // 术语翻译统一走 glossary（`data/curated/glossary.json`），这里不另写一份替换表：
-  // 芯片名在参数表、分面、榜单、搜索建议、画布短规格里都要显示，两处各写一份
+  // 芯片名在参数表、分面、榜单、搜索建议里都要显示，两处各写一份
   // 迟早分叉（这正是上一轮刚踩过的「两份真源」）。
   return localizeSpecValue(s);
 }

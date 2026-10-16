@@ -112,7 +112,7 @@ function stripLineComments(text) {
 
 /* ---- §2.5 命令式 innerHTML + scoped 样式陷阱 ---- */
 {
-  // 历史真 bug：BoardCanvas 用 innerHTML 注入瓦片，节点没有 data-v-xxx，
+  // 历史真 bug：已下线的 BoardCanvas 曾用 innerHTML 注入瓦片，节点没有 data-v-xxx，
   // scoped 样式不命中 → 瓦片竖直堆叠。约定是这类结构必须 :deep() 或写全局样式。
   for (const f of walk(SRC)) {
     const text = readFileSync(f, 'utf8');

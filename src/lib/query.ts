@@ -1,14 +1,12 @@
 /**
  * 查询归一化与匹配 —— **零 import 的纯函数**。
  *
- * 为什么要单独抽一个文件：`lib/search.ts`（搜索页）与 `lib/canvasFilter.ts`
- * （无限画布筛选）各有一份 tokenize，两份口径**已经漂移**了 ——
- * 搜索页做了归一化容错，画布没有，于是用户在画布里搜 `mate80` 得到 0 台，
+ * 为什么要单独抽一个文件：搜索与筛选曾各写一份 tokenize，两份口径**已经漂移**了 ——
+ * 一处做了归一化容错、另一处没有，于是同一个词在两处给出不同结果，
  * 在搜索页搜同一个词却有几台。同一个功能两个答案，比少一个功能更糟。
  *
  * 抽出共享层是唯一能长期锁住口径的办法（两份各自改，下个月必然又漂）。
- * 零依赖是为了让 `scripts/selftest.mjs` 能直接 import 它做护栏，
- * 理由同 board.ts / globe.ts。
+ * 零依赖是为了让 `scripts/selftest.mjs` 能直接 import 它做护栏。
  *
  * 口径六条
  * ------------------------------------------------------------
@@ -104,7 +102,7 @@ export function tokenize(q: string): string[] {
   return q.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-/** 分词 + 混写词按汉字边界拆分，搜索页与画布的公共入口 */
+/** 分词 + 混写词按汉字边界拆分，搜索与筛选的公共入口 */
 export function queryTokens(q: string): string[] {
   return tokenize(q).flatMap(splitRuns);
 }

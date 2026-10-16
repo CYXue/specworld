@@ -19,7 +19,7 @@
 |---|---|
 | 「更新数据」 | `node scripts/pipeline.mjs --data-only` → 核对 `data/products.json` 的台数与覆盖率 → `npm run build` |
 | 「改解析器 / 闸门」 | **先写断言再改代码**。改完 `npm run selftest`，不通过不许往下走 |
-| 「改界面」 | `npm run build` → 起 dev → **真机拖一遍**（画布/球必须拖、必须点进详情页） |
+| 「改界面」 | `npm run build` → 起 dev → **真机拖一遍**（滚动/点按/筛选必须真试，必须点进详情页） |
 | 「加/改一台机器的参数」 | 编辑 `data/overrides.json`（条目格式见文件内 `_doc`）→ 跑一次 `--data-only`。用户层每次同步重新应用，**官网刷新不会冲掉用户数据**；写错会被闸门拒绝写盘（这是设计） |
 
 ---
@@ -113,17 +113,6 @@ sRGB 低亮度端被严重压缩，按通道值等差会出现「两档肉眼完
 最后一条是因为天空改黑白后，地面的饱和绿曾像荧光棒一样扎眼 ——
 **基调整体性要机器守，不能靠「改的时候顺手看一眼」。**
 
-### 改了 `src/lib/board.ts` / `globe.ts`（几何）
-```bash
-npm run selftest          # 含不变量 + 暴力对拍，不是 golden 快照
-node _smoke-canvas.cjs    # 需先 npm run dev（端口 5183，与 vite.config.ts 的 server.port 同源）
-node _smoke-globe.cjs
-```
-几何是「错了也不报错、只会静默画错」的地方：回绕边界算错会瞬移、双模漏负值会取到 `undefined`。
-**单测和产物闸门都抓不到「容器高度塌成 0」** —— 画布有 fallback 视口兜底，高度为 0 时
-画面照样完整渲染，但指针事件全落空（拖不动、点不进、零报错）。
-**交互组件必须真机拖一遍，smoke 脚本不许省。**
-
 ⚠️ **根目录 7 个 `_smoke*.cjs` 依赖 `puppeteer-core`，它已在 `devDependencies` 中**
 （CI 不需要浏览器，本地用本机已装的系统 Chrome）。无需手动 `npm i puppeteer`。
 早期版本曾依赖未入库的 `puppeteer`（`npm i puppeteer --no-save`），`npm ci` 会静默删掉它、
@@ -208,7 +197,7 @@ data/sprites/  精灵图 —— 构建期生成，不入库
 ## 五、几个反复踩到的实现细节
 
 - **`setPointerCapture` 拖过阈值（6px）才调**。在 `pointerdown` 里就调会劫持 click 的 target，
-  症状是「能拖能缩但设备永远点不进去」，零报错。两个画布各中招过一次。
+  症状是「能拖能缩但设备永远点不进去」，零报错。拖拽类交互组件各中招过一次。
 - **取值一律 `pick(product, path)`（specs-first，`scripts/lib/specs.mjs`）**。
   v2 起品类参数在扁平 specs 容器里（`specs['display.sizeIn']`），v1 嵌套回退。
   只读 specs 会让迁移后第一轮的覆盖率对比跌到 0 触发拒写；只读嵌套则用户修正永远不生效。

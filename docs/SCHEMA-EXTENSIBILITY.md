@@ -191,5 +191,5 @@ specGroups 重构为**引擎**：schema 里每个字段默认按 type 自动渲�
    - schema `orderDeriver:"refreshHzNumber"` 声明 + `fields.ts ORDER_DERIVERS` 注册表 +
      `orderDeriverFor(path)`；selftest 对账（声明必须有实现、null→null 不冒充）。
    - SORTS_LITE/榜单保持**序类策展 UI**（有意不字典化：变化频率低、ABILITIES 对账闸门已守语义）。
-4. **有意不做（留档）**：身份字段进字典（=契约迁移，两项目同构）；ART 导向策展（CanvasView/
+4. **有意不做（留档）**：身份字段进字典（=契约迁移，两项目同构）；ART 导向策展（
    导出图/搜索权重）留代码；SORTS_LITE 序类策展。

@@ -35,8 +35,6 @@ const PAGES = [
   ['compare', '#/compare'],
   ['search', '#/search?q=mate'],
   ['search-empty', '#/search'],
-  ['canvas', '#/canvas'],
-  ['globe', '#/globe'],
   ['about', '#/about'],
   ['brand', '#/brand/apple'],
   ['product', '#/product/apple-iphone-16'],
@@ -60,16 +58,15 @@ const AUDIT = () => {
     const f = cs.filter || '';
     if (f && f !== 'none' && f.includes('blur')) blur.push(el.className || el.tagName);
 
-    // 2. 圆角（球体 .globe-body 几何必需，白名单）
+    // 2. 圆角（零圆角纪律）
     const r = parseFloat(cs.borderRadius) || 0;
     const cls = String(el.className || '');
-    const isGlobe = cls.includes('globe-body');
-    if (r > 0 && !isGlobe) round.push(`${cls || el.tagName}:${cs.borderRadius}`);
+    if (r > 0) round.push(`${cls || el.tagName}:${cs.borderRadius}`);
 
     // 3. 字号：像素字只认 12 的整数倍与 12 本身
     //    排除两类「合理例外」，否则噪声会让人整体忽略这个检查：
     //      · .sr-only —— 视觉隐藏的无障碍等价物（含其**后代**，用 closest 而非自身匹配：
-    //        画布/球面的文本等价列表里 <h2>/<a> 自己不带 class，只在祖先里）
+    //        无障碍文本等价列表里 <h2>/<a> 自己不带 class，只在祖先里）
     //      · <title>/<style>/<head> 内的元素 —— 根本不渲染
     if (el.childNodes.length && [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) {
       const hidden =
@@ -135,7 +132,7 @@ const AUDIT = () => {
 
   // 移动端窄屏：验证固定像素布局没破
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
-  for (const [name, hash] of [['home-m', '#/'], ['canvas-m', '#/canvas'], ['globe-m', '#/globe']]) {
+  for (const [name, hash] of [['home-m', '#/']]) {
     await page.goto(BASE + hash, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await new Promise((r) => setTimeout(r, 700));
     await page.screenshot({ path: path.join(OUT, `${name}.png`) });

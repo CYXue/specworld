@@ -69,7 +69,7 @@ refreshHz[48,240]）与 `phone.json` 的 `range` **逐字相同但独立维护**
 | B1 | `fields.ts specGroups`（29 处字段访问+组标题） | 详情页/对比表策展行 | ✅ 渲染对账闸门（selftest #246） |
 | B2 | `facets.ts DIMENSIONS`(9 维) + `valueOf` switch + order 内 `'phone'` | 筛选维度（身份/派生维度） | ❌ 无 |
 | B3 | `catalog.ts` 策展表：`VARIANTS`(11 正则)、`APPLE_SERIES`(4)、`CHIP_BRAND='麒麟'`（isMultiChip 只认麒麟前缀，注释自述苹果不覆盖）、`seriesOf` 品牌分支 | 系列/变体/芯片解析 | ❌ 无——**新品牌/新系列/新变体全要人工改代码** |
-| B4 | `CanvasView.vue`（5 处字段访问：ppi/芯片/尺寸/刷新率/电池） | 画布标签策展 | ❌（策展性质，低危） |
+| B4 | （已移除）原 `CanvasView.vue` 画布标签策展 —— 画布页已于 2026-10-16 下线 | — | — |
 | B5 | `sync/validate.mjs` REQUIRED_PATHS + provenance 核心清单（weightG/sizeIn/capacityMah） | 手机偏置（已文档化，行李箱需扩） | 部分（schema 校验会查未注册键） |
 | B6 | `scripts/normalize/*.mjs` 大量字段路径 | 解析器产出层（v1 嵌套，迁移阶段已文档化） | 合理硬编码 |
 | B7 | `exportSummary.ts` / `renderExportImage.ts` / `search.ts` 字段访问 | 导出图/摘要/搜索策展 | ❌（同 B4 性质） |

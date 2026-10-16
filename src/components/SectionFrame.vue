@@ -6,7 +6,7 @@ withDefaults(
     title?: string;
     hud?: string;
     id?: string;
-    icon?: 'clock' | 'trophy' | 'grid' | 'globe' | 'compare' | 'search' | 'home' | 'list';
+    icon?: 'clock' | 'trophy' | 'compare' | 'search' | 'home' | 'list';
   }>(),
   { title: '', hud: 'var(--color-gold)', id: undefined, icon: undefined },
 );

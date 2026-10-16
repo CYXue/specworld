@@ -11,7 +11,7 @@
  * 覆盖三个 localizeSpecValue 出口（与 src/lib/glossary.ts 的接入口一致）
  * ----------------------------------------------------------------
  * - specGroups（详情页/对比页参数表）          → fields.ts
- * - chipNameLabel（芯片名：CanvasView / search 建议词） → catalog.ts
+ * - chipNameLabel（芯片名：search 建议词） → catalog.ts
  * - facets（筛选条 string 型分面 + 芯片分面）   → facets.ts
  *
  * 不覆盖
@@ -65,7 +65,7 @@ export async function collectResidualTokens() {
     for (const g of FIELDS.specGroups(p)) {
       for (const r of g.rows) collectCJK(r.value, found);
     }
-    // 2) 芯片名（CanvasView 短规格 / search 建议词）
+    // 2) 芯片名（search 建议词）
     collectCJK(CAT.chipNameLabel(p.chipset?.name ?? ''), found);
     // 3) 筛选条（各维度分面 label；不传 brandLabels，见文件头说明）
     for (const dim of FACETS.DIMENSION_KEYS) {

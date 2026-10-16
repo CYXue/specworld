@@ -104,8 +104,6 @@ const PROBE = async () => {
     '#/rankings',
     '#/compare',
     '#/search?q=mate',
-    '#/canvas',
-    '#/globe',
   ];
   const allMissing = new Set();
   const allBlank = new Set();

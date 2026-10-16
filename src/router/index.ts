@@ -12,10 +12,6 @@ export const routes = [
   { path: '/compare', name: 'compare', component: () => import('../views/CompareView.vue') },
   { path: '/rankings', name: 'rankings', component: () => import('../views/RankingsView.vue') },
   { path: '/timeline', name: 'timeline', component: () => import('../views/TimelineView.vue') },
-  // /canvas 同样必须排在 '/:pathMatch(.*)*' 之前，理由见下。
-  { path: '/canvas', name: 'canvas', component: () => import('../views/CanvasView.vue') },
-  // /globe 是球面版：设备贴在球壳上，拖动转球，绕一圈回到原位。
-  { path: '/globe', name: 'globe', component: () => import('../views/GlobeView.vue') },
   // /search 放在 '/:pathMatch(.*)*' 之前 —— 通配在 vue-router 里是按声明顺序
   // 匹配的，写晚了 '/search' 会被 404 吃掉。
   { path: '/search', name: 'search', component: () => import('../views/SearchView.vue') },

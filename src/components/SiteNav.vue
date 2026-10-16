@@ -44,10 +44,6 @@ withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false });
 //    这不是改文案讨好用户 —— 名不准会让用户点错。
 // 4. **「关于」是低频页，不该占主导航的视觉预算**：它已经在页脚有署名、
 //    关于页里有完整的项目说明与数据原则。移到页脚，主导航留给高频页。
-//
-// 分组：查数据（广场 / 机型库 / 榜单 / 时间线）与逛玩法（画布 / 设备球），
-// 中间一条像素竖线，后者用弱化色 —— 这两组的使用节奏完全不同，
-// 混在一排里用户读不出「哪些是工具、哪些是玩具」。
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -62,16 +58,6 @@ const primaryItems = computed(() => [
   { name: 'compare', label: t('nav.compare'), to: '/compare' },
   { name: 'rankings', label: t('nav.rankings'), to: '/rankings' },
   { name: 'timeline', label: t('nav.timeline'), to: '/timeline' },
-]);
-
-/**
- * 逛玩法：探索型的可视化界面。使用频率明显低于查数据，
- * 所以用**弱化色文字链接**而不是按钮 —— 它们不需要和工具抢点击权重。
- * 仍然给 aria-current，当前页要能看出来（弱化不等于不可见）。
- */
-const secondaryItems = computed(() => [
-  { name: 'canvas', label: t('nav.canvas'), to: '/canvas' },
-  { name: 'globe', label: t('nav.globe'), to: '/globe' },
 ]);
 
 const isCurrent = (n: string) => route.name === n;
@@ -100,21 +86,6 @@ function submit() {
       :to="it.to"
       class="pixel-button-flat px-2 py-0.5 text-[12px] leading-[1.5]"
       :aria-current="isCurrent(it.name) ? 'page' : undefined"
-    >
-      {{ it.label }}
-    </RouterLink>
-
-    <!-- 逛玩法：弱化，与「查数据」分组。
-         分隔线用 stone-gray 而不是 ink-soft —— 后者 #4a5468 在 ink 底上
-         对比度太低，实测几乎看不见（暗底暗线 = 没有线）。 -->
-    <span class="mx-1 h-3 w-0.5 bg-[var(--color-stone)]" aria-hidden="true"></span>
-    <RouterLink
-      v-for="it in secondaryItems"
-      :key="it.name"
-      :to="it.to"
-      class="bg-[rgb(11_16_32/0.62)] px-2 py-0.5 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)] hover:text-[var(--color-parchment-lit)]"
-      :aria-current="isCurrent(it.name) ? 'page' : undefined"
-      :class="isCurrent(it.name) ? 'text-[var(--color-gold)]' : ''"
     >
       {{ it.label }}
     </RouterLink>

@@ -1,3 +1,5 @@
+> ⚠️ **历史引用声明（2026-10-16 补）**：本文提及的「画布 / 设备球」可视化探索页及其组件（已下线的 CanvasView / GlobeView / BoardCanvas / BoardImageview / BoardViewbox / BoardBackground / GlobeCanvas、已下线的 board.ts / globe.ts / canvasFilter.ts 等）已于 **2026-10-16 随对应页面下线而移除**，相关源码与脚本均已删除。文中所有 `组件:行号` 引用均为当时快照，非当前代码。
+
 # 全库审计报告：硬编码 / 死代码 / 临时文件（2026-10-13）
 
 > **存档说明（2026-10-14 补）**：本文是 2026-10-13 全库审计的**过程与决策记录**。
@@ -80,7 +82,7 @@
 | 位置 | 符号 | 判断 |
 |---|---|---|
 | `src/lib/adapt.ts` | `fieldStatus` | v1 残留，被 `fieldStatusOf` 类新实现取代 |
-| `src/lib/board.ts` | `rescaleMovers` | 画布动画旧函数，无调用方 |
+| `src/lib/已下线的 board.ts` | `rescaleMovers` | 画布动画旧函数，无调用方 |
 | `src/lib/catalog.ts` | `ramFacets` | 内存分面旧表，DIMENSIONS 泛化后废弃 |
 | `src/lib/facets.ts` | `DIM_LABEL` | 标签表，泛化后废弃（全库仅定义一处出现） |
 | `src/lib/specs.ts` | `topN` | 榜单旧助手，无调用方 |
@@ -93,8 +95,8 @@
 
 ### D3. 导出多余（内部使用、外部无人 import，共 34 个，🟢 外观级）
 
-- `src/`（26 个）：globe.ts 8 个（Viewport3/SpherePoint/FIT_RATIO/BACK_OPACITY/fiboPoint/
-  toVec/toCameraSpace/focal）、canvasFilter.ts 5 个、catalog.ts 5 个、fields.ts 3 个、
+- `src/`（26 个）：已下线的 globe.ts 8 个（Viewport3/SpherePoint/FIT_RATIO/BACK_OPACITY/fiboPoint/
+  toVec/toCameraSpace/focal）、已下线的 canvasFilter.ts 5 个、catalog.ts 5 个、fields.ts 3 个、
   compare.ts 2 个、search.ts 2 个、specs.ts 2 个，及 adapt/facets/fieldValidate/query/
   renderExportImage/src-types 各 1–4 个。
 - `scripts/`（8 个）：apple.mjs 5 个、apple-compare.mjs 4 个、apple-prices.mjs 2 个、
@@ -124,7 +126,7 @@ return (p.category as CategoryId | undefined) ?? 'phone';
 | 检查项 | 结果 |
 |---|---|
 | 品牌字面量散落（原则 7） | ✅ src/ 零处 `'apple'/'huawei'` |
-| URL 硬编码 | ✅ 仅 site.ts 两个真源 + BoardCanvas 的 SVG data URI（非网络请求） |
+| URL 硬编码 | ✅ 仅 site.ts 两个真源 + 已下线的 BoardCanvas 的 SVG data URI（非网络请求） |
 | schema range vs 真实数据 | ✅ 15 组区间全部覆盖（折叠屏宽 164.6mm ∈ [50,200]） |
 | LIMITS 双源（A2） | ✅ 已从 schema 派生，缺 range 显性报错 |
 | METRICS/ABILITIES 三源（A1） | ✅ selftest 4507/4530 两条对账闸门真实存在 |
@@ -252,8 +254,8 @@ lint:fix 会改代码，改后已重跑 selftest 确认无行为变化。
   之外零出现」判定。**修正了审计扫描的两个盲区**：必须连 `.vue`一起扫（statusLabelOf /
   site.ts 五个真源常量 / useDataset / continentOf 都被 .vue 消费，漏了就会误删），
   并查 `export * from` 再导出。
-- 去掉 export 的 64 个：adapt 2、canvasFilter 5、catalog 5、compare 2、facets 1、fields 3、
-  fieldValidate 1、globe 8、query 1、renderExportImage 1、search 2、specs 2、src/types.ts 4、
+- 去掉 export 的 64 个：adapt 2、已下线的 canvasFilter 5、catalog 5、compare 2、facets 1、fields 3、
+  fieldValidate 1、已下线的 globe 8、query 1、renderExportImage 1、search 2、specs 2、src/types.ts 4、
   brands 3、archive-shape 2、schema 5、normalize/shared 1、fingerprint 2、
   apple-compare 4、apple-prices 2、apple 5、sprite/generate 1、sync/queue 1。
 - **保留 8 个（判断点，用户可否决）**：`src/lib/types.ts` 7 个 + `scripts/sources/types.ts`
@@ -288,7 +290,7 @@ postbuild 全绿（含新闸门反向测）。工作区累计 35 个文件改动
 
 ### 7.1 🔴 功能性缺陷（最高价值，不是死代码是坏代码）
 
-**B1. BoardImageview.vue 交互全线失灵（Vite 重构引入的回归）**
+**B1. 已下线的 BoardImageview.vue 交互全线失灵（Vite 重构引入的回归）**
 全屏立绘查看器写全了 `onDown/onMove/onUp/onWheel` 四个指针/滚轮处理器，
 提示文字也宣传「拖拽移动图片，滚轮 / 双指捏合缩放」，但**模板上一个事件绑定都没有**——
 打开查看器后拖拽、滚轮、捏合全部无响应，零报错。文件自 45705fc（Vite 重构提交）
@@ -297,7 +299,7 @@ postbuild 全绿（含新闸门反向测）。工作区累计 35 个文件改动
 **注意**：这是行为修复，按项目纪律改完必须真机拖一遍（冒烟脚本或手动）。
 
 **B2. reduceMotion 死变量（a11y 偏好未生效）**
-BoardCanvas.vue:75 算了 `matchMedia('(prefers-reduced-motion: reduce)')` 却没有任何
+已下线的 BoardCanvas.vue:75 算了 `matchMedia('(prefers-reduced-motion: reduce)')` 却没有任何
 消费方——系统级「减少动效」偏好在画布上被静默忽略。修法二选一：接进 RAF 循环
 （reduceMotion.matches 时直接吸附目标位，不做缓动），或删掉声明。倾向前者（声明在 = 意图在）。
 
@@ -317,11 +319,11 @@ BoardCanvas.vue:75 算了 `matchMedia('(prefers-reduced-motion: reduce)')` 却�
 | scripts/selftest.mjs | ADAPT_LIB | 死动态 import（import 了不用） |
 | scripts/report/quality.mjs | stateZh | 四态标签 map，实际打印处全内联硬编 |
 | scripts/report/quality.mjs | hasVal | |
-| src/components/BoardImageview.vue | props | defineProps 返回值未用（模板直接用 src） |
-| src/components/BoardViewbox.vue | props | 同上（tile） |
+| src/components/已下线的 BoardImageview.vue | props | defineProps 返回值未用（模板直接用 src） |
+| src/components/已下线的 BoardViewbox.vue | props | 同上（tile） |
 | src/lib/types.ts | Snapshot/PoolKey/ProductDerived | **保留**：契约镜像（Snapshot 有 validate.mjs JSDoc 消费者） |
 
-BoardImageview 的 onDown/onMove/onUp/onWheel 归入 B1（功能缺陷）不在此表。
+已下线的 BoardImageview 的 onDown/onMove/onUp/onWheel 归入 B1（功能缺陷）不在此表。
 
 ### 7.3 🟢 未使用的 import（19 个，eslint 的 unused 规则是关的所以 lint 从不报）
 
@@ -329,7 +331,7 @@ BoardImageview 的 onDown/onMove/onUp/onWheel 归入 B1（功能缺陷）不在�
 - scripts/normalize/brands/apple.mjs: parseOis、parseRearLenses、parseFront、parseResolution、parsePpi
 - scripts/normalize/brands/huawei.mjs: parseAperture、parseOis、parseLens、pickFirstRes、parseWatt、sliceByVariants、nums
 - scripts/pipeline.mjs: writeFileSync ｜ scripts/qa/index.mjs: resolve ｜ scripts/selftest.mjs: STATUS_VALUES
-- src/components/ChampionRow.vue: Product ｜ src/components/GlobeCanvas.vue: LAT_LIMIT ｜ src/lib/specs.ts: Dataset
+- src/components/ChampionRow.vue: Product ｜ src/components/已下线的 GlobeCanvas.vue: LAT_LIMIT ｜ src/lib/specs.ts: Dataset
 
 **二阶效应**：清掉 apple/huawei 两个 normalize 的未使用 import 后，shared.mjs 里对应的
 parse* 导出可能变成零消费者——修完要重跑导出扫描确认（本次已查出 parseOis 等在两处
@@ -360,7 +362,7 @@ scripts/favicon/browsershot.cjs：零引用（不在 npm scripts、不在 workfl
 
 ## 八、第二轮修复全部实施（2026-10-13 深夜，用户指示「全部按最优解修，不考虑兼容性」）
 
-### 8.1 B1 BoardImageview 交互接线（功能修复）
+### 8.1 B1 已下线的 BoardImageview 交互接线（功能修复）
 - `.imageview_image` 补 `@pointerdown/@pointermove/@pointerup/@pointercancel/@wheel.prevent`；
   顺手去掉未用的 `const props =` 绑定（defineProps 调用保留）。
 - **真机验证**（_smoke-boardfix.cjs，puppeteer，9 项断言全过零运行时错误）：
@@ -368,13 +370,13 @@ scripts/favicon/browsershot.cjs：零引用（不在 npm scripts、不在 workfl
 - 顺带发现并修复同文件同类的：见 8.2。
 
 ### 8.2 B2 减动效偏好全线接通（三处，a11y）
-- **BoardCanvas**：`move()` 加 reduce-motion 分支——不攒惯性不补间，本帧直接到位后
+- **已下线的 BoardCanvas**：`move()` 加 reduce-motion 分支——不攒惯性不补间，本帧直接到位后
   `stopInertia()`。真机数据印证模型：常规态总位移 1229px（=初速/0.05 的惯性滑行），
   减动效态 -57px（20 步直接到位之和），两态松手行为分别「继续滑 / 即停」。
-- **BoardBackground**（本轮新发现的第三处同款缺陷）：原来常驻 rAF 永不归零，
+- **已下线的 BoardBackground**（本轮新发现的第三处同款缺陷）：原来常驻 rAF 永不归零，
   且点亮淡出完全不看减动效。改为：reduce-motion 时硬切点亮一帧即灭；无活跃方块时
   rAF 停止（常规态也省下一个空转的常驻循环）；`trigger()` 负责唤醒。
-- **GlobeCanvas** 本就是正确范本（声明+消费都有），未动。
+- **已下线的 GlobeCanvas** 本就是正确范本（声明+消费都有），未动。
 
 ### 8.3 死符号与未使用 import 清理
 - 删死符号 13 个：brandName / PAPER / indexById / apFindAll（连带修头部注释清单）/
@@ -382,7 +384,7 @@ scripts/favicon/browsershot.cjs：零引用（不在 npm scripts、不在 workfl
   stateZh + hasVal（quality.mjs 实际打印处全内联硬编）/ props×2（defineProps 返回值未用）。
 - 清未使用 import 19 个（archive statSync、normalize apple 5 + huawei 7、pipeline
   writeFileSync、qa resolve、selftest STATUS_VALUES、ChampionRow Product、
-  GlobeCanvas LAT_LIMIT、specs Dataset）。
+  已下线的 GlobeCanvas LAT_LIMIT、specs Dataset）。
 - **二阶效应**：shared.mjs 导出清单下架 6 个零消费者（nums、parseOis、cameraRole、
   parseRefresh、parseWatt、sliceByVariants——其中 parseResolution 一度被误删后恢复，
   huawei 实际在用）；import 自 parse.mjs 转手层清掉 nums/parsePpi/sliceByVariants。

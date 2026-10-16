@@ -8,7 +8,7 @@
  * 完整扩展名，于是 selftest 一碰到跨文件 import 就报 ERR_MODULE_NOT_FOUND。
  *
  * 在此之前 `src/lib/*` 恰好都是零 import 的单文件，所以这个坑一直没露头。
- * 抽出 `lib/query.ts` 共享层后，`search.ts` / `canvasFilter.ts` 立刻互相 import ——
+ * 抽出 `lib/query.ts` 共享层后，`search.ts` 立刻和 query.ts 互相 import ——
  * 坑就露出来了。两种选择：
  *   A. 源码里写 `from './query.ts'`。Vite 支持，但 `tsconfig` 的
  *      `allowImportingTsExtensions: false` 与之冲突（noEmit 下才允许），

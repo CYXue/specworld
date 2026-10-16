@@ -26,7 +26,7 @@
 
 | 维度 | BENCHMARK 旧结论 | 当前实际 |
 |---|---|---|
-| 单元自测 | 66 项（旧结论） | `scripts/selftest.mjs` 断言 **112 项**（含品牌映射层 golden 测试、闸门自身、**渲染层几何数学**：环面 + 球面），CI 第一个 job 强制跑（见 §6） |
+| 单元自测 | 66 项（旧结论） | `scripts/selftest.mjs` 断言覆盖品牌映射层 golden 测试、闸门自身、渲染层纯函数（环面/球面几何数学已随画布/设备球页面于 2026-10-16 下线而退役），CI 第一个 job 强制跑（见 §6） |
 | 只读 QA 脚本 | P1 未做 | `scripts/qa/` 已建 `why-champion` / `coverage` / `stale-lineup` 三件套，且直接复用 `buildChampions` 单一真源 |
 | 精灵图 | 入库，规模增长爆点 | **已改为构建期生成、`data/sprites/` 写入 `.gitignore` 不再入库**（见 §6）——不再是退步点 |
 

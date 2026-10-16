@@ -19,8 +19,6 @@
     "compare": "Models",
     "rankings": "Rankings",
     "timeline": "Timeline",
-    "canvas": "Canvas",
-    "globe": "Globe",
     "search": "Search",
     "searchLabel": "Search models",
     "searchPlaceholder": "Search model / chip"
@@ -49,20 +47,6 @@
     "released": "Released {date}",
     "fromPrice": "From {price}",
     "priceUnpublished": "China price not published"
-  },
-  "board": {
-    "dragTitle": "Drag to explore",
-    "dragSub": "Browse all models",
-    "wrapReady": "Infinite wrap ready",
-    "fullSpecs": "Full specs →",
-    "backClose": "[ Back ] :: close()",
-    "imageviewTip": "+ Drag to pan, wheel / pinch to zoom +",
-    "canvasAriaLabel": "Infinite device canvas: drag to pan, click a tile for details",
-    "emptyTitle": "No devices on the canvas",
-    "emptySub": "The current filter matched nothing. Try another condition or clear to see all.",
-    "hudCount": "{n} devices",
-    "hudWrap": "Torus wrap · infinite pan",
-    "imageTitle": "Full-screen image viewer: drag to pan, wheel or pinch to zoom"
   },
   "home": {
     "loadFailed": "Failed to load data: {err}",
@@ -95,11 +79,7 @@
     "remove": "Remove",
     "countUnits": "{n} devices",
     "models": "{n} models",
-    "all": "All",
-    "line": "Product line",
     "unknown": "Unknown",
-    "other": "Other",
-    "yearUnknown": "Year not published",
     "loadFailed": "Failed to load: {err}",
     "loadFailedRaw": "Failed to load data: "
   },
@@ -121,10 +101,6 @@
     "batteryDesc": "Battery large→small",
     "cameraAsc": "Main camera MP low→high",
     "cameraDesc": "Main camera MP high→low",
-    "newToOld": "New→Old",
-    "oldToNew": "Old→New",
-    "name": "Name",
-    "ppi": "Pixel density",
     "label": "Sort"
   },
   "spec": {
@@ -152,7 +128,6 @@
     "chip": "Chip",
     "ram": "RAM",
     "year": "Year",
-    "month": "Month",
     "price": "Price",
     "allCategory": "All categories",
     "allForm": "All forms",
@@ -343,39 +318,6 @@
   "notFound": {
     "title": "There is no such house on this street."
   },
-  "canvas": {
-    "title": "Infinite canvas",
-    "howto": "Drag / wheel to pan · click a tile for details · infinite torus wrap",
-    "resetView": "Reset view",
-    "exportPng": "Export PNG",
-    "exporting": "Exporting…",
-    "exportFilename": "specworld-filtered-{n}.png",
-    "noSpecs": "Specs not published",
-    "sortPrefix": "Sort: {name}",
-    "allDevices": "All devices",
-    "brand": "Brand",
-    "line": "Product line",
-    "year": "Year",
-    "all": "All",
-    "searchLabel": "Search within the canvas",
-    "searchPlaceholder": "Search model / chip on the canvas",
-    "a11yNavLabel": "Device list (text equivalent of the canvas)",
-    "a11yListTitle": "Devices under the current filter (text list)"
-  },
-  "globe": {
-    "title": "Device globe",
-    "howto": "Drag to rotate · wheel or pinch to change distance · one full turn returns to the start",
-    "spinPause": "Pause spin",
-    "spinStart": "Start spin",
-    "resetView": "Reset camera",
-    "searchLabel": "Search on the globe",
-    "searchPlaceholder": "Search model / chip on the globe",
-    "a11yNavLabel": "Device list (text equivalent of the globe)",
-    "canvasAria": "Device globe: drag to rotate the sphere and browse all devices",
-    "hud": "{n} devices · lon {lon}° · lat {lat}° · dist {dist}",
-    "empty": "No devices on the globe",
-    "monthCurrent": "This month"
-  },
   "feedback": {
     "openButton": "Report an error / add data",
     "title": "Report an error / add data",
@@ -403,18 +345,6 @@
     "submittedOk": "Submitted",
     "anonymous": "Anonymous",
     "noBackend": "No data service is connected in this environment (e.g. a purely static host such as Bilibili Toy). Please copy the template below and send it to the author by DM or comment — once imported and approved it takes effect. Thanks for the correction!"
-  },
-  "export": {
-    "noContext": "Cannot get a 2D canvas context",
-    "title": "Specworld · filtered results",
-    "totalCount": "{n} devices total",
-    "noImage": "(no image)",
-    "statusTitle": "Status distribution",
-    "brandTitle": "Brand distribution",
-    "priceTitle": "Starting price totals (by brand)",
-    "priceRow": "{name} {n} · ¥{total}",
-    "priceMissing": "({n} without a published price)",
-    "priceTotal": "Cumulative total ¥{total}"
   },
   "validate": {
     "empty": "Value cannot be empty",
