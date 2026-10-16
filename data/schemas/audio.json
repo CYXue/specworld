@@ -55,6 +55,13 @@
       "nameEn": "Processor & Performance",
       "type": "single",
       "guide": "SoC/协处理器/图形内存"
+    },
+    {
+      "id": "memory",
+      "name": "内存与存储",
+      "nameEn": "Memory & Storage",
+      "type": "single",
+      "guide": "RAM/存储"
     }
   ],
   "fields": [
@@ -427,6 +434,32 @@
       "group": "features",
       "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
       "labelEn": "Sensors",
+      "unitEn": null
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "运行内存",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": null,
+      "labelEn": "RAM",
+      "unitEn": null
+    },
+    {
+      "path": "memory.storageGb",
+      "label": "存储档位",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": null,
+      "labelEn": "Storage tiers",
       "unitEn": null
     }
   ]

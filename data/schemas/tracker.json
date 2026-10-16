@@ -203,6 +203,19 @@
       "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
       "labelEn": "Sensors",
       "unitEn": null
+    },
+    {
+      "path": "connectivity.nfc",
+      "label": "NFC",
+      "unit": null,
+      "type": "boolean",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": null,
+      "labelEn": "NFC",
+      "unitEn": null
     }
   ],
   "groups": [

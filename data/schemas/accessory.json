@@ -231,6 +231,19 @@
       "note": "官方技术规格页链接（macdb 收录）",
       "labelEn": "Tech specs URL",
       "unitEn": null
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": null,
+      "labelEn": "Bluetooth",
+      "unitEn": null
     }
   ],
   "groups": [

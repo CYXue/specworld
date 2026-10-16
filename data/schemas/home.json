@@ -345,6 +345,19 @@
       "note": null,
       "labelEn": "Audio formats",
       "unitEn": null
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "运行内存",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": null,
+      "labelEn": "RAM",
+      "unitEn": null
     }
   ],
   "groups": [

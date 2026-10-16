@@ -291,6 +291,22 @@
       "note": null,
       "labelEn": "Graphics memory",
       "unitEn": null
+    },
+    {
+      "path": "power.adapterW",
+      "label": "电源功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        1500
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "chipset",
+      "note": null,
+      "labelEn": "Power adapter",
+      "unitEn": null
     }
   ],
   "groups": [

@@ -326,6 +326,64 @@
       "note": "麦克风阵列/空间音频等官网原文",
       "labelEn": "Audio system",
       "unitEn": null
+    },
+    {
+      "path": "display.sizeIn",
+      "label": "屏幕尺寸",
+      "unit": "英寸",
+      "type": "number",
+      "range": [
+        0.5,
+        100
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": null,
+      "labelEn": "Display size",
+      "unitEn": "in"
+    },
+    {
+      "path": "display.resolutionPx",
+      "label": "分辨率",
+      "unit": "px",
+      "type": "object",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": null,
+      "labelEn": "Resolution",
+      "unitEn": null
+    },
+    {
+      "path": "display.ppi",
+      "label": "像素密度",
+      "unit": "ppi",
+      "type": "number",
+      "range": [
+        60,
+        500
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": null,
+      "labelEn": "Pixel density",
+      "unitEn": null
+    },
+    {
+      "path": "security.unlock",
+      "label": "解锁方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "security",
+      "note": null,
+      "labelEn": "Unlock method",
+      "unitEn": null
     }
   ],
   "groups": [

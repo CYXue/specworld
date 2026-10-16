@@ -652,6 +652,32 @@
       "note": "光驱/软驱配置，官网原文",
       "labelEn": "Optical drive",
       "unitEn": null
+    },
+    {
+      "path": "memory.ramStorageBinding",
+      "label": "内存-存储绑定",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "memory",
+      "note": "macdb 原文（如 12GB LPDDR5X 绑 256G/512G）；同代不同内存配不同存储时保留绑定关系",
+      "labelEn": "RAM-storage binding",
+      "unitEn": null
+    },
+    {
+      "path": "device.modelVariants",
+      "label": "型号变体",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "A 号/机型标识符与变体标识成对（如 A3361（蜂窝网络）、A3362（蜂窝网络-中国大陆））；macdb 原文",
+      "labelEn": "Model variants",
+      "unitEn": null
     }
   ]
 }
