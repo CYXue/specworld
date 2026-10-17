@@ -123,7 +123,7 @@ const heroScreen = computed(() =>
 <template>
   <div class="page-shell py-6">
     <div v-if="err" class="card p-6 text-center text-danger">{{ t('home.loadFailed', { err }) }}</div>
-    <LoadingState v-else-if="!ds" :label="t('common.loading')" />
+    <LoadingState v-else-if="!ds" variant="sheet" />
 
     <div v-else-if="!product" class="card p-12 text-center">
       <p class="font-semibold text-fg">{{ t('product.notFound') }}</p>
@@ -189,7 +189,7 @@ const heroScreen = computed(() =>
 
       <!-- 完整规格：keySpecs 化 —— 默认只展开前 3 组，其余收进「查看全部参数」 -->
       <section class="space-y-4">
-        <h2 class="text-lg font-semibold text-fg">{{ t('product.fullSpecs') }}</h2>
+        <h2 class="kicker">{{ t('product.fullSpecs') }}</h2>
         <SpecSection v-for="g in visibleGroups" :key="g.title" :title="g.title" :rows="g.rows" />
         <button
           v-if="hiddenGroupCount > 0 && !allGroupsShown"

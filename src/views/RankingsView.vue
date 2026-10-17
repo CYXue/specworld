@@ -443,7 +443,7 @@ function barPct(p: Product): number | null {
          这里只管排序链本身 -->
     <section class="card p-3 sm:p-4">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="text-[13px] text-dim">{{ t('rank.priority') }}</span>
+        <span class="kicker">{{ t('rank.priority') }}</span>
         <template v-if="sorts.length">
           <!-- 中性描边 chips：序号用小方块，金色不再用于「已选条件」 -->
           <span v-for="r in rows" :key="r.idx" class="chip">
@@ -593,11 +593,11 @@ function barPct(p: Product): number | null {
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 hover:bg-surface-2">
           <span class="w-10 flex-none text-right">
             <span
-              class="num inline-block rounded px-1.5 py-0.5 text-sm font-semibold"
+              class="num inline-block rounded-[3px] px-1.5 py-0.5 text-sm font-semibold"
               :class="[
                 (primaryRanks.get(p.id) ?? 0) > 0 && (primaryRanks.get(p.id) ?? 0) <= 3 && primaryDim !== 'release'
                   ? 'bg-accent-soft text-accent'
-                  : 'text-dim',
+                  : 'text-faint',
               ]"
             >{{ (primaryRanks.get(p.id) ?? 0) > 0 ? primaryRanks.get(p.id) : '—' }}</span>
           </span>

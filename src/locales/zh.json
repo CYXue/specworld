@@ -29,7 +29,9 @@
   "footer": {
     "about": "关于",
     "tagline": "参数世界 specworld · 数据来源：厂商官网规格 + 人工核查 · 选择更清楚",
-    "sourceCode": "源码"
+    "sourceCode": "源码",
+    "themeDark": "切换深色",
+    "themeLight": "切换浅色"
   },
   "library": {
     "foundExcluded": "找到 {found} 款 · 已排除 {excluded} 款"
@@ -64,7 +66,6 @@
     "uncollected": "本站未收录",
     "uncollectedTip": "官网可能有此数据，本站尚未采集到——详情页「官网原文」可自行核对",
     "currencySymbol": "¥",
-    "detail": "详情",
     "models": "{n} 款",
     "unknown": "未知",
     "loadFailedRaw": "数据加载失败：",

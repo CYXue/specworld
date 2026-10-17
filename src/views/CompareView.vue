@@ -19,7 +19,7 @@ const brandLabels = computed(() => {
 <template>
   <div class="page-shell py-4">
     <div v-if="err" class="card p-6 text-center text-danger">{{ t('home.loadFailed', { err }) }}</div>
-    <LoadingState v-else-if="!ds" :label="t('common.loading')" />
+    <LoadingState v-else-if="!ds" variant="cards" />
     <!-- 数据就绪后才挂载 LibraryInner：useLibraryFilters 在挂载时一次性构建分面目录，
          若在 products 为空时初始化，分面会是空的且不会随加载更新。 -->
     <LibraryInner v-else :products="ds.products" :brand-labels="brandLabels" />

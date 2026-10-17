@@ -25,7 +25,7 @@ const products = computed<Product[]>(() => {
 <template>
   <div class="page-shell py-6">
     <div v-if="err" class="card p-6 text-center text-danger">{{ t('home.loadFailed', { err }) }}</div>
-    <LoadingState v-else-if="!ds" :label="t('common.loading')" />
+    <LoadingState v-else-if="!ds" variant="sheet" />
 
     <EmptyState
       v-else-if="!products.length"

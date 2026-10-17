@@ -22,18 +22,18 @@ const subline = computed(() =>
 const checked = computed(() => has(props.product.id));
 
 // 左侧小视觉区：与卡片同一套几何（品牌色 + 屏幕比例），列表行也有识别锚点
-const chipBg = computed(() => hexToRgba(props.vendorColor, 0.13));
+const chipBg = computed(() => hexToRgba(props.vendorColor, 0.14));
 const screen = computed(() => ({
   ...screenBox(props.product, 20),
-  background: hexToRgba(props.vendorColor, 0.5),
-  borderColor: hexToRgba(props.vendorColor, 0.9),
+  background: hexToRgba(props.vendorColor, 0.55),
+  borderColor: hexToRgba(props.vendorColor, 0.95),
 }));
 </script>
 
 <template>
-  <article class="card card-hover flex flex-wrap items-center gap-3 p-3" :class="checked ? 'border-accent/60' : ''">
-    <div class="flex h-9 w-9 flex-none items-center justify-center rounded-md" :style="{ background: chipBg }">
-      <div class="rounded-[3px] border" :style="screen" aria-hidden="true" />
+  <article class="card card-hover flex flex-wrap items-center gap-3 px-3.5 py-2.5" :class="checked ? 'border-ink' : ''">
+    <div class="flex h-9 w-9 flex-none items-center justify-center rounded-[4px]" :style="{ background: chipBg }">
+      <div class="rounded-[2px] border" :style="screen" aria-hidden="true" />
     </div>
     <RouterLink :to="`/product/${product.id}`" class="min-w-0 flex-1">
       <div class="flex items-center gap-2">
@@ -43,13 +43,11 @@ const screen = computed(() => ({
       <p class="truncate text-[13px] text-dim">{{ subline }}</p>
     </RouterLink>
     <PriceTag :product="product" size="md" class="shrink-0" />
-    <RouterLink :to="`/product/${product.id}`" class="btn btn-subtle shrink-0 px-3 text-sm">{{ t('common.detail') }}</RouterLink>
-    <!-- 与卡片视图同一套加入交互（按钮即选中态）—— 原来这里是复选框，
-         两个视图两种机制，切换视图后用户要找的入口不见了 -->
+    <!-- 加入对比：墨块反白即选中态，与卡片视图同一套机制 -->
     <button
       type="button"
       class="btn shrink-0 px-3 text-sm"
-      :class="checked ? 'btn-subtle' : 'btn-ghost'"
+      :class="checked ? 'btn-primary' : 'btn-ghost'"
       :aria-pressed="checked"
       @click="toggle(product.id)"
     >

@@ -196,8 +196,8 @@ function showMore() {
               >⚠ {{ t('timeline.inverted') }}</span>
               <div
                 v-else
-                class="absolute top-0.5 h-3 rounded"
-                :class="it.product.status === 'on-sale' ? 'bg-accent/70' : 'bg-border'"
+                class="absolute top-0.5 h-3 rounded-[2px]"
+                :class="it.product.status === 'on-sale' ? 'bg-ink' : 'bg-border-strong'"
                 :style="{
                   left: `${barGeometry(it, activeRange).leftPct}%`,
                   width: `${barGeometry(it, activeRange).widthPct}%`,
@@ -213,9 +213,9 @@ function showMore() {
         </div>
 
         <div class="mt-3 flex items-center gap-4 text-xs text-faint">
-          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded bg-accent/70" />{{ t('timeline.onSale') }}</span>
-          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded bg-border" />{{ t('timeline.retired') }}</span>
-          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded border-r-2 border-dashed border-faint bg-border" />{{ t('timeline.retireUnknown') }}</span>
+          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded-[2px] bg-ink" />{{ t('timeline.onSale') }}</span>
+          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded-[2px] bg-border-strong" />{{ t('timeline.retired') }}</span>
+          <span class="inline-flex items-center gap-1"><span class="inline-block h-2 w-4 rounded-[2px] border-r-2 border-dashed border-faint bg-border-strong" />{{ t('timeline.retireUnknown') }}</span>
         </div>
       </div>
 

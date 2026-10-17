@@ -106,31 +106,40 @@ const licenses = computed(() =>
 </script>
 
 <template>
-  <div class="page-shell space-y-6 py-6">
+  <div class="page-shell space-y-8 py-6">
+    <!-- 刊头：kicker + 大墨字标题（与首页同一套刊头语言） -->
     <header>
-      <h1 class="text-2xl font-bold tracking-tight text-fg">{{ t('about.title') }}</h1>
+      <p class="kicker">Specworld</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-fg">{{ t('about.title') }}</h1>
       <p class="mt-1 text-sm text-dim">{{ t('about.subtitle') }}</p>
     </header>
 
-    <section class="card space-y-3 p-4">
-      <h2 class="text-base font-semibold text-fg">{{ t('about.introTitle') }}</h2>
+    <!-- 01 / 项目说明 -->
+    <section class="card space-y-3 p-5">
+      <h2 class="kicker">01 / {{ t('about.introTitle') }}</h2>
       <p class="text-sm leading-relaxed text-fg">
         {{ t('about.introA') }}<b class="text-accent">{{ t('about.introBold') }}</b>{{ t('about.introB') }}
       </p>
-      <ul class="grid gap-2 sm:grid-cols-2">
-        <li v-for="row in scope" :key="row.key" class="border border-border bg-surface-2 px-3 py-2">
-          <span class="text-xs font-semibold text-dim">{{ row.label }}</span>
-          <span class="ml-2 text-sm text-dim">{{ row.value }}</span>
+      <!-- 首版范围表：mono 键值对（纸上数据库的「规格行」） -->
+      <ul class="grid gap-0 overflow-hidden rounded-[4px] border border-border sm:grid-cols-2">
+        <li
+          v-for="row in scope"
+          :key="row.key"
+          class="flex items-baseline gap-2 border-b border-border px-3 py-2 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0"
+        >
+          <span class="kicker">{{ row.label }}</span>
+          <span class="num text-sm text-fg">{{ row.value }}</span>
         </li>
       </ul>
       <p class="text-sm leading-relaxed text-faint">{{ t('about.why') }}</p>
     </section>
 
-    <section class="card space-y-3 p-4">
-      <h2 class="text-base font-semibold text-fg">{{ t('about.dataTitle') }}</h2>
-      <ul class="space-y-2">
-        <li v-for="p in principles" :key="p.key" class="flex gap-2">
-          <span class="mt-1.5 h-1.5 w-1.5 flex-none rounded-full bg-accent" />
+    <!-- 02 / 数据与原则 -->
+    <section class="card space-y-3 p-5">
+      <h2 class="kicker">02 / {{ t('about.dataTitle') }}</h2>
+      <ul class="space-y-2.5">
+        <li v-for="(p, i) in principles" :key="p.key" class="flex gap-3">
+          <span class="num mt-0.5 flex-none text-sm font-semibold text-faint">{{ String(i + 1).padStart(2, '0') }}</span>
           <span class="text-sm leading-relaxed text-fg"
             ><b class="text-accent">{{ p.title }}：</b>{{ p.body }}</span
           >
@@ -138,8 +147,8 @@ const licenses = computed(() =>
       </ul>
       <div class="border-t border-border pt-3">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-          <span class="text-xs font-semibold text-dim">{{ t('about.snapshot') }}</span>
-          <span v-if="generatedAt" class="text-fg">{{ generatedAt }}</span>
+          <span class="kicker">{{ t('about.snapshot') }}</span>
+          <span v-if="generatedAt" class="num text-fg">{{ generatedAt }}</span>
           <span v-else class="text-faint">{{ t('about.loading') }}</span>
         </div>
         <div v-if="sources.length" class="mt-2 flex flex-wrap gap-1.5">
@@ -161,8 +170,9 @@ const licenses = computed(() =>
       <p class="text-sm leading-relaxed text-faint">{{ t('about.dataFooter') }}</p>
     </section>
 
-    <section class="card space-y-3 p-4">
-      <h2 class="text-base font-semibold text-fg">{{ t('about.licenseTitle') }}</h2>
+    <!-- 03 / 许可与署名 -->
+    <section class="card space-y-3 p-5">
+      <h2 class="kicker">03 / {{ t('about.licenseTitle') }}</h2>
       <ul class="grid gap-2">
         <li v-for="l in licenses" :key="l.key" class="border border-border bg-surface-2 px-3 py-2">
           <div class="flex flex-wrap items-baseline gap-x-2">

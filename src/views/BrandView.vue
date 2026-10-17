@@ -35,9 +35,10 @@ const brandLabels = computed(() => {
 
     <template v-else>
       <header class="mb-4">
-        <h1 class="text-2xl font-bold tracking-tight text-fg">{{ vendor.nameZh || vendor.name }}</h1>
+        <p class="kicker">{{ vendor.name }}</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-fg">{{ vendor.nameZh || vendor.name }}</h1>
         <p class="mt-1 text-sm text-dim">
-          {{ vendor.name }} · {{ t('common.models', { n: products.length }) }}
+          {{ t('common.models', { n: products.length }) }}
         </p>
         <p class="mt-2 text-sm text-dim">
           {{ t('brand.crossBrandBefore') }}

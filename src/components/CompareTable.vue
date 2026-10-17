@@ -208,7 +208,7 @@ function jumpToGroup(i: number) {
                 data-group-anchor
                 :data-group="gi"
                 colspan="100"
-                class="sticky top-0 z-10 bg-surface-2 px-3 py-1.5 text-left text-xs font-semibold uppercase tracking-wide text-dim"
+                class="sticky top-0 z-10 bg-surface-2 px-3 py-1.5 text-left font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-dim"
               >
                 {{ g.title }}
               </th>
@@ -236,7 +236,7 @@ function jumpToGroup(i: number) {
                 <td
                   v-if="allIdentical(row)"
                   :colspan="products.length"
-                  class="bg-surface-2/70 px-3 py-2 text-fg"
+                  class="border-l-2 border-l-ink bg-surface-2 px-3 py-2 text-fg"
                 >
                   <span class="mr-1.5 text-[10px] text-faint">＝</span>{{ val(products[0]!, row) }}
                 </td>
@@ -282,7 +282,7 @@ function jumpToGroup(i: number) {
         <StatusBadge :status="p.status" />
         <dl class="mt-2 space-y-1.5">
           <template v-for="g in groups" :key="g.title">
-            <p class="pt-1 text-xs font-semibold uppercase tracking-wide text-dim">{{ g.title }}</p>
+            <p class="pt-1 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-dim">{{ g.title }}</p>
             <div
               v-for="row in visibleRows(g.rows)"
               :key="row.label"

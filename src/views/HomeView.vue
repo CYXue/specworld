@@ -103,13 +103,15 @@ function rowChipScreen(p: Product) {
 
     <template v-else>
       <!-- 首屏双栏：左「搜索 + 入口」，右「最近更新」。
-           进站第一屏同时看到搜索和真实数据，不用先滚过一整屏标题。 -->
-      <section class="animate-fade-up grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:items-start lg:gap-8">
+           纸上数据库刊头：kicker 编号行 + 大号墨字标题 + 墨块主按钮。 -->
+      <section class="animate-fade-up grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:items-start lg:gap-10">
         <div>
-          <h1 class="text-3xl font-bold tracking-tight text-fg sm:text-4xl">{{ t('home.heroTitle') }}</h1>
-          <p class="mt-2 max-w-xl text-sm text-dim sm:text-base">{{ t('home.heroSub') }}</p>
+          <p class="kicker">{{ t('home.heroSub') }}</p>
+          <h1 class="mt-2 text-3xl font-bold leading-tight tracking-tight text-fg sm:text-4xl">
+            {{ t('home.heroTitle') }}
+          </h1>
 
-          <div class="mt-5 flex flex-col gap-4">
+          <div class="mt-6 flex flex-col gap-4">
             <SearchBox size="lg" :placeholder="t('home.searchPlaceholder')" />
 
             <div class="flex flex-wrap items-center gap-3">
@@ -117,20 +119,20 @@ function rowChipScreen(p: Product) {
               <RouterLink to="/vs" class="btn btn-ghost">{{ t('home.startCompare') }}</RouterLink>
             </div>
 
-            <!-- 品类入口与快捷筛选：同一组 chips，竖线分组 -->
+            <!-- 品类入口与快捷筛选：同一组 chips，发丝竖线分组 -->
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <RouterLink
                 v-for="c in categories"
                 :key="c.to"
                 :to="c.to"
-                class="chip hover:border-border-strong"
+                class="chip"
               >{{ c.label }}</RouterLink>
               <span class="h-5 w-px bg-border" aria-hidden="true" />
               <RouterLink
                 v-for="q in quickFilters"
                 :key="q.to"
                 :to="q.to"
-                class="chip text-dim hover:border-border-strong hover:text-fg"
+                class="chip text-dim hover:text-fg"
               >{{ q.label }}</RouterLink>
             </div>
           </div>

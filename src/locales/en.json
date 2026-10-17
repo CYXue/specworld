@@ -29,7 +29,9 @@
   "footer": {
     "about": "About",
     "tagline": "Specworld · Sources: official vendor specs + manual review · Choose with clarity",
-    "sourceCode": "source"
+    "sourceCode": "source",
+    "themeDark": "Switch to dark",
+    "themeLight": "Switch to light"
   },
   "library": {
     "foundExcluded": "{found} matched · {excluded} excluded"
@@ -64,7 +66,6 @@
     "uncollected": "Not collected yet",
     "uncollectedTip": "The official site may list this data; we have not collected it yet — check the \"Official source\" drawer on the detail page",
     "currencySymbol": "¥",
-    "detail": "Details",
     "models": "{n} models",
     "unknown": "Unknown",
     "loadFailedRaw": "Failed to load data: ",

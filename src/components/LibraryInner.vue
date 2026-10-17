@@ -109,22 +109,31 @@ function vendorColorOf(p: Product): string | undefined {
           <option v-for="s in SORTS" :key="s.id" :value="s.id">{{ sortLabel(s.id) }}</option>
         </select>
       </label>
-      <div class="flex overflow-hidden rounded border border-border-strong">
+      <div class="flex overflow-hidden rounded-[4px] border border-border-strong">
         <button
           type="button"
-          class="px-2.5 py-1.5 text-sm"
+          class="px-2.5 py-1.5"
           :class="view === 'card' ? 'bg-surface-2 text-fg' : 'text-dim'"
+          :aria-label="t('view.card')"
           @click="setView('card')"
         >
-          ▦
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="5.5" height="5.5" />
+            <rect x="9" y="1.5" width="5.5" height="5.5" />
+            <rect x="1.5" y="9" width="5.5" height="5.5" />
+            <rect x="9" y="9" width="5.5" height="5.5" />
+          </svg>
         </button>
         <button
           type="button"
-          class="px-2.5 py-1.5 text-sm"
+          class="px-2.5 py-1.5"
           :class="view === 'list' ? 'bg-surface-2 text-fg' : 'text-dim'"
+          :aria-label="t('view.list')"
           @click="setView('list')"
         >
-          ☰
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M1.5 3.5h13M1.5 8h13M1.5 12.5h13" stroke-linecap="round" />
+          </svg>
         </button>
       </div>
     </div>

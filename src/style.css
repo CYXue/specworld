@@ -1,67 +1,111 @@
 @import 'tailwindcss';
 
 /* ============================================================================
-   参数世界 · 设计系统（v3 深色产品数据库风）
-   纯深色、克制、信息密度适中。主色暖黄只用于选中/主操作；
-   链接蓝、成功绿、错误红；像素字体与游戏化视觉全部移除。
+   参数世界 · 设计系统 v4「纸上数据库」（Paper Database）
+   Swiss 编辑风格全量重设计（2026-10-17，与 v3 深色琥珀完全切割）：
+   - 暖纸白底 + 墨色文字，层级靠发丝线（hairline）与留白，不靠投影；
+   - 数据值一律等宽字体（--font-mono），是全站的视觉身份；
+   - 钴蓝单强调色只给链接 / 焦点 / 数据高亮；主操作按钮与选中 chip 是墨块反白；
+   - 圆角极小（4/6/10），卡片平铺，阴影只给浮层。
    ========================================================================== */
 
 @theme {
-  /* 背景层（三层明度阶梯：页面 < 卡片 < 悬浮/选中 —— 层级主要靠明度，
-     描边只做下限提示，所以 border 压得很淡） */
-  --color-bg: #0b0d12;
-  --color-surface: #141821;
-  --color-surface-2: #1b212d;
-  --color-elevated: #222a38;
+  /* 背景层：纸 < 白卡 < 浅灰填充。层级主要靠发丝线描边与留白 */
+  --color-bg: #f7f6f2;
+  --color-surface: #fffffe;
+  --color-surface-2: #f1efe9;
+  --color-elevated: #fffffe;
 
-  /* 描边（克制：能少描边就少描边，让背景明度承担分层） */
-  --color-border: #212734;
-  --color-border-strong: #323b4b;
+  /* 描边：hairline 为主，strong 用于可交互边界与表头分隔 */
+  --color-border: #e5e2d9;
+  --color-border-strong: #cfccc0;
 
-  /* 文字 */
-  --color-fg: #e7eaf0;
-  --color-dim: #9aa4b6;
-  --color-faint: #64708a;
+  /* 文字：墨色阶梯 */
+  --color-fg: #1b1a15;
+  --color-dim: #6d695c;
+  --color-faint: #a5a091;
 
-  /* 语义色 */
-  --color-accent: #f5c518;
-  --color-accent-fg: #1a1500;
-  --color-accent-soft: #3a3211;
-  --color-link: #5b9dff;
-  --color-success: #34d399;
-  --color-success-soft: #11321f;
-  --color-danger: #f87171;
-  --color-danger-soft: #3a1717;
-  --color-warn: #fbbf24;
-  --color-warn-soft: #38300f;
+  /* 语义色：钴蓝为唯一强调色；语义色低饱和适配纸底 */
+  --color-accent: #2952e3;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #e9eefc;
+  --color-ink: #1b1a15; /* 墨块：主按钮 / 选中 chip */
+  --color-ink-fg: #f7f6f2;
+  --color-link: #2952e3;
+  --color-success: #177245;
+  --color-success-soft: #e3f1e8;
+  --color-danger: #c4351f;
+  --color-danger-soft: #fae9e4;
+  --color-warn: #a06a00;
+  --color-warn-soft: #f7efdb;
 
   /* 字体 */
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Menlo,
+    Consolas, monospace;
 
   /* 字体层级量表（全站统一，组件按这张表选 utility，不要各页自创）：
-     页面标题 30px / 700   text-3xl font-bold
-     区块标题 18px / 650   text-lg font-semibold
-     设备名称 15px / 600   text-[15px] font-semibold
-     核心价格 18px / 700   text-lg font-bold
-     正文     14px / 400   text-sm
-     辅助信息 13px / 400   text-[13px] text-dim
-     按钮     14px / 600   .btn 基类（已定，勿在调用处覆盖字号字重） */
+     页面标题 30px / 700 / -0.02em   text-3xl font-bold tracking-tight
+     区块标题 18px / 650             text-lg font-semibold
+     设备名称 15px / 600             text-[15px] font-semibold
+     核心价格 17px / 700 mono        .num text-[17px] font-bold
+     正文     14px / 400             text-sm
+     辅助信息 13px / 400             text-[13px] text-dim
+     按钮     14px / 600             .btn 基类（勿在调用处覆盖字号字重） */
 
-  /* 圆角 */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* 圆角：瑞士式小圆角 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 
-  /* 阴影（克制） */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  /* 阴影只给浮层（popover / drawer），卡片平铺无投影 */
+  --shadow-sm: 0 1px 2px rgba(27, 26, 21, 0.06);
+  --shadow-md: 0 8px 28px rgba(27, 26, 21, 0.12);
+}
+
+/* ============================================================================
+   深色模式（纸上数据库 · 夜间纸墨）：同一套令牌名整体换值。
+   - 墨块关系反转：ink 变浅、ink-fg 变深，主按钮/选中 chip 自动跟随；
+   - 语义色提亮适配暗底；accent 换浅钴蓝。
+   由页脚开关写 documentElement.dataset.theme + localStorage 持久化。
+   ========================================================================== */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #131418;
+  --color-surface: #1a1c21;
+  --color-surface-2: #23262d;
+  --color-elevated: #23262d;
+
+  --color-border: #2b2e36;
+  --color-border-strong: #3d414c;
+
+  --color-fg: #e9e7dd;
+  --color-dim: #a3a294;
+  --color-faint: #6f6e62;
+
+  --color-accent: #8aa4ff;
+  --color-accent-fg: #0f1b3d;
+  --color-accent-soft: #232c49;
+  --color-ink: #e9e7dd;
+  --color-ink-fg: #131418;
+  --color-link: #8aa4ff;
+  --color-success: #4ec98f;
+  --color-success-soft: #16301f;
+  --color-danger: #ef8068;
+  --color-danger-soft: #3a1f18;
+  --color-warn: #e0b45c;
+  --color-warn-soft: #38300f;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.6);
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html,
@@ -86,9 +130,9 @@
 
   /* 可见焦点（无障碍：不依赖颜色表达状态） */
   :focus-visible {
-    outline: 2px solid var(--color-link);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 3px;
   }
 
   ::selection {
@@ -119,7 +163,7 @@
     border: 2px solid var(--color-bg);
   }
   *::-webkit-scrollbar-thumb:hover {
-    background: #455268;
+    background: var(--color-dim);
   }
 }
 
@@ -127,18 +171,28 @@
   /* 统一的页面外框：左右留白 + 最大宽度 */
   .page-shell {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1240px;
     margin-inline: auto;
     padding-inline: 16px;
   }
 
-  /* 顶栏当前页：暖黄 = 选中（设计系统语义：accent 只给选中/主操作）。
-     只在这里设背景，文字色由 active-class 的 !text-accent 压过 text-dim。 */
-  .nav-active {
-    background: var(--color-accent-soft);
+  /* 区块小标（Swiss 编辑风签名）：mono 大写 + 编号，如「01 / 身体」 */
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-dim);
   }
 
-  /* 卡片 */
+  /* 顶栏当前页：墨块反白（选中 = 高对比，不用彩色） */
+  .nav-active {
+    background: var(--color-ink);
+    color: var(--color-ink-fg) !important;
+  }
+
+  /* 卡片：白纸面 + 发丝线，平铺无投影 */
   .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -146,7 +200,7 @@
   }
   .card-hover:hover {
     border-color: var(--color-border-strong);
-    background: var(--color-surface-2);
+    background: var(--color-surface);
   }
 
   /* 按钮基元 */
@@ -155,8 +209,8 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    min-height: 40px;
-    padding-inline: 16px;
+    min-height: 38px;
+    padding-inline: 14px;
     border-radius: var(--radius-sm);
     border: 1px solid transparent;
     font-size: 14px;
@@ -172,20 +226,22 @@
   }
   @media (max-width: 640px) {
     .btn {
-      min-height: 44px; /* 移动端触控区 */
+      min-height: 42px; /* 移动端触控区 */
     }
   }
   .btn:disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: not-allowed;
   }
 
+  /* 主操作 = 墨块反白（纸上数据库的核心笔触） */
   .btn-primary {
-    background: var(--color-accent);
-    color: var(--color-accent-fg);
+    background: var(--color-ink);
+    color: var(--color-ink-fg);
+    border-color: var(--color-ink);
   }
   .btn-primary:hover:not(:disabled) {
-    background: #ffd633;
+    background: #35342c;
   }
 
   .btn-ghost {
@@ -194,17 +250,17 @@
     border-color: var(--color-border-strong);
   }
   .btn-ghost:hover:not(:disabled) {
-    background: var(--color-surface-2);
-    border-color: #455268;
+    border-color: var(--color-dim);
+    background: var(--color-surface);
   }
 
   .btn-subtle {
     background: var(--color-surface-2);
     color: var(--color-fg);
-    border-color: var(--color-border);
+    border-color: transparent;
   }
   .btn-subtle:hover:not(:disabled) {
-    background: var(--color-elevated);
+    background: #e9e6dd;
   }
 
   .btn-link {
@@ -217,10 +273,10 @@
     text-decoration: underline;
   }
 
-  /* 输入框 */
+  /* 输入框：白底发丝线，聚焦钴蓝 */
   .input {
     width: 100%;
-    min-height: 40px;
+    min-height: 38px;
     padding: 8px 12px;
     background: var(--color-surface);
     border: 1px solid var(--color-border-strong);
@@ -234,34 +290,34 @@
   }
   .input:focus {
     outline: none;
-    border-color: var(--color-link);
+    border-color: var(--color-accent);
   }
 
-  /* 标签 / 徽章 */
+  /* 标签 / 徽章：方角小胶囊 */
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 8px;
-    border-radius: 999px;
+    padding: 2px 7px;
+    border-radius: 3px;
     font-size: 12px;
     line-height: 1.5;
     font-weight: 600;
     border: 1px solid transparent;
   }
 
-  /* 标签筛选 chip */
+  /* 标签筛选 chip：方角发丝线；选中 = 墨块反白（高对比是设计签名） */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
+    padding: 5px 11px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--color-border-strong);
     background: var(--color-surface);
     color: var(--color-dim);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     transition:
       border-color 0.12s ease,
@@ -270,14 +326,20 @@
     white-space: nowrap;
   }
   .chip:hover {
-    border-color: #4a566b;
+    border-color: var(--color-dim);
     color: var(--color-fg);
   }
   .chip[aria-pressed='true'],
   .chip.is-active {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-    background: var(--color-accent-soft);
+    border-color: var(--color-ink);
+    color: var(--color-ink-fg);
+    background: var(--color-ink);
+  }
+  .chip[aria-pressed='true'] .text-faint,
+  .chip.is-active .text-faint,
+  .chip[aria-pressed='true'] span,
+  .chip.is-active span {
+    color: var(--color-ink-fg);
   }
 
   .tag-remove {
@@ -287,33 +349,35 @@
     width: 16px;
     height: 16px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(27, 26, 21, 0.08);
     color: inherit;
     cursor: pointer;
     font-size: 11px;
     line-height: 1;
   }
   .tag-remove:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(27, 26, 21, 0.18);
   }
 
-  /* 数字排版：数值列全部等宽数字 + 右对齐（评审 2026-10-17：单位与数字混排不对齐）。
-     由格式化函数保证「数字 + 半角空格 + 单位」，这里只管字形的等宽。 */
+  /* 数字排版：数据值一律等宽字体 + 表格数字（纸上数据库的身份特征）。
+     由格式化函数保证「数字 + 半角空格 + 单位」，这里只管字形。 */
   .num {
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
+    letter-spacing: -0.01em;
   }
 
-  /* 缺失值徽章（评审 2026-10-17：三种「没有值」语义必须有三种可区分的呈现，
-     且虚线边框是缺失徽章的专属视觉，别的组件不许用虚线）。
-     —— 官网未公布：灰底虚线胶囊（官网真没有，诚实降级）
-     —— 本站未采集：实底灰胶囊（本站没抓到，可以改进） */
+  /* 缺失值徽章（沿用既有语义纪律，配色换纸墨）：
+     —— 官网未公布：虚线胶囊（官网真没有，诚实降级）
+     —— 本站未采集：实底胶囊（本站没抓到，可以改进）
+     虚线边框是缺失徽章的专属视觉，别的组件不许用虚线。 */
   .badge-missing {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 1px 8px;
-    border-radius: 999px;
+    padding: 1px 7px;
+    border-radius: 3px;
     font-size: 12px;
     line-height: 1.5;
     font-weight: 500;

@@ -17,13 +17,13 @@ function toggleNote(r: SpecRow) {
 
 /**
  * 三态徽章的视觉权重递减（评审 2026-10-16）：
- *   unpublished  浅灰实底胶囊「官网未公布」——官网真没有，可解释
+ *   unpublished  实底胶囊「官网未公布」——官网真没有，可解释
  *   uncollected  虚线边框胶囊「本站未收录」——采集深度不足，不应据此得出「有 vs 无」
  *   none         纯文字「无」——官网明确写没有（'/'），不是缺失
  */
 function badgeClass(state: SpecRowState): string {
   return state === 'uncollected'
-    ? 'badge border border-dashed border-border bg-transparent text-faint'
+    ? 'badge border border-dashed border-border-strong bg-transparent text-faint'
     : 'badge border border-border bg-surface-2 text-faint';
 }
 function badgeText(state: SpecRowState): string {
@@ -33,7 +33,8 @@ function badgeText(state: SpecRowState): string {
 
 <template>
   <section class="card overflow-hidden">
-    <h3 class="border-b border-border bg-surface-2 px-4 py-2 text-sm font-semibold text-fg">
+    <!-- 规格表组头：kicker 风格 mono 小标 + 发丝线（纸上数据库的「分节」） -->
+    <h3 class="border-b border-border bg-surface-2 px-4 py-2 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-dim">
       {{ title }}
     </h3>
     <dl class="divide-y divide-border">
@@ -43,7 +44,7 @@ function badgeText(state: SpecRowState): string {
         class="flex items-start justify-between gap-4 px-4 py-2.5 text-sm"
       >
         <dt class="shrink-0 text-dim">{{ r.label }}</dt>
-        <dd class="text-right" :class="r.state === 'value' ? 'font-medium text-fg' : ''">
+        <dd class="text-right" :class="r.state === 'value' ? 'num font-medium text-fg' : ''">
           <!-- 缺失三态：官网未公布（实底）/ 本站未收录（虚线）/ 无（纯文字） -->
           <button
             v-if="(r.state === 'unpublished' || r.state === 'uncollected')"
