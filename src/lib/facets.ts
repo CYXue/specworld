@@ -16,6 +16,7 @@ import {
   priceLabel,
   seriesLabel,
   seriesOf,
+  statusLabelOf,
   variantLabel,
   variantOf,
   yearOf,
@@ -68,6 +69,7 @@ const IDENTITY_KEYS: DimKey[] = [
   'ram',
   'year',
   'price',
+  'status',
 ];
 
 /** 身份维度名 → locale 键。字面量映射（不是拼接），对账闸门才看得见 */
@@ -81,6 +83,7 @@ const IDENTITY_LABEL_KEY: Record<string, string> = {
   ram: 'facet.ram',
   year: 'facet.year',
   price: 'facet.price',
+  status: 'facet.status',
 };
 
 /** 身份维度「全部 X」→ locale 键 */
@@ -94,6 +97,7 @@ const IDENTITY_ALL_LABEL_KEY: Record<string, string> = {
   ram: 'facet.allRam',
   year: 'facet.allYear',
   price: 'facet.allPrice',
+  status: 'facet.allStatus',
 };
 
 /** 全量维度键 = 身份维度 + schema 声明的参数维度（facet:true）。 */
@@ -170,6 +174,9 @@ function valueOf(p: Product, dim: DimKey): string {
       return yearOf(p);
     case 'price':
       return priceBucket(p);
+    case 'status':
+      // 在售状态是权威枚举（on-sale/upcoming/retired），缺字段按 retired 保守处理
+      return p.status || 'retired';
     default:
       // 参数维度（schema facet:true）：相等类取值，与对比引擎同一纪律（只判相等，不判序）
       if (SPEC_FACET_SET.has(dim)) return specFacetValue(p, dim);
@@ -212,6 +219,7 @@ const order = {
 function facetLabel(dim: DimKey, id: string): string {
   if (dim === 'price') return priceLabel(id);
   if (id === UNKNOWN) return i18n.global.t('common.unpublished');
+  if (dim === 'status') return statusLabelOf(id);
   if (dim === 'chip') return chipNameLabel(id);
   if (dim === 'category') return categoryLabel(id as Parameters<typeof categoryLabel>[0]);
   if (dim === 'form') {
@@ -478,6 +486,7 @@ const PARAM: Record<DimKey, string> = {
   ram: 'r',
   year: 'y',
   price: 'g',
+  status: 't',
 };
 
 /** 维度 → URL 参数键：身份维度用单字母（链接短），参数维度直接用字段路径（不冲突、可读）。 */

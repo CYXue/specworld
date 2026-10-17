@@ -13,12 +13,3 @@ export const LICENSE_PATH = 'LICENSE';
 
 /** 本项目代码与数据产物的许可证。 */
 export const CODE_LICENSE = 'MIT';
-
-/**
- * 像素字体上游（Fusion Pixel Font，OFL-1.1）。
- * 本站字体是它的**子集**，属 OFL 定义的 Modified Version，故已改名 SpecPixel。
- */
-export const FONT_UPSTREAM_URL = 'https://github.com/TakWolf/fusion-pixel-font';
-
-/** 本站像素字体的名字（不是上游原名 —— OFL 要求修改版改名）。 */
-export const FONT_NAME = 'SpecPixel';

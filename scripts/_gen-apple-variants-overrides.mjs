@@ -34,7 +34,7 @@ function pad({ id, name, date, status, category, line, specs }) {
     product: {
       id, slug: id, brand: 'apple', category, line, name, nameZh: null,
       releaseDate: date, releaseDatePrecision: 'day',
-      status: status ?? 'discontinued', retiredAt: null, skus: [], scores: [],
+      status: status ?? 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs,
       provenance: {

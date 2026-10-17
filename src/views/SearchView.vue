@@ -5,9 +5,8 @@ import { useI18n } from 'vue-i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { buildDocs, searchWithMeta, suggestions } from '../lib/search';
 import { abilityRows } from '../lib/specs';
-import PxIcon from '../components/PxIcon.vue';
-import SectionFrame from '../components/SectionFrame.vue';
-import SpriteImg from '../components/SpriteImg.vue';
+import { useChunkedList } from '../lib/useChunkedList';
+import LoadingState from '../components/LoadingState.vue';
 
 // 搜索页：URL 即状态。
 // q 与 brand 都写在 query 里（#/search?q=mate&brand=huawei），所以刷新、分享、
@@ -47,7 +46,7 @@ const brands = computed(() => {
         id: doc.brand,
         nameZh: doc.vendor?.nameZh ?? doc.brand,
         count: 1,
-        accentColor: doc.vendor?.accentColor ?? 'var(--color-parchment)',
+        accentColor: doc.vendor?.accentColor ?? 'var(--color-fg)',
       });
   }
   return [...seen.values()].sort((a, b) => b.count - a.count);
@@ -57,6 +56,8 @@ const brands = computed(() => {
 // 组件里不自己重判 —— 两个判据迟早分叉）。
 const outcome = computed(() => searchWithMeta(docs.value, q.value, { brand: brand.value }));
 const results = computed(() => outcome.value.results);
+/** 分批渲染（同机型库）：品牌维度宽查询（如某品牌全部 864 台）也会直出大列表 */
+const { shownList: resultsShown, total: resultsTotal, hasMore, showMore } = useChunkedList(results, 60);
 const usedLooseMatch = computed(() => outcome.value.usedLooseMatch);
 const hasQuery = computed(() => q.value.trim().length > 0 || brand.value.length > 0);
 const hint = computed(() => suggestions(docs.value));
@@ -99,19 +100,34 @@ function clearAll() {
 
 <template>
   <div class="page-shell space-y-6 py-6">
-    <SectionFrame :title="t('search.title')" hud="var(--color-crown)" icon="search">
-      <template #aside>{{ t('search.count', { n: results.length, total: docs.length }) }}</template>
+    <LoadingState v-if="!ds" :label="t('common.loading')" />
+    <template v-else>
+    <section class="card p-5 sm:p-6">
+      <h1 class="text-xl font-semibold text-fg">{{ t('search.title') }}</h1>
+      <p class="mt-1 text-sm text-dim">{{ t('search.count', { n: results.length, total: docs.length }) }}</p>
 
-      <label class="block">
+      <label class="mt-4 block">
         <span class="sr-only">{{ t('search.ariaLabel') }}</span>
-        <input
-          v-model="q"
-          type="search"
-          :placeholder="t('search.placeholder')"
-          class="pixel-input w-full px-3 py-2 text-[12px] leading-[1.5]"
-          autocomplete="off"
-          @input="apply()"
-        />
+        <span class="relative block">
+          <span
+            class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
+            aria-hidden="true"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" stroke-linecap="round" />
+            </svg>
+          </span>
+          <input
+            id="site-search"
+            v-model="q"
+            type="search"
+            :placeholder="t('search.placeholder')"
+            class="input pl-9"
+            autocomplete="off"
+            @input="apply()"
+          />
+        </span>
       </label>
 
       <!--
@@ -121,22 +137,21 @@ function clearAll() {
       -->
       <p
         v-if="usedLooseMatch"
-        class="mt-2 flex items-center gap-2 px-2 py-1 text-[12px] leading-[1.5]"
-        style="color: var(--color-dawn)"
+        class="mt-3 flex items-center gap-2 rounded-md border border-warn/30 bg-warn/10 px-3 py-2 text-sm text-warn"
       >
-        <PxIcon name="search" :size="12" class="flex-none" />
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" stroke-linecap="round" />
+        </svg>
         {{ t('search.looseHint', { q, name: looseHint }) }}
       </p>
 
       <!-- 品牌过滤：只列数据里真实存在的品牌，台数是真实计数 -->
-      <div class="mt-3 flex flex-wrap items-center gap-2">
-        <span
-          class="w-10 shrink-0 text-[12px] leading-[1.5]"
-          style="color: var(--color-ink-soft)"
-          >{{ t('search.brandLabel') }}</span
-        >
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="text-sm text-dim">{{ t('search.brandLabel') }}</span>
         <button
-          class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+          type="button"
+          class="chip"
           :aria-pressed="!brand"
           @click="apply(undefined, '')"
         >
@@ -145,7 +160,8 @@ function clearAll() {
         <button
           v-for="b in brands"
           :key="b.id"
-          class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
+          type="button"
+          class="chip"
           :aria-pressed="brand === b.id"
           :style="brand === b.id ? undefined : { color: b.accentColor }"
           @click="pickBrand(b.id)"
@@ -154,31 +170,32 @@ function clearAll() {
         </button>
         <button
           v-if="hasQuery"
-          class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
-          style="color: var(--color-east)"
+          type="button"
+          class="chip"
+          style="color: var(--color-danger)"
           @click="clearAll"
         >
           {{ t('search.clear') }}
         </button>
       </div>
-    </SectionFrame>
+    </section>
 
     <!-- 未输入：给真实存在的建议词，而不是留白 -->
-    <div v-if="!hasQuery" class="pixel-note pixel-stripe p-4">
-      <p class="mb-3 text-[12px] leading-[1.5]" style="color: var(--color-parchment-dim)">
+    <div v-if="!hasQuery" class="card p-5 sm:p-6">
+      <p class="text-sm text-dim">
         {{ t('search.tipA') }}
-        <b class="text-[var(--color-gold)]">{{ t('search.tipBold') }}</b>
+        <b class="font-semibold text-fg">{{ t('search.tipBold') }}</b>
         {{ t('search.tipB') }}
-        <span style="color: var(--color-parchment)">nova 14 Ultra</span>
+        <span class="text-fg">nova 14 Ultra</span>
         {{ t('search.tipConj') }}
-        <span style="color: var(--color-parchment)">nova14ultra</span> {{ t('search.tipC') }}
+        <span class="text-fg">nova14ultra</span> {{ t('search.tipC') }}
       </p>
-      <div class="flex flex-wrap gap-2">
+      <div class="mt-3 flex flex-wrap gap-2">
         <button
           v-for="h in hint"
           :key="h"
-          class="pixel-tag px-2 py-1 text-[12px] leading-[1.5]"
-          style="color: var(--color-parchment)"
+          type="button"
+          class="chip"
           @click="
             q = h;
             apply(h);
@@ -190,46 +207,29 @@ function clearAll() {
     </div>
 
     <!-- 有查询无结果：说清是哪一部分没命中，而不是只说「无结果」 -->
-    <div v-else-if="!results.length" class="pixel-note p-6 text-center">
-      <p
-        class="pixel-outline font-pixel text-[24px] leading-[1.5]"
-        style="color: var(--color-ember)"
-      >
-        {{ t('search.noResultTitle') }}
-      </p>
-      <p class="mt-3 text-[12px] leading-[1.5]" style="color: var(--color-ink-soft)">
-        {{ t('search.noResultBody') }}
-      </p>
-      <button class="pixel-button mt-4 px-3 py-1.5 text-[12px] leading-[1.5]" @click="clearAll">
+    <div v-else-if="!results.length" class="card flex flex-col items-center gap-3 px-6 py-12 text-center">
+      <p class="text-lg font-semibold text-danger">{{ t('search.noResultTitle') }}</p>
+      <p class="max-w-sm text-sm text-dim">{{ t('search.noResultBody') }}</p>
+      <button type="button" class="btn btn-ghost px-3 py-1.5 text-sm" @click="clearAll">
         {{ t('search.clearConditions') }}
       </button>
     </div>
 
     <ul v-else class="space-y-2">
-      <li v-for="(r, i) in results" :key="r.product.id">
+      <li v-for="(r, i) in resultsShown" :key="r.product.id">
         <RouterLink
           :to="`/product/${r.product.id}`"
-          class="pixel-row grid grid-cols-[auto_auto_1fr] items-center gap-3 px-2.5 py-2 sm:grid-cols-[auto_auto_minmax(0,1fr)_auto]"
+          class="card card-hover grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 px-3 py-2 sm:grid-cols-[auto_minmax(0,1fr)_auto]"
         >
-          <span
-            class="pixel-chip w-6 py-0.5 text-center text-[12px] leading-[1.5]"
-            style="color: var(--color-ink-soft)"
-            >{{ i + 1 }}</span
-          >
-          <SpriteImg :id="r.product.id" :delay="i * 0.12" class="h-9 w-auto" />
+          <span class="w-6 flex-none text-center text-xs text-dim">{{ i + 1 }}</span>
           <span class="min-w-0">
             <span class="flex items-center gap-2">
-              <span class="truncate text-[12px] leading-[1.5] text-[var(--color-parchment-lit)]">{{
-                r.product.name
-              }}</span>
-              <span class="shrink-0 text-[12px]" :style="{ color: r.vendor?.accentColor }">
+              <span class="truncate text-sm font-medium text-fg">{{ r.product.name }}</span>
+              <span class="shrink-0 text-sm" :style="{ color: r.vendor?.accentColor }">
                 {{ r.vendor?.nameZh ?? r.product.brand }}
               </span>
             </span>
-            <span
-              class="mt-0.5 block truncate text-[12px] leading-[1.5]"
-              style="color: var(--color-ink-soft)"
-            >
+            <span class="mt-0.5 block truncate text-xs text-dim">
               {{ r.product.line }}
               <template v-if="r.product.nameZh"> · {{ r.product.nameZh }}</template>
             </span>
@@ -238,9 +238,9 @@ function clearAll() {
             <span
               v-for="a in brief?.(r.product.id) ?? []"
               :key="a.key"
-              class="text-[12px] leading-[1.5]"
+              class="text-xs"
               :style="{
-                color: a.raw == null ? 'var(--color-ink-soft)' : 'var(--color-parchment-dim)',
+                color: a.raw == null ? 'var(--color-faint)' : 'var(--color-dim)',
               }"
               >{{ a.label }} {{ a.display }}</span
             >
@@ -248,5 +248,14 @@ function clearAll() {
         </RouterLink>
       </li>
     </ul>
+    <div v-if="hasMore" class="mt-3 flex flex-col items-center gap-1.5">
+      <button type="button" class="btn btn-ghost px-4 py-1.5 text-sm" @click="showMore">
+        {{ t('common.showMore') }}
+      </button>
+      <span class="text-sm text-dim">
+        {{ t('common.shownOf', { shown: resultsShown.length, total: resultsTotal }) }}
+      </span>
+    </div>
+    </template>
   </div>
 </template>

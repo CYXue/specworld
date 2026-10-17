@@ -55,7 +55,8 @@ interface GlossaryJson {
 const G = glossaryJson as unknown as GlossaryJson;
 
 // 区间一律用 \u 转义而非字面量字形：正则边界不渲染，
-// 字面量会要求字体子集带上永不显示的字形（font:check 会拦）。
+// 字面量对代码审查与跨编辑器检索都不友好（历史上还曾要求字体子集
+// 带上永不显示的字形，该闸门已随 2026-10-15 去像素化退役）。
 const CJK = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/;
 
 /**

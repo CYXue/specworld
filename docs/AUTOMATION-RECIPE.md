@@ -84,12 +84,12 @@ data/                 ← 唯一不可重建的输入（代码同样入库，但
   products.json         归一化后的快照（含运行时刻字段，无妨，指纹会剥）
   release-dates.json    ★ 人工取证的 curated 数据，必须入库
   .fingerprint          ★ 上次同步/发布的状态指针
-  sprites/              ← 构建期生成的精灵图，gitignore（不入库）
 dist/                 ← 站点产物，gitignore
 _work/                ← 中间物 + HTTP 缓存，gitignore
 .github/workflows/    ← sync.yml / toy.yml，入库
 scripts/              ← 全部代码，入库
 ```
+（2026-10-16：原 `sprites/` 一行随像素立绘退役移除——立绘不再生成，dist 零引用。）
 
 ### 这一条坑值一整天的排查时间
 
@@ -560,7 +560,7 @@ node scripts/publish/toy-create.mjs --commit   # 第二段：人看过预览链�
 | 闸门 | 拦什么 | 什么时候跑 |
 |---|---|---|
 | `check-conventions.mjs` | `base` 必须是 `'./'`、必须 hash 路由（子路径下绝对路径 404、history 模式刷新即 404） | CI 第一个 job |
-| `verify-dist.mjs`（postbuild） | 入口真的打进去了、引用全相对、零外链、无失效引用、data/ 与 sprites/ 齐备、≤50MB | 每次 build 后 |
+| `verify-dist.mjs`（postbuild） | 入口真的打进去了、引用全相对、零外链、无失效引用、data/ 齐备、≤50MB | 每次 build 后 |
 | 官方 `toy_doctor.py` | 平台侧口径（源码目录误传、HTML 过大、URL mutation） | create 前（找不到不阻断，核心 ERROR 已被 verify-dist 覆盖） |
 
 **⑤ SDK 决策：不主动引。** 参考项目（AI 大模型世界）的 `BiliLink.tsx` 是

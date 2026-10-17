@@ -387,7 +387,7 @@ putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, ap, ['w', 'h'])
 
 **第 2 条值得抄**：**缺数据时退回品牌中性色，而不是猜一个好看的配色。**
 
-> **现状（2026-10-03）**：生成器 `scripts/sprite/generate.mjs` 仍在，并在管线构建期运行；但产物 `data/sprites/` 已写入 `.gitignore` 不再入库，且未接入任何页面（产品侧判定视觉效果不佳）。
+> **现状（2026-10-16 终局）**：生成器 `scripts/sprite/generate.mjs` 已随去像素化**整体退役删除**——前端自 2026-10-15 起重写为纯文字产品数据库风后不再渲染立绘，dist 零引用，管线（`pipeline.mjs`）与同步（`sync-public.mjs`）中的生成/拷贝环节一并移除。历史路径：2026-10-03 曾在管线构建期运行、产物 gitignore；「未接入任何页面」的判定最终以整条管线退役收场。
 
 ---
 
@@ -480,7 +480,7 @@ workflow_dispatch:                 # 抢时效时手动整轮跑（不到一分�
 **cron 避开整点**（整点是高峰排队）。
 
 `push` 触发条件匹配 `scripts/**`、`data/release-dates.json`、`data/products.json`、
-`public/fonts/**`、`src/**` 等——**bot 提交的 data/ 也命中这里，会再触发一轮，
+`src/**` 等——**bot 提交的 data/ 也命中这里，会再触发一轮，
 但因指纹不变不会再次 push，故不会死循环，只是多跑一次无害的冗余 run。**
 
 ---

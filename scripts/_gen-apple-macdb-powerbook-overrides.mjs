@@ -62,7 +62,7 @@ function pad(id, name, date, line, o) {
     product: {
       id, slug: id, brand: 'apple', category: 'laptop', line, name, nameZh: null,
       releaseDate: date, releaseDatePrecision: 'day',
-      status: 'discontinued', retiredAt: null, skus: [], scores: [],
+      status: 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs,
       provenance: {

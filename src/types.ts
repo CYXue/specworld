@@ -111,6 +111,25 @@ export interface Product {
   /** v2 全品类目录：品类 id（phone / tablet / laptop / audio，见 data/categories.json）。旧快照没有此字段 */
   category?: string;
   /**
+   * 采集粒度（评审 2026-10-16 缺失值三态的判定依据）：
+   *   specs-page      官网完整规格页 —— null = 官网真没有（unpublished）
+   *   compare-matrix  官网对比页，字段较粗 —— null = 本站未收录（uncollected）
+   *   manual          手册/人工整理 —— null 同样按未收录处理
+   * 旧快照可能缺失，缺失时按 uncollected 保守处理。
+   */
+  granularity?: 'specs-page' | 'compare-matrix' | 'manual' | string;
+  /**
+   * 采集说明（中文串数组，解析层写下的「为什么这个字段是 null」的取证）。
+   * 参数表按字段路径/标签匹配后展示在缺值单元格旁（SpecSection）。
+   */
+  notes?: string[];
+  /**
+   * 官网原文（仅 specs-page / compare-matrix 采集的产品带）：键 = 官网页面的分段标题，
+   * 值 = 该段原文。「可核查」的落点 —— 详情页「官网原文」抽屉直接分段渲染它，
+   * 用户拿任何解析值都能对回官网原话。
+   */
+  rawOfficial?: Record<string, string>;
+  /**
    * v2 全品类目录：品类参数容器，键 = 字段路径（如 'display.sizeIn'），
    * 值 = 官网值或用户修正值（provenance 标 'user-manual'）。
    * 数据加载时 adapt.ts 会把它展开回 body/display 等嵌套形状，
@@ -121,8 +140,22 @@ export interface Product {
   skus?: Sku[];
   releaseDate: string; // ISO date
   releaseDatePrecision: 'day' | 'month' | 'year' | string;
-  status: 'on-sale' | 'upcoming' | 'retired' | string;
+  /**
+   * 生命周期状态。⚠️ 权威枚举 = 'on-sale' | 'upcoming' | 'retired'（与 src/lib/types.ts
+   * ProductRecord.status 一致——本文件是前端侧镜像、那份是管线侧镜像，两份必须同改；
+   * 运行时闸门 = scripts/sync/validate.mjs 的 11a，真源 = scripts/lib/schema.mjs 的
+   * LIFECYCLE_STATUS_VALUES）。
+   * 历史漂移记录：此处曾带 `| string` 兜底，把 812 台 'discontinued'（v1 残留）吞进类型
+   * 系统、页面回落显示原始键——2026-10-17 审计 A1 移除兜底并补闸门。
+   */
+  status: 'on-sale' | 'upcoming' | 'retired';
   retiredAt: string | null;
+  /**
+   * 数据来源链接（官网新闻稿 / 发布会页等，可被 `source` 直接验证）。
+   * 数据层从 release-dates / overrides 合并进产品；未公布写 null，不是空串。
+   * 详情页 SourceBadge 据此渲染「来源」或「官方未公布」。
+   */
+  sourceUrl?: string | null;
   body: Body;
   display: Display;
   chipset: Chipset;

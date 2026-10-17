@@ -135,7 +135,7 @@ data/
 
 - `products.valueStatus` **只**存 `none` / `not_applicable` 两种例外，其余靠 presence 推导——
   避免给 62 台手机各塞 42 个 `available` 键。
-- ⚠️ 顶层 `products.status`（`'on-sale'` / `'discontinued'`）是**生命周期状态**，与四态映射
+- ⚠️ 顶层 `products.status`（`'on-sale'` / `'upcoming'` / `'retired'`）是**生命周期状态**，与四态映射
   `valueStatus` 是**不同字段**，不要混淆（撞名会让闸门把生命周期字符串当映射遍历误报）。
 - 取值一律走 `valueStatus(product, path)`（`scripts/lib/schema.mjs`）/ `fieldStatus(p, path)`
   （`src/lib/adapt.ts`），二者同源。计算时把 `null` / `[]` 视为 `unknown`——本项目把

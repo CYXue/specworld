@@ -39,7 +39,6 @@ on:
       - 'scripts/**'
       - 'data/release-dates.json'
       - 'data/products.json'
-      - 'public/fonts/**'
       - 'src/**'
       - 'index.html'
       - 'vite.config.ts'
@@ -70,15 +69,10 @@ jobs:
         with:
           node-version: '22'
 
-      # 精灵图是构建期产物（data/sprites/ 在 .gitignore 里），全新 checkout 不存在。
-      # 而「画布字段与数据对齐」等判据要读立绘 SVG —— 不补这一步，CI 上 selftest
-      # 从工作流上线第一天起就必失败（缺 apple-iphone-16.svg），
-      # needs: selftest 的 sync / deploy 全部被跳过 ⇒ 定时同步其实一次都没跑通过。
-      # 2026-10-12 复盘 24 次历史 run 时发现：唯一的 bot 成功提交停留在 10-02，
-      # 正是因为 10-02 时 sprites 还入库，10-03 重构把它移出仓库后判据就开始必挂。
-      # 离线生成：只读 data/products.json，零网络零依赖，秒级；不入库（CI 用完即弃）。
-      - name: 生成精灵图（离线）
-        run: node scripts/sprite/generate.mjs
+      # （2026-10-16：原「生成精灵图（离线）」一步随去像素化移除——立绘不再生成，
+      # selftest 的「像素立绘几何」一节已整节退役，CI 不再需要 data/sprites/。
+      # 历史教训保留在该步原注释里：曾因 sprites 移出仓库而 CI 必挂 24 个 run，
+      # 根因是「闸门读了构建期产物却没人跑生成」——退役比修生成更彻底。）
 
       # 覆盖两类东西：
       #   1. 解析器——错了不报错，只会静默产出脏值（历史上刷新率解析错过两次）
@@ -107,13 +101,13 @@ jobs:
       - name: 模板类型检查（vue-tsc）
         run: npm run type-check
 
-      # 字形覆盖闸门：字体缺字形时浏览器**静默**回退系统字体，零报错，
-      # 症状是「同一句话里有些字像素、有些字圆滑」—— 风格不统一最隐蔽的成因。
-      # 历史教训：旧字体只覆盖项目实需汉字的 45%，而所有基于样式声明的检查都是绿的。
-      # 数据来自生成期落下的 public/fonts/coverage.json（含字体 sha256，防「换了字体忘重生成」）。
-      # 换字体/改文案后若报缺字：python scripts/font/build-subset.py
-      - name: 字形覆盖检查
-        run: node scripts/publish/check-font-coverage.mjs
+      # （2026-10-17：原「字形覆盖检查」一步随去像素化移除——全站改用系统字体栈，
+      # 不再有自定义字体，缺字形静默回退的故障形态随之消失；
+      # 其脚本 check-font-coverage.mjs 与字体产物 public/fonts/ 均已删除。
+      # 历史教训保留在该步原注释里：旧字体只覆盖实需汉字的 45%，而所有基于
+      # 样式声明的检查都是绿的——「静默回退」只能靠生成期权威数据兜底。
+      # 残留清理记录：删除脚本时漏了本 CI 步，曾造成每轮同步必挂——
+      # 「退役一个机制」必须同时注销它的全部调用点，与 sprite 退役同因。）
 
   sync:
     runs-on: ubuntu-latest
@@ -146,7 +140,8 @@ jobs:
           key: sync-http-cache-${{ github.run_id }}
           restore-keys: sync-http-cache-
 
-      # 数据层：取数 → 规范化 → 整合闸门 → 精灵图 → 指纹。
+      # 数据层：取数 → 规范化 → 整合闸门 → 指纹。
+      # （2026-10-16：原链尾的「生成精灵图」随去像素化移除——立绘不再渲染。）
       # --data-only 跳过旧的多页 HTML 建站（渲染已交给 Vite，见下一步）。
       # 这条链只用 Node 内置模块，不装任何依赖 —— HTML 解析是手写正则与状态机。
       # 管线内建合理性闸门：机型总数骤降、必填字段覆盖率下滑、数值超出物理区间
@@ -204,7 +199,7 @@ jobs:
 
       # 只提交 data/（唯一数据源）。dist/ 与 _work/ 都在 .gitignore 里，
       # 站点产物任何人都能用 `node scripts/pipeline.mjs --data-only && npm ci && npm run build` 重新生成。
-      # public/data 与 public/sprites 是构建期从 data/ 同步的拷贝，同样不入库 ——
+      # public/data 是构建期从 data/ 同步的拷贝，同样不入库 ——
       # 入库两份必然出现「改了 data/ 忘了重新 build」的版本漂移。
       # 这与参考项目一致：仓库存数据与代码，产物不入库。
       #

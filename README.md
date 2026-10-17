@@ -2,13 +2,13 @@
 
 > 选择更清楚 · Choose with Clarity
 
-把手机参数做成一个**一眼看懂、可核查、不编造**的静态站点。首版范围：
+把产品参数做成一个**一眼看懂、可核查、不编造**的静态站点。当前范围：
 
 | 项 | 决定 |
 |---|---|
-| 品类 | **手机**（当前唯一已建设品类）；目录架构已泛化为全品类（v2，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`），tablet/laptop/audio 为预注册未建设 |
+| 品类 | **全品类 17 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / audio / media / tracker / network / pda / input / printer / storage / accessory |
 | 品牌 | **华为 + 苹果** |
-| 机型 | **2024-09 起在售**（收录窗口 `WINDOW_START`，含已停售但属该窗口的机型，用状态区分） |
+| 机型 | **913 台**（苹果 864 / 华为 49）。两条收录通道：① 官网抓取，按收录窗口 `WINDOW_START = 2024-09-01` 过滤；② 用户数据层 `add-product` **显式收录，不过窗口**（苹果老产品线 1976–2023 全部由此进站）——状态（在售/未发售/已停售）区分生命周期，与窗口无关 |
 | 形态 | 纯静态站（零后端），已送审 B 站 Toy（slug=specworld） |
 | 数据 | 厂商官网规格页为主源，**不做跑分/成绩分**（无可公开核查的第三方成绩源），缺数据一律 `null` |
 
@@ -47,17 +47,15 @@ src/types.ts            前端视图模型（与 data/products.json 对齐）
 src/lib/types.ts        管线侧数据契约（Node 侧；与上面同名不同职责，见 CONVENTIONS §1.3）
 src/locales/            zh/en 界面语言包（vue-i18n；参数值官方术语表在 data/curated/glossary.json）
 src/lib/                渲染层逻辑：数据装载、规格分组、能力横条、搜索
-src/components/         23 个像素风组件（Sky/Ground/ProductRoom/SpecTable/…）
+src/components/         17 个现代风组件（AppTopNav/ProductCard/FilterBar/CompareTable/…）
 src/views/              9 个页面（广场/机型详情/品牌/对比/榜单/时间线/搜索/关于 + 404）
 src/router/index.ts     hash 路由（Toy 挂在子路径下，history 模式会失效）
-scripts/pipeline.mjs    数据层编排（取数→规范化→闸门→精灵图→指纹）
+scripts/pipeline.mjs    数据层编排（取数→规范化→闸门→指纹）
 scripts/sources/        四个官网取数适配器
 scripts/normalize/      官网字段 → 契约字段（含纯函数解析层）
 scripts/sync/           窗口过滤 + 校验闸门 + 原子写
 scripts/editor-server.mjs 后台录入服务（npm run editor；页面在 admin/，不随站点发布）
-scripts/sprite/         数据驱动的像素立绘生成（62 张 SVG）
-scripts/sprite/review.mjs 像素立绘审查表（按几何分组，肉眼核对改阈值后的画法）
-scripts/lib/foldable.mjs 折叠屏判据**全站唯一真源**（前端与立绘共用）
+scripts/lib/foldable.mjs 折叠屏判据**全站唯一真源**（前端 catalog.ts 转出消费）
 scripts/archive.mjs     官网原始响应归档（→ data/raw/，供解析器离线回放）
 scripts/sync/queue.mjs  窗口过滤 + 待收录队列（纯函数，自测直接 import）
 scripts/sync-public.mjs 构建期把 data/ 同步进 public/（prebuild 自动跑）
@@ -95,7 +93,7 @@ npm ci && npm run build           # = prebuild(sync-public) + vite build + postb
 ## 改解析器之前先跑这个
 
 ```bash
-node scripts/selftest.mjs           # 285 项断言，不联网，1 秒
+node scripts/selftest.mjs           # 249 项断言，不联网，1 秒
 node scripts/selftest.mjs --verbose # 逐项打印
 ```
 
@@ -156,7 +154,8 @@ node scripts/qa/stale-lineup.mjs         # 池子里有没有过时机型
 ## 新机没出现？先看待收录队列
 
 苹果新机发布了、官网也抓到了，但站上没有——**不是取数失败，是它缺发布日期**。
-收录窗口靠发布日期过滤（`WINDOW_START = 2024-09-01`），拿不到日期就判不了在不在窗口内。
+官网抓取通道按发布日期过滤（`WINDOW_START = 2024-09-01`），拿不到日期就判不了在不在窗口内。
+（注意口径：窗口只管官网抓取；用户数据层 `add-product` 是显式收录，不过窗口。）
 
 以前这类机器被丢进 `_work/sync-report.json` 就没了，而 `_work/` 在 `.gitignore` 里——
 **12 小时后没人知道它存在过**。现在它们进 `data/discovery-pending.json`（入库）：
@@ -367,8 +366,8 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 | `#/` | `HomeView` | 广场：最新/最贵/最便宜（按品类各取一台）+ 各品牌最新几台 + 各维度第一 |
 | `#/brand/:brand` | `BrandView` | 品牌页：按**品类 → 形态 → 系列 → 变体 → 芯片 → 内存 → 年份 → 价格段**筛选（品类置顶、形态第二——折叠屏不是品类是形态，与机型库同一套 `facets.ts` 口径）。苹果系列只分 标准/Air/SE/折叠屏，Pro/Pro Max/Plus 归入变体层；结果区顶部同样有轻量排序条 |
 | `#/product/:id` | `ProductView` | 详情页：完整规格 + 能力横条 |
-| `#/compare` | `CompareView` | **机型库 + 对比台合一（筛选 = AND 组合，可减员到一排）**：默认列全部 62 台，按 品类/形态（折叠屏7·直板55，曲屏直屏数据源无原文暂不做）/品牌/系列/变体/芯片/内存/年份/**价格段（京东式 ¥0-1999…¥8000+）** AND 组合筛选；顶部有「已选条件」汇总条（可逐个删/一键清空）、京东「高级筛选」式下拉选择器（选定即收起）、计数为 0 的档灰显；勾选加入对比台，勾 1 台看详情、≥2 台并排对比不限台数；结果区顶部另有**轻量单级排序条**（最新/价格/续航/屏幕/轻薄/影像，辅助非主打）。条件/已选/排序全在 URL |
-| `#/rankings` | `RankingsView` | **榜单 = 多级排序器（与筛选是两件事）**：对所有 62 台按**优先级链**排序（如「优先大电池 → 再加相机二级排」），永远不减员；四个能力维度一键加为排序级，可增删 / 调优先级 / 切升降序；排序链写进 URL `o` |
+| `#/compare` | `CompareView` | **机型库 + 对比台合一（筛选 = AND 组合，可减员到一排）**：默认列全部 913 台，按 品类/品牌/系列/变体/芯片/内存/年份/**价格段（京东式 ¥0-1999…¥8000+）** AND 组合筛选；顶部有「已选条件」汇总条（可逐个删/一键清空）、京东「高级筛选」式下拉选择器（选定即收起）、计数为 0 的档灰显；勾选加入对比台，勾 1 台看详情、≥2 台并排对比不限台数；结果区顶部另有**轻量单级排序条**（最新/价格/续航/屏幕/轻薄/影像，辅助非主打）。条件/已选/排序全在 URL |
+| `#/rankings` | `RankingsView` | **榜单 = 多级排序器（与筛选是两件事）**：对全部 913 台按**优先级链**排序（如「优先大电池 → 再加相机二级排」），永远不减员；四个能力维度一键加为排序级，可增删 / 调优先级 / 切升降序；排序链写进 URL `o` |
 | `#/timeline` | `TimelineView` | 全部机型按发布月份铺开的发布史 |
 | `#/search` | `SearchView` | 顶栏搜索：分词 AND，只搜机型名/中文名/产品线/芯片/厂商 |
 | `#/about` | `AboutView` | **关于页**：项目说明 + 数据与原则（含动态数据快照时间与数据源状态）；原每页底部的「数据与原则」面板已收敛到此页，footer 只留品牌署名 |
@@ -429,21 +428,21 @@ logo 字号**不能跟着降到 12px**：像素风字号取 12 的整数倍，18
 ## 管线
 
 ```
-官方取数（scripts/sources）   华为规格页 50 台 / 苹果规格页 7 台 / 苹果对比页 42 列 / 苹果价格 7 台
+官方取数（scripts/sources）   四路通道：华为规格页 / 苹果规格页 / 苹果对比页矩阵 / 苹果价格
         ↓
 规范化（scripts/normalize）  官网字段 → 契约字段，口径判定 + 逐字段 provenance
         ↓
-发布日期取证（data/release-dates.json） 64 条人工核对，100% 日精度，**入库**
+整合（scripts/sync）        窗口过滤（只管官网抓取通道）+ 发布日期回填 + 校验闸门 + 原子写
         ↓
-整合（scripts/sync）        窗口过滤 + 发布日期回填 + 校验闸门 + 原子写
+用户数据层（data/overrides.json） 851 条 add-product 显式收录（不过窗口）+ 字段修正
         ↓
-data/products.json          62 台（华为 49 / 苹果 13）
+发布日期取证（data/release-dates.json） 66 条人工核对（apple 15 / huawei 51），100% 日精度，**入库**
         ↓
-精灵图（scripts/sprite）    由数据几何算出机身宽高比与镜头数，62 张 SVG
+data/products.json          913 台（苹果 864 / 华为 49；官网抓取 62 + 用户层显式收录 851）
         ↓
 同步（scripts/sync-public）  构建期拷进 public/（真源只有 data/，拷贝不入库）
         ↓
-渲染（Vite + Vue3 + TS）    9 个页面 + 23 个像素风组件，Tailwind v4 设计令牌
+渲染（Vite + Vue3 + TS）    9 个页面 + 17 个现代风组件，Tailwind v4 设计令牌
         ↓
 产物闸门（verify-dist）     入口存在 · 引用全相对 · 零外链 · < 50 MB
         ↓
@@ -455,20 +454,21 @@ data/products.json          62 台（华为 49 / 苹果 13）
 - [x] 数据契约 v0.1（`docs/DATA-CONTRACT.md`）
 - [x] 对比页信息设计定稿（`docs/COMPARE-DESIGN.md`）+ 可执行行定义（`src/lib/fields.ts`）
 - [x] 官网取数通道探针（`docs/PROBE-FINDINGS.md`）：两家都通，纯 HTTP、无鉴权、无隐藏 JSON API
-- [x] 覆盖口径决策：**窗口 2024-09 之后**（两家官网都只保留在售机型规格页，归档站不可达）
+- [x] 覆盖口径决策：**窗口 2024-09 之后**（两家官网都只保留在售机型规格页，归档站不可达）——窗口只管官网抓取通道；用户数据层 add-product 显式收录不过窗口（苹果老产品线由此进站）
 - [x] 范围决策：**不做跑分评分**（手机圈无可公开核查的第三方成绩源），只做客观参数
-- [x] 四个适配器：华为 50 台（0 跳过）、苹果规格页 7 台、苹果对比页矩阵 42 列 × 25 组、苹果价格 7 台
-- [x] 发布日期取证：64 条，100% 日精度（`data/release-dates.json`，curated 数据入库）
+- [x] 四个适配器（首批口径）：华为规格页 50 台（0 跳过）、苹果规格页 7 台、苹果对比页矩阵 42 列 × 25 组、苹果价格 7 台
+- [x] 发布日期取证：`data/release-dates.json` 现 66 条（apple 15 / huawei 51），100% 日精度（curated 数据入库）
 - [x] 规范化层：官网字段 → 契约字段，含机型拆分、口径判定、逐字段 provenance
-- [x] 跑通管线产出真实 `data/products.json`（62 台）并通过全部校验闸门
+- [x] 跑通管线产出真实 `data/products.json`（首批 62 台，现 913 台）并通过全部校验闸门
 - [x] 修复 `refreshHz` 解析污染：旧实现把 PWM 调光频率（1440/2160）与分辨率（2622）当成刷新率，
       已改为子句级解析 + 排除调光/采样 + 区分区间/离散/单值，并在 `sync/validate.mjs` 加了 `[48,240]` 闸门
 - [x] 派生层：分位标尺、首页头衔、一句话定位（`scripts/lib/derive.mjs`）
 - [x] **渲染层重构为 Vite 6 + Vue 3 + TS + Tailwind v4**（原 mjs 手写模板已退役）：
       遵循 Bilibili Toy 官方推荐栈，`base:'./'` + hash 路由，产物 0.79 MB
-- [x] 像素世界设计语言落地：`src/style.css` 用 Tailwind v4 `@theme` 承载全部令牌，
-      破晓渐变天空 + 像素天际线 + 内阴影描边面板 + 16-bit 像素字体
-- [x] 23 个组件 / 9 个页面：广场、机型详情、品牌、对比、榜单、时间线、搜索、关于（关于页承载原 footer 的「数据与原则」）
+- [x] **全站去像素化重构**（2026-10-15/16）：像素风设计语言（渐变天空/像素天际线/像素字体/立绘）
+      整体退役，改为现代深色产品数据库风（参考 Linear / Vercel / Arc）：`src/style.css` 重建设计令牌，
+      23 个像素组件收敛为 17 个现代组件，9 个页面全部重写，像素字体与立绘管线（`scripts/sprite/`）删除
+- [x] 17 个组件 / 9 个页面：广场、机型详情、品牌、对比、榜单、时间线、搜索、关于（关于页承载原 footer 的「数据与原则」）
 - [x] （已移除）原「无限画布 / 设备球」可视化探索页、环面/球面几何模块（`board.ts` / `globe.ts` / `canvasFilter.ts`）、画布导出 PNG、对应 smoke 脚本，均已于 2026-10-16 下线。
 - [x] **全站搜索**（`src/lib/search.ts` + `SearchView.vue`）：空格分词 AND 匹配，
       查机型名/中文名/产品线/芯片 + 品牌过滤，查询词进 URL query（刷新与分享可还原）
@@ -476,12 +476,14 @@ data/products.json          62 台（华为 49 / 苹果 13）
       `sync.yml` / `toy.yml` 改为「跑数据管线 → npm ci → npm run build」
 - [x] 产物闸门 `scripts/publish/verify-dist.mjs` 取代旧多页校验（8 个固定页路径、
       跨页死链在 SPA 里已不存在，硬套会天天误报）：改查入口、相对路径、外链、体积、数据齐备
-- [x] 内容指纹的模板层从 `scripts/**/*.mjs` 换成 `src/**` + 构建配置 + `scripts/sprite/**`，
-      前端改一个字会正确触发 Pages 重发
+- [x] 内容指纹的模板层从 `scripts/**/*.mjs` 换成 `src/**` + 构建配置，
+      前端改一个字会正确触发 Pages 重发（2026-10-16：原 `scripts/sprite/**` 随立绘退役移除）
 - [x] `package-lock.json` 的 125 条 `resolved` 全部从 npmmirror 换回 registry.npmjs.org
       （GitHub runner 不在国内镜像后面；integrity 是 tarball 哈希，两镜像字节相同故不变）
-- [x] 285 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
+- [x] 249 项自测 `scripts/selftest.mjs`：解析器、闸门自身、渲染层纯函数都在被测范围内，
       两次刷新率事故各固化成一条断言，CI 第一个 job
+      （项数史：285 → 246 系 2026-10-15 去像素化时像素美术用例整节退役；246 → 249 系
+      2026-10-17 补 status 枚举闸门与日期形状闸门——数字以 `npm run selftest` 末尾自报为准）
 - [x] 全链路编排 `scripts/pipeline.mjs`：一条命令跑通，失败即停不写盘
 - [x] 内容指纹 `scripts/publish/fingerprint.mjs`：剥掉运行时刻字段后再算，
       解决「每次跑指纹都变 → 每 12 小时空提交一次」的去重失效问题
@@ -489,7 +491,7 @@ data/products.json          62 台（华为 49 / 苹果 13）
 - [x] 自动发布 GitHub Pages：零凭据，站点内容有变化才发（`sync.yml` 的 `deploy` job）
 - [x] 自动送审 B 站 Toy `toy.yml`：每天一次 + 指纹去重 + 缺凭据安静跳过 + 失败开 issue
 - [x] 体检脚本 `scripts/qa/`：只读、离线、确定性，回答「为什么是这个结果」
-- [x] 像素立绘：62 张 SVG 由数据几何生成（机身宽高比与镜头数），经 `SpriteImg.vue` 接入对比/详情/榜单/搜索/时间线等页面（早期曾整体移除，后随 universal-catalog 重新接线）
+- [x]（已退役）像素立绘：62 张 SVG 由数据几何生成，经 `SpriteImg.vue` 接入多页 —— 2026-10-15 全站去像素化时**整体移除**（源码/脚本/产物全删），此行保留是为让「曾有过」可查，不再是当前能力
 - [ ] 扩品牌（小米/OPPO/vivo/荣耀/三星/Google）—— 需要各写一个官网取数适配器
 - [x] 首次送审 B 站 Toy（slug=specworld，2026-10-12 打包送审，审核中）；后续由 toy.yml 每日指纹去重自动送审
 

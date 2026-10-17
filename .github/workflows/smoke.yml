@@ -2,10 +2,14 @@ name: 浏览器冒烟
 
 # 为什么需要这条独立工作流：
 # selftest / i18n-ssr 是零浏览器断言，抓不到「真机里点不动、画布拖不起来、
-# 字体静默回退、容错提示不显示」这类**只有浏览器里才复现**的故障。
-# 7 个 _smoke*.cjs 正是干这个的，但它们曾在 .gitignore 里（CI 根本拿不到）、
-# 在 package.json 里没注册、也没有任何工作流调用 —— 「注册≠调用」的完整形态：
-# 脚本存在、能跑、甚至本地跑出过 14 项红灯，而没有任何一次自动运行看得见。
+# 容错提示不显示」这类**只有浏览器里才复现**的故障。
+# 2 个 _smoke*.cjs（_smoke.cjs / _smoke-search.cjs）正是干这个的，但它们曾在
+# .gitignore 里（CI 根本拿不到）、在 package.json 里没注册、也没有任何工作流调用
+# —— 「注册≠调用」的完整形态：脚本存在、能跑、甚至本地跑出过 14 项红灯，
+# 而没有任何一次自动运行看得见。
+# （2026-10-15 去像素化后 _smoke-font.cjs / _smoke-pixel.cjs 随字体与像素立绘
+# 一并退役，脚本数 7 → 2；本条计数改过三轮，每次都是机制退役时漏同步——
+# 注释里的数字没有闸门守，全凭退役 checklist 自觉。）
 #
 # 触发面刻意与 sync.yml 分开：同步是 12 小时定时的事，冒烟是每次改前端就该跑的事。
 # 合在一起会让「改一行 CSS」也触发一次联网抓官网。
@@ -50,18 +54,13 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
-      # 精灵图是构建期产物（data/sprites/ 不入库），全新 checkout 不存在；
-      # 画布/搜索/对比等页面的冒烟要读它，缺了会静默少渲染一堆设备。
-      - name: 生成精灵图（离线）
-        run: node scripts/sprite/generate.mjs
-
       # postbuild 自带 verify-dist.mjs：入口缺失/绝对路径/外链/超体积都会在这里拦下。
       - name: 构建站点
         run: npm run build
 
       # ubuntu-latest 镜像预装 Google Chrome stable（/usr/bin/google-chrome）。
       # 不靠「应该有」——显式验一次，缺了当场报清晰的错，
-      # 而不是让 7 个脚本各自抛一句「找不到浏览器」再互相淹没。
+      # 而不是让 2 个脚本各自抛一句「找不到浏览器」再互相淹没。
       - name: 确认 Chrome 可用
         run: |
           if ! command -v google-chrome >/dev/null 2>&1; then
@@ -70,7 +69,7 @@ jobs:
           fi
           google-chrome --version
 
-      # preview 默认只监听 localhost，7 个脚本的默认 BASE 也正是 localhost:4173
+      # preview 默认只监听 localhost，2 个脚本的默认 BASE 也正是 localhost:4173
       # （端口真源在 vite.config.ts，注释里写了「改一处要同步所有引用方」）。
       # 用轮询等就绪而不是 sleep 猜：CI 机器快慢不定，猜错了要么连不上、
       # 要么白等——两种都是静默浪费时间。
@@ -89,7 +88,7 @@ jobs:
           fi
           echo "preview 就绪（第 ${i} 秒）"
 
-      # 一键跑完全部 7 个浏览器脚本 + selftest + i18n SSR。
+      # 一键跑完全部 2 个浏览器脚本 + selftest + i18n SSR。
       # 失败时上传 _shots 截图：冒烟的失败信息往往只有「差了几个像素」，
       # 没有截图连排查入口都没有。
       - name: 浏览器冒烟

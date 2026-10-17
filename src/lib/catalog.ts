@@ -64,8 +64,9 @@ function makeNameTest(rule: {
   const re = new RegExp(rule.match, rule.flags ?? '');
   return (n: string) => re.test(n);
 }
-// 折叠屏判据的下游真源：构建期的像素立绘（scripts/sprite/generate.mjs）也必须用同一份。
-// 判据注释与三个实测坑全在那个文件里，这里只做转出，避免两份正则各写各的。
+// 折叠屏判据的下游真源：scripts/lib/foldable.mjs（唯一真源，自 2026-10-16 起本站是唯一消费者——
+// 原构建期像素立绘 generate.mjs 已随去像素化退役）。判据注释与三个实测坑全在那个文件里，
+// 这里只做转出，避免两份正则各写各的。
 
 /**
  * 品类 / 系列 / 价格 派生层（纯函数，无 DOM，可被 selftest 直接 import）。
@@ -159,10 +160,11 @@ export function categoryLabel(id: CategoryId): string {
 /**
  * 折叠屏判据：官网规格页「尺寸与重量」段出现 `折叠` 或 `展开` 两个字。
  *
- * 实现下沉到 `scripts/lib/foldable.mjs`（三个实测坑的完整说明在那里），
- * 因为构建期的像素立绘要吃同一份判据——两处各写一份正则，必然分叉，
- * 而分叉的后果是**机型库标着「折叠屏」、立绘却画成直板**，用户看得见却不报错。
- * 那个分歧是 2026-10-06 补 `scripts/sprite/review.mjs` 时肉眼发现的。
+ * 实现下沉到 `scripts/lib/foldable.mjs`（三个实测坑的完整说明在那里）。
+ * 历史：判据曾有两份（前端与构建期像素立绘各写一份正则），分叉的后果是
+ * **机型库标着「折叠屏」、立绘却画成直板**，用户看得见却不报错；
+ * 那个分歧是 2026-10-06 补立绘审查表时肉眼发现的。立绘已随 2026-10-16
+ * 去像素化退役，判据收敛为这一份真源。
  */
 export function isFoldable(p: Product): boolean {
   return isFoldableOfficial(p);
@@ -227,6 +229,26 @@ export const FORM_LABEL_KEY: Record<FormId, string> = {
 
 export function formOf(p: Product): FormId {
   return isFoldable(p) ? 'foldable' : 'bar';
+}
+
+/**
+ * 日期短格式（卡片/列表用，评审 2026-10-17 #9：全站日期两套写法）。
+ * 规则：卡片/列表 = 短格式（2026 年 10 月）；表格/排序 = ISO；详情页 = 长格式。
+ * **精度降级**：year 精度只写「2026 年」，不渲染假月份——不许把 YYYY 补成 YYYY-MM。
+ */
+export function shortDateLabel(p: Pick<Product, 'releaseDate' | 'releaseDatePrecision'>): string {
+  const d = p.releaseDate || '';
+  if (!d) return '';
+  const [y, m] = d.split('-');
+  if (!y) return '';
+  if (p.releaseDatePrecision === 'year' || !m) return `${y} 年`;
+  const mi = Number.parseInt(m, 10);
+  return Number.isFinite(mi) ? `${y} 年 ${mi} 月` : `${y} 年`;
+}
+
+/** 形态的本地化文案（折叠屏 / 直板），卡片副标题用 */
+export function formLabelOf(p: Product): string {
+  return i18n.global.t(FORM_LABEL_KEY[formOf(p)]);
 }
 
 // ── 系列（产品线）──
@@ -382,7 +404,9 @@ export const UNKNOWN = '未公布';
  * `未公布` 是**可见可点**的筛选项，不是隐形消失（见 `UNKNOWN`）。
  */
 export function chipName(p: Product): string {
-  const raw = p.chipset?.name;
+  // specs-first：v2 数据在扁平 specs 容器里（`specs['chipset.name']`），
+  // v1 嵌套 `p.chipset?.name` 仅作老快照回退——只读嵌套会让 v2 全部静默变「未公布」。
+  const raw = (p.specs ?? {})['chipset.name'] ?? p.chipset?.name;
   if (raw == null) return UNKNOWN;
   let s = String(raw);
   s = s.replace(/[（(][^）)]*[）)]/g, ''); // 去掉「（16 GB RAM 版本）」

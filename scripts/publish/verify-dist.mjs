@@ -25,7 +25,7 @@
  *    public/ 会被 vite 原样拷进 dist，管理界面不该在线上公开可访问）。
  * 5. **体积在平台上限内**：50 MB。超了上传直接被拒。
  *
- * 除此之外还顺手核对数据与精灵是否真被打进去了：prebuild 若忘了跑，
+ * 除此之外还顺手核对数据是否真被打进去了：prebuild 若忘了跑，
  * 站点能打开但一屏空白，这是最容易被误判成「渲染坏了」的一类失败，
  * 让闸门直接把它喊出来。
  *
@@ -124,18 +124,14 @@ if (extRefs) note(`产物里有 ${extRefs} 处外部资源引用（平台要求�
 if (absRefs) note(`产物里有 ${absRefs} 处绝对路径引用（挂在 /toy/<slug>/ 或 /<repo>/ 下会 404）`);
 if (missingRefs) note(`产物里有 ${missingRefs} 处指向不存在文件的引用`);
 
-/* ---------- 3. 数据与精灵确实在产物里 ---------- */
+/* ---------- 3. 数据确实在产物里 ---------- */
 // prebuild（scripts/sync-public.mjs）没跑时的典型症状：站点能开、一屏空白。
 // 在这里喊出来，比上线后被人问「为什么是空的」划算得多。
 const hasData = files.some((f) => relOf(f) === 'dist/data/products.json');
-const spriteCount = files.filter((f) => relOf(f).startsWith('dist/sprites/')).length;
 if (!hasData) {
   note(
     'dist/data/products.json 不存在 —— prebuild 没跑或 public/ 是空的，跑一次 node scripts/sync-public.mjs',
   );
-}
-if (spriteCount === 0) {
-  note('dist/sprites/ 为空 —— 跑一次 node scripts/sprite/generate.mjs 生成立绘');
 }
 
 /* ---------- 4. 管理后台页不随站点发布 ---------- */
@@ -167,7 +163,6 @@ const manifest = {
   externalRefs: extRefs,
   absoluteRefs: absRefs,
   missingRefs,
-  sprites: spriteCount,
   strayHtml: strayHtml.length,
   selfContained: extRefs === 0 && absRefs === 0 && missingRefs === 0,
   issues,
@@ -175,14 +170,14 @@ const manifest = {
 writeFileSync(join(DIST, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
 console.log(
-  `产物 ${files.length} 个文件 / ${mb.toFixed(2)} MB · 精灵 ${spriteCount} 张 · HTML ${htmlCount} 个`,
+  `产物 ${files.length} 个文件 / ${mb.toFixed(2)} MB · HTML ${htmlCount} 个`,
 );
 console.log(`引用体检：外部 ${extRefs} · 绝对路径 ${absRefs} · 失效 ${missingRefs}`);
 if (refSamples.length) for (const s of refSamples) console.log(`  ${s}`);
 
 if (ok) {
   console.log(
-    '✅ 发布校验通过：入口存在、引用全相对、零外链、后台页不随线、包体在限内、数据与精灵齐备',
+    '✅ 发布校验通过：入口存在、引用全相对、零外链、后台页不随线、包体在限内、数据齐备',
   );
 } else {
   console.error(`❌ 发布校验未通过，共 ${issues.length} 处：`);

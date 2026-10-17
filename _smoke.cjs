@@ -28,7 +28,6 @@ const BASE = process.env.SMOKE_BASE || 'http://localhost:4173/'
     productLinks: document.querySelectorAll('a[href*="#/product/"]').length,
     imgsOk: Array.from(document.images).filter((i) => i.complete && i.naturalWidth > 0).length,
     imgsTotal: document.images.length,
-    fontLoaded: document.fonts ? document.fonts.check('12px "Fusion Pixel"') : null,
     hash: location.hash,
   }))
 
@@ -65,6 +64,49 @@ const BASE = process.env.SMOKE_BASE || 'http://localhost:4173/'
   await new Promise((r) => setTimeout(r, 800))
   const brandOnly = await probe()
   await page.screenshot({ path: `${OUT}/search-brand.png` })
+
+  // 对比选择跨页保持（2026-10-16 用户实测报的真 bug 回归）：
+  // 广场/机型库加入对比后点右上角入口，进去清空 —— 根因是跳转丢 sel、
+  // useCompare 的 watcher 清空已选。必须真机【点击】复现：goto 带 query
+  // 进页面走的是初始化通道，复现不了这个 bug。
+  await page.goto(BASE + '#/compare', { waitUntil: 'domcontentloaded', timeout: 30000 })
+  await new Promise((r) => setTimeout(r, 1000))
+  const added = await page.evaluate(() => {
+    // 2026-10-17 设备库改版：卡片上的「加入对比」按钮改为左上角勾选热区
+    // （aria-label 仍是 compare.add = 「加入对比」），按 aria 找，不按文本找
+    const btn = Array.from(document.querySelectorAll('button[aria-label]')).find(
+      (b) => b.getAttribute('aria-label')?.includes('加入对比'),
+    )
+    if (!btn) return { ok: false, why: '找不到勾选热区（aria-label=加入对比）' }
+    btn.click()
+    return { ok: true }
+  })
+  await new Promise((r) => setTimeout(r, 500))
+  const selInUrl = await page.evaluate(() => location.hash.includes('sel='))
+  const dockShown = await page.evaluate(
+    () => document.body.textContent?.includes('对比这') ?? false,
+  )
+  // 点顶栏右上角的对比入口（裸路径 RouterLink —— 回归点）
+  await page.evaluate(() => {
+    document.querySelector('header a[href="#/vs"]')?.click()
+  })
+  await new Promise((r) => setTimeout(r, 900))
+  const vsState = await page.evaluate(() => ({
+    hash: location.hash,
+    hasTable: Boolean(document.querySelector('table')),
+    productLinks: document.querySelectorAll('a[href*="#/product/"]').length,
+    emptyHint: document.body.textContent?.includes('勾选左侧机型加入对比') ?? false,
+  }))
+  await page.screenshot({ path: `${OUT}/compare-persist.png` })
+  const persistOk =
+    added.ok && selInUrl && dockShown && vsState.hasTable && vsState.productLinks > 0 && !vsState.emptyHint
+  console.log('CMP-PERSIST', JSON.stringify({ added, selInUrl, dockShown, vsState, persistOk }))
+  if (!persistOk) {
+    throw new Error(
+      `对比选择没有跨页保持：added=${JSON.stringify(added)} selInUrl=${selInUrl} ` +
+        `dockShown=${dockShown} vs=${JSON.stringify(vsState)} —— 检查 router 的 sel 守卫与 useCompare watcher`,
+    )
+  }
 
   console.log('HOME    ', JSON.stringify(home))
   console.log('PRODUCT ', JSON.stringify(product))

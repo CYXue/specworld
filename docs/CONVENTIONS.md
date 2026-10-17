@@ -285,38 +285,40 @@ npm run lint        # 只报告，CI 用
   当前页用金色底 + `aria-current`，**不用位移** —— 位移会把整条导航顶歪）。
   同理**描边宽度跟着字号走**：24px 字配 2px 描边是对的，12px 字配 2px 会把笔画缝隙填满。
   这条不是「越素越好」，而是**尺度匹配**：加装饰前先问「它相对容器有多大」。
-- **图标走 SVG 不走字符**：字体子集里没有 `✓ ✗ ⚠ √ ≤ ≥`，用字符会静默回退成非像素字形。
-  统一用 `src/components/PxIcon.vue`（16×16 整数坐标路径 + `crispEdges`）；
+- **图标走 SVG 不走字符**：`✓ ✗ ⚠ √ ≤ ≥` 这类符号不进字体也不进文案，
+  统一用内联 `<svg viewBox="0 0 24 24" stroke="currentColor">` 画（见 `AppTopNav.vue` /
+  `SearchBox.vue` 的现役写法）——2026-10-15 前用 `PxIcon.vue`（像素方块路径），
+  已随去像素化退役；
 - **不要写行内 `box-shadow`**：一律用 `.pixel-*` 组件类（style.css 的 `@layer components`）。
   行内样式散落各处正是「同一元素在不同页面圆角不一致」的成因。
 - **链接走 `.pixel-link`**：常态金色无下划线，hover 才出**虚线**下划线。
   不用浏览器默认的连续实线下划线（12px 点阵下必落非整数像素，且跨字符长度不均匀）。
   站外链接一律 `target="_blank" rel="noopener noreferrer"`；
-  站内相对资源（字体许可证等）走 `lib/assets.ts` 的 `asset()`，**不许硬写 `./`**。
+  站内相对资源走 `lib/assets.ts` 的 `asset()`，**不许硬写 `./`**；
 
-自动检查：`_smoke-pixel.cjs`（puppeteer，逐页扫模糊/圆角/字号/字体），
-三条检测项**都已反向测过**（注入违规确认报红，见 `PITFALLS.md` P8 的同源纪律）。
-⚠️ **它的 `PAGES` 清单是白名单，新页面不在清单里就等于没被扫**
-（`#/about` 曾因此带着两处违规字号长期隐身，加进清单后当场报出）。
-**加页面必须同时加进这个清单**，否则「零违规」只覆盖清单内那几页。
+自动检查：`_smoke.cjs` / `_smoke-search.cjs`（puppeteer，真机加载 SPA、
+查控制台错误、验证路由与搜索三态）。
+（2026-10-15 去像素化后 `_smoke-pixel.cjs` / `_smoke-font.cjs` 随像素立绘与
+自定义字体一并退役；2026-10-17 补注销 CI 里对已删脚本的引用。）
+⚠️ **smoke 脚本不跑等于没有**：新增页面要确认被某个脚本或 selftest 的
+「路由可达性」一节覆盖，否则「零违规」只覆盖被跑到的那些页面。
 
 许可与署名：
 
-- 站点标识（仓库地址、许可证名、字体名、上游地址）集中在 **`src/lib/site.ts`**，
+- 站点标识（仓库地址、许可证名、上游地址）集中在 **`src/lib/site.ts`**，
   **唯一真源**。页脚与关于页都从它取 —— 同一个值写两份、改名漏一处就是静默指向旧地址；
 - 许可信息**只写在关于页**（`AboutView.vue` 的「许可与署名」小节），
-  页脚只留三词短链入口。**别在每个页面底部铺开**（用户已明确否掉那种做法）；
-- 字体是 OFL-1.1 的**修改版**（子集化），OFL 要求改名 + 披露修改，
-  故 `SpecPixel` 这个名字与「Fusion Pixel 子集」这句话**必须出现在站内**，
-  只放在 `public/fonts/OFL.txt` 里等于没披露。
+  页脚只留三词短链入口。**别在每个页面底部铺开**（用户已明确否掉那种做法）。
 
-字体相关：
+字体（2026-10-17 更新）：
 
-- 像素字体是 `SpecPixel`（Fusion Pixel 子集，OFL-1.1，因修改已改名），
-  `public/fonts/OFL.txt` 是许可证全文；
-- 换字体/加文案后跑 `npm run font:check`。缺字形**不会**让构建失败，
-  只会让那些字悄悄变回系统圆滑字体，所以单独设闸门拦（详见 `PITFALLS.md` P8）；
-- 重新生成子集：`python scripts/font/build-subset.py`（需 fontTools + brotli）。
+- 全站 2026-10-15 去像素化起改用**系统字体栈**（`src/style.css` 的 `--font-sans`），
+  像素字体 SpecPixel / `public/fonts/` / `font:check` 闸门 / `build-subset.py`
+  全部退役——「缺字形静默回退」的故障形态随之消失；
+- 历史教训（旧字体只覆盖实需汉字 45% 的事故与修法）保留在 `PITFALLS.md` P8，
+  本条不再重复；
+- **不要再引入自定义字体**：i18n 双语 + 全品类中文参数值已经覆盖生僻字，
+  系统栈是当前唯一形态；确需引入时，先读 PITFALLS P8 的判据纪律。
 
 ---
 
@@ -537,7 +539,6 @@ specs 里的值是**中文官网原文**（数据诚信：不改写、不换算�
 | `npm run lint` / `lint:fix` | 风格检查 / 自动修 | 交付前 |
 | `npm run format` | Prettier 格式化 | 交付前 |
 | `npm run lock:check` / `lock:fix` | 依赖源检查 / 规范化 | 装过新依赖后、推送前 |
-| `npm run font:check` | 字形覆盖检查（字体缺字形是静默失效） | 换字体、改界面文案后 |
 | `npm run conventions:check` | 规范自检（Toy 约束/零日志/命令式 DOM 样式） | 交付前 |
 | `npm run dev` | 本地开发服务器 | 交互验证 |
 
@@ -632,8 +633,8 @@ npm run conventions:check    # = node scripts/publish/check-conventions.mjs
 | §5.3 | `src/` 零 `console.*` / `debugger` | 污染用户视图、可能泄露内部路径 |
 | §2.5 | `innerHTML` 注入含标签结构时告警 | 命令式 DOM 拿不到 scoped 样式（真 bug） |
 
-另一道独立闸门 `npm run font:check`（= `node scripts/publish/check-font-coverage.mjs`）
-守 §2.5.1 的字体纪律：字形缺失时浏览器静默回退系统字体，零报错。
+（2026-10-17：原「另一道独立闸门 `npm run font:check`」随自定义字体退役一并移除——
+全站改用系统字体栈后不再有「缺字形静默回退」的故障形态；历史教训见 `PITFALLS.md` P8。）
 
 **主观条款不查**（注释写得好不好、命名贴不贴切、目录分得对不对）——
 闸门一旦开始报「审美问题」，就会被整体忽略。**只管能判的**。
@@ -644,9 +645,9 @@ npm run conventions:check    # = node scripts/publish/check-conventions.mjs
 > 修法是匹配前先剥行注释（`stripLineComments`）。
 > 这与 `PRINCIPLES.md` §4「闸门自身也会误报」是同一条纪律。
 >
-> 像素风的两道闸门（`font:check` 与 `_smoke-pixel.cjs`）也都反向测过，
-> 且 `font:check` 测了**两条不同的失败路径**（真实缺口 / 清单与字体不同源）。
-> 详见 `PITFALLS.md` P8。
+> （2026-10-17：原「像素风的两道闸门（`font:check` 与 `_smoke-pixel.cjs`）也都反向测过，
+> 且 `font:check` 测了两条失败路径」随字体与像素立绘退役转为历史记录——
+> 「闸门必须反向测、且要测不同失败路径」的纪律不过时，详见 `PITFALLS.md` P8。）
 
 ---
 
@@ -657,10 +658,9 @@ npm run conventions:check    # = node scripts/publish/check-conventions.mjs
 - [ ] `npm run lint:fix && npm run format` 已跑
 - [ ] `npm run conventions:check` 通过（改了 base/路由/依赖/日志更要跑）
 - [ ] `npm run selftest` 全绿（改了解析器/闸门/几何时**必跑**）
-- [ ] `npm run font:check` 通过（改了界面文案/字体**必跑**，缺字形是静默失效）
 - [ ] 改了界面文案 / 加删语言包键 → `npm run smoke:i18n` 通过（见 §2.6）
 - [ ] `npm run build` 通过（含 `verify-dist` 闸门）
-- [ ] 改了样式 → `_smoke-pixel.cjs` 零模糊/零圆角/字号整数（需 `npm run preview` 起服务）
+- [ ] 改了交互/路由 → `npm run smoke` + `npm run smoke:search` 真机过一遍（需 `npm run preview` 起服务）
 - [ ] 装过新依赖 → `npm run lock:check` 通过
 - [ ] `grep -rn "console\.\|debugger" src/` 零命中
 - [ ] 改了目录/命名/脚本 → **本文已同步更新**

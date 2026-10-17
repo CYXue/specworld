@@ -19,13 +19,9 @@ data/overrides.json.bak
 # release-dates.json 曾经躺在这里，后果是 CI 全新 checkout 拿不到，60 台全被窗口过滤丢掉。
 _work/
 
-# 精灵图：由 scripts/sprite/generate.mjs 随管线构建期生成（数据几何算出，改字段即变），不入库
-data/sprites/
-
-# public/ 下的数据与精灵：构建期从 data/ 同步过来的拷贝（scripts/sync-public.mjs，prebuild 自动跑）。
+# public/ 下的数据：构建期从 data/ 同步过来的拷贝（scripts/sync-public.mjs，prebuild 自动跑）。
 # 真源只有 data/ —— 入库两份必然出现「改了 data/ 忘了重新 build」的版本漂移。
 public/data/
-public/sprites/
 
 # Toy 送审包（dist 的拷贝，随打包重建，不入库）
 .toy-pkg/
@@ -49,9 +45,6 @@ Thumbs.db
 # 工作助手本地目录（不入库）
 .workbuddy/
 .atomcode/
-
-# 像素风视觉核对截图（_smoke-pixel.cjs 的产物，随时可重跑生成，不入库）
-_shots-pixel/
 
 # Toy 资产是可再生产物：真源 = public/favicon.svg + toy-assets/poster.html + make-toy-assets.mjs。
 # PNG 入库只会多一份会漂移的副本（与 data/ vs dist/ 同一纪律）。

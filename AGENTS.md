@@ -52,7 +52,7 @@ v2 全品类目录（category + specs 扁平容器）的设计见 `docs/UNIVERSA
 
 ### 改了 `scripts/normalize/parse.mjs`（解析器）
 ```bash
-npm run selftest          # 285 项，不联网，1 秒
+npm run selftest          # 249 项，不联网，1 秒（项数以运行末尾自报为准）
 node scripts/pipeline.mjs --data-only   # 再看真实数据有没有变
 ```
 解析器出错**不会抛异常**，它会安静地把 PWM 调光频率当刷新率、把分辨率当屏幕尺寸，
@@ -77,22 +77,6 @@ node scripts/qa/index.mjs          # 回答「为什么这台是榜首」「影�
 补一条 `data/release-dates.json` 的取证后下次同步自动进站 —— `action` 字段把要补的那条写出来了，照抄即可。
 队列只有「缺发布日期」这一类；窗口外的老机型与解析失败不入队（详见 `queue.mjs` 的注释）。
 
-### 改了 `scripts/sprite/generate.mjs`（立绘画法）
-```bash
-node scripts/selftest.mjs      # layout 纯函数 + 与前端的判据同源
-npm run sprites:review          # 出审查表，人眼核对
-node _smoke-pixel.cjs# 像素风扫描（需 preview 已起：npm run build && npm run preview，端口 4173 只监听 localhost）
-```
-立绘每一根线都由数据算出，改一个阈值就是改**全部 62 张图**，
-而单测、产物闸门、像素风扫描**三者都抓不到「画错了但完全合规」**。
-所以改完必须打开 `_work/sprite-review/index.html` 看一眼：
-**同组的机器必须长得非常像**（折叠档里混进直板机 = 判据坏了）。
-
-判据只能有一个真源：折叠屏判据在 `scripts/lib/foldable.mjs`，
-前端 `src/lib/catalog.ts` 与立绘都引它。
-两处各写一份正则必然分叉，而分叉的后果是「机型库标着折叠屏、立绘却画成直板」——
-这个 bug 就是靠审查表肉眼发现的（详见 `PITFALLS.md` P16）。
-
 ### 改了 `scripts/normalize/parse.mjs` 之后想复现官网改版
 ```bash
 npm run archive:check   # 归档件与当前 raw 不一致 = 官网在我们没察觉时改了结构
@@ -100,20 +84,15 @@ node scripts/archive.mjs# 更新 data/raw/
 ```
 `data/raw/` 存的是官网原文键值对（不是 HTML），解析器改坏时喂它离线复现，不需联网。
 
-### 改了 `Sky.vue` / `Ground.vue`（banner 的黑白太极）
-```bash
-npm run selftest          # 五条明度不变量
-```
-天空是8 段**离散色带**（不是渐变），地面三层也是灰阶。
-最易踩的一条：**等差必须在 WCAG 线性亮度空间做，不能在 sRGB 通道值上做** ——
-sRGB 低亮度端被严重压缩，按通道值等差会出现「两档肉眼完全看不出差别」。
+### 顶部导航 / 首页（去像素化后的形态）
+自 2026-10-15 起，全站改为现代深色产品数据库风格（参考 Linear / Vercel / Arc Search）：
+无像素 banner、无立绘、无自定义字体，顶栏是 `AppTopNav.vue`、页脚是 `AppFooter.vue`，
+机型卡片/列表走 `LibraryInner.vue` + `ProductCard.vue` / `ProductListItem.vue`。
+改视觉时优先复用 `src/style.css` 里的设计令牌（`--color-surface*`、`--color-border*`、
+`--color-fg/dim/faint`、`--color-accent`、`.btn*`、`.card`、`.badge`、`.input`、`.chip`），
+不要手写像素式硬色值或 `border-image` 像素描边。
 
-自测守的判据与具体色值无关：离散非渐变 / 相邻档线性亮度差 ≥ 2.5% /
-先升后降的太极结构 / 每档对白字 ≥ 4.5:1（AA）/ banner 内无高饱和色（通道差 ≤ 24）。
-最后一条是因为天空改黑白后，地面的饱和绿曾像荧光棒一样扎眼 ——
-**基调整体性要机器守，不能靠「改的时候顺手看一眼」。**
-
-⚠️ **根目录 7 个 `_smoke*.cjs` 依赖 `puppeteer-core`，它已在 `devDependencies` 中**
+⚠️ **根目录的 `_smoke*.cjs`（如 `_smoke.cjs` / `_smoke-search.cjs`）依赖 `puppeteer-core`，它已在 `devDependencies` 中**
 （CI 不需要浏览器，本地用本机已装的系统 Chrome）。无需手动 `npm i puppeteer`。
 早期版本曾依赖未入库的 `puppeteer`（`npm i puppeteer --no-save`），`npm ci` 会静默删掉它、
 导致 7 个脚本全部 MODULE_NOT_FOUND——2026-10-14 就这么发生过一次。现已迁到 `puppeteer-core`，
@@ -121,27 +100,20 @@ sRGB 低亮度端被严重压缩，按通道值等差会出现「两档肉眼完
 端口口径已统一收在 `vite.config.ts`（dev 5183 / preview 4173），脚本默认值引用它；
 preview 只监听 localhost（127.0.0.1 不通，实测过）。
 
-### 改了界面文案 / 字体
+### 改了界面文案 / 视觉
 ```bash
-npm run font:check
-node _smoke-pixel.cjs     # 需 preview 已起（npm run preview，端口 4173 只监听 localhost；端口真源在 vite.config.ts）
+npm run type-check        # vue-tsc：模板与脚本的类型闸，改契约后先跑
+npm run smoke             # puppeteer 冒烟：加载 SPA、查控制台错误、验证路由
+npm run smoke:search      # 搜索三态（空 / 命中 / 无结果）与 query 进 URL
 ```
-字体缺字形是**静默**的：同一句话里有些字像素、有些字圆滑，浏览器静默回退系统字体。
-唯一权威判据是字体 cmap，`font:check` 查的就是生成期落下的 `coverage.json`。
-**不要用字符图标**（字体子集没有 `✓✗⚠√≤≥`，用字符会静默回退成非像素字形）→ 走 `PxIcon.vue`。
-
-⚠️ **新加了页面，`_smoke-pixel.cjs` 的 `PAGES` 清单里也要加**。
-那份清单是硬编码白名单，不在里面 = 脚本压根没打开过这一页，
-但它输出的话仍写着「零违规」（`#/about` 就这样长期带着两处违规字号隐身，
-加进清单后当场报出，详见 `PITFALLS.md` P19）。
+自 2026-10-15 去像素化后，全站改用系统字体栈（CSS `--font-sans`），
+**不再有自定义像素字体**，故 `font:check` 与 `_smoke-pixel.cjs` 已退役。
+新增页面记得在 `router/index.ts` 登记，并让某个导航链接可达（孤儿页由
+`selftest` 的「路由可达性」一节拦截）。
 
 ### 改了许可 / 版权 / 署名
 站点标识（仓库地址、许可证名、字体名、上游地址）**只有一个真源**：`src/lib/site.ts`。
 页脚与关于页都从它取 —— 同一个值写两份，改名时漏一处就是**静默指向旧地址**。
-
-字体是 OFL-1.1 的**修改版**（子集化），OFL 要求改名 + 披露修改：
-`SpecPixel` 这个名字和「Fusion Pixel 子集」这句话**必须出现在站内**
-（现在写在关于页的「许可与署名」里），只放在 `public/fonts/OFL.txt` 等于没披露。
 
 许可信息**只写在关于页**，页脚留三词短链入口。
 **别在每个页面底部铺开** —— 用户已明确否掉那种做法。
@@ -180,7 +152,6 @@ data/          唯一入库的数据源。顶层 *.json 与 schemas/*.json 进�
 _work/         中间产物与原始响应缓存 —— 不入库，CI 靠 actions/cache 恢复
 dist/          构建产物 —— 不入库
 public/data/   data/ 的构建期拷贝 —— 不入库（入库两份必然版本漂移）
-data/sprites/  精灵图 —— 构建期生成，不入库
 ```
 
 **入库的只有 `data/` 顶层 JSON。** 这条 CI 里还有一道显式 pathspec 兜底：

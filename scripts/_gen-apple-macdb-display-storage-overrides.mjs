@@ -27,6 +27,10 @@ const startSeq = kept.length;
 const entries = [];
 let seq = startSeq;
 
+// 日期精度从日期形状派生（2026-10-17 审计 A3）：'YYYY-01-01'+day 是假精度（闸门16 拒），
+// 手工把精度降成 year 又会留下「形状不符」——精度与形状同源，永远一致
+const precisionOf = (d) => (d.split('-').length === 3 ? 'day' : d.split('-').length === 2 ? 'month' : 'year');
+
 const K = {
   w: 'body.widthMm', h: 'body.heightMm', dp: 'body.depthMm', g: 'body.weightG',
   mat: 'body.material', colors: 'body.colors',
@@ -53,8 +57,8 @@ function pad(id, name, date, category, line, o) {
     createdAt: D,
     product: {
       id, slug: id, brand: 'apple', category, line, name, nameZh: null,
-      releaseDate: date, releaseDatePrecision: 'day',
-      status: 'discontinued', retiredAt: null, skus: [], scores: [],
+      releaseDate: date, releaseDatePrecision: precisionOf(date),
+      status: 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs,
       provenance: {
@@ -84,64 +88,64 @@ const colr = (id, name, date, size, res, o = {}) =>
     ports: ['DB-15 视频输入'], ...o,
   });
 
-mono('apple-monitor-ii', 'Apple Monitor II', '1980-01-01', 12, [560, 192]);
-mono('apple-monitor-iii', 'Apple Monitor III', '1980-01-01', 12, [560, 192], { g: 8400 });
-mono('apple-monochrome-monitor', 'Apple Monochrome Monitor', '1980-01-01', 12, [560, 192]);
-mono('apple-monochrome-monitor-iie', 'Apple Monochrome Monitor IIe', '1985-01-01', 12, [560, 192], { g: 6300 });
-mono('apple-monitor-iic', 'Apple Monitor IIc', '1984-01-01', 12, [560, 192], { g: 5900 });
-pad('apple-iic-flat-panel-display', 'Apple IIc Flat Panel Display', '1984-01-01', 'display', 'Apple Display', {
+mono('apple-monitor-ii', 'Apple Monitor II', 1980, 12, [560, 192]);
+mono('apple-monitor-iii', 'Apple Monitor III', 1980, 12, [560, 192], { g: 8400 });
+mono('apple-monochrome-monitor', 'Apple Monochrome Monitor', 1980, 12, [560, 192]);
+mono('apple-monochrome-monitor-iie', 'Apple Monochrome Monitor IIe', 1985, 12, [560, 192], { g: 6300 });
+mono('apple-monitor-iic', 'Apple Monitor IIc', 1984, 12, [560, 192], { g: 5900 });
+pad('apple-iic-flat-panel-display', 'Apple IIc Flat Panel Display', 1984, 'display', 'Apple Display', {
   ...B, w: 260, h: 220, dp: 90, g: 1400, size: 9, disp: '单色液晶显示器', res: [560, 192],
   ports: ['DB-15 视频输入'],
 });
-colr('apple-color-monitor-100', 'AppleColor Monitor 100', '1985-01-01', 13, [640, 400], { g: 15000 });
-colr('apple-color-composite-monitor', 'AppleColor Composite Monitor', '1985-01-01', 13, [560, 192], { g: 15000 });
-colr('apple-color-composite-monitor-iie', 'AppleColor Composite Monitor IIe', '1985-01-01', 13, [560, 192], { g: 15000 });
-colr('apple-colormonitor-iie-iic', 'ColorMonitor IIe/IIc', '1985-01-01', 14, [560, 192], { g: 16000 });
-colr('apple-color-rgb-monitor', 'AppleColor RGB Monitor', '1986-01-01', 13, [640, 400], { g: 15500 });
-mono('apple-high-resolution-monochrome', 'Apple High-Resolution Monochrome', '1986-01-01', 12, [640, 480], { g: 8000 });
-colr('apple-color-high-resolution-rgb', 'AppleColor High-Resolution RGB', '1986-01-01', 13, [640, 480], { g: 16000 });
-mono('apple-macintosh-portrait-display', 'Macintosh Portrait Display', '1989-01-01', 15, [640, 870], {
+colr('apple-color-monitor-100', 'AppleColor Monitor 100', 1985, 13, [640, 400], { g: 15000 });
+colr('apple-color-composite-monitor', 'AppleColor Composite Monitor', 1985, 13, [560, 192], { g: 15000 });
+colr('apple-color-composite-monitor-iie', 'AppleColor Composite Monitor IIe', 1985, 13, [560, 192], { g: 15000 });
+colr('apple-colormonitor-iie-iic', 'ColorMonitor IIe/IIc', 1985, 14, [560, 192], { g: 16000 });
+colr('apple-color-rgb-monitor', 'AppleColor RGB Monitor', 1986, 13, [640, 400], { g: 15500 });
+mono('apple-high-resolution-monochrome', 'Apple High-Resolution Monochrome', 1986, 12, [640, 480], { g: 8000 });
+colr('apple-color-high-resolution-rgb', 'AppleColor High-Resolution RGB', 1986, 13, [640, 480], { g: 16000 });
+mono('apple-macintosh-portrait-display', 'Macintosh Portrait Display', 1989, 15, [640, 870], {
   w: 350, h: 400, dp: 380, g: 11500,
 });
-mono('apple-two-page-monochrome', 'Apple Two-Page Monochrome', '1989-01-01', 15, [1152, 870], {
+mono('apple-two-page-monochrome', 'Apple Two-Page Monochrome', 1989, 15, [1152, 870], {
   w: 380, h: 420, dp: 400, g: 13000,
 });
-colr('apple-macintosh-12inch-rgb', 'Macintosh 12-inch RGB', '1990-01-01', 12, [512, 384], { g: 9000 });
-mono('apple-macintosh-12inch-monochrome', 'Macintosh 12-inch Monochrome', '1990-01-01', 12, [640, 480], { g: 8000 });
-colr('apple-macintosh-21inch-color', 'Macintosh 21-inch Color', '1990-01-01', 21, [1152, 870], { w: 500, h: 480, dp: 520, g: 27000 });
-colr('apple-macintosh-color-display', 'Macintosh Color Display', '1990-01-01', 14, [640, 480], { g: 15000 });
-colr('apple-performa-plus-display', 'Apple Performa Plus Display', '1992-01-01', 14, [640, 480], { g: 16000 });
-colr('apple-color-plus-14', 'Apple Color Plus 14-inch Display', '1993-01-01', 14, [640, 480], { g: 15000 });
-colr('apple-basic-color-monitor', 'Apple Basic Color Monitor', '1993-01-01', 14, [640, 480], { g: 14000 });
-colr('apple-audiovision-14', 'AudioVision 14 Display', '1993-01-01', 14, [640, 480], {
+colr('apple-macintosh-12inch-rgb', 'Macintosh 12-inch RGB', 1990, 12, [512, 384], { g: 9000 });
+mono('apple-macintosh-12inch-monochrome', 'Macintosh 12-inch Monochrome', 1990, 12, [640, 480], { g: 8000 });
+colr('apple-macintosh-21inch-color', 'Macintosh 21-inch Color', 1990, 21, [1152, 870], { w: 500, h: 480, dp: 520, g: 27000 });
+colr('apple-macintosh-color-display', 'Macintosh Color Display', 1990, 14, [640, 480], { g: 15000 });
+colr('apple-performa-plus-display', 'Apple Performa Plus Display', 1992, 14, [640, 480], { g: 16000 });
+colr('apple-color-plus-14', 'Apple Color Plus 14-inch Display', 1993, 14, [640, 480], { g: 15000 });
+colr('apple-basic-color-monitor', 'Apple Basic Color Monitor', 1993, 14, [640, 480], { g: 14000 });
+colr('apple-audiovision-14', 'AudioVision 14 Display', 1993, 14, [640, 480], {
   g: 16000, spk: '内置立体声扬声器', ports: ['DB-15 视频输入', '音频输入', '音频输出'],
 });
-colr('apple-multiple-scan-20', 'Multiple Scan 20', '1993-01-01', 20, [1152, 870], { w: 480, h: 460, dp: 500, g: 26000 });
-colr('apple-multiple-scan-17', 'Multiple Scan 17', '1994-01-01', 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 21000 });
-colr('apple-multiple-scan-15', 'Multiple Scan 15', '1994-01-01', 15, [1024, 768], { g: 17000 });
-colr('apple-multiple-scan-14', 'Multiple Scan 14', '1995-01-01', 14, [1024, 768], { g: 15000 });
-colr('apple-multiple-scan-15av', 'Multiple Scan 15AV', '1996-01-01', 15, [1024, 768], {
+colr('apple-multiple-scan-20', 'Multiple Scan 20', 1993, 20, [1152, 870], { w: 480, h: 460, dp: 500, g: 26000 });
+colr('apple-multiple-scan-17', 'Multiple Scan 17', 1994, 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 21000 });
+colr('apple-multiple-scan-15', 'Multiple Scan 15', 1994, 15, [1024, 768], { g: 17000 });
+colr('apple-multiple-scan-14', 'Multiple Scan 14', 1995, 14, [1024, 768], { g: 15000 });
+colr('apple-multiple-scan-15av', 'Multiple Scan 15AV', 1996, 15, [1024, 768], {
   g: 17000, spk: '内置立体声扬声器', ports: ['DB-15 视频输入', '音频输入', '音频输出'],
 });
-colr('apple-multiple-scan-1705', 'Multiple Scan 1705', '1996-01-01', 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
-colr('apple-colorsync-17', 'ColorSync 17-inch', '1996-01-01', 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
-colr('apple-colorsync-20', 'ColorSync 20-inch', '1996-01-01', 20, [1280, 1024], { w: 480, h: 460, dp: 500, g: 26000 });
-colr('apple-applevision-1710', 'AppleVision 1710', '1995-01-01', 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 21000 });
-colr('apple-applevision-1710av', 'AppleVision 1710AV', '1995-01-01', 17, [1024, 768], {
+colr('apple-multiple-scan-1705', 'Multiple Scan 1705', 1996, 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
+colr('apple-colorsync-17', 'ColorSync 17-inch', 1996, 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
+colr('apple-colorsync-20', 'ColorSync 20-inch', 1996, 20, [1280, 1024], { w: 480, h: 460, dp: 500, g: 26000 });
+colr('apple-applevision-1710', 'AppleVision 1710', 1995, 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 21000 });
+colr('apple-applevision-1710av', 'AppleVision 1710AV', 1995, 17, [1024, 768], {
   w: 420, h: 420, dp: 460, g: 21500, spk: '内置立体声扬声器',
   ports: ['DB-15 视频输入', 'S-Video 输入输出', '音频输入', '音频输出'],
 });
-colr('apple-applevision-850', 'AppleVision/ColorSync 850', '1996-01-01', 20, [1280, 1024], { w: 480, h: 460, dp: 500, g: 26500 });
-colr('apple-applevision-850av', 'AppleVision/ColorSync 850AV', '1996-01-01', 20, [1280, 1024], {
+colr('apple-applevision-850', 'AppleVision/ColorSync 850', 1996, 20, [1280, 1024], { w: 480, h: 460, dp: 500, g: 26500 });
+colr('apple-applevision-850av', 'AppleVision/ColorSync 850AV', 1996, 20, [1280, 1024], {
   w: 480, h: 460, dp: 500, g: 27000, spk: '内置立体声扬声器',
   ports: ['DB-15 视频输入', 'S-Video 输入输出', '音频输入', '音频输出'],
 });
-colr('apple-applevision-750', 'AppleVision/ColorSync 750', '1997-01-01', 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
-colr('apple-applevision-750av', 'AppleVision/ColorSync 750AV', '1997-01-01', 17, [1024, 768], {
+colr('apple-applevision-750', 'AppleVision/ColorSync 750', 1997, 17, [1024, 768], { w: 420, h: 420, dp: 460, g: 20500 });
+colr('apple-applevision-750av', 'AppleVision/ColorSync 750AV', 1997, 17, [1024, 768], {
   w: 420, h: 420, dp: 460, g: 21000, spk: '内置立体声扬声器',
   ports: ['DB-15 视频输入', 'S-Video 输入输出', '音频输入', '音频输出'],
 });
-colr('apple-multiple-scan-720', 'Multiple Scan 720', '1997-01-01', 17, [1280, 1024], { w: 420, h: 420, dp: 460, g: 21000 });
+colr('apple-multiple-scan-720', 'Multiple Scan 720', 1997, 17, [1280, 1024], { w: 420, h: 420, dp: 460, g: 21000 });
 
 /* ══════════════════ 现代显示器补全（macdb.cn/display）═════════════════ */
 const lcd = (id, name, date, size, res, ppi, o = {}) =>
@@ -149,10 +153,10 @@ const lcd = (id, name, date, size, res, ppi, o = {}) =>
     ...B, colors: ['银色'], w: 480, h: 400, dp: 180, g: 7000, size, disp: '液晶显示器', res, ppi,
     nitT: 250, ports: ['DVI 视频输入', 'USB（含 2 个下游 USB 端口）'], ...o,
   });
-lcd('apple-studio-display-15', 'Apple Studio Display 15 英寸', '1998-01-01', 15, [1024, 768], 85, {
+lcd('apple-studio-display-15', 'Apple Studio Display 15 英寸', 1998, 15, [1024, 768], 85, {
   colors: ['蓝白色'], w: 400, h: 380, dp: 200, g: 6800, ports: ['DB-15 视频输入', 'ADB'],
 });
-lcd('apple-studio-display-lcd', 'Apple Studio Display (LCD)', '1998-01-01', 15, [1024, 768], 85, {
+lcd('apple-studio-display-lcd', 'Apple Studio Display (LCD)', 1998, 15, [1024, 768], 85, {
   colors: ['蓝白色'], w: 400, h: 380, dp: 200, g: 6800, ports: ['DB-15 视频输入', 'ADB'],
 });
 lcd('apple-studio-display-17-adc', 'Apple Studio Display (17 英寸 ADC)', '2000-07-19', 17, [1280, 1024], 96, {
@@ -209,22 +213,22 @@ st('apple-disk-iii', 'Apple Disk III', '1980-11-01', {
   cap: [KB(140)], bays: 1, conn: 'Apple III 内置接口', ports: ['Apple III 内置接口'],
   power: null, os: 'Apple SOS 1.0',
 });
-st('apple-disk-iic', 'Apple Disk IIc', '1984-01-01', {
+st('apple-disk-iic', 'Apple Disk IIc', 1984, {
   w: 145, h: 95, dp: 290, g: 2100, type: '软盘', medium: '5.25 英寸软盘',
   cap: [KB(140)], bays: 1, conn: 'Apple IIc 软驱接口', ports: ['Apple IIc 软驱接口'],
   power: null, os: 'Apple DOS 3.3',
 });
-st('apple-duo-disk', 'Apple DuoDisk', '1985-01-01', {
+st('apple-duo-disk', 'Apple DuoDisk', 1985, {
   w: 160, h: 110, dp: 310, g: 3400, type: '软盘', medium: '5.25 英寸软盘',
   cap: [KB(140)], bays: 2, conn: 'Apple II 外设插槽', ports: ['Apple II 外设插槽 ×1'],
   power: null, os: 'Apple DOS 3.3',
 });
-st('apple-3-5-drive', 'Apple 3.5 Drive', '1986-01-01', {
+st('apple-3-5-drive', 'Apple 3.5 Drive', 1986, {
   w: 140, h: 60, dp: 210, g: 1200, type: '软盘', medium: '3.5 英寸软盘',
   cap: [KB(800)], bays: 1, conn: 'Apple II 外设插槽', ports: ['Apple II 外设插槽 ×1'],
   power: null, os: 'Apple DOS 3.3',
 });
-st('apple-fdhd-superdrive', 'Apple FDHD / SuperDrive', '1988-01-01', {
+st('apple-fdhd-superdrive', 'Apple FDHD / SuperDrive', 1988, {
   w: 140, h: 60, dp: 210, g: 1250, type: '软盘', medium: '3.5 英寸软盘',
   cap: [MB(1.44)], bays: 1, conn: '软驱接口', ports: ['外接软驱接口'],
   power: null, os: 'System 6',
@@ -234,7 +238,7 @@ st('apple-macintosh-400k-external', 'Macintosh 400K External Drive', '1984-01-24
   cap: [KB(400)], bays: 1, conn: '软驱接口', ports: ['外接软盘口'],
   power: null, os: 'Macintosh System 1',
 });
-st('apple-macintosh-800k-external', 'Macintosh 800K External Drive', '1986-01-01', {
+st('apple-macintosh-800k-external', 'Macintosh 800K External Drive', 1986, {
   w: 140, h: 60, dp: 210, g: 1200, type: '软盘', medium: '3.5 英寸软盘',
   cap: [KB(800)], bays: 1, conn: '软驱接口', ports: ['外接软盘口'],
   power: null, os: 'Macintosh System 3',
@@ -244,7 +248,7 @@ st('apple-powerbook-2400c-floppy', 'Macintosh PowerBook 2400c Floppy Disk Drive'
   cap: [MB(1.44)], bays: 1, conn: '软驱接口', ports: ['外接软驱接口'],
   power: null, os: 'Mac OS 7.6',
 });
-st('apple-hdi20-external-floppy', 'Macintosh HDI-20 External 1.4MB Floppy Disk Drive', '1995-01-01', {
+st('apple-hdi20-external-floppy', 'Macintosh HDI-20 External 1.4MB Floppy Disk Drive', 1995, {
   w: 130, h: 25, dp: 150, g: 290, type: '软盘', medium: '3.5 英寸软盘',
   cap: [MB(1.44)], bays: 1, conn: 'HDI-20 软驱接口', ports: ['HDI-20 软驱接口'],
   power: null, os: 'System 7.5',
@@ -260,27 +264,27 @@ st('apple-macintosh-hard-disk-20', 'Macintosh Hard Disk 20', '1985-09-17', {
   cap: [MB(20)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'Macintosh System 2',
 });
-st('apple-hard-disk-20sc', 'Apple Hard Disk 20SC', '1986-01-01', {
+st('apple-hard-disk-20sc', 'Apple Hard Disk 20SC', 1986, {
   w: 260, h: 90, dp: 300, g: 3600, type: '硬盘', medium: '20MB 硬盘',
   cap: [MB(20)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 3',
 });
-st('apple-hard-disk-40sc', 'Apple Hard Disk 40SC', '1987-01-01', {
+st('apple-hard-disk-40sc', 'Apple Hard Disk 40SC', 1987, {
   w: 260, h: 90, dp: 300, g: 3800, type: '硬盘', medium: '40MB 硬盘',
   cap: [MB(40)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 5',
 });
-st('apple-hard-disk-80sc', 'Apple Hard Disk 80SC', '1987-01-01', {
+st('apple-hard-disk-80sc', 'Apple Hard Disk 80SC', 1987, {
   w: 260, h: 90, dp: 300, g: 4000, type: '硬盘', medium: '80MB 硬盘',
   cap: [MB(80)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 5',
 });
-st('apple-hard-disk-160sc', 'Apple Hard Disk 160SC', '1988-01-01', {
+st('apple-hard-disk-160sc', 'Apple Hard Disk 160SC', 1988, {
   w: 260, h: 90, dp: 300, g: 4200, type: '硬盘', medium: '160MB 硬盘',
   cap: [MB(160)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 6',
 });
-st('apple-external-hard-drive', 'Apple External Hard Drive', '1993-01-01', {
+st('apple-external-hard-drive', 'Apple External Hard Drive', 1993, {
   w: 240, h: 70, dp: 280, g: 2600, type: '硬盘', medium: '硬盘',
   cap: [MB(230), MB(500)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 7',
@@ -296,12 +300,12 @@ st('apple-drive-module-sata-sas', 'Apple Drive Module (SATA/SAS)', '2004-01-06',
   power: '主机供电', os: 'Mac OS X Server',
 });
 // ── 光盘驱动器 ──
-st('apple-cd-sc', 'AppleCD SC', '1988-01-01', {
+st('apple-cd-sc', 'AppleCD SC', 1988, {
   w: 210, h: 70, dp: 330, g: 3200, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 6',
 });
-st('apple-cd-sc-plus', 'AppleCD SC Plus', '1989-01-01', {
+st('apple-cd-sc-plus', 'AppleCD SC Plus', 1989, {
   w: 210, h: 70, dp: 330, g: 3300, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 6',
@@ -311,22 +315,22 @@ st('apple-powercd', 'Apple PowerCD', '1993-05-01', {
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI', '音频输出'],
   power: '内置电源', os: 'System 7',
 });
-st('apple-cd-150', 'AppleCD 150', '1993-01-01', {
+st('apple-cd-150', 'AppleCD 150', 1993, {
   w: 210, h: 70, dp: 330, g: 3200, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 7',
 });
-st('apple-cd-300', 'AppleCD 300', '1994-01-01', {
+st('apple-cd-300', 'AppleCD 300', 1994, {
   w: 210, h: 70, dp: 330, g: 3300, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 7.5',
 });
-st('apple-cd-300e-plus', 'AppleCD 300e Plus', '1995-01-01', {
+st('apple-cd-300e-plus', 'AppleCD 300e Plus', 1995, {
   w: 210, h: 70, dp: 330, g: 3400, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 7.5',
 });
-st('apple-cd-600e', 'AppleCD 600e', '1995-01-01', {
+st('apple-cd-600e', 'AppleCD 600e', 1995, {
   w: 210, h: 70, dp: 330, g: 3500, type: '光盘驱动器', medium: 'CD-ROM',
   cap: [MB(650)], bays: 1, conn: 'SCSI', ports: ['SCSI'],
   power: '内置电源', os: 'System 7.5',

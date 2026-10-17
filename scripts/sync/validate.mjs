@@ -12,9 +12,11 @@
  */
 
 import { isValidBrand } from '../brands.mjs';
+import { findDateShapeViolations } from '../lib/data-guards.mjs';
 import { validateOverrides } from '../lib/overrides.mjs';
 import {
   isRegisteredCategory,
+  LIFECYCLE_STATUS_VALUES,
   loadCategories,
   loadSchema,
   validateSpecs,
@@ -246,6 +248,18 @@ export function validate(snapshot, previous, options = {}) {
     }
     // 11. 品牌必须在注册表里（注册表单一真源见 scripts/brands.mjs，新增品牌只改那一个文件）
     if (!isValidBrand(p.brand)) fail.push(`${p.id} 的品牌不在注册表：${p.brand}`);
+    // 11a. 生命周期 status 必须在权威枚举内（2026-10-17 审计 A1 补的闸门）。
+    // 补闸门前：契约与两份 types.ts 定 'upcoming'|'on-sale'|'retired'（'discontinued'
+    // 2026-10-13 已废），但生成脚本硬编码 'discontinued'，812 台带病写盘、零报错——
+    // 「闸门太静」的标准形态（PITFALLS P3/P7）。枚举真源 = schema.mjs 的
+    // LIFECYCLE_STATUS_VALUES（与 DATA-CONTRACT.md §3.1、两份 TS 镜像对齐）。
+    // 缺 status 同样拒：它是顶层身份字段，与 category 缺失同级处理（见 11b）。
+    if (!LIFECYCLE_STATUS_VALUES.includes(p.status)) {
+      fail.push(
+        `${p.id} 的 status = ${JSON.stringify(p.status)} 不在权威枚举 ` +
+          `${LIFECYCLE_STATUS_VALUES.join(' / ')} 内（'discontinued' 已于 2026-10-13 废弃，用 'retired'）`,
+      );
+    }
     // 11b. 品类必须注册，且 specs 逐键过该品类的 schema（v2 全品类结构）。
     // 防的故障：① category 缺失或指向不存在的品类 → 没有字段表，参数表渲染直接崩；
     //   （categoryOf() 对缺失静默回落 'phone'，闸门若只拦「未注册值」，
@@ -280,6 +294,96 @@ export function validate(snapshot, previous, options = {}) {
         for (const e of validateStatusMap(p, schema)) fail.push(e);
       }
     }
+  }
+
+  // 14. 身份标识串号检测（2026-10-16 事故：iMac 全系 25 台共用 "iMac,1"/M4984、
+  //     iPad mini 7 台共用 iPad1,1、AirPods Max 2 沿用 1 代 A3454——都是批量补录时
+  //     把同一套身份字段复制到了整条产品线上。用户一对比就会看到
+  //     「2019 iMac 用 ATI Rage IIc 显卡」，一次就够把整站可信度清零）。
+  //     口径：同 brand+line 内 device.identifier / device.modelCodes 必须唯一；
+  //     identifier 还必须长得像 Apple 内部标识（`iMac,1` / `iPad14,6`），
+  //     纯数字、'-'、把型号代码（M3076）填进 identifier 的都算畸形。
+  const identRe = /^[A-Za-z][A-Za-z0-9]*,\d+$/; // Apple 内部标识：Name,N
+  const codeRe = /^[A-Z]\d{3,6}$/; // A1219 / M4984
+  const seenIdent = new Map(); // `${brand}|${line}|${identifier}` → 首见机型 id
+  const seenCode = new Map(); // `${brand}|${line}|${code}` → 首见机型 id
+  for (const p of ps) {
+    const group = `${p.brand ?? ''}|${p.line ?? ''}`;
+    const ident = get(p, 'device.identifier');
+    if (ident !== null && ident !== undefined && ident !== '') {
+      const s = String(ident);
+      if (!identRe.test(s)) {
+        fail.push(`${p.id} 的 device.identifier = "${s}" 不是合法的 Apple 内部标识（应为 Name,N 形态）`);
+      } else {
+        const key = `${group}|${s}`;
+        if (seenIdent.has(key)) fail.push(`${p.id} 的 device.identifier "${s}" 与 ${seenIdent.get(key)} 串号（同 line 内必须唯一）`);
+        else seenIdent.set(key, p.id);
+      }
+    }
+    for (const code of get(p, 'device.modelCodes') ?? []) {
+      if (code === null || code === undefined || code === '') continue;
+      const s = String(code);
+      if (!codeRe.test(s)) {
+        fail.push(`${p.id} 的 device.modelCodes 含非法值 "${s}"（应为 A#### / M#### 形态）`);
+      } else {
+        const key = `${group}|${s}`;
+        if (seenCode.has(key)) fail.push(`${p.id} 的 modelCode "${s}" 与 ${seenCode.get(key)} 串号（同 line 内必须唯一）`);
+        else seenCode.set(key, p.id);
+      }
+    }
+  }
+
+  // 15. 时间线自相矛盾：停售不得早于发布（airport-express-2012 曾发布 2012-06、
+  //     停售 2008-03——生命周期时间轴上线后线会往回走，可视化是最好的校验器）
+  // 16. 假精度：releaseDatePrecision 必须在枚举内；天级精度不得压在 01-01——
+  //     一大批 1993-01-01 / 1986-01-01 实为年份推测，渲染成「1993 年 1 月 1 日发布」
+  //     就是编造事实，与「不做估算」原则直接冲突（取值应降为 year）。
+  // 17. 相机阵列与官网原文交叉校验：rawOfficial 写「双摄/三摄系统」时，
+  //     camera.rear 的镜头数必须吻合——iPhone 16 曾平白多出一条 tele（官网明明写
+  //     双摄），「几颗镜头」是用户最不可能看错的两项之一，这里错一次信任归零。
+  //     只在原文含中文数字「N摄」时触发（「二合一摄像头系统」不匹配，不算数）。
+  const precisionOk = new Set(['day', 'month', 'year', 'unknown']);
+  const CN_NUM = { 双: 2, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7 };
+  for (const p of ps) {
+    if (p.releaseDate && p.retiredAt) {
+      const r = Date.parse(p.releaseDate);
+      const t = Date.parse(p.retiredAt);
+      if (!Number.isNaN(r) && !Number.isNaN(t) && t < r)
+        fail.push(`${p.id} 的 retiredAt（${p.retiredAt}）早于 releaseDate（${p.releaseDate}）——时间线倒挂，应清 null 取证后重录`);
+    }
+    if (p.releaseDatePrecision !== undefined && p.releaseDatePrecision !== null) {
+      if (!precisionOk.has(p.releaseDatePrecision))
+        fail.push(`${p.id} 的 releaseDatePrecision = "${p.releaseDatePrecision}" 不在枚举内（day/month/year/unknown）`);
+      else if (p.releaseDatePrecision === 'day' && /^\d{4}-01-01$/.test(p.releaseDate ?? ''))
+        fail.push(`${p.id} 的 releaseDate = ${p.releaseDate} 压在 01-01 却声明天级精度（年份推测应降为 year）`);
+    }
+    const raw = p.rawOfficial;
+    const rawText = typeof raw === 'string' ? raw : Array.isArray(raw) ? raw.join('\n') : '';
+    const camMatch = rawText.match(/([双二两三四五六七])摄/);
+    if (camMatch) {
+      const rear = get(p, 'camera.rear');
+      if (Array.isArray(rear)) {
+        const expected = CN_NUM[camMatch[1]];
+        if (rear.length !== expected)
+          fail.push(
+            `${p.id} 的官网原文写「${camMatch[1]}摄」但 camera.rear 有 ${rear.length} 条——` +
+              `镜头阵列与原文不一致（多出的 role 或整条缺失）`,
+          );
+      }
+    }
+  }
+
+  // 18. 日期精度形状（data-guards D，2026-10-17 审计 A3 接入写盘闸门）。
+  // 曾经的缺口：data-guards.mjs 五条判据只在 selftest 里跑，写盘路径（本文件）没有
+  // 形状校验——65 台「year 精度 + 'YYYY-01-01' 占位日期」一路绿灯写进 products.json，
+  // 直到自测才炸。闸门存在但不在写盘路径上 = 闸门太静（PITFALLS P3/P7 的又一形态）。
+  // 判据：day 必须 YYYY-MM-DD、month 必须 YYYY-MM、year 必须 YYYY——
+  // 形状不符 = 用假精度冒充真日期（数据诚信红线）。
+  for (const [id, d] of findDateShapeViolations(ps)) {
+    fail.push(
+      `${id} 的 releaseDate = ${d} 的形状与 releaseDatePrecision 不符` +
+        `（day=YYYY-MM-DD / month=YYYY-MM / year=YYYY，假精度是数据诚信红线）`,
+    );
   }
 
   // 13. 用户数据层合法性（set-field 引用悬空 / 字段未注册 / 值类型区间 / add-product 冲突）。

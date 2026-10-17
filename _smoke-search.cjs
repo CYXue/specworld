@@ -12,7 +12,7 @@
 const path = require('path');
 const puppeteer = require('puppeteer-core');
 // 截图目录走集中解析（ensureShotsDir），不写死相对路径 ——
-// 否则未先跑 _smoke-pixel 时目录不存在，这里直接 ENOENT。
+// 否则首个 smoke 脚本跑之前目录不存在，这里直接 ENOENT。
 const { chromePath, ensureShotsDir } = require('./_smoke-paths.cjs');
 
 const BASE = process.env.SMOKE_BASE || 'http://localhost:4173/';
@@ -81,8 +81,11 @@ const CASES = [
     await new Promise((r) => setTimeout(r, 450));
 
     const got = await page.evaluate(() => {
-      const aside = document.querySelector('header span.ml-auto');
-      const m = aside?.textContent?.match(/(\d+)\s*\/\s*(\d+)/);
+      // 结果计数：2026-10-16 去像素化重写后从旧版顶部栏 span.ml-auto 迁到
+      // 搜索卡片里 h1 的下一行 <p>（"n / total 台"）。结构再变时会返回 -1 让用例红，
+      // 而不是静默通过。
+      const countP = document.querySelector('h1 + p');
+      const m = countP?.textContent?.match(/(\d+)\s*\/\s*(\d+)/);
       const note = Array.from(document.querySelectorAll('p')).find((p) =>
         p.textContent.includes('已忽略大小写与空格'),
       );
@@ -121,7 +124,7 @@ const CASES = [
     await page.goto(BASE + '#/search?q=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 30000 });
     await new Promise((r) => setTimeout(r, 400));
     return page.evaluate(() => {
-      const m = document.querySelector('header span.ml-auto')?.textContent?.match(/(\d+)\s*\//);
+      const m = document.querySelector('h1 + p')?.textContent?.match(/(\d+)\s*\//);
       return m ? Number(m[1]) : -1;
     });
   };

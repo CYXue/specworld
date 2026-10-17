@@ -30,6 +30,10 @@ const startSeq = kept.length;
 const entries = [];
 let seq = startSeq;
 
+// 日期精度从日期形状派生（2026-10-17 审计 A3）：'YYYY-01-01'+day 是假精度（闸门16 拒），
+// 手工把精度降成 year 又会留下「形状不符」——精度与形状同源，永远一致
+const precisionOf = (d) => (d.split('-').length === 3 ? 'day' : d.split('-').length === 2 ? 'month' : 'year');
+
 /** 短键 → schema path 映射，让每台机器只占一行 */
 const K = {
   w: 'body.widthMm', h: 'body.heightMm', d: 'body.depthMm', kg: 'body.weightKg',
@@ -65,8 +69,8 @@ function pad({ id, name, date, category, line, o }) {
     createdAt: D,
     product: {
       id, slug: id, brand: 'apple', category, line, name, nameZh: null,
-      releaseDate: date, releaseDatePrecision: 'day',
-      status: 'discontinued', retiredAt: null, skus: [], scores: [],
+      releaseDate: date, releaseDatePrecision: precisionOf(date),
+      status: 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs,
       provenance: {
@@ -232,7 +236,7 @@ perf('475', '1993-10-18', 'Motorola 68LC040 处理器 | 25MHz');
 perf('476', '1993-10-18', 'Motorola 68LC040 处理器 | 25MHz');
 perf14('520', '1993-06-28', 'Motorola 68030 处理器 | 25MHz');
 perf14('550', '1993-10-18', 'Motorola 68030 处理器 | 33MHz');
-perf14('560 Money Edition', '1994-01-01', 'Motorola 68030 处理器 | 33MHz');
+perf14('560 Money Edition', 1994, 'Motorola 68030 处理器 | 33MHz');
 perf14('575', '1994-02-28', 'Motorola 68LC040 处理器 | 33MHz');
 perf14('577', '1994-02-28', 'Motorola 68LC040 处理器 | 33MHz');
 perf14('578', '1994-02-28', 'Motorola 68LC040 处理器 | 33MHz');
@@ -313,7 +317,7 @@ ppm('apple-power-macintosh-6400', 'Power Macintosh 6400', '1996-08-05', 'PowerPC
 ppm('apple-power-macintosh-7215', 'Power Macintosh 7215', '1995-05-01', 'PowerPC 601 处理器 | 75MHz', {
   w: 414, h: 109, d: 419, kg: 8.6,
 });
-ppm('apple-power-macintosh-7220', 'Power Macintosh 7220', '1996-01-01', 'PowerPC 601 处理器 | 120MHz', {
+ppm('apple-power-macintosh-7220', 'Power Macintosh 7220', 1996, 'PowerPC 601 处理器 | 120MHz', {
   w: 414, h: 109, d: 419, kg: 8.6,
 });
 ppm('apple-power-macintosh-7500', 'Power Macintosh 7500', '1995-08-08', 'PowerPC 601 处理器 | 100MHz', {

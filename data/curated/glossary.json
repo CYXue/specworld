@@ -429,6 +429,14 @@
       "en": "Apple-designed second-generation Ultra Wideband chip",
       "ev": "appleSupportLegacy"
     },
+    "设计第二代超宽带技术芯片": {
+      "en": "Second-generation Ultra Wideband chip",
+      "ev": "appleMacNeo"
+    },
+    "Apple设计第二代超宽带技术": {
+      "en": "Apple second-generation Ultra Wideband",
+      "ev": "appleMacNeo"
+    },
     "Apple U1 芯片": {
       "en": "Apple U1 chip",
       "ev": "appleSupportLegacy"
@@ -483,6 +491,10 @@
     },
     "10 核图形处理器": {
       "en": "10-core GPU",
+      "ev": "appleSpecsCommon"
+    },
+    "四核图形处理器": {
+      "en": "Quad-core GPU",
       "ev": "appleSpecsCommon"
     },
     "8 核图形处理器": {
@@ -748,6 +760,16 @@
       "re": "^(\\d+) 核图形处理器$",
       "en": "$1-core GPU",
       "ev": "apple16"
+    },
+    {
+      "re": "^(\\d+) 核图形处理器（可配 (\\d+) 核）$",
+      "en": "$1-core GPU (configurable to $2-core)",
+      "ev": "appleMacMini"
+    },
+    {
+      "re": "^(Motorola|PowerPC|Intel|ARM|MOS|StrongARM)([0-9A-Za-z/-]*)处理器$",
+      "en": "$1 $2 processor",
+      "ev": "appleSupportLegacy"
     },
     {
       "re": "^(\\d+) 核神经网络引擎$",

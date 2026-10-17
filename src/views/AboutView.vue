@@ -2,10 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDataset } from '../lib/useDataset';
-import PxIcon from '../components/PxIcon.vue';
-import SectionFrame from '../components/SectionFrame.vue';
-import { asset } from '../lib/assets';
-import { CODE_LICENSE, FONT_NAME, FONT_UPSTREAM_URL, LICENSE_PATH, REPO_URL } from '../lib/site';
+import { CODE_LICENSE, LICENSE_PATH, REPO_URL } from '../lib/site';
 
 // 关于页 = 项目说明 + 数据与原则 + 许可与署名。
 // 「数据与原则」原先挂在每个页面底部的 SiteFooter，用户要求收敛到独立关于页，
@@ -83,16 +80,6 @@ const LICENSES = [
     links: [{ labelKey: 'about.licenseLinkView', href: `${REPO_URL}/blob/main/${LICENSE_PATH}` }],
   },
   {
-    key: 'font',
-    nameKey: 'about.licenseFont.name',
-    termsKey: 'about.licenseFont.terms',
-    bodyKey: 'about.licenseFont.body',
-    links: [
-      { labelKey: 'about.licenseLinkFull', href: asset('fonts/OFL.txt') },
-      { labelKey: 'about.licenseLinkUpstream', href: FONT_UPSTREAM_URL },
-    ],
-  },
-  {
     key: 'data',
     nameKey: 'about.licenseData.name',
     termsKey: 'about.licenseData.terms',
@@ -111,8 +98,8 @@ const licenses = computed(() =>
   LICENSES.map((l) => ({
     key: l.key,
     name: t(l.nameKey),
-    terms: t(l.termsKey, { license: CODE_LICENSE, fontName: FONT_NAME }),
-    body: t(l.bodyKey, { fontName: FONT_NAME }),
+    terms: t(l.termsKey, { license: CODE_LICENSE }),
+    body: t(l.bodyKey),
     links: l.links.map((x) => ({ label: t(x.labelKey), href: x.href })),
   })),
 );
@@ -121,101 +108,82 @@ const licenses = computed(() =>
 <template>
   <div class="page-shell space-y-6 py-6">
     <header>
-      <h1
-        class="pixel-outline font-pixel text-[24px] leading-[1.5] text-[var(--color-parchment-lit)]"
-      >
-        {{ t('about.title') }}
-      </h1>
-      <p class="mt-1 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]">
-        {{ t('about.subtitle') }}
-      </p>
+      <h1 class="text-2xl font-bold tracking-tight text-fg">{{ t('about.title') }}</h1>
+      <p class="mt-1 text-sm text-dim">{{ t('about.subtitle') }}</p>
     </header>
 
-    <SectionFrame :title="t('about.introTitle')">
-      <p class="mb-3 text-[12px] leading-[1.6] text-[var(--color-parchment-lit)]">
-        {{ t('about.introA') }}
-        <b class="text-[var(--color-gold)]">{{ t('about.introBold') }}</b>
-        {{ t('about.introB') }}
+    <section class="card space-y-3 p-4">
+      <h2 class="text-base font-semibold text-fg">{{ t('about.introTitle') }}</h2>
+      <p class="text-sm leading-relaxed text-fg">
+        {{ t('about.introA') }}<b class="text-accent">{{ t('about.introBold') }}</b>{{ t('about.introB') }}
       </p>
       <ul class="grid gap-2 sm:grid-cols-2">
-        <li v-for="row in scope" :key="row.key" class="pixel-panel px-3 py-2">
-          <span class="pixel-heading text-[12px] leading-[1.5]">{{ row.label }}</span>
-          <span class="ml-2 text-[12px] leading-[1.5] text-[var(--color-parchment-dim)]">{{
-            row.value
-          }}</span>
+        <li v-for="row in scope" :key="row.key" class="border border-border bg-surface-2 px-3 py-2">
+          <span class="text-xs font-semibold text-dim">{{ row.label }}</span>
+          <span class="ml-2 text-sm text-dim">{{ row.value }}</span>
         </li>
       </ul>
-      <p class="mt-3 text-[12px] leading-[1.6] text-[var(--color-ink-soft)]">
-        {{ t('about.why') }}
-      </p>
-    </SectionFrame>
+      <p class="text-sm leading-relaxed text-faint">{{ t('about.why') }}</p>
+    </section>
 
-    <SectionFrame :title="t('about.dataTitle')">
+    <section class="card space-y-3 p-4">
+      <h2 class="text-base font-semibold text-fg">{{ t('about.dataTitle') }}</h2>
       <ul class="space-y-2">
         <li v-for="p in principles" :key="p.key" class="flex gap-2">
-          <PxIcon name="dot" :size="8" class="mt-1 flex-none text-[var(--color-gold)]" />
-          <span class="text-[12px] leading-[1.6] text-[var(--color-parchment-lit)]">
-            <b class="text-[var(--color-gold)]">{{ p.title }}：</b>{{ p.body }}
-          </span>
+          <span class="mt-1.5 h-1.5 w-1.5 flex-none rounded-full bg-accent" />
+          <span class="text-sm leading-relaxed text-fg"
+            ><b class="text-accent">{{ p.title }}：</b>{{ p.body }}</span
+          >
         </li>
       </ul>
-
-      <div class="mt-4 border-t-2 border-[var(--color-ink)] pt-3">
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] leading-[1.5]">
-          <span class="pixel-heading">{{ t('about.snapshot') }}</span>
-          <span v-if="generatedAt" class="text-[var(--color-parchment-lit)]">{{
-            generatedAt
-          }}</span>
-          <span v-else class="text-[var(--color-ink-soft)]">{{ t('about.loading') }}</span>
+      <div class="border-t border-border pt-3">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          <span class="text-xs font-semibold text-dim">{{ t('about.snapshot') }}</span>
+          <span v-if="generatedAt" class="text-fg">{{ generatedAt }}</span>
+          <span v-else class="text-faint">{{ t('about.loading') }}</span>
         </div>
-
         <div v-if="sources.length" class="mt-2 flex flex-wrap gap-1.5">
           <span
             v-for="s in sources"
             :key="s.key"
-            class="pixel-chip flex items-center gap-1 px-1.5 py-0.5 text-[12px] leading-[1.5]"
-            :style="{ color: s.ok ? 'var(--color-newborn)' : 'var(--color-east)' }"
+            class="badge"
+            :class="
+              s.ok
+                ? 'border-success/30 bg-success-soft text-success'
+                : 'border-danger/30 bg-danger-soft text-danger'
+            "
             :title="s.note"
           >
-            <PxIcon :name="s.ok ? 'check' : 'cross'" :size="10" />
-            {{ s.key }}
+            {{ s.ok ? '✓' : '×' }} {{ s.key }}
           </span>
         </div>
       </div>
+      <p class="text-sm leading-relaxed text-faint">{{ t('about.dataFooter') }}</p>
+    </section>
 
-      <p class="mt-3 text-[12px] leading-[1.6] text-[var(--color-ink-soft)]">
-        {{ t('about.dataFooter') }}
-      </p>
-    </SectionFrame>
-
-    <SectionFrame :title="t('about.licenseTitle')">
+    <section class="card space-y-3 p-4">
+      <h2 class="text-base font-semibold text-fg">{{ t('about.licenseTitle') }}</h2>
       <ul class="grid gap-2">
-        <li v-for="l in licenses" :key="l.key" class="pixel-panel px-3 py-2">
+        <li v-for="l in licenses" :key="l.key" class="border border-border bg-surface-2 px-3 py-2">
           <div class="flex flex-wrap items-baseline gap-x-2">
-            <span class="pixel-heading text-[12px] leading-[1.5]">{{ l.name }}</span>
-            <span class="text-[12px] leading-[1.5] text-[var(--color-parchment-lit)]">{{
-              l.terms
-            }}</span>
+            <span class="text-sm font-semibold text-fg">{{ l.name }}</span>
+            <span class="text-sm text-dim">{{ l.terms }}</span>
           </div>
-          <p class="mt-1 text-[12px] leading-[1.6] text-[var(--color-parchment-dim)]">
-            {{ l.body }}
-          </p>
+          <p class="mt-1 text-sm leading-relaxed text-dim">{{ l.body }}</p>
           <p
             v-if="l.links.length"
-            class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] leading-[1.5]"
+            class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm"
           >
             <template v-for="(lk, i) in l.links" :key="lk.href">
-              <span v-if="i > 0" class="text-[var(--color-stone)]" aria-hidden="true">·</span>
-              <a class="pixel-link" :href="lk.href" target="_blank" rel="noopener noreferrer">{{
+              <span v-if="i > 0" class="text-faint" aria-hidden="true">·</span>
+              <a :href="lk.href" target="_blank" rel="noopener noreferrer" class="text-link hover:underline">{{
                 lk.label
               }}</a>
             </template>
           </p>
         </li>
       </ul>
-      <p class="mt-3 text-[12px] leading-[1.6] text-[var(--color-ink-soft)]">
-        {{ t('about.artNote') }}
-      </p>
-    </SectionFrame>
+      <p class="text-sm leading-relaxed text-faint">{{ t('about.artNote') }}</p>
+    </section>
   </div>
 </template>

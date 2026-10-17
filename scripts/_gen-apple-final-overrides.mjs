@@ -82,7 +82,7 @@ pad({
   id: 'apple-vision-pro',
   name: 'Apple Vision Pro',
   date: '2023-06-05',
-  status: 'discontinued',
+  status: 'retired',
   category: 'headset',
   line: 'Apple Vision Pro',
   specs: {
@@ -159,7 +159,7 @@ pad({
   id: 'apple-pro-display-xdr-2019',
   name: 'Pro Display XDR',
   date: '2019-06-03',
-  status: 'discontinued',
+  status: 'retired',
   category: 'display',
   line: 'Pro Display XDR',
   specs: {
@@ -187,7 +187,7 @@ pad({
   id: 'apple-studio-display-2022',
   name: 'Studio Display (2022)',
   date: '2022-03-08',
-  status: 'discontinued',
+  status: 'retired',
   category: 'display',
   line: 'Studio Display',
   specs: {

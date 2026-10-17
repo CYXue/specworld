@@ -46,7 +46,7 @@ function pad({ id, name, date, status, category, line, specs }) {
       nameZh: null,
       releaseDate: date,
       releaseDatePrecision: 'day',
-      status: status ?? 'discontinued',
+      status: status ?? 'retired',
       retiredAt: null,
       skus: [],
       scores: [],
@@ -105,7 +105,7 @@ pad({
   id: 'apple-airtag-1',
   name: 'AirTag',
   date: '2021-04-20',
-  status: 'discontinued',
+  status: 'retired',
   category: 'tracker',
   line: 'AirTag',
   specs: {

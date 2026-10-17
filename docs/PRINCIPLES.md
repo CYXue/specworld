@@ -110,7 +110,7 @@ i18n 英文版也必须人审后填，不靠机器翻译硬凑。
 ## 8. 零依赖与可重建
 
 **规则**：全链路只用 Node 内置模块（`node:*`），无 `node_modules`，CI 无装包失败点。
-入库的只有 `data/` 与代码（`_work/`、`dist/`、`data/sprites/` 都 gitignore，产物可由仓库确定性重建）；任何人跑 `node scripts/pipeline.mjs --offline`
+入库的只有 `data/` 与代码（`_work/`、`dist/` 都 gitignore，产物可由仓库确定性重建）；任何人跑 `node scripts/pipeline.mjs --offline`
 （约 4 秒）就能从缓存重建全部产物。
 
 **为什么**：依赖越少，十年后还能跑的概率越高。本项目定位 demo，但工程纪律不降级。

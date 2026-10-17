@@ -45,7 +45,7 @@ function pad({ id, name, date, status, specs }) {
       nameZh: null,
       releaseDate: date,
       releaseDatePrecision: 'day',
-      status: status ?? 'discontinued',
+      status: status ?? 'retired',
       retiredAt: null,
       skus: [],
       scores: [],

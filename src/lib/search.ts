@@ -47,8 +47,10 @@ interface SearchableDoc {
 
 /**
  * 进检索串的字段，顺序即**权重**（见 score）。
- * 机型名 → 中文名 → 产品线 → 芯片 → 厂商：厂商名放最后，
+ * 机型名 → 中文名 → 产品线 → 芯片 → 型号代码/内部标识 → 厂商：厂商名放最后，
  * 因为没人会拿「华为」当区分条件，那是产品线与代号的活。
+ * 型号代码（评审 2026-10-16）：A3288 / M4984 / iPhone17,3 是用户真实会打的查询——
+ * 数据里 device.modelCodes / device.identifier / device.orderNumbers 全都有，检索索引做全字段。
  */
 const fields = (p: Product, v: Vendor | undefined): string[] =>
   [
@@ -59,7 +61,14 @@ const fields = (p: Product, v: Vendor | undefined): string[] =>
     p.brand ?? '',
     v?.name ?? '',
     v?.nameZh ?? '',
-  ].filter(Boolean);
+    // 型号代码三源：specs 扁平容器（v2）
+    p.specs?.['device.modelCodes'],
+    p.specs?.['device.identifier'],
+    p.specs?.['device.orderNumbers'],
+  ]
+    .flat()
+    .filter((x): x is string => typeof x === 'string' && x !== '')
+    .filter(Boolean);
 
 export { compact, tokenize, splitRuns, queryTokens, matchExact };
 

@@ -11,14 +11,15 @@
  *   node scripts/pipeline.mjs --offline      # 只用缓存，CI 失败时的重跑方式
  *   node scripts/pipeline.mjs --skip-sources  # 跳过取数，用已有 raw 缓存
  *   node scripts/pipeline.mjs --dry          # 只跑校验，不写盘
- *   node scripts/pipeline.mjs --data-only    # 只跑到「取数→规范化→整合→精灵图→指纹」，
+ *   node scripts/pipeline.mjs --data-only    # 只跑到「取数→规范化→整合→指纹」，
  *                                              跳过旧的多页 HTML 建站与发布校验；渲染交给 Vite。
  *                                              这是 CI 与本地日常用的模式。
  *
  * --data-only 存在的理由：渲染层已经换成 Vite（见 src/ 与 vite.config.ts），
  * 旧的分析层 / 建站 / 发布校验三步产出的多页 HTML 不再是发布物，继续跑只是浪费。
- * 数据层（取数→规范化→整合闸门→精灵图）仍然是唯一真源 —— Vite 前端就吃它产出的
- * data/products.json 与 data/sprites/，所以这两段一步都没动。
+ * 数据层（取数→规范化→整合闸门）仍然是唯一真源 —— Vite 前端就吃它产出的
+ * data/products.json，所以这两段一步都没动。
+ * （2026-10-16：原「→精灵图」一环随去像素化退役，前端不再渲染立绘。）
  */
 
 import { spawnSync } from 'node:child_process';
@@ -106,10 +107,9 @@ run('规范化（官网字段 → 契约字段）', 'scripts/normalize/index.mjs
 /* ---- 3. 整合（窗口过滤 + 校验闸门 + 原子写） ---- */
 run('整合与校验闸门', 'scripts/sync/index.mjs', DRY ? ['--dry'] : []);
 
-/* ---- 3.5 精灵图：构建期生成，不入库（见 .gitignore 的 data/sprites/）。
- * 立绘完全由数据几何算出（机身宽高比←屏幕、镜头数←后摄），改一个字段就跟着变，
- * 所以必须随管线重建，而不是手提交 60 个 .svg 进仓库——那样既爆仓库又必然和官网数据脱节。 ---- */
-if (!DRY) run('生成精灵图', 'scripts/sprite/generate.mjs');
+/* ---- 3.5 精灵图生成：已随 2026-10-16 去像素化退役移除 ----
+ * 立绘（scripts/sprite/generate.mjs）由数据几何算出，但自去像素化后前端不再渲染
+ * （机型卡片改用纯文字 .card），dist 零引用，故管线不再生成、不再进 public/。 ---- */
 
 /* ---- 3.6 原始响应归档：把官网原文键值对存进 data/raw/（入库）。
  *
@@ -133,7 +133,7 @@ if (!DRY && !SKIP_SOURCES) run('归档官网原始响应', 'scripts/archive.mjs'
 /* ---- 5–7. 旧多页 HTML 站点链（分析层 / 站点构建 / 发布校验） ----
  * 已随 Vite 迁移一并清理：scripts/lib/analyze.mjs、scripts/site/、
  * scripts/preview/、scripts/publish/verify.mjs 均不再存在（2026-10-04）。
- * 数据链路由 --data-only 覆盖（取数→规范化→整合闸门→精灵图），
+ * 数据链路由 --data-only 覆盖（取数→规范化→整合闸门），
  * 站点产物由 `npm run build`（Vite）与 postbuild 的 verify-dist.mjs 负责。 ---- */
 if (DATA_ONLY) {
   console.log('\n▶ 旧多页站点链：已移除（渲染交给 Vite，走 npm run build）');

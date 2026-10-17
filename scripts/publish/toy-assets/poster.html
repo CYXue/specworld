@@ -10,47 +10,39 @@
   toy-create.mjs 跑 doctor 时没传 --poster，这条校验被静默跳过、零 findings 是假象。
   2026-10-12 改为 4:3 并把 --poster 补上。
 
-  构图：上下结构（标识居上 → 标题组 → 黑带压底）。
-  4:3 比 16:9 高 180px，原来的「左太极右文字」横排会出现大片死空；
-  上下结构在卡片缩略图里标题更大，裁切也裁不到主体。
+  构图：上下结构（标识居上 → 标题组 → 通栏黑带压底）。
+  4:3 比 16:9 高 180px，横排会出现大片死空；上下结构在卡片缩略图里标题更大。
+  太极图直接 NEAREST 放大 public/favicon.svg —— 它就是本站的视觉标识。
 
-  像素风纪律（CONVENTIONS.md §2.5.1）：零圆角 / 零模糊 / 零渐变 / 字号 12 整数倍。
-  SpecPixel 是 12px 字体，这里只取 24/72 两档，保证字形不被缩放糊掉。
-  太极图直接 NEAREST 放大 public/favicon.svg —— 它就是本站的视觉标识，
-  像素块必须硬，一放大就糊等于自己砸自己的美学。
-  改这张页面 = 改封面；改完重跑 node scripts/publish/make-toy-assets.mjs。
+  字体（2026-10-17 更新）
+  ----------------------
+  全站 2026-10-15 去像素化后改用系统字体栈（src/style.css 的 --font-sans），
+  像素字体 SpecPixel / public/fonts/ 全部退役。本封面同步跟进：
+  原先 @font-face 引用已删除的 pixel-zh.woff2，症状是**静默回退**到系统字形
+  （截图照样出、肉眼不放大看不出来）——本项目最忌讳的故障样式，故整体换栈。
+  字号不再受「12 整数倍」的像素纪律约束，按封面视觉权重取 24/64 两档。
+
+  改这张页面 = 改封面；改完重跑 node scripts/publish/make-toy-assets.mjs --force。
 -->
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <title>参数世界 · Toy 封面</title>
 <style>
-  @font-face {
-    font-family: 'SpecPixel';
-    src: url('../../../public/fonts/pixel-zh.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-    font-display: block;
-  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 960px; height: 720px; overflow: hidden; }
   body {
     background: #f5f5f7;
-    font-family: 'SpecPixel', monospace;
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+      sans-serif;
     color: #111114;
-    -webkit-font-smoothing: none;
     position: relative;
   }
-  /* 四角像素装饰：8px 实心方块，顶左/底右各一，呼应 favicon 的黑白语言 */
-  .corner { position: absolute; width: 8px; height: 8px; background: #111114; }
-  .corner.tl { top: 32px; left: 32px; }
-  .corner.tr { top: 32px; right: 32px; background: #f5f5f7; border: 8px solid #111114; }
-  .corner.bl { bottom: 92px; left: 32px; background: #f5f5f7; border: 8px solid #111114; }
-  .corner.br { bottom: 92px; right: 32px; }
 
   .stage { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
 
-  /* 太极标识，NEAREST 放大保像素硬边 */
+  /* 太极标识，NEAREST 放大保硬边 */
   .mark {
     width: 224px; height: 224px;
     margin-top: 64px;
@@ -59,27 +51,24 @@
     flex: none;
   }
 
-  /* 标题组：中英双语，英文用同一 SpecPixel（52/52 拉丁字形全覆盖，不回退系统字体） */
-  .title { font-size: 72px; line-height: 1.2; letter-spacing: 8px; margin-top: 48px; }
-  .title-en { font-size: 24px; line-height: 1.5; letter-spacing: 8px; color: #3c3d44; margin-top: 16px; }
-  .rule { width: 96px; height: 12px; background: #111114; margin: 28px 0; }
-  .slogan { font-size: 24px; line-height: 1.5; letter-spacing: 2px; }
-  .sub { font-size: 24px; line-height: 1.5; letter-spacing: 2px; margin-top: 12px; }
+  /* 标题组：中英双语，同一套系统栈（拉丁与中文都不回退到第二种字体） */
+  .title { font-size: 64px; font-weight: 700; letter-spacing: 6px; margin-top: 44px; }
+  .title-en { font-size: 22px; font-weight: 500; letter-spacing: 6px; color: #3c3d44; margin-top: 14px; }
+  .rule { width: 96px; height: 4px; background: #111114; border-radius: 2px; margin: 30px 0; }
+  .slogan { font-size: 24px; font-weight: 500; letter-spacing: 2px; }
+  .sub { font-size: 20px; letter-spacing: 2px; color: #3c3d44; margin-top: 12px; }
 
   /* 底：通栏黑带 */
   .band {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 36px;
+    position: absolute; left: 0; right: 0; bottom: 0; height: 44px;
     background: #111114; color: #f5f5f7;
-    font-size: 12px; letter-spacing: 3px; line-height: 36px;
+    font-size: 13px; letter-spacing: 3px; line-height: 44px;
     padding: 0 32px;
     display: flex; justify-content: space-between;
   }
 </style>
 </head>
 <body>
-  <span class="corner tl"></span><span class="corner tr"></span>
-  <span class="corner bl"></span><span class="corner br"></span>
-
   <div class="stage">
     <img class="mark" src="../../../public/favicon.svg" alt="参数世界">
     <div class="title">参数世界</div>

@@ -5,6 +5,7 @@ import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' 
 import tabletSchemaJson from '../../data/schemas/tablet.json' with { type: 'json' };
 import wearableSchemaJson from '../../data/schemas/wearable.json' with { type: 'json' };
 import phoneViewJson from '../../data/view-phone.json' with { type: 'json' };
+import { classifyMissing, isNonePlaceholder, toSpecRowState } from '../../scripts/lib/missing-state.mjs';
 import { i18n, currentLocale, pickLocale } from '../i18n';
 import type { Product } from '../types';
 import { categoryOf } from './catalog';
@@ -101,16 +102,47 @@ export function schemaForCategory(category: string): SchemaJson {
   return SCHEMAS[category] ?? PHONE_SCHEMA;
 }
 
-interface SpecRow {
+/**
+ * 缺失值三态（评审 2026-10-16：缺失是一等公民）：
+ *   value        specs 有值 → 正常显示
+ *   none         数据用 '/' 表达「官网明确无此物」→ 显示「无」
+ *   unpublished  null 且 granularity=specs-page（官网完整规格页都没有 → 官网真没有）
+ *   uncollected  null 且 granularity=compare-matrix/manual（对比页/手册采集深度不足 → 本站未收录）
+ * 「—」不再一律渲染成「官网未公布」——用户分不清「官网没有」和「这站没抓」，
+ * 后者基于「缺失」会得出「有 vs 无」的假结论（iPhone 16 的蜂窝频段 vs 16 Plus 即真实案例）。
+ */
+export type SpecRowState = 'value' | 'none' | 'unpublished' | 'uncollected';
+
+export interface SpecRow {
   label: string;
   value: string;
+  state: SpecRowState;
+  /** 与该字段相关的采集说明（来自产品 notes，按字段路径/标签匹配），点击灰胶囊展开 */
+  note?: string;
 }
 interface SpecGroup {
   title: string;
   rows: SpecRow[];
 }
 
+
 const dash = (x: unknown): string => (x == null || x === '' ? '—' : String(x));
+
+/**
+ * 行级缺失态判定：任一 path 有非空值 → value；值为 '/' / '—' → none；
+ * 全空则按产品 granularity 区分「官网未公布」与「本站未收录」。
+ */
+function rowState(values: unknown[], granularity: string | undefined): SpecRowState {
+  return toSpecRowState(classifyMissing(values, granularity));
+}
+
+/** 从产品 notes 里找与该字段相关的采集说明（notes 是中文串数组，按路径或标签匹配） */
+function noteFor(paths: string[], labels: string[], notes: string[] | undefined): string | undefined {
+  if (!notes?.length) return undefined;
+  return notes.find((n) =>
+    paths.some((p) => n.includes(p)) || labels.some((l) => l && n.includes(l)),
+  );
+}
 
 /** 语言感知的标签/单位解析（数据侧 label/labelEn、unit/unitEn 双字段） */
 const labelOf = (f: { label: string; labelEn?: string }): string => pickLocale(f.label, f.labelEn);
@@ -243,6 +275,7 @@ const CAMERA_ROLES: Array<{ role: string; labelKey: string }> = [
 function cameraRoleRows(
   path: string,
   specs: Record<string, unknown> | null | undefined,
+  granularity?: string,
 ): SpecRow[] {
   const rear = (specs?.[path] ?? []) as Array<{
     role?: string;
@@ -255,7 +288,12 @@ function cameraRoleRows(
     const bits = c
       ? [c.mp != null ? `${c.mp} MP` : null, c.aperture, c.ois ? 'OIS' : null].filter(Boolean)
       : [];
-    return { label: t(labelKey), value: bits.length ? bits.join(' · ') : '—' };
+    const value = bits.length ? bits.join(' · ') : '—';
+    return {
+      label: t(labelKey),
+      value,
+      state: bits.length ? ('value' as const) : rowState([specs?.[path]], granularity),
+    };
   });
 }
 
@@ -266,8 +304,10 @@ function cameraRoleRows(
 function buildSpecGroups(
   schema: SchemaJson,
   view: ViewDict,
-  specs: Record<string, unknown> | null | undefined,
+  p: Product,
 ): SpecGroup[] {
+  const specs = p.specs;
+  const granularity = p.granularity;
   const fieldByPath = new Map(schema.fields.map((f) => [f.path, f]));
   const referenced = new Set<string>();
   const out: Array<SpecGroup & { id: string }> = [];
@@ -277,21 +317,35 @@ function buildSpecGroups(
     for (const r of g.rows) {
       if (r.expand) {
         referenced.add(r.expand);
-        if (r.format === 'cameraRole') rows.push(...cameraRoleRows(r.expand, specs));
-        else rows.push({ label: r.label ?? r.expand, value: dash(specs?.[r.expand]) });
+        if (r.format === 'cameraRole') {
+          rows.push(...cameraRoleRows(r.expand, specs, granularity));
+        } else {
+          const values = [specs?.[r.expand]];
+          rows.push({
+            label: r.label ?? r.expand,
+            value: dash(values[0]),
+            state: rowState(values, granularity),
+            note: noteFor([r.expand], [], p.notes),
+          });
+        }
         continue;
       }
       const paths = r.fields ?? (r.field ? [r.field] : []);
-      for (const p of paths) referenced.add(p);
-      const fields = paths.map((p) => fieldByPath.get(p)).filter(Boolean) as SchemaFieldJson[];
-      const values = paths.map((p) => specs?.[p]);
+      for (const p2 of paths) referenced.add(p2);
+      const fields = paths.map((p3) => fieldByPath.get(p3)).filter(Boolean) as SchemaFieldJson[];
+      const values = paths.map((p4) => specs?.[p4]);
       const fmt = r.format ? FORMATTERS[r.format] : undefined;
       const value = fmt
         ? fmt({ values, fields })
         : paths.length === 1
           ? defaultFormat(fields[0], values[0])
           : values.map((v, i) => defaultFormat(fields[i], v)).join(' / ');
-      rows.push({ label: pickLocale(r.label ?? paths.join('+'), r.labelEn), value });
+      rows.push({
+        label: pickLocale(r.label ?? paths.join('+'), r.labelEn),
+        value,
+        state: rowState(values, granularity),
+        note: noteFor(paths, [pickLocale(r.label ?? '', r.labelEn)], p.notes),
+      });
     }
     out.push({ id: g.id, title: pickLocale(g.title, g.titleEn), rows });
   }
@@ -315,7 +369,12 @@ function buildSpecGroups(
         ? pickLocale(sg.name, sg.nameEn)
         : f.group;
     if (target) targetId.set(key, target.id);
-    const row: SpecRow = { label: labelOf(f), value: defaultFormat(f, specs?.[f.path]) };
+    const row: SpecRow = {
+      label: labelOf(f),
+      value: defaultFormat(f, specs?.[f.path]),
+      state: rowState([specs?.[f.path]], granularity),
+      note: noteFor([f.path], [labelOf(f)], p.notes),
+    };
     if (!extra.has(key)) extra.set(key, []);
     extra.get(key)!.push(row);
   }
@@ -341,7 +400,7 @@ export function specGroups(p: Product): SpecGroup[] {
   const category = categoryOf(p);
   const schema = schemaForCategory(category);
   const view = category === 'phone' ? PHONE_VIEW : EMPTY_VIEW;
-  const groups = buildSpecGroups(schema, view, p.specs);
+  const groups = buildSpecGroups(schema, view, p);
   if (currentLocale() !== 'en') return groups;
   return groups.map((g) => ({
     ...g,

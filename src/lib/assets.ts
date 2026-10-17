@@ -6,7 +6,3 @@ export function asset(path: string): string {
   const clean = path.replace(/^\/+/, '');
   return `${base}${clean}`;
 }
-
-export function spriteUrl(id: string): string {
-  return asset(`sprites/${id}.svg`);
-}

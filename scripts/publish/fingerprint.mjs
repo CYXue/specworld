@@ -244,12 +244,13 @@ function compute() {
   //   2. 补上构建期配置：index.html（字体与 favicon 的内联声明）、vite.config.ts
   //      （base:'./' 是 Toy 能否加载的决定项）、postcss.config.mjs、package.json
   //      （依赖升级会改变产物字节）。这几个是单文件，声明式列出。
-  //   3. 精灵图生成器 scripts/sprite/ 保留：立绘是由数据算出来的几何图形，
-  //      改画法等于改用户看得见的像素画，必须触发发布。
+  //   （2026-10-16：原第 3 项「精灵图生成器 scripts/sprite/」随去像素化退役一并移除——
+  //   立绘不再渲染，改画法不再改变任何用户可见产物。）
   //
-  // 排除的：public/fonts、public/favicon.svg 等二进制资源（用固定哈希会被
-  // 换字体时漏判；真正的字节变化由构建产物与 dataFingerprint 之外的手段兜底，
-  // 字体换版属于人工低频操作，按注释里的指针手动 --write-pointer 即可）。
+  // 排除的：public/favicon.svg 等二进制资源（用固定哈希会被换资源时漏判；
+  // 真正的字节变化由构建产物与 dataFingerprint 之外的手段兜底，
+  // 换资源属于人工低频操作，按注释里的指针手动 --write-pointer 即可）。
+  // （2026-10-17：原排除项里的 public/fonts 字体已随去像素化退役，路径不存在了。）
   const templateFiles = [
     ...collectFiles(join(ROOT, 'src'), ['.vue', '.ts', '.css']),
     ...[
@@ -258,7 +259,6 @@ function compute() {
       collectOne('postcss.config.mjs'),
       collectOne('package.json'),
     ].filter(Boolean),
-    ...collectFiles(join(ROOT, 'scripts/sprite'), ['.mjs']),
   ];
   const templateFingerprint = canonicalHash(templateFiles.map((f) => `${f.path}:${f.hash}`));
 

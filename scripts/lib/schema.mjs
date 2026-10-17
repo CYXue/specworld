@@ -130,7 +130,7 @@ export function fieldsByGroup(schema) {
  *   none            valueStatus[path]='none'   → 显示"无"（该机型确实没有此参数）
  *   not_applicable  valueStatus[path]=该值      → 显示"不适用"，跨品类时整行隐藏
  *
- * 注意键名：产品顶层的 `status`（'on-sale'/'discontinued'）是**生命周期状态**，
+ * 注意键名：产品顶层的 `status`（'on-sale'/'upcoming'/'retired'）是**生命周期状态**，
  * 与四态例外映射**完全不同**，所以四态例外映射单独用 `valueStatus` 这个键，
  * 避免和生命周期 status 撞名（撞名会导致闸门把生命周期字符串当映射遍历而误报）。
  * 设计：valueStatus 只存 none / not_applicable 两种例外，其余靠 specs 是否存在推导，
@@ -164,6 +164,17 @@ export function valueStatus(product, path) {
 
 /** 合法 status 取值（产品侧只显式存这两个例外） */
 export const STATUS_VALUES = Object.freeze(['none', 'not_applicable']);
+
+/**
+ * 生命周期 status 权威枚举（2026-10-17 审计 A1 补闸门时落的运行时真源）。
+ * 文档侧唯一真源 = docs/DATA-CONTRACT.md §3.1；TS 镜像两份必须同改：
+ *   - 管线侧 src/lib/types.ts 的 ProductRecord.status
+ *   - 前端侧 src/types.ts 的 Product.status
+ * 历史：v1 残留值 'discontinued' 曾带病写盘 812 台（苹果老产品线生成脚本硬编码），
+ * validate.mjs 无任何顶层 status 枚举校验 → 一路绿灯；前端 `| string` 兜底 +
+ * statusLabelOf 回落原文，页面直接显示原始键。2026-10-17 统一为 'retired'。
+ */
+export const LIFECYCLE_STATUS_VALUES = Object.freeze(['upcoming', 'on-sale', 'retired']);
 
 /** 子字段表（多实例子字典，2026-10-13 最优解「两处结构升级」②）。field.cardinality==='list' 时存在 */
 function subfieldsOf(field) {

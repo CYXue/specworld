@@ -24,6 +24,10 @@ const startSeq = kept.length;
 const entries = [];
 let seq = startSeq;
 
+// 日期精度从日期形状派生（2026-10-17 审计 A3）：'YYYY-01-01'+day 是假精度（闸门16 拒），
+// 手工把精度降成 year 又会留下「形状不符」——精度与形状同源，永远一致
+const precisionOf = (d) => (d.split('-').length === 3 ? 'day' : d.split('-').length === 2 ? 'month' : 'year');
+
 function pad({ id, name, date, status, category, line, specs }) {
   seq += 1;
   entries.push({
@@ -32,8 +36,8 @@ function pad({ id, name, date, status, category, line, specs }) {
     createdAt: D,
     product: {
       id, slug: id, brand: 'apple', category, line, name, nameZh: null,
-      releaseDate: date, releaseDatePrecision: 'day',
-      status: status ?? 'discontinued', retiredAt: null, skus: [], scores: [],
+      releaseDate: date, releaseDatePrecision: precisionOf(date),
+      status: status ?? 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs,
       provenance: {
@@ -65,7 +69,7 @@ pad({ id: 'apple-magic-keyboard-2015', name: 'Magic Keyboard', date: '2015-10-13
 pad({ id: 'apple-magic-keyboard-touch-id-2021', name: 'Magic Keyboard（带有 Touch ID）', date: '2021-05-18', category: 'input', line: 'Magic Keyboard', specs: { 'body.heightMm': 11.49, 'body.widthMm': 278.9, 'body.depthMm': 109, 'body.weightG': 243, 'body.colors': ['银色'], 'input.buttons': 78, 'input.tracking': null, 'connectivity.type': '无线', 'connectivity.bluetooth': '蓝牙', 'power.type': '内置可充电电池（Lightning 接口充电）', 'power.batteryLifeMonths': 1, 'os.launch': 'macOS 11.4 或更高版本' } });
 pad({ id: 'apple-magic-keyboard-usb-c-2024', name: 'Magic Keyboard（带有 Lock 键）(USB-C)', date: '2024-10-28', category: 'input', line: 'Magic Keyboard', specs: { 'body.heightMm': 11.49, 'body.widthMm': 279, 'body.depthMm': 109, 'body.weightG': 239, 'body.colors': ['银色'], 'input.buttons': 78, 'input.tracking': null, 'connectivity.type': '无线', 'connectivity.bluetooth': '蓝牙', 'power.type': '内置可充电电池（USB-C 接口充电）', 'power.batteryLifeMonths': 1, 'os.launch': 'macOS 15.1 或更高版本' } });
 // ── 鼠标 10 台（「泪滴」形态从 1993 延续至今）──
-pad({ id: 'apple-adb-mouse-ii-1993', name: 'Apple Desktop Bus Mouse II', date: '1993-01-01', category: 'input', line: 'Mouse', specs: { 'body.heightMm': 33, 'body.widthMm': 61, 'body.depthMm': 107, 'body.weightG': 132, 'body.colors': ['铂金色'], 'input.buttons': 1, 'input.tracking': '机械滚珠', 'connectivity.type': 'ADB（Apple Desktop Bus）', 'connectivity.bluetooth': null, 'power.type': 'ADB 总线供电', 'power.batteryLifeMonths': null, 'os.launch': null } });
+pad({ id: 'apple-adb-mouse-ii-1993', name: 'Apple Desktop Bus Mouse II', date: 1993, category: 'input', line: 'Mouse', specs: { 'body.heightMm': 33, 'body.widthMm': 61, 'body.depthMm': 107, 'body.weightG': 132, 'body.colors': ['铂金色'], 'input.buttons': 1, 'input.tracking': '机械滚珠', 'connectivity.type': 'ADB（Apple Desktop Bus）', 'connectivity.bluetooth': null, 'power.type': 'ADB 总线供电', 'power.batteryLifeMonths': null, 'os.launch': null } });
 pad({ id: 'apple-usb-mouse-1998', name: 'Apple USB Mouse（冰球鼠标）', date: '1998-08-15', category: 'input', line: 'Mouse', specs: { 'body.heightMm': null, 'body.widthMm': null, 'body.depthMm': null, 'body.weightG': null, 'body.colors': ['邦迪蓝', '蓝莓色', '葡萄色', '草莓色', '橘橙色'], 'input.buttons': 1, 'input.tracking': '机械滚珠', 'connectivity.type': 'USB', 'connectivity.bluetooth': null, 'power.type': 'USB 总线供电', 'power.batteryLifeMonths': null, 'os.launch': 'Mac OS 8.1 或更高版本' } });
 pad({ id: 'apple-pro-mouse-2000', name: 'Apple Pro Mouse', date: '2000-07-19', category: 'input', line: 'Mouse', specs: { 'body.heightMm': null, 'body.widthMm': null, 'body.depthMm': null, 'body.weightG': null, 'body.colors': ['白色', '黑色'], 'input.buttons': 1, 'input.tracking': '光电', 'connectivity.type': 'USB', 'connectivity.bluetooth': null, 'power.type': 'USB 总线供电', 'power.batteryLifeMonths': null, 'os.launch': 'Mac OS 9.0.4 或更高版本' } });
 pad({ id: 'apple-mouse-2003', name: 'Apple Mouse', date: '2003-05-06', category: 'input', line: 'Mouse', specs: { 'body.heightMm': null, 'body.widthMm': null, 'body.depthMm': null, 'body.weightG': null, 'body.colors': ['白色'], 'input.buttons': 1, 'input.tracking': '光电', 'connectivity.type': 'USB', 'connectivity.bluetooth': null, 'power.type': 'USB 总线供电', 'power.batteryLifeMonths': null, 'os.launch': null } });

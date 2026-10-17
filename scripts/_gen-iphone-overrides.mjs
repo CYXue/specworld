@@ -35,7 +35,7 @@ function phone({ id, name, date, specs }) {
       nameZh: null,
       releaseDate: date,
       releaseDatePrecision: 'day',
-      status: 'discontinued',
+      status: 'retired',
       retiredAt: null,
       skus: [],
       scores: [],

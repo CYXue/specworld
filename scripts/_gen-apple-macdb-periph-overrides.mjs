@@ -29,6 +29,10 @@ const startSeq = kept.length;
 const entries = [];
 let seq = startSeq;
 
+// 日期精度从日期形状派生（2026-10-17 审计 A3）：'YYYY-01-01'+day 是假精度（闸门16 拒），
+// 手工把精度降成 year 又会留下「形状不符」——精度与形状同源，永远一致
+const precisionOf = (d) => (d.split('-').length === 3 ? 'day' : d.split('-').length === 2 ? 'month' : 'year');
+
 const px = (w, h) => ({ w, h });
 
 function pad(id, name, date, category, line, specs) {
@@ -41,8 +45,8 @@ function pad(id, name, date, category, line, specs) {
     createdAt: D,
     product: {
       id, slug: id, brand: 'apple', category, line, name, nameZh: null,
-      releaseDate: date, releaseDatePrecision: 'day',
-      status: 'discontinued', retiredAt: null, skus: [], scores: [],
+      releaseDate: date, releaseDatePrecision: precisionOf(date),
+      status: 'retired', retiredAt: null, skus: [], scores: [],
       granularity: 'manual',
       specs: s,
       provenance: {
@@ -247,9 +251,9 @@ const sp = (id, name, date, h, dia, g, o = {}) =>
     'connectivity.bluetooth': null, 'connectivity.thread': null, 'connectivity.wifi': null,
     'chipset.name': null, 'features.charging': null, 'os.launch': null, ...o,
   });
-sp('apple-designed-powered-speakers', 'AppleDesign Powered Speakers', '1986-01-01', 120, 90, 1400);
-sp('apple-designed-powered-speakers-ii', 'AppleDesign Powered Speakers II', '1993-01-01', 140, 100, 1600);
-sp('apple-plaintalk-microphone', 'PlainTalk Microphone', '1994-01-01', 60, 40, 120);
+sp('apple-designed-powered-speakers', 'AppleDesign Powered Speakers', 1986, 120, 90, 1400);
+sp('apple-designed-powered-speakers-ii', 'AppleDesign Powered Speakers II', 1993, 140, 100, 1600);
+sp('apple-plaintalk-microphone', 'PlainTalk Microphone', 1994, 60, 40, 120);
 sp('apple-g4-cube-speakers', 'Apple G4 Cube Speakers', '2000-07-19', 180, 80, 1100);
 sp('apple-pro-speakers', 'Apple Pro Speakers', '2001-01-09', 170, 70, 900);
 sp('apple-ipod-hi-fi', 'iPod Hi-Fi', '2006-02-28', 175, 160, 6600, { 'body.colors': ['白色'] });
