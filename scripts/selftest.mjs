@@ -1943,6 +1943,7 @@ check('persona 折叠域不按机型名反推（旧错法回归防护）', () =>
 // ⚠️ import 必须在模块顶层：check() 是同步 try/catch，回调里 await 会让
 // 断言失败变成未捕获 rejection、用例永远绿（本项目踩过的坑）。
 const DV = await import('../src/lib/deviceVisual.ts');
+const SUMMARY = await import('../src/lib/summary.ts');
 
 check('视觉区比例：直板/折叠/平板/笔记本各一档，未知品类不猜（方形兜底）', () => {
   const bar = pdoc({ id: 'bar', category: 'phone' });
@@ -1971,6 +1972,56 @@ check('hexToRgba：品牌色正确拆分；坏值回退中性灰而不是抛错�
   assert.equal(DV.hexToRgba('#cf0a2c', 0.13), 'rgba(207, 10, 44, 0.13)', '华为红');
   assert.equal(DV.hexToRgba(undefined, 0.5), 'rgba(100, 112, 138, 0.5)', '缺失 → --color-faint');
   assert.equal(DV.hexToRgba('not-a-color', 0.5), 'rgba(100, 112, 138, 0.5)', '坏形态 → 中性灰，不许抛');
+});
+
+// ── 固定 3 槽摘要（specSlotsOf：标签必须随品类规则走）──
+// 真实故障（2026-10-17 用户报告）：specSlotsOf 的**值**按品类表取（audio = 蓝牙/重量），
+// **标签**却是全局写死的 ['屏幕','电池','快充'] 按列位硬贴 —— HomePod mini 2 的蓝牙值
+// 贴「电池」、重量值贴「快充」；Apple TV 4K（media 走兜底表）的 217g 贴「电池」。
+// 标签与值语义错位是零报错静默故障，只能靠断言守。
+check('槽位标签随品类规则走：audio 的蓝牙/重量不得贴「电池/快充」标签', () => {
+  const homepod = pdoc({
+    id: 'homepod-mini',
+    category: 'audio',
+    specs: { 'connectivity.bluetooth': '蓝牙 5.3', 'body.weightG': 335 },
+  });
+  const slots = SUMMARY.specSlotsOf(homepod, 'zh', 'buy');
+  const byValue = new Map(slots.map((s) => [s.value, s.label]));
+  assert.equal(byValue.get('蓝牙 5.3'), '蓝牙', '蓝牙值必须贴「蓝牙」标签');
+  assert.equal(byValue.get('335g'), '重量', '重量值必须贴「重量」标签');
+  assert.notEqual(byValue.get('蓝牙 5.3'), '电池', '蓝牙值不得贴「电池」标签（用户报告的原故障）');
+  assert.notEqual(byValue.get('335g'), '快充', '重量值不得贴「快充」标签（用户报告的原故障）');
+});
+
+check('槽位标签随品类规则走：media（Apple TV）不得出现「电池」标签挂在重量上', () => {
+  const appletv = pdoc({
+    id: 'appletv-4k',
+    category: 'media',
+    specs: { 'chipset.name': 'A15 Bionic', 'body.weightG': 217 },
+  });
+  const slots = SUMMARY.specSlotsOf(appletv, 'zh', 'buy');
+  const byValue = new Map(slots.map((s) => [s.value, s.label]));
+  assert.equal(byValue.get('217g'), '重量', '重量值必须贴「重量」标签');
+  for (const s of slots) {
+    assert.notEqual(s.label, '电池', `media 品类不该有电池槽（实际：${s.label} = ${s.value}）`);
+  }
+});
+
+check('手机 3 槽语义保持：屏幕/电池/快充，缺值占位不前挤', () => {
+  const p = pdoc({
+    id: 'phone-slot',
+    category: 'phone',
+    specs: { 'display.sizeIn': 6.9, 'battery.capacityMah': 5000 },
+  });
+  const slots = SUMMARY.specSlotsOf(p, 'zh', 'buy');
+  assert.deepEqual(
+    slots.map((s) => s.label),
+    ['屏幕', '电池', '快充'],
+    '手机列位语义固定，改顺序会移动整列语义',
+  );
+  assert.equal(slots[0].value, '6.9″');
+  assert.equal(slots[1].value, '5,000mAh');
+  assert.equal(slots[2].value, null, '快充无值 → 占位 null，不许把后面的值往前挤');
 });
 
 check('各注册品类的计数都是非负整数（数据诚信：0 台就如实 0，不拿别的品类凑数）', () => {
