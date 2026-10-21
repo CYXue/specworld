@@ -712,6 +712,42 @@
     "磁盘阵列": {
       "en": "Disk array",
       "ev": "appleSupportLegacy"
+    },
+    "超瓷晶面板": {
+      "en": "Ceramic Shield",
+      "ev": "apple16"
+    },
+    "闪电接口": {
+      "en": "Lightning",
+      "ev": "appleIphoneDuoEn"
+    },
+    "立体声扬声器": {
+      "en": "stereo speakers",
+      "ev": "appleMacBookPro"
+    },
+    "数码表冠": {
+      "en": "Digital Crown",
+      "ev": "appleSpecsCommon"
+    },
+    "原彩显示": {
+      "en": "True Tone",
+      "ev": "appleSpecsCommon"
+    },
+    "车祸检测": {
+      "en": "Crash Detection",
+      "ev": "apple16"
+    },
+    "摔倒检测": {
+      "en": "Fall Detection",
+      "ev": "appleSpecsCommon"
+    },
+    "心电图": {
+      "en": "ECG",
+      "ev": "appleSpecsCommon"
+    },
+    "深空灰色": {
+      "en": "Space Gray",
+      "ev": "appleMacMini"
     }
   },
   "prefixes": [

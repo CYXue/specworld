@@ -21,6 +21,7 @@ import {
   buildChampions,
   buildPersona,
   buildScalesByCategory,
+  deriveCpuCores,
   percentileOf,
 } from '../lib/derive.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from '../lib/overrides.mjs';
@@ -150,6 +151,20 @@ function main() {
     process.exit(1);
   }
   const { products: merged, report: overrideReport } = applyOverrides(kept, overrides);
+
+  // ---- 3b. 派生事实：CPU 核心数 ------------------------------------------
+  // 官网/macDB 的「芯片配置」原文（如「Performance Core × 2+Efficiency Core × 4+GPU × 4」）
+  // 已写明核心数，加法导出即可；缺失时补挂，provenance 标 'derived'（类型契约见 src/lib/types.ts）。
+  // 只算术、不外推：config 解析不出就保持缺失（'—'）。
+  let derivedCores = 0;
+  for (const p of merged) {
+    if (p.specs?.['chipset.cpuCores'] != null) continue;
+    const cores = deriveCpuCores(p.specs?.['chipset.config']);
+    if (cores == null) continue;
+    p.specs['chipset.cpuCores'] = cores;
+    p.provenance = { ...(p.provenance ?? {}), 'chipset.cpuCores': 'derived' };
+    derivedCores++;
+  }
 
   // 待收录队列只列「还没上站」的：用户层 add-product 显式收录的机型（即使缺发布日期）
   // 已经在册。不过滤的话队列会诱导人工去补 release-dates 取证，而那会让管线也产出

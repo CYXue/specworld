@@ -30,6 +30,7 @@ export type SourceId =
   | 'dxomark'
   | 'manual' // 人工取证（如 data/release-dates.json 的发布日期）
   | 'user-manual' // 用户手动数据层修正（data/overrides.json，set-field / add-product）
+  | 'macdb-cn' // macDB 第二票来源（macdb.cn 结构化参数，仅填空缺字段；scripts/macdb-sync/）
   | 'derived';
 
 /**

@@ -186,7 +186,9 @@ export function applyOverrides(products, overrides) {
       }
       const before = pick(target, e.field);
       setSpec(target, e.field, e.value);
-      target.provenance[e.field] = 'user-manual';
+      // provenance 按条目来源派生：macDB 第二票数据标 'macdb-cn'，
+      // 其余（真正的用户手改）标 'user-manual'。见 src/lib/types.ts 的取值契约。
+      target.provenance[e.field] = e.source === 'macdb-cn' ? 'macdb-cn' : 'user-manual';
       report.applied.push({ id: e.id, op: 'set-field', productId: e.productId, field: e.field, value: e.value });
       if (before !== undefined && before !== null) {
         report.replaced.push({ id: e.id, productId: e.productId, field: e.field, from: before, to: e.value });
@@ -218,13 +220,14 @@ export function applyOverrides(products, overrides) {
         specs: { ...(p.specs ?? {}) },
         skus: Array.isArray(p.skus) ? p.skus : [],
         scores: Array.isArray(p.scores) ? p.scores : [],
-        // provenance：specs 全键 + releaseDate 有值时都要标 user-manual。
+        // provenance：specs 全键 + releaseDate 有值时都要登记。
         // 「有值但缺 provenance」是字段级硬闸门（validate 第 10 条），漏一个键就拒写。
+        // 取值按条目 source 派生：macDB 批次标 'macdb-cn'，用户手改标 'user-manual'。
         provenance: Object.fromEntries(
           Object.entries({
             ...(p.provenance ?? {}),
-            ...Object.fromEntries(Object.keys(p.specs ?? {}).map((k) => [k, 'user-manual'])),
-            ...(p.releaseDate ? { releaseDate: 'user-manual' } : {}),
+            ...Object.fromEntries(Object.keys(p.specs ?? {}).map((k) => [k, e.source === 'macdb-cn' ? 'macdb-cn' : 'user-manual'])),
+            ...(p.releaseDate ? { releaseDate: e.source === 'macdb-cn' ? 'macdb-cn' : 'user-manual' } : {}),
           }),
         ),
       };

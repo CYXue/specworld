@@ -131,7 +131,7 @@ export interface Product {
   rawOfficial?: Record<string, string>;
   /**
    * v2 全品类目录：品类参数容器，键 = 字段路径（如 'display.sizeIn'），
-   * 值 = 官网值或用户修正值（provenance 标 'user-manual'）。
+   * 值 = 官网值或修正值（provenance 标 'user-manual' / 'macdb-cn'）。
    * 数据加载时 adapt.ts 会把它展开回 body/display 等嵌套形状，
    * 所以现有组件读 product.display.sizeIn 不受影响；新品类页面直接消费它。
    */

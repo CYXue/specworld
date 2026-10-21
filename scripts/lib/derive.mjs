@@ -314,3 +314,29 @@ export function buildPersona(product, products, scalesByCategory) {
     bits.push(`最高 ${metricValue(product, 'storageMaxGb')} GB 存储`);
   return bits.length ? bits.join('，') : '暂无足够参数生成定位';
 }
+
+/**
+ * 从官方芯片配置文本算术导出 CPU 核心数（不含 GPU）。
+ * 数据来源是官网/macDB 的配置原文（如「Performance Core × 2+Efficiency Core × 4+GPU × 4」），
+ * 本函数只做加法，不做任何外部推断 —— 符合数据诚信红线（派生事实，来源标 'derived'）。
+ * 返回 null 表示解析不出（不是 0）。
+ */
+export function deriveCpuCores(config) {
+  if (typeof config !== 'string' || !config.trim()) return null;
+  const segments = config.split(/[+|、,，]/);
+  let sum = 0;
+  let found = false;
+  for (const seg of segments) {
+    const s = seg.trim();
+    if (!s) continue;
+    // GPU/显卡/神经引擎段不算 CPU 核心
+    if (/GPU|显卡|图形|神经|Neural|NPU/i.test(s)) continue;
+    // 形态一：「Performance Core × 2」「核 × 4」
+    let m = s.match(/[×x]\s*(\d+)/i);
+    if (m) { sum += +m[1]; found = true; continue; }
+    // 形态二：「6 核 CPU」「6核」
+    m = s.match(/(\d+)\s*核/);
+    if (m) { sum += +m[1]; found = true; }
+  }
+  return found && sum > 0 ? sum : null;
+}

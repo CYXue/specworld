@@ -4448,6 +4448,124 @@ section('较上代派生');
 }
 
 /* ================================================================ *
+ * macDB 匹配表健康度（scripts/macdb-sync/match-table.json）
+ * 2026-10-20 批次三轮纠错发现的三类错配，此处固化为防线：
+ * 悬空引用 / slug 重复 / 品类不一致 / era 限定词冲突 / 年份偏差
+ * ================================================================ */
+section('macDB 匹配表健康度');
+try {
+  const mtPath = new URL('./macdb-sync/match-table.json', import.meta.url);
+  const mt = JSON.parse(readFileSync(mtPath, 'utf8'));
+  const siteNow = JSON.parse(readFileSync(new URL('../data/products.json', import.meta.url), 'utf8'));
+  const siteById = new Map((siteNow.products || siteNow).map(p => [p.id, p]));
+
+  check('悬空引用：每个 productId 都在本站目录中', () => {
+    const bad = mt.filter(m => !siteById.has(m.productId));
+    if (bad.length) throw new Error(bad.map(m => `${m.slug}→${m.productId}`).slice(0, 5).join(', '));
+  });
+
+  check('slug 唯一：同一 macDB 页不得出现两条映射', () => {
+    const seen = new Set();
+    const dup = [];
+    for (const m of mt) {
+      if (seen.has(m.slug)) dup.push(m.slug);
+      seen.add(m.slug);
+    }
+    if (dup.length) throw new Error(`重复 slug: ${dup.slice(0, 5).join(', ')}`);
+  });
+
+  check('cat 与目标品类一致：条目 cat 必须等于目标产品 category', () => {
+    const bad = mt.filter(m => !m.cat || siteById.get(m.productId)?.category !== m.cat);
+    if (bad.length) throw new Error(bad.map(m => `${m.slug}(cat=${m.cat})`).slice(0, 5).join(', '));
+  });
+
+  check('era 限定词不冲突：年初/年末/年中 不得跨配（merge 标记的变体合并豁免）', () => {
+    const era = (s) => {
+      if (/年初|early/i.test(s)) return 'early';
+      if (/年末|late/i.test(s)) return 'late';
+      if (/年中|mid/i.test(s)) return 'mid';
+      return null;
+    };
+    const bad = mt.filter((m) => {
+      if (m.merge) return false;
+      const a = era(m.name || ''), b = era(m.ourName || '');
+      return a && b && a !== b;
+    });
+    if (bad.length) throw new Error(bad.map(m => `${m.slug}(${era(m.name)})→${m.productId}(${era(m.ourName)})`).slice(0, 5).join(', '));
+  });
+
+  check('年份偏差：桌面/笔电/手机/平板类 macDB 页面年份与本站 releaseDate 年份差 ≤1', () => {
+    // 配件/外设/媒体类两边的日期本就是占位或停产日，不做强校验（见 macdb-sync/README）
+    const STRICT = new Set(['desktop', 'laptop', 'phone', 'tablet']);
+    const dated = mt.filter(m => m.pageDate && !m.dateQuirk && !m.merge
+      && STRICT.has(m.cat) && siteById.get(m.productId)?.releaseDate);
+    const bad = dated.filter((m) => {
+      const py = +m.pageDate.slice(0, 4);
+      const ry = +siteById.get(m.productId).releaseDate.slice(0, 4);
+      return Math.abs(py - ry) > 1;
+    });
+    if (bad.length) {
+      throw new Error(bad.map(m => `${m.slug}(${m.pageDate})→${m.productId}(${siteById.get(m.productId).releaseDate})`).slice(0, 5).join(', '));
+    }
+    if (dated.length < 150) throw new Error(`pageDate 覆盖异常减少（${dated.length}），检查 match-table 是否被覆盖`);
+  });
+
+  check('跨机型类别：slug 机型类别与目标品类一致（merge 豁免）', () => {
+    const catOf = (slug) => {
+      if (/display$|monitor|portrait-display|monochrome|-rgb$|inch-color$/.test(slug)) return 'display';
+      if (/drive$|floppy|hard-disk|raid|hi-fi$/.test(slug)) return 'storage|audio';
+      if (/earphones|headset/.test(slug)) return 'audio';
+      if (/^ipad(?!-keyboard)/.test(slug)) return 'tablet';
+      if (/^ipod-touch/.test(slug)) return 'phone|media';
+      if (/^ipod/.test(slug)) return 'media|audio';
+      if (/^iphone(?!-bluetooth|-stereo)/.test(slug)) return 'phone';
+      if (/^airpods|^earpods|headphone/.test(slug)) return 'audio';
+      if (/keyboard|mouse|trackpad|keypad|tablet$|pencil|remote|adapter|dock|folio/.test(slug)) return 'input|accessory';
+      if (/watch/.test(slug)) return 'wearable';
+      if (/^xserve/.test(slug)) return 'desktop|laptop|network|storage';
+      if (/^imac|^mac-|^macintosh|^power-|^powerbook|^ibook|^emac|^workgroup|^lisa|^apple-i/.test(slug)) return 'desktop|laptop';
+      return null;
+    };
+    const bad = mt.filter((m) => {
+      if (m.merge) return false;
+      const expect = catOf(m.slug);
+      return expect && !expect.split('|').includes(m.cat);
+    });
+    if (bad.length) throw new Error(bad.map(m => `${m.slug}(expect=${catOf(m.slug)}, cat=${m.cat})`).slice(0, 5).join(', '));
+  });
+
+  check('映射规模守恒：条目数在合理区间（防误清空）', () => {
+    if (mt.length < 800 || mt.length > 950) throw new Error(`条目数 ${mt.length} 超出 [800,950]`);
+  });
+} catch (e) {
+  failures.push({ group: 'macDB 匹配表健康度', name: '装载失败', message: e.message });
+}
+
+section('派生层：CPU 核心数（deriveCpuCores）');
+{
+  const D = await import('./lib/derive.mjs');
+  const cases = [
+    ['Performance Core × 2+Efficiency Core × 4+GPU × 4', 6], // GPU 段不计
+    ['Core × 2+GPU × 6', 2],
+    ['Core × 1+GPU × 1', 1],
+    ['Performance Core × 4+Efficiency Core × 4+GPU × 7', 8],
+    ['6 核 CPU + 4 核 GPU', 6],
+    ['  ', null],
+    ['', null],
+    [null, null],
+  ];
+  for (const [input, want] of cases) {
+    check(`deriveCpuCores(${JSON.stringify(input)}) = ${want}`, () => {
+      assert.equal(D.deriveCpuCores(input), want);
+    });
+  }
+  check('反向测：GPU 段绝不能计入 CPU 核心数', () => {
+    // 若实现错把 GPU 计入，性能核+能效核+GPU 会得出 10 而非 6 —— 故注入反例
+    assert.notEqual(D.deriveCpuCores('Performance Core × 2+Efficiency Core × 4+GPU × 4'), 10);
+  });
+}
+
+/* ================================================================ *
  * 汇总
  * ================================================================ */
 console.log('');

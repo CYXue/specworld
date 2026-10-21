@@ -1,0 +1,7595 @@
+[
+ {
+  "slug": "10w-usb",
+  "name": "10W USB 电源适配器",
+  "productId": "apple-10w-usb-adapter-2010",
+  "ourName": "10W USB 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "12w-usb",
+  "name": "12W USB 电源适配器",
+  "productId": "apple-12w-usb-adapter-2012",
+  "ourName": "12W USB 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "140w-usb-c",
+  "name": "140W USB-C 电源适配器",
+  "productId": "apple-140w-usb-c-adapter",
+  "ourName": "140W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "18w-usb-c",
+  "name": "18W USB-C 电源适配器",
+  "productId": "apple-18w-usb-c-adapter-2018",
+  "ourName": "18W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "20w-usb-c",
+  "name": "20W USB-C 电源适配器",
+  "productId": "apple-20w-usb-c-adapter-2020",
+  "ourName": "20W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "29w-usb-c",
+  "name": "29W USB-C 电源适配器",
+  "productId": "apple-29w-usb-c-adapter-2015",
+  "ourName": "29W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "35w-usb-c-2",
+  "name": "35W 双 USB-C 端口小型电源适配器",
+  "productId": "apple-35w-dual-usb-c-compact",
+  "ourName": "35W 双 USB-C 端口小型电源适配器",
+  "j": 1,
+  "cat": "accessory",
+  "fixed": true
+ },
+ {
+  "slug": "40w-60w",
+  "name": "40W 动态电源适配器 (最高 60W)",
+  "productId": "apple-40w-dynamic-adapter",
+  "ourName": "40W 动态电源适配器 (最高 60W)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "45w-magsafe-2",
+  "name": "45W MagSafe 2 电源适配器",
+  "productId": "apple-45w-magsafe-2-adapter",
+  "ourName": "45W MagSafe 2 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "45w-magsafe",
+  "name": "45W MagSafe 电源适配器",
+  "productId": "apple-45w-magsafe-adapter",
+  "ourName": "45W MagSafe 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "5w-usb-2",
+  "name": "5W USB 电源适配器",
+  "productId": "apple-5w-usb-adapter-2008",
+  "ourName": "5W USB 电源适配器",
+  "j": 1,
+  "cat": "accessory",
+  "fixed": true
+ },
+ {
+  "slug": "60w-magsafe-2",
+  "name": "60W MagSafe 2 电源适配器",
+  "productId": "apple-60w-magsafe-2-adapter",
+  "ourName": "60W MagSafe 2 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "60w-magsafe-l",
+  "name": "60W MagSafe 电源适配器 (L 形)",
+  "productId": "apple-60w-magsafe-l",
+  "ourName": "60W MagSafe 电源适配器 (L 形)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "60w-magsafe-t",
+  "name": "60W MagSafe 电源适配器 (T 形)",
+  "productId": "apple-60w-magsafe-t",
+  "ourName": "60W MagSafe 电源适配器 (T 形)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "61w-usb-c-2",
+  "name": "61W USB-C 电源适配器 (新款)",
+  "productId": "apple-61w-usb-c-adapter-2018",
+  "ourName": "61W USB-C 电源适配器 (新款)",
+  "j": 1,
+  "cat": "accessory",
+  "fixed": true
+ },
+ {
+  "slug": "67w-usb-c",
+  "name": "67W USB-C 电源适配器",
+  "productId": "apple-67w-usb-c-adapter",
+  "ourName": "67W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "70w-usb-c",
+  "name": "70W USB-C 电源适配器",
+  "productId": "apple-70w-usb-c-adapter",
+  "ourName": "70W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "85w-magsafe-2",
+  "name": "85W MagSafe 2 电源适配器",
+  "productId": "apple-85w-magsafe-2-adapter",
+  "ourName": "85W MagSafe 2 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "85w-magsafe-l",
+  "name": "85W MagSafe 电源适配器 (L 形)",
+  "productId": "apple-85w-magsafe-l",
+  "ourName": "85W MagSafe 电源适配器 (L 形)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "85w-magsafe-t",
+  "name": "85W MagSafe 电源适配器 (T 形)",
+  "productId": "apple-85w-magsafe-t",
+  "ourName": "85W MagSafe 电源适配器 (T 形)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "87w-usb-c",
+  "name": "87W USB-C 电源适配器",
+  "productId": "apple-87w-usb-c-adapter",
+  "ourName": "87W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "96w-usb-c",
+  "name": "96W USB-C 电源适配器",
+  "productId": "apple-96w-usb-c-adapter",
+  "ourName": "96W USB-C 电源适配器",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "airpods-1",
+  "name": "AirPods 1",
+  "productId": "apple-airpods-1",
+  "ourName": "AirPods (第 1 代)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-2",
+  "name": "AirPods 2",
+  "productId": "apple-airpods-2",
+  "ourName": "AirPods (第 2 代)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-3",
+  "name": "AirPods 3",
+  "productId": "apple-airpods-3",
+  "ourName": "AirPods (第 3 代)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-4-2",
+  "name": "AirPods 4",
+  "productId": "apple-airpods-4",
+  "ourName": "AirPods 4",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-5-2",
+  "name": "AirPods 5",
+  "productId": "apple-airpods-5",
+  "ourName": "AirPods 5",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-max-2",
+  "name": "AirPods Max 2",
+  "productId": "apple-airpods-max-2",
+  "ourName": "AirPods Max 2",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-pro-1",
+  "name": "AirPods Pro 1 (无线充电盒)",
+  "productId": "apple-airpods-pro-1",
+  "ourName": "AirPods Pro (第 1 代)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-pro-2-usb-c",
+  "name": "AirPods Pro 2 (USB-C)",
+  "productId": "apple-airpods-pro-2-usbc",
+  "ourName": "AirPods Pro (第 2 代，USB-C)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airpods-pro-3",
+  "name": "AirPods Pro 3",
+  "productId": "apple-airpods-pro-3",
+  "ourName": "AirPods Pro 3",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "airport-base-station-graphite",
+  "name": "AirPort Base Station (Graphite)",
+  "productId": "apple-airport-base-station-graphite",
+  "ourName": "AirPort Base Station (Graphite)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2001-11"
+ },
+ {
+  "slug": "airport-base-station",
+  "name": "AirPort Base Station (Dual Ethernet)",
+  "productId": "apple-airport-base-station-dual-ethernet",
+  "ourName": "AirPort Base Station (Dual Ethernet)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "airport-card",
+  "name": "AirPort Card",
+  "productId": "apple-airport-card",
+  "ourName": "AirPort Card",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2004-06"
+ },
+ {
+  "slug": "airport-express-802-11n",
+  "name": "AirPort Express 802.11n (第二代)",
+  "productId": "apple-airport-express-80211n-2nd",
+  "ourName": "AirPort Express (802.11n 第 2 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2018-04"
+ },
+ {
+  "slug": "airport-express",
+  "name": "AirPort Express",
+  "productId": "apple-airport-express-original",
+  "ourName": "AirPort Express",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2008-03"
+ },
+ {
+  "slug": "airport-extreme-802-11ac",
+  "name": "AirPort Extreme 802.11ac",
+  "productId": "apple-airport-extreme-2013",
+  "ourName": "AirPort Extreme (802.11ac)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2018-04"
+ },
+ {
+  "slug": "airport-extreme-802-11n-2",
+  "name": "AirPort Extreme 802.11n (第四代)",
+  "productId": "apple-airport-extreme-80211n-4th",
+  "ourName": "AirPort Extreme (802.11n 第 4 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2011-06"
+ },
+ {
+  "slug": "airport-extreme-802-11n-3",
+  "name": "AirPort Extreme 802.11n (第三代)",
+  "productId": "apple-airport-extreme-80211n-3rd",
+  "ourName": "AirPort Extreme (802.11n 第 3 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2009-10"
+ },
+ {
+  "slug": "airport-extreme-802-11n-4",
+  "name": "AirPort Extreme 802.11n (第二代)",
+  "productId": "apple-airport-extreme-80211n-2nd",
+  "ourName": "AirPort Extreme (802.11n 第 2 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2009-03"
+ },
+ {
+  "slug": "airport-extreme-802-11n-5",
+  "name": "AirPort Extreme 802.11n (第一代)",
+  "productId": "apple-airport-extreme-80211n-1st",
+  "ourName": "AirPort Extreme (802.11n 第 1 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2007-08"
+ },
+ {
+  "slug": "airport-extreme-802-11n",
+  "name": "AirPort Extreme 802.11n (第五代)",
+  "productId": "apple-airport-extreme-80211n-5th",
+  "ourName": "AirPort Extreme (802.11n 第 5 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2013-06"
+ },
+ {
+  "slug": "airport-extreme-base-station-poeul-2043",
+  "name": "AirPort Extreme Base Station (PoE/UL 2043)",
+  "productId": "apple-airport-extreme-bs-poe",
+  "ourName": "AirPort Extreme Base Station (PoE/UL 2043)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2007-01"
+ },
+ {
+  "slug": "airport-extreme-base-station-with-modem",
+  "name": "AirPort Extreme Base Station (with Modem)",
+  "productId": "apple-airport-extreme-bs-modem",
+  "ourName": "AirPort Extreme Base Station (with Modem)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2007-01"
+ },
+ {
+  "slug": "airport-extreme-base-station",
+  "name": "AirPort Extreme Base Station",
+  "productId": "apple-airport-extreme-base-station",
+  "ourName": "AirPort Extreme Base Station",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2007-01"
+ },
+ {
+  "slug": "airport-extreme-card",
+  "name": "AirPort Extreme Card",
+  "productId": "apple-airport-extreme-card",
+  "ourName": "AirPort Extreme Card",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2009-01"
+ },
+ {
+  "slug": "airport-time-capsule-802-11ac",
+  "name": "AirPort Time Capsule 802.11ac",
+  "productId": "apple-time-capsule-2013",
+  "ourName": "AirPort Time Capsule (802.11ac)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2018-04"
+ },
+ {
+  "slug": "airtag-2",
+  "name": "AirTag (第 2 代)",
+  "productId": "apple-airtag-2",
+  "ourName": "AirTag (第 2 代)",
+  "j": 1,
+  "cat": "tracker"
+ },
+ {
+  "slug": "apple-3-5-drive",
+  "name": "Apple 3.5 Drive",
+  "productId": "apple-3-5-drive",
+  "ourName": "Apple 3.5 Drive",
+  "j": 1,
+  "cat": "storage"
+ },
+ {
+  "slug": "apple-adjustable-keyboard",
+  "name": "Apple Adjustable Keyboard",
+  "productId": "apple-adjustable-keyboard",
+  "ourName": "Apple Adjustable Keyboard",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-basic-color-monitor",
+  "name": "Apple Basic Color Monitor",
+  "productId": "apple-basic-color-monitor",
+  "ourName": "Apple Basic Color Monitor",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1993-10"
+ },
+ {
+  "slug": "apple-cinema-display-20",
+  "name": "Apple Cinema Display （20 英寸）",
+  "productId": "apple-cinema-display-20",
+  "ourName": "Apple Cinema Display (20 英寸)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-cinema-display",
+  "name": "Apple Cinema Display",
+  "productId": "apple-cinema-display-1999",
+  "ourName": "Apple Cinema Display",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-cinema-hd-display",
+  "name": "Apple Cinema HD Display",
+  "productId": "apple-cinema-hd-display-2004",
+  "ourName": "Apple Cinema HD Display",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-color-plus-14-inch-display",
+  "name": "Apple Color Plus 14-inch Display",
+  "productId": "apple-color-plus-14",
+  "ourName": "Apple Color Plus 14-inch Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1995-08"
+ },
+ {
+  "slug": "apple-desktop-bus-keyboard",
+  "name": "Apple Desktop Bus Keyboard",
+  "productId": "apple-desktop-bus-keyboard",
+  "ourName": "Apple Desktop Bus Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "apple-desktop-bus-mouse-ii",
+  "name": "Apple Desktop Bus Mouse II",
+  "productId": "apple-adb-mouse-ii-1993",
+  "ourName": "Apple Desktop Bus Mouse II",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "apple-disk-iic",
+  "name": "Apple Disk IIc",
+  "productId": "apple-disk-iic",
+  "ourName": "Apple Disk IIc",
+  "j": 1,
+  "cat": "storage"
+ },
+ {
+  "slug": "apple-disk-iii",
+  "name": "Apple Disk III",
+  "productId": "apple-disk-iii",
+  "ourName": "Apple Disk III",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1985-09"
+ },
+ {
+  "slug": "apple-drive-module-ata",
+  "name": "Apple Drive Module (ATA)",
+  "productId": "apple-drive-module-ata",
+  "ourName": "Apple Drive Module (ATA)",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2008-02"
+ },
+ {
+  "slug": "apple-drive-module-satasas",
+  "name": "Apple Drive Module (SATA/SAS)",
+  "productId": "apple-drive-module-sata-sas",
+  "ourName": "Apple Drive Module (SATA/SAS)",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2011-01"
+ },
+ {
+  "slug": "apple-duodisk",
+  "name": "Apple DuoDisk",
+  "productId": "apple-duo-disk",
+  "ourName": "Apple DuoDisk",
+  "j": 1,
+  "cat": "storage"
+ },
+ {
+  "slug": "apple-extended-keyboard-ii",
+  "name": "Apple Extended Keyboard II",
+  "productId": "apple-keyboard-extended-ii-1990",
+  "ourName": "Apple Extended Keyboard II",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1994-03"
+ },
+ {
+  "slug": "apple-extended-keyboard",
+  "name": "Apple Extended Keyboard",
+  "productId": "apple-keyboard-extended-1987",
+  "ourName": "Apple Extended Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1990-10"
+ },
+ {
+  "slug": "apple-external-hard-drive",
+  "name": "Apple External Hard Drive",
+  "productId": "apple-external-hard-drive",
+  "ourName": "Apple External Hard Drive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "apple-fdhd-superdrive",
+  "name": "Apple FDHD / SuperDrive",
+  "productId": "apple-fdhd-superdrive",
+  "ourName": "Apple FDHD / SuperDrive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1994-06"
+ },
+ {
+  "slug": "apple-g4-cube-speakers",
+  "name": "Apple G4 Cube Speakers",
+  "productId": "apple-g4-cube-speakers",
+  "ourName": "Apple G4 Cube Speakers",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2001-07"
+ },
+ {
+  "slug": "apple-graphics-tablet",
+  "name": "Apple Graphics Tablet",
+  "productId": "apple-graphics-tablet",
+  "ourName": "Apple Graphics Tablet",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-hard-disk-160sc",
+  "name": "Apple Hard Disk 160SC",
+  "productId": "apple-hard-disk-160sc",
+  "ourName": "Apple Hard Disk 160SC",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "apple-hard-disk-20sc",
+  "name": "Apple Hard Disk 20SC",
+  "productId": "apple-hard-disk-20sc",
+  "ourName": "Apple Hard Disk 20SC",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "apple-hard-disk-40sc",
+  "name": "Apple Hard Disk 40SC",
+  "productId": "apple-hard-disk-40sc",
+  "ourName": "Apple Hard Disk 40SC",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "apple-hard-disk-80sc",
+  "name": "Apple Hard Disk 80SC",
+  "productId": "apple-hard-disk-80sc",
+  "ourName": "Apple Hard Disk 80SC",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "apple-high-resolution-monochrome",
+  "name": "Apple High-Resolution Monochrome",
+  "productId": "apple-high-resolution-monochrome",
+  "ourName": "Apple High-Resolution Monochrome",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1991-02"
+ },
+ {
+  "slug": "apple-iic-flat-panel-display",
+  "name": "Apple IIc Flat Panel Display",
+  "productId": "apple-iic-flat-panel-display",
+  "ourName": "Apple IIc Flat Panel Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1990-11"
+ },
+ {
+  "slug": "apple-iic-plus",
+  "productId": "apple-iic-plus",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1988-01"
+ },
+ {
+  "slug": "apple-iic",
+  "productId": "apple-iic",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1984-01"
+ },
+ {
+  "slug": "apple-iie-platinum",
+  "productId": "apple-iie-platinum",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1987-01"
+ },
+ {
+  "slug": "apple-iigs",
+  "productId": "apple-iigs",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "apple-keyboard-2",
+  "name": "Apple Keyboard (带有数字小键盘)",
+  "productId": "apple-keyboard-alu-2007",
+  "ourName": "Apple Keyboard（铝合金）",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-keyboard-ii",
+  "name": "Apple Keyboard II",
+  "productId": "apple-keyboard-ii-1990",
+  "ourName": "Apple Keyboard II",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "apple-lisa-2",
+  "productId": "apple-lisa-2",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1984-01"
+ },
+ {
+  "slug": "apple-mighty-mouse-2",
+  "name": "Apple Mighty Mouse",
+  "productId": "apple-mighty-mouse-2005",
+  "ourName": "Apple Mighty Mouse",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-monitor-iic",
+  "name": "Apple Monitor IIc",
+  "productId": "apple-monitor-iic",
+  "ourName": "Apple Monitor IIc",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1990-11"
+ },
+ {
+  "slug": "apple-monitor-iii",
+  "name": "Apple Monitor III",
+  "productId": "apple-monitor-iii",
+  "ourName": "Apple Monitor III",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1985-09"
+ },
+ {
+  "slug": "apple-monitor-ii",
+  "name": "Apple Monitor II",
+  "productId": "apple-monitor-ii",
+  "ourName": "Apple Monitor II",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1993-11"
+ },
+ {
+  "slug": "apple-monochrome-monitor-iie",
+  "name": "Apple Monochrome Monitor IIe",
+  "productId": "apple-monochrome-monitor-iie",
+  "ourName": "Apple Monochrome Monitor IIe",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "apple-monochrome-monitor",
+  "name": "Apple Monochrome Monitor",
+  "productId": "apple-monochrome-monitor",
+  "ourName": "Apple Monochrome Monitor",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "apple-mouse",
+  "name": "Apple Mouse",
+  "productId": "apple-mouse-2003",
+  "ourName": "Apple Mouse",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-pencil-1",
+  "name": "Apple Pencil (第 1 代)",
+  "productId": "apple-pencil-1st",
+  "ourName": "Apple Pencil (第 1 代)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "apple-pencil-2",
+  "name": "Apple Pencil (第 2 代)",
+  "productId": "apple-pencil-2nd",
+  "ourName": "Apple Pencil (第 2 代)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "apple-pencil-pro",
+  "name": "Apple Pencil Pro",
+  "productId": "apple-pencil-pro",
+  "ourName": "Apple Pencil Pro",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "apple-pencil-usb-c",
+  "name": "Apple Pencil (USB-C)",
+  "productId": "apple-pencil-usb-c",
+  "ourName": "Apple Pencil (USB-C)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "apple-performa-plus-display",
+  "name": "Apple Performa Plus Display",
+  "productId": "apple-performa-plus-display",
+  "ourName": "Apple Performa Plus Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1994-07"
+ },
+ {
+  "slug": "apple-powercd",
+  "name": "Apple PowerCD",
+  "productId": "apple-powercd",
+  "ourName": "Apple PowerCD",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "apple-pro-keyboard",
+  "name": "Apple Pro Keyboard",
+  "productId": "apple-keyboard-pro-2000",
+  "ourName": "Apple Pro Keyboard",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-pro-mouse",
+  "name": "Apple Pro Mouse",
+  "productId": "apple-pro-mouse-2000",
+  "ourName": "Apple Pro Mouse",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-pro-speakers",
+  "name": "Apple Pro Speakers",
+  "productId": "apple-pro-speakers",
+  "ourName": "Apple Pro Speakers",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "apple-profile",
+  "name": "Apple ProFile",
+  "productId": "apple-profile",
+  "ourName": "Apple ProFile",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1986-09"
+ },
+ {
+  "slug": "apple-remote-2",
+  "name": "Apple Remote (白色版)",
+  "productId": "apple-remote-2005",
+  "ourName": "Apple Remote",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "apple-standard-keyboard",
+  "name": "Apple Standard Keyboard",
+  "productId": "apple-standard-keyboard",
+  "ourName": "Apple Standard Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "apple-studio-display-15",
+  "name": "Apple Studio Display 15 英寸",
+  "productId": "apple-studio-display-15",
+  "ourName": "Apple Studio Display 15 英寸",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-studio-display-17-adc",
+  "name": "Apple Studio Display （17 英寸 ADC）",
+  "productId": "apple-studio-display-17-adc",
+  "ourName": "Apple Studio Display (17 英寸 ADC)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-studio-display-17-crt",
+  "name": "Apple Studio Display （17 英寸 CRT）",
+  "productId": "apple-studio-display-crt-17-1999",
+  "ourName": "Apple Studio Display (17 英寸 CRT)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-studio-display-17-lcd",
+  "name": "Apple Studio Display （17 英寸 LCD）",
+  "productId": "apple-studio-display-17-lcd",
+  "ourName": "Apple Studio Display (17 英寸 LCD)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-studio-display-21-crt",
+  "name": "Apple Studio Display （21 英寸 CRT）",
+  "productId": "apple-studio-display-crt-21-1999",
+  "ourName": "Apple Studio Display (21 英寸 CRT)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-studio-display-lcd",
+  "name": "Apple Studio Display （LCD）",
+  "productId": "apple-studio-display-lcd",
+  "ourName": "Apple Studio Display (LCD)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "apple-tv-1",
+  "name": "Apple TV (第 1 代)",
+  "productId": "apple-tv-1st",
+  "ourName": "Apple TV (第 1 代)",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-tv-2",
+  "name": "Apple TV (第 2 代)",
+  "productId": "apple-tv-2nd",
+  "ourName": "Apple TV (第 2 代)",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-tv-3",
+  "name": "Apple TV (第 3 代)",
+  "productId": "apple-tv-3rd",
+  "ourName": "Apple TV (第 3 代)",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-tv-4k-2",
+  "name": "Apple TV 4K (第 2 代)",
+  "productId": "apple-tv-4k-2021",
+  "ourName": "Apple TV 4K (第 2 代)",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-tv-4k-3",
+  "name": "Apple TV 4K (第 3 代)",
+  "productId": "apple-tv-4k-2022",
+  "ourName": "Apple TV 4K (第 3 代)",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-tv-hd",
+  "name": "Apple TV HD",
+  "productId": "apple-tv-hd-2015",
+  "ourName": "Apple TV HD",
+  "j": 1,
+  "cat": "home"
+ },
+ {
+  "slug": "apple-two-page-monochrome",
+  "name": "Apple Two-Page Monochrome",
+  "productId": "apple-two-page-monochrome",
+  "ourName": "Apple Two-Page Monochrome",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "apple-usb-keyboard",
+  "name": "Apple USB Keyboard",
+  "productId": "apple-keyboard-usb-1998",
+  "ourName": "Apple USB Keyboard",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-usb-mouse",
+  "name": "Apple USB Mouse",
+  "productId": "apple-usb-mouse-1998",
+  "ourName": "Apple USB Mouse（冰球鼠标）",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "apple-vision-pro-m5",
+  "name": "Apple Vision Pro (M5)",
+  "productId": "apple-vision-pro-m5-2025",
+  "ourName": "Apple Vision Pro (M5)",
+  "j": 1,
+  "cat": "headset"
+ },
+ {
+  "slug": "apple-vision-pro",
+  "name": "Apple Vision Pro",
+  "productId": "apple-vision-pro",
+  "ourName": "Apple Vision Pro",
+  "j": 1,
+  "cat": "headset",
+  "pageDate": "2025-10"
+ },
+ {
+  "slug": "apple-watch-se-1",
+  "name": "Apple Watch SE (第 1 代)",
+  "productId": "apple-watch-se-1",
+  "ourName": "Apple Watch SE (第 1 代)",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2022-09"
+ },
+ {
+  "slug": "apple-watch-se-2",
+  "name": "Apple Watch SE (第 2 代)",
+  "productId": "apple-watch-se-2",
+  "ourName": "Apple Watch SE (第 2 代)",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-se-3",
+  "name": "Apple Watch SE (第 3 代)",
+  "productId": "apple-watch-se-3",
+  "ourName": "Apple Watch SE (第 3 代)",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-series-10",
+  "name": "Apple Watch Series 10",
+  "productId": "apple-watch-series-10",
+  "ourName": "Apple Watch Series 10",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-series-11",
+  "name": "Apple Watch Series 11",
+  "productId": "apple-watch-series-11",
+  "ourName": "Apple Watch Series 11",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-series-12",
+  "name": "Apple Watch Series 12",
+  "productId": "apple-watch-series-12",
+  "ourName": "Apple Watch Series 12",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-series-1",
+  "name": "Apple Watch Series 1",
+  "productId": "apple-watch-series-1",
+  "ourName": "Apple Watch Series 1",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2018-01"
+ },
+ {
+  "slug": "apple-watch-series-2",
+  "name": "Apple Watch Series 2",
+  "productId": "apple-watch-series-2",
+  "ourName": "Apple Watch Series 2",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2017-01"
+ },
+ {
+  "slug": "apple-watch-series-3",
+  "name": "Apple Watch Series 3",
+  "productId": "apple-watch-series-3",
+  "ourName": "Apple Watch Series 3",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2022-01"
+ },
+ {
+  "slug": "apple-watch-series-4",
+  "name": "Apple Watch Series 4",
+  "productId": "apple-watch-series-4",
+  "ourName": "Apple Watch Series 4",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2019-01"
+ },
+ {
+  "slug": "apple-watch-series-5",
+  "name": "Apple Watch Series 5",
+  "productId": "apple-watch-series-5",
+  "ourName": "Apple Watch Series 5",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2020-01"
+ },
+ {
+  "slug": "apple-watch-series-6",
+  "name": "Apple Watch Series 6",
+  "productId": "apple-watch-series-6",
+  "ourName": "Apple Watch Series 6",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2021-01"
+ },
+ {
+  "slug": "apple-watch-series-7",
+  "name": "Apple Watch Series 7",
+  "productId": "apple-watch-series-7",
+  "ourName": "Apple Watch Series 7",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2022-01"
+ },
+ {
+  "slug": "apple-watch-series-8",
+  "name": "Apple Watch Series 8",
+  "productId": "apple-watch-series-8",
+  "ourName": "Apple Watch Series 8",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2023-01"
+ },
+ {
+  "slug": "apple-watch-series-9",
+  "name": "Apple Watch Series 9",
+  "productId": "apple-watch-series-9",
+  "ourName": "Apple Watch Series 9",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2024-01"
+ },
+ {
+  "slug": "apple-watch-ultra-2",
+  "name": "Apple Watch Ultra 2",
+  "productId": "apple-watch-ultra-2",
+  "ourName": "Apple Watch Ultra 2",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-ultra-3",
+  "name": "Apple Watch Ultra 3",
+  "productId": "apple-watch-ultra-3",
+  "ourName": "Apple Watch Ultra 3",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-ultra-4",
+  "name": "Apple Watch Ultra 4",
+  "productId": "apple-watch-ultra-4",
+  "ourName": "Apple Watch Ultra 4",
+  "j": 1,
+  "cat": "wearable"
+ },
+ {
+  "slug": "apple-watch-ultra",
+  "name": "Apple Watch Ultra",
+  "productId": "apple-watch-ultra-1",
+  "ourName": "Apple Watch Ultra",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2023-09"
+ },
+ {
+  "slug": "apple-watch",
+  "name": "Apple Watch (第一代)",
+  "productId": "apple-watch-1",
+  "ourName": "Apple Watch（第 1 代）",
+  "j": 1,
+  "cat": "wearable",
+  "pageDate": "2016-01"
+ },
+ {
+  "slug": "apple-wireless-keyboard",
+  "name": "Apple Wireless Keyboard (铝合金)",
+  "productId": "apple-keyboard-wireless-alu-2007",
+  "ourName": "Apple Wireless Keyboard（铝合金）",
+  "j": 1,
+  "cat": "input",
+  "fixed": true
+ },
+ {
+  "slug": "apple-wireless-mouse",
+  "name": "Apple Wireless Mouse",
+  "productId": "apple-wireless-mouse-2003",
+  "ourName": "Apple Wireless Mouse",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "applecd-150",
+  "name": "AppleCD 150",
+  "productId": "apple-cd-150",
+  "ourName": "AppleCD 150",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1994-06"
+ },
+ {
+  "slug": "applecd-300e-plus",
+  "name": "AppleCD 300e Plus",
+  "productId": "apple-cd-300e-plus",
+  "ourName": "AppleCD 300e Plus",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1995-05"
+ },
+ {
+  "slug": "applecd-300",
+  "name": "AppleCD 300",
+  "productId": "apple-cd-300",
+  "ourName": "AppleCD 300",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1994-06"
+ },
+ {
+  "slug": "applecd-600e",
+  "name": "AppleCD 600e",
+  "productId": "apple-cd-600e",
+  "ourName": "AppleCD 600e",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "applecd-sc-plus",
+  "name": "AppleCD SC Plus",
+  "productId": "apple-cd-sc-plus",
+  "ourName": "AppleCD SC Plus",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1992-03"
+ },
+ {
+  "slug": "applecd-sc",
+  "name": "AppleCD SC",
+  "productId": "apple-cd-sc",
+  "ourName": "AppleCD SC",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1991-06"
+ },
+ {
+  "slug": "applecolor-composite-monitor",
+  "name": "AppleColor Composite Monitor IIe / AppleColor Composite Monitor",
+  "productId": "apple-color-composite-monitor-iie",
+  "ourName": "AppleColor Composite Monitor IIe",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "applecolor-high-resolution-rgb",
+  "name": "AppleColor High-Resolution RGB",
+  "productId": "apple-color-high-resolution-rgb",
+  "ourName": "AppleColor High-Resolution RGB",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "applecolor-monitor-100",
+  "name": "AppleColor Monitor 100",
+  "productId": "apple-color-monitor-100",
+  "ourName": "AppleColor Monitor 100",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "applecolor-rgb-monitor",
+  "name": "AppleColor RGB Monitor",
+  "productId": "apple-color-rgb-monitor",
+  "ourName": "AppleColor RGB Monitor",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "appledesign-keyboard",
+  "name": "AppleDesign Keyboard",
+  "productId": "apple-keyboard-appledesign-1994",
+  "ourName": "AppleDesign Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "appledesign-powered-speakers-ii",
+  "name": "AppleDesign Powered Speakers II",
+  "productId": "apple-designed-powered-speakers-ii",
+  "ourName": "AppleDesign Powered Speakers II",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "appledesign-powered-speakers",
+  "name": "AppleDesign Powered Speakers",
+  "productId": "apple-designed-powered-speakers",
+  "ourName": "AppleDesign Powered Speakers",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "applevision-1710av",
+  "name": "AppleVision 1710AV",
+  "productId": "apple-applevision-1710av",
+  "ourName": "AppleVision 1710AV",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1997-08"
+ },
+ {
+  "slug": "applevision-1710",
+  "name": "AppleVision 1710",
+  "productId": "apple-applevision-1710",
+  "ourName": "AppleVision 1710",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1997-08"
+ },
+ {
+  "slug": "applevisioncolorsync-750av",
+  "name": "AppleVision/ColorSync 750AV",
+  "productId": "apple-applevision-750av",
+  "ourName": "AppleVision/ColorSync 750AV",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1997-11"
+ },
+ {
+  "slug": "applevisioncolorsync-750",
+  "name": "AppleVision/ColorSync 750",
+  "productId": "apple-applevision-750",
+  "ourName": "AppleVision/ColorSync 750",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1998-01"
+ },
+ {
+  "slug": "applevisioncolorsync-850av",
+  "name": "AppleVision/ColorSync 850AV",
+  "productId": "apple-applevision-850av",
+  "ourName": "AppleVision/ColorSync 850AV",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1997-11"
+ },
+ {
+  "slug": "applevisioncolorsync-850",
+  "name": "AppleVision/ColorSync 850",
+  "productId": "apple-applevision-850",
+  "ourName": "AppleVision/ColorSync 850",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1997-11"
+ },
+ {
+  "slug": "audiovision-14-display",
+  "name": "AudioVision 14 Display",
+  "productId": "apple-audiovision-14",
+  "ourName": "AudioVision 14 Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1995-10"
+ },
+ {
+  "slug": "cinema-display-20-dvi2005",
+  "name": "Cinema Display （20 英寸 DVI，2005 年末）",
+  "productId": "apple-cinema-display-20-dvi-2005",
+  "ourName": "Cinema Display (20 英寸 DVI, 2005 年末)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "cinema-display-20-dvi",
+  "name": "Cinema Display （20 英寸 DVI）",
+  "productId": "apple-cinema-display-20-dvi",
+  "ourName": "Cinema Display (20 英寸 DVI)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "cinema-display-23-dvi2005",
+  "name": "Cinema Display （23 英寸 DVI，2005 年末）",
+  "productId": "apple-cinema-display-23-dvi-2005",
+  "ourName": "Cinema Display (23 英寸 DVI, 2005 年末)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "cinema-display-23-dvi",
+  "name": "Cinema Display （23 英寸 DVI）",
+  "productId": "apple-cinema-display-23-dvi",
+  "ourName": "Cinema Display (23 英寸 DVI)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "cinema-display-30-dvi2005",
+  "name": "Cinema Display （30 英寸 DVI，2005 年末）",
+  "productId": "apple-cinema-display-30-dvi-2005",
+  "ourName": "Cinema Display (30 英寸 DVI, 2005 年末)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "cinema-display-30-dvi",
+  "name": "Cinema Display （30 英寸 DVI）",
+  "productId": "apple-cinema-display-30-dvi",
+  "ourName": "Cinema Display (30 英寸 DVI)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "colormonitor-iieiic",
+  "name": "ColorMonitor IIe/IIc",
+  "productId": "apple-colormonitor-iie-iic",
+  "ourName": "ColorMonitor IIe/IIc",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "colorsync-17-inch",
+  "name": "ColorSync 17-inch",
+  "productId": "apple-colorsync-17",
+  "ourName": "ColorSync 17-inch",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "colorsync-20-inch",
+  "name": "ColorSync 20-inch",
+  "productId": "apple-colorsync-20",
+  "ourName": "ColorSync 20-inch",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "disk-ii",
+  "name": "Disk II",
+  "productId": "apple-disk-ii",
+  "ourName": "Disk II",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1984-05"
+ },
+ {
+  "slug": "earphones",
+  "name": "Earphones (具有线控功能和麦克风)",
+  "productId": "apple-earphones-remote",
+  "ourName": "Earphones (具有线控功能和麦克风)",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2012-01"
+ },
+ {
+  "slug": "earpods-3-5mm-headphone-plug",
+  "name": "EarPods (3.5 毫米耳机插头)",
+  "productId": "apple-earpods-35",
+  "ourName": "EarPods (3.5 毫米耳机插头)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "earpods-lightning",
+  "name": "EarPods (闪电接头)",
+  "productId": "apple-earpods-lightning",
+  "ourName": "EarPods (闪电接头)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "earpods-usb-c",
+  "name": "EarPods (USB-C)",
+  "productId": "apple-earpods-usb-c",
+  "ourName": "EarPods (USB-C)",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "emac-1-0-ghz-g4",
+  "name": "eMac (1.0 GHz G4)",
+  "productId": "apple-emac-1ghz",
+  "ourName": "eMac (1.0 GHz G4)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "emac-2005",
+  "name": "eMac (2005 年)",
+  "productId": "apple-emac-2005",
+  "ourName": "eMac (2005 年)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "emac-ati-graphics",
+  "name": "eMac (ATI Graphics)",
+  "productId": "apple-emac-ati-graphics",
+  "ourName": "eMac (ATI Graphics)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "emac-usb-2-0",
+  "name": "eMac (USB 2.0)",
+  "productId": "apple-emac-usb2",
+  "ourName": "eMac (USB 2.0)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2004-01"
+ },
+ {
+  "slug": "emate-300",
+  "name": "eMate 300",
+  "productId": "apple-emate-300",
+  "ourName": "eMate 300",
+  "j": 1,
+  "cat": "pda",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "homepod-1",
+  "name": "HomePod (第 1 代)",
+  "productId": "apple-homepod-1",
+  "ourName": "HomePod（第 1 代）",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "homepod-2",
+  "name": "HomePod (第 2 代)",
+  "productId": "apple-homepod-2",
+  "ourName": "HomePod（第 2 代）",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "homepod-mini",
+  "name": "HomePod mini",
+  "productId": "apple-homepod-mini",
+  "ourName": "HomePod mini",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "ibook-12-16-vram",
+  "name": "iBook (12英寸 16 VRAM)",
+  "productId": "apple-ibook-12-16vram",
+  "ourName": "iBook (12 英寸 16 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-14-lcd-16-vram",
+  "name": "iBook (14英寸 LCD 16 VRAM)",
+  "productId": "apple-ibook-14-16vram",
+  "ourName": "iBook (14 英寸 LCD 16 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-14-lcd-32-vram",
+  "name": "iBook (14英寸 LCD 32 VRAM)",
+  "productId": "apple-ibook-14-32vram",
+  "ourName": "iBook (14 英寸 LCD 32 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-14-lcd-900-mhz-32-vram",
+  "name": "iBook (14英寸 LCD 900 MHz 32 VRAM)",
+  "productId": "apple-ibook-14-900",
+  "ourName": "iBook (14 英寸 LCD 900 MHz 32 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-14-lcd",
+  "name": "iBook (14英寸 LCD)",
+  "productId": "apple-ibook-14-2002",
+  "ourName": "iBook (14 英寸 LCD)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-2001",
+  "name": "iBook (2001年末)",
+  "productId": "apple-ibook-2001-late",
+  "ourName": "iBook (2001 年末)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-32-vram",
+  "name": "iBook (32 VRAM)",
+  "productId": "apple-ibook-32vram",
+  "ourName": "iBook (32 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-800900-mhz-32-vram",
+  "name": "iBook (800/900 MHz 32 VRAM)",
+  "productId": "apple-ibook-800-900",
+  "ourName": "iBook (800/900 MHz 32 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "ibook-opaque-16-vram",
+  "name": "iBook (Opaque 16 VRAM)",
+  "productId": "apple-ibook-opaque-16vram",
+  "ourName": "iBook (Opaque 16 VRAM)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "imac-15-2003",
+  "name": "iMac (15 英寸, 2003 年初)",
+  "productId": "apple-imac-g4-15-2003",
+  "ourName": "iMac (15 英寸, 2003 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-15-usb-2-0",
+  "name": "iMac (15 英寸, USB 2.0)",
+  "productId": "apple-imac-g4-15-usb2",
+  "ourName": "iMac (15 英寸, USB 2.0)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-17-2006-2",
+  "name": "iMac (17 英寸, 2006年中)",
+  "productId": "apple-imac-17-2006-late",
+  "ourName": "iMac (17 英寸, 2006 年末)",
+  "j": 1,
+  "fixed": true,
+  "cat": "desktop",
+  "merge": true
+ },
+ {
+  "slug": "imac-17-2006-cd",
+  "name": "iMac (17 英寸, 2006 年末 CD)",
+  "productId": "apple-imac-17-2006-cd",
+  "ourName": "iMac (17 英寸, 2006 年末 CD)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-17-flat-panel-1ghz",
+  "name": "iMac (17 英寸, Flat Panel, 1GHz)",
+  "productId": "apple-imac-g4-17-1ghz",
+  "ourName": "iMac (17 英寸, Flat Panel, 1GHz)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-17-usb-2-0",
+  "name": "iMac (17 英寸, USB 2.0)",
+  "productId": "apple-imac-g4-17-usb2",
+  "ourName": "iMac (17 英寸, USB 2.0)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-20-2006-2",
+  "name": "iMac (20 英寸, 2006 年初)",
+  "productId": "apple-imac-20-2006-early",
+  "ourName": "iMac (20 英寸, 2006 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-20-2007",
+  "name": "iMac (20 英寸, 2007 年中)",
+  "productId": "apple-imac-20-2007",
+  "ourName": "iMac (20 英寸, 2007 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-20-2008",
+  "name": "iMac (20 英寸, 2008 年初)",
+  "productId": "apple-imac-20-2008-early",
+  "ourName": "iMac (20 英寸, 2008 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-20-2009-2",
+  "name": "iMac (20 英寸, 2009 年初)",
+  "productId": "apple-imac-20-2009-early",
+  "ourName": "iMac (20 英寸, 2009 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-20-usb-2-0",
+  "name": "iMac (20 英寸, USB 2.0)",
+  "productId": "apple-imac-g4-20-usb2",
+  "ourName": "iMac (20 英寸, USB 2.0)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-21-5-2010",
+  "name": "iMac (21.5 英寸, 2010 年中)",
+  "productId": "apple-imac-21-5-2010",
+  "ourName": "iMac (21.5 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-21-5-2012",
+  "name": "iMac (21.5 英寸, 2012 年末)",
+  "productId": "apple-imac-21-5-2012",
+  "ourName": "iMac 21.5 英寸（2012 超薄）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-21-5-2014",
+  "name": "iMac (21.5 英寸, 2014 年中)",
+  "productId": "apple-imac-215-2014-mid",
+  "ourName": "iMac (21.5 英寸, 2014 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-4k-21-5-2015",
+  "name": "iMac (Retina 4K, 21.5 英寸, 2015 年末)",
+  "productId": "apple-imac-4k-2015",
+  "ourName": "iMac (21.5 英寸 4K，2015 年末)",
+  "j": 0.8,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-21-5-2017",
+  "name": "iMac (21.5 英寸, 2017 年)",
+  "productId": "apple-imac-215-2017",
+  "ourName": "iMac (21.5 英寸, 2017)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-24-2006",
+  "name": "iMac (24 英寸, 2006 年末)",
+  "productId": "apple-imac-24-2006-late",
+  "ourName": "iMac (24 英寸, 2006 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-24-2007",
+  "name": "iMac (24 英寸, 2007 年中)",
+  "productId": "apple-imac-24-2007",
+  "ourName": "iMac 24 英寸（2007 铝金属）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-24-2008",
+  "name": "iMac (24 英寸, 2008 年初)",
+  "productId": "apple-imac-24-2008-early",
+  "ourName": "iMac (24 英寸, 2008 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-24-2009",
+  "name": "iMac (24 英寸, 2009 年初)",
+  "productId": "apple-imac-24-2009-early",
+  "ourName": "iMac (24 英寸, 2009 年初)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-27-2009",
+  "name": "iMac (27 英寸, 2009 年末)",
+  "productId": "apple-imac-27-2009-late",
+  "ourName": "iMac 27 英寸（2009 年末）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-27-2010",
+  "name": "iMac (27 英寸, 2010 年中)",
+  "productId": "apple-imac-27-2010",
+  "ourName": "iMac (27 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-27-2011",
+  "name": "iMac (27 英寸, 2011 年中)",
+  "productId": "apple-imac-27-2011",
+  "ourName": "iMac (27 英寸, 2011 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-27-2012",
+  "name": "iMac (27 英寸, 2012 年末)",
+  "productId": "apple-imac-27-2012-late",
+  "ourName": "iMac (27 英寸, 2012 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-27-2013",
+  "name": "iMac (27 英寸, 2013 年末)",
+  "productId": "apple-imac-27-2013-late",
+  "ourName": "iMac (27 英寸, 2013 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-early-2001",
+  "name": "iMac (Early 2001)",
+  "productId": "apple-imac-early-2001",
+  "ourName": "iMac (Early 2001)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-g5-20-2",
+  "name": "iMac G5 (20 英寸)",
+  "productId": "apple-imac-g5-20",
+  "ourName": "iMac G5 (20 英寸)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-pro",
+  "name": "iMac Pro (2017 年)",
+  "productId": "apple-imac-pro-2017",
+  "ourName": "iMac Pro (2017)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-4k-21-5-2017",
+  "name": "iMac (Retina 4K, 21.5 英寸, 2017 年)",
+  "productId": "apple-imac-21-5-4k-2017",
+  "ourName": "iMac 21.5 英寸（4K，2017）",
+  "j": 0.8,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-4k-21-5-2019",
+  "name": "iMac (Retina 4K, 21.5 英寸, 2019 年)",
+  "productId": "apple-imac-retina-4k-2019",
+  "ourName": "iMac (Retina 4K, 21.5 英寸, 2019)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-5k-27-2014",
+  "name": "iMac (Retina 5K, 27 英寸, 2014 年末)",
+  "productId": "apple-imac-27-5k-2014",
+  "ourName": "iMac 27 英寸（Retina 5K，2014）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-5k-27-2015-2",
+  "name": "iMac (Retina 5K, 27 英寸, 2015 年中)",
+  "productId": "apple-imac-retina-5k-2015-mid",
+  "ourName": "iMac (Retina 5K, 27 英寸, 2015 年中)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-5k-27-2017",
+  "name": "iMac (Retina 5K, 27 英寸, 2017 年)",
+  "productId": "apple-imac-retina-5k-2017",
+  "ourName": "iMac (Retina 5K, 27 英寸, 2017)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-5k-27-2019",
+  "name": "iMac (Retina 5K, 27 英寸, 2019 年)",
+  "productId": "apple-imac-retina-5k-27-2019",
+  "ourName": "iMac (Retina 5K, 27 英寸, 2019 年)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-retina-5k-27-2020",
+  "name": "iMac (Retina 5K, 27 英寸, 2020 年)",
+  "productId": "apple-imac-27-5k-2020",
+  "ourName": "iMac 27 英寸（Retina 5K，2020）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "imac-summer-2001",
+  "name": "iMac (Summer 2001)",
+  "productId": "apple-imac-summer-2001",
+  "ourName": "iMac (Summer 2001)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "in-ear-headphones",
+  "name": "In-Ear Headphones (具有线控功能和麦克风)",
+  "productId": "apple-in-ear-headphones-remote",
+  "ourName": "In-Ear Headphones (具有线控功能和麦克风)",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2016-01"
+ },
+ {
+  "slug": "ipad-10",
+  "name": "iPad (第 10 代)",
+  "productId": "apple-ipad-10",
+  "ourName": "iPad（第 10 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-2",
+  "name": "iPad 2",
+  "productId": "apple-ipad-2",
+  "ourName": "iPad（第 2 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-3",
+  "name": "iPad (第 3 代)",
+  "productId": "apple-ipad-3",
+  "ourName": "iPad（第 3 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-4",
+  "name": "iPad (第 4 代)",
+  "productId": "apple-ipad-4",
+  "ourName": "iPad（第 4 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-5",
+  "name": "iPad (第 5 代)",
+  "productId": "apple-ipad-5",
+  "ourName": "iPad（第 5 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-6",
+  "name": "iPad (第 6 代)",
+  "productId": "apple-ipad-6",
+  "ourName": "iPad（第 6 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-7",
+  "name": "iPad (第 7 代)",
+  "productId": "apple-ipad-7",
+  "ourName": "iPad（第 7 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-8",
+  "name": "iPad (第 8 代)",
+  "productId": "apple-ipad-8",
+  "ourName": "iPad（第 8 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-9",
+  "name": "iPad (第 9 代)",
+  "productId": "apple-ipad-9",
+  "ourName": "iPad（第 9 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-a16",
+  "name": "iPad (A16)",
+  "productId": "apple-ipad-a16",
+  "ourName": "iPad (A16)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-11-m2",
+  "name": "iPad Air 11 英寸 (M2)",
+  "productId": "apple-ipad-air-6-11",
+  "ourName": "iPad Air 11 英寸 (M2)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-11-m3",
+  "name": "iPad Air 11 英寸 (M3)",
+  "productId": "apple-ipad-air-7-11",
+  "ourName": "iPad Air 11 英寸 (M3)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-11-m4",
+  "name": "iPad Air 11 英寸 (M4)",
+  "productId": "apple-ipad-air-8-11",
+  "ourName": "iPad Air 11 英寸 (M4)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-13-m2",
+  "name": "iPad Air 13 英寸 (M2)",
+  "productId": "apple-ipad-air-6-13",
+  "ourName": "iPad Air 13 英寸 (M2)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-13-m3",
+  "name": "iPad Air 13 英寸 (M3)",
+  "productId": "apple-ipad-air-7-13",
+  "ourName": "iPad Air 13 英寸 (M3)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-13-m4",
+  "name": "iPad Air 13 英寸 (M4)",
+  "productId": "apple-ipad-air-8-13",
+  "ourName": "iPad Air 13 英寸 (M4)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-1",
+  "name": "iPad Air (第 1 代)",
+  "productId": "apple-ipad-air-1",
+  "ourName": "iPad Air（第 1 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-2",
+  "name": "iPad Air (第 2 代)",
+  "productId": "apple-ipad-air-2",
+  "ourName": "iPad Air（第 2 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-3",
+  "name": "iPad Air (第 3 代)",
+  "productId": "apple-ipad-air-3",
+  "ourName": "iPad Air（第 3 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-4",
+  "name": "iPad Air (第 4 代)",
+  "productId": "apple-ipad-air-4",
+  "ourName": "iPad Air（第 4 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-air-5",
+  "name": "iPad Air (第 5 代)",
+  "productId": "apple-ipad-air-5",
+  "ourName": "iPad Air（第 5 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-keyboard-dock",
+  "name": "iPad 键盘式底座",
+  "productId": "apple-ipad-keyboard-dock",
+  "ourName": "iPad 键盘式底座",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "ipad-mini-2",
+  "name": "iPad mini 2",
+  "productId": "apple-ipad-mini-2",
+  "ourName": "iPad mini（第 2 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-mini-3",
+  "name": "iPad mini 3",
+  "productId": "apple-ipad-mini-3",
+  "ourName": "iPad mini（第 3 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-mini-4",
+  "name": "iPad mini 4",
+  "productId": "apple-ipad-mini-4",
+  "ourName": "iPad mini（第 4 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-mini-5",
+  "name": "iPad mini (第 5 代)",
+  "productId": "apple-ipad-mini-5",
+  "ourName": "iPad mini（第 5 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-mini-6",
+  "name": "iPad mini (第 6 代)",
+  "productId": "apple-ipad-mini-6",
+  "ourName": "iPad mini（第 6 代）",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "magic-keyboard-for-ipad-pro",
+  "name": "妙控键盘 (适用于 iPad Pro)",
+  "productId": "apple-magic-keyboard-ipad-pro",
+  "ourName": "妙控键盘 (适用于 iPad Pro)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "ipad-pro-11-1",
+  "name": "iPad Pro 11 英寸 (第 1 代)",
+  "productId": "apple-ipad-pro-11-1",
+  "ourName": "iPad Pro (11 英寸，第 1 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-11-2",
+  "name": "iPad Pro 11 英寸 (第 2 代)",
+  "productId": "apple-ipad-pro-11-2",
+  "ourName": "iPad Pro (11 英寸，第 2 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-11-3",
+  "name": "iPad Pro 11 英寸 (第 3 代)",
+  "productId": "apple-ipad-pro-11-3",
+  "ourName": "iPad Pro (11 英寸，第 3 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-11-4",
+  "name": "iPad Pro 11 英寸 (第 4 代)",
+  "productId": "apple-ipad-pro-11-4",
+  "ourName": "iPad Pro (11 英寸，第 4 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-11-m4",
+  "name": "iPad Pro 11 英寸 (M4)",
+  "productId": "apple-ipad-pro-11-5",
+  "ourName": "iPad Pro 11 英寸 (M4)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-11-m5",
+  "name": "iPad Pro 11 英寸 (M5)",
+  "productId": "apple-ipad-pro-11-6",
+  "ourName": "iPad Pro 11 英寸 (M5)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-1",
+  "name": "iPad Pro 12.9 英寸 (第 1 代)",
+  "productId": "apple-ipad-pro-12-9-1",
+  "ourName": "iPad Pro (12.9 英寸，第 1 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-2",
+  "name": "iPad Pro 12.9 英寸 (第 2 代)",
+  "productId": "apple-ipad-pro-12-9-2",
+  "ourName": "iPad Pro (12.9 英寸，第 2 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-3",
+  "name": "iPad Pro 12.9 英寸 (第 3 代)",
+  "productId": "apple-ipad-pro-12-9-3",
+  "ourName": "iPad Pro (12.9 英寸，第 3 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-4",
+  "name": "iPad Pro 12.9 英寸 (第 4 代)",
+  "productId": "apple-ipad-pro-12-9-4",
+  "ourName": "iPad Pro (12.9 英寸，第 4 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-5",
+  "name": "iPad Pro 12.9 英寸 (第 5 代)",
+  "productId": "apple-ipad-pro-12-9-5",
+  "ourName": "iPad Pro (12.9 英寸，第 5 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-12-9-6",
+  "name": "iPad Pro 12.9 英寸 (第 6 代)",
+  "productId": "apple-ipad-pro-12-9-6",
+  "ourName": "iPad Pro (12.9 英寸，第 6 代)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-13-m4",
+  "name": "iPad Pro 13 英寸 (M4)",
+  "productId": "apple-ipad-pro-13-5",
+  "ourName": "iPad Pro 13 英寸 (M4)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-13-m5",
+  "name": "iPad Pro 13 英寸 (M5)",
+  "productId": "apple-ipad-pro-13-6",
+  "ourName": "iPad Pro 13 英寸 (M5)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "ipad-pro-9-7",
+  "name": "iPad Pro 9.7 英寸",
+  "productId": "apple-ipad-pro-9-7",
+  "ourName": "iPad Pro (9.7 英寸)",
+  "j": 1,
+  "cat": "tablet"
+ },
+ {
+  "slug": "iphone-11-pro-max",
+  "name": "iPhone 11 Pro Max",
+  "productId": "apple-iphone-11-pro-max",
+  "ourName": "iPhone 11 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-11-pro",
+  "name": "iPhone 11 Pro",
+  "productId": "apple-iphone-11-pro",
+  "ourName": "iPhone 11 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-11",
+  "name": "iPhone 11",
+  "productId": "apple-iphone-11",
+  "ourName": "iPhone 11",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-12-mini",
+  "name": "iPhone 12 mini",
+  "productId": "apple-iphone-12-mini",
+  "ourName": "iPhone 12 mini",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-12-pro-max",
+  "name": "iPhone 12 Pro Max",
+  "productId": "apple-iphone-12-pro-max",
+  "ourName": "iPhone 12 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-12-pro",
+  "name": "iPhone 12 Pro",
+  "productId": "apple-iphone-12-pro",
+  "ourName": "iPhone 12 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-12",
+  "name": "iPhone 12",
+  "productId": "apple-iphone-12",
+  "ourName": "iPhone 12",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-13-mini",
+  "name": "iPhone 13 mini",
+  "productId": "apple-iphone-13-mini",
+  "ourName": "iPhone 13 mini",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-13-pro-max",
+  "name": "iPhone 13 Pro Max",
+  "productId": "apple-iphone-13-pro-max",
+  "ourName": "iPhone 13 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-13-pro",
+  "name": "iPhone 13 Pro",
+  "productId": "apple-iphone-13-pro",
+  "ourName": "iPhone 13 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-13",
+  "name": "iPhone 13",
+  "productId": "apple-iphone-13",
+  "ourName": "iPhone 13",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-14-plus",
+  "name": "iPhone 14 Plus",
+  "productId": "apple-iphone-14-plus",
+  "ourName": "iPhone 14 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-14-pro-max",
+  "name": "iPhone 14 Pro Max",
+  "productId": "apple-iphone-14-pro-max",
+  "ourName": "iPhone 14 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-14-pro",
+  "name": "iPhone 14 Pro",
+  "productId": "apple-iphone-14-pro",
+  "ourName": "iPhone 14 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-14",
+  "name": "iPhone 14",
+  "productId": "apple-iphone-14",
+  "ourName": "iPhone 14",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-15-plus",
+  "name": "iPhone 15 Plus",
+  "productId": "apple-iphone-15-plus",
+  "ourName": "iPhone 15 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-15-pro-max",
+  "name": "iPhone 15 Pro Max",
+  "productId": "apple-iphone-15-pro-max",
+  "ourName": "iPhone 15 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-15-pro",
+  "name": "iPhone 15 Pro",
+  "productId": "apple-iphone-15-pro",
+  "ourName": "iPhone 15 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-15",
+  "name": "iPhone 15",
+  "productId": "apple-iphone-15",
+  "ourName": "iPhone 15",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-16-plus",
+  "name": "iPhone 16 Plus",
+  "productId": "apple-iphone-16-plus",
+  "ourName": "iPhone 16 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-16-pro-max",
+  "name": "iPhone 16 Pro Max",
+  "productId": "apple-iphone-16-pro-max",
+  "ourName": "iPhone 16 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-16-pro",
+  "name": "iPhone 16 Pro",
+  "productId": "apple-iphone-16-pro",
+  "ourName": "iPhone 16 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-16e",
+  "name": "iPhone 16e",
+  "productId": "apple-iphone-16e",
+  "ourName": "iPhone 16e",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-16",
+  "name": "iPhone 16",
+  "productId": "apple-iphone-16",
+  "ourName": "iPhone 16",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-17-pro-max",
+  "name": "iPhone 17 Pro Max",
+  "productId": "apple-iphone-17-pro-max",
+  "ourName": "iPhone 17 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-17-pro",
+  "name": "iPhone 17 Pro",
+  "productId": "apple-iphone-17-pro",
+  "ourName": "iPhone 17 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-17e",
+  "name": "iPhone 17e",
+  "productId": "apple-iphone-17e",
+  "ourName": "iPhone 17e",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-17",
+  "name": "iPhone 17",
+  "productId": "apple-iphone-17",
+  "ourName": "iPhone 17",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-18-pro-max",
+  "name": "iPhone 18 Pro Max",
+  "productId": "apple-iphone-18-pro-max",
+  "ourName": "iPhone 18 Pro Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-18-pro",
+  "name": "iPhone 18 Pro",
+  "productId": "apple-iphone-18-pro",
+  "ourName": "iPhone 18 Pro",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-3gs",
+  "name": "iPhone 3GS",
+  "productId": "apple-iphone-3gs",
+  "ourName": "iPhone 3GS",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-3g",
+  "name": "iPhone 3G",
+  "productId": "apple-iphone-3g",
+  "ourName": "iPhone 3G",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-4s",
+  "name": "iPhone 4s",
+  "productId": "apple-iphone-4s",
+  "ourName": "iPhone 4S",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-4",
+  "name": "iPhone 4",
+  "productId": "apple-iphone-4",
+  "ourName": "iPhone 4",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-5c",
+  "name": "iPhone 5c",
+  "productId": "apple-iphone-5c",
+  "ourName": "iPhone 5c",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-5s",
+  "name": "iPhone 5s",
+  "productId": "apple-iphone-5s",
+  "ourName": "iPhone 5s",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-5",
+  "name": "iPhone 5",
+  "productId": "apple-iphone-5",
+  "ourName": "iPhone 5",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-6-plus",
+  "name": "iPhone 6 Plus",
+  "productId": "apple-iphone-6-plus",
+  "ourName": "iPhone 6 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-6s-plus",
+  "name": "iPhone 6s Plus",
+  "productId": "apple-iphone-6s-plus",
+  "ourName": "iPhone 6s Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-6s",
+  "name": "iPhone 6s",
+  "productId": "apple-iphone-6s",
+  "ourName": "iPhone 6s",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-6",
+  "name": "iPhone 6",
+  "productId": "apple-iphone-6",
+  "ourName": "iPhone 6",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-7-plus",
+  "name": "iPhone 7 Plus",
+  "productId": "apple-iphone-7-plus",
+  "ourName": "iPhone 7 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-7",
+  "name": "iPhone 7",
+  "productId": "apple-iphone-7",
+  "ourName": "iPhone 7",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-8-plus",
+  "name": "iPhone 8 Plus",
+  "productId": "apple-iphone-8-plus",
+  "ourName": "iPhone 8 Plus",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-8",
+  "name": "iPhone 8",
+  "productId": "apple-iphone-8",
+  "ourName": "iPhone 8",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-air",
+  "name": "iPhone Air",
+  "productId": "apple-iphone-air",
+  "ourName": "iPhone Air",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-bluetooth-headset",
+  "name": "iPhone Bluetooth Headset",
+  "productId": "apple-iphone-bluetooth-headset",
+  "ourName": "iPhone Bluetooth Headset",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2009-03"
+ },
+ {
+  "slug": "iphone-duo",
+  "name": "iPhone Duo",
+  "productId": "apple-iphone-duo",
+  "ourName": "iPhone Duo",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-se-2",
+  "name": "iPhone SE (第 2 代)",
+  "productId": "apple-iphone-se-2",
+  "ourName": "iPhone SE (第 2 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-se-3",
+  "name": "iPhone SE (第 3 代)",
+  "productId": "apple-iphone-se-3",
+  "ourName": "iPhone SE (第 3 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-stereo-headset",
+  "name": "iPhone Stereo Headset",
+  "productId": "apple-iphone-stereo-headset",
+  "ourName": "iPhone Stereo Headset",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2009-01"
+ },
+ {
+  "slug": "iphone-xr",
+  "name": "iPhone XR",
+  "productId": "apple-iphone-xr",
+  "ourName": "iPhone XR",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-xs-max",
+  "name": "iPhone XS Max",
+  "productId": "apple-iphone-xs-max",
+  "ourName": "iPhone XS Max",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-xs",
+  "name": "iPhone XS",
+  "productId": "apple-iphone-xs",
+  "ourName": "iPhone XS",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone-x",
+  "name": "iPhone X",
+  "productId": "apple-iphone-x",
+  "ourName": "iPhone X",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "iphone",
+  "name": "iPhone",
+  "productId": "apple-iphone-1",
+  "ourName": "iPhone",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-2",
+  "name": "iPod (基座接口)",
+  "productId": "apple-ipod-click-wheel",
+  "ourName": "iPod (点按式转盘)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2004-07"
+ },
+ {
+  "slug": "ipod-4",
+  "name": "iPod (彩屏版) (第4代)",
+  "productId": "apple-ipod-color-4th",
+  "ourName": "iPod (彩屏版) (第 4 代)",
+  "j": 1,
+  "cat": "media",
+  "reassigned": true,
+  "pageDate": "2005-10"
+ },
+ {
+  "slug": "ipod-5-2006",
+  "name": "iPod (第5代) (2006年末)",
+  "productId": "apple-ipod-5-late-2006",
+  "ourName": "iPod (第 5 代，2006 年末)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2007-09"
+ },
+ {
+  "slug": "ipod-5-u2",
+  "name": "iPod (第5代 U2特别版)",
+  "productId": "apple-ipod-u2-5g-2006",
+  "ourName": "iPod (第 5 代 U2 特别版)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2007-09"
+ },
+ {
+  "slug": "ipod-5",
+  "name": "iPod (第5代)",
+  "productId": "apple-ipod-5-video",
+  "ourName": "iPod (第 5 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2006-09"
+ },
+ {
+  "slug": "ipod-classic-120gb",
+  "name": "iPod classic (120GB)",
+  "productId": "apple-ipod-classic-2008",
+  "ourName": "iPod classic (120GB)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2009-09"
+ },
+ {
+  "slug": "ipod-classic-160gb",
+  "name": "iPod classic 160GB (2009年末)",
+  "productId": "apple-ipod-classic-2009",
+  "ourName": "iPod classic (160GB，2009 年末)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2014-09"
+ },
+ {
+  "slug": "ipod-classic",
+  "name": "iPod classic",
+  "productId": "apple-ipod-classic-2007",
+  "ourName": "iPod classic",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2008-09"
+ },
+ {
+  "slug": "ipod-earphones",
+  "name": "iPod Earphones",
+  "productId": "apple-ipod-earphones",
+  "ourName": "iPod Earphones",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2012-01"
+ },
+ {
+  "slug": "ipod-hi-fi",
+  "name": "iPod Hi-Fi",
+  "productId": "apple-ipod-hi-fi",
+  "ourName": "iPod Hi-Fi",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2007-09"
+ },
+ {
+  "slug": "ipod-in-ear-headphones",
+  "name": "iPod In-Ear Headphones",
+  "productId": "apple-ipod-in-ear-headphones",
+  "ourName": "iPod In-Ear Headphones",
+  "j": 1,
+  "cat": "audio",
+  "pageDate": "2008-01"
+ },
+ {
+  "slug": "ipod-mini-2",
+  "name": "iPod mini (第2代)",
+  "productId": "apple-ipod-mini-2",
+  "ourName": "iPod mini (第 2 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2005-09"
+ },
+ {
+  "slug": "ipod-nano-1",
+  "name": "iPod nano (第1代)",
+  "productId": "apple-ipod-nano-1",
+  "ourName": "iPod nano (第 1 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2006-02"
+ },
+ {
+  "slug": "ipod-nano-2",
+  "name": "iPod nano (第2代)",
+  "productId": "apple-ipod-nano-2",
+  "ourName": "iPod nano (第 2 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2007-09"
+ },
+ {
+  "slug": "ipod-nano-3",
+  "name": "iPod nano (第3代)",
+  "productId": "apple-ipod-nano-3",
+  "ourName": "iPod nano (第 3 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2008-09"
+ },
+ {
+  "slug": "ipod-nano-4",
+  "name": "iPod nano (第4代)",
+  "productId": "apple-ipod-nano-4",
+  "ourName": "iPod nano (第 4 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2009-09"
+ },
+ {
+  "slug": "ipod-nano-5",
+  "name": "iPod nano (第5代)",
+  "productId": "apple-ipod-nano-5",
+  "ourName": "iPod nano (第 5 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2010-09"
+ },
+ {
+  "slug": "ipod-nano-6",
+  "name": "iPod nano (第6代)",
+  "productId": "apple-ipod-nano-6",
+  "ourName": "iPod nano (第 6 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2012-09"
+ },
+ {
+  "slug": "ipod-nano-7-2015",
+  "name": "iPod nano (第7代) (2015年中)",
+  "productId": "apple-ipod-nano-7th-2015",
+  "ourName": "iPod nano (第 7 代, 2015 年中)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2017-07"
+ },
+ {
+  "slug": "ipod-nano-7",
+  "name": "iPod nano (第7代)",
+  "productId": "apple-ipod-nano-7",
+  "ourName": "iPod nano (第 7 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2015-07"
+ },
+ {
+  "slug": "ipod-photo",
+  "name": "iPod photo",
+  "productId": "apple-ipod-photo-2004",
+  "ourName": "iPod photo",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2005-06"
+ },
+ {
+  "slug": "ipod-shuffle-1",
+  "name": "iPod shuffle (第1代)",
+  "productId": "apple-ipod-shuffle-1",
+  "ourName": "iPod shuffle (第 1 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2006-09"
+ },
+ {
+  "slug": "ipod-shuffle-2-2007",
+  "name": "iPod shuffle (第2代) (2007年末)",
+  "productId": "apple-ipod-shuffle-2nd-2007",
+  "ourName": "iPod shuffle (第 2 代, 2007 年末)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2008-09"
+ },
+ {
+  "slug": "ipod-shuffle-2-2008",
+  "name": "iPod shuffle (第2代) (2008年末)",
+  "productId": "apple-ipod-shuffle-2nd-2008",
+  "ourName": "iPod shuffle (第 2 代, 2008 年末)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2009-03"
+ },
+ {
+  "slug": "ipod-shuffle-2",
+  "name": "iPod shuffle (第2代)",
+  "productId": "apple-ipod-shuffle-2",
+  "ourName": "iPod shuffle (第 2 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2007-09"
+ },
+ {
+  "slug": "ipod-shuffle-3",
+  "name": "iPod shuffle (第3代)",
+  "productId": "apple-ipod-shuffle-3",
+  "ourName": "iPod shuffle (第 3 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2009-09"
+ },
+ {
+  "slug": "ipod-shuffle-4-2012",
+  "name": "iPod shuffle (第4代) (2012年末)",
+  "productId": "apple-ipod-shuffle-4th-2012",
+  "ourName": "iPod shuffle (第 4 代, 2012 年末)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2015-07"
+ },
+ {
+  "slug": "ipod-shuffle-4-2015",
+  "name": "iPod shuffle (第4代) (2015年中)",
+  "productId": "apple-ipod-shuffle-4th-2015",
+  "ourName": "iPod shuffle (第 4 代, 2015 年中)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2017-07"
+ },
+ {
+  "slug": "ipod-shuffle-4",
+  "name": "iPod shuffle (第4代)",
+  "productId": "apple-ipod-shuffle-4",
+  "ourName": "iPod shuffle (第 4 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2015-07"
+ },
+ {
+  "slug": "ipod-touch-5",
+  "name": "iPod touch (第 5 代)",
+  "productId": "apple-ipod-touch-5",
+  "ourName": "iPod touch (第 5 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch-2",
+  "name": "iPod touch (第 2 代)",
+  "productId": "apple-ipod-touch-2",
+  "ourName": "iPod touch (第 2 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch-3",
+  "name": "iPod touch (第 3 代)",
+  "productId": "apple-ipod-touch-3",
+  "ourName": "iPod touch (第 3 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch-4",
+  "name": "iPod touch (第 4 代)",
+  "productId": "apple-ipod-touch-4",
+  "ourName": "iPod touch (第 4 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch-6",
+  "name": "iPod touch (第 6 代)",
+  "productId": "apple-ipod-touch-6",
+  "ourName": "iPod touch (第 6 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch-7",
+  "name": "iPod touch (第 7 代)",
+  "productId": "apple-ipod-touch-7",
+  "ourName": "iPod touch (第 7 代)",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-touch",
+  "name": "iPod touch",
+  "productId": "apple-ipod-touch-1",
+  "ourName": "iPod touch",
+  "j": 1,
+  "cat": "phone"
+ },
+ {
+  "slug": "ipod-u2-3",
+  "name": "iPod U2 特别版 (第3代)",
+  "productId": "apple-ipod-u2-3rd",
+  "ourName": "iPod U2 特别版 (第 3 代)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2005-06"
+ },
+ {
+  "slug": "ipod-u2",
+  "name": "iPod (U2 特别版 彩屏版)",
+  "productId": "apple-ipod-u2-2005",
+  "ourName": "iPod (U2 特别版 彩屏版)",
+  "j": 1,
+  "cat": "media",
+  "pageDate": "2005-10"
+ },
+ {
+  "slug": "led-cinema-display-24",
+  "name": "LED Cinema Display （24 英寸）",
+  "productId": "apple-led-cinema-display-24",
+  "ourName": "LED Cinema Display (24 英寸)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "mac-mini-2005",
+  "name": "Mac mini (2005年末)",
+  "productId": "apple-mac-mini-2005",
+  "ourName": "Mac mini（2005）",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "mac-mini-2006-2",
+  "name": "Mac mini (2006年初)",
+  "productId": "apple-mac-mini-2006",
+  "ourName": "Mac mini (Intel Core Duo)",
+  "j": 1,
+  "cat": "desktop",
+  "fixed": true
+ },
+ {
+  "slug": "mac-mini-2007",
+  "name": "Mac mini (2007 年中)",
+  "productId": "apple-mac-mini-2007",
+  "ourName": "Mac mini (2007 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2007-01"
+ },
+ {
+  "slug": "mac-mini-2009-2",
+  "name": "Mac mini (2009 年初)",
+  "productId": "apple-mac-mini-2009-early",
+  "ourName": "Mac mini (2009 年初)",
+  "j": 1,
+  "cat": "desktop",
+  "reassigned": true,
+  "pageDate": "2009-01"
+ },
+ {
+  "slug": "mac-mini-2011",
+  "name": "Mac mini (2011年中)",
+  "productId": "apple-mac-mini-2011",
+  "ourName": "Mac mini (2011 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2011-01"
+ },
+ {
+  "slug": "mac-mini-server-2012",
+  "name": "Mac mini Server (2012年末)",
+  "productId": "apple-mac-mini-server-2012",
+  "ourName": "Mac mini Server (2012 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "mac-mini-2014",
+  "name": "Mac mini (2014年末)",
+  "productId": "apple-mac-mini-2014",
+  "ourName": "Mac mini (2014 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "mac-mini-2018",
+  "name": "Mac mini (2018 年)",
+  "productId": "apple-mac-mini-2018",
+  "ourName": "Mac mini（2018）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "mac-mini-server-2009",
+  "name": "Mac mini Server (2009 年末)",
+  "productId": "apple-mac-mini-server-2009-late",
+  "ourName": "Mac mini Server (2009 年末)",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "mac-mini-server-2011",
+  "name": "Mac mini Server (2011年中)",
+  "productId": "apple-mac-mini-server-2011",
+  "ourName": "Mac mini Server (2011 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2011-01"
+ },
+ {
+  "slug": "mac-mini-server-mid-2010",
+  "name": "Mac mini Server (Mid 2010)",
+  "productId": "apple-mac-mini-server-2010",
+  "ourName": "Mac mini Server (2010 年中)",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "2010-01"
+ },
+ {
+  "slug": "mac-pro-2008",
+  "name": "Mac Pro (2008 年初)",
+  "productId": "apple-mac-pro-2008",
+  "ourName": "Mac Pro (2008 年初)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2008-01"
+ },
+ {
+  "slug": "mac-pro-2009",
+  "name": "Mac Pro (2009 年初)",
+  "productId": "apple-mac-pro-2009-early",
+  "ourName": "Mac Pro (2009 年初)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2009-01"
+ },
+ {
+  "slug": "mac-pro-2010",
+  "name": "Mac Pro (2010 年中)",
+  "productId": "apple-mac-pro-2010",
+  "ourName": "Mac Pro (2010 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2010-01"
+ },
+ {
+  "slug": "mac-pro-2012",
+  "name": "Mac Pro (2012 年中)",
+  "productId": "apple-mac-pro-2012",
+  "ourName": "Mac Pro (2012 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2012-01"
+ },
+ {
+  "slug": "mac-pro-2013",
+  "name": "Mac Pro (2013 年末)",
+  "productId": "apple-mac-pro-2013",
+  "ourName": "Mac Pro（2013 圆柱）",
+  "j": 1,
+  "cat": "desktop"
+ },
+ {
+  "slug": "mac-pro-2019-2",
+  "name": "Mac Pro (机架式, 2019 年)",
+  "productId": "apple-mac-pro-2019-rack",
+  "ourName": "Mac Pro（2019 机架式）",
+  "j": 1,
+  "cat": "desktop",
+  "fixed": true
+ },
+ {
+  "slug": "mac-pro-2023-2",
+  "name": "Mac Pro (机架式, 2023 年)",
+  "productId": "apple-mac-pro-2023-rack",
+  "ourName": "Mac Pro（2023 机架式）",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2023-01"
+ },
+ {
+  "slug": "mac-pro-server-2010",
+  "name": "Mac Pro Server (2010年中)",
+  "productId": "apple-mac-pro-server-2010",
+  "ourName": "Mac Pro Server (2010 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2010-01"
+ },
+ {
+  "slug": "mac-pro-server-2012",
+  "name": "Mac Pro Server (2012年中)",
+  "productId": "apple-mac-pro-server-2012",
+  "ourName": "Mac Pro Server (2012 年中)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2012-01"
+ },
+ {
+  "slug": "macbook-13-2006-2",
+  "name": "MacBook (13英寸, 2006年)",
+  "productId": "apple-macbook-13-2006-late",
+  "ourName": "MacBook (13 英寸, 2006 年末)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-13-2007-2",
+  "name": "MacBook (13英寸, 2007年中)",
+  "productId": "apple-macbook-13-2007-mid",
+  "ourName": "MacBook (13 英寸, 2007 年中)",
+  "j": 1,
+  "cat": "laptop",
+  "fixed": true
+ },
+ {
+  "slug": "macbook-13-2008-2",
+  "name": "MacBook (13英寸, 2008年末)",
+  "productId": "apple-macbook-13-2008-late",
+  "ourName": "MacBook (13 英寸, 2008 年末)",
+  "j": 1,
+  "cat": "laptop",
+  "fixed": true
+ },
+ {
+  "slug": "macbook-13-2009-2",
+  "name": "MacBook (13 英寸, 2009 年中)",
+  "productId": "apple-macbook-13-2009-mid",
+  "ourName": "MacBook (13 英寸, 2009 年中)",
+  "j": 1,
+  "cat": "laptop",
+  "fixed": true
+ },
+ {
+  "slug": "macbook-13-2010",
+  "name": "MacBook (13 英寸, 2010 年中)",
+  "productId": "apple-macbook-13-2010-mid",
+  "ourName": "MacBook (13 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2010",
+  "name": "MacBook Air (11 英寸, 2010 年末)",
+  "productId": "apple-macbook-air-11-2010-late",
+  "ourName": "MacBook Air (11 英寸, 2010 年末)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2011",
+  "name": "MacBook Air (11 英寸, 2011 年中)",
+  "productId": "apple-macbook-air-11-2011-mid",
+  "ourName": "MacBook Air (11 英寸, 2011 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2012",
+  "name": "MacBook Air (11 英寸, 2012 年中)",
+  "productId": "apple-macbook-air-11-2012-mid",
+  "ourName": "MacBook Air (11 英寸, 2012 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2013",
+  "name": "MacBook Air (11 英寸, 2013 年中)",
+  "productId": "apple-macbook-air-11-2013-mid",
+  "ourName": "MacBook Air (11 英寸, 2013 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2014",
+  "name": "MacBook Air (11 英寸, 2014 年初)",
+  "productId": "apple-macbook-air-11-2014-early",
+  "ourName": "MacBook Air (11 英寸, 2014 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-11-2015",
+  "name": "MacBook Air (11 英寸, 2015 年初)",
+  "productId": "apple-macbook-air-11-2015-early",
+  "ourName": "MacBook Air (11 英寸, 2015 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2010",
+  "name": "MacBook Air (13 英寸, 2010 年末)",
+  "productId": "apple-macbook-air-13-2010",
+  "ourName": "MacBook Air 13 英寸（2010）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2011",
+  "name": "MacBook Air (13 英寸, 2011 年中)",
+  "productId": "apple-macbook-air-2011",
+  "ourName": "MacBook Air 13 英寸 (2011 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2012",
+  "name": "MacBook Air (13 英寸, 2012 年中)",
+  "productId": "apple-macbook-air-2012",
+  "ourName": "MacBook Air 13 英寸 (2012 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2013",
+  "name": "MacBook Air (13 英寸, 2013 年中)",
+  "productId": "apple-macbook-air-2013",
+  "ourName": "MacBook Air 13 英寸 (2013 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2014",
+  "name": "MacBook Air (13 英寸, 2014 年初)",
+  "productId": "apple-macbook-air-13-2014-early",
+  "ourName": "MacBook Air (13 英寸, 2014 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2015",
+  "name": "MacBook Air (13 英寸, 2015 年初)",
+  "productId": "apple-macbook-air-2015",
+  "ourName": "MacBook Air 13 英寸 (2015 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2019",
+  "name": "MacBook Air (13 英寸, 2019 年)",
+  "productId": "apple-macbook-air-13-2019",
+  "ourName": "MacBook Air (13 英寸, 2019)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-2020",
+  "name": "MacBook Air (13 英寸, 2020 年)",
+  "productId": "apple-macbook-air-13-2020-intel",
+  "ourName": "MacBook Air (13 英寸, 2020)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-3-2017",
+  "name": "MacBook Air (13.3 英寸, 2017 年)",
+  "productId": "apple-macbook-air-13-2017",
+  "ourName": "MacBook Air (13.3 英寸, 2017)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-13-m5-2026",
+  "name": "MacBook Air (13 英寸, M5, 2026 年)",
+  "productId": "apple-macbook-air-13-m5-2026",
+  "ourName": "MacBook Air 13 英寸 (M5)",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-15-m5-2026",
+  "name": "MacBook Air (15 英寸, M5, 2026 年)",
+  "productId": "apple-macbook-air-15-m5-2026",
+  "ourName": "MacBook Air 15 英寸 (M5)",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-2008-2009",
+  "name": "MacBook Air (2008 年末/2009 年初)",
+  "productId": "apple-macbook-air-late2008",
+  "ourName": "MacBook Air (2008 年末/2009 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-retina-13-2018",
+  "name": "MacBook Air (Retina, 13 英寸, 2018 年)",
+  "productId": "apple-macbook-air-retina-2018",
+  "ourName": "MacBook Air 13 英寸（Retina，2018）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-air-superdrive",
+  "name": "MacBook Air SuperDrive",
+  "productId": "apple-macbook-air-superdrive",
+  "ourName": "MacBook Air SuperDrive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2012-06"
+ },
+ {
+  "slug": "macbook-pro-13-2009",
+  "name": "MacBook Pro (13英寸, 2009年中)",
+  "productId": "apple-macbook-pro-13-2009-mid",
+  "ourName": "MacBook Pro (13 英寸, 2009 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2010",
+  "name": "MacBook Pro (13英寸, 2010年中)",
+  "productId": "apple-macbook-pro-13-2010-mid",
+  "ourName": "MacBook Pro (13 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2011-2",
+  "name": "MacBook Pro (13英寸, 2011年初)",
+  "productId": "apple-macbook-pro-13-2011-early",
+  "ourName": "MacBook Pro (13 英寸, 2011 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2012",
+  "name": "MacBook Pro (13英寸, 2012年中)",
+  "productId": "apple-macbook-pro-13-2012-mid",
+  "ourName": "MacBook Pro (13 英寸, 2012 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2016-2",
+  "name": "MacBook Pro (13 英寸, 2016 年, 雷雳×2)",
+  "productId": "apple-macbook-pro-13-2016-tb2",
+  "ourName": "MacBook Pro (13 英寸, 2016, 雷雳×2)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2016-4",
+  "name": "MacBook Pro (13 英寸, 2016 年, 雷雳×4)",
+  "productId": "apple-macbook-pro-13-2016-4",
+  "ourName": "MacBook Pro (13 英寸, 2016 年, 雷雳×4)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2017-2",
+  "name": "MacBook Pro (13 英寸, 2017 年, 雷雳×2)",
+  "productId": "apple-macbook-pro-13-2017-tb2",
+  "ourName": "MacBook Pro (13 英寸, 2017, 雷雳×2)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2017-4",
+  "name": "MacBook Pro (13 英寸, 2017 年, 雷雳×4)",
+  "productId": "apple-macbook-pro-13-2017-tb4",
+  "ourName": "MacBook Pro (13 英寸, 2017, 雷雳×4)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2019-2",
+  "name": "MacBook Pro (13 英寸, 2019 年, 雷雳×2)",
+  "productId": "apple-macbook-pro-13-2019-tb2",
+  "ourName": "MacBook Pro (13 英寸, 2019, 雷雳×2)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2020-2",
+  "name": "MacBook Pro (13 英寸, 2020 年, 雷雳×2)",
+  "productId": "apple-macbook-pro-13-2020-tb2",
+  "ourName": "MacBook Pro (13 英寸, 2020, 雷雳×2)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-2020-4",
+  "name": "MacBook Pro (13 英寸, 2020 年, 雷雳×4)",
+  "productId": "apple-macbook-pro-13-2020-4",
+  "ourName": "MacBook Pro (13 英寸, 2020 年, 雷雳×4)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-m1-2020",
+  "name": "MacBook Pro (13 英寸, M1, 2020 年)",
+  "productId": "apple-macbook-pro-13-m1-2020",
+  "ourName": "MacBook Pro 13 英寸 (M1)",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-13-m2-2022",
+  "name": "MacBook Pro (13 英寸, M2, 2022 年)",
+  "productId": "apple-macbook-pro-13-m2-2022",
+  "ourName": "MacBook Pro (13 英寸, M2, 2022)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-14-2023",
+  "name": "MacBook Pro (14 英寸, 2023 年)",
+  "productId": "apple-macbook-pro-14-2023",
+  "ourName": "MacBook Pro (14 英寸, 2023)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-14-m4-promax-2024",
+  "name": "MacBook Pro (14 英寸, M4 Pro/Max, 2024 年)",
+  "productId": "apple-macbook-pro-14-m4-promax-2024",
+  "ourName": "MacBook Pro (14 英寸, M4 Pro/Max, 2024 年)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-14-m5-promax-2026",
+  "name": "MacBook Pro (14 英寸, M5 Pro/Max, 2026 年)",
+  "productId": "apple-macbook-pro-14-m5max-2026",
+  "ourName": "MacBook Pro 14 英寸 (M5 Max)",
+  "j": 0.83,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-14-m5",
+  "name": "MacBook Pro (14 英寸, M5)",
+  "productId": "apple-macbook-pro-14-m5-2025",
+  "ourName": "MacBook Pro 14 英寸 (M5)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2-53ghz-2009",
+  "name": "MacBook Pro (15英寸, 2.53GHz, 2009年中)",
+  "productId": "apple-macbook-pro-15-253-2009-mid",
+  "ourName": "MacBook Pro (15 英寸, 2.53GHz, 2009 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2006",
+  "name": "MacBook Pro (15英寸, 2006年初)",
+  "productId": "apple-macbook-pro-15-2006",
+  "ourName": "MacBook Pro 15 英寸（2006）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2007",
+  "name": "MacBook Pro (15英寸, 2007年中)",
+  "productId": "apple-macbook-pro-15-2007",
+  "ourName": "MacBook Pro 15 英寸 (2007 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2008-2",
+  "name": "MacBook Pro (15英寸, 2008年初)",
+  "productId": "apple-macbook-pro-15-2008-early",
+  "ourName": "MacBook Pro (15 英寸, 2008 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2010",
+  "name": "MacBook Pro (15英寸, 2010年中)",
+  "productId": "apple-macbook-pro-15-2010-mid",
+  "ourName": "MacBook Pro (15 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2011-2",
+  "name": "MacBook Pro (15英寸, 2011年初)",
+  "productId": "apple-macbook-pro-2011",
+  "ourName": "MacBook Pro 15 英寸 (2011 年初)",
+  "j": 1,
+  "cat": "laptop",
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-15-2012",
+  "name": "MacBook Pro (15英寸, 2012年中)",
+  "productId": "apple-macbook-pro-15-2012-mid",
+  "ourName": "MacBook Pro (15 英寸, 2012 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2017",
+  "name": "MacBook Pro (15 英寸, 2017 年)",
+  "productId": "apple-macbook-pro-15-2017",
+  "ourName": "MacBook Pro (15 英寸, 2017)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2018",
+  "name": "MacBook Pro (15 英寸, 2018 年)",
+  "productId": "apple-macbook-pro-15-2018",
+  "ourName": "MacBook Pro (15 英寸, 2018)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-2019",
+  "name": "MacBook Pro (15 英寸, 2019 年)",
+  "productId": "apple-macbook-pro-15-2019",
+  "ourName": "MacBook Pro (15 英寸, 2019)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-15-core-2-duo-2006",
+  "name": "MacBook Pro (15英寸, Core 2 Duo, 2006年)",
+  "productId": "apple-macbook-pro-15-c2d-2006",
+  "ourName": "MacBook Pro (15 英寸, Core 2 Duo, 2006)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-16-2019",
+  "name": "MacBook Pro (16 英寸, 2019 年)",
+  "productId": "apple-macbook-pro-16-2019",
+  "ourName": "MacBook Pro 16 英寸 (2019 年)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-16-2023-11",
+  "name": "MacBook Pro (16 英寸, 2023 年 11 月)",
+  "productId": "apple-macbook-pro-16-2023-11",
+  "ourName": "MacBook Pro (16 英寸, 2023 年 11 月)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-16-2023",
+  "name": "MacBook Pro (16 英寸, 2023 年)",
+  "productId": "apple-macbook-pro-16-2023",
+  "ourName": "MacBook Pro (16 英寸, 2023)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-16-2024",
+  "name": "MacBook Pro (16 英寸, 2024 年)",
+  "productId": "apple-macbook-pro-16-2024",
+  "ourName": "MacBook Pro (16 英寸, 2024)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-16-2026",
+  "name": "MacBook Pro (16 英寸, 2026 年)",
+  "productId": "apple-macbook-pro-16-2026",
+  "ourName": "MacBook Pro (16 英寸, 2026)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2006",
+  "name": "MacBook Pro (17英寸, 2006年)",
+  "productId": "apple-macbook-pro-17-2006",
+  "ourName": "MacBook Pro (17 英寸, 2006)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2007",
+  "name": "MacBook Pro (17英寸, 2007年中)",
+  "productId": "apple-macbook-pro-17-2007-mid",
+  "ourName": "MacBook Pro (17 英寸, 2007 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2008-2",
+  "name": "MacBook Pro (17英寸, 2008年初)",
+  "productId": "apple-macbook-pro-17-2008-early",
+  "ourName": "MacBook Pro (17 英寸, 2008 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2009-2",
+  "name": "MacBook Pro (17英寸, 2009年初)",
+  "productId": "apple-macbook-pro-17-2009-early",
+  "ourName": "MacBook Pro (17 英寸, 2009 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2010",
+  "name": "MacBook Pro (17英寸, 2010年中)",
+  "productId": "apple-macbook-pro-17-2010-mid",
+  "ourName": "MacBook Pro (17 英寸, 2010 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-2011-2",
+  "name": "MacBook Pro (17英寸, 2011年初)",
+  "productId": "apple-macbook-pro-17-2011-early",
+  "ourName": "MacBook Pro (17 英寸, 2011 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-17-core-2-duo-2006",
+  "name": "MacBook Pro (17英寸, Core 2 Duo, 2006年)",
+  "productId": "apple-macbook-pro-17-c2d-2006",
+  "ourName": "MacBook Pro (17 英寸, Core 2 Duo, 2006)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-13-2012",
+  "name": "MacBook Pro (Retina, 13 英寸, 2012 年末)",
+  "productId": "apple-macbook-pro-13-retina-2012-late",
+  "ourName": "MacBook Pro (Retina, 13 英寸, 2012 年末)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-13-2013-2",
+  "name": "MacBook Pro (Retina, 13 英寸, 2013 年初)",
+  "productId": "apple-macbook-pro-13-retina-2013-early",
+  "ourName": "MacBook Pro (Retina, 13 英寸, 2013 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-13-2015",
+  "name": "MacBook Pro (Retina, 13 英寸, 2015 年初)",
+  "productId": "apple-macbook-pro-retina-2015",
+  "ourName": "MacBook Pro 13 英寸 (Retina，2015 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-15-2012",
+  "name": "MacBook Pro (Retina, 15英寸, 2012年中)",
+  "productId": "apple-macbook-pro-15-retina-2012",
+  "ourName": "MacBook Pro 15 英寸（Retina，2012）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-15-2013-2",
+  "name": "MacBook Pro (Retina, 15 英寸, 2013 年初)",
+  "productId": "apple-macbook-pro-15-retina-2013-early",
+  "ourName": "MacBook Pro (Retina, 15 英寸, 2013 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-15-2014",
+  "name": "MacBook Pro (Retina, 15 英寸, 2014 年中)",
+  "productId": "apple-macbook-pro-retina-2014",
+  "ourName": "MacBook Pro 15 英寸 (Retina，2014 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-pro-retina-15-2015",
+  "name": "MacBook Pro (Retina, 15 英寸, 2015 年中)",
+  "productId": "apple-macbook-pro-15-retina-2015-mid",
+  "ourName": "MacBook Pro (Retina, 15 英寸, 2015 年中)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-retina-12-2016",
+  "name": "MacBook (Retina, 12 英寸, 2016 年)",
+  "productId": "apple-macbook-12-retina-2016",
+  "ourName": "MacBook（Retina，12 英寸，2016 年初）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-retina-12-2017",
+  "name": "MacBook (Retina, 12 英寸, 2017 年)",
+  "productId": "apple-macbook-12-retina-2017",
+  "ourName": "MacBook（Retina，12 英寸，2017 年）",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-12-inch-monochrome",
+  "name": "Macintosh 12-inch Monochrome",
+  "productId": "apple-macintosh-12inch-monochrome",
+  "ourName": "Macintosh 12-inch Monochrome",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1993-10"
+ },
+ {
+  "slug": "macintosh-12-inch-rgb",
+  "name": "Macintosh 12-inch RGB",
+  "productId": "apple-macintosh-12inch-rgb",
+  "ourName": "Macintosh 12-inch RGB",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1993-03"
+ },
+ {
+  "slug": "macintosh-16-inch-color",
+  "name": "Macintosh 16-inch Color",
+  "productId": "apple-macintosh-16-inch-color",
+  "ourName": "Macintosh 16-inch Color",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1994-04"
+ },
+ {
+  "slug": "macintosh-21-inch-color",
+  "name": "Macintosh 21-inch Color",
+  "productId": "apple-macintosh-21inch-color",
+  "ourName": "Macintosh 21-inch Color",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1994-03"
+ },
+ {
+  "slug": "macintosh-400k-external-drive",
+  "name": "Macintosh 400K External Drive",
+  "productId": "apple-macintosh-400k-external",
+  "ourName": "Macintosh 400K External Drive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "macintosh-800k-external-drive",
+  "name": "Macintosh 800K External Drive",
+  "productId": "apple-macintosh-800k-external",
+  "ourName": "Macintosh 800K External Drive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1986-09"
+ },
+ {
+  "slug": "macintosh-color-classic-ii",
+  "name": "Macintosh Color Classic II (1993 年)",
+  "productId": "apple-macintosh-color-classic-ii",
+  "ourName": "Macintosh Color Classic II",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-color-display",
+  "name": "Macintosh Color Display",
+  "productId": "apple-macintosh-color-display",
+  "ourName": "Macintosh Color Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1993-09"
+ },
+ {
+  "slug": "macintosh-hard-disk-20",
+  "name": "Macintosh Hard Disk 20",
+  "productId": "apple-macintosh-hard-disk-20",
+  "ourName": "Macintosh Hard Disk 20",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1987-09"
+ },
+ {
+  "slug": "macintosh-hdi-20-external-1-4mb-floppy-disk-drive",
+  "name": "Macintosh HDI-20 External 1.4MB Floppy Disk Drive",
+  "productId": "apple-hdi20-external-floppy",
+  "ourName": "Macintosh HDI-20 External 1.4MB Floppy Disk Drive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1997-02"
+ },
+ {
+  "slug": "macintosh-keyboard",
+  "name": "Macintosh Keyboard",
+  "productId": "apple-macintosh-keyboard",
+  "ourName": "Macintosh Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "macintosh-mouse",
+  "name": "Macintosh Mouse",
+  "productId": "apple-macintosh-mouse",
+  "ourName": "Macintosh Mouse",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1987-01"
+ },
+ {
+  "slug": "macintosh-numeric-keypad",
+  "name": "Macintosh Numeric Keypad",
+  "productId": "apple-macintosh-numeric-keypad",
+  "ourName": "Macintosh Numeric Keypad",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "macintosh-performa-5400-series",
+  "name": "Macintosh Performa 5400 Series (1996 年)",
+  "productId": "apple-macintosh-performa-5400 Series",
+  "ourName": "Macintosh Performa 5400 Series",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "macintosh-performa-560-money-edition",
+  "name": "Macintosh Performa 560 Money Edition (1994 年)",
+  "productId": "apple-macintosh-performa-560 Money Edition",
+  "ourName": "Macintosh Performa 560 Money Edition",
+  "j": 0.83,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-580cd",
+  "productId": "apple-macintosh-performa-580cd",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-588cd",
+  "productId": "apple-macintosh-performa-588cd",
+  "j": 1,
+  "exact": true,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-600600cd",
+  "name": "Macintosh Performa 600/600CD (1992 年)",
+  "productId": "apple-macintosh-performa-600/600CD",
+  "ourName": "Macintosh Performa 600/600CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-performa-6100-series",
+  "name": "Macintosh Performa 6100 Series (1994 年)",
+  "productId": "apple-macintosh-performa-6100 Series",
+  "ourName": "Macintosh Performa 6100 Series",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-6200-series",
+  "name": "Macintosh Performa 6200 Series (1995 年)",
+  "productId": "apple-macintosh-performa-6200-series",
+  "ourName": "Macintosh Performa 6200 Series",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-6300-series",
+  "name": "Macintosh Performa 6300 Series (1995 年)",
+  "productId": "apple-macintosh-performa-6300-series",
+  "ourName": "Macintosh Performa 6300 Series",
+  "j": 0.8,
+  "cat": "desktop",
+  "pageDate": "1996-02"
+ },
+ {
+  "slug": "macintosh-performa-640064106420",
+  "name": "Macintosh Performa 6400/6410/6420 (1996 年)",
+  "productId": "apple-macintosh-performa-6400-6410-6420",
+  "ourName": "Macintosh Performa 6400/6410/6420",
+  "j": 0.83,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "macintosh-portrait-display",
+  "name": "Macintosh Portrait Display",
+  "productId": "apple-macintosh-portrait-display",
+  "ourName": "Macintosh Portrait Display",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1992-12"
+ },
+ {
+  "slug": "macintosh-powerbook-140",
+  "name": "Macintosh PowerBook 140 -",
+  "productId": "apple-powerbook-140",
+  "ourName": "Macintosh PowerBook 140",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-145b",
+  "name": "Macintosh PowerBook 145B -",
+  "productId": "apple-powerbook-145b",
+  "ourName": "Macintosh PowerBook 145B",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-145",
+  "name": "Macintosh PowerBook 145 -",
+  "productId": "apple-powerbook-145",
+  "ourName": "Macintosh PowerBook 145",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-2400c-floppy-disk-drive",
+  "name": "Macintosh PowerBook 2400c Floppy Disk Drive",
+  "productId": "apple-powerbook-2400c-floppy",
+  "ourName": "Macintosh PowerBook 2400c Floppy Disk Drive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "1998-12"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-210",
+  "name": "Macintosh PowerBook Duo 210 (9英寸)",
+  "productId": "apple-powerbook-duo-210",
+  "ourName": "Macintosh PowerBook Duo 210",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-230",
+  "name": "Macintosh PowerBook Duo 230 (9英寸)",
+  "productId": "apple-powerbook-duo-230",
+  "ourName": "Macintosh PowerBook Duo 230",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-250",
+  "name": "Macintosh PowerBook Duo 250 (9英寸)",
+  "productId": "apple-powerbook-duo-250",
+  "ourName": "Macintosh PowerBook Duo 250",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-270c",
+  "name": "Macintosh PowerBook Duo 270c (9英寸)",
+  "productId": "apple-powerbook-duo-270c",
+  "ourName": "Macintosh PowerBook Duo 270c",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-280c",
+  "name": "Macintosh PowerBook Duo 280c (8.4英寸 彩色版)",
+  "productId": "apple-powerbook-duo-280c",
+  "ourName": "Macintosh PowerBook Duo 280c",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-powerbook-duo-280",
+  "name": "Macintosh PowerBook Duo 280 (9英寸)",
+  "productId": "apple-powerbook-duo-280",
+  "ourName": "Macintosh PowerBook Duo 280",
+  "j": 0.8,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macintosh-server-g3-blue-and-white",
+  "name": "Macintosh Server G3 (Blue and White)",
+  "productId": "apple-macintosh-server-g3-bw",
+  "ourName": "Macintosh Server G3 (Blue and White)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "macintosh-server-g3",
+  "name": "Macintosh Server G3",
+  "productId": "apple-macintosh-server-g3",
+  "ourName": "Macintosh Server G3",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1998-01"
+ },
+ {
+  "slug": "macintosh-server-g4-agp-graphics",
+  "name": "Macintosh Server G4 (AGP Graphics)",
+  "productId": "apple-macintosh-server-g4-agp",
+  "ourName": "Macintosh Server G4 (AGP Graphics)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2000-01"
+ },
+ {
+  "slug": "macintosh-server-g4-mirrored-drive-doors",
+  "name": "Macintosh Server G4 (Mirrored Drive Doors)",
+  "productId": "apple-macintosh-server-g4-mdd",
+  "ourName": "Macintosh Server G4 (Mirrored Drive Doors)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "macintosh-server-g4-quicksilver-2001",
+  "name": "Macintosh Server G4 (QuickSilver 2001)",
+  "productId": "apple-macintosh-server-g4-qs2001",
+  "ourName": "Macintosh Server G4 (QuickSilver 2001)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2001-01"
+ },
+ {
+  "slug": "macintosh-server-g4-quicksilver-2002",
+  "name": "Macintosh Server G4 (QuickSilver 2002)",
+  "productId": "apple-macintosh-server-g4-qs2002",
+  "ourName": "Macintosh Server G4 (QuickSilver 2002)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "magic-keyboard-2",
+  "name": "Magic Keyboard",
+  "productId": "apple-magic-keyboard-2015",
+  "ourName": "Magic Keyboard",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-keyboard-for-ipad-air",
+  "name": "妙控键盘 (适用于 iPad Air)",
+  "productId": "apple-magic-keyboard-ipad-air",
+  "ourName": "妙控键盘 (适用于 iPad Air)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-keyboard-lock-usb-c",
+  "name": "Magic Keyboard (带有 Lock 键)(USB-C)",
+  "productId": "apple-magic-keyboard-usb-c-2024",
+  "ourName": "Magic Keyboard（带有 Lock 键）(USB-C)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-keyboard-touch-id-2",
+  "name": "Magic Keyboard (带有 Touch ID)",
+  "productId": "apple-magic-keyboard-touch-id-2021",
+  "ourName": "Magic Keyboard（带有 Touch ID）",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-mouse-2",
+  "name": "Magic Mouse 2 (第 2 代)",
+  "productId": "apple-magic-mouse-2-2015",
+  "ourName": "Magic Mouse 2",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-mouse-usb-c",
+  "name": "Magic Mouse (USB-C)",
+  "productId": "apple-magic-mouse-usb-c-2024",
+  "ourName": "Magic Mouse (USB-C)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-mouse",
+  "name": "Magic Mouse",
+  "productId": "apple-magic-mouse-2009",
+  "ourName": "Magic Mouse",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-trackpad-2",
+  "name": "Magic Trackpad 2 (第 2 代)",
+  "productId": "apple-magic-trackpad-2",
+  "ourName": "Magic Trackpad 2 (第 2 代)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-trackpad-usb-c",
+  "name": "Magic Trackpad (USB-C)",
+  "productId": "apple-magic-trackpad-usb-c-2024",
+  "ourName": "Magic Trackpad (USB-C)",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magic-trackpad",
+  "name": "Magic Trackpad",
+  "productId": "apple-magic-trackpad-2010",
+  "ourName": "Magic Trackpad",
+  "j": 1,
+  "cat": "input"
+ },
+ {
+  "slug": "magsafe-battery-pack",
+  "name": "MagSafe 外接电池",
+  "productId": "apple-magsafe-battery-pack",
+  "ourName": "MagSafe 外接电池",
+  "j": 1,
+  "cat": "accessory",
+  "pageDate": "2023-09"
+ },
+ {
+  "slug": "magsafe-battery",
+  "name": "MagSafe 电池 (iPhone Air 专用)",
+  "productId": "apple-magsafe-battery-air",
+  "ourName": "MagSafe 电池 (iPhone Air 专用)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "messagepad-100",
+  "name": "MessagePad 100",
+  "productId": "apple-messagepad-100",
+  "ourName": "MessagePad 100",
+  "j": 1,
+  "cat": "pda",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "messagepad-110",
+  "name": "MessagePad 110",
+  "productId": "apple-newton-110",
+  "ourName": "MessagePad 110",
+  "j": 1,
+  "cat": "pda",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "messagepad-130",
+  "name": "MessagePad 130",
+  "productId": "apple-newton-130",
+  "ourName": "MessagePad 130",
+  "j": 1,
+  "cat": "pda",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "multiple-scan-14",
+  "name": "Multiple Scan 14",
+  "productId": "apple-multiple-scan-14",
+  "ourName": "Multiple Scan 14",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1996-09"
+ },
+ {
+  "slug": "multiple-scan-15av",
+  "name": "Multiple Scan 15AV",
+  "productId": "apple-multiple-scan-15av",
+  "ourName": "Multiple Scan 15AV",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "multiple-scan-15",
+  "name": "Multiple Scan 15",
+  "productId": "apple-multiple-scan-15",
+  "ourName": "Multiple Scan 15",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1996-09"
+ },
+ {
+  "slug": "multiple-scan-1705",
+  "name": "Multiple Scan 1705",
+  "productId": "apple-multiple-scan-1705",
+  "ourName": "Multiple Scan 1705",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "multiple-scan-17",
+  "name": "Multiple Scan 17",
+  "productId": "apple-multiple-scan-17",
+  "ourName": "Multiple Scan 17",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "multiple-scan-20",
+  "name": "Multiple Scan 20",
+  "productId": "apple-multiple-scan-20",
+  "ourName": "Multiple Scan 20",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "multiple-scan-720",
+  "name": "Multiple Scan 720",
+  "productId": "apple-multiple-scan-720",
+  "ourName": "Multiple Scan 720",
+  "j": 1,
+  "cat": "display",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "network-server-500",
+  "name": "Network Server 500",
+  "productId": "apple-network-server-500",
+  "ourName": "Network Server 500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "network-server-700",
+  "name": "Network Server 700",
+  "productId": "apple-network-server-700",
+  "ourName": "Network Server 700",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "newton-keyboard",
+  "name": "Newton Keyboard",
+  "productId": "apple-newton-keyboard",
+  "ourName": "Newton Keyboard",
+  "j": 1,
+  "cat": "input",
+  "pageDate": "1998-02"
+ },
+ {
+  "slug": "plaintalk-microphone",
+  "name": "PlainTalk Microphone",
+  "productId": "apple-plaintalk-microphone",
+  "ourName": "PlainTalk Microphone",
+  "j": 1,
+  "cat": "audio"
+ },
+ {
+  "slug": "power-mac-g4-agp-graphics",
+  "name": "Power Mac G4 (AGP Graphics)",
+  "productId": "apple-power-mac-g4-agp-graphics",
+  "ourName": "Power Mac G4 (AGP Graphics)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "power-mac-g4-cube",
+  "name": "Power Mac G4 Cube",
+  "productId": "apple-power-mac-g4-cube",
+  "ourName": "Power Mac G4 Cube",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2000-01"
+ },
+ {
+  "slug": "power-mac-g4-digital-audio",
+  "name": "Power Mac G4 (Digital Audio)",
+  "productId": "apple-power-mac-g4-digital-audio",
+  "ourName": "Power Mac G4 (Digital Audio)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2001-01"
+ },
+ {
+  "slug": "power-mac-g4-firewire-800",
+  "name": "Power Mac G4 (FireWire 800)",
+  "productId": "apple-power-mac-g4-firewire-800",
+  "ourName": "Power Mac G4 (FireWire 800)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "power-mac-g4-gigabit-ethernet",
+  "name": "Power Mac G4 (Gigabit Ethernet)",
+  "productId": "apple-power-mac-g4-gigabit-ethernet",
+  "ourName": "Power Mac G4 (Gigabit Ethernet)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2000-01"
+ },
+ {
+  "slug": "power-mac-g4-mirrored-drive-doors",
+  "name": "Power Mac G4 (Mirrored Drive Doors)",
+  "productId": "apple-power-mac-g4-mdd-2003",
+  "ourName": "Power Mac G4 (Mirrored Drive Doors)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "power-mac-g4-pci-graphics",
+  "name": "Power Mac G4 (PCI Graphics)",
+  "productId": "apple-power-mac-g4-pci-graphics",
+  "ourName": "Power Mac G4 (PCI Graphics)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "power-mac-g4-quicksilver-2002ed",
+  "name": "Power Mac G4 (QuickSilver 2002ED)",
+  "productId": "apple-power-mac-g4-quicksilver-2002ed",
+  "ourName": "Power Mac G4 (QuickSilver 2002ED)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "power-mac-g4-quicksilver-2002",
+  "name": "Power Mac G4 (QuickSilver 2002)",
+  "productId": "apple-power-mac-g4-quicksilver-2002",
+  "ourName": "Power Mac G4 (QuickSilver 2002)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "power-mac-g4-quicksilver",
+  "name": "Power Mac G4 (QuickSilver)",
+  "productId": "apple-power-mac-g4-quicksilver",
+  "ourName": "Power Mac G4 (QuickSilver)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2001-01"
+ },
+ {
+  "slug": "power-mac-g5-20046",
+  "name": "Power Mac G5 (2004年6月)",
+  "productId": "apple-power-mac-g5-2004-06",
+  "ourName": "Power Mac G5 (2004 年 6 月)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2004-01"
+ },
+ {
+  "slug": "power-mac-g5-2004",
+  "name": "Power Mac G5 (2004年末)",
+  "productId": "apple-power-mac-g5-2004-10",
+  "ourName": "Power Mac G5 (2004 年末)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2004-01"
+ },
+ {
+  "slug": "power-mac-g5-2005-2",
+  "name": "Power Mac G5 (2005年初)",
+  "productId": "apple-power-mac-g5-2005-04",
+  "ourName": "Power Mac G5 (2005 年初)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "power-mac-g5",
+  "name": "Power Mac G5",
+  "productId": "apple-power-mac-g5-2003",
+  "ourName": "Power Mac G5",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "power-macintosh-4400",
+  "name": "Power Macintosh 4400",
+  "productId": "apple-power-macintosh-4400",
+  "ourName": "Power Macintosh 4400",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-520075-lc",
+  "name": "Power Macintosh 5200/75 LC",
+  "productId": "apple-power-macintosh-5200-75lc",
+  "ourName": "Power Macintosh 5200/75 LC",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-5260",
+  "name": "Power Macintosh 5260",
+  "productId": "apple-power-macintosh-5260",
+  "ourName": "Power Macintosh 5260",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-5300100-lc",
+  "name": "Power Macintosh 5300/100 LC",
+  "productId": "apple-power-macintosh-5300-100lc",
+  "ourName": "Power Macintosh 5300/100 LC",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-5400",
+  "name": "Power Macintosh 5400",
+  "productId": "apple-power-macintosh-5400",
+  "ourName": "Power Macintosh 5400",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-5500",
+  "name": "Power Macintosh 5500",
+  "productId": "apple-power-macintosh-5500",
+  "ourName": "Power Macintosh 5500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-6100",
+  "name": "Power Macintosh 6100",
+  "productId": "apple-power-macintosh-6100",
+  "ourName": "Power Macintosh 6100",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "power-macintosh-6200",
+  "name": "Power Macintosh 6200",
+  "productId": "apple-power-macintosh-6200",
+  "ourName": "Power Macintosh 6200",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-6300",
+  "name": "Power Macintosh 6300",
+  "productId": "apple-power-macintosh-6300",
+  "ourName": "Power Macintosh 6300",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-6400",
+  "name": "Power Macintosh 6400",
+  "productId": "apple-power-macintosh-6400",
+  "ourName": "Power Macintosh 6400",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-6500",
+  "name": "Power Macintosh 6500",
+  "productId": "apple-power-macintosh-6500",
+  "ourName": "Power Macintosh 6500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-7100",
+  "name": "Power Macintosh 7100",
+  "productId": "apple-power-macintosh-7100",
+  "ourName": "Power Macintosh 7100",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "power-macintosh-7200",
+  "name": "Power Macintosh 7200",
+  "productId": "apple-power-macintosh-7200",
+  "ourName": "Power Macintosh 7200",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-7215",
+  "name": "Power Macintosh 7215",
+  "productId": "apple-power-macintosh-7215",
+  "ourName": "Power Macintosh 7215",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-7220",
+  "name": "Power Macintosh 7220",
+  "productId": "apple-power-macintosh-7220",
+  "ourName": "Power Macintosh 7220",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-7300",
+  "name": "Power Macintosh 7300",
+  "productId": "apple-power-macintosh-7300",
+  "ourName": "Power Macintosh 7300",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-7500",
+  "name": "Power Macintosh 7500",
+  "productId": "apple-power-macintosh-7500",
+  "ourName": "Power Macintosh 7500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-7600",
+  "name": "Power Macintosh 7600",
+  "productId": "apple-power-macintosh-7600",
+  "ourName": "Power Macintosh 7600",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-8100",
+  "name": "Power Macintosh 8100",
+  "productId": "apple-power-macintosh-8100",
+  "ourName": "Power Macintosh 8100",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "power-macintosh-8200",
+  "name": "Power Macintosh 8200",
+  "productId": "apple-power-macintosh-8200",
+  "ourName": "Power Macintosh 8200",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "power-macintosh-8500",
+  "name": "Power Macintosh 8500",
+  "productId": "apple-power-macintosh-8500",
+  "ourName": "Power Macintosh 8500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-8600",
+  "name": "Power Macintosh 8600",
+  "productId": "apple-power-macintosh-8600",
+  "ourName": "Power Macintosh 8600",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-9500",
+  "name": "Power Macintosh 9500",
+  "productId": "apple-power-macintosh-9500",
+  "ourName": "Power Macintosh 9500",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "power-macintosh-9600",
+  "name": "Power Macintosh 9600",
+  "productId": "apple-power-macintosh-9600",
+  "ourName": "Power Macintosh 9600",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-g3-all-in-one",
+  "name": "Power Macintosh G3 (All-in-One)",
+  "productId": "apple-power-macintosh-g3-all-in-one",
+  "ourName": "Power Macintosh G3 (All-in-One)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1998-01"
+ },
+ {
+  "slug": "power-macintosh-g3-blue-and-white",
+  "name": "Power Macintosh G3 (Blue and White)",
+  "productId": "apple-power-macintosh-g3-blue-white",
+  "ourName": "Power Macintosh G3 (Blue and White)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1999-01"
+ },
+ {
+  "slug": "power-macintosh-g3-desktop",
+  "name": "Power Macintosh G3 (Desktop)",
+  "productId": "apple-power-macintosh-g3-desktop",
+  "ourName": "Power Macintosh G3 (Desktop)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "power-macintosh-g3-mini-tower",
+  "name": "Power Macintosh G3 (Mini Tower)",
+  "productId": "apple-power-macintosh-g3-mini-tower",
+  "ourName": "Power Macintosh G3 (Mini Tower)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "powerbook-g3-19989",
+  "name": "PowerBook G3 (1998年9月)",
+  "productId": "apple-powerbook-g3-1998-09",
+  "ourName": "PowerBook G3 (1998 年 9 月)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g3-bronze-keyboard",
+  "name": "PowerBook G3 (Bronze Keyboard)",
+  "productId": "apple-powerbook-g3-bronze",
+  "ourName": "PowerBook G3 (Bronze Keyboard)",
+  "j": 1,
+  "cat": "laptop",
+  "merge": true
+ },
+ {
+  "slug": "powerbook-g3-firewire",
+  "name": "PowerBook G3 (FireWire)",
+  "productId": "apple-powerbook-g3-firewire",
+  "ourName": "PowerBook G3 (FireWire)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-12-1-33ghz",
+  "name": "PowerBook G4 (12英寸 1.33GHz)",
+  "productId": "apple-powerbook-g4-12-133",
+  "ourName": "PowerBook G4 (12 英寸 1.33GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-12-1-5ghz",
+  "name": "PowerBook G4 (12英寸 1.5GHz)",
+  "productId": "apple-powerbook-g4-12-150",
+  "ourName": "PowerBook G4 (12 英寸 1.5GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-12-2003",
+  "name": "PowerBook G4 (12英寸, 2003年初)",
+  "productId": "apple-powerbook-g4-12-2003",
+  "ourName": "PowerBook G4 (12 英寸, 2003 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-12-dvi",
+  "name": "PowerBook G4 (12英寸 DVI)",
+  "productId": "apple-powerbook-g4-12-dvi",
+  "ourName": "PowerBook G4 (12 英寸 DVI)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-15-1-5ghz1-33ghz",
+  "name": "PowerBook G4 (15英寸 1.5GHz/1.33GHz)",
+  "productId": "apple-powerbook-g4-15-133-150",
+  "ourName": "PowerBook G4 (15 英寸 1.5GHz/1.33GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-15-1-67ghz",
+  "name": "PowerBook G4 (15英寸 1.67GHz)",
+  "productId": "apple-powerbook-g4-15-167",
+  "ourName": "PowerBook G4 (15 英寸 1.67GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-15-double-layer-sd",
+  "name": "PowerBook G4 (15英寸 Double-Layer SD)",
+  "productId": "apple-powerbook-g4-15-dlsd",
+  "ourName": "PowerBook G4 (15 英寸 Double-Layer SD)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-15-fw800",
+  "name": "PowerBook G4 (15英寸 FW800)",
+  "productId": "apple-powerbook-g4-15-fw800",
+  "ourName": "PowerBook G4 (15 英寸 FW800)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-17-1-33ghz",
+  "name": "PowerBook G4 (17英寸 1.33GHz)",
+  "productId": "apple-powerbook-g4-17-133",
+  "ourName": "PowerBook G4 (17 英寸 1.33GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-17-1-5ghz",
+  "name": "PowerBook G4 (17英寸 1.5GHz)",
+  "productId": "apple-powerbook-g4-17-150",
+  "ourName": "PowerBook G4 (17 英寸 1.5GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-17-1-67ghz",
+  "name": "PowerBook G4 (17英寸 1.67GHz)",
+  "productId": "apple-powerbook-g4-17-167",
+  "ourName": "PowerBook G4 (17 英寸 1.67GHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-17-2003",
+  "name": "PowerBook G4 (17英寸, 2003年初)",
+  "productId": "apple-powerbook-g4-17-2003",
+  "ourName": "PowerBook G4 (17 英寸, 2003 年初)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-17-double-layer-sd",
+  "name": "PowerBook G4 (17英寸 Double-Layer SD)",
+  "productId": "apple-powerbook-g4-17-dlsd",
+  "ourName": "PowerBook G4 (17 英寸 Double-Layer SD)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-1ghz867mhz",
+  "name": "PowerBook G4 (1GHz/867MHz)",
+  "productId": "apple-powerbook-g4-1ghz",
+  "ourName": "PowerBook G4 (1GHz/867MHz)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "powerbook-g4-dvi",
+  "name": "PowerBook G4 (DVI)",
+  "productId": "apple-powerbook-g4-dvi",
+  "ourName": "PowerBook G4 (DVI)",
+  "j": 1,
+  "cat": "laptop"
+ },
+ {
+  "slug": "siri-remote-1",
+  "name": "Siri Remote (第 1 代)",
+  "productId": "apple-siri-remote-1st",
+  "ourName": "Siri Remote (第 1 代)",
+  "j": 1,
+  "cat": "accessory",
+  "pageDate": "2015-01"
+ },
+ {
+  "slug": "siri-remote-2",
+  "name": "Siri Remote (第 2 代)",
+  "productId": "apple-siri-remote-2nd",
+  "ourName": "Siri Remote (第 2 代)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "siri-remote-3",
+  "name": "Siri Remote (第 3 代)",
+  "productId": "apple-siri-remote-3rd",
+  "ourName": "Siri Remote (第 3 代)",
+  "j": 1,
+  "cat": "accessory"
+ },
+ {
+  "slug": "studio-display-2022",
+  "name": "Studio Display (2022)",
+  "productId": "apple-studio-display-2022",
+  "ourName": "Studio Display (2022)",
+  "j": 1,
+  "cat": "display"
+ },
+ {
+  "slug": "time-capsule-802-11n-2",
+  "name": "Time Capsule 802.11n (第三代)",
+  "productId": "apple-time-capsule-80211n-3rd",
+  "ourName": "Time Capsule (802.11n 第 3 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2011-06"
+ },
+ {
+  "slug": "time-capsule-802-11n-3",
+  "name": "Time Capsule 802.11n (第二代)",
+  "productId": "apple-time-capsule-80211n-2nd",
+  "ourName": "Time Capsule (802.11n 第 2 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2009-10"
+ },
+ {
+  "slug": "time-capsule-802-11n-4",
+  "name": "Time Capsule 802.11n (第一代)",
+  "productId": "apple-time-capsule-80211n-1st",
+  "ourName": "Time Capsule (802.11n 第 1 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2009-03"
+ },
+ {
+  "slug": "time-capsule-802-11n",
+  "name": "Time Capsule 802.11n (第四代)",
+  "productId": "apple-time-capsule-80211n-4th",
+  "ourName": "Time Capsule (802.11n 第 4 代)",
+  "j": 1,
+  "cat": "network",
+  "pageDate": "2013-06"
+ },
+ {
+  "slug": "twentieth-anniversary-macintosh",
+  "name": "Twentieth Anniversary Macintosh",
+  "productId": "apple-twentieth-anniversary-macintosh",
+  "ourName": "Twentieth Anniversary Macintosh",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "usb-superdrive",
+  "name": "USB SuperDrive",
+  "productId": "apple-usb-superdrive",
+  "ourName": "USB SuperDrive",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2024-08"
+ },
+ {
+  "slug": "workgroup-server-60",
+  "name": "Workgroup Server 60",
+  "productId": "apple-workgroup-server-60",
+  "ourName": "Workgroup Server 60",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "workgroup-server-6150-60-mhz",
+  "name": "Workgroup Server 6150 (60 MHz)",
+  "productId": "apple-workgroup-server-6150-60",
+  "ourName": "Workgroup Server 6150 (60 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "workgroup-server-6150-66-mhz",
+  "name": "Workgroup Server 6150 (66 MHz)",
+  "productId": "apple-workgroup-server-6150-66",
+  "ourName": "Workgroup Server 6150 (66 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "workgroup-server-7250",
+  "name": "Workgroup Server 7250",
+  "productId": "apple-workgroup-server-7250",
+  "ourName": "Workgroup Server 7250",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "workgroup-server-7350",
+  "name": "Workgroup Server 7350",
+  "productId": "apple-workgroup-server-7350",
+  "ourName": "Workgroup Server 7350",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "workgroup-server-80",
+  "name": "Workgroup Server 80",
+  "productId": "apple-workgroup-server-80",
+  "ourName": "Workgroup Server 80",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "workgroup-server-8150-110-mhz",
+  "name": "Workgroup Server 8150 (110 MHz)",
+  "productId": "apple-workgroup-server-8150-110",
+  "ourName": "Workgroup Server 8150 (110 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "workgroup-server-8150-80-mhz",
+  "name": "Workgroup Server 8150 (80 MHz)",
+  "productId": "apple-workgroup-server-8150-80",
+  "ourName": "Workgroup Server 8150 (80 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "workgroup-server-8550-132-mhz",
+  "name": "Workgroup Server 8550 (132 MHz)",
+  "productId": "apple-workgroup-server-8550-132",
+  "ourName": "Workgroup Server 8550 (132 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "workgroup-server-8550-200-mhz",
+  "name": "Workgroup Server 8550 (200 MHz)",
+  "productId": "apple-workgroup-server-8550-200",
+  "ourName": "Workgroup Server 8550 (200 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "workgroup-server-9150-80-mhz",
+  "name": "Workgroup Server 9150 (80 MHz)",
+  "productId": "apple-workgroup-server-9150-80",
+  "ourName": "Workgroup Server 9150 (80 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "workgroup-server-95",
+  "name": "Workgroup Server 95",
+  "productId": "apple-workgroup-server-95",
+  "ourName": "Workgroup Server 95",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "workgroup-server-9650-233-mhz",
+  "name": "Workgroup Server 9650 (233 MHz)",
+  "productId": "apple-workgroup-server-9650-233",
+  "ourName": "Workgroup Server 9650 (233 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "workgroup-server-9650-350-mhz",
+  "name": "Workgroup Server 9650 (350 MHz)",
+  "productId": "apple-workgroup-server-9650-350",
+  "ourName": "Workgroup Server 9650 (350 MHz)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "xserve-1",
+  "name": "Xserve (第1代)",
+  "productId": "apple-xserve-g4-1st",
+  "ourName": "Xserve (第 1 代)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "xserve-2006",
+  "name": "Xserve (2006 年末)",
+  "productId": "apple-xserve-2006-late",
+  "ourName": "Xserve (2006 年末)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2006-01"
+ },
+ {
+  "slug": "xserve-2008",
+  "name": "Xserve (2008 年早期)",
+  "productId": "apple-xserve-2008-early",
+  "ourName": "Xserve (2008 年早期)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2008-01"
+ },
+ {
+  "slug": "xserve-2009",
+  "name": "Xserve (2009 年早期)",
+  "productId": "apple-xserve-2009-early",
+  "ourName": "Xserve (2009 年早期)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2009-01"
+ },
+ {
+  "slug": "xserve-2",
+  "name": "Xserve (槽载)",
+  "productId": "apple-xserve-g4-slot",
+  "ourName": "Xserve (槽载)",
+  "j": 1,
+  "pageDate": "2003-01",
+  "fixed": true,
+  "cat": "desktop"
+ },
+ {
+  "slug": "xserve-g5-2005-1-2",
+  "name": "Xserve G5 (2005 年 1 月)",
+  "productId": "apple-xserve-g5-2005",
+  "ourName": "Xserve G5 (2005 年 1 月)",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "xserve-g5-2",
+  "name": "Xserve G5",
+  "productId": "apple-xserve-g5",
+  "ourName": "Xserve G5",
+  "j": 1,
+  "cat": "desktop",
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "xserve-raid-sfp-late-2004",
+  "name": "Xserve RAID (SFP Late 2004)",
+  "productId": "apple-xserve-raid-sfp-late2004",
+  "ourName": "Xserve RAID (SFP Late 2004)",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2008-02"
+ },
+ {
+  "slug": "xserve-raid-sfp",
+  "name": "Xserve RAID (SFP)",
+  "productId": "apple-xserve-raid-sfp",
+  "ourName": "Xserve RAID (SFP)",
+  "j": 1,
+  "cat": "storage",
+  "pageDate": "2004-10"
+ },
+ {
+  "slug": "xserve-raid",
+  "name": "Xserve RAID 机架式磁盘阵列",
+  "productId": "apple-xserve-raid-2003",
+  "ourName": "Xserve RAID",
+  "j": 1,
+  "cat": "storage"
+ },
+ {
+  "slug": "airpods-5",
+  "name": "AirPods 5 (配无线充电盒)",
+  "productId": "apple-airpods-5",
+  "ourName": "AirPods 5",
+  "j": 0.8,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "airpods-max-lightning",
+  "name": "AirPods Max (Lightning)",
+  "productId": "apple-airpods-max-1",
+  "ourName": "AirPods Max",
+  "j": 0.8,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "airpods-max-usb-c",
+  "name": "AirPods Max (USB-C)",
+  "productId": "apple-airpods-max-1",
+  "ourName": "AirPods Max",
+  "j": 0.8,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "apple-ii-plus",
+  "name": "Apple II Plus (1979 年)",
+  "productId": "apple-ii-plus",
+  "ourName": "Apple II Plus",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1979-01"
+ },
+ {
+  "slug": "apple-iie-enhanced",
+  "name": "Apple IIe Enhanced (1985 年)",
+  "productId": "apple-iie-enhanced",
+  "ourName": "Apple IIe Enhanced",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1985-01"
+ },
+ {
+  "slug": "apple-iie",
+  "name": "Apple IIe (1983 年)",
+  "productId": "apple-iie",
+  "ourName": "Apple IIe",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1983-01"
+ },
+ {
+  "slug": "apple-iii-plus",
+  "name": "Apple III Plus (1983 年)",
+  "productId": "apple-iii-plus",
+  "ourName": "Apple III Plus",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1983-01"
+ },
+ {
+  "slug": "apple-iii",
+  "name": "Apple III (1980 年)",
+  "productId": "apple-iii",
+  "ourName": "Apple III",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1980-01"
+ },
+ {
+  "slug": "apple-ii",
+  "name": "Apple II (1977 年)",
+  "productId": "apple-ii",
+  "ourName": "Apple II",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1977-01"
+ },
+ {
+  "slug": "apple-i",
+  "name": "Apple I (1976 年)",
+  "productId": "apple-i",
+  "ourName": "Apple I",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1976-01"
+ },
+ {
+  "slug": "apple-lisa",
+  "name": "Apple Lisa (1983 年)",
+  "productId": "apple-lisa",
+  "ourName": "Apple Lisa",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1983-01"
+ },
+ {
+  "slug": "apple-thunderbolt-display",
+  "name": "Apple Thunderbolt Display （27 英寸）",
+  "productId": "apple-thunderbolt-display-2011",
+  "ourName": "Apple Thunderbolt Display",
+  "j": 0.8,
+  "cat": "display",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-neo",
+  "name": "MacBook Neo (13 英寸，A18 Pro)",
+  "productId": "apple-macbook-neo-2026",
+  "ourName": "MacBook Neo",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-128k",
+  "name": "Macintosh 128K (1984 年)",
+  "productId": "apple-macintosh-128k",
+  "ourName": "Macintosh 128K",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1984-01"
+ },
+ {
+  "slug": "macintosh-classic-ii",
+  "name": "Macintosh Classic II (1991 年)",
+  "productId": "apple-macintosh-classic-ii",
+  "ourName": "Macintosh Classic II",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1991-01"
+ },
+ {
+  "slug": "macintosh-classic",
+  "name": "Macintosh Classic (1990 年)",
+  "productId": "apple-macintosh-classic",
+  "ourName": "Macintosh Classic",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "macintosh-color-classic",
+  "name": "Macintosh Color Classic (1993 年)",
+  "productId": "apple-macintosh-color-classic",
+  "ourName": "Macintosh Color Classic",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-iici",
+  "name": "Macintosh IIci (1989 年)",
+  "productId": "apple-macintosh-iici",
+  "ourName": "Macintosh IIci",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "macintosh-iicx",
+  "name": "Macintosh IIcx (1989 年)",
+  "productId": "apple-macintosh-iicx",
+  "ourName": "Macintosh IIcx",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "macintosh-iifx",
+  "name": "Macintosh IIfx (1990 年)",
+  "productId": "apple-macintosh-iifx",
+  "ourName": "Macintosh IIfx",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "macintosh-iisi",
+  "name": "Macintosh IIsi (1990 年)",
+  "productId": "apple-macintosh-iisi",
+  "ourName": "Macintosh IIsi",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "macintosh-iivi",
+  "name": "Macintosh IIvi (1992 年)",
+  "productId": "apple-macintosh-iivi",
+  "ourName": "Macintosh IIvi",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-iivx",
+  "name": "Macintosh IIvx (1992 年)",
+  "productId": "apple-macintosh-iivx",
+  "ourName": "Macintosh IIvx",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-iix",
+  "name": "Macintosh IIx (1988 年)",
+  "productId": "apple-macintosh-iix",
+  "ourName": "Macintosh IIx",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1988-01"
+ },
+ {
+  "slug": "macintosh-ii",
+  "name": "Macintosh II (1987 年)",
+  "productId": "apple-macintosh-ii",
+  "ourName": "Macintosh II",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1987-01"
+ },
+ {
+  "slug": "macintosh-lc-475",
+  "name": "Macintosh LC 475 (1993 年)",
+  "productId": "apple-macintosh-lc-475",
+  "ourName": "Macintosh LC 475",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-lc-520",
+  "name": "Macintosh LC 520 (1993 年)",
+  "productId": "apple-macintosh-lc-520",
+  "ourName": "Macintosh LC 520",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-lc-550",
+  "name": "Macintosh LC 550 (1994 年)",
+  "productId": "apple-macintosh-lc-550",
+  "ourName": "Macintosh LC 550",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-lc-575",
+  "name": "Macintosh LC 575 (1994 年)",
+  "productId": "apple-macintosh-lc-575",
+  "ourName": "Macintosh LC 575",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-lc-580",
+  "name": "Macintosh LC 580 (1995 年)",
+  "productId": "apple-macintosh-lc-580",
+  "ourName": "Macintosh LC 580",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-lc-630",
+  "name": "Macintosh LC 630 (1994 年)",
+  "productId": "apple-macintosh-lc-630",
+  "ourName": "Macintosh LC 630",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-lc-ii",
+  "name": "Macintosh LC II (1992 年)",
+  "productId": "apple-macintosh-lc-ii",
+  "ourName": "Macintosh LC II",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-lc",
+  "name": "Macintosh LC (1990 年)",
+  "productId": "apple-macintosh-lc",
+  "ourName": "Macintosh LC",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1990-01"
+ },
+ {
+  "slug": "macintosh-performa-200",
+  "name": "Macintosh Performa 200 (1992 年)",
+  "productId": "apple-macintosh-performa-200",
+  "ourName": "Macintosh Performa 200",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-performa-250",
+  "name": "Macintosh Performa 250 (1993 年)",
+  "productId": "apple-macintosh-performa-250",
+  "ourName": "Macintosh Performa 250",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-275",
+  "name": "Macintosh Performa 275 (1993 年，日本限定)",
+  "productId": "apple-macintosh-performa-275",
+  "ourName": "Macintosh Performa 275",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-400",
+  "name": "Macintosh Performa 400 (1992 年)",
+  "productId": "apple-macintosh-performa-400",
+  "ourName": "Macintosh Performa 400",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-performa-405",
+  "name": "Macintosh Performa 405 (1993 年)",
+  "productId": "apple-macintosh-performa-405",
+  "ourName": "Macintosh Performa 405",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-410",
+  "name": "Macintosh Performa 410 (1993 年)",
+  "productId": "apple-macintosh-performa-410",
+  "ourName": "Macintosh Performa 410",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-430",
+  "name": "Macintosh Performa 430 (1993 年)",
+  "productId": "apple-macintosh-performa-430",
+  "ourName": "Macintosh Performa 430",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-450",
+  "name": "Macintosh Performa 450 (1993 年)",
+  "productId": "apple-macintosh-performa-450",
+  "ourName": "Macintosh Performa 450",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-460",
+  "name": "Macintosh Performa 460 (1993 年)",
+  "productId": "apple-macintosh-performa-460",
+  "ourName": "Macintosh Performa 460",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-467",
+  "name": "Macintosh Performa 467 (1993 年)",
+  "productId": "apple-macintosh-performa-467",
+  "ourName": "Macintosh Performa 467",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-475",
+  "name": "Macintosh Performa 475 (1993 年)",
+  "productId": "apple-macintosh-performa-475",
+  "ourName": "Macintosh Performa 475",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-476",
+  "name": "Macintosh Performa 476 (1993 年)",
+  "productId": "apple-macintosh-performa-476",
+  "ourName": "Macintosh Performa 476",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-5200cd",
+  "name": "Macintosh Performa 5200CD (1995 年)",
+  "productId": "apple-macintosh-performa-5200CD",
+  "ourName": "Macintosh Performa 5200CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-520",
+  "name": "Macintosh Performa 520 (1993 年)",
+  "productId": "apple-macintosh-performa-520",
+  "ourName": "Macintosh Performa 520",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-5210cd",
+  "name": "Macintosh Performa 5210CD (1995 年)",
+  "productId": "apple-macintosh-performa-5210CD",
+  "ourName": "Macintosh Performa 5210CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-5215cd",
+  "name": "Macintosh Performa 5215CD (1995 年)",
+  "productId": "apple-macintosh-performa-5215CD",
+  "ourName": "Macintosh Performa 5215CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-5220cd",
+  "name": "Macintosh Performa 5220CD (1995 年)",
+  "productId": "apple-macintosh-performa-5220CD",
+  "ourName": "Macintosh Performa 5220CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-5260cd",
+  "name": "Macintosh Performa 5260CD (1996 年)",
+  "productId": "apple-macintosh-performa-5260CD",
+  "ourName": "Macintosh Performa 5260CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "5260-01",
+  "dateQuirk": true
+ },
+ {
+  "slug": "macintosh-performa-5270cd",
+  "name": "Macintosh Performa 5270CD (1996 年)",
+  "productId": "apple-macintosh-performa-5270CD",
+  "ourName": "Macintosh Performa 5270CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "macintosh-performa-5280",
+  "name": "Macintosh Performa 5280 (1996 年)",
+  "productId": "apple-macintosh-performa-5280",
+  "ourName": "Macintosh Performa 5280",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "macintosh-performa-5300cd",
+  "name": "Macintosh Performa 5300CD (1995 年)",
+  "productId": "apple-macintosh-performa-5300CD",
+  "ourName": "Macintosh Performa 5300CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-5320cd",
+  "name": "Macintosh Performa 5320CD (1995 年)",
+  "productId": "apple-macintosh-performa-5320CD",
+  "ourName": "Macintosh Performa 5320CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "macintosh-performa-550",
+  "name": "Macintosh Performa 550 (1993 年)",
+  "productId": "apple-macintosh-performa-550",
+  "ourName": "Macintosh Performa 550",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-performa-575",
+  "name": "Macintosh Performa 575 (1994 年)",
+  "productId": "apple-macintosh-performa-575",
+  "ourName": "Macintosh Performa 575",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-577",
+  "name": "Macintosh Performa 577 (1994 年)",
+  "productId": "apple-macintosh-performa-577",
+  "ourName": "Macintosh Performa 577",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-578",
+  "name": "Macintosh Performa 578 (1994 年)",
+  "productId": "apple-macintosh-performa-578",
+  "ourName": "Macintosh Performa 578",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-631cd",
+  "name": "Macintosh Performa 631CD (1994 年)",
+  "productId": "apple-macintosh-performa-631CD",
+  "ourName": "Macintosh Performa 631CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-635cd",
+  "name": "Macintosh Performa 635CD (1994 年)",
+  "productId": "apple-macintosh-performa-635CD",
+  "ourName": "Macintosh Performa 635CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-6360",
+  "name": "Macintosh Performa 6360 (1996 年)",
+  "productId": "apple-macintosh-performa-6360",
+  "ourName": "Macintosh Performa 6360",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1996-01"
+ },
+ {
+  "slug": "macintosh-performa-637cd",
+  "name": "Macintosh Performa 637CD (1994 年)",
+  "productId": "apple-macintosh-performa-637CD",
+  "ourName": "Macintosh Performa 637CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-638cd",
+  "name": "Macintosh Performa 638CD (1994 年)",
+  "productId": "apple-macintosh-performa-638CD",
+  "ourName": "Macintosh Performa 638CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-performa-640cd",
+  "name": "Macintosh Performa 640CD (1994 年)",
+  "productId": "apple-macintosh-performa-640CD",
+  "ourName": "Macintosh Performa 640CD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-plus",
+  "name": "Macintosh Plus (1986 年)",
+  "productId": "apple-macintosh-plus",
+  "ourName": "Macintosh Plus",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1986-01"
+ },
+ {
+  "slug": "macintosh-portable",
+  "name": "Macintosh Portable (9.8英寸)",
+  "productId": "apple-macintosh-portable",
+  "ourName": "Macintosh Portable",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-1400cs",
+  "name": "Macintosh PowerBook 1400cs (11.3英寸, 1996年10月)",
+  "productId": "apple-powerbook-1400cs",
+  "ourName": "Macintosh PowerBook 1400cs",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-1400c",
+  "name": "Macintosh PowerBook 1400c (11.3英寸, 1996年10月)",
+  "productId": "apple-powerbook-1400c",
+  "ourName": "Macintosh PowerBook 1400c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-150",
+  "name": "Macintosh PowerBook 150 (9.5英寸)",
+  "productId": "apple-powerbook-150",
+  "ourName": "Macintosh PowerBook 150",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-160",
+  "name": "Macintosh PowerBook 160 (10英寸)",
+  "productId": "apple-powerbook-160",
+  "ourName": "Macintosh PowerBook 160",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-165c",
+  "name": "Macintosh PowerBook 165c (9英寸 彩色版)",
+  "productId": "apple-powerbook-165c",
+  "ourName": "Macintosh PowerBook 165c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-165",
+  "name": "Macintosh PowerBook 165 (10英寸)",
+  "productId": "apple-powerbook-165",
+  "ourName": "Macintosh PowerBook 165",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-170",
+  "name": "Macintosh PowerBook 170 (10英寸)",
+  "productId": "apple-powerbook-170",
+  "ourName": "Macintosh PowerBook 170",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-180c",
+  "name": "Macintosh PowerBook 180c (8.4英寸)",
+  "productId": "apple-powerbook-180c",
+  "ourName": "Macintosh PowerBook 180c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-180",
+  "name": "Macintosh PowerBook 180 (10英寸)",
+  "productId": "apple-powerbook-180",
+  "ourName": "Macintosh PowerBook 180",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-190cs",
+  "name": "Macintosh PowerBook 190cs (10.4英寸 彩色屏)",
+  "productId": "apple-powerbook-190cs",
+  "ourName": "Macintosh PowerBook 190cs",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-190",
+  "name": "Macintosh PowerBook 190 (9.5英寸)",
+  "productId": "apple-powerbook-190",
+  "ourName": "Macintosh PowerBook 190",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-2400c",
+  "name": "Macintosh PowerBook 2400c (10.4英寸, 1997年5月)",
+  "productId": "apple-powerbook-2400c",
+  "ourName": "Macintosh PowerBook 2400c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-3400c",
+  "name": "Macintosh PowerBook 3400c (12.1英寸, 1997年2月)",
+  "productId": "apple-powerbook-3400c",
+  "ourName": "Macintosh PowerBook 3400c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-500",
+  "name": "Macintosh PowerBook 500 (9.5英寸 PowerPC版)",
+  "productId": "apple-powerbook-500",
+  "ourName": "Macintosh PowerBook 500",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-520c",
+  "name": "Macintosh PowerBook 520c (9.5英寸 彩色版)",
+  "productId": "apple-powerbook-520c",
+  "ourName": "Macintosh PowerBook 520c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-520",
+  "name": "Macintosh PowerBook 520 (9.5英寸)",
+  "productId": "apple-powerbook-520",
+  "ourName": "Macintosh PowerBook 520",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-5300ce",
+  "name": "Macintosh PowerBook 5300ce (10.4英寸 高配版)",
+  "productId": "apple-powerbook-5300ce",
+  "ourName": "Macintosh PowerBook 5300ce",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-5300cs",
+  "name": "Macintosh PowerBook 5300cs (10.4英寸 双扫彩色屏)",
+  "productId": "apple-powerbook-5300cs",
+  "ourName": "Macintosh PowerBook 5300cs",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-5300c",
+  "name": "Macintosh PowerBook 5300c (10.4英寸 主动矩阵彩色屏)",
+  "productId": "apple-powerbook-5300c",
+  "ourName": "Macintosh PowerBook 5300c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-5300",
+  "name": "Macintosh PowerBook 5300 (9.5英寸 灰度屏)",
+  "productId": "apple-powerbook-5300",
+  "ourName": "Macintosh PowerBook 5300",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-540c",
+  "name": "Macintosh PowerBook 540c (9.5英寸 彩色版)",
+  "productId": "apple-powerbook-540c",
+  "ourName": "Macintosh PowerBook 540c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-540",
+  "name": "Macintosh PowerBook 540 (9.5英寸)",
+  "productId": "apple-powerbook-540",
+  "ourName": "Macintosh PowerBook 540",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-550c",
+  "name": "Macintosh PowerBook 550c (10.4英寸)",
+  "productId": "apple-powerbook-550c",
+  "ourName": "Macintosh PowerBook 550c",
+  "j": 0.8,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-quadra-605",
+  "name": "Macintosh Quadra 605 (1993 年)",
+  "productId": "apple-macintosh-quadra-605",
+  "ourName": "Macintosh Quadra 605",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-610",
+  "name": "Macintosh Quadra 610 (1993 年)",
+  "productId": "apple-macintosh-quadra-610",
+  "ourName": "Macintosh Quadra 610",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-630",
+  "name": "Macintosh Quadra 630 (1994 年)",
+  "productId": "apple-macintosh-quadra-630",
+  "ourName": "Macintosh Quadra 630",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "macintosh-quadra-650",
+  "name": "Macintosh Quadra 650 (1993 年)",
+  "productId": "apple-macintosh-quadra-650",
+  "ourName": "Macintosh Quadra 650",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-660av",
+  "name": "Macintosh Quadra 660AV (1993 年)",
+  "productId": "apple-macintosh-quadra-660av",
+  "ourName": "Macintosh Quadra 660AV",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-700",
+  "name": "Macintosh Quadra 700 (1991 年)",
+  "productId": "apple-quadra-700",
+  "ourName": "Macintosh Quadra 700",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1991-01"
+ },
+ {
+  "slug": "macintosh-quadra-800",
+  "name": "Macintosh Quadra 800 (1993 年)",
+  "productId": "apple-macintosh-quadra-800",
+  "ourName": "Macintosh Quadra 800",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-840av",
+  "name": "Macintosh Quadra 840AV (1993 年)",
+  "productId": "apple-macintosh-quadra-840av",
+  "ourName": "Macintosh Quadra 840AV",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-quadra-900",
+  "name": "Macintosh Quadra 900 (1991 年)",
+  "productId": "apple-macintosh-quadra-900",
+  "ourName": "Macintosh Quadra 900",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1991-01"
+ },
+ {
+  "slug": "macintosh-quadra-950",
+  "name": "Macintosh Quadra 950 (1992 年)",
+  "productId": "apple-macintosh-quadra-950",
+  "ourName": "Macintosh Quadra 950",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1992-01"
+ },
+ {
+  "slug": "macintosh-se30",
+  "name": "Macintosh SE/30 (1989 年)",
+  "productId": "apple-macintosh-se30",
+  "ourName": "Macintosh SE/30",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1989-01"
+ },
+ {
+  "slug": "macintosh-sese-fdhd",
+  "name": "Macintosh SE/SE FDHD (1987 年)",
+  "productId": "apple-macintosh-se-fdhd",
+  "ourName": "Macintosh SE FDHD",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1987-01",
+  "dateQuirk": true
+ },
+ {
+  "slug": "macintosh-tv",
+  "name": "Macintosh TV (1993 年)",
+  "productId": "apple-macintosh-tv",
+  "ourName": "Macintosh TV",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-xl",
+  "name": "Macintosh XL (1985 年)",
+  "productId": "apple-macintosh-xl",
+  "ourName": "Macintosh XL",
+  "j": 0.8,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1985-01"
+ },
+ {
+  "slug": "pro-display-xdr",
+  "name": "Pro Display XDR (2019)",
+  "productId": "apple-pro-display-xdr-2019",
+  "ourName": "Pro Display XDR",
+  "j": 0.8,
+  "cat": "display",
+  "baseMatch": true
+ },
+ {
+  "slug": "studio-display-xdr",
+  "name": "Studio Display XDR (2026)",
+  "productId": "apple-studio-display-xdr-2026",
+  "ourName": "Studio Display XDR",
+  "j": 0.8,
+  "cat": "display",
+  "baseMatch": true
+ },
+ {
+  "slug": "30w-usb-c",
+  "name": "30W USB-C 电源适配器",
+  "productId": "apple-30w-usb-c-adapter-2015",
+  "ourName": "30W USB-C 电源适配器",
+  "j": 0.75,
+  "cat": "accessory",
+  "baseMatch": true
+ },
+ {
+  "slug": "5w-usb",
+  "name": "5W USB 电源适配器 (初代)",
+  "productId": "apple-5w-usb-adapter-2004",
+  "ourName": "5W USB 电源适配器（初代）",
+  "j": 0.75,
+  "cat": "accessory",
+  "baseMatch": true
+ },
+ {
+  "slug": "61w-usb-c",
+  "name": "61W USB-C 电源适配器",
+  "productId": "apple-61w-usb-c-adapter-2016",
+  "ourName": "61W USB-C 电源适配器",
+  "j": 0.75,
+  "cat": "accessory",
+  "baseMatch": true
+ },
+ {
+  "slug": "airpods-4",
+  "name": "AirPods 4 (主动降噪版)",
+  "productId": "apple-airpods-4-anc",
+  "ourName": "AirPods 4（主动降噪版）",
+  "j": 0.75,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "airpods-pro-1-magsafe",
+  "name": "AirPods Pro 1 (MagSafe 充电盒)",
+  "productId": "apple-airpods-pro-1",
+  "ourName": "AirPods Pro (第 1 代)",
+  "j": 0.75,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "airpods-pro-2-lighting",
+  "name": "AirPods Pro 2 (Lighting)",
+  "productId": "apple-airpods-pro-2",
+  "ourName": "AirPods Pro (第 2 代，Lightning)",
+  "j": 0.75,
+  "cat": "audio",
+  "baseMatch": true
+ },
+ {
+  "slug": "airtag-1",
+  "name": "AirTag (第 1 代)",
+  "productId": "apple-airtag-1",
+  "ourName": "AirTag",
+  "j": 0.75,
+  "cat": "tracker",
+  "baseMatch": true,
+  "pageDate": "2026-01"
+ },
+ {
+  "slug": "apple-desktop-bus-mouse",
+  "name": "Apple Desktop Bus Mouse",
+  "productId": "apple-adb-mouse-ii-1993",
+  "ourName": "Apple Desktop Bus Mouse II",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "apple-keyboard",
+  "name": "Apple Keyboard (铝合金)",
+  "productId": "apple-keyboard-alu-2007",
+  "ourName": "Apple Keyboard（铝合金）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "apple-keyboard-3",
+  "name": "Apple Keyboard",
+  "productId": "apple-keyboard-alu-2007",
+  "ourName": "Apple Keyboard（铝合金）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "apple-mighty-mouse",
+  "name": "Apple Mighty Mouse (无线)",
+  "productId": "apple-mighty-mouse-wireless-2006",
+  "ourName": "Apple Mighty Mouse（无线）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "apple-tv-4k-1",
+  "name": "Apple TV 4K (第 1 代)",
+  "productId": "apple-tv-4k-2017",
+  "ourName": "Apple TV 4K",
+  "j": 0.75,
+  "cat": "home",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "apple-wireless-keyboard-2003",
+  "name": "Apple Wireless Keyboard (2003)",
+  "productId": "apple-keyboard-wireless-2003",
+  "ourName": "Apple Wireless Keyboard",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "emac-2002",
+  "name": "eMac (2002 年)",
+  "productId": "apple-emac-2002",
+  "ourName": "eMac",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "2002-01"
+ },
+ {
+  "slug": "ibook-dual-usb-2001",
+  "name": "iBook (Dual USB, 2001年中期)",
+  "productId": "apple-ibook-2001",
+  "ourName": "iBook（双 USB 接口）",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-g4-12-inch-12200310",
+  "name": "iBook G4 (12-inch) (12英寸，2003年10月)",
+  "productId": "apple-ibook-g4-12-2004-early",
+  "ourName": "iBook G4 (12 英寸, 2004 年初)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-g4-12-inch-122004",
+  "name": "iBook G4 (12-inch) (12英寸，2004年末)",
+  "productId": "apple-ibook-g4-12-2004-late",
+  "ourName": "iBook G4 (12 英寸, 2004 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "ibook-g4-12-inch-122004-2",
+  "name": "iBook G4 (12-inch) (12英寸，2004年初)",
+  "productId": "apple-ibook-g4-12-2004-early",
+  "ourName": "iBook G4 (12 英寸, 2004 年初)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-g4-12-inch-122005",
+  "name": "iBook G4 (12-inch) (12英寸，2005年中期)",
+  "productId": "apple-ibook-g4-12-2005",
+  "ourName": "iBook G4 (12 英寸, 2005 年中期)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "ibook-g4-14-inch-14200310",
+  "name": "iBook G4 (14-inch) (14英寸，2003年10月)",
+  "productId": "apple-ibook-g4-14-2003",
+  "ourName": "iBook G4 (14 英寸, 2003 年 10 月)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "ibook-g4-14-inch-142004",
+  "name": "iBook G4 (14-inch) (14英寸，2004年末)",
+  "productId": "apple-ibook-g4-14-2004-late",
+  "ourName": "iBook G4 (14 英寸, 2004 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "ibook-g4-14-inch-142004-2",
+  "name": "iBook G4 (14-inch) (14英寸，2004年初)",
+  "productId": "apple-ibook-g4-14-2004-early",
+  "ourName": "iBook G4 (14 英寸, 2004 年初)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-g4-14-inch-142005",
+  "name": "iBook G4 (14-inch) (14英寸，2005年中期)",
+  "productId": "apple-ibook-g4-14-2005",
+  "ourName": "iBook G4 (14 英寸, 2005 年中期)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-se-19997",
+  "name": "iBook SE (1999年7月)",
+  "productId": "apple-ibook-se-1999",
+  "ourName": "iBook SE",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ibook-se-firewire-20009",
+  "name": "iBook SE (Firewire, 2000年9月)",
+  "productId": "apple-ibook-se-firewire",
+  "ourName": "iBook SE (FireWire)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac",
+  "name": "iMac",
+  "productId": "apple-imac-g3-1998",
+  "ourName": "iMac G3",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "imac-17-2006",
+  "name": "iMac (17 英寸, 2006 年末)",
+  "productId": "apple-imac-17-2006-late",
+  "ourName": "iMac (17 英寸, 2006 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-17-2006-3",
+  "name": "iMac (17 英寸, 2006 年初)",
+  "productId": "apple-imac-17-2006-early",
+  "ourName": "iMac (17 英寸, 2006 年初)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-17-flat-panel",
+  "name": "iMac (17 英寸, Flat Panel)",
+  "productId": "apple-imac-g4-17-1ghz",
+  "ourName": "iMac (17 英寸, Flat Panel, 1GHz)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-20-2006",
+  "name": "iMac (20 英寸, 2006 年末)",
+  "productId": "apple-imac-20-2006-late",
+  "ourName": "iMac (20 英寸, 2006 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-20-2009",
+  "name": "iMac (20 英寸, 2009 年中)",
+  "productId": "apple-imac-20-2009-mid",
+  "ourName": "iMac (20 英寸, 2009 年中)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-21-5-2009",
+  "name": "iMac (21.5 英寸, 2009 年末)",
+  "productId": "apple-imac-led-2009",
+  "ourName": "iMac (21.5/27 英寸 LED，2009 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "imac-21-5-2011",
+  "name": "iMac (21.5 英寸, 2011 年末)",
+  "productId": "apple-imac-2011",
+  "ourName": "iMac (2011 年中)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "merge": true
+ },
+ {
+  "slug": "imac-21-5-2011-2",
+  "name": "iMac (21.5 英寸, 2011 年中)",
+  "productId": "apple-imac-2011",
+  "ourName": "iMac (2011 年中)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-21-5-2013",
+  "name": "iMac (21.5 英寸, 2013 年末)",
+  "productId": "apple-imac-2013",
+  "ourName": "iMac (2013 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-24-2023-2",
+  "name": "iMac (24 英寸, 2023 年, 端口×2)",
+  "productId": "apple-imac-24-m3",
+  "ourName": "iMac 24 英寸 (M3)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-24-2023-4",
+  "name": "iMac (24 英寸, 2023 年, 端口×4)",
+  "productId": "apple-imac-24-m3",
+  "ourName": "iMac 24 英寸 (M3)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-24-m1-2021-2",
+  "name": "iMac (24 英寸, M1, 2021 年, 端口×2)",
+  "productId": "apple-imac-24-m1-2021",
+  "ourName": "iMac 24 英寸 (M1)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-24-m1-2021-4",
+  "name": "iMac (24 英寸, M1, 2021 年, 端口×4)",
+  "productId": "apple-imac-24-m1-2021",
+  "ourName": "iMac 24 英寸 (M1)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-5-flavors",
+  "name": "iMac (5 Flavors)",
+  "productId": "apple-imac-g3-1998",
+  "ourName": "iMac G3",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "imac-flat-panel",
+  "name": "iMac (Flat Panel)",
+  "productId": "apple-imac-g4-17-1ghz",
+  "ourName": "iMac (17 英寸, Flat Panel, 1GHz)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-g5-17",
+  "name": "iMac G5 (17 英寸, 环境光传感器)",
+  "productId": "apple-imac-g5-2004",
+  "ourName": "iMac G5",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-g5-17-2",
+  "name": "iMac G5 (17 英寸)",
+  "productId": "apple-imac-g5-2004",
+  "ourName": "iMac G5",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-g5-20",
+  "name": "iMac G5 (20 英寸, 环境光传感器)",
+  "productId": "apple-imac-g5-20",
+  "ourName": "iMac G5 (20 英寸)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-retina-5k-27-2015",
+  "name": "iMac (Retina 5K, 27 英寸, 2015 年末)",
+  "productId": "apple-imac-retina-5k-2015-mid",
+  "ourName": "iMac (Retina 5K, 27 英寸, 2015 年中)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "merge": true
+ },
+ {
+  "slug": "imac-slot-loading-dvdv-se",
+  "name": "iMac (Slot Loading, DV/DV SE)",
+  "productId": "apple-imac-slot-loading",
+  "ourName": "iMac (Slot Loading)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "imac-summer-2000-dvdvplusdv-se",
+  "name": "iMac (Summer 2000, DV/DV+/DV SE)",
+  "productId": "apple-imac-summer-2000",
+  "ourName": "iMac (Summer 2000)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "ipad",
+  "name": "iPad",
+  "productId": "apple-ipad-1",
+  "ourName": "iPad（第 1 代）",
+  "j": 0.75,
+  "cat": "tablet",
+  "baseMatch": true
+ },
+ {
+  "slug": "ipad-mini",
+  "name": "iPad mini",
+  "productId": "apple-ipad-mini-1",
+  "ourName": "iPad mini（第 1 代）",
+  "j": 0.75,
+  "cat": "tablet",
+  "baseMatch": true
+ },
+ {
+  "slug": "ipad-mini-a17-pro",
+  "name": "iPad mini (A17 Pro)",
+  "productId": "apple-ipad-mini-7",
+  "ourName": null,
+  "j": 0.75,
+  "cat": "tablet",
+  "baseMatch": true
+ },
+ {
+  "slug": "iphone-se",
+  "name": "iPhone SE",
+  "productId": "apple-iphone-se-2016",
+  "ourName": "iPhone SE（2016）",
+  "j": 0.75,
+  "cat": "phone",
+  "baseMatch": true
+ },
+ {
+  "slug": "ipod",
+  "name": "iPod (点按式转盘)",
+  "productId": "apple-ipod-click-wheel",
+  "ourName": "iPod (点按式转盘)",
+  "j": 0.75,
+  "cat": "media",
+  "baseMatch": true,
+  "pageDate": "2005-06"
+ },
+ {
+  "slug": "ipod-3",
+  "name": "iPod (触控式转盘)",
+  "productId": "apple-ipod-touch-wheel",
+  "ourName": "iPod (触控式转盘)",
+  "j": 0.75,
+  "cat": "media",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "2003-04"
+ },
+ {
+  "slug": "ipod-6",
+  "name": "iPod (滚动式转盘)",
+  "productId": "apple-ipod-scroll-wheel",
+  "ourName": "iPod (滚动式转盘)",
+  "j": 0.75,
+  "cat": "media",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "2003-04"
+ },
+ {
+  "slug": "ipod-mini-1",
+  "name": "iPod mini (第1代)",
+  "productId": "apple-ipod-mini-1",
+  "ourName": "iPod mini",
+  "j": 0.75,
+  "cat": "media",
+  "baseMatch": true,
+  "pageDate": "2005-02"
+ },
+ {
+  "slug": "ipod-shuffle-3-2009",
+  "name": "iPod shuffle (第3代) (2009 年末,不锈钢)",
+  "productId": "apple-ipod-shuffle-3",
+  "ourName": "iPod shuffle (第 3 代)",
+  "j": 0.75,
+  "cat": "media",
+  "baseMatch": true,
+  "pageDate": "2010-09"
+ },
+ {
+  "slug": "ipod-touch-16gb-5",
+  "name": "iPod touch 16GB (第 5 代) (2013年中)",
+  "productId": "apple-ipod-touch-5",
+  "ourName": "iPod touch (第 5 代)",
+  "j": 0.75,
+  "cat": "phone",
+  "baseMatch": true
+ },
+ {
+  "slug": "led-cinema-display-27",
+  "name": "LED Cinema Display （27 英寸）",
+  "productId": "apple-led-cinema-display-2009",
+  "ourName": "LED Cinema Display",
+  "j": 0.75,
+  "cat": "display",
+  "baseMatch": true
+ },
+ {
+  "slug": "mac-mini",
+  "name": "Mac mini",
+  "productId": "apple-mac-mini-2005",
+  "ourName": "Mac mini（2005）",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "2005-01"
+ },
+ {
+  "slug": "mac-mini-2006",
+  "name": "Mac mini (2006 年末)",
+  "productId": "apple-mac-mini-2006-late",
+  "ourName": "Mac mini (2006 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "2006-01"
+ },
+ {
+  "slug": "mac-mini-2009",
+  "name": "Mac mini (2009 年末)",
+  "productId": "apple-mac-mini-2009",
+  "ourName": "Mac mini (2009 年末)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "mac-mini-m1-2020",
+  "name": "Mac mini (M1, 2020 年)",
+  "productId": "apple-mac-mini-m1-2020",
+  "ourName": "Mac mini (M1)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true
+ },
+ {
+  "slug": "mac-pro-2023",
+  "name": "Mac Pro (2023 年)",
+  "productId": "apple-mac-pro-m2ultra-2023",
+  "ourName": "Mac Pro (M2 Ultra)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "2023-01"
+ },
+ {
+  "slug": "mac-studio-2022",
+  "name": "Mac Studio (2022 年)",
+  "productId": "apple-mac-studio-m1max-2022",
+  "ourName": "Mac Studio (M1 Max)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "2023-06"
+ },
+ {
+  "slug": "mac-studio-2025",
+  "name": "Mac Studio (2025 年)",
+  "productId": "apple-mac-studio-m4max-2025",
+  "ourName": "Mac Studio (M4 Max)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "mac-studio-2026",
+  "name": "Mac Studio (2026 年)",
+  "productId": "apple-mac-studio-m5max-2026",
+  "ourName": "Mac Studio (M5 Max)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-13-2006",
+  "name": "MacBook (13英寸, 2006年末)",
+  "productId": "apple-macbook-13-2006-late",
+  "ourName": "MacBook (13 英寸, 2006 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-13-2007",
+  "name": "MacBook (13英寸, 2007年末)",
+  "productId": "apple-macbook-13-2007-late",
+  "ourName": "MacBook (13 英寸, 2007 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-13-2008",
+  "name": "MacBook (13英寸, 铝合金, 2008年末)",
+  "productId": "apple-macbook-13-2008-late",
+  "ourName": "MacBook (13 英寸, 2008 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-13-2008-3",
+  "name": "MacBook (13英寸, 2008年初)",
+  "productId": "apple-macbook-13-2008-early",
+  "ourName": "MacBook (13 英寸, 2008 年初)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-13-2009",
+  "name": "MacBook (13 英寸, 2009 年末)",
+  "productId": "apple-macbook-white-2009",
+  "ourName": "MacBook 13 英寸 (2009 年末)",
+  "j": 0.75,
+  "baseMatch": true,
+  "fixed": true,
+  "cat": "laptop"
+ },
+ {
+  "slug": "macbook-13-2009-3",
+  "name": "MacBook (13 英寸, 2009 年初)",
+  "productId": "apple-macbook-13-2009-early",
+  "ourName": "MacBook (13 英寸, 2009 年初)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-air-13-m3-2024",
+  "name": "MacBook Air (13 英寸, M3, 2024 年)",
+  "productId": "apple-macbook-air-13-m3-2024",
+  "ourName": "MacBook Air 13.6 英寸 (M3)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-13-m4-2025",
+  "name": "MacBook Air (13 英寸, M4, 2025 年)",
+  "productId": "apple-macbook-air-13-m4-2025",
+  "ourName": "MacBook Air 13.6 英寸 (M4)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-15-m2-2023",
+  "name": "MacBook Air (15 英寸, M2, 2023 年)",
+  "productId": "apple-macbook-air-15-m2-2023",
+  "ourName": "MacBook Air 15.3 英寸 (M2)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-15-m3-2024",
+  "name": "MacBook Air (15 英寸, M3, 2024 年)",
+  "productId": "apple-macbook-air-13-m3-2024",
+  "ourName": "MacBook Air 13.6 英寸 (M3)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-air-15-m4-2025",
+  "name": "MacBook Air (15 英寸, M4, 2025 年)",
+  "productId": "apple-macbook-air-13-m4-2025",
+  "ourName": "MacBook Air 13.6 英寸 (M4)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-air-2008",
+  "name": "MacBook Air (2008 年初)",
+  "productId": "apple-macbook-air-2008",
+  "ourName": "MacBook Air 13 英寸（2008）",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-2009",
+  "name": "MacBook Air (2009 年中)",
+  "productId": "apple-macbook-air-2009",
+  "ourName": "MacBook Air 13 英寸 (2009 年中)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-m1-2020",
+  "name": "MacBook Air (M1, 2020 年)",
+  "productId": "apple-macbook-air-13-m1-2020",
+  "ourName": "MacBook Air 13 英寸 (M1)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-air-m2-2022",
+  "name": "MacBook Air (M2, 2022 年)",
+  "productId": "apple-macbook-air-13-m2-2022",
+  "ourName": "MacBook Air 13.6 英寸 (M2)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-13-2011",
+  "name": "MacBook Pro (13英寸, 2011年末)",
+  "productId": "apple-macbook-pro-13-2011-late",
+  "ourName": "MacBook Pro (13 英寸, 2011 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-14-2021",
+  "name": "MacBook Pro (14 英寸, 2021 年)",
+  "productId": "apple-macbook-pro-14-m1pro-2021",
+  "ourName": "MacBook Pro 14 英寸 (M1 Pro)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-14-m3-2023-11",
+  "name": "MacBook Pro (14 英寸, M3, 2023 年 11 月)",
+  "productId": "apple-macbook-pro-14-m3-2023",
+  "ourName": "MacBook Pro 14 英寸 (M3)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-14-m3-promax-2023-11",
+  "name": "MacBook Pro (14 英寸, M3 Pro/Max, 2023 年 11 月)",
+  "productId": "apple-macbook-pro-14-2023",
+  "ourName": "MacBook Pro (14 英寸, 2023)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-14-m4-2024",
+  "name": "MacBook Pro (14 英寸, M4, 2024 年)",
+  "productId": "apple-macbook-pro-14-m4-2024",
+  "ourName": "MacBook Pro 14 英寸 (M4)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-15-2008",
+  "name": "MacBook Pro (15英寸, 2008年末)",
+  "productId": "apple-macbook-pro-15-2008-late",
+  "ourName": "MacBook Pro (15 英寸, 2008 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-15-2009",
+  "name": "MacBook Pro (15英寸, 2009年中)",
+  "productId": "apple-macbook-pro-15-253-2009-mid",
+  "ourName": "MacBook Pro (15 英寸, 2.53GHz, 2009 年中)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-15-2011",
+  "name": "MacBook Pro (15英寸, 2011年末)",
+  "productId": "apple-macbook-pro-15-2011-late",
+  "ourName": "MacBook Pro (15 英寸, 2011 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-15-2016",
+  "name": "MacBook Pro (15 英寸, 2016 年)",
+  "productId": "apple-macbook-pro-touchbar-2016",
+  "ourName": "MacBook Pro 15 英寸 (Touch Bar，2016 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-16-2021",
+  "name": "MacBook Pro (16 英寸, 2021 年)",
+  "productId": "apple-macbook-pro-16-m1pro-2021",
+  "ourName": "MacBook Pro 16 英寸 (M1 Pro)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-pro-17-2008",
+  "name": "MacBook Pro (17英寸, 2008年末)",
+  "productId": "apple-macbook-pro-17-2008-late",
+  "ourName": "MacBook Pro (17 英寸, 2008 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-17-2009",
+  "name": "MacBook Pro (17英寸, 2009年中)",
+  "productId": "apple-macbook-pro-17-2009-mid",
+  "ourName": "MacBook Pro (17 英寸, 2009 年中)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-17-2011",
+  "name": "MacBook Pro (17英寸, 2011年末)",
+  "productId": "apple-macbook-pro-17-2011-late",
+  "ourName": "MacBook Pro (17 英寸, 2011 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macbook-pro-retina-13-2013",
+  "name": "MacBook Pro (Retina, 13 英寸, 2013 年末)",
+  "productId": "apple-macbook-pro-retina-2013",
+  "ourName": "MacBook Pro 13 英寸 (Retina，2013 年末)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "macbook-retina-12-2015",
+  "name": "MacBook (Retina, 12 英寸, 2015 年初)",
+  "productId": "apple-macbook-12-retina-2015",
+  "ourName": "MacBook 12 英寸（2015）",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-512k512ke",
+  "name": "Macintosh 512K/512Ke (1984-1986 年)",
+  "productId": "apple-macintosh-512ke",
+  "ourName": "Macintosh 512Ke",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1986-04"
+ },
+ {
+  "slug": "macintosh-centris-660av-quadra-660av",
+  "name": "Macintosh Centris 660AV / Quadra 660AV (1993 年)",
+  "productId": "apple-macintosh-centris-660av",
+  "ourName": "Macintosh Centris 660AV",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-lc-iii",
+  "name": "Macintosh LC III (1993 年)",
+  "productId": "apple-macintosh-lc-iii",
+  "ourName": "Macintosh LC III",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-lc-iiiplus",
+  "name": "Macintosh LC III+ (1993 年)",
+  "productId": "apple-macintosh-lc-iii-plus",
+  "ourName": "Macintosh LC III+",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-powerbook-100",
+  "name": "Macintosh PowerBook 100 (9英寸)",
+  "productId": "apple-powerbook-100",
+  "ourName": "PowerBook 100",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-powerbook-duo-2300c",
+  "name": "Macintosh PowerBook Duo 2300c (9.5英寸)",
+  "productId": "apple-powerbook-2300c",
+  "ourName": "Macintosh PowerBook 2300c",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "macintosh-server-g4",
+  "name": "Macintosh Server G4 (数字音频)",
+  "productId": "apple-macintosh-server-g4-da",
+  "ourName": "Macintosh Server G4 (Digital Audio)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "2001-01"
+ },
+ {
+  "slug": "macintosh-server-g4-2",
+  "name": "Macintosh Server G4 (千兆以太网)",
+  "productId": "apple-macintosh-server-g4-ge",
+  "ourName": "Macintosh Server G4 (Gigabit Ethernet)",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "fixed": true,
+  "pageDate": "2000-01"
+ },
+ {
+  "slug": "magic-keyboard",
+  "name": "Magic Keyboard (带有数字小键盘)",
+  "productId": "apple-magic-keyboard-2015",
+  "ourName": "Magic Keyboard",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "magic-keyboard-folio",
+  "name": "妙控键盘双面夹",
+  "productId": "apple-magic-keyboard-folio",
+  "ourName": null,
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "magic-keyboard-for-ipad",
+  "name": "妙控键盘iPad",
+  "productId": "apple-magic-keyboard-ipad",
+  "ourName": "妙控键盘 iPad",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "magic-keyboard-lock",
+  "name": "Magic Keyboard (带有 Lock 键)",
+  "productId": "apple-magic-keyboard-usb-c-2024",
+  "ourName": "Magic Keyboard（带有 Lock 键）(USB-C)",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "magic-keyboard-touch-id",
+  "name": "Magic Keyboard (带有 Touch ID 和数字小键盘)",
+  "productId": "apple-magic-keyboard-touch-id-2021",
+  "ourName": "Magic Keyboard（带有 Touch ID）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "magic-keyboard-touch-id-usb-c",
+  "name": "Magic Keyboard (带有 Touch ID 和数字小键盘)(USB-C)",
+  "productId": "apple-magic-keyboard-touch-id-2021",
+  "ourName": "Magic Keyboard（带有 Touch ID）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "magic-keyboard-touch-idusb-c",
+  "name": "Magic Keyboard (带有 Touch ID)(USB-C)",
+  "productId": "apple-magic-keyboard-touch-id-2021",
+  "ourName": "Magic Keyboard（带有 Touch ID）",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "messagepad-2000",
+  "name": "MessagePad 2000",
+  "productId": "apple-newton-2000",
+  "ourName": "Newton MessagePad 2000",
+  "j": 0.75,
+  "cat": "pda",
+  "baseMatch": true,
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "messagepad-2100",
+  "name": "MessagePad 2100",
+  "productId": "apple-newton-2100",
+  "ourName": "Newton MessagePad 2100",
+  "j": 0.75,
+  "cat": "pda",
+  "baseMatch": true,
+  "pageDate": "1997-01"
+ },
+ {
+  "slug": "powerbook-g3-1997",
+  "name": "PowerBook G3 (1997年)",
+  "productId": "apple-powerbook-g3-1997",
+  "ourName": "PowerBook G3 (Wallstreet)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "powerbook-g3-19985",
+  "name": "PowerBook G3 (1998年5月)",
+  "productId": "apple-powerbook-g3-1997",
+  "ourName": "PowerBook G3 (Wallstreet)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "powerbook-g4",
+  "name": "PowerBook G4 (千兆以太网)",
+  "productId": "apple-powerbook-g4-gigabit",
+  "ourName": "PowerBook G4 (Gigabit Ethernet)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "powerbook-g4-15-1-5ghz",
+  "name": "PowerBook G4 (15英寸 1.5GHz)",
+  "productId": "apple-powerbook-g4-15-133-150",
+  "ourName": "PowerBook G4 (15 英寸 1.5GHz/1.33GHz)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "powerbook-g4-2001",
+  "name": "PowerBook G4 (2001年初)",
+  "productId": "apple-powerbook-g4-2001",
+  "ourName": "PowerBook G4 (Titanium)",
+  "j": 0.75,
+  "cat": "laptop",
+  "baseMatch": true
+ },
+ {
+  "slug": "smart-keyboard-folio",
+  "name": "智能键盘式双面夹",
+  "productId": "apple-smart-keyboard-folio",
+  "ourName": null,
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true
+ },
+ {
+  "slug": "smart-keyboard-for-ipad-pro",
+  "name": "智能键盘iPad Pro",
+  "productId": "apple-smart-keyboard-ipad-pro",
+  "ourName": "智能键盘 iPad Pro",
+  "j": 0.75,
+  "cat": "input",
+  "baseMatch": true,
+  "fixed": true
+ },
+ {
+  "slug": "studio-display-2026",
+  "name": "Studio Display (2026)",
+  "productId": "apple-studio-display-2026",
+  "ourName": "Studio Display",
+  "j": 0.75,
+  "cat": "display",
+  "baseMatch": true
+ },
+ {
+  "slug": "twentieth-anniversary-macintosh-keyboard",
+  "name": "Twentieth Anniversary Macintosh Keyboard",
+  "productId": "apple-twentieth-anniversary-macintosh",
+  "ourName": "Twentieth Anniversary Macintosh",
+  "j": 0.75,
+  "cat": "desktop",
+  "baseMatch": true,
+  "pageDate": "1998-03",
+  "merge": true
+ },
+ {
+  "slug": "35w-usb-c",
+  "name": "35W 双 USB-C 端口电源适配器",
+  "productId": "apple-35w-dual-usb-c-adapter",
+  "ourName": "35W 双 USB-C 端口电源适配器",
+  "j": 1,
+  "cat": "accessory",
+  "manual": true
+ },
+ {
+  "slug": "apple-remote",
+  "name": "Apple Remote (铝合金版)",
+  "productId": "apple-remote-aluminum",
+  "ourName": "Apple Remote (铝合金版)",
+  "j": 1,
+  "cat": "accessory",
+  "manual": true
+ },
+ {
+  "slug": "imac-24-2024-2",
+  "name": "iMac (24 英寸, 2024 年, 端口×2)",
+  "productId": "apple-imac-24-m4-2024",
+  "ourName": "iMac 24 英寸 (M4)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true
+ },
+ {
+  "slug": "imac-24-2024-4",
+  "name": "iMac (24 英寸, 2024 年, 端口×4)",
+  "productId": "apple-imac-24-m4-2024",
+  "ourName": "iMac 24 英寸 (M4)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true
+ },
+ {
+  "slug": "mac-mini-2010",
+  "name": "Mac mini (2010年中)",
+  "productId": "apple-mac-mini-2010",
+  "ourName": "Mac mini（2010 Unibody）",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2010-01"
+ },
+ {
+  "slug": "mac-mini-2024",
+  "name": "Mac mini (2024 年)",
+  "productId": "apple-mac-mini-m4-2024",
+  "ourName": "Mac mini (M4)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true
+ },
+ {
+  "slug": "mac-pro-2019",
+  "name": "Mac Pro (2019 年)",
+  "productId": "apple-mac-pro-2019",
+  "ourName": "Mac Pro（2019 塔式）",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true
+ },
+ {
+  "slug": "mac-pro-8-core",
+  "name": "Mac Pro (8 Core)",
+  "productId": "apple-mac-pro-2007",
+  "ourName": "Mac Pro (8 核)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "reassigned": true,
+  "pageDate": "2007-01"
+ },
+ {
+  "slug": "mac-pro",
+  "name": "Mac Pro",
+  "productId": "apple-mac-pro-2006",
+  "ourName": "Mac Pro（2006）",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2006-01"
+ },
+ {
+  "slug": "mac-studio-2023",
+  "name": "Mac Studio (2023 年)",
+  "productId": "apple-mac-studio-m4max-2025",
+  "ourName": "Mac Studio (M4 Max)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "reassigned": true,
+  "pageDate": "2025-03"
+ },
+ {
+  "slug": "macintosh-centris-610-quadra-610",
+  "name": "Macintosh Centris 610 / Quadra 610 (1993 年)",
+  "productId": "apple-macintosh-centris-610",
+  "ourName": "Macintosh Centris 610",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "macintosh-centris-650-quadra-650",
+  "name": "Macintosh Centris 650 / Quadra 650 (1993 年)",
+  "productId": "apple-macintosh-centris-650",
+  "ourName": "Macintosh Centris 650",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "messagepad-120",
+  "name": "MessagePad 120",
+  "productId": "apple-newton-120",
+  "ourName": "Newton MessagePad 120",
+  "j": 1,
+  "cat": "pda",
+  "manual": true,
+  "pageDate": "1994-01"
+ },
+ {
+  "slug": "messagepad",
+  "name": "MessagePad",
+  "productId": "apple-newton-messagepad",
+  "ourName": "Newton MessagePad",
+  "j": 1,
+  "cat": "pda",
+  "manual": true,
+  "pageDate": "1993-01"
+ },
+ {
+  "slug": "power-mac-g4-mirrored-drive-doors-2003",
+  "name": "Power Mac G4 (Mirrored Drive Doors 2003年)",
+  "productId": "apple-power-mac-g4-mdd-2003",
+  "ourName": "Power Mac G4 (Mirrored Drive Doors)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "power-mac-g5-2005",
+  "name": "Power Mac G5 (2005年末)",
+  "productId": "apple-power-mac-g5-2005-10",
+  "ourName": "Power Mac G5 (2005 年末，双核)",
+  "j": 1,
+  "manual": true,
+  "reassigned": true,
+  "pageDate": "2005-01",
+  "fixed": true,
+  "cat": "desktop"
+ },
+ {
+  "slug": "workgroup-server-9150-120-mhz",
+  "name": "Workgroup Server 9150 (120 MHz)",
+  "productId": "apple-workgroup-server-9150",
+  "ourName": "Workgroup Server 9150",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "1995-01"
+ },
+ {
+  "slug": "xserve",
+  "name": "Xserve (集群节点)",
+  "productId": "apple-xserve-g4-cluster",
+  "ourName": "Xserve (集群节点)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2003-01"
+ },
+ {
+  "slug": "xserve-g5",
+  "name": "Xserve G5 (集群节点)",
+  "productId": "apple-xserve-g5-cluster",
+  "ourName": "Xserve G5 (集群节点)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2004-01"
+ },
+ {
+  "slug": "xserve-g5-2005-1",
+  "name": "Xserve G5 (2005 年 1 月 集群节点)",
+  "productId": "apple-xserve-g5-2005-cluster",
+  "ourName": "Xserve G5 (2005 年 1 月 集群节点)",
+  "j": 1,
+  "cat": "desktop",
+  "manual": true,
+  "pageDate": "2005-01"
+ }
+]
