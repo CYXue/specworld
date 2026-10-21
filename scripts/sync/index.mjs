@@ -230,6 +230,12 @@ function main() {
           : undefined,
         ok: true,
       },
+      'macdb-cn': {
+        fetchedAt: null,
+        note: 'macDB 第二票通道（scripts/macdb-sync/），仅填空缺字段',
+        noteKey: 'about.sourceMacdbCn',
+        ok: true,
+      },
     },
     vendors: VENDORS.filter((v) => brands.includes(v.id)),
     products: merged.sort((a, b) => a.id.localeCompare(b.id)),

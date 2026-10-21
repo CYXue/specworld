@@ -748,6 +748,78 @@
     "深空灰色": {
       "en": "Space Gray",
       "ev": "appleMacMini"
+    },
+    "妙控键盘双面夹": {
+      "en": "Magic Keyboard Folio",
+      "ev": "appleIpadProM5"
+    },
+    "触控板": {
+      "en": "trackpad",
+      "ev": "appleMacBookPro"
+    },
+    "视网膜显示屏": {
+      "en": "Retina display",
+      "ev": "appleSpecsCommon"
+    },
+    "超视网膜": {
+      "en": "Super Retina",
+      "ev": "apple16"
+    },
+    "全天候视网膜显示屏": {
+      "en": "Always-On Retina display",
+      "ev": "appleSpecsCommon"
+    },
+    "麦克风": {
+      "en": "microphones",
+      "ev": "appleMacBookPro"
+    },
+    "耳机插孔": {
+      "en": "headphone jack",
+      "ev": "appleMacBookPro"
+    },
+    "蜂窝网络": {
+      "en": "Cellular",
+      "ev": "appleSpecsCommon"
+    },
+    "血氧": {
+      "en": "blood oxygen",
+      "ev": "appleSpecsCommon"
+    },
+    "陀螺仪": {
+      "en": "gyroscope",
+      "ev": "appleSpecsCommon"
+    },
+    "加速度计": {
+      "en": "accelerometer",
+      "ev": "appleSpecsCommon"
+    },
+    "第一代": {
+      "en": "1st generation",
+      "ev": "appleSpecsCommon"
+    },
+    "第二代": {
+      "en": "2nd generation",
+      "ev": "appleSpecsCommon"
+    },
+    "第三代": {
+      "en": "3rd generation",
+      "ev": "appleSpecsCommon"
+    },
+    "尼特": {
+      "en": "nits",
+      "ev": "appleSpecsCommon"
+    },
+    "毫米": {
+      "en": "mm",
+      "ev": "appleSpecsCommon"
+    },
+    "高动态范围陀螺仪": {
+      "en": "high-dynamic-range gyroscope",
+      "ev": "appleSpecsCommon"
+    },
+    "血氧传感器": {
+      "en": "blood oxygen sensor",
+      "ev": "appleSpecsCommon"
     }
   },
   "prefixes": [

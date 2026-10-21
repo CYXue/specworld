@@ -119,6 +119,8 @@ export interface SpecRow {
   state: SpecRowState;
   /** 与该字段相关的采集说明（来自产品 notes，按字段路径/标签匹配），点击灰胶囊展开 */
   note?: string;
+  /** 字段级来源徽标：非官方来源（user-manual / macdb-cn / derived）才设置，官方值不设 */
+  prov?: string;
 }
 interface SpecGroup {
   title: string;
@@ -309,6 +311,12 @@ function buildSpecGroups(
   const specs = p.specs;
   const granularity = p.granularity;
   const fieldByPath = new Map(schema.fields.map((f) => [f.path, f]));
+  // 来源徽标：仅非官方来源透出（官网值不打标）；多字段合并行不标（歧义）
+  const provFor = (paths: string[]): string | undefined => {
+    if (paths.length !== 1) return undefined;
+    const v = p.provenance?.[paths[0]];
+    return v === 'user-manual' || v === 'macdb-cn' || v === 'derived' ? v : undefined;
+  };
   const referenced = new Set<string>();
   const out: Array<SpecGroup & { id: string }> = [];
 
@@ -345,6 +353,7 @@ function buildSpecGroups(
         value,
         state: rowState(values, granularity),
         note: noteFor(paths, [pickLocale(r.label ?? '', r.labelEn)], p.notes),
+        prov: provFor(paths),
       });
     }
     out.push({ id: g.id, title: pickLocale(g.title, g.titleEn), rows });
@@ -374,6 +383,7 @@ function buildSpecGroups(
       value: defaultFormat(f, specs?.[f.path]),
       state: rowState([specs?.[f.path]], granularity),
       note: noteFor([f.path], [labelOf(f)], p.notes),
+      prov: provFor([f.path]),
     };
     if (!extra.has(key)) extra.set(key, []);
     extra.get(key)!.push(row);

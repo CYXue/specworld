@@ -1,6 +1,7 @@
 // macDB 参数折叠：按 match-table.json 把结构化参数折进 data/overrides.json。
 // 只填空缺字段；默认预演，--apply 才写盘。
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
+import { dedupeIdentifierSerial, dedupeModelCodeSerial, rangeHeal } from './fill-core.mjs';
 
 const APPLY = process.argv.includes('--apply');
 const HERE = new URL('.', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
@@ -164,11 +165,11 @@ function parsePage(slug, cat) {
       if (!reg[cat].has(field)) continue;
       let v = null;
       try { v = parser(raw); } catch { v = null; }
-      if (v === null || v === undefined || v === '') continue;
+      if (v === null || v === undefined || v === '' || (Array.isArray(v) && !v.length)) continue;
       const f = reg[cat].get(field);
       if (f && f.type === 'number' && typeof v === 'number' && Array.isArray(f.range)) {
         const [lo, hi] = f.range;
-        if (v < lo || v > hi) { const fx = v * 10; if (fx >= lo && fx <= hi) v = fx; else continue; }
+        if (v < lo || v > hi) { const fx = rangeHeal(v, lo, hi); if (fx != null) v = fx; else continue; }
       }
       out[field] = v;
     }
@@ -192,6 +193,7 @@ for (const e of overrides.entries) {
 const nextId = () => `ovr-macdb-fill-${String(++fillSeq).padStart(4, '0')}`;
 
 const setFields = [];
+const foldLog = []; // --diff 审查面：{ target, field, value }（add-product 折叠 + set-field 同表）
 const log = { pageFail: 0, folded: 0, dupFold: 0, setField: 0, skippedHasValue: 0 };
 for (const m of matchTable) {
   const p = prods.get(m.productId);
@@ -213,6 +215,7 @@ for (const m of matchTable) {
         ap.product.provenance['battery.capacityCaliber'] = 'macdb-cn';
       }
       log.folded++;
+      foldLog.push({ target: m.productId, field, value: v, slug: m.slug });
     } else if (keptIds.has(m.productId)) {
       const cur = p.specs || {};
       const prov = p.provenance || {};
@@ -225,65 +228,25 @@ for (const m of matchTable) {
         createdAt: new Date().toISOString().slice(0, 10), active: true,
       });
       log.setField++;
+      foldLog.push({ target: m.productId, field, value: v, slug: m.slug, setField: true });
     }
   }
 }
 
-// 串号防线：identifier 同 brand+line 内唯一，owner = 最早发布
-{
-  const IDENT = 'device.identifier';
-  const groups = new Map();
-  for (const e of overrides.entries) {
-    if (e.op !== 'add-product') continue;
-    const v = e.product?.specs?.[IDENT];
-    if (typeof v !== 'string' || !v) continue;
-    const key = e.product.brand + '||' + e.product.line + '||' + v;
-    (groups.get(key) ?? groups.set(key, []).get(key)).push(e);
-  }
-  let removed = 0;
-  for (const arr of groups.values()) {
-    if (arr.length < 2) continue;
-    arr.sort((a, b) => (a.product.releaseDate || '9999').localeCompare(b.product.releaseDate || '9999')
-      || a.product.id.localeCompare(b.product.id));
-    for (const e of arr.slice(1)) {
-      delete e.product.specs[IDENT];
-      if (e.product.provenance) delete e.product.provenance[IDENT];
-      removed++;
-    }
-  }
-  log.serialDedup = removed;
-}
+// 串号防线（纯函数见 ./fill-core.mjs，fixture 自测在 selftest）
+log.serialDedup = dedupeIdentifierSerial(overrides.entries);
 
-// modelCode 串号防线：同 brand+line 内每个型号代码只能归属一台（owner = 最早发布）
-{
-  const FIELD = 'device.modelCodes';
-  const groups = new Map();
-  for (const e of overrides.entries) {
-    if (e.op !== 'add-product') continue;
-    const codes = e.product?.specs?.[FIELD];
-    if (!Array.isArray(codes)) continue;
-    for (const c of codes) {
-      const key = e.product.brand + '||' + e.product.line + '||' + c;
-      (groups.get(key) ?? groups.set(key, []).get(key)).push(e);
-    }
-  }
-  let removed = 0;
-  for (const arr of groups.values()) {
-    if (arr.length < 2) continue;
-    arr.sort((a, b) => (a.product.releaseDate || '9999').localeCompare(b.product.releaseDate || '9999')
-      || a.product.id.localeCompare(b.product.id));
-    for (const e of arr.slice(1)) {
-      const s = e.product.specs;
-      if (!Array.isArray(s[FIELD])) continue;
-      s[FIELD] = s[FIELD].filter(c => !arr[0].product.specs[FIELD]?.includes(c));
-      if (!s[FIELD].length) { delete s[FIELD]; if (e.product.provenance) delete e.product.provenance[FIELD]; }
-      removed++;
-    }
-  }
-  log.modelCodeDedup = removed;
-}
+// modelCode 串号防线（同上）
+log.modelCodeDedup = dedupeModelCodeSerial(overrides.entries);
 
 console.log('匹配:', matchTable.length, JSON.stringify(log));
+// --diff 审查面：本轮将写入的全部字段变更（折叠 + set-field 同表），
+// 全量落 _work/macdb-fill-diff.json，终端采样 20 条。写盘前过目用。
+writeFileSync(WORK + 'macdb-fill-diff.json', JSON.stringify(foldLog, null, 1));
+for (const d of foldLog.slice(0, 20)) {
+  console.log(`  ${d.setField ? '[set]' : '[fold]'} ${d.target} · ${d.field} ← ${JSON.stringify(d.value)?.slice(0, 60)} (${d.slug})`);
+}
+if (foldLog.length > 20) console.log(`  … 其余 ${foldLog.length - 20} 条见 _work/macdb-fill-diff.json`);
 if (APPLY) {
   if (setFields.length) overrides.entries.push(...setFields);
   writeFileSync(ROOT + 'data/overrides.json', JSON.stringify(overrides, null, 2) + '\n');

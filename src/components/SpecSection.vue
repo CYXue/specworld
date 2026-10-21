@@ -29,6 +29,13 @@ function badgeClass(state: SpecRowState): string {
 function badgeText(state: SpecRowState): string {
   return state === 'unpublished' ? t('common.unpublished') : t('common.uncollected');
 }
+/** 来源徽标文案：非官方来源（user-manual / macdb-cn / derived）才显示 */
+function srcText(prov?: string): string | null {
+  if (prov === 'macdb-cn') return 'macDB';
+  if (prov === 'derived') return t('common.srcDerived');
+  if (prov === 'user-manual') return t('common.srcUserEdited');
+  return null;
+}
 </script>
 
 <template>
@@ -56,6 +63,12 @@ function badgeText(state: SpecRowState): string {
           >{{ badgeText(r.state) }}</button>
           <span v-else-if="r.state === 'none'" class="text-faint">{{ t('common.none') }}</span>
           <template v-else>{{ r.value }}</template>
+          <!-- 来源徽标：macDB 第二票 / 派生 / 用户修正 —— 可核验性的字段级落点 -->
+          <span
+            v-if="srcText(r.prov)"
+            class="ml-1.5 align-middle badge border border-border bg-surface-2 text-[11px] font-normal text-faint"
+            :title="t('common.srcHint')"
+          >{{ srcText(r.prov) }}</span>
           <!-- 采集说明上浮：数据里「为什么是 null」的取证，点击胶囊展开 -->
           <p
             v-if="r.note && expanded.has(r.label)"

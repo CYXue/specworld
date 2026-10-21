@@ -21,6 +21,7 @@
 | 「改解析器 / 闸门」 | **先写断言再改代码**。改完 `npm run selftest`，不通过不许往下走 |
 | 「改界面」 | `npm run build` → 起 dev → **真机拖一遍**（滚动/点按/筛选必须真试，必须点进详情页） |
 | 「加/改一台机器的参数」 | 编辑 `data/overrides.json`（条目格式见文件内 `_doc`）→ 跑一次 `--data-only`。用户层每次同步重新应用，**官网刷新不会冲掉用户数据**；写错会被闸门拒绝写盘（这是设计） |
+| 「macDB 又更新了 / 再对一次账」 | `node scripts/macdb-sync/reconcile.mjs --fetch`（拉 sitemap+详情页并对账）→ 人工研判新机器补 `match-table.json` → `node scripts/macdb-sync/fill.mjs --apply`（只填空缺字段）→ `selftest` + `--data-only`。纪律见 `scripts/macdb-sync/README.md`；macDB 来源条目 source=`macdb-cn` |
 
 ---
 
@@ -196,8 +197,9 @@ public/data/   data/ 的构建期拷贝 —— 不入库（入库两份必然版
 - **先撤销旧的 GitHub PAT**。它曾明文泄露过，新 PAT 只需 `contents: write`。
 - **提交 `package.json` 的 `name` / `version` 必须同步 `package-lock.json`**，
   否则 `npm ci` 报锁不一致。
-- **推送走 `gh-proxy.com` / `ghproxy.net` 前缀**（GitHub 直连本机被 reset），
-  仓库 git 根在子目录。
+- **推送 GitHub 直连即可**（2026-10-20 实测直连成功；旧结论「必须走 gh-proxy 前缀」已过时——
+  代理改写会导致凭据管理器按代理主机找凭据而匿名失败）。仓库 git 根在子目录。
+  另有 atomgit 远端镜像（`git push atomgit main` 直连）。
 - **B 站 Toy 需 `secrets.TOY_CLI_SESSION_TOKEN` + `vars.TOY_ID`**，未配则安静跳过。
 - **页面挂 `/toy/<slug>/`**：dist 里不能有任何写死的路径前缀。
 - **首次发布 Toy 走人工两段式**：`node scripts/publish/toy-create.mjs`（预览，不带 `--yes`）

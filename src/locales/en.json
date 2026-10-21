@@ -65,6 +65,9 @@
     "unpublishedTip": "The official spec page has no such item — honestly left empty, never estimated",
     "uncollected": "Not collected yet",
     "uncollectedTip": "The official site may list this data; we have not collected it yet — check the \"Official source\" drawer on the detail page",
+    "srcDerived": "derived",
+    "srcUserEdited": "user edit",
+    "srcHint": "Field-level data source: non-official values are labelled here (macDB cross-check / derived / user edit)",
     "currencySymbol": "¥",
     "models": "{n} models",
     "unknown": "Unknown",
@@ -271,6 +274,7 @@
     "sourceHuaweiOfficial": "Huawei official spec page",
     "sourceReleaseDates": "{total} evidenced, {unresolved} unresolved",
     "sourceUserManual": "{total} user entries, {applied} applied this run",
+    "sourceMacdbCn": "macDB cross-check channel (macdb.cn, fills gaps only)",
     "sourceUserEmpty": "No user data",
     "sourceMissing": "Missing"
   },

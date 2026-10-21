@@ -70,6 +70,28 @@ const SPLIT = /(\s*\|\s*|\s*,\s*|\s*，\s*|\s*、\s*)/;
  * translateSegment 调用间串味导致漏匹配。需整段替换多处的（如全角冒号）走 split/join。 */
 const PATTERNS = G.patterns.map((p) => ({ re: new RegExp(p.re), en: p.en }));
 
+// 边界安全子串替换用的组合正则（惰性构建一次；词条按长度降序，长词优先命中）。
+// 只含长度 ≥2 的 CJK 词条；前后 lookaround 保证术语「自成一词」（邻字符不是 CJK），
+// 不会把「适用于体能训练的心率传感器」这类嵌入式短语拦腰换掉。
+function escapeRe(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+const CJK_CLASS = '[\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff]';
+let BOUNDARY_RE: RegExp | null = null;
+function boundaryTermsPass(s: string): string {
+  if (!BOUNDARY_RE) {
+    const terms = Object.keys(G.exact)
+      .filter((k) => k.length >= 2 && CJK.test(k))
+      .sort((a, b) => b.length - a.length);
+    if (!terms.length) return s;
+    BOUNDARY_RE = new RegExp(
+      `(?<!${CJK_CLASS})(?:${terms.map(escapeRe).join('|')})(?!${CJK_CLASS})`,
+      'g',
+    );
+  }
+  return s.replace(BOUNDARY_RE, (t) => G.exact[t]?.en ?? t);
+}
+
 export const GLOSSARY_EXACT = G.exact;
 export const GLOSSARY_PATTERNS = G.patterns;
 export const GLOSSARY_SOURCES = G._sources;
@@ -99,6 +121,10 @@ function translateSegment(s: string): string {
   for (const p of PATTERNS) {
     if (p.re.test(out)) out = out.replace(p.re, p.en);
   }
+  // 边界安全子串替换：「雷雳 ×2」「加速度计 (16 g)」这类「术语 + 限定词」片段，
+  // 整段 exact 罩不住（限定词不固定），但术语本身在官网英文页有逐条对应。
+  // 替换术语、保留限定词，比整段中文残留诚实；边界 lookaround 保证不拆嵌入式短语。
+  if (CJK.test(out)) out = boundaryTermsPass(out);
   // 品牌/系列名可以在一行里出现多次（`麒麟 9020A 麒麟 9020B`），而 pattern 是
   // 锚定整片段的、`replace` 只换第一个。所以还剩中文时再做一次全局兜底。
   if (CJK.test(out)) {

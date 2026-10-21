@@ -4565,6 +4565,93 @@ section('派生层：CPU 核心数（deriveCpuCores）');
   });
 }
 
+section('glossary：边界安全子串替换（boundaryTermsPass）');
+{
+  // 正例：术语+限定词 片段，术语翻译、限定词保留（macDB 批次的「雷雳 ×2」形态）
+  const cases = [
+    ['加速度计 (16 g)', 'accelerometer (16 g)'],
+    ['妙控键盘双面夹 (仅支持)', 'Magic Keyboard Folio (仅支持)'],
+  ];
+  for (const [zh, want] of cases) {
+    check(`边界替换：${zh} → ${want}`, () => {
+      assert.equal(withLocale('en', () => GLOSS.localizeSpecValue(zh)), want);
+    });
+  }
+  // 反例：嵌入式短语（术语前邻 CJK）不得被拦腰替换 —— 诚实保留原文
+  const negatives = ['适用于体能训练的心率传感器', '内置液晶显示屏', '双千兆以太网'];
+  for (const zh of negatives) {
+    check(`边界不拆：${zh} 保留原文`, () => {
+      assert.equal(withLocale('en', () => GLOSS.localizeSpecValue(zh)), zh);
+    });
+  }
+  // 组合正例：片段内多术语依次替换（长词优先）
+  check('边界替换：高动态范围陀螺仪 整词命中', () => {
+    assert.equal(
+      withLocale('en', () => GLOSS.localizeSpecValue('accelerometer (high-g), 高动态范围陀螺仪')),
+      'accelerometer (high-g), high-dynamic-range gyroscope',
+    );
+  });
+}
+
+section('macdb-sync fill-core：串号防线与单位自愈（fixture）');
+{
+  const FC = await import('./macdb-sync/fill-core.mjs');
+  const mk = (id, releaseDate, specs) => ({
+    op: 'add-product',
+    product: { id, brand: 'apple', line: 'L', releaseDate, specs, provenance: {} },
+  });
+
+  check('identifier 串号：owner = 最早发布，其余清空', () => {
+    const entries = [
+      mk('b', '2009-09', { 'device.identifier': 'iMac,1' }),
+      mk('a', '2006-01', { 'device.identifier': 'iMac,1' }),
+      mk('c', '2010-01', {}),
+    ];
+    const removed = FC.dedupeIdentifierSerial(entries);
+    assert.equal(removed, 1);
+    assert.equal(entries[0].product.specs['device.identifier'], undefined); // b（晚）被清空
+    assert.equal(entries[1].product.specs['device.identifier'], 'iMac,1'); // a（早）保留
+  });
+
+  check('identifier 无冲突时零改动', () => {
+    const entries = [mk('a', '2006-01', { 'device.identifier': 'iMac,1' }), mk('c', '2010-01', {})];
+    assert.equal(FC.dedupeIdentifierSerial(entries), 0);
+    assert.equal(entries[0].product.specs['device.identifier'], 'iMac,1');
+  });
+
+  check('modelCode 串号：冲突码从非 owner 移除，无冲突码保留', () => {
+    const entries = [
+      mk('late', '2012-06', { 'device.modelCodes': ['A1255', 'A9999'] }),
+      mk('early', '2007-04', { 'device.modelCodes': ['A1255'] }),
+    ];
+    const removed = FC.dedupeModelCodeSerial(entries);
+    assert.equal(removed, 1);
+    // late 与 early 都持有 A1255 → late 里 A1255 被移除，A9999 保留；early（owner）不动
+    assert.deepEqual(entries[0].product.specs['device.modelCodes'], ['A9999']);
+    assert.deepEqual(entries[1].product.specs['device.modelCodes'], ['A1255']);
+  });
+
+  check('modelCode 去重健壮性：前一组删空后另一组不再炸（历史回归）', () => {
+    const entries = [
+      mk('late', '2012-06', { 'device.modelCodes': ['A1009'] }),
+      mk('mid', '2008-02', { 'device.modelCodes': ['A1009'] }),
+      mk('early', '2004-01', { 'device.modelCodes': ['A1009'] }),
+    ];
+    // 三台同码：owner=early，mid/late 依次移除；mid 删空后 late 必须不炸
+    assert.doesNotThrow(() => FC.dedupeModelCodeSerial(entries));
+    assert.deepEqual(entries[2].product.specs['device.modelCodes'], ['A1009']); // early（owner）不动
+    assert.equal(entries[1].product.specs['device.modelCodes'], undefined); // mid 删空后整字段删除
+    assert.equal(entries[0].product.specs['device.modelCodes'], undefined); // late 同样删空
+  });
+
+  check('rangeHeal：range 内原样、越界 ×10 落入则自愈、否则 null', () => {
+    assert.equal(FC.rangeHeal(100, 40, 1500), 100);
+    assert.equal(FC.rangeHeal(30.5, 80, 650), 305); // macDB 老机型 cm 误标 mm
+    assert.equal(FC.rangeHeal(1, 80, 650), null); // ×10 仍越界 → 拒
+    assert.equal(FC.rangeHeal(99999, 40, 1500), null);
+  });
+}
+
 /* ================================================================ *
  * 汇总
  * ================================================================ */

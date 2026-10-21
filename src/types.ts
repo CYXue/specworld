@@ -136,6 +136,12 @@ export interface Product {
    * 所以现有组件读 product.display.sizeIn 不受影响；新品类页面直接消费它。
    */
   specs?: Record<string, unknown>;
+  /**
+   * 字段级数据来源（管线快照透传，adapt.ts spread 原样带过）。
+   * 取值契约 = src/lib/types.ts 的 SourceId；非官方来源（user-manual /
+   * macdb-cn / derived）在详情参数行以来源徽标可视化。
+   */
+  provenance?: Record<string, string>;
   /** 在售档位表（容量/内存/价格）。v1 老快照可能整段缺失 */
   skus?: Sku[];
   releaseDate: string; // ISO date
