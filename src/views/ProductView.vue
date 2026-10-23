@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useRoute, RouterLink } from 'vue-router';
 import { useDataset, useDerived } from '../lib/useDataset';
 import type { Product } from '../types';
@@ -12,11 +12,11 @@ import { useCompare } from '../lib/useCompare';
 import StatusBadge from '../components/StatusBadge.vue';
 import SourceBadge from '../components/SourceBadge.vue';
 import SpecSection from '../components/SpecSection.vue';
+import ComplianceSection from '../components/ComplianceSection.vue';
 import MetricCard from '../components/MetricCard.vue';
 import RawOfficialDrawer from '../components/RawOfficialDrawer.vue';
 import LoadingState from '../components/LoadingState.vue';
 
-const { t } = useI18n();
 const route = useRoute();
 const { ds, err } = useDataset();
 const derived = useDerived();
@@ -185,6 +185,12 @@ const heroScreen = computed(() =>
           <template #value><PriceTag :product="product" size="xl" /></template>
         </MetricCard>
         <MetricCard v-for="m in metrics" :key="m.label" :value="m.value" :label="m.label" />
+      </section>
+
+      <!-- 合规认证：进网许可/SRRC/SAR/产地/能效——监管申报口径单列 + 官方验真入口 -->
+      <section class="mb-6">
+        <h2 class="kicker mb-3">合规认证</h2>
+        <ComplianceSection :product="product" />
       </section>
 
       <!-- 完整规格：keySpecs 化 —— 默认只展开前 3 组，其余收进「查看全部参数」 -->
