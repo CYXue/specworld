@@ -899,7 +899,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "device",
-      "note": "头部电磁辐射吸收率。进网检测强制项；欧盟限值 2.0 / 美国 1.6 W/kg，不同法规口径不可比，只并列展示。上界 10 留余量防闸门误报"
+      "note": "头部电磁辐射吸收率。进网检测强制项；**存储口径固定为 over 10g（2.0 W/kg 限值的欧盟/中国进网口径）**——苹果 RF 暴露页同页给 1g（美标 1.6）与 10g 两套值，混存两口径不可比。上界 10 留余量防闸门误报"
     },
     {
       "path": "device.sarBodyWkg",
@@ -913,7 +913,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "device",
-      "note": "身体佩戴位电磁辐射吸收率；与 sarHeadWkg 永远分列不合并（同典型/峰值亮度纪律）。官网不公布 = unknown"
+      "note": "身体佩戴位电磁辐射吸收率；与 sarHeadWkg 永远分列不合并（同典型/峰值亮度纪律）。**存储口径固定为 over 10g（欧盟/中国进网口径）**。官网不公布 = unknown"
     }
   ]
 }

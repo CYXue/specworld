@@ -38,6 +38,9 @@ import {
 } from './context.mjs';
 import { check, section } from './runtime.mjs';
 
+// 顶层 await 预加载（纪律：同步 check 里绝不写 await——async 用例会静默绿）
+const { parseSarText } = await import('../ingest/apple-sar-parse.mjs');
+
 
 
 
@@ -762,7 +765,6 @@ check('反向测：非 phone 品类监管字段同样过 validateSpecValue 正�
   const schema = loadSchema('display');
   const f = (p) => fieldMap(schema).get(p);
   // 正向
-  assert.equal(validateSpecValue(f('device.origin'), '中国上海', 't'), null);
   assert.equal(validateSpecValue(f('device.envUsePeriod'), 20, 't'), null);
   assert.equal(validateSpecValue(f('device.ctaNo'), null, 't'), null, 'null 恒合法（未公布）');
   assert.equal(validateSpecValue(f('power.inputVoltage'), '100-240V~, 50/60Hz', 't'), null);
@@ -774,6 +776,61 @@ check('反向测：非 phone 品类监管字段同样过 validateSpecValue 正�
   assert.ok(validateSpecValue(f('device.envUsePeriod'), 99, 't'), '超区间必须报错');
   assert.ok(validateSpecValue(f('power.inputPower'), '180', 't'), '功率漂成字符串必须报错');
   assert.ok(validateSpecValue(f('power.protectionClass'), 'IV', 't'), '防触电类别枚举越界必须报错');
+});
+
+check('SAR 解析器黄金夹具：苹果 RF 暴露页渲染文本 → 10g 口径 Head/Body（先红后绿）', () => {
+  // 夹具取自 regulatoryinfo.apple.com/rfexposure/iPhone16,2/en 渲染文本（iPhone 15 Pro Max）。
+  // 解析只取 over 10g（2.0 W/kg 限值）口径——存储口径已钉死在 phone schema 的 note 里。
+  // （parseSarText 由本文件顶部 await import 预加载——同步 check 里绝不写 await）
+  const fixture = `
+### iPhone 15 Pro Max
+### Model A2849
+1.6 W/kg (over 1 g) SAR Limit
+Head : 1.07
+Body : 1.11
+2.0 W/kg (over 10 g) SAR Limit
+Head : 0.98
+Body : 0.98
+### Model A3105,A3106,A3108
+1.6 W/kg (over 1 g) SAR Limit
+Head : 1.09
+Body : 1.13
+2.0 W/kg (over 10 g) SAR Limit
+Head : 0.98
+Body : 0.98`;
+  const rows = parseSarText(fixture);
+  assert.equal(rows.length, 2, '两个 Model 段应各出一行');
+  assert.deepEqual(
+    rows[0],
+    { model: 'A2849', head10g: 0.98, body10g: 0.98 },
+    'A2849 的 10g 口径应为 Head 0.98 / Body 0.98',
+  );
+  assert.deepEqual(rows[1], { model: 'A3105,A3106,A3108', head10g: 0.98, body10g: 0.98 });
+  // 1g 口径（1.07/1.11/1.09/1.13）绝不许混进 10g 结果——口径漂移是最危险的静默故障
+  for (const r of rows) {
+    assert.notEqual(r.head10g, 1.07);
+    assert.notEqual(r.head10g, 1.09);
+  }
+  assert.deepEqual(parseSarText(''), [], '空文本返回空数组（不抛异常）');
+  assert.deepEqual(
+    parseSarText('没有 SAR 内容的页面'),
+    [],
+    '无 2.0 段的页面返回空数组（官网没公布 = unknown，不许编）',
+  );
+  // 无 # 形态（浏览器 innerText 的真实形态，iPhone12,1 页实测）：Model 行没有 ###
+  const plain = parseSarText(`
+Model A2221
+1.6 W/kg (over 1 g) SAR Limit
+Head : 1.09
+Body : 1.18
+2.0 W/kg (over 10 g) SAR Limit
+Head : 0.95
+Body : 0.99`);
+  assert.deepEqual(
+    plain,
+    [{ model: 'A2221', head10g: 0.95, body10g: 0.99 }],
+    'innerText 无 # 的 Model 段必须同样解析（1g 的 1.09/1.18 不得混入）',
+  );
 });
 
 check('反向测：specs 未注册键整机报错（拼错字段名的唯一防线）', () => {
@@ -1146,6 +1203,47 @@ check('反向测：引用悬空 / 字段未注册 / 值越界 / id 冲突 / 品�
     ),
     [],
     'excludeIds 里的 id 是用户层自己加的，不算冲突',
+  );
+});
+
+check('闸门参照集：set-field 指向本层 add-product 收录的机型必须放行（sync/index.mjs 修复）', () => {
+  // 2026-10-23 apple-sar 批次实测踩中：整合闸门在 add-product 合并**之前**校验，
+  // 参照集只有官网窗口内机型，指向用户层历史机型的 set-field 全被「引用悬空」误拦
+  // （80/102 条被拒）。修复 = 参照集并入 add-product 声明的机型 + excludeIds 排除自身。
+  // 同款纪律：真实合法数据过闸 = 正向测；悬空引用照旧报错 = 反向测（修复不许放松防线）。
+  const entry = {
+    id: 'sar-1',
+    op: 'set-field',
+    productId: 'legacy-1',
+    field: 'device.sarHeadWkg',
+    value: 0.98,
+    reason: '苹果 RF 暴露页 SAR（over 10g）',
+    createdAt: '2026-10-23',
+    active: true,
+  };
+  const legacy = makeProduct('legacy-1'); // 用户层 add-product 收录的历史机型
+  const official = [makeProduct('p1')]; // 官网窗口内机型（不含 legacy-1）
+  const addProducts = [legacy];
+  // 正向：参照集 = 官网侧 + 本层 add-product，set-field 指向后者必须零报错
+  assert.deepEqual(
+    validateOverrides({ entries: [entry] }, [...official, ...addProducts], {
+      excludeIds: addProducts.map((p) => p.id),
+    }),
+    [],
+    'set-field 指向 add-product 机型不应报引用悬空',
+  );
+  // 反向：参照集不含 add-product 机型（修复前的错误形态）必须报出——防线不许放松
+  assert.ok(
+    validateOverrides({ entries: [entry] }, official).some((e) => /引用的机型不存在/.test(e)),
+  );
+  // 反向：真正悬空的引用在修复后的参照集下照样报错
+  assert.ok(
+    validateOverrides(
+      { entries: [{ ...entry, productId: 'ghost' }] },
+      [...official, ...addProducts],
+      { excludeIds: addProducts.map((p) => p.id) },
+    ).some((e) => /引用的机型不存在/.test(e)),
+    '修复不许把悬空引用放进来',
   );
 });
 

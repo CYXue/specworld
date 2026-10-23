@@ -144,7 +144,16 @@ function main() {
   // 先 validateOverrides 再过 applyOverrides：引用悬空/字段未注册/类型区间错误
   // 一律拒绝写盘，不静默跳过。
   const overrides = loadOverrides();
-  const overrideErrors = validateOverrides(overrides, kept);
+  // 参照集 = 官网窗口内机型 + 本层 add-product 声明的机型。set-field 允许指向用户层
+  // 收录的历史机型（2026-10-23 apple-sar 批次：SAR 补录到老 iPhone，80/102 条曾因
+  // 参照集只有 kept 而被「引用悬空」误拦）。excludeIds 排除 add-product 自身 id，
+  // 避免 add-product 的冲突检查「自己冲突自己」。
+  const addProducts = overrides.entries
+    .filter((e) => e.op === 'add-product' && e.product?.id)
+    .map((e) => e.product);
+  const overrideErrors = validateOverrides(overrides, kept.concat(addProducts), {
+    excludeIds: addProducts.map((p) => p.id),
+  });
   if (overrideErrors.length) {
     console.error(`\n❌ 用户数据层校验未通过（${overrideErrors.length} 项），拒绝写盘：`);
     for (const e of overrideErrors) console.error(`  - ${e}`);
@@ -193,9 +202,9 @@ function main() {
       'apple-official': {
         fetchedAt: now,
         note: `苹果官网规格页`,
-        // 展示走语言包（2026-10-14 i18n 深扫）：note 是管线拼的中文串，
-        // 英文页会原样吐中文。noteKey + noteParams 让前端按语言渲染，
-        // 数字作为插值参数而不是写死在句子里（否则「64 条取证」没法双语）。
+        // 展示走文案键（2026-10-14 键化，2026-10-21 多语言退役后仍保留）：
+        // note 是管线拼的中文串，noteKey + noteParams 让前端查 zh 字典渲染，
+        // 数字作为插值参数而不是写死在句子里（改措辞不用重跑管线）。
         noteKey: 'about.sourceAppleOfficial',
         ok: merged.some((p) => p.brand === 'apple'),
       },
