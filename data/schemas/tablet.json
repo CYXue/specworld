@@ -2,87 +2,74 @@
   "_doc": "平板电脑品类参数字段表（schema v2）。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图从 phone.json 推导：屏幕/芯片/内存/存储/电池/相机/网络/系统通用，手机专属组（振动马达/卫星通信/红外/NFC 支付）不建；电池容量用 Wh（苹果官网口径，与手机 mAh 不互换算——蓝图原则 4）；重量用 g（平板介于手机与笔记本之间，仍用 g）。range 是闸门合理性区间（不是规格区间），已按 iPad 全系真实数据 + 余量设定。新增/修改字段需同步 docs/UNIVERSAL-CATALOG.md 的说明。",
   "id": "tablet",
   "label": "平板",
-  "labelEn": "Tablet",
   "groups": [
     {
       "id": "body",
       "name": "外观与机身",
-      "nameEn": "Appearance & Build",
       "type": "single",
       "guide": "厚度/重量/材质/配色"
     },
     {
       "id": "display",
       "name": "屏幕显示",
-      "nameEn": "Display",
       "type": "single",
       "guide": "尺寸/类型/分辨率/亮度/刷新/色域"
     },
     {
       "id": "chipset",
       "name": "处理器与性能",
-      "nameEn": "Processor & Performance",
       "type": "single",
       "guide": "SoC/制程/核心数/GPU/NPU"
     },
     {
       "id": "memory",
       "name": "内存与存储",
-      "nameEn": "Memory & Storage",
       "type": "single",
       "guide": "内存档位/存储档位/存储扩展"
     },
     {
       "id": "battery",
       "name": "电池与电源",
-      "nameEn": "Battery & Power",
       "type": "single",
       "guide": "容量(Wh)/续航"
     },
     {
       "id": "camera",
       "name": "摄像头",
-      "nameEn": "Camera",
       "type": "multi",
       "guide": "前置+后置"
     },
     {
       "id": "audio",
       "name": "音频",
-      "nameEn": "Audio",
       "type": "single",
       "guide": "扬声器"
     },
     {
       "id": "connectivity",
       "name": "网络与连接",
-      "nameEn": "Network & Connectivity",
       "type": "single",
       "guide": "WLAN/蓝牙/5G/定位/USB/eSIM"
     },
     {
       "id": "features",
       "name": "功能特性",
-      "nameEn": "Features",
       "type": "single",
       "guide": "触控笔支持"
     },
     {
       "id": "os",
       "name": "系统与软件",
-      "nameEn": "OS & Software",
       "type": "single",
       "guide": "出厂系统"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "security",
-      "name": "安全",
-      "nameEn": "Security"
+      "name": "安全"
     }
   ],
   "fields": [
@@ -97,9 +84,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.widthMm",
@@ -112,9 +97,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Width",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.thicknessMm",
@@ -127,9 +110,7 @@
       ],
       "dir": "low",
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Thickness",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -143,9 +124,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "iPad mini 293g 起，iPad Pro 12.9 (2015) 713g 封顶",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "iPad mini 293g 起，iPad Pro 12.9 (2015) 713g 封顶"
     },
     {
       "path": "body.material",
@@ -155,8 +134,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Body material"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -166,8 +144,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "display.sizeIn",
@@ -181,9 +158,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "iPad mini 8.3 起，iPad Pro 13 封顶",
-      "labelEn": "Screen size",
-      "unitEn": "in"
+      "note": "iPad mini 8.3 起，iPad Pro 13 封顶"
     },
     {
       "path": "display.type",
@@ -193,8 +168,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Display type"
+      "group": "display"
     },
     {
       "path": "display.resolutionPx",
@@ -204,9 +178,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Resolution",
-      "unitEn": "px"
+      "group": "display"
     },
     {
       "path": "display.ppi",
@@ -220,9 +192,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "下界 100 为初代 iPad 留位（iPad 1/2 为 132ppi——原 [150,600] 只覆盖 Retina 时代，闸门误报拦截全代数据）",
-      "labelEn": "Pixel density",
-      "unitEn": "ppi"
+      "note": "下界 100 为初代 iPad 留位（iPad 1/2 为 132ppi——原 [150,600] 只覆盖 Retina 时代，闸门误报拦截全代数据）"
     },
     {
       "path": "display.refreshHz",
@@ -233,9 +203,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": "字符串：官网原文形态（苹果写「ProMotion 自适应刷新率」/安卓写「120Hz」）。排序/算术前用 refreshHzNumber 取代表值",
-      "labelEn": "Refresh rate",
-      "unitEn": "Hz"
+      "note": "字符串：官网原文形态（苹果写「ProMotion 自适应刷新率」/安卓写「120Hz」）。排序/算术前用 refreshHzNumber 取代表值"
     },
     {
       "path": "display.brightnessTypicalNits",
@@ -248,9 +216,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Typical brightness",
-      "unitEn": "nits"
+      "group": "display"
     },
     {
       "path": "display.brightnessPeakNits",
@@ -264,9 +230,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "与典型亮度永远分列，不合成「最高亮度」",
-      "labelEn": "Peak brightness",
-      "unitEn": "nits"
+      "note": "与典型亮度永远分列，不合成「最高亮度」"
     },
     {
       "path": "display.colorGamut",
@@ -277,8 +241,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": "官网原文（P3 广色域），不换算覆盖率",
-      "labelEn": "Color gamut"
+      "note": "官网原文（P3 广色域），不换算覆盖率"
     },
     {
       "path": "chipset.name",
@@ -288,8 +251,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Processor"
+      "group": "chipset"
     },
     {
       "path": "chipset.processNm",
@@ -303,9 +265,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "chipset",
-      "note": "上界 100 为老 A 系列留位（A4/A5 为 45nm）",
-      "labelEn": "Process node",
-      "unitEn": "nm"
+      "note": "上界 100 为老 A 系列留位（A4/A5 为 45nm）"
     },
     {
       "path": "chipset.cpuCores",
@@ -318,9 +278,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "chipset",
-      "labelEn": "CPU cores",
-      "unitEn": "cores"
+      "group": "chipset"
     },
     {
       "path": "chipset.gpu",
@@ -331,8 +289,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "官网原文（「4 核图形处理器」），不拆核数",
-      "labelEn": "GPU"
+      "note": "官网原文（「4 核图形处理器」），不拆核数"
     },
     {
       "path": "chipset.npu",
@@ -342,8 +299,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "NPU"
+      "group": "chipset"
     },
     {
       "path": "memory.ramGb",
@@ -354,9 +310,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": "苹果官网不公布 iPad RAM → 记 null（unknown），不估算",
-      "labelEn": "RAM options",
-      "unitEn": "GB"
+      "note": "苹果官网不公布 iPad RAM → 记 null（unknown），不估算"
     },
     {
       "path": "memory.storageGb",
@@ -366,9 +320,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "memory",
-      "labelEn": "Storage options",
-      "unitEn": "GB"
+      "group": "memory"
     },
     {
       "path": "memory.expandable",
@@ -378,8 +330,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "memory",
-      "labelEn": "Expandable storage"
+      "group": "memory"
     },
     {
       "path": "battery.capacityWh",
@@ -393,9 +344,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "battery",
-      "note": "苹果官网以 Wh 公布（与手机 mAh 不互换算，蓝图原则 4）",
-      "labelEn": "Battery capacity",
-      "unitEn": "Wh"
+      "note": "苹果官网以 Wh 公布（与手机 mAh 不互换算，蓝图原则 4）"
     },
     {
       "path": "battery.vendorClaimedHours",
@@ -409,9 +358,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报（「最长可达 10 小时」），测试条件不一，只并列展示不参与排名",
-      "labelEn": "Vendor-claimed battery life",
-      "unitEn": "h"
+      "note": "厂商自报（「最长可达 10 小时」），测试条件不一，只并列展示不参与排名"
     },
     {
       "path": "camera.rear",
@@ -436,8 +383,7 @@
             "periscope",
             "macro",
             "depth"
-          ],
-          "labelEn": "Lens role"
+          ]
         },
         {
           "path": "camera.rear.mp",
@@ -447,33 +393,27 @@
           "range": [
             0.1,
             250
-          ],
-          "labelEn": "Resolution",
-          "unitEn": "MP"
+          ]
         },
         {
           "path": "camera.rear.aperture",
           "label": "光圈",
           "unit": null,
-          "type": "string",
-          "labelEn": "Aperture"
+          "type": "string"
         },
         {
           "path": "camera.rear.ois",
           "label": "光学防抖",
           "unit": null,
-          "type": "boolean",
-          "labelEn": "Optical image stabilization"
+          "type": "boolean"
         },
         {
           "path": "camera.rear.sensorNote",
           "label": "传感器备注",
           "unit": null,
-          "type": "string",
-          "labelEn": "Sensor note"
+          "type": "string"
         }
-      ],
-      "labelEn": "Rear camera"
+      ]
     },
     {
       "path": "camera.front",
@@ -484,8 +424,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "camera",
-      "note": "iPad 前摄为横向布局，object 形态 { mp, note }",
-      "labelEn": "Front camera"
+      "note": "iPad 前摄为横向布局，object 形态 { mp, note }"
     },
     {
       "path": "camera.videoMax",
@@ -495,8 +434,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "camera",
-      "labelEn": "Max video spec"
+      "group": "camera"
     },
     {
       "path": "audio.speakers",
@@ -507,8 +445,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "官网原文（双扬声器/四扬声器系统），不换算数量",
-      "labelEn": "Speakers"
+      "note": "官网原文（双扬声器/四扬声器系统），不换算数量"
     },
     {
       "path": "connectivity.wifi",
@@ -518,8 +455,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "WLAN"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.bluetooth",
@@ -529,8 +465,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.fiveG",
@@ -542,8 +477,7 @@
       "quantifiable": false,
       "group": "connectivity",
       "facet": true,
-      "note": "仅蜂窝版支持；WLAN 版记 false",
-      "labelEn": "5G"
+      "note": "仅蜂窝版支持；WLAN 版记 false"
     },
     {
       "path": "connectivity.gnss",
@@ -553,8 +487,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Positioning"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.usb",
@@ -564,8 +497,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "USB"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.esim",
@@ -576,8 +508,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "facet": true,
-      "labelEn": "eSIM"
+      "facet": true
     },
     {
       "path": "features.stylus",
@@ -588,8 +519,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文（支持 Apple Pencil Pro），不折算代数",
-      "labelEn": "Stylus support"
+      "note": "官网原文（支持 Apple Pencil Pro），不折算代数"
     },
     {
       "path": "os.launch",
@@ -599,8 +529,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "Shipped OS"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -611,8 +540,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -624,8 +551,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -637,8 +562,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -650,8 +573,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "labelEn": "Core clocks",
-      "unitEn": null,
       "note": "性能核/能效核的频率与数量（如 4.93GHz × 2 + 2.64GHz × 4）"
     },
     {
@@ -663,8 +584,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "labelEn": "Memory type",
-      "unitEn": null,
       "note": "内存颗粒类型与速率（如 LPDDR5X（7500 MT/s）、DDR4 ECC）"
     },
     {
@@ -676,8 +595,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "labelEn": "Charging methods",
-      "unitEn": null,
       "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
     },
     {
@@ -689,8 +606,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "labelEn": "Baseband",
-      "unitEn": null,
       "note": "蜂窝基带型号（Apple C1X / Apple C2 / 高通 X80M 等）"
     },
     {
@@ -702,8 +617,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "labelEn": "Authentication",
-      "unitEn": null,
       "note": "生物识别 + 密码的组合方式（面容 ID / 触控 ID / 侧边按钮）"
     },
     {
@@ -718,8 +631,6 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "labelEn": "HDR brightness",
-      "unitEn": "nit",
       "note": "HDR 内容的典型亮度；与典型亮度、峰值亮度是三个不同口径"
     },
     {
@@ -731,9 +642,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）",
-      "labelEn": "Chip configuration",
-      "unitEn": null
+      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）"
     },
     {
       "path": "battery.vendorClaimedWebHours",
@@ -747,9 +656,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报（浏览网页口径），只并列展示不参与排名",
-      "labelEn": "Web battery life",
-      "unitEn": "h"
+      "note": "厂商自报（浏览网页口径），只并列展示不参与排名"
     },
     {
       "path": "battery.vendorClaimedCellularHours",
@@ -763,9 +670,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报（蜂窝网络口径），只并列展示不参与排名",
-      "labelEn": "Cellular battery life",
-      "unitEn": "h"
+      "note": "厂商自报（蜂窝网络口径），只并列展示不参与排名"
     },
     {
       "path": "audio.system",
@@ -776,9 +681,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "麦克风阵列/空间音频等官网原文",
-      "labelEn": "Audio system",
-      "unitEn": null
+      "note": "麦克风阵列/空间音频等官网原文"
     },
     {
       "path": "features.keyboard",
@@ -789,9 +692,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文（背光妙控键盘/秒控键盘）",
-      "labelEn": "Keyboard",
-      "unitEn": null
+      "note": "官网原文（背光妙控键盘/秒控键盘）"
     },
     {
       "path": "memory.ramStorageBinding",
@@ -802,9 +703,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": "macdb 原文（如 12GB LPDDR5X 绑 256G/512G）；同代不同内存配不同存储时保留绑定关系",
-      "labelEn": "RAM-storage binding",
-      "unitEn": null
+      "note": "macdb 原文（如 12GB LPDDR5X 绑 256G/512G）；同代不同内存配不同存储时保留绑定关系"
     },
     {
       "path": "device.modelVariants",
@@ -815,9 +714,73 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "A 号/机型标识符与变体标识成对（如 A3361（蜂窝网络）、A3362（蜂窝网络-中国大陆））；macdb 原文",
-      "labelEn": "Model variants",
-      "unitEn": null
+      "note": "A 号/机型标识符与变体标识成对（如 A3361（蜂窝网络）、A3362（蜂窝网络-中国大陆））；macdb 原文"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/Wi-Fi 版 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "device.sarHeadWkg",
+      "label": "SAR 头部",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [0, 10],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "头部电磁辐射吸收率。进网检测强制项；欧盟限值 2.0 / 美国 1.6 W/kg，不同法规口径不可比，只并列展示"
+    },
+    {
+      "path": "device.sarBodyWkg",
+      "label": "SAR 身体",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [0, 10],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "身体佩戴位电磁辐射吸收率；与 sarHeadWkg 永远分列不合并。官网不公布 = unknown"
     }
   ]
 }

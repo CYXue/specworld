@@ -2,64 +2,54 @@
   "_doc": "音频设备品类参数字段表（schema v2）。覆盖 AirPods 全系（AirPods/AirPods Pro/AirPods Max）与 HomePod。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图「音频」组推导：单耳重量 g 与充电盒重量 g 分列（苹果官网口径）；主动降噪/空间音频是布尔筛选维度（facet）；续航分「单次」与「含充电盒总续航」两字段（苹果官网口径）。苹果不公布电池容量 mAh → 不建容量字段。range 按 AirPods/HomePod 全系真实数据 + 余量设定（AirPods Max 头戴 384.8g，上界放宽到 500）。",
   "id": "audio",
   "label": "音频",
-  "labelEn": "Audio",
   "groups": [
     {
       "id": "body",
       "name": "外观与机身",
-      "nameEn": "Appearance & Build",
       "type": "single",
       "guide": "单耳重量/充电盒重量/材质/配色/防水"
     },
     {
       "id": "audio",
       "name": "音频",
-      "nameEn": "Audio",
       "type": "single",
       "guide": "驱动单元/主动降噪/空间音频"
     },
     {
       "id": "battery",
       "name": "电池与续航",
-      "nameEn": "Battery",
       "type": "single",
       "guide": "单次续航/总续航"
     },
     {
       "id": "connectivity",
       "name": "网络与连接",
-      "nameEn": "Network & Connectivity",
       "type": "single",
       "guide": "蓝牙"
     },
     {
       "id": "features",
       "name": "功能特性",
-      "nameEn": "Features",
       "type": "single",
       "guide": "充电方式"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "chipset",
       "name": "处理器与性能",
-      "nameEn": "Processor & Performance",
       "type": "single",
       "guide": "SoC/协处理器/图形内存"
     },
     {
       "id": "memory",
       "name": "内存与存储",
-      "nameEn": "Memory & Storage",
       "type": "single",
       "guide": "RAM/存储"
     }
@@ -77,9 +67,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "HomePod 立式机身（168mm）与耳机盒（AirPods Max 智能盒）通用；耳塞本体不适用记 null",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "note": "HomePod 立式机身（168mm）与耳机盒（AirPods Max 智能盒）通用；耳塞本体不适用记 null"
     },
     {
       "path": "body.diameterMm",
@@ -93,9 +81,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "HomePod mini 90mm、HomePod 138–142mm；耳机不适用记 null",
-      "labelEn": "Diameter",
-      "unitEn": "mm"
+      "note": "HomePod mini 90mm、HomePod 138–142mm；耳机不适用记 null"
     },
     {
       "path": "body.weightG",
@@ -109,9 +95,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "下限由 iPhone Bluetooth Headset 10g 撑起；上限由 iPod Hi-Fi 6.6kg 撑起（2026-10-15 macDB 对账批）",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "下限由 iPhone Bluetooth Headset 10g 撑起；上限由 iPod Hi-Fi 6.6kg 撑起（2026-10-15 macDB 对账批）"
     },
     {
       "path": "body.budWeightG",
@@ -125,9 +109,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "AirPods 单只约 4.3g，AirPods Max 头戴 384.8g；HomePod 不适用记 null",
-      "labelEn": "Weight (each bud)",
-      "unitEn": "g"
+      "note": "AirPods 单只约 4.3g，AirPods Max 头戴 384.8g；HomePod 不适用记 null"
     },
     {
       "path": "body.caseWeightG",
@@ -141,9 +123,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "AirPods Max 智能充电盒无电池、不参与续航计算，重量仍录",
-      "labelEn": "Charging case weight",
-      "unitEn": "g"
+      "note": "AirPods Max 智能充电盒无电池、不参与续航计算，重量仍录"
     },
     {
       "path": "body.material",
@@ -153,8 +133,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Material"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -164,8 +143,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "body.waterResistance",
@@ -176,8 +154,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "官网原文（抗汗抗水 IPX4），不折算 IP",
-      "labelEn": "Water resistance"
+      "note": "官网原文（抗汗抗水 IPX4），不折算 IP"
     },
     {
       "path": "audio.driverUnit",
@@ -188,8 +165,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "官网原文（HomePod「高振幅低音单元搭配振幅达 20 毫米的电动机」）；AirPods 官网不公布 → null",
-      "labelEn": "Driver unit"
+      "note": "官网原文（HomePod「高振幅低音单元搭配振幅达 20 毫米的电动机」）；AirPods 官网不公布 → null"
     },
     {
       "path": "audio.anc",
@@ -200,8 +176,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "facet": true,
-      "labelEn": "Active noise cancellation"
+      "facet": true
     },
     {
       "path": "audio.spatialAudio",
@@ -213,8 +188,7 @@
       "quantifiable": false,
       "group": "audio",
       "facet": true,
-      "note": "官网口径：支持动态头部追踪的空间音频",
-      "labelEn": "Spatial audio"
+      "note": "官网口径：支持动态头部追踪的空间音频"
     },
     {
       "path": "battery.budHours",
@@ -228,9 +202,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报，测试条件不一，只并列展示不参与排名",
-      "labelEn": "Battery life (single charge)",
-      "unitEn": "h"
+      "note": "厂商自报，测试条件不一，只并列展示不参与排名"
     },
     {
       "path": "battery.withCaseHours",
@@ -244,9 +216,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "搭配充电盒总续航；AirPods Max 无充电盒供电 → null",
-      "labelEn": "Battery life (with case)",
-      "unitEn": "h"
+      "note": "搭配充电盒总续航；AirPods Max 无充电盒供电 → null"
     },
     {
       "path": "connectivity.bluetooth",
@@ -256,8 +226,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.thread",
@@ -268,8 +237,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "智能家居互联协议（HomePod 起支持）",
-      "labelEn": "Thread"
+      "note": "智能家居互联协议（HomePod 起支持）"
     },
     {
       "path": "connectivity.wifi",
@@ -280,8 +248,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "HomePod 智能音箱需要（802.11ac 等）；AirPods 经手机联网不适用 → null",
-      "labelEn": "WLAN"
+      "note": "HomePod 智能音箱需要（802.11ac 等）；AirPods 经手机联网不适用 → null"
     },
     {
       "path": "chipset.name",
@@ -292,8 +259,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "Apple W1/H1/H2/S 芯片官网公布的录（AirPods 2 起「H1 芯片」）；HomePod 芯片官网不列 → null",
-      "labelEn": "Chip"
+      "note": "Apple W1/H1/H2/S 芯片官网公布的录（AirPods 2 起「H1 芯片」）；HomePod 芯片官网不列 → null"
     },
     {
       "path": "features.charging",
@@ -304,8 +270,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文（MagSafe 充电盒/USB-C/闪电）",
-      "labelEn": "Charging"
+      "note": "官网原文（MagSafe 充电盒/USB-C/闪电）"
     },
     {
       "path": "os.launch",
@@ -316,8 +281,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "os",
-      "note": "HomePod 走 homeOS；耳机不适用记 null",
-      "labelEn": "OS at launch"
+      "note": "HomePod 走 homeOS；耳机不适用记 null"
     },
     {
       "path": "device.identifier",
@@ -328,8 +292,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -341,8 +303,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -354,8 +314,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -367,8 +325,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "labelEn": "Charging methods",
-      "unitEn": null,
       "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
     },
     {
@@ -380,9 +336,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列",
-      "labelEn": "Order numbers",
-      "unitEn": null
+      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列"
     },
     {
       "path": "device.codename",
@@ -393,9 +347,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": null,
-      "labelEn": "Codename",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "device.specUrl",
@@ -406,9 +358,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
     },
     {
       "path": "chipset.coprocessor",
@@ -419,9 +369,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "如 Apple R1（定位协处理器）",
-      "labelEn": "Coprocessor",
-      "unitEn": null
+      "note": "如 Apple R1（定位协处理器）"
     },
     {
       "path": "features.sensors",
@@ -432,9 +380,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Sensors",
-      "unitEn": null
+      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "memory.ramGb",
@@ -445,9 +391,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": null,
-      "labelEn": "RAM",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "memory.storageGb",
@@ -458,9 +402,51 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": null,
-      "labelEn": "Storage tiers",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
     }
   ]
 }

@@ -2,87 +2,74 @@
   "_doc": "手机品类参数字段表（schema v2）。由 docs/DATA-CONTRACT.md 的 ProductRecord 逐字段推导，src/lib/types.ts 是其代码镜像。新增/修改字段必须三处同步：本文件、src/lib/types.ts、docs/DATA-CONTRACT.md。range 是闸门合理性区间（不是规格区间）；dir 只对可量化数值字段有意义（high=越大越好，low=越小越好）。groups 是显式参数分组（借鉴准绳/Baseline 的 groups 表：type=单值/多实例、guide 分组说明），前端分面与详情页分组直接吃，不再从 path 前缀隐式猜。value_status 四态（available/unknown/none/not_applicable）沿用了准绳：specs 有值=available；specs 缺该键=unknown（显示「—」）；products.valueStatus[path]='none' 显式标无（显示「无」）；='not_applicable' 显式标不适用（整行隐藏，跨品类关键）。products.valueStatus 只存 none/not_applicable 两种例外，其余靠 presence 推导。注意顶层 products.status（'on-sale'/'discontinued'）是「生命周期状态」，与四态映射 valueStatus 是不同字段，不要混淆。",
   "id": "phone",
   "label": "手机",
-  "labelEn": "Phone",
   "groups": [
     {
       "id": "body",
       "name": "外观与机身",
-      "nameEn": "Appearance & Build",
       "type": "single",
       "guide": "尺寸/重量/材质/防护/配色"
     },
     {
       "id": "display",
       "name": "屏幕显示",
-      "nameEn": "Display",
       "type": "single",
       "guide": "尺寸/类型/分辨率/亮度/刷新/盖板"
     },
     {
       "id": "chipset",
       "name": "处理器与性能",
-      "nameEn": "Processor & Performance",
       "type": "single",
       "guide": "SoC/制程/核心数/GPU/NPU"
     },
     {
       "id": "memory",
       "name": "内存与存储",
-      "nameEn": "Memory & Storage",
       "type": "single",
       "guide": "RAM 档位/存储档位"
     },
     {
       "id": "battery",
       "name": "电池与电源",
-      "nameEn": "Battery & Power",
       "type": "single",
       "guide": "容量/充电/续航"
     },
     {
       "id": "camera",
       "name": "摄像头",
-      "nameEn": "Camera",
       "type": "multi",
       "guide": "前置+后置多摄"
     },
     {
       "id": "audio",
       "name": "音频",
-      "nameEn": "Audio",
       "type": "single",
       "guide": "扬声器/麦克风/耳机孔（蓝图第 9 组）"
     },
     {
       "id": "haptic",
       "name": "振动马达",
-      "nameEn": "Haptics",
       "type": "single",
       "guide": "振动马达类型与量级（超出蓝图 16 组的手机扩展，先例 A.2）"
     },
     {
       "id": "connectivity",
       "name": "网络与通信",
-      "nameEn": "Network & Connectivity",
       "type": "single",
       "guide": "5G/WLAN/蓝牙/NFC/红外遥控/蜂窝频段/WLAN 频段/卫星/USB/SIM/eSIM"
     },
     {
       "id": "os",
       "name": "系统与软件",
-      "nameEn": "OS & Software",
       "type": "single",
       "guide": "出厂系统/可升级"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "security",
-      "name": "安全",
-      "nameEn": "Security"
+      "name": "安全"
     }
   ],
   "fields": [
@@ -97,8 +84,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Height"
+      "group": "body"
     },
     {
       "path": "body.widthMm",
@@ -112,8 +98,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "上界 200 为折叠机展开态留位（iPhone Duo 展开宽 164.6mm，实测 62 台最大值）",
-      "labelEn": "Width"
+      "note": "上界 200 为折叠机展开态留位（iPhone Duo 展开宽 164.6mm，实测 62 台最大值）"
     },
     {
       "path": "body.thicknessMm",
@@ -126,8 +111,7 @@
       ],
       "dir": "low",
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Thickness"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -140,8 +124,7 @@
       ],
       "dir": "low",
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Weight"
+      "group": "body"
     },
     {
       "path": "body.ipRating",
@@ -151,8 +134,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Dust & water resistance"
+      "group": "body"
     },
     {
       "path": "body.material",
@@ -162,8 +144,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Frame material"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -173,8 +154,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "body.folded",
@@ -184,8 +164,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Folded dimensions"
+      "group": "body"
     },
     {
       "path": "display.sizeIn",
@@ -198,9 +177,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Screen size",
-      "unitEn": "in"
+      "group": "display"
     },
     {
       "path": "display.type",
@@ -210,8 +187,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Display type"
+      "group": "display"
     },
     {
       "path": "display.resolutionPx",
@@ -221,8 +197,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Resolution"
+      "group": "display"
     },
     {
       "path": "display.ppi",
@@ -235,8 +210,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Pixel density"
+      "group": "display"
     },
     {
       "path": "display.refreshHz",
@@ -249,8 +223,7 @@
       "group": "display",
       "facet": true,
       "orderDeriver": "refreshHzNumber",
-      "note": "字符串类型：1-120（区间）/ 60/90（离散档）/ 120（单值）都是官网原文形态，强行转 number 会丢语义。排序/算术前用派生函数取代表值。orderDeriver=序类适配器声明（string 字段参与排序时的取代表值实现，注册表见 src/lib/fields.ts，selftest 对账）",
-      "labelEn": "Refresh rate"
+      "note": "字符串类型：1-120（区间）/ 60/90（离散档）/ 120（单值）都是官网原文形态，强行转 number 会丢语义。排序/算术前用派生函数取代表值。orderDeriver=序类适配器声明（string 字段参与排序时的取代表值实现，注册表见 src/lib/fields.ts，selftest 对账）"
     },
     {
       "path": "display.brightnessTypicalNits",
@@ -263,8 +236,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Typical brightness"
+      "group": "display"
     },
     {
       "path": "display.brightnessPeakNits",
@@ -278,8 +250,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "与典型亮度永远分列，不合成「最高亮度」",
-      "labelEn": "Peak brightness"
+      "note": "与典型亮度永远分列，不合成「最高亮度」"
     },
     {
       "path": "display.protection",
@@ -289,8 +260,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Cover glass"
+      "group": "display"
     },
     {
       "path": "chipset.name",
@@ -300,8 +270,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Processor"
+      "group": "chipset"
     },
     {
       "path": "chipset.processNm",
@@ -315,9 +284,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "chipset",
-      "note": "上界 100 为老 A 系列留位（2026-10-15 iPhone 全代收录：A6 32nm、A7 28nm、A8 20nm、A9 16nm——原 [1,10] 只覆盖当代机型，闸门误报拦截全代数据）",
-      "labelEn": "Process node",
-      "unitEn": "nm"
+      "note": "上界 100 为老 A 系列留位（2026-10-15 iPhone 全代收录：A6 32nm、A7 28nm、A8 20nm、A9 16nm——原 [1,10] 只覆盖当代机型，闸门误报拦截全代数据）"
     },
     {
       "path": "chipset.cpuCores",
@@ -330,9 +297,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "chipset",
-      "labelEn": "CPU cores",
-      "unitEn": "cores"
+      "group": "chipset"
     },
     {
       "path": "chipset.gpu",
@@ -342,8 +307,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "GPU"
+      "group": "chipset"
     },
     {
       "path": "chipset.npu",
@@ -353,8 +317,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "NPU"
+      "group": "chipset"
     },
     {
       "path": "memory.ramGb",
@@ -364,8 +327,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "memory",
-      "labelEn": "RAM options"
+      "group": "memory"
     },
     {
       "path": "memory.storageGb",
@@ -375,8 +337,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "memory",
-      "labelEn": "Storage options"
+      "group": "memory"
     },
     {
       "path": "battery.capacityMah",
@@ -389,8 +350,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "battery",
-      "labelEn": "Battery capacity"
+      "group": "battery"
     },
     {
       "path": "battery.capacityCaliber",
@@ -404,8 +364,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "battery",
-      "labelEn": "Capacity caliber"
+      "group": "battery"
     },
     {
       "path": "battery.wiredChargeW",
@@ -418,8 +377,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "battery",
-      "labelEn": "Wired charging"
+      "group": "battery"
     },
     {
       "path": "battery.wirelessChargeW",
@@ -432,8 +390,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "battery",
-      "labelEn": "Wireless charging"
+      "group": "battery"
     },
     {
       "path": "battery.vendorClaimedVideoHours",
@@ -447,9 +404,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报，测试条件不一，只并列展示不参与排名",
-      "labelEn": "Vendor-claimed battery life",
-      "unitEn": "h"
+      "note": "厂商自报，测试条件不一，只并列展示不参与排名"
     },
     {
       "path": "battery.vendorClaimedAudioHours",
@@ -463,9 +418,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "battery",
-      "note": "官网音频播放口径（iPod touch 系 22–40h；手机多无此口径记 null）",
-      "labelEn": "Audio playback",
-      "unitEn": "h"
+      "note": "官网音频播放口径（iPod touch 系 22–40h；手机多无此口径记 null）"
     },
     {
       "path": "battery.measuredHours",
@@ -478,9 +431,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "battery",
-      "labelEn": "Measured battery life",
-      "unitEn": "h"
+      "group": "battery"
     },
     {
       "path": "camera.rear",
@@ -505,8 +456,7 @@
             "periscope",
             "macro",
             "depth"
-          ],
-          "labelEn": "Lens role"
+          ]
         },
         {
           "path": "camera.rear.mp",
@@ -516,33 +466,28 @@
           "range": [
             0.1,
             250
-          ],
-          "labelEn": "Resolution"
+          ]
         },
         {
           "path": "camera.rear.aperture",
           "label": "光圈",
           "unit": null,
-          "type": "string",
-          "labelEn": "Aperture"
+          "type": "string"
         },
         {
           "path": "camera.rear.ois",
           "label": "光学防抖",
           "unit": null,
-          "type": "boolean",
-          "labelEn": "Optical image stabilization"
+          "type": "boolean"
         },
         {
           "path": "camera.rear.sensorNote",
           "label": "传感器备注",
           "unit": null,
-          "type": "string",
-          "labelEn": "Sensor note"
+          "type": "string"
         }
       ],
-      "note": "多实例子字典（SCHEMA-EXTENSIBILITY 最优解「两处结构升级」②）：每颗镜头的子属性也走 schema 校验——mp 越界/role 拼错/多余键都被闸门拦（此前 array:object 不做深校验）。给镜头加新子属性 = subfields 加一行。子 path 约定：父 path + '.' + 子键（报错可读）",
-      "labelEn": "Rear camera"
+      "note": "多实例子字典（SCHEMA-EXTENSIBILITY 最优解「两处结构升级」②）：每颗镜头的子属性也走 schema 校验——mp 越界/role 拼错/多余键都被闸门拦（此前 array:object 不做深校验）。给镜头加新子属性 = subfields 加一行。子 path 约定：父 path + '.' + 子键（报错可读）"
     },
     {
       "path": "camera.front",
@@ -552,8 +497,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "camera",
-      "labelEn": "Front camera"
+      "group": "camera"
     },
     {
       "path": "camera.videoMax",
@@ -563,8 +507,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "camera",
-      "labelEn": "Max video spec"
+      "group": "camera"
     },
     {
       "path": "audio.speakers",
@@ -575,8 +518,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "官网原文形态（立体声双扬声器/双单元/单扬声器），不换算数量——转数字属自行加工。对比按原文异同标注差异，不判好坏",
-      "labelEn": "Speakers"
+      "note": "官网原文形态（立体声双扬声器/双单元/单扬声器），不换算数量——转数字属自行加工。对比按原文异同标注差异，不判好坏"
     },
     {
       "path": "haptic.motor",
@@ -588,8 +530,7 @@
       "quantifiable": false,
       "group": "haptic",
       "facet": true,
-      "note": "官网原文形态（X 轴线性/Z 轴线性/转子等），厂商写法不一故不做 enum；苹果官网通常不标（unknown）。可量化优先级：马达尺寸/振动量级 mm³ 待有可靠来源再加",
-      "labelEn": "Haptic motor"
+      "note": "官网原文形态（X 轴线性/Z 轴线性/转子等），厂商写法不一故不做 enum；苹果官网通常不标（unknown）。可量化优先级：马达尺寸/振动量级 mm³ 待有可靠来源再加"
     },
     {
       "path": "connectivity.fiveG",
@@ -600,8 +541,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "facet": true,
-      "labelEn": "5G"
+      "facet": true
     },
     {
       "path": "connectivity.wifi",
@@ -611,8 +551,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "WLAN"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.bluetooth",
@@ -622,8 +561,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.nfc",
@@ -634,8 +572,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "facet": true,
-      "labelEn": "NFC"
+      "facet": true
     },
     {
       "path": "connectivity.nfcDetail",
@@ -646,8 +583,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "官网原文（苹果「支持读卡器模式的 NFC」/ 华为「支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）」）。⚠️ 各品牌官网措辞口径不对称：苹果只写读卡器模式（其卡模拟能力官网不表述），华为写全模式 → 跨品牌不可比。因此只存原文、并列展示、标注差异，不参与排名、不做分面筛选、不折算成模式数量。nfc=false（官网明确写「不支持」）时本字段留 null，避免「无」与原文重复",
-      "labelEn": "NFC capability (as stated)"
+      "note": "官网原文（苹果「支持读卡器模式的 NFC」/ 华为「支持读卡器模式、卡模拟模式（华为钱包支付，SIM 卡支付*，HCE 支付）」）。⚠️ 各品牌官网措辞口径不对称：苹果只写读卡器模式（其卡模拟能力官网不表述），华为写全模式 → 跨品牌不可比。因此只存原文、并列展示、标注差异，不参与排名、不做分面筛选、不折算成模式数量。nfc=false（官网明确写「不支持」）时本字段留 null，避免「无」与原文重复"
     },
     {
       "path": "connectivity.irBlaster",
@@ -659,8 +595,7 @@
       "quantifiable": false,
       "group": "connectivity",
       "facet": true,
-      "note": "红外遥控发射（智能遥控，遥控家电），是主动发射器件。⚠️ 与「红外传感器」完全不是同一件事——后者是传感器清单里的一项（接近检测/人脸补光用），被动器件。解析判据必须显式排除「红外传感器」字样，否则会静默把传感器当遥控发布出去，而闸门挡不住（布尔值本身合法）。官网不写 = unknown（null），绝不判 false——「没写」不等于「没有」",
-      "labelEn": "IR blaster"
+      "note": "红外遥控发射（智能遥控，遥控家电），是主动发射器件。⚠️ 与「红外传感器」完全不是同一件事——后者是传感器清单里的一项（接近检测/人脸补光用），被动器件。解析判据必须显式排除「红外传感器」字样，否则会静默把传感器当遥控发布出去，而闸门挡不住（布尔值本身合法）。官网不写 = unknown（null），绝不判 false——「没写」不等于「没有」"
     },
     {
       "path": "connectivity.cellularBands",
@@ -671,8 +606,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "按制式分组的蜂窝频段：{ nrFdd[], nrTdd[], lteFdd[], lteTdd[], umts[], gsm[], modelNote }。苹果独立规格页有完整频段串（如「FDD-5G NR (频段 n1、n2…)」）；苹果对比页矩阵与华为规格页均不列蜂窝频段 → null（unknown，不是「没有」）。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)，具备 4x4 MIMO 技术」是制式描述而非频段列表，别把它解析进来；同段开头的「A3721 型号**」是机型型号，归到 modelNote",
-      "labelEn": "Cellular bands"
+      "note": "按制式分组的蜂窝频段：{ nrFdd[], nrTdd[], lteFdd[], lteTdd[], umts[], gsm[], modelNote }。苹果独立规格页有完整频段串（如「FDD-5G NR (频段 n1、n2…)」）；苹果对比页矩阵与华为规格页均不列蜂窝频段 → null（unknown，不是「没有」）。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)，具备 4x4 MIMO 技术」是制式描述而非频段列表，别把它解析进来；同段开头的「A3721 型号**」是机型型号，归到 modelNote"
     },
     {
       "path": "connectivity.wlanBands",
@@ -683,8 +617,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "WLAN 工作频段（如 [\"2.4 GHz\",\"5 GHz\"]）。华为规格页有「WLAN 频段」条目；苹果官网不列 → null。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)」不是 WLAN 频段——按 GHz 关键字取值会误命中它，判据必须锚定「WLAN 频段」键或 WLAN 段落",
-      "labelEn": "WLAN bands"
+      "note": "WLAN 工作频段（如 [\"2.4 GHz\",\"5 GHz\"]）。华为规格页有「WLAN 频段」条目；苹果官网不列 → null。⚠️ 苹果蜂窝段里的「5G (sub-6 GHz)」不是 WLAN 频段——按 GHz 关键字取值会误命中它，判据必须锚定「WLAN 频段」键或 WLAN 段落"
     },
     {
       "path": "connectivity.satellite",
@@ -694,8 +627,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Satellite"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.usb",
@@ -705,8 +637,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "USB"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.sim",
@@ -716,8 +647,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "SIM"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.esim",
@@ -728,8 +658,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "facet": true,
-      "labelEn": "eSIM"
+      "facet": true
     },
     {
       "path": "os.launch",
@@ -739,8 +668,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "Shipped OS"
+      "group": "os"
     },
     {
       "path": "os.upgradableTo",
@@ -750,8 +678,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "Upgradable to"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -762,8 +689,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -775,8 +700,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -788,8 +711,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -801,8 +722,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "labelEn": "Core clocks",
-      "unitEn": null,
       "note": "性能核/能效核的频率与数量（如 4.93GHz × 2 + 2.64GHz × 4）"
     },
     {
@@ -814,8 +733,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "labelEn": "Memory type",
-      "unitEn": null,
       "note": "内存颗粒类型与速率（如 LPDDR5X（7500 MT/s）、DDR4 ECC）"
     },
     {
@@ -827,8 +744,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "labelEn": "Charging methods",
-      "unitEn": null,
       "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
     },
     {
@@ -843,8 +758,6 @@
       "dir": "high",
       "quantifiable": true,
       "group": "battery",
-      "labelEn": "Streaming playback",
-      "unitEn": "h",
       "note": "官方「流媒体播放」口径，与视频播放口径不同，不可互相顶替"
     },
     {
@@ -856,8 +769,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "labelEn": "Baseband",
-      "unitEn": null,
       "note": "蜂窝基带型号（Apple C1X / Apple C2 / 高通 X80M 等）"
     },
     {
@@ -869,8 +780,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "labelEn": "Authentication",
-      "unitEn": null,
       "note": "生物识别 + 密码的组合方式（面容 ID / 触控 ID / 侧边按钮）"
     },
     {
@@ -885,8 +794,6 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "labelEn": "HDR brightness",
-      "unitEn": "nit",
       "note": "HDR 内容的典型亮度；与典型亮度、峰值亮度是三个不同口径"
     },
     {
@@ -898,9 +805,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
     },
     {
       "path": "chipset.config",
@@ -911,9 +816,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）",
-      "labelEn": "Chip configuration",
-      "unitEn": null
+      "note": "核心拓扑描述（如 性能核 ×2 + 能效核 ×4 + GPU ×7）"
     },
     {
       "path": "camera.rearMain",
@@ -924,9 +827,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "camera",
-      "note": "主摄像头官网原文（多摄详情仍以 camera.rear 为准）",
-      "labelEn": "Main camera",
-      "unitEn": null
+      "note": "主摄像头官网原文（多摄详情仍以 camera.rear 为准）"
     },
     {
       "path": "memory.ramStorageBinding",
@@ -937,9 +838,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": "macdb 原文（如 12GB LPDDR5X 绑 256G/512G）；同代不同内存配不同存储时保留绑定关系",
-      "labelEn": "RAM-storage binding",
-      "unitEn": null
+      "note": "macdb 原文（如 12GB LPDDR5X 绑 256G/512G）；同代不同内存配不同存储时保留绑定关系"
     },
     {
       "path": "device.modelVariants",
@@ -950,9 +849,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "A 号/机型标识符与变体标识成对（如 A3361（蜂窝网络）、A3362（蜂窝网络-中国大陆））；macdb 原文",
-      "labelEn": "Model variants",
-      "unitEn": null
+      "note": "A 号/机型标识符与变体标识成对（如 A3361（蜂窝网络）、A3362（蜂窝网络-中国大陆））；macdb 原文"
     },
     {
       "path": "battery.capacityWh",
@@ -966,9 +863,57 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "macdb 以 Wh 记录的苹果机型电池；与 capacityMah（华为口径）分列，不换算、不混算",
-      "labelEn": "Battery capacity (Wh)",
-      "unitEn": null
+      "note": "macdb 以 Wh 记录的苹果机型电池；与 capacityMah（华为口径）分列，不换算、不混算"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一（如 02-B1234-231456）；国行机型才有，海外版 unknown。可到 jwxk.miit.gov.cn 验真。非蜂窝设备 not_applicable"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643），印在机身/包装或系统关于页；与 ctaNo 同为监管编号，只存原文不解析语义"
+    },
+    {
+      "path": "device.sarHeadWkg",
+      "label": "SAR 头部",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [
+        0,
+        10
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "头部电磁辐射吸收率。进网检测强制项；欧盟限值 2.0 / 美国 1.6 W/kg，不同法规口径不可比，只并列展示。上界 10 留余量防闸门误报"
+    },
+    {
+      "path": "device.sarBodyWkg",
+      "label": "SAR 身体",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [
+        0,
+        10
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "身体佩戴位电磁辐射吸收率；与 sarHeadWkg 永远分列不合并（同典型/峰值亮度纪律）。官网不公布 = unknown"
     }
   ]
 }

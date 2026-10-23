@@ -13,9 +13,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "键盘 11–44mm、鼠标 21–35mm",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "note": "键盘 11–44mm、鼠标 21–35mm"
     },
     {
       "path": "body.widthMm",
@@ -29,9 +27,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "鼠标 57–61mm、键盘 279–479mm",
-      "labelEn": "Width",
-      "unitEn": "mm"
+      "note": "鼠标 57–61mm、键盘 279–479mm"
     },
     {
       "path": "body.depthMm",
@@ -45,9 +41,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "鼠标 100–114mm、键盘 109–196mm",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "note": "鼠标 100–114mm、键盘 109–196mm"
     },
     {
       "path": "body.weightG",
@@ -61,9 +55,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "鼠标 99–132g、键盘 231–1200g",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "鼠标 99–132g、键盘 231–1200g"
     },
     {
       "path": "body.colors",
@@ -73,8 +65,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "input.buttons",
@@ -88,9 +79,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "input",
-      "note": "鼠标 1–4 按钮；键盘为总键数 76–109",
-      "labelEn": "Buttons / keys",
-      "unitEn": null
+      "note": "鼠标 1–4 按钮；键盘为总键数 76–109"
     },
     {
       "path": "input.tracking",
@@ -101,8 +90,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "input",
-      "note": "机械滚珠/光电/激光/多点触控/力度触控",
-      "labelEn": "Tracking"
+      "note": "机械滚珠/光电/激光/多点触控/力度触控"
     },
     {
       "path": "connectivity.type",
@@ -113,8 +101,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "ADB/USB/蓝牙/蓝牙+USB-C 四代接口史",
-      "labelEn": "Connection"
+      "note": "ADB/USB/蓝牙/蓝牙+USB-C 四代接口史"
     },
     {
       "path": "connectivity.bluetooth",
@@ -124,8 +111,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "power.type",
@@ -136,8 +122,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "power",
-      "note": "USB 总线/内置锂电/AA 电池/串口直供",
-      "labelEn": "Power"
+      "note": "USB 总线/内置锂电/AA 电池/串口直供"
     },
     {
       "path": "power.batteryLifeMonths",
@@ -151,9 +136,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "power",
-      "note": "官网口径「约一个月或更长」按 1 记；2003 键盘宣称 9 个月",
-      "labelEn": "Battery life",
-      "unitEn": "months"
+      "note": "官网口径「约一个月或更长」按 1 记；2003 键盘宣称 9 个月"
     },
     {
       "path": "os.launch",
@@ -164,8 +147,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "os",
-      "note": "官方系统要求口径",
-      "labelEn": "OS requirement"
+      "note": "官方系统要求口径"
     },
     {
       "path": "device.identifier",
@@ -176,8 +158,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -189,8 +169,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -202,8 +180,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -215,9 +191,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列",
-      "labelEn": "Order numbers",
-      "unitEn": null
+      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列"
     },
     {
       "path": "device.codename",
@@ -228,41 +202,77 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": null,
-      "labelEn": "Codename",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "input",
-      "name": "输入方式",
-      "nameEn": "Input"
+      "name": "输入方式"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "power",
-      "name": "供电",
-      "nameEn": "Power"
+      "name": "供电"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     }
   ]
 }

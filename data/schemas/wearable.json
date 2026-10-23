@@ -2,73 +2,62 @@
   "_doc": "可穿戴设备品类参数字段表（schema v2）。覆盖 Apple Watch 全系（Series/SE/Ultra）。按 docs/UNIVERSAL-FIELD-BLUEPRINT.md 蓝图推导：表壳尺寸 mm + 厚度 + 重量 g；屏幕用官网口径（LTPO OLED 全天乎视网膜、单一亮度 nits——苹果不公布手表分辨率/ppi，故不建该字段）；健康传感器是多实例（array:string 官网原文）；防水用官网原文（WR 50 米/100 米，非 IP 口径）。苹果不公布手表电池 mAh → 不建容量字段，只录官网续航口径。range 按 Apple Watch 全系真实数据 + 余量设定。",
   "id": "wearable",
   "label": "可穿戴",
-  "labelEn": "Wearable",
   "groups": [
     {
       "id": "body",
       "name": "外观与机身",
-      "nameEn": "Appearance & Build",
       "type": "single",
       "guide": "表壳尺寸/厚度/重量/材质/配色/防水"
     },
     {
       "id": "display",
       "name": "屏幕显示",
-      "nameEn": "Display",
       "type": "single",
       "guide": "类型/亮度"
     },
     {
       "id": "chipset",
       "name": "处理器与性能",
-      "nameEn": "Processor & Performance",
       "type": "single",
       "guide": "SiP 芯片"
     },
     {
       "id": "memory",
       "name": "存储",
-      "nameEn": "Storage",
       "type": "single",
       "guide": "存储档位"
     },
     {
       "id": "battery",
       "name": "电池与续航",
-      "nameEn": "Battery",
       "type": "single",
       "guide": "续航时间（官网口径）"
     },
     {
       "id": "features",
       "name": "功能特性",
-      "nameEn": "Features",
       "type": "single",
       "guide": "健康传感器"
     },
     {
       "id": "connectivity",
       "name": "网络与连接",
-      "nameEn": "Network & Connectivity",
       "type": "single",
       "guide": "WLAN/蓝牙/蜂窝/NFC/定位"
     },
     {
       "id": "os",
       "name": "系统与软件",
-      "nameEn": "OS & Software",
       "type": "single",
       "guide": "出厂系统"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "security",
-      "name": "安全",
-      "nameEn": "Security"
+      "name": "安全"
     }
   ],
   "fields": [
@@ -84,9 +73,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "官网口径：38/40/41/42/44/45/46/49 毫米，多尺寸机型按主力尺寸录",
-      "labelEn": "Case size",
-      "unitEn": "mm"
+      "note": "官网口径：38/40/41/42/44/45/46/49 毫米，多尺寸机型按主力尺寸录"
     },
     {
       "path": "body.thicknessMm",
@@ -99,9 +86,7 @@
       ],
       "dir": "low",
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Thickness",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -115,9 +100,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶"
     },
     {
       "path": "body.material",
@@ -127,8 +110,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Case material"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -138,8 +120,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "body.waterResistance",
@@ -150,8 +131,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "官网原文（50 米防水/100 米防水，WR 口径），不折算 IP",
-      "labelEn": "Water resistance"
+      "note": "官网原文（50 米防水/100 米防水，WR 口径），不折算 IP"
     },
     {
       "path": "display.type",
@@ -161,8 +141,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Display type"
+      "group": "display"
     },
     {
       "path": "display.brightnessNits",
@@ -176,9 +155,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "苹果只公布单一亮度口径（1000/2000/3000 尼特），不拆典型/峰值",
-      "labelEn": "Brightness",
-      "unitEn": "nits"
+      "note": "苹果只公布单一亮度口径（1000/2000/3000 尼特），不拆典型/峰值"
     },
     {
       "path": "chipset.name",
@@ -189,8 +166,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "官网口径（S10 SiP）",
-      "labelEn": "Processor"
+      "note": "官网口径（S10 SiP）"
     },
     {
       "path": "memory.storageGb",
@@ -200,9 +176,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "memory",
-      "labelEn": "Storage options",
-      "unitEn": "GB"
+      "group": "memory"
     },
     {
       "path": "battery.vendorClaimedHours",
@@ -216,9 +190,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报（最长 18/36/72 小时），测试条件不一，只并列展示不参与排名；苹果不公布电池容量",
-      "labelEn": "Vendor-claimed battery life",
-      "unitEn": "h"
+      "note": "厂商自报（最长 18/36/72 小时），测试条件不一，只并列展示不参与排名；苹果不公布电池容量"
     },
     {
       "path": "features.healthSensors",
@@ -229,8 +201,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "多实例：官网原文（心率、血氧、体温、心电图、睡眠）",
-      "labelEn": "Health sensors"
+      "note": "多实例：官网原文（心率、血氧、体温、心电图、睡眠）"
     },
     {
       "path": "connectivity.wifi",
@@ -240,8 +211,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "WLAN"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.bluetooth",
@@ -251,8 +221,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.cellular",
@@ -263,8 +232,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "官网原文（LTE 和 UMTS）；GPS 版记 null（unknown，不是「没有」）",
-      "labelEn": "Cellular"
+      "note": "官网原文（LTE 和 UMTS）；GPS 版记 null（unknown，不是「没有」）"
     },
     {
       "path": "connectivity.nfc",
@@ -276,8 +244,7 @@
       "quantifiable": false,
       "group": "connectivity",
       "facet": true,
-      "note": "Apple Pay 支持",
-      "labelEn": "NFC"
+      "note": "Apple Pay 支持"
     },
     {
       "path": "connectivity.gnss",
@@ -287,8 +254,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Positioning"
+      "group": "connectivity"
     },
     {
       "path": "os.launch",
@@ -298,8 +264,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "Shipped OS"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -310,8 +275,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -323,8 +286,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -336,8 +297,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -349,8 +308,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "labelEn": "Security chip",
-      "unitEn": null,
       "note": "Secure Enclave / 专用安全协处理器"
     },
     {
@@ -362,8 +319,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "labelEn": "Charging methods",
-      "unitEn": null,
       "note": "有线/磁吸/无线各路径（USB-C / MagSafe / Qi / Qi2）"
     },
     {
@@ -375,9 +330,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
     },
     {
       "path": "chipset.coprocessor",
@@ -388,9 +341,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "如 Apple R1（定位协处理器）",
-      "labelEn": "Coprocessor",
-      "unitEn": null
+      "note": "如 Apple R1（定位协处理器）"
     },
     {
       "path": "features.sensors",
@@ -401,9 +352,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Sensors",
-      "unitEn": null
+      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "features.input",
@@ -414,9 +363,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Input methods",
-      "unitEn": null
+      "note": "（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "display.sizeIn",
@@ -430,9 +377,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Display size",
-      "unitEn": "in"
+      "note": null
     },
     {
       "path": "display.resolutionPx",
@@ -443,9 +388,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Resolution",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "display.ppi",
@@ -459,9 +402,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Pixel density",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "security.unlock",
@@ -472,9 +413,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "note": null,
-      "labelEn": "Unlock method",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "memory.ramGb",
@@ -485,9 +424,73 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": null,
-      "labelEn": "RAM",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/Wi-Fi 版 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "device.sarHeadWkg",
+      "label": "SAR 头部",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [0, 10],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "头部电磁辐射吸收率。进网检测强制项；欧盟限值 2.0 / 美国 1.6 W/kg，不同法规口径不可比，只并列展示"
+    },
+    {
+      "path": "device.sarBodyWkg",
+      "label": "SAR 身体",
+      "unit": "W/kg",
+      "type": "number",
+      "range": [0, 10],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "device",
+      "note": "身体佩戴位电磁辐射吸收率；与 sarHeadWkg 永远分列不合并。官网不公布 = unknown"
     }
   ]
 }

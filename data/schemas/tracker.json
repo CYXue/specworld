@@ -13,9 +13,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.diameterMm",
@@ -28,9 +26,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Diameter",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -43,9 +39,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "group": "body"
     },
     {
       "path": "body.material",
@@ -55,8 +49,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Materials"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -66,8 +59,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "chipset.name",
@@ -78,8 +70,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "U1（一代）/ 二代 UWB（AirTag 2）",
-      "labelEn": "Chip"
+      "note": "U1（一代）/ 二代 UWB（AirTag 2）"
     },
     {
       "path": "connectivity.bluetooth",
@@ -89,8 +80,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.uwb",
@@ -101,8 +91,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "精确查找能力口径（Precision Finding）",
-      "labelEn": "Ultra Wideband"
+      "note": "精确查找能力口径（Precision Finding）"
     },
     {
       "path": "features.speaker",
@@ -113,8 +102,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "发声查找能力",
-      "labelEn": "Speaker"
+      "note": "发声查找能力"
     },
     {
       "path": "features.batteryType",
@@ -125,8 +113,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "CR2032 可更换纽扣电池及续航口径",
-      "labelEn": "Battery"
+      "note": "CR2032 可更换纽扣电池及续航口径"
     },
     {
       "path": "features.waterResistance",
@@ -136,8 +123,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "features",
-      "labelEn": "Water resistance"
+      "group": "features"
     },
     {
       "path": "device.identifier",
@@ -148,8 +134,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -161,8 +145,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -174,8 +156,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -187,9 +167,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列",
-      "labelEn": "Order numbers",
-      "unitEn": null
+      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列"
     },
     {
       "path": "features.sensors",
@@ -200,9 +178,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Sensors",
-      "unitEn": null
+      "note": "官网原文清单（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "connectivity.nfc",
@@ -213,36 +189,73 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": null,
-      "labelEn": "NFC",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "chipset",
-      "name": "处理器与性能",
-      "nameEn": "Processor & Performance"
+      "name": "处理器与性能"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "features",
-      "name": "功能特性",
-      "nameEn": "Features"
+      "name": "功能特性"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     }
   ]
 }

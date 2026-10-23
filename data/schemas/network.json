@@ -14,9 +14,7 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "下限由 AirPort Extreme Card 扩展卡撑起（2026-10-15 macDB 对账批收录）",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "note": "下限由 AirPort Extreme Card 扩展卡撑起（2026-10-15 macDB 对账批收录）"
     },
     {
       "path": "body.widthMm",
@@ -30,8 +28,6 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "labelEn": "Width",
-      "unitEn": "mm",
       "note": "下限由 AirPort Express 84mm 撑起（2026-10-15 macDB 对账批收录）"
     },
     {
@@ -46,8 +42,6 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "labelEn": "Depth",
-      "unitEn": "mm",
       "note": "下限由 AirPort Express 84mm 撑起（2026-10-15 macDB 对账批收录）"
     },
     {
@@ -62,8 +56,6 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "labelEn": "Weight",
-      "unitEn": "g",
       "note": "下限由 AirPort Card / AirPort Extreme Card 撑起（2026-10-15 macDB 对账批收录）"
     },
     {
@@ -74,8 +66,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "chipset.name",
@@ -85,8 +76,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Chip"
+      "group": "chipset"
     },
     {
       "path": "chipset.arch",
@@ -96,8 +86,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Architecture"
+      "group": "chipset"
     },
     {
       "path": "chipset.cpuCores",
@@ -110,9 +99,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "chipset",
-      "labelEn": "CPU cores",
-      "unitEn": "-core"
+      "group": "chipset"
     },
     {
       "path": "memory.ramGb",
@@ -123,9 +110,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "memory",
-      "note": "Xserve 服务器内存；路由器记 null",
-      "labelEn": "Memory",
-      "unitEn": "GB"
+      "note": "Xserve 服务器内存；路由器记 null"
     },
     {
       "path": "memory.storageGb",
@@ -136,9 +121,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "memory",
-      "note": "Time Capsule 内置硬盘（500GB–3TB）；纯路由器记 null",
-      "labelEn": "Storage",
-      "unitEn": "GB"
+      "note": "Time Capsule 内置硬盘（500GB–3TB）；纯路由器记 null"
     },
     {
       "path": "connectivity.wifi",
@@ -149,8 +132,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "802.11 代际与频段口径",
-      "labelEn": "Wireless"
+      "note": "802.11 代际与频段口径"
     },
     {
       "path": "connectivity.ports",
@@ -161,8 +143,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "以太网口数、USB 口等，官网原文分段",
-      "labelEn": "Ports"
+      "note": "以太网口数、USB 口等，官网原文分段"
     },
     {
       "path": "features.backup",
@@ -173,8 +154,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "Time Machine 自动备份（Time Capsule 特性）",
-      "labelEn": "Backup"
+      "note": "Time Machine 自动备份（Time Capsule 特性）"
     },
     {
       "path": "features.rack",
@@ -185,8 +165,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "Xserve 1U 机架；路由器记 null",
-      "labelEn": "Rack unit"
+      "note": "Xserve 1U 机架；路由器记 null"
     },
     {
       "path": "device.identifier",
@@ -197,8 +176,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -210,8 +187,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -223,8 +198,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -236,9 +209,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": null,
-      "labelEn": "Firmware",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "memory.storageInterface",
@@ -249,9 +220,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": "如 Ultra ATA/66 (ATA-5)、SATA",
-      "labelEn": "Storage interface",
-      "unitEn": null
+      "note": "如 Ultra ATA/66 (ATA-5)、SATA"
     },
     {
       "path": "memory.expansionSlots",
@@ -262,9 +231,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": null,
-      "labelEn": "Expansion slots",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "memory.opticalDrive",
@@ -275,9 +242,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "memory",
-      "note": "光驱/软驱配置，官网原文",
-      "labelEn": "Optical drive",
-      "unitEn": null
+      "note": "光驱/软驱配置，官网原文"
     },
     {
       "path": "chipset.gpuMemory",
@@ -288,9 +253,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": null,
-      "labelEn": "Graphics memory",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "power.adapterW",
@@ -304,41 +267,127 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": null,
-      "labelEn": "Power adapter",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "power.inputVoltage",
+      "label": "额定输入电压",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "铭牌原文（如 100-240V~, 50/60Hz）；AC/DC 电源性质随原文"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "额定输入功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        1000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "note": "CCC 铭牌强制项；与充电/电池字段口径分开"
+    },
+    {
+      "path": "power.protectionClass",
+      "label": "防触电类别",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "I",
+        "II",
+        "III"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "GB 4943.1 防触电保护类别：I 类接地 / II 类双重绝缘 / III 类特低电压"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "chipset",
-      "name": "处理器与性能",
-      "nameEn": "Processor & Performance"
+      "name": "处理器与性能"
     },
     {
       "id": "memory",
-      "name": "内存与存储",
-      "nameEn": "Memory & Storage"
+      "name": "内存与存储"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "features",
-      "name": "功能特性",
-      "nameEn": "Features"
+      "name": "功能特性"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
+    },
+    {
+      "id": "power",
+      "name": "电源",
+      "type": "single",
+      "guide": "输入电压/功率/防触电"
     }
   ]
 }

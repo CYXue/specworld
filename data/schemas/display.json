@@ -14,9 +14,7 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "下限由 Apple IIc 平板显示器 220mm 撑起（2026-10-15 早期显示器收录）",
-      "labelEn": "Height (with stand)",
-      "unitEn": "mm"
+      "note": "下限由 Apple IIc 平板显示器 220mm 撑起（2026-10-15 早期显示器收录）"
     },
     {
       "path": "body.widthMm",
@@ -30,8 +28,6 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "labelEn": "Width",
-      "unitEn": "mm",
       "note": "下限由 Apple IIc 平板显示器 260mm 撑起（2026-10-15 早期显示器收录）"
     },
     {
@@ -46,9 +42,7 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "上限由 Macintosh 21 英寸彩色显示器 520mm 撑起（2026-10-15 早期显示器收录）",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "note": "上限由 Macintosh 21 英寸彩色显示器 520mm 撑起（2026-10-15 早期显示器收录）"
     },
     {
       "path": "body.weightG",
@@ -62,9 +56,7 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "含标配支架",
-      "labelEn": "Weight (with stand)",
-      "unitEn": "g"
+      "note": "含标配支架"
     },
     {
       "path": "body.colors",
@@ -74,8 +66,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "display.sizeIn",
@@ -89,9 +80,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "下限由 Apple Monitor II/III 12 英寸与 Apple IIc 平板显示器 9 英寸撑起（2026-10-15 macDB 对账批收录早期显示器，原 15 英寸下限会误拦真数据）",
-      "labelEn": "Screen size",
-      "unitEn": "in"
+      "note": "下限由 Apple Monitor II/III 12 英寸与 Apple IIc 平板显示器 9 英寸撑起（2026-10-15 macDB 对账批收录早期显示器，原 15 英寸下限会误拦真数据）"
     },
     {
       "path": "display.type",
@@ -101,8 +90,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Panel type"
+      "group": "display"
     },
     {
       "path": "display.resolutionPx",
@@ -112,8 +100,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Resolution"
+      "group": "display"
     },
     {
       "path": "display.ppi",
@@ -126,9 +113,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Pixel density",
-      "unitEn": "ppi"
+      "group": "display"
     },
     {
       "path": "display.refreshHz",
@@ -138,8 +123,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Refresh rate"
+      "group": "display"
     },
     {
       "path": "display.brightnessTypicalNits",
@@ -153,9 +137,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "SDR 持续亮度",
-      "labelEn": "Typical brightness",
-      "unitEn": "nits"
+      "note": "SDR 持续亮度"
     },
     {
       "path": "display.brightnessPeakNits",
@@ -169,9 +151,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "HDR 峰值（XDR 机型的 2000 尼特口径）",
-      "labelEn": "Peak brightness",
-      "unitEn": "nits"
+      "note": "HDR 峰值（XDR 机型的 2000 尼特口径）"
     },
     {
       "path": "display.colorGamut",
@@ -181,8 +161,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Color gamut"
+      "group": "display"
     },
     {
       "path": "camera.front",
@@ -193,8 +172,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": "内置摄像头（12MP Center Stage）；无内置记 null",
-      "labelEn": "Front camera"
+      "note": "内置摄像头（12MP Center Stage）；无内置记 null"
     },
     {
       "path": "audio.speakers",
@@ -204,8 +182,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Speakers"
+      "group": "display"
     },
     {
       "path": "connectivity.ports",
@@ -216,8 +193,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "官网原文分段（雷雳 5 / USB-C），不互换算",
-      "labelEn": "Ports"
+      "note": "官网原文分段（雷雳 5 / USB-C），不互换算"
     },
     {
       "path": "connectivity.hostCharging",
@@ -228,8 +204,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "上行雷雳口给 Mac 的回充功率（96W/140W）",
-      "labelEn": "Host charging"
+      "note": "上行雷雳口给 Mac 的回充功率（96W/140W）"
     },
     {
       "path": "device.identifier",
@@ -240,8 +215,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -253,8 +226,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -266,8 +237,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -282,8 +251,6 @@
       "dir": null,
       "quantifiable": true,
       "group": "power",
-      "labelEn": "Power supply",
-      "unitEn": "W",
       "note": "随附电源适配器或整机功耗（如 iMac 143 瓦）"
     },
     {
@@ -295,9 +262,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": null,
-      "labelEn": "Codename",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "device.specUrl",
@@ -308,36 +273,156 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国上海 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "power.inputVoltage",
+      "label": "额定输入电压",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "铭牌原文（如 100-240V~, 50/60Hz）；AC/DC 电源性质随原文"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "额定输入功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        1000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "note": "CCC 铭牌强制项；与充电/电池字段口径分开"
+    },
+    {
+      "path": "power.protectionClass",
+      "label": "防触电类别",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "I",
+        "II",
+        "III"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "GB 4943.1 防触电保护类别：I 类接地 / II 类双重绝缘 / III 类特低电压"
+    },
+    {
+      "path": "power.ratingLevel",
+      "label": "能效等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "中国能效标识等级（如 1级）；仅目录内品类存在，其余 not_applicable。energylabel.com.cn 可查"
+    },
+    {
+      "path": "power.standbyPowerW",
+      "label": "睡眠功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        50
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "power",
+      "note": "睡眠状态功率（能效标准口径）"
+    },
+    {
+      "path": "power.offPowerW",
+      "label": "关机功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        50
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "power",
+      "note": "关闭状态功率（能效标准口径）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "display",
-      "name": "屏幕显示",
-      "nameEn": "Display"
+      "name": "屏幕显示"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "power",
-      "name": "供电",
-      "nameEn": "Power"
+      "name": "供电"
     }
   ]
 }

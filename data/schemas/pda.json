@@ -13,9 +13,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.widthMm",
@@ -28,9 +26,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Width",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.thicknessMm",
@@ -43,9 +39,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.depthMm",
@@ -58,9 +52,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -73,9 +65,7 @@
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -85,8 +75,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "display.sizeIn",
@@ -100,9 +89,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "Reflective 灰度液晶",
-      "labelEn": "Screen size",
-      "unitEn": "in"
+      "note": "Reflective 灰度液晶"
     },
     {
       "path": "display.type",
@@ -112,8 +99,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Display type"
+      "group": "display"
     },
     {
       "path": "display.resolutionPx",
@@ -123,8 +109,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Resolution"
+      "group": "display"
     },
     {
       "path": "display.ppi",
@@ -137,9 +122,7 @@
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display",
-      "labelEn": "Pixel density",
-      "unitEn": "ppi"
+      "group": "display"
     },
     {
       "path": "chipset.name",
@@ -150,8 +133,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "ARM 610（Newton 专用 RISC）",
-      "labelEn": "Processor"
+      "note": "ARM 610（Newton 专用 RISC）"
     },
     {
       "path": "chipset.arch",
@@ -161,8 +143,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Architecture"
+      "group": "chipset"
     },
     {
       "path": "chipset.cpuCores",
@@ -175,9 +156,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "CPU cores",
-      "unitEn": "-core"
+      "group": "chipset"
     },
     {
       "path": "memory.storageGb",
@@ -188,9 +167,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "memory",
-      "note": "早期按 KB 口径，数值 < 0.01GB 时记 null（存储类型进 display.type 无法承载时省略）",
-      "labelEn": "Storage",
-      "unitEn": "GB"
+      "note": "早期按 KB 口径，数值 < 0.01GB 时记 null（存储类型进 display.type 无法承载时省略）"
     },
     {
       "path": "memory.ramGb",
@@ -204,8 +181,6 @@
       "dir": "high",
       "quantifiable": true,
       "group": "memory",
-      "labelEn": "Memory",
-      "unitEn": "GB",
       "note": "Newton 内存档位；数组形态与 desktop 一致（maxRamGb 契约）"
     },
     {
@@ -217,8 +192,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "Newton 时代无 Wi-Fi，一律 null",
-      "labelEn": "Wi-Fi"
+      "note": "Newton 时代无 Wi-Fi，一律 null"
     },
     {
       "path": "connectivity.bluetooth",
@@ -228,8 +202,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.ports",
@@ -239,8 +212,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Ports"
+      "group": "connectivity"
     },
     {
       "path": "camera.front",
@@ -251,8 +223,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "camera",
-      "note": "Newton 无摄像头记 null",
-      "labelEn": "Front camera"
+      "note": "Newton 无摄像头记 null"
     },
     {
       "path": "audio.speakers",
@@ -262,8 +233,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "audio",
-      "labelEn": "Speakers"
+      "group": "audio"
     },
     {
       "path": "features.input",
@@ -274,8 +244,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "手写识别（Calligraphy/Print Recognizer）、屏幕软键盘（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Input"
+      "note": "手写识别（Calligraphy/Print Recognizer）、屏幕软键盘（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "os.launch",
@@ -285,8 +254,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "OS at launch"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -297,8 +265,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -310,8 +276,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -323,61 +287,93 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "display",
-      "name": "屏幕显示",
-      "nameEn": "Display"
+      "name": "屏幕显示"
     },
     {
       "id": "chipset",
-      "name": "处理器与性能",
-      "nameEn": "Processor & Performance"
+      "name": "处理器与性能"
     },
     {
       "id": "memory",
-      "name": "内存与存储",
-      "nameEn": "Memory & Storage"
+      "name": "内存与存储"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "camera",
-      "name": "摄像头",
-      "nameEn": "Camera"
+      "name": "摄像头"
     },
     {
       "id": "audio",
-      "name": "音频",
-      "nameEn": "Audio"
+      "name": "音频"
     },
     {
       "id": "features",
-      "name": "功能特性",
-      "nameEn": "Features"
+      "name": "功能特性"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     }
   ]
 }

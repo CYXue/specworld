@@ -14,9 +14,7 @@
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "含 Light Seal 与头带，官网区间口径录下限（600-650g → 600）；外置电池单独 353g 不含",
-      "labelEn": "Device weight",
-      "unitEn": "g"
+      "note": "含 Light Seal 与头带，官网区间口径录下限（600-650g → 600）；外置电池单独 353g 不含"
     },
     {
       "path": "body.material",
@@ -26,8 +24,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Materials"
+      "group": "body"
     },
     {
       "path": "body.colors",
@@ -37,8 +34,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "display.type",
@@ -49,8 +45,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": "官网原文含像素口径（2300 万像素 3D 显示系统 micro-OLED）",
-      "labelEn": "Display system"
+      "note": "官网原文含像素口径（2300 万像素 3D 显示系统 micro-OLED）"
     },
     {
       "path": "display.refreshHz",
@@ -61,8 +56,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": "官网多档刷新率（90Hz/96Hz/100Hz/120Hz），录可解析区间形态",
-      "labelEn": "Refresh rate"
+      "note": "官网多档刷新率（90Hz/96Hz/100Hz/120Hz），录可解析区间形态"
     },
     {
       "path": "display.colorGamut",
@@ -72,8 +66,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "display",
-      "labelEn": "Color gamut"
+      "group": "display"
     },
     {
       "path": "chipset.name",
@@ -84,8 +77,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "双芯片：主芯片 + R1 传感芯片，用 | 分段",
-      "labelEn": "Chips"
+      "note": "双芯片：主芯片 + R1 传感芯片，用 | 分段"
     },
     {
       "path": "chipset.cpuCores",
@@ -99,9 +91,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "chipset",
-      "note": "主芯片 CPU 核心数",
-      "labelEn": "CPU cores",
-      "unitEn": "-core"
+      "note": "主芯片 CPU 核心数"
     },
     {
       "path": "chipset.gpu",
@@ -111,8 +101,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "GPU"
+      "group": "chipset"
     },
     {
       "path": "chipset.npu",
@@ -122,8 +111,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "chipset",
-      "labelEn": "Neural Engine"
+      "group": "chipset"
     },
     {
       "path": "memory.ramGb",
@@ -133,9 +121,7 @@
       "range": null,
       "dir": "high",
       "quantifiable": true,
-      "group": "memory",
-      "labelEn": "Memory",
-      "unitEn": "GB"
+      "group": "memory"
     },
     {
       "path": "memory.storageGb",
@@ -146,9 +132,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "memory",
-      "note": "GB 数值数组（256/512/1024）",
-      "labelEn": "Storage",
-      "unitEn": "GB"
+      "note": "GB 数值数组（256/512/1024）"
     },
     {
       "path": "battery.vendorClaimedHours",
@@ -162,9 +146,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "battery",
-      "note": "官网「一般使用」口径；视频续航另列于 display.type 无法承载时进 notes",
-      "labelEn": "Battery (general use)",
-      "unitEn": "h"
+      "note": "官网「一般使用」口径；视频续航另列于 display.type 无法承载时进 notes"
     },
     {
       "path": "camera.front",
@@ -175,8 +157,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "camera",
-      "note": "立体 3D 主摄（空间照片/视频拍摄）",
-      "labelEn": "Main camera system"
+      "note": "立体 3D 主摄（空间照片/视频拍摄）"
     },
     {
       "path": "features.sensors",
@@ -187,8 +168,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "官网 Sensors 段逐项",
-      "labelEn": "Sensors"
+      "note": "官网 Sensors 段逐项"
     },
     {
       "path": "connectivity.wifi",
@@ -198,8 +178,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Wi-Fi"
+      "group": "connectivity"
     },
     {
       "path": "connectivity.bluetooth",
@@ -209,8 +188,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "connectivity",
-      "labelEn": "Bluetooth"
+      "group": "connectivity"
     },
     {
       "path": "os.launch",
@@ -220,8 +198,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "OS at launch"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -232,8 +209,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -245,8 +220,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -258,8 +231,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -271,8 +242,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "labelEn": "Security chip",
-      "unitEn": null,
       "note": "Secure Enclave / 专用安全协处理器"
     },
     {
@@ -284,9 +253,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
     },
     {
       "path": "chipset.coprocessor",
@@ -297,9 +264,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "如 Apple R1（定位协处理器）",
-      "labelEn": "Coprocessor",
-      "unitEn": null
+      "note": "如 Apple R1（定位协处理器）"
     },
     {
       "path": "features.input",
@@ -310,9 +275,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "features",
-      "note": "（macdb 以 / 分隔的多项清单，存为数组）",
-      "labelEn": "Input methods",
-      "unitEn": null
+      "note": "（macdb 以 / 分隔的多项清单，存为数组）"
     },
     {
       "path": "audio.system",
@@ -323,9 +286,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "audio",
-      "note": "麦克风阵列/空间音频等官网原文",
-      "labelEn": "Audio system",
-      "unitEn": null
+      "note": "麦克风阵列/空间音频等官网原文"
     },
     {
       "path": "display.sizeIn",
@@ -339,9 +300,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Display size",
-      "unitEn": "in"
+      "note": null
     },
     {
       "path": "display.resolutionPx",
@@ -352,9 +311,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Resolution",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "display.ppi",
@@ -368,9 +325,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "display",
-      "note": null,
-      "labelEn": "Pixel density",
-      "unitEn": null
+      "note": null
     },
     {
       "path": "security.unlock",
@@ -381,71 +336,101 @@
       "dir": null,
       "quantifiable": false,
       "group": "security",
-      "note": null,
-      "labelEn": "Unlock method",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [0, 30],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "display",
-      "name": "屏幕显示",
-      "nameEn": "Display"
+      "name": "屏幕显示"
     },
     {
       "id": "chipset",
-      "name": "处理器与性能",
-      "nameEn": "Processor & Performance"
+      "name": "处理器与性能"
     },
     {
       "id": "memory",
-      "name": "内存与存储",
-      "nameEn": "Memory & Storage"
+      "name": "内存与存储"
     },
     {
       "id": "battery",
-      "name": "电池与续航",
-      "nameEn": "Battery"
+      "name": "电池与续航"
     },
     {
       "id": "camera",
-      "name": "摄像头",
-      "nameEn": "Camera"
+      "name": "摄像头"
     },
     {
       "id": "features",
-      "name": "功能特性",
-      "nameEn": "Features"
+      "name": "功能特性"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     },
     {
       "id": "security",
-      "name": "安全",
-      "nameEn": "Security"
+      "name": "安全"
     },
     {
       "id": "audio",
       "name": "音频",
-      "nameEn": "Audio",
       "type": "single",
       "guide": "音频系统"
     }

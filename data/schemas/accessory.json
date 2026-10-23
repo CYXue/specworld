@@ -13,9 +13,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "上限由 Apple Pencil 166mm 与 Siri Remote 136mm 撑起；下限由 MagSafe 电池 11mm 级别撑起（2026-10-15 macDB 对账批）",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "note": "上限由 Apple Pencil 166mm 与 Siri Remote 136mm 撑起；下限由 MagSafe 电池 11mm 级别撑起（2026-10-15 macDB 对账批）"
     },
     {
       "path": "body.widthMm",
@@ -29,9 +27,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "下限由 Apple Pencil 直径 9mm 撑起（2026-10-15 macDB 对账批收录触控笔）",
-      "labelEn": "Width",
-      "unitEn": "mm"
+      "note": "下限由 Apple Pencil 直径 9mm 撑起（2026-10-15 macDB 对账批收录触控笔）"
     },
     {
       "path": "body.depthMm",
@@ -45,9 +41,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "body",
-      "note": "下限由 MagSafe 外接电池 11mm 撑起（2026-10-15 macDB 对账批收录）",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "note": "下限由 MagSafe 外接电池 11mm 撑起（2026-10-15 macDB 对账批收录）"
     },
     {
       "path": "body.weightG",
@@ -61,9 +55,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "适配器 25–160g、iSight 63.5g",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "适配器 25–160g、iSight 63.5g"
     },
     {
       "path": "body.colors",
@@ -73,8 +65,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "accessory.type",
@@ -85,8 +76,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "accessory",
-      "note": "电源适配器/摄像头/遥控器",
-      "labelEn": "Type"
+      "note": "电源适配器/摄像头/遥控器"
     },
     {
       "path": "power.outputW",
@@ -100,9 +90,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "power",
-      "note": "5W 五福一安到 140W MagSafe 3",
-      "labelEn": "Output power",
-      "unitEn": "W"
+      "note": "5W 五福一安到 140W MagSafe 3"
     },
     {
       "path": "power.outputSpec",
@@ -113,8 +101,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "power",
-      "note": "官网口径如 5V1A、9V2.22A",
-      "labelEn": "Output spec"
+      "note": "官网口径如 5V1A、9V2.22A"
     },
     {
       "path": "power.protocol",
@@ -125,8 +112,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "power",
-      "note": "Apple 1.0A/USB PD 等",
-      "labelEn": "Charging protocol"
+      "note": "Apple 1.0A/USB PD 等"
     },
     {
       "path": "connectivity.type",
@@ -137,8 +123,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "USB-A/USB-C/Lightning/FireWire 400/红外",
-      "labelEn": "Connector"
+      "note": "USB-A/USB-C/Lightning/FireWire 400/红外"
     },
     {
       "path": "camera.mp",
@@ -152,9 +137,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "camera",
-      "note": "iSight 0.3MP；非摄像头配件记 null",
-      "labelEn": "Camera",
-      "unitEn": "MP"
+      "note": "iSight 0.3MP；非摄像头配件记 null"
     },
     {
       "path": "os.launch",
@@ -164,8 +147,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "OS requirement"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -176,8 +158,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -189,8 +169,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -202,8 +180,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
     },
     {
@@ -215,9 +191,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列",
-      "labelEn": "Order numbers",
-      "unitEn": null
+      "note": "官方订购编号（如 MX532AM/A），多套装/多地区并列"
     },
     {
       "path": "device.specUrl",
@@ -228,9 +202,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "note": "官方技术规格页链接（macdb 收录）",
-      "labelEn": "Tech specs URL",
-      "unitEn": null
+      "note": "官方技术规格页链接（macdb 收录）"
     },
     {
       "path": "connectivity.bluetooth",
@@ -241,46 +213,125 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": null,
-      "labelEn": "Bluetooth",
-      "unitEn": null
+      "note": null
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国深圳 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "power.inputVoltage",
+      "label": "额定输入电压",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "铭牌原文（如 100-240V~, 50/60Hz）；AC/DC 电源性质随原文"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "额定输入功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        1000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "note": "CCC 铭牌强制项；与充电/电池字段口径分开"
+    },
+    {
+      "path": "power.protectionClass",
+      "label": "防触电类别",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "I",
+        "II",
+        "III"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "GB 4943.1 防触电保护类别：I 类接地 / II 类双重绝缘 / III 类特低电压"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "accessory",
-      "name": "配件",
-      "nameEn": "Accessory"
+      "name": "配件"
     },
     {
       "id": "power",
-      "name": "供电",
-      "nameEn": "Power"
+      "name": "供电"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "camera",
-      "name": "摄像头",
-      "nameEn": "Camera"
+      "name": "摄像头"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
     }
   ]
 }

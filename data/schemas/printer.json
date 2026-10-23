@@ -12,9 +12,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Height",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.widthMm",
@@ -27,9 +25,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Width",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.depthMm",
@@ -42,9 +38,7 @@
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Depth",
-      "unitEn": "mm"
+      "group": "body"
     },
     {
       "path": "body.weightG",
@@ -58,9 +52,7 @@
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "喷墨 2–3kg、激光 7–20kg",
-      "labelEn": "Weight",
-      "unitEn": "g"
+      "note": "喷墨 2–3kg、激光 7–20kg"
     },
     {
       "path": "body.colors",
@@ -70,8 +62,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "body",
-      "labelEn": "Colors"
+      "group": "body"
     },
     {
       "path": "printer.tech",
@@ -82,8 +73,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "printer",
-      "note": "激光（PostScript）/针式点阵/喷墨",
-      "labelEn": "Printing technology"
+      "note": "激光（PostScript）/针式点阵/喷墨"
     },
     {
       "path": "printer.color",
@@ -94,8 +84,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "printer",
-      "note": "黑白/彩色",
-      "labelEn": "Color"
+      "note": "黑白/彩色"
     },
     {
       "path": "printer.dpi",
@@ -109,9 +98,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "printer",
-      "note": "针式 144dpi、激光 300–600dpi、喷墨 360–720dpi",
-      "labelEn": "Print resolution",
-      "unitEn": "dpi"
+      "note": "针式 144dpi、激光 300–600dpi、喷墨 360–720dpi"
     },
     {
       "path": "printer.speedPpm",
@@ -125,9 +112,7 @@
       "dir": "high",
       "quantifiable": true,
       "group": "printer",
-      "note": "激光 8ppm 起（1985 年已是奇迹）",
-      "labelEn": "Print speed",
-      "unitEn": "ppm"
+      "note": "激光 8ppm 起（1985 年已是奇迹）"
     },
     {
       "path": "printer.paperSize",
@@ -137,8 +122,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "printer",
-      "labelEn": "Paper size"
+      "group": "printer"
     },
     {
       "path": "connectivity.type",
@@ -149,8 +133,7 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity",
-      "note": "串口/LocalTalk/并口/USB/以太网",
-      "labelEn": "Connection"
+      "note": "串口/LocalTalk/并口/USB/以太网"
     },
     {
       "path": "os.launch",
@@ -160,8 +143,7 @@
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "os",
-      "labelEn": "OS requirement"
+      "group": "os"
     },
     {
       "path": "device.identifier",
@@ -172,8 +154,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model identifier",
-      "unitEn": null,
       "note": "Apple 内部机型标识（如 iPhone19,3 / Mac16,3），与型号号（Axxxx）不是一回事"
     },
     {
@@ -185,8 +165,6 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "Model numbers",
-      "unitEn": null,
       "note": "机身/包装上的 Axxxx 型号号，多地区版本会并列多个"
     },
     {
@@ -198,36 +176,162 @@
       "dir": null,
       "quantifiable": false,
       "group": "device",
-      "labelEn": "FCC ID",
-      "unitEn": null,
       "note": "监管编号（如 BCG‑E9187A），可到 fccid.io 反查射频与 SAR 测试报告"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；国行蜂窝机型才有，海外版/非蜂窝 unknown 或 not_applicable。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码（如 26J44XA31643）；含射频器件（WLAN/蓝牙/蜂窝）的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国上海 / Assembled in China）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "power.inputVoltage",
+      "label": "额定输入电压",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "铭牌原文（如 100-240V~, 50/60Hz）；AC/DC 电源性质随原文"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "额定输入功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        2000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "note": "CCC 铭牌强制项；与充电/电池字段口径分开"
+    },
+    {
+      "path": "power.protectionClass",
+      "label": "防触电类别",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "I",
+        "II",
+        "III"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "GB 4943.1 防触电保护类别：I 类接地 / II 类双重绝缘 / III 类特低电压"
+    },
+    {
+      "path": "power.ratingLevel",
+      "label": "能效等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "中国能效标识等级（如 1级）；仅目录内品类存在，其余 not_applicable。energylabel.com.cn 可查"
+    },
+    {
+      "path": "power.standbyPowerW",
+      "label": "睡眠功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        50
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "power",
+      "note": "睡眠状态功率（能效标准口径）"
+    },
+    {
+      "path": "power.offPowerW",
+      "label": "关机功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        0,
+        50
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "power",
+      "note": "关闭状态功率（能效标准口径）"
     }
   ],
   "groups": [
     {
       "id": "body",
-      "name": "外观与机身",
-      "nameEn": "Appearance & Build"
+      "name": "外观与机身"
     },
     {
       "id": "printer",
-      "name": "打印",
-      "nameEn": "Printing"
+      "name": "打印"
     },
     {
       "id": "connectivity",
-      "name": "网络与连接",
-      "nameEn": "Network & Connectivity"
+      "name": "网络与连接"
     },
     {
       "id": "os",
-      "name": "系统与软件",
-      "nameEn": "OS & Software"
+      "name": "系统与软件"
     },
     {
       "id": "device",
-      "name": "型号标识",
-      "nameEn": "Model ID"
+      "name": "型号标识"
+    },
+    {
+      "id": "power",
+      "name": "电源",
+      "type": "single",
+      "guide": "输入电压/功率/防触电/能效"
     }
   ]
 }
