@@ -1,0 +1,79 @@
+{
+  "_doc": "华为监管编号人工取证证据文件（2026-10-23）。三路检索（Mate 折叠屏+Mate70/80/90 系、Pura/Pocket/nova14 系、nova15/16+畅享 系，共 49 台）的裁决结果。入库标准（从严）：值必须带可回溯来源 URL；双独立来源一致、或来源与官方型号代码互相印证；任何跨机型同号冲突（电商模板复用错误）一律置 null 留档。未入库机型的排查结论在 rejected 节，供后续在 jwxk.miit.gov.cn（acceptid 接口）按型号代码人工复核。 Consumed by scripts/ingest/huawei-cta-fill.mjs",
+  "version": 1,
+  "results": [
+    {
+      "productId": "huawei-mate70",
+      "ctaNo": null,
+      "srrcId": "24J44HW2Q864",
+      "srrcSource": "https://www.ithome.com/0/837/312.htm",
+      "note": "CMIIT ID 对应国行 CLS-AL00（IT之家引中国电信终端产品库+华为客服确认）；同源 CLS-AL30 = 24C44HW2L539（变体未入库）"
+    },
+    {
+      "productId": "huawei-mate70-pro",
+      "ctaNo": null,
+      "srrcId": "24C44HW27122",
+      "srrcSource": "https://manuals.plus/m/540e4069c3cb1ee7eaa9d92172b1b38f499ee7d771d8a5c41e623e927bc43128",
+      "note": "CMIIT ID 对应国行 PLR-AL00，出自官方快速指南（认证页）；同文档 PLR-AL30 = 24C44HW2D821（变体未入库）"
+    },
+    {
+      "productId": "huawei-nova15-ultra",
+      "ctaNo": null,
+      "srrcId": "25C44HW27912",
+      "srrcSource": "https://www.notice-facile.com/notice/751969/huawei+nova-15-ultra",
+      "note": "CMIIT ID 对应国行 SLY-AL00，出自该机用户手册认证页镜像"
+    },
+    {
+      "productId": "huawei-changxiang-80",
+      "ctaNo": "02-D710-233215",
+      "ctaSource": "https://www.suning.com/itemcanshu/0000000000/12444126221.html",
+      "srrcId": null,
+      "note": "苏宁两 SKU 页一致，同编号未见跨机型混标；国行型号 JUY-AL00（4G 机型）"
+    },
+    {
+      "productId": "huawei-changxiang-90-plus",
+      "ctaNo": "02-C409-241783",
+      "ctaSource": "https://pcdetail.taobao.com/cHdNNVNZVXUzMk1laEVNZ1NDVko2QT09.html",
+      "srrcId": null,
+      "note": "两个独立淘宝参数页一致；国行型号 JUY-AL50。存在仿冒 listing 借用同号（已在 reason 提示复核）"
+    },
+    {
+      "productId": "huawei-changxiang-70x-zunxiangban",
+      "ctaNo": "02-D710-230594",
+      "ctaSource": "https://www.suning.com/itemcanshu/0000000000/12449683877.html",
+      "srrcId": null,
+      "note": "苏宁参数页明确标注且与国行型号 BRE-AL80a 同页印证；注意与被广泛误标的 02-D710-230592 相邻不同号"
+    },
+    {
+      "productId": "huawei-nova16-z",
+      "ctaNo": "00-D726-249429",
+      "ctaSource": "https://pcdetail.taobao.com/Yzl0dFVBQURscWdsWWhSbEFUNGI3Zz09.html",
+      "srrcId": null,
+      "note": "国行型号 PKN-AL00（pconline/gsmarena 交叉印证）；单一电商来源，编号前缀 00-D726"
+    }
+  ],
+  "rejected": [
+    { "productId": "huawei-pura-x", "reason": "单一苏宁来源且编号格式异常（00-B220-239204），来源未确认型号代码，待工信部复核" },
+    { "productId": "huawei-pura80", "reason": "淘宝单源，页面未标注型号代码" },
+    { "productId": "huawei-pura80-pro", "reason": "02-D710-222059 与 Pura 80 Pro+ 同号，无法判定同证变体还是模板复用" },
+    { "productId": "huawei-pura80-pro-plus", "reason": "同上冲突" },
+    { "productId": "huawei-pura90-pro", "reason": "淘宝 02-E219-243496 与苏宁 02-D710-222059 冲突" },
+    { "productId": "huawei-pocket-2-youxiangban", "reason": "苏宁 02-D710-222661 与淘宝 02-B220-240385 冲突" },
+    { "productId": "huawei-nova14", "reason": "02-D710-230397 同号被标给 nova 14 活力版/Pro（不同机型不可能同证），模板复用嫌疑" },
+    { "productId": "huawei-nova14-huoliban", "reason": "同上，仅第三方店铺页标注，可信度低" },
+    { "productId": "huawei-nova14-pro", "reason": "同上" },
+    { "productId": "huawei-nova15", "reason": "02-D710-230397 跨 nova15/Pro/Ultra 三机型复用" },
+    { "productId": "huawei-nova15-pro", "reason": "同上" },
+    { "productId": "huawei-nova16", "reason": "02-D710-230592 跨 nova16 SE/Pro、畅享90 系复用" },
+    { "productId": "huawei-nova16-pro", "reason": "四来源互相冲突" },
+    { "productId": "huawei-nova16-se", "reason": "仅苏宁单源且该号广泛误标" },
+    { "productId": "huawei-nova16-ultra", "reason": "与 nova15 系同号，复用嫌疑" },
+    { "productId": "huawei-pura-x-max", "reason": "02-D710-230592 跨机型复用" },
+    { "productId": "huawei-pura-x-view", "reason": "同上" },
+    { "productId": "huawei-pura90-pro-max", "reason": "同上" },
+    { "productId": "huawei-changxiang-70x", "reason": "两淘宝页 02-D710-230041 / 02-E219-241298 冲突" },
+    { "productId": "huawei-changxiang-90-pro-max", "reason": "四来源全部冲突" },
+    { "productId": "huawei-mate70-pro-youxiangban", "reason": "仅二手电商页标注 02-B220-250903，来源质量不足" },
+    { "productId": "huawei-mate70-pro-youxiangban#", "reason": "以下机型公开渠道无可引用证据（入网型号代码已确认，留待 jwxk.miit.gov.cn 人工复核）：mate-x6(ICL-AL10)、mate-x7(DEL-AL10)、mate-xt-2(LAP-AL10)、mate-xts(GRL-AL20)、mate70-air(SUP-AL90)、mate70-pro-plus(PLA-AL10)、mate70-rs(PLU-AL10)、mate80(VYG-AL00/30)、mate80-pro(SGT-AL00/50)、mate80-pro-max(SGT-AL10)、mate80-rs(SGU-AL10)、mate90(HLS-AL00)、mate90-pro(CMS-AL20)、mate90-pro-max(CMM-AL00/AL10)、mate90-rs(CMU-AL10)、pura80-ultra、pura90、changxiang-90(JUY-AL80)、changxiang-90m-plus(JUY-AL50)" }
+  ]
+}

@@ -93040,6 +93040,83 @@
       "createdAt": "2026-10-23",
       "active": true,
       "source": "apple-regulatory"
+    },
+    {
+      "id": "ovr-manual-1233",
+      "op": "set-field",
+      "productId": "huawei-mate70",
+      "field": "device.srrcId",
+      "value": "24J44HW2Q864",
+      "reason": "人工取证监管编号（CMIIT ID 对应国行 CLS-AL00（IT之家引中国电信终端产品库+华为客服确认）；同源 CLS-AL30 = 24C44HW2L539（变体未入库））——来源：https://www.ithome.com/0/837/312.htm",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1234",
+      "op": "set-field",
+      "productId": "huawei-mate70-pro",
+      "field": "device.srrcId",
+      "value": "24C44HW27122",
+      "reason": "人工取证监管编号（CMIIT ID 对应国行 PLR-AL00，出自官方快速指南（认证页）；同文档 PLR-AL30 = 24C44HW2D821（变体未入库））——来源：https://manuals.plus/m/540e4069c3cb1ee7eaa9d92172b1b38f499ee7d771d8a5c41e623e927bc43128",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1235",
+      "op": "set-field",
+      "productId": "huawei-nova15-ultra",
+      "field": "device.srrcId",
+      "value": "25C44HW27912",
+      "reason": "人工取证监管编号（CMIIT ID 对应国行 SLY-AL00，出自该机用户手册认证页镜像）——来源：https://www.notice-facile.com/notice/751969/huawei+nova-15-ultra",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1236",
+      "op": "set-field",
+      "productId": "huawei-changxiang-80",
+      "field": "device.ctaNo",
+      "value": "02-D710-233215",
+      "reason": "人工取证监管编号（苏宁两 SKU 页一致，同编号未见跨机型混标；国行型号 JUY-AL00（4G 机型））——来源：https://www.suning.com/itemcanshu/0000000000/12444126221.html",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1237",
+      "op": "set-field",
+      "productId": "huawei-changxiang-90-plus",
+      "field": "device.ctaNo",
+      "value": "02-C409-241783",
+      "reason": "人工取证监管编号（两个独立淘宝参数页一致；国行型号 JUY-AL50。存在仿冒 listing 借用同号（已在 reason 提示复核））——来源：https://pcdetail.taobao.com/cHdNNVNZVXUzMk1laEVNZ1NDVko2QT09.html",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1238",
+      "op": "set-field",
+      "productId": "huawei-changxiang-70x-zunxiangban",
+      "field": "device.ctaNo",
+      "value": "02-D710-230594",
+      "reason": "人工取证监管编号（苏宁参数页明确标注且与国行型号 BRE-AL80a 同页印证；注意与被广泛误标的 02-D710-230592 相邻不同号）——来源：https://www.suning.com/itemcanshu/0000000000/12449683877.html",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-manual-1239",
+      "op": "set-field",
+      "productId": "huawei-nova16-z",
+      "field": "device.ctaNo",
+      "value": "00-D726-249429",
+      "reason": "人工取证监管编号（国行型号 PKN-AL00（pconline/gsmarena 交叉印证）；单一电商来源，编号前缀 00-D726）——来源：https://pcdetail.taobao.com/Yzl0dFVBQURscWdsWWhSbEFUNGI3Zz09.html",
+      "createdAt": "2026-10-23",
+      "active": true,
+      "source": "manual-evidence"
     }
   ]
 }
