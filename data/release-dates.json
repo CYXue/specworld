@@ -660,6 +660,4096 @@
       "source": "manual",
       "sourceUrl": null,
       "note": "2022-03-08（美西）官网新闻稿官宣，全球媒体通写口径；北京时间为 03-09 凌晨。03-11 预购、03-18 开售。官网新闻稿 URL 待补，日期可独立核验"
+    },
+    {
+      "id": "huawei-matepad-edge",
+      "name": "HUAWEI MatePad Edge",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://nb.zol.com.cn/1088/10880903.html",
+      "note": "2025-11-25 华为全场景新品线上发布会正式发布（中关村在线/ITBear 双源在案），当日 18:08 开售"
+    },
+    {
+      "id": "huawei-matepad-pro-12",
+      "name": "HUAWEI MatePad Pro",
+      "brand": "huawei",
+      "date": "2026-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.sina.cn/news/article/nimhpmz5068391.html",
+      "note": "2026-08-05 尊界时代旗舰 MPV 及华为全场景新品发布会正式发布并开启预售；2026-08-14 全渠道正式开售（天极网/数字尾巴双源在案）"
+    },
+    {
+      "id": "huawei-matepad-pro-max",
+      "name": "HUAWEI MatePad Pro Max",
+      "brand": "huawei",
+      "date": "2026-05-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/mobile/n/c/2026-05-20/doc-inhyqcsh9593248.shtml",
+      "note": "2026-05-20 华为鸿蒙办公新品技术沟通会发布并开启预售；2026-06-01 正式开售（新浪科技/快科技双源在案）"
+    },
+    {
+      "id": "huawei-matepad-mini",
+      "name": "HUAWEI MatePad Mini",
+      "brand": "huawei",
+      "date": "2025-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.pingwest.com/w/307371",
+      "note": "2025-09-04 华为新品发布会正式发布并开启预售；2025-09-12 正式开售（品玩/IT之家双源在案）"
+    },
+    {
+      "id": "huawei-matepad-mini-yueduban",
+      "name": "HUAWEI MatePad Mini 悦读版",
+      "brand": "huawei",
+      "date": "2025-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/885/608.htm",
+      "note": "2025-09-04 与 MatePad Mini 同场官宣；2025-09-12 预售、2025-09-25 开售（IT之家在案，仅线下渠道销售）"
+    },
+    {
+      "id": "huawei-matepad-air-z",
+      "name": "HUAWEI MatePad Air Z",
+      "brand": "huawei",
+      "date": "2026-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20260924A04W3C00",
+      "note": "2026-09-24 官宣并开启预售（华为商城官微同日官宣）；2026-09-29 正式开售（腾讯新闻/快科技双源在案）"
+    },
+    {
+      "id": "huawei-matepad-air-12",
+      "name": "HUAWEI MatePad Air",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/999/366.htm",
+      "note": "2026-09-07 鸿蒙操作系统 7 暨 Mate XT 2 新品发布会正式发布并预售；2026-09-12 全渠道开售（IT之家/新华网双源在案）"
+    },
+    {
+      "id": "huawei-matepad-air-2025",
+      "name": "HUAWEI MatePad Air",
+      "brand": "huawei",
+      "date": "2025-08-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/875/535.htm",
+      "note": "2025-08-15 华为 2025 夏季新品大咖秀发布并开启预售；2025-08-21 正式开售（IT之家/新华网双源在案）"
+    },
+    {
+      "id": "huawei-matepad-11-5-2026",
+      "name": "HUAWEI MatePad 11.5",
+      "brand": "huawei",
+      "date": "2025-12-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/906/972.htm",
+      "note": "2025-12-22 正式发布（与 nova 系列同场）；2025-12-25 10:08 正式开售（IT之家/凤凰网双源在案）"
+    },
+    {
+      "id": "huawei-matepad-11-5-s-2025",
+      "name": "HUAWEI MatePad 11.5 S",
+      "brand": "huawei",
+      "date": "2025-08-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/875/530.htm",
+      "note": "2025-08-15 正式发布并开启预售；2025-08-21 10:08 正式开售（IT之家/CNMO 双源在案）"
+    },
+    {
+      "id": "huawei-matepad-11-5-s-dynamic-2025",
+      "name": "HUAWEI MatePad 11.5 S 灵动款",
+      "brand": "huawei",
+      "date": "2025-08-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.chinaz.com/feed/0815/1704215.shtml",
+      "note": "2025-08-15 与 MatePad 11.5 S 同场发布；标准版 08-21 首销、灵动款 08-31 首销（站长之家/IT之家双源在案）"
+    },
+    {
+      "id": "huawei-matepad-se-11",
+      "name": "HUAWEI MatePad SE",
+      "brand": "huawei",
+      "date": "2024-07-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/778/771.htm",
+      "note": "2024-07-01 发布并预售、2024-07-04 首销（IT之家/快科技双源在案）；落在首发窗口（2024-09）之前，如实记录，窗口过滤会排除"
+    },
+    {
+      "id": "huawei-watch-ultimate-2",
+      "name": "HUAWEI WATCH Ultimate 2",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.news.cn/tech/20251125/87b9ad83a2684767a1d7bcad33ba4b8c/c.html",
+      "note": "2025-11-25 Mate 80 | Mate X7 及全场景发布会发布并预售；2025-11-28 9:08 开售（新华网/央广网双源在案）"
+    },
+    {
+      "id": "huawei-watch-ultimate-design-royal-gold-edition",
+      "name": "HUAWEI WATCH ULTIMATE DESIGN 非凡大师紫金款",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.news.cn/tech/20251125/012cad32a99947da8ebc25c607efec0f/c.html",
+      "note": "2025-11-25 同场发布；2025-11-28 9:08 开售（新华网双源在案）"
+    },
+    {
+      "id": "huawei-watch-6",
+      "name": "HUAWEI WATCH 6",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2197813.html",
+      "note": "2026-09-07 鸿蒙 7 | Mate XT 2 及全场景发布会发布；2026-09-23 开售（PChome 在案，海外 9-2 发布）"
+    },
+    {
+      "id": "huawei-watch-6-pro",
+      "name": "HUAWEI WATCH 6 Pro",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2197813.html",
+      "note": "同 WATCH 6：2026-09-07 发布、2026-09-23 开售（PChome/IT之家双源在案）"
+    },
+    {
+      "id": "huawei-watch-5",
+      "name": "HUAWEI WATCH 5",
+      "brand": "huawei",
+      "date": "2025-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.cnr.cn/techxp/20250611/t20250611_527205773.shtml",
+      "note": "2025-06-11 Pura 80 系列及全场景发布会发布并当日开售（央广网/腾讯双源在案）"
+    },
+    {
+      "id": "huawei-watch-gt7",
+      "name": "HUAWEI WATCH GT 7",
+      "brand": "huawei",
+      "date": "2026-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.pingwest.com/w/316217",
+      "note": "2026-08-05 尊界时代旗舰 MPV 及全场景发布会发布；数字款 2026-08-14 开售（品玩在案）"
+    },
+    {
+      "id": "huawei-watch-gt7-pro",
+      "name": "HUAWEI WATCH GT 7 Pro",
+      "brand": "huawei",
+      "date": "2026-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.pingwest.com/w/316217",
+      "note": "2026-08-05 同场发布；Pro 款 2026-08-28 开售（品玩/IT之家双源在案）"
+    },
+    {
+      "id": "huawei-watch-buds-2",
+      "name": "HUAWEI WATCH Buds 2",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20260420A073GI00",
+      "note": "2026-04-20 Pura系列及全场景新品发布会发布；2026-04-25 首销"
+    },
+    {
+      "id": "huawei-watch-d2",
+      "name": "HUAWEI WATCH D2",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://smartwear.zol.com.cn/922/9221187.html",
+      "note": "2024-11-26 Mate品牌盛典发布；首销2024-11-28/29"
+    },
+    {
+      "id": "huawei-watch-d3",
+      "name": "HUAWEI WATCH D3",
+      "brand": "huawei",
+      "date": "2026-09-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/discovery/2026-09-03/doc-iniqnawn4567024.shtml",
+      "note": "2026-09-02 慕尼黑全球发布会；百度百科载国内2026-09-29开售"
+    },
+    {
+      "id": "huawei-watch-fit4",
+      "name": "HUAWEI WATCH FIT 4",
+      "brand": "huawei",
+      "date": "2025-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/247.htm",
+      "note": "2025-05-15 柏林全球发布会（FIT 4系列）"
+    },
+    {
+      "id": "huawei-watch-fit4-pro",
+      "name": "HUAWEI WATCH FIT 4 Pro",
+      "brand": "huawei",
+      "date": "2025-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/247.htm",
+      "note": "2025-05-15 柏林全球发布会（FIT 4系列）"
+    },
+    {
+      "id": "huawei-watch-fit5",
+      "name": "HUAWEI WATCH FIT 5",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/247.htm",
+      "note": "2026-04-20 Pura系列及全场景新品发布会发布；4-29 开售"
+    },
+    {
+      "id": "huawei-watch-fit5-pro",
+      "name": "HUAWEI WATCH FIT 5 Pro",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/247.htm",
+      "note": "2026-04-20 发布；4-29 预售、5-15 开售"
+    },
+    {
+      "id": "huawei-watch-gt-runner-2",
+      "name": "HUAWEI WATCH GT Runner 2",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/mobile/n/n/2026-03-23/doc-inhryhit7969139.shtml",
+      "note": "2026-03-23 华为春季全场景新品发布会（国行）；海外2026-02-26马德里发布"
+    },
+    {
+      "id": "huawei-watch-gt6",
+      "name": "HUAWEI WATCH GT 6",
+      "brand": "huawei",
+      "date": "2025-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.jiemian.com/article/13394232.html",
+      "note": "2025-09-24 华为穿戴音频新品发布会发布；2025-09-29 开售"
+    },
+    {
+      "id": "huawei-watch-gt6-pro",
+      "name": "HUAWEI WATCH GT 6 Pro",
+      "brand": "huawei",
+      "date": "2025-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.chnfund.com/article/ARa3fce771-1689-1cfd-b3e5-3a1c8d88dd83",
+      "note": "2025-09-24 发布；10-20 开售"
+    },
+    {
+      "id": "huawei-watch-kids-x1",
+      "name": "华为超新星手表 X1",
+      "brand": "huawei",
+      "date": "2026-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/950/964.htm",
+      "note": "2026-05-15 智界V9发布会上官宣发布并预售；2026-05-29 开售"
+    },
+    {
+      "id": "huawei-watch-kids-x1-pro",
+      "name": "华为超新星手表 X1 Pro",
+      "brand": "huawei",
+      "date": "2026-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.cn/tech/2026-05-15/detail-inhxypti3307017.d.html",
+      "note": "2026-05-15 发布并开启预售；2026-05-29 开售"
+    },
+    {
+      "id": "huawei-watch-ultimate-design-sapphire-edition",
+      "name": "HUAWEI WATCH ULTIMATE DESIGN 非凡大师 蓝宝石黄金款",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241126A06EYE00",
+      "note": "2024-11-26 Mate品牌盛典发布，当日开售"
+    },
+    {
+      "id": "huawei-watch-ultimate-design-spring-edition",
+      "name": "HUAWEI WATCH ULTIMATE DESIGN 非凡大师 星钻绽放款",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/239.htm",
+      "note": "2026-04-20 Pura发布会发布；5-15 开售"
+    },
+    {
+      "id": "huawei-band10",
+      "name": "华为手环 10",
+      "brand": "huawei",
+      "date": "2025-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2184478.html",
+      "note": "2025-03-20 Pura先锋盛典发布，当日18:08开售"
+    },
+    {
+      "id": "huawei-band11",
+      "name": "华为手环 11",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1111/1111019.htm",
+      "note": "2026-03-23 春季全场景新品发布会（国行）发布并开售"
+    },
+    {
+      "id": "huawei-band11-pro",
+      "name": "华为手环 11 Pro",
+      "brand": "huawei",
+      "date": "2026-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.eetrend.com/content/2026-03/a1956472-4af5-4809-b19a-3c9a6ff036e0-100599694.html",
+      "note": "2026-03-23 国行发布并开售"
+    },
+    {
+      "id": "huawei-talkband-b7",
+      "name": "华为通话手环 B7",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/681/840.htm",
+      "note": "2023-03-23 春季旗舰新品发布会发布；2023-03-30 开售"
+    },
+    {
+      "id": "huawei-kids-watch-5",
+      "name": "华为儿童手表 5",
+      "brand": "huawei",
+      "date": "2023-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/history/smartwatch/huawei/c14311/",
+      "note": "太平洋历史报价库记载2023-05-18发布"
+    },
+    {
+      "id": "huawei-kids-watch-5-lite",
+      "name": "华为儿童手表 5 活力版",
+      "brand": "huawei",
+      "date": "2023-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/history/smartwatch/huawei/c14311/",
+      "note": "太平洋历史报价库记载2023-07-27发布（活力版）"
+    },
+    {
+      "id": "huawei-kids-watch-5-pro",
+      "name": "华为儿童手表 5 Pro",
+      "brand": "huawei",
+      "date": "2024-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240515A0646M00",
+      "note": "2024-05-15 华为夏季全场景发布会发布；2024-05-24 开售"
+    },
+    {
+      "id": "huawei-kids-watch-5-pro-special-edition",
+      "name": "华为儿童手表 5 Pro 感光炫彩版",
+      "brand": "huawei",
+      "date": "2024-08-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/785/763.htm",
+      "note": "2024-07-30 预售，2024-08-02 正式开售"
+    },
+    {
+      "id": "huawei-kids-watch-5x",
+      "name": "华为儿童手表 5X",
+      "brand": "huawei",
+      "date": "2022-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/659/950.htm",
+      "note": "2022-12-09 冬季全场景发布会发布；12-26 开售"
+    },
+    {
+      "id": "huawei-kids-watch-5x-pro",
+      "name": "华为儿童手表 5X Pro",
+      "brand": "huawei",
+      "date": "2022-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/659/950.htm",
+      "note": "2022-12-09 发布；12-26 开售"
+    },
+    {
+      "id": "huawei-ax2-pro",
+      "name": "华为路由 AX2 Pro",
+      "brand": "huawei",
+      "date": "2021-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/552/249.htm",
+      "note": "2021-05-19 全场景智慧生活新品发布会当天开启预售，6月1日发货"
+    },
+    {
+      "id": "huawei-ax3000",
+      "name": "华为路由 AX3000",
+      "brand": "huawei",
+      "date": "2024-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/cn/routers/ax3000/specs/",
+      "note": "未检索到明确发布会日期；仅能确定2024年前后上市"
+    },
+    {
+      "id": "huawei-ax6",
+      "name": "华为路由 AX6 (new)",
+      "brand": "huawei",
+      "date": "2022-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://view.inews.qq.com/a/20220429A00JT000",
+      "note": "2022-04-28 折叠旗舰及全场景新品发布会发布；AX6 new白色版2024-01-20上架"
+    },
+    {
+      "id": "huawei-ax6-pro",
+      "name": "华为路由 AX6 Pro",
+      "brand": "huawei",
+      "date": "2024-02-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/750/729.htm",
+      "note": "2024-02-18 开启预售，2月24日首销"
+    },
+    {
+      "id": "huawei-be3-pro",
+      "name": "华为路由 BE3 Pro",
+      "brand": "huawei",
+      "date": "2023-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/721/526.htm",
+      "note": "2023-09-25 秋季全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-be7",
+      "name": "华为路由 BE7",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://i.ifeng.com/c/8d8kLUxNl8U",
+      "note": "2024-09-24 秋季全场景新品发布会发布；BE7 9月27日首销"
+    },
+    {
+      "id": "huawei-be7-pro",
+      "name": "华为路由 BE7 Pro",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/798/130.htm",
+      "note": "与BE7同场发布"
+    },
+    {
+      "id": "huawei-q6",
+      "name": "华为凌霄子母路由 Q6",
+      "brand": "huawei",
+      "date": "2022-03-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20220316A0BDSB00",
+      "note": "2022-03-16 全屋智能及全场景新品春季发布会发布"
+    },
+    {
+      "id": "huawei-q6-ethernet-cable",
+      "name": "华为凌霄子母路由 Q6 网线版",
+      "brand": "huawei",
+      "date": "2022-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://view.inews.qq.com/a/20220429A00JT000",
+      "note": "Q6网线版与AX6同场发布，5月13日开售"
+    },
+    {
+      "id": "huawei-q6e",
+      "name": "华为凌霄子母路由 Q6E",
+      "brand": "huawei",
+      "date": "2023-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.ittime.com.cn/news/news_73045.shtml",
+      "note": "未见发布会官宣；2023-05-19 开启预定，5月31日开售"
+    },
+    {
+      "id": "huawei-q7",
+      "name": "华为凌霄子母路由 Q7 电线版",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/958/271.htm",
+      "note": "2026-06-01 nova 16 系列及全场景新品发布会发布；6月24日开售"
+    },
+    {
+      "id": "huawei-q7-ethernet-cable",
+      "name": "华为凌霄子母路由 Q7 网线版",
+      "brand": "huawei",
+      "date": "2024-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241126A083EH00",
+      "note": "2024-11-26 Mate品牌盛典发布，12月10日开售"
+    },
+    {
+      "id": "huawei-x1",
+      "name": "华为路由 X1",
+      "brand": "huawei",
+      "date": "2025-04-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/845/615.htm",
+      "note": "2025-04-16 发布并预售，4月25日开售"
+    },
+    {
+      "id": "huawei-x1-pro",
+      "name": "华为路由 X1 Pro",
+      "brand": "huawei",
+      "date": "2025-04-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/845/615.htm",
+      "note": "与X1同场发布"
+    },
+    {
+      "id": "huawei-x2",
+      "name": "华为路由 X2",
+      "brand": "huawei",
+      "date": "2026-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/015/187.htm",
+      "note": "2026-10-20 开启预售（无发布会官宣）；10月26日开售"
+    },
+    {
+      "id": "huawei-x2-pro",
+      "name": "华为路由 X2 Pro",
+      "brand": "huawei",
+      "date": "2026-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/015/187.htm",
+      "note": "与X2同日预售；10月26日开售"
+    },
+    {
+      "id": "huawei-mobile-router-2",
+      "name": "华为移动路由 2",
+      "brand": "huawei",
+      "date": "2023-09-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/720/195.htm",
+      "note": "2023-09-19 上架开启预售；未见发布会官宣"
+    },
+    {
+      "id": "huawei-mobile-router-5",
+      "name": "华为移动路由 5",
+      "brand": "huawei",
+      "date": "2025-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250810A03CC100",
+      "note": "2025-08-10 报道发布，8月18日首销"
+    },
+    {
+      "id": "huawei-mobile-router-pro",
+      "name": "华为移动路由 Pro",
+      "brand": "huawei",
+      "date": "2022-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/613/669.htm",
+      "note": "2022-04-18 开启预售，4月28日开售"
+    },
+    {
+      "id": "huawei-mobile-wifi-3-pro",
+      "name": "华为随行 WiFi 3 Pro",
+      "brand": "huawei",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://i.ifeng.com/c/8HNOS2BK8z7",
+      "note": "2022-07-04 华为夏季新品发布会发布"
+    },
+    {
+      "id": "huawei-mobile-wifi-5-esim",
+      "name": "华为随行 WiFi 5 eSIM",
+      "brand": "huawei",
+      "date": "2026-09-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1149/1149447.htm",
+      "note": "2026-09-08 正式发布并开售"
+    },
+    {
+      "id": "huawei-mobile-wifi-6-pro",
+      "name": "华为随行 WiFi 6 Pro",
+      "brand": "huawei",
+      "date": "2026-09-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1149/1149579.htm",
+      "note": "2026-09-08 开启预售；未见发布会官宣"
+    },
+    {
+      "id": "huawei-mobile-wifi-x",
+      "name": "华为随行 WiFi X",
+      "brand": "huawei",
+      "date": "2026-03-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/927/889.htm",
+      "note": "2026-03-11 华为鸿蒙智家技术沟通会正式发布"
+    },
+    {
+      "id": "huawei-huawei-eyewear-2",
+      "name": "华为智能眼镜 2",
+      "brand": "huawei",
+      "date": "2023-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20230925A07FF600",
+      "note": "2023-09-25 秋季全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-freearc",
+      "name": "HUAWEI FreeArc 耳挂耳机",
+      "brand": "huawei",
+      "date": "2025-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/854/165.htm",
+      "note": "2025-05-19 nova 14 系列及鸿蒙电脑发布会发布"
+    },
+    {
+      "id": "huawei-freebuds-neo",
+      "name": "HUAWEI FreeBuds Neo",
+      "brand": "huawei",
+      "date": "2026-09-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.jiemian.com/article/15148434.html",
+      "note": "国内9月29日开售；海外2026-09-02慕尼黑首发"
+    },
+    {
+      "id": "huawei-freebuds-pro-5",
+      "name": "HUAWEI FreeBuds Pro 5",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.cnr.cn/tech/techgd/20251125/t20251125_527441290.shtml",
+      "note": "2025-11-25 Mate 80 | Mate X7 及全场景发布会发布"
+    },
+    {
+      "id": "huawei-freebuds-se-3",
+      "name": "HUAWEI FreeBuds SE 3",
+      "brand": "huawei",
+      "date": "2024-12-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/817/020.htm",
+      "note": "2024-12-12 发布并预售"
+    },
+    {
+      "id": "huawei-freebuds-se-4-anc",
+      "name": "HUAWEI FreeBuds SE 4 ANC",
+      "brand": "huawei",
+      "date": "2025-09-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/882/084.htm",
+      "note": "2025-09-11 开启预售、9月15日开售"
+    },
+    {
+      "id": "huawei-freebuds6",
+      "name": "HUAWEI FreeBuds 6",
+      "brand": "huawei",
+      "date": "2025-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250320A077IC00",
+      "note": "2025-03-20 Pura 先锋盛典发布；3月28日开售"
+    },
+    {
+      "id": "huawei-freebuds6i",
+      "name": "HUAWEI FreeBuds 6i",
+      "brand": "huawei",
+      "date": "2024-08-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/786/644.htm",
+      "note": "2024-08-06 享界S9及华为全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-freebuds7",
+      "name": "HUAWEI FreeBuds 7",
+      "brand": "huawei",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/999/364.htm",
+      "note": "2026-09-07 HarmonyOS 7 | Mate XT 2 及全场景发布会发布"
+    },
+    {
+      "id": "huawei-freebuds7i",
+      "name": "HUAWEI FreeBuds 7i",
+      "brand": "huawei",
+      "date": "2025-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.c114.com.cn/news/126/a1296384.html",
+      "note": "2025-09-04 Mate XTs 非凡大师及全场景发布会发布并开售"
+    },
+    {
+      "id": "huawei-freeclip",
+      "name": "HUAWEI FreeClip 耳夹耳机",
+      "brand": "huawei",
+      "date": "2023-12-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20231226A05H8600",
+      "note": "2023-12-26 问界M9及华为冬季全场景发布会国内发布"
+    },
+    {
+      "id": "huawei-freeclip2",
+      "name": "HUAWEI FreeClip 2 耳夹耳机",
+      "brand": "huawei",
+      "date": "2025-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/885/405.htm",
+      "note": "2025-09-24 华为穿戴音频新品发布会发布"
+    },
+    {
+      "id": "huawei-freeclip2-diancangban",
+      "name": "HUAWEI FreeClip 2 典藏版 耳夹耳机",
+      "brand": "huawei",
+      "date": "2026-06-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/958/257.htm",
+      "note": "2026-06-01 nova 16 系列及全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-sound-joy-2-ai-speaker",
+      "name": "HUAWEI Sound Joy 2 智能版",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240924A06JB900",
+      "note": "2024-09-24 秋季全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-sound-joy-2-bluetooth-speaker",
+      "name": "HUAWEI Sound Joy 2 蓝牙版",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240924A06JB900",
+      "note": "与智能版同场发布"
+    },
+    {
+      "id": "huawei-sound-theatre",
+      "name": "华为悦彰家庭影院",
+      "brand": "huawei",
+      "date": "2025-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/cn/press/events/2025/huawei-pura-fashion-gala-and-hima-new-product-launch-event/",
+      "note": "2025-03-20 Pura 先锋盛典发布"
+    },
+    {
+      "id": "huawei-sound-x-gold",
+      "name": "HUAWEI Sound X 鎏金剧院版",
+      "brand": "huawei",
+      "date": "2022-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/639/318.htm",
+      "note": "2022-09-06 Mate 50 系列及全场景新品秋季发布会发布"
+    },
+    {
+      "id": "huawei-sound-x4",
+      "name": "HUAWEI Sound X4",
+      "brand": "huawei",
+      "date": "2024-10-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/802/988.htm",
+      "note": "2024-10-17 上架发布并预售（无发布会官宣）"
+    },
+    {
+      "id": "huawei-sound-x5",
+      "name": "HUAWEI Sound X5",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/246.htm",
+      "note": "2026-04-20 Pura 系列及全场景新品发布会发布"
+    },
+    {
+      "id": "huawei-5",
+      "name": "华为Vision智慧屏 5",
+      "brand": "huawei",
+      "date": "2025-04-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.smartcn.cn/340882.html",
+      "note": "2025-04-16 发布并开售"
+    },
+    {
+      "id": "huawei-5-pro",
+      "name": "华为Vision智慧屏 5 Pro",
+      "brand": "huawei",
+      "date": "2025-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.chnfund.com/article/ARa3fce771-1689-1cfd-b3e5-3a1c8d88dd83",
+      "note": "2025-09-24 穿戴音频新品线上发布会正式发布"
+    },
+    {
+      "id": "huawei-5-se",
+      "name": "华为Vision智慧屏 5 SE",
+      "brand": "huawei",
+      "date": "2025-04-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.smartcn.cn/340882.html",
+      "note": "与 Vision 5 同场公布；5-8 首销"
+    },
+    {
+      "id": "huawei-mate-tv",
+      "name": "华为智慧屏 MateTV",
+      "brand": "huawei",
+      "date": "2025-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www3.xinhuanet.com/tech/20250905/62da5ad5d1574597a06b0ced7debaac5/c.html",
+      "note": "2025-09-04 Mate XTs 及全场景发布会发布"
+    },
+    {
+      "id": "huawei-mate-tv-2",
+      "name": "华为智慧屏 MateTV 2",
+      "brand": "huawei",
+      "date": "2026-09-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.news.cn/tech/20260930/61ed14e07ae8450b9d6bea863f50f4cd/c.html",
+      "note": "随 Mate 90 系列发布；9-23 预售，9-30 开售"
+    },
+    {
+      "id": "huawei-mate-tv-2-max",
+      "name": "华为智慧屏 MateTV 2 Max",
+      "brand": "huawei",
+      "date": "2026-09-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.huaweicentral.com/huawei-mate-tv-2-launched-with-5000nits-brightness-kirin-9-series-chip/",
+      "note": "MateTV 2 系列同场发布版本"
+    },
+    {
+      "id": "huawei-mate-tv-max",
+      "name": "华为智慧屏 MateTV Max",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1088/1088654.htm",
+      "note": "2025-11-25 随 Mate 80 系列及全场景发布会官宣"
+    },
+    {
+      "id": "huawei-s6-pro",
+      "name": "华为智慧屏 S6 Pro",
+      "brand": "huawei",
+      "date": "2025-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/roll/2025-03-21/doc-ineqhwir7812168.shtml",
+      "note": "2025-03-20 Pura先锋盛典发布，4-3 开售"
+    },
+    {
+      "id": "huawei-s7",
+      "name": "华为智慧屏 S7",
+      "brand": "huawei",
+      "date": "2026-05-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/948/405.htm",
+      "note": "2026-05-10 正式发布并当日开售"
+    },
+    {
+      "id": "huawei-s7-pro",
+      "name": "华为智慧屏 S7 Pro",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.news.cn/tech/20260420/32018c0774154389ae365527a9d25c06/c.html",
+      "note": "2026-04-20 Pura系列及全场景发布会发布并当日开售"
+    },
+    {
+      "id": "huawei-s7-rgb",
+      "name": "华为智慧屏 S7 RGB",
+      "brand": "huawei",
+      "date": "2026-08-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ledinside.cn/news/20260903-62473.html",
+      "note": "2026-08-26 鸿蒙智家技术沟通会正式亮相"
+    },
+    {
+      "id": "huawei-vision-6",
+      "name": "华为Vision智慧屏 6",
+      "brand": "huawei",
+      "date": "2026-03-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.10jqka.com.cn/20260311/c675220715.shtml",
+      "note": "2026-03-11 鸿蒙智家技术沟通会发布"
+    },
+    {
+      "id": "huawei-vision-6-pro",
+      "name": "华为Vision智慧屏 6 Pro",
+      "brand": "huawei",
+      "date": "2026-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/944/314.htm",
+      "note": "仅检索到 2026-04-28 正式开售日，未见单独发布会"
+    },
+    {
+      "id": "huawei-vision-6se",
+      "name": "华为Vision智慧屏 6 SE",
+      "brand": "huawei",
+      "date": "2026-03-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/927/885.htm",
+      "note": "2026-03-11 鸿蒙智家技术沟通会发布"
+    },
+    {
+      "id": "huawei-vision-6se-rgb",
+      "name": "华为Vision智慧屏 6 SE RGB",
+      "brand": "huawei",
+      "date": "2026-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/8vMrmpHEJO7",
+      "note": "2026-08-05 尊界时代旗舰MPV及华为全场景新品发布会发布并当日开售"
+    },
+    {
+      "id": "huawei-mateview-gt",
+      "name": "MateView GT 34 英寸 Sound 版",
+      "brand": "huawei",
+      "date": "2021-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/552/312.htm",
+      "note": "2021-05-19 全场景智慧生活新品发布会发布"
+    },
+    {
+      "id": "huawei-mateview-gt-2026",
+      "name": "MateView GT 27 英寸",
+      "brand": "huawei",
+      "date": "2026-05-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1123/1123656.htm",
+      "note": "2026-05-20 华为鸿蒙办公新品技术沟通会前后正式发布"
+    },
+    {
+      "id": "huawei-mateview-se",
+      "name": "MateView SE 23.8 英寸旋转升降支架版",
+      "brand": "huawei",
+      "date": "2022-05-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://nb.zol.com.cn/793/7930569.html",
+      "note": "2022-05-23 MateBook系列新品发布会发布"
+    },
+    {
+      "id": "huawei-mateview-se-27inch-fhd",
+      "name": "MateView SE 27 英寸 FHD",
+      "brand": "huawei",
+      "date": "2024-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/813/814.htm",
+      "note": "2024-11-28 现货开售（上市日）"
+    },
+    {
+      "id": "huawei-mateview-se-27inch-qhd",
+      "name": "MateView SE 27 英寸 QHD",
+      "brand": "huawei",
+      "date": "2024-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/806/321.htm",
+      "note": "2024-10-30 官宣发布并开启预售"
+    },
+    {
+      "id": "huawei-mateview-se-standard-stand",
+      "name": "MateView SE 23.8 英寸标准支架版",
+      "brand": "huawei",
+      "date": "2022-05-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/620/049.htm",
+      "note": "2022-05-23 发布"
+    },
+    {
+      "id": "huawei-matebook-14-2024",
+      "name": "14.2 英寸MateBook 14 酷睿 Ultra",
+      "brand": "huawei",
+      "date": "2024-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://nb.zol.com.cn/871/8718117.html",
+      "note": "2024-05-15 华为夏季全场景新品发布会发布并当日开售"
+    },
+    {
+      "id": "huawei-matebook-d-14-2024-13th-gen-core",
+      "name": "14 英寸MateBook D 14 2024 13 代酷睿版",
+      "brand": "huawei",
+      "date": "2024-01-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/744/545.htm",
+      "note": "无单独发布会，2024-01-11 官方上架并开售"
+    },
+    {
+      "id": "huawei-matebook-d-16-2024",
+      "name": "16 英寸 MateBook D 16",
+      "brand": "huawei",
+      "date": "2023-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://notebook.pconline.com.cn/1688/16881489.html",
+      "note": "2023-11-28 智界S7及华为全场景发布会发布"
+    },
+    {
+      "id": "huawei-matebook-d-16-se-2024",
+      "name": "16 英寸MateBook D 16 2024",
+      "brand": "huawei",
+      "date": "2023-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.techsir.com/a/202311/86970.html",
+      "note": "2023-11-28 华为全场景发布会发布"
+    },
+    {
+      "id": "huawei-matebook-gt-14",
+      "name": "14.2 英寸MateBook GT 14",
+      "brand": "huawei",
+      "date": "2024-08-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/996/996101.htm",
+      "note": "2024-08-08 正式发布并开售"
+    },
+    {
+      "id": "huawei-matebook-x-pro-ultra-premium-edition",
+      "name": "14.2 英寸MateBook X Pro 酷睿 Ultra 微绒典藏版",
+      "brand": "huawei",
+      "date": "2024-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/761/261.htm",
+      "note": "2024-04-11 鸿蒙生态春季沟通会发布"
+    },
+    {
+      "id": "xiaomi-21413",
+      "name": "REDMI K Pad 12GB+256GB 深邃黑",
+      "brand": "xiaomi",
+      "date": "2025-06-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://new.qq.com/rain/a/20250626A0ACGJ00",
+      "note": "2025-06-26 小米人车家全生态发布会发布（REDMI K Pad）"
+    },
+    {
+      "id": "xiaomi-21931",
+      "name": "Xiaomi 17 12GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2025-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250925A0854800",
+      "note": "2025-09-25 雷军年度演讲暨秋季发布会发布（Xiaomi 17）"
+    },
+    {
+      "id": "xiaomi-23969",
+      "name": "REDMI K90 Max 12GB+256GB 暗影黑",
+      "brand": "xiaomi",
+      "date": "2026-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/794.htm",
+      "note": "2026-04-21 REDMI 春季新品发布会发布（K90 Max）"
+    },
+    {
+      "id": "xiaomi-23974",
+      "name": "REDMI K Pad 2 深邃黑 8GB内存 256GB存储",
+      "brand": "xiaomi",
+      "date": "2026-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/794.htm",
+      "note": "2026-04-21 REDMI K90 Max 新品发布会发布（K Pad 2）"
+    },
+    {
+      "id": "xiaomi-24648",
+      "name": "Xiaomi 17 Max 12GB+256GB 白色",
+      "brand": "xiaomi",
+      "date": "2026-05-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/953/605.htm",
+      "note": "2026-05-21 小米人车家全生态新品发布会发布（Xiaomi 17 Max）"
+    },
+    {
+      "id": "xiaomi-24809",
+      "name": "Xiaomi 17T Pro 12GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-06-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/961/385.htm",
+      "note": "2026-06-08 国内发布会发布（17T Pro）"
+    },
+    {
+      "id": "xiaomi-24814",
+      "name": "Xiaomi 17T 12GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-06-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/jjxw/2026-06-08/doc-iniaswmk8658859.shtml",
+      "note": "2026-06-08 国内发布会发布（17T）"
+    },
+    {
+      "id": "xiaomi-24930",
+      "name": "REDMI Note 17 Pro 8GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-07-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/976/760.htm",
+      "note": "2026-07-14 REDMI 新品发布会发布（Note 17 Pro）"
+    },
+    {
+      "id": "xiaomi-24940",
+      "name": "REDMI Note 17 8GB+128GB 浅水青",
+      "brand": "xiaomi",
+      "date": "2026-07-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.kejixun.co/article/757367.html",
+      "note": "2026-07-14 同场发布（Note 17）"
+    },
+    {
+      "id": "xiaomi-25135",
+      "name": "REDMI K100 Pro 12GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/stock/t/2026-08-11/doc-inimyhkc7371480.shtml",
+      "note": "2026-08-11 REDMI K100 Pro 系列发布会发布"
+    },
+    {
+      "id": "xiaomi-25140",
+      "name": "REDMI K100 Pro Max 12GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/stock/t/2026-08-11/doc-inimyhkc7371480.shtml",
+      "note": "与 K100 Pro 同场发布"
+    },
+    {
+      "id": "xiaomi-25299",
+      "name": "Xiaomi 18 Fold 16GB+1TB  暖金白",
+      "brand": "xiaomi",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/999/441.htm",
+      "note": "2026-09-07 秋季旗舰新品发布会发布（18 Fold）"
+    },
+    {
+      "id": "xiaomi-25524",
+      "name": "Xiaomi 18 Pro 16GB+1TB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.jiemian.com/article/15134264.html",
+      "note": "2026-09-23 秋季新品发布会发布（18 Pro）"
+    },
+    {
+      "id": "xiaomi-25526",
+      "name": "Xiaomi 18 Pro Max 16GB+1TB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://wallstreetcn.com/articles/3782386",
+      "note": "与 18 Pro 同场发布"
+    },
+    {
+      "id": "xiaomi-25687",
+      "name": "REDMI Note 17 Pro 焕新版 8GB+256GB 流沙橙",
+      "brand": "xiaomi",
+      "date": "2026-10-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/012/273.htm",
+      "note": "2026-10-13 官宣发布（Note 17 Pro 焕新版）"
+    },
+    {
+      "id": "huawei-x3-pro",
+      "name": "华为路由 X3 Pro 日照金山",
+      "brand": "huawei",
+      "date": "2025-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.cnr.cn/tech/techgd/20251125/t20251125_527441290.shtml",
+      "note": "2025-11-25 Mate 80 | Mate X7 及全场景发布会发布（日照金山版）"
+    },
+    {
+      "id": "huawei-ai-glasses",
+      "name": "华为 AI 眼镜",
+      "brand": "huawei",
+      "date": "2026-04-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/277.htm",
+      "note": "2026-04-20 Pura 系列及全场景新品发布会发布；4-25 开售（新京报/IT之家双源）"
+    },
+    {
+      "id": "huawei-q7-thin",
+      "name": "华为凌霄子母路由 Q7 网线版 超薄款",
+      "brand": "huawei",
+      "date": "2025-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/890/677.htm",
+      "note": "2025-10-20 官方商城上架（子路由超薄款，需搭配母路由；无发布会官宣）"
+    },
+    {
+      "id": "xiaomi-10050236",
+      "name": "小米电视 S Pro 65 RGB-Mini LED 2027 至尊版",
+      "brand": "xiaomi",
+      "date": "2026-08",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=25256",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2026年8月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050247",
+      "name": "REDMI 电视 X 55 RGB-Mini LED 2027 竞技版",
+      "brand": "xiaomi",
+      "date": "2026-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=25689",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2026年9月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050173",
+      "name": "小米电视S55 Mini LED 2026 至尊版 ",
+      "brand": "xiaomi",
+      "date": "2026-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23676",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2026年4月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050131",
+      "name": "小米电视S Pro 65 Mini LED 2026",
+      "brand": "xiaomi",
+      "date": "2025-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=21754",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2025年9月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050050",
+      "name": "小米电视 S Pro 65 Mini LED 65英寸2025款 锖色 65英寸",
+      "brand": "xiaomi",
+      "date": "2024-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=20548",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2024年 10月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050072",
+      "name": "REDMI 电视 MAX 85 2026 黑色 85英寸",
+      "brand": "xiaomi",
+      "date": "2026-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23598",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2026年3月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050135",
+      "name": "REDMI 电视 X55 2026",
+      "brand": "xiaomi",
+      "date": "2025-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=22317",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2025年11月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050074",
+      "name": "REDMI 电视 A Pro 43 2026 黑色 43英寸",
+      "brand": "xiaomi",
+      "date": "2026-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23539",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2026年3月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-10050071",
+      "name": "REDMI 智能电视 A32 一级能效版",
+      "brand": "xiaomi",
+      "date": "2025-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=20988",
+      "note": "小米商城商品页「关键参数」自带「发布时间=2025年2月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-24645",
+      "name": "REDMI 头戴降噪耳机 爵士蓝",
+      "brand": "xiaomi",
+      "date": "2026-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=24645",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年6月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-24647",
+      "name": "Xiaomi 耳夹式耳机 缎光金",
+      "brand": "xiaomi",
+      "date": "2026-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=24647",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年5月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-23966",
+      "name": "REDMI Buds 8 脂白",
+      "brand": "xiaomi",
+      "date": "2026-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23966",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年4月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-23261",
+      "name": "REDMI Buds 8 活力版 哑黑",
+      "brand": "xiaomi",
+      "date": "2026-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23261",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年3月 」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-23260",
+      "name": "REDMI Buds 8 青春版 迷雾黑",
+      "brand": "xiaomi",
+      "date": "2026-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=23260",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年2月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-22137",
+      "name": "REDMI Buds 8 Pro 冰釉白",
+      "brand": "xiaomi",
+      "date": "2026-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=22137",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2026年1月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-22419",
+      "name": "Xiaomi Buds 6 月影黑",
+      "brand": "xiaomi",
+      "date": "2025-12",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=22419",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2025年12月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-21588",
+      "name": "Xiaomi 骨传导耳机2 燕麦白",
+      "brand": "xiaomi",
+      "date": "2025-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=21588",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2025年7月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-20978",
+      "name": "Xiaomi Buds 5 Pro 钛光金",
+      "brand": "xiaomi",
+      "date": "2025-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=20978",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2025年2月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-21418",
+      "name": "Xiaomi 开放式耳机 Pro 曜石黑",
+      "brand": "xiaomi",
+      "date": "2025-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=21418",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2025年6月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-20426",
+      "name": "REDMI Buds 6 子夜黑",
+      "brand": "xiaomi",
+      "date": "2024-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=20426",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2024年9月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-21120",
+      "name": "REDMI Buds 7S 晴雪白",
+      "brand": "xiaomi",
+      "date": "2025-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=21120",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2025年4月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-2230001744",
+      "name": "REDMI Buds 6 活力版-白色",
+      "brand": "xiaomi",
+      "date": "2024-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shop/buy/detail?product_id=20007",
+      "note": "小米商城商品页「关键参数」自带「发布日期=2024年5月」（月精度，官方口径）"
+    },
+    {
+      "id": "xiaomi-20593",
+      "name": "Xiaomi Pad 7 8GB+256GB 天际蓝",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241029A09PJC00",
+      "note": "小米15系列暨澎湃OS 2发布会（Pad 7）；当日开售"
+    },
+    {
+      "id": "xiaomi-20598",
+      "name": "Xiaomi Pad 7 Pro 8GB+256GB 天际蓝",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241029A09PJC00",
+      "note": "与 Pad 7 同场发布（Pad 7 Pro）"
+    },
+    {
+      "id": "xiaomi-21130",
+      "name": "Xiaomi Pad 7 Ultra 柔光版 12GB+512GB 黑色",
+      "brand": "xiaomi",
+      "date": "2025-05-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250522A08U8I00",
+      "note": "小米15周年战略新品发布会（Pad 7 Ultra）；当日开售"
+    },
+    {
+      "id": "xiaomi-21406",
+      "name": "Xiaomi Pad 7S Pro 8GB+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2025-06-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/863/944.htm",
+      "note": "小米人车家全生态发布会（Pad 7S Pro）；发布会后立即开售"
+    },
+    {
+      "id": "xiaomi-21591",
+      "name": "REDMI Pad 2 6GB+128GB 灰色",
+      "brand": "xiaomi",
+      "date": "2025-07-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250725A044IX00",
+      "note": "中国大陆 2025-07-25 官方发布（REDMI Pad 2）；8-1 开售"
+    },
+    {
+      "id": "xiaomi-22535",
+      "name": "REDMI Pad 2 Pro 哈利·波特版 8GB内存 256GB存储",
+      "brand": "xiaomi",
+      "date": "2026-01-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.bbtnews.com.cn/2026/0129/583596.shtml",
+      "note": "REDMI Turbo 5 系列发布会同场发布（Pad 2 Pro 哈利·波特版）"
+    },
+    {
+      "id": "xiaomi-24235",
+      "name": "REDMI Pad 2 SE 银色 6GB内存 128GB存储",
+      "brand": "xiaomi",
+      "date": "2026-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://pad.zol.com.cn/1169/11692539.html",
+      "note": "4-21 发布并开售（Pad 2 SE）"
+    },
+    {
+      "id": "xiaomi-21871",
+      "name": "Xiaomi Pad 8 Pro 黑色 8GB+128GB",
+      "brand": "xiaomi",
+      "date": "2025-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/roll/2025-09-25/doc-infrtpuk1019201.shtml",
+      "note": "2025 雷军年度演讲暨小米17系列发布会（Pad 8 Pro）"
+    },
+    {
+      "id": "xiaomi-21872",
+      "name": "Xiaomi Pad 8 黑色 8GB+128GB",
+      "brand": "xiaomi",
+      "date": "2025-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/885/838.htm",
+      "note": "与 Pad 8 Pro 同场发布（Pad 8）"
+    },
+    {
+      "id": "xiaomi-25324",
+      "name": "Xiaomi Pad 9 Pro Max 8+256GB 黑色",
+      "brand": "xiaomi",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/999/446.htm",
+      "note": "小米秋季旗舰新品发布会（Pad 9 Pro Max，与 18 Fold 同场）"
+    },
+    {
+      "id": "xiaomi-25445",
+      "name": "Xiaomi Pad 9 Pro 银色 8GB内存 128GB存储",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/006/429.htm",
+      "note": "小米秋季新品发布会（Pad 9 Pro，与 18 Pro 同场）"
+    },
+    {
+      "id": "xiaomi-25446",
+      "name": "Xiaomi Pad 9 银色 8GB内存 128GB存储",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/006/429.htm",
+      "note": "与 Pad 9 Pro 同场发布（Pad 9）"
+    },
+    {
+      "id": "xiaomi-10050058",
+      "name": "Redmi Book 16 2024焕新版-13代 16+512",
+      "brand": "xiaomi",
+      "date": "2023-11-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.c114.com.cn/w51-1249467.html",
+      "note": "Redmi K70 系列发布会发布（Book 16 2024 13代）；12-1 首销"
+    },
+    {
+      "id": "xiaomi-20993",
+      "name": "REDMI Book Pro 16 2025 Ultra5-225H/32G/1T/3.1K/165Hz",
+      "brand": "xiaomi",
+      "date": "2025-02-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/8hJxQqLYqaf",
+      "note": "小米15 Ultra 发布会（REDMI Book Pro 16 2025）"
+    },
+    {
+      "id": "xiaomi-21364",
+      "name": "REDMI Book 14 2025 锐龙版 R5-7535H/16G/512G/FHD",
+      "brand": "xiaomi",
+      "date": "2025-05-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/856/037.htm",
+      "note": "2025-05-26 上架发布（REDMI Book 14 2025 锐龙版）；无单独发布会"
+    },
+    {
+      "id": "xiaomi-23472",
+      "name": "Xiaomi Book Pro 14 Ultra5-325/24G/1T/雅灰",
+      "brand": "xiaomi",
+      "date": "2026-03-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/930/776.htm",
+      "note": "小米春季新品发布会（Book Pro 14，与新一代 SU7 同场）；3-21 开售"
+    },
+    {
+      "id": "xiaomi-24035",
+      "name": "REDMI Book Pro 14 2026 Ultra5-325/24G/1T/2.8K",
+      "brand": "xiaomi",
+      "date": "2026-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/797.htm",
+      "note": "REDMI K90 Max 发布会同场（Book Pro 14 2026）"
+    },
+    {
+      "id": "xiaomi-24037",
+      "name": "REDMI Book Pro 16 2026 Ultra5-325/24G/1T/3.2K",
+      "brand": "xiaomi",
+      "date": "2026-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/941/797.htm",
+      "note": "同场发布（Book Pro 16 2026）"
+    },
+    {
+      "id": "xiaomi-24038",
+      "name": "REDMI Book 16 2026 Ultra5-125H/16G/512G",
+      "brand": "xiaomi",
+      "date": "2026-04-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/940/216.htm",
+      "note": "官方口径 4-17 开售（Book 16 2026 Ultra5-125H）；未检索到单独发布会"
+    },
+    {
+      "id": "xiaomi-24282",
+      "name": "REDMI Book 14 2026 Ultra5-125H/16G/512G",
+      "brand": "xiaomi",
+      "date": "2026-04-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/940/216.htm",
+      "note": "4-17 开售（Book 14 2026 Ultra5-125H）"
+    },
+    {
+      "id": "xiaomi-10050239",
+      "name": "小米手环11 银色",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://oversea.huanqiu.com/article/4TL2rNU3DsE",
+      "note": "小米秋季新品发布会（手环 11）；首销 2026-09-07 前后多源略有出入"
+    },
+    {
+      "id": "xiaomi-25306",
+      "name": "小米手环11 黑色",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://oversea.huanqiu.com/article/4TL2rNU3DsE",
+      "note": "手环 11 标准版同场发布"
+    },
+    {
+      "id": "xiaomi-25307",
+      "name": "小米手环11 NFC版 黑色",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.fonearena.com/blog/493251/xiaomi-watch-s5-41mm-xiaomi-band-11-price-features.html",
+      "note": "手环 11 NFC 版同场发布"
+    },
+    {
+      "id": "xiaomi-24629",
+      "name": "小米手环10 Pro 黑色",
+      "brand": "xiaomi",
+      "date": "2026-05-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/953/607.htm",
+      "note": "小米人车家全生态新品发布会（手环 10 Pro）并当日开售"
+    },
+    {
+      "id": "xiaomi-22153",
+      "name": "REDMI Watch 6 皎月银",
+      "brand": "xiaomi",
+      "date": "2025-10-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/890/436.htm",
+      "note": "与 REDMI K90 系列同场发布（REDMI Watch 6）"
+    },
+    {
+      "id": "xiaomi-25161",
+      "name": "REDMI Watch 6 活力版 锖色",
+      "brand": "xiaomi",
+      "date": "2026-08-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/991/945.htm",
+      "note": "当日发布并开售（REDMI Watch 6 活力版）"
+    },
+    {
+      "id": "xiaomi-22418",
+      "name": "Xiaomi Watch 5 黑色氟胶表带款",
+      "brand": "xiaomi",
+      "date": "2025-12-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1094/1094782.htm",
+      "note": "Xiaomi 17 Ultra 发布会（Watch 5）"
+    },
+    {
+      "id": "xiaomi-23408",
+      "name": "Xiaomi Watch S5 46mm 黑色",
+      "brand": "xiaomi",
+      "date": "2026-03-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/930/777.htm",
+      "note": "小米春季新品发布会（Watch S5 46mm）当日开售"
+    },
+    {
+      "id": "xiaomi-25419",
+      "name": "Xiaomi Watch S5 41mm 海盐蓝",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/006/432.htm",
+      "note": "小米秋季新品发布会（Watch S5 41mm）"
+    },
+    {
+      "id": "xiaomi-25768",
+      "name": "REDMI手环 4 锖色",
+      "brand": "xiaomi",
+      "date": "2026-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/roll/2026-10-20/doc-inivwcmp5760877.shtml",
+      "note": "当日发布并发售（REDMI 手环 4）"
+    },
+    {
+      "id": "xiaomi-10015",
+      "name": "小米小爱音箱  Play  白色",
+      "brand": "xiaomi",
+      "date": "2019-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/427/660.htm",
+      "note": "小米手环4暨米家智能新品发布会（小爱音箱 Play）；6-18 开售"
+    },
+    {
+      "id": "xiaomi-14596",
+      "name": "小米小爱音箱Play 增强版 黑色",
+      "brand": "xiaomi",
+      "date": "2021-08-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2136401.html",
+      "note": "2021-08-03 发布并预售（小爱音箱 Play 增强版）；8-6 开售"
+    },
+    {
+      "id": "xiaomi-16800",
+      "name": "Xiaomi Sound  Pro",
+      "brand": "xiaomi",
+      "date": "2022-12-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3Sound%20Pro/62441395",
+      "note": "Xiaomi 13 & MIUI 14 新品发布会（Sound Pro）；当晚开售"
+    },
+    {
+      "id": "xiaomi-22104",
+      "name": "Xiaomi Sound 2 Max",
+      "brand": "xiaomi",
+      "date": "2025-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/885/847.htm",
+      "note": "2025 雷军年度演讲暨小米17系列发布会（Sound 2 Max）"
+    },
+    {
+      "id": "xiaomi-22545",
+      "name": "Xiaomi Sound 2 Pro",
+      "brand": "xiaomi",
+      "date": "2026-01-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/914/688.htm",
+      "note": "2026-01-20 正式开售（Sound 2 Pro）；约 1-15 上架预约"
+    },
+    {
+      "id": "xiaomi-20981",
+      "name": "Xiaomi 智能音箱 Pro",
+      "brand": "xiaomi",
+      "date": "2025-02-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/834/163.htm",
+      "note": "双 Ultra 发布会（智能音箱 Pro）"
+    },
+    {
+      "id": "xiaomi-21205",
+      "name": "Xiaomi 智能音箱 云灰",
+      "brand": "xiaomi",
+      "date": "2025-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://product.suning.com/0000000000/12432846854.html",
+      "note": "云灰配色苏宁标注上市时间 2025-06（月精度）；标准版 2025-04-24 发布"
+    },
+    {
+      "id": "xiaomi-2230003632",
+      "name": "Xiaomi 智能音箱 Pro",
+      "brand": "xiaomi",
+      "date": "2025-02-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/834/163.htm",
+      "note": "与 xiaomi-20981 同款同日期"
+    },
+    {
+      "id": "xiaomi-2230003993",
+      "name": "Xiaomi 智能音箱 云灰",
+      "brand": "xiaomi",
+      "date": "2025-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://product.suning.com/0000000000/12432846854.html",
+      "note": "与 xiaomi-21205 同款同日期（月精度）"
+    },
+    {
+      "id": "xiaomi-25431",
+      "name": "REDMI Buds 8S 暮黑",
+      "brand": "xiaomi",
+      "date": "2026-09-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/discovery/2026-09-22/doc-inissitp2220158.shtml",
+      "note": "9-22 上市开售（REDMI Buds 8S）；9-15 预约"
+    },
+    {
+      "id": "xiaomi-19106",
+      "name": "Xiaomi路由器AX3000T",
+      "brand": "xiaomi",
+      "date": "2023-08-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2167005.html",
+      "note": "2023-08-26 官宣发布并预售（AX3000T）"
+    },
+    {
+      "id": "xiaomi-19332",
+      "name": "Xiaomi路由器 6500 Pro",
+      "brand": "xiaomi",
+      "date": "2023-10-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/728/923.htm",
+      "note": "10-24 预售、10-31 开售（路由器 6500 Pro）"
+    },
+    {
+      "id": "xiaomi-19647",
+      "name": "Xiaomi路由器 BE3600 2.5G版",
+      "brand": "xiaomi",
+      "date": "2024-01-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240130A04FR200",
+      "note": "1-30 发布并开售（BE3600 2.5G版）"
+    },
+    {
+      "id": "xiaomi-19990",
+      "name": "Xiaomi路由器 BE5000 白色",
+      "brand": "xiaomi",
+      "date": "2024-05-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/766/680.htm",
+      "note": "5-9 上架开启预售（BE5000）；5-14 开售"
+    },
+    {
+      "id": "xiaomi-20276",
+      "name": "Xiaomi 路由器BE6500",
+      "brand": "xiaomi",
+      "date": "2024-08-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/786/382.htm",
+      "note": "8-5 京东上架（BE6500）；8-16 开售"
+    },
+    {
+      "id": "xiaomi-20559",
+      "name": "Xiaomi全屋路由 BE3600Pro 套装",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241030A06PJP00",
+      "note": "10-29 晚发布（全屋路由 BE3600 Pro 套装）；10-31 开售"
+    },
+    {
+      "id": "xiaomi-10050158",
+      "name": "Xiaomi 全屋路由 BE3600 Pro 网线版 白色（1主3子）套装",
+      "brand": "xiaomi",
+      "date": "2025-05-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/roll/2025-05-12/doc-inewhnuz5466486.shtml",
+      "note": "首发众筹（1主4子）；1主3子版 5-27 预售、6-3 开售"
+    },
+    {
+      "id": "xiaomi-21958",
+      "name": "Xiaomi 路由器BE10000 Pro",
+      "brand": "xiaomi",
+      "date": "2025-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/885/841.htm",
+      "note": "2025 雷军年度演讲暨小米17系列发布会（BE10000 Pro）"
+    },
+    {
+      "id": "xiaomi-18544",
+      "name": "REDMI显示器A27 IPS版 黑色",
+      "brand": "xiaomi",
+      "date": "2023-05-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/695/713.htm",
+      "note": "5-27 预售、5-31 开售（REDMI 显示器 A27 IPS版）"
+    },
+    {
+      "id": "xiaomi-10050240",
+      "name": "REDMI显示器 A27U Type-C 120Hz 2027",
+      "brand": "xiaomi",
+      "date": "2026-09-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/999/335.htm",
+      "note": "9-7 盲约、9-14 首销（REDMI 显示器 A27U 2027）"
+    },
+    {
+      "id": "xiaomi-19618",
+      "name": "Redmi 显示器 G34WQ 黑色",
+      "brand": "xiaomi",
+      "date": "2024-01-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/745/750.htm",
+      "note": "1-17 上架预售（G34WQ）；1-22 首销"
+    },
+    {
+      "id": "huawei-mateview-gt-se",
+      "name": "MateView GT 34 英寸 标准版",
+      "brand": "huawei",
+      "date": "2021-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/lcd/huawei/2320159_price.html",
+      "note": "中国大陆无发布会官宣（Sound 版 2021-05-19 发布）。此日期为依据第三方比价库在售记录（京东历史低价 2021-09-29）推定的上市窗口，非官方发布日；日本 2021-11-25 发售（日经）晚于大陆在售记录"
+    },
+    {
+      "id": "xiaomi-20791",
+      "name": " 巨省电Pro 立式大3匹 超一级能效 米家空调（2025） ",
+      "brand": "xiaomi",
+      "date": "2024-11-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241127A062GJ00",
+      "note": "REDMI K80 发布会介绍（巨省电 Pro 立式 3 匹），11-30 首销；产品标注 2025 款"
+    },
+    {
+      "id": "xiaomi-13143",
+      "name": "巨省电 1.5匹新一级能效 小米空调",
+      "brand": "xiaomi",
+      "date": "2022-09-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/644/205.htm",
+      "note": "巨省电 1.5 匹 9-30 开售（国家新一级能效）"
+    },
+    {
+      "id": "xiaomi-16152",
+      "name": "巨省电 大1匹新一级能效 小米空调",
+      "brand": "xiaomi",
+      "date": "2020-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.zhihu.com/tardis/zm/art/358006953",
+      "note": "巨省电 N1A1 1 匹为 2020 年双十一后发布（月精度，拆机文章口径）"
+    },
+    {
+      "id": "xiaomi-19280",
+      "name": "新风 1.5匹新一级能效 米家空调",
+      "brand": "xiaomi",
+      "date": "2023-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://home.miot-spec.com/p/xiaomi.aircondition.m19",
+      "note": "米家新风空调 1.5 匹，miot-spec 产品库发布时间 2023-10（月精度）"
+    },
+    {
+      "id": "xiaomi-20858",
+      "name": "Pro 上出风 1.5匹超一级能效 冰晶白 米家空调",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/808/097.htm",
+      "note": "上出风 Pro 1.5 匹 10-29 发布，APF 5.65 超一级能效"
+    },
+    {
+      "id": "xiaomi-13149",
+      "name": "巨省电 立式3匹 新一级能效 小米空调",
+      "brand": "xiaomi",
+      "date": "2025-05-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/851/370.htm",
+      "note": "巨省电立式 3 匹 5-8 上市、5-14 开售"
+    },
+    {
+      "id": "xiaomi-18362",
+      "name": "巨省电 2匹 新一级能效  米家空调",
+      "brand": "xiaomi",
+      "date": "2023-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.toutiao.com/article/7223199097765757473/",
+      "note": "巨省电 2 匹 4-18 开售"
+    },
+    {
+      "id": "xiaomi-9726",
+      "name": "米家空调伴侣 2",
+      "brand": "xiaomi",
+      "date": "2019-05-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/422/457.htm",
+      "note": "米家空调伴侣 2 发布并开售"
+    },
+    {
+      "id": "xiaomi-22504",
+      "name": "米家冰箱 636L对开",
+      "brand": "xiaomi",
+      "date": "2026-01-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/912/097.htm",
+      "note": "636L 对开 1-10 上架、1-15 开售"
+    },
+    {
+      "id": "xiaomi-22397",
+      "name": "米家冰箱Pro 微冰鲜双系统 十字平嵌560L 冰晶白",
+      "brand": "xiaomi",
+      "date": "2025-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/903/580.htm",
+      "note": "冰箱 Pro 十字平嵌 560L 12-9 推出、2026-01-03 开售"
+    },
+    {
+      "id": "xiaomi-12115",
+      "name": "米家冰箱 三门215L",
+      "brand": "xiaomi",
+      "date": "2025-04-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/843/600.htm",
+      "note": "三门 215L 4-7 上市"
+    },
+    {
+      "id": "xiaomi-15638",
+      "name": "米家冰箱 216L三门风冷",
+      "brand": "xiaomi",
+      "date": "2022-03-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2146399.html",
+      "note": "216L 三门风冷 3-22 全渠道开售"
+    },
+    {
+      "id": "xiaomi-22503",
+      "name": "米家冰箱 430L十字 2026款",
+      "brand": "xiaomi",
+      "date": "2026-01-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/912/134.htm",
+      "note": "430L 十字 2026 款 1-10 预售、1-16 首销"
+    },
+    {
+      "id": "xiaomi-10050151",
+      "name": "米家冰箱 501L对开",
+      "brand": "xiaomi",
+      "date": "2023-09-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/718/950.htm",
+      "note": "501L 对开 墨羽岩 9-13 上架"
+    },
+    {
+      "id": "xiaomi-10050149",
+      "name": "米家冰箱Pro 微冰鲜双系统 十字平嵌560L 冰晶白",
+      "brand": "xiaomi",
+      "date": "2025-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/903/580.htm",
+      "note": "与 xiaomi-22397 同款同日期"
+    },
+    {
+      "id": "xiaomi-10050150",
+      "name": "米家冰箱Pro 513L十字",
+      "brand": "xiaomi",
+      "date": "2024-12-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/819/899.htm",
+      "note": "冰箱 Pro 513L 十字 墨羽岩 12-24 推出、2025-01-01 开售"
+    },
+    {
+      "id": "xiaomi-10050153",
+      "name": "米家冰箱 法式平嵌400L 杏色",
+      "brand": "xiaomi",
+      "date": "2025-06-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/862/328.htm",
+      "note": "法式平嵌 400L 6-20 预售、7-1 开售"
+    },
+    {
+      "id": "xiaomi-10050152",
+      "name": "米家冰箱 430L十字 2026款",
+      "brand": "xiaomi",
+      "date": "2026-01-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/912/134.htm",
+      "note": "与 xiaomi-22503 同款同日期"
+    },
+    {
+      "id": "xiaomi-10050143",
+      "name": "米家冰箱 256L三门 2026款",
+      "brand": "xiaomi",
+      "date": "2026-09-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/004/821.htm",
+      "note": "256L 三门 9-20 开售"
+    },
+    {
+      "id": "xiaomi-10050148",
+      "name": "米家冰箱 186L两门 2026款",
+      "brand": "xiaomi",
+      "date": "2026-04-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/934/976.htm",
+      "note": "186L 两门 4-1 推出（同场 216L 三门）"
+    },
+    {
+      "id": "xiaomi-2230014913",
+      "name": "米家三筒洗衣机 健康洗Pro 14kg",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/006/460.htm",
+      "note": "三筒健康洗 Pro 14kg 9-23 秋季发布会上市、9-30 开售"
+    },
+    {
+      "id": "xiaomi-22521",
+      "name": "米家洗衣机Pro 超电解智投 洗烘12kg",
+      "brand": "xiaomi",
+      "date": "2024-05-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240520A09Z1N00",
+      "note": "超净洗 Pro 洗烘 12kg 5-20 开售"
+    },
+    {
+      "id": "xiaomi-10050211",
+      "name": "米家洗衣机 健康洗 三筒11kg",
+      "brand": "xiaomi",
+      "date": "2026-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://feng.ifeng.com/c/8x8OEgLmrCv",
+      "note": "三筒 11kg 10-11 开售"
+    },
+    {
+      "id": "xiaomi-10050249",
+      "name": "米家洗衣机 健康洗 双筒1kg",
+      "brand": "xiaomi",
+      "date": "2026-10-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/discovery/2026-10-13/doc-iniuzqst8190155.shtml",
+      "note": "双筒 1kg 10-13 预售"
+    },
+    {
+      "id": "xiaomi-10000407",
+      "name": "米家洗衣机 波轮10kg",
+      "brand": "xiaomi",
+      "date": "2022-11-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/652/215.htm",
+      "note": "波轮 10kg 11-8 上架、11-10 首发"
+    },
+    {
+      "id": "xiaomi-10050187",
+      "name": "米家洗衣机Pro 至尊版 超电解智投 洗烘13kg",
+      "brand": "xiaomi",
+      "date": "2026-05-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/954/716.htm",
+      "note": "洗衣机 Pro 至尊版 13kg 5-25 预售、6-1 开售"
+    },
+    {
+      "id": "xiaomi-10050186",
+      "name": "米家洗衣机 滚筒10kg 灰色",
+      "brand": "xiaomi",
+      "date": "2026-03-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/927/481.htm",
+      "note": "滚筒 10kg 3-10 预售"
+    },
+    {
+      "id": "xiaomi-10050183",
+      "name": "米家洗衣机 洗烘12kg灰色",
+      "brand": "xiaomi",
+      "date": "2025-07-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/867/085.htm",
+      "note": "洗烘 12kg 7-10 上架、7-17 开售"
+    },
+    {
+      "id": "xiaomi-25516",
+      "name": "米家洗衣机 护衣洗Pro 至尊版 热泵洗烘13kg",
+      "brand": "xiaomi",
+      "date": "2026-09-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/008/003.htm",
+      "note": "护衣洗 Pro 热泵 13kg 9-28 上架、9-30 开售"
+    },
+    {
+      "id": "xiaomi-10050212",
+      "name": "米家三筒洗衣机 健康洗Pro 洗烘14kg",
+      "brand": "xiaomi",
+      "date": "2026-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/1/006/460.htm",
+      "note": "与 xiaomi-2230014913 同场发布会"
+    },
+    {
+      "id": "xiaomi-2230005467",
+      "name": "米家空气净化器 6 双芯除醛",
+      "brand": "xiaomi",
+      "date": "2025-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/888/636.htm",
+      "note": "空气净化器 6 双芯除醛 10-11 上架"
+    },
+    {
+      "id": "xiaomi-20836",
+      "name": "米家空气净化器 5 Pro",
+      "brand": "xiaomi",
+      "date": "2024-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/816/306.htm",
+      "note": "空气净化器 5 Pro 12-9 开售"
+    },
+    {
+      "id": "xiaomi-19781",
+      "name": "米家空气净化器 5S",
+      "brand": "xiaomi",
+      "date": "2024-04-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2174288.html",
+      "note": "空气净化器 5S 4-7 开售"
+    },
+    {
+      "id": "xiaomi-20266",
+      "name": "米家空气净化器 5",
+      "brand": "xiaomi",
+      "date": "2024-08-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240815A01YY700",
+      "note": "空气净化器 5 8-15 首销"
+    },
+    {
+      "id": "xiaomi-18254",
+      "name": "米家全效空气净化器",
+      "brand": "xiaomi",
+      "date": "2023-03-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/683/541.htm",
+      "note": "全效空气净化器 3-21 发布、3-31 开售"
+    },
+    {
+      "id": "xiaomi-20173",
+      "name": "米家全效空气净化器  Ultra 增强版",
+      "brand": "xiaomi",
+      "date": "2024-07-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2177560.html",
+      "note": "全效空气净化器 Ultra 增强版 7-23 全渠道开售"
+    },
+    {
+      "id": "xiaomi-21096",
+      "name": "米家宠物空气净化器",
+      "brand": "xiaomi",
+      "date": "2025-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/844/477.htm",
+      "note": "宠物空气净化器 4-2 发布、4-11 京东开售"
+    },
+    {
+      "id": "xiaomi-15061",
+      "name": "米家空气净化器 4 Lite 白色",
+      "brand": "xiaomi",
+      "date": "2021-10-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/579/985.htm",
+      "note": "空气净化器 4 Lite 10-12 全平台开售"
+    },
+    {
+      "id": "xiaomi-20399",
+      "name": "米家净化加湿器 3 Max",
+      "brand": "xiaomi",
+      "date": "2024-09-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1004/1004051.htm",
+      "note": "净化加湿器 3 Max 9-7 发布、9-19 开售"
+    },
+    {
+      "id": "xiaomi-20429",
+      "name": "米家无雾加湿器3[800] ",
+      "brand": "xiaomi",
+      "date": "2024-10-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/800/573.htm",
+      "note": "无雾加湿器 3（800）9-17 官宣众筹、10-8 开售"
+    },
+    {
+      "id": "xiaomi-19491",
+      "name": "米家无雾加湿器3[1200]",
+      "brand": "xiaomi",
+      "date": "2023-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/tags/%e5%b0%8f%e7%b1%b3%e5%8a%a0%e6%b9%bf%e5%99%a8/",
+      "note": "无雾加湿器 3（1200）11-28 开售"
+    },
+    {
+      "id": "xiaomi-15196",
+      "name": "米家智能除湿机 22L 白色",
+      "brand": "xiaomi",
+      "date": "2021-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/595/171.htm",
+      "note": "智能除湿机 22L 12-28 开售"
+    },
+    {
+      "id": "xiaomi-19555",
+      "name": "米家智能除湿机13L ",
+      "brand": "xiaomi",
+      "date": "2023-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/742/022.htm",
+      "note": "智能除湿机 13L 12-28 开售"
+    },
+    {
+      "id": "xiaomi-20807",
+      "name": "米家智能变频除湿机 30L",
+      "brand": "xiaomi",
+      "date": "2024-12-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2181518.html",
+      "note": "智能变频除湿机 30L 12-4 开售"
+    },
+    {
+      "id": "xiaomi-18197",
+      "name": "米家除湿机 50L",
+      "brand": "xiaomi",
+      "date": "2023-02-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://i.ifeng.com/c/8NU5rU3ZHBl",
+      "note": "除湿机 50L 2-17 发布并预售"
+    },
+    {
+      "id": "xiaomi-19098",
+      "name": "米家无雾加湿器 3 Pro ",
+      "brand": "xiaomi",
+      "date": "2023-08-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://digi.ithome.com/archiver/714/741.htm",
+      "note": "无雾加湿器 3 Pro 8-25 开卖"
+    },
+    {
+      "id": "xiaomi-18463",
+      "name": "米家智能蒸发式冷风扇 白色",
+      "brand": "xiaomi",
+      "date": "2023-05-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://i.ifeng.com/c/8PZ1DSwHiRl",
+      "note": "智能蒸发式冷风扇 5-6 上架/众筹预热口径"
+    },
+    {
+      "id": "xiaomi-21223",
+      "name": "米家无线洗地机4 Pro",
+      "brand": "xiaomi",
+      "date": "2025-04-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/digi/2025-04-25/doc-ineuknpt2513572.shtml",
+      "note": "无线洗地机 4 Pro 4-29 首销"
+    },
+    {
+      "id": "xiaomi-20916",
+      "name": "米家有线吸尘器",
+      "brand": "xiaomi",
+      "date": "2020-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/521/334.htm",
+      "note": "有线吸尘器 11-25 开售"
+    },
+    {
+      "id": "xiaomi-20039",
+      "name": "米家无线洗地机3 Max",
+      "brand": "xiaomi",
+      "date": "2024-05-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/772/192.htm",
+      "note": "无线洗地机 3 Max 5-31 开售"
+    },
+    {
+      "id": "xiaomi-12498",
+      "name": "米家随手吸尘器",
+      "brand": "xiaomi",
+      "date": "2020-09-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.weste.net/2020/09-01/124294.html",
+      "note": "随手吸尘器 9-1 全渠道开售（7-29 众筹）"
+    },
+    {
+      "id": "xiaomi-20809",
+      "name": "米家无线洗地机4C",
+      "brand": "xiaomi",
+      "date": "2024-12-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/814/664.htm",
+      "note": "无线洗地机 4C 12-2 开售"
+    },
+    {
+      "id": "xiaomi-20336",
+      "name": "米家无线吸尘器 3C",
+      "brand": "xiaomi",
+      "date": "2024-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/793/767.htm",
+      "note": "无线吸尘器 3C 9-5 开售"
+    },
+    {
+      "id": "xiaomi-19939",
+      "name": "米家智能欧式吸油烟机S2烟灶套装5.2kw（天然气）",
+      "brand": "xiaomi",
+      "date": "2023-12-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/741/438.htm",
+      "note": "智能净烟机烟灶套装 S2 12-25 开售"
+    },
+    {
+      "id": "xiaomi-19556",
+      "name": "米家双核净水器 1200G Pro 白色",
+      "brand": "xiaomi",
+      "date": "2024-01-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/743/597.htm",
+      "note": "双核净水器 1200G Pro 1-5 开售"
+    },
+    {
+      "id": "xiaomi-16549",
+      "name": "米家净水器1600G 白色",
+      "brand": "xiaomi",
+      "date": "2022-09-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2153930.html",
+      "note": "净水器 1600G 9-21 预售口径"
+    },
+    {
+      "id": "xiaomi-14536",
+      "name": "米家智能电饭煲 微压版 3L 白色",
+      "brand": "xiaomi",
+      "date": "2021-09-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/572/897.htm",
+      "note": "智能电饭煲微压版 3L 9-1 预售口径（另有 7-19 发布说法）"
+    },
+    {
+      "id": "xiaomi-13855",
+      "name": "米家智能电压力锅 5L",
+      "brand": "xiaomi",
+      "date": "2021-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://home.miot-spec.com/s/pre_cooker",
+      "note": "智能电压力锅 5L，miot-spec 产品库发布时间 2021-03（月精度）"
+    },
+    {
+      "id": "xiaomi-11326",
+      "name": "米家电饭煲C1  3L 白色",
+      "brand": "xiaomi",
+      "date": "2019-11-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.53shop.com/news/121/kes121224.html",
+      "note": "电饭煲 C1 3L 11-25 众筹上线口径"
+    },
+    {
+      "id": "xiaomi-13287",
+      "name": "米家智能电压力锅2.5L",
+      "brand": "xiaomi",
+      "date": "2021-01-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/530/369.htm",
+      "note": "智能电压力锅 2.5L 1-19 开售"
+    },
+    {
+      "id": "xiaomi-16456",
+      "name": "米家智能快煮电饭煲 5L",
+      "brand": "xiaomi",
+      "date": "2022-09-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/638/331.htm",
+      "note": "智能快煮电饭煲 5L 9-1 开售口径"
+    },
+    {
+      "id": "xiaomi-10330",
+      "name": "米家智能微波炉20L",
+      "brand": "xiaomi",
+      "date": "2019-08-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.icloudnews.net/a/21928.html",
+      "note": "智能微波炉 20L 7-29 发布、8-1 开卖"
+    },
+    {
+      "id": "xiaomi-20289",
+      "name": "小米智能门锁2 Pro",
+      "brand": "xiaomi",
+      "date": "2024-08-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/789/681.htm",
+      "note": "智能门锁 2 Pro 8-13 发布、8-20 开售"
+    },
+    {
+      "id": "xiaomi-19987",
+      "name": "小米智能门锁2 指静脉版 黑色",
+      "brand": "xiaomi",
+      "date": "2024-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/768/247.htm",
+      "note": "智能门锁 2 指静脉版 5-15 开售"
+    },
+    {
+      "id": "xiaomi-20464",
+      "name": "小米智能门锁 E30 星辰黑",
+      "brand": "xiaomi",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/1004/1004921.htm",
+      "note": "智能门锁 E30 9-24 开售"
+    },
+    {
+      "id": "xiaomi-10050069",
+      "name": "小米智能开关Pro 双开",
+      "brand": "xiaomi",
+      "date": "2023-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/724/133.htm",
+      "note": "智能开关/墙壁插座 Pro 10-11 全渠道开售（双开为其中版本）"
+    },
+    {
+      "id": "xiaomi-16003",
+      "name": "米家智能嵌入式蒸烤一体机S1 58L",
+      "brand": "xiaomi",
+      "date": "2022-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://home.miot-spec.com/p/chunmi.oven.s1",
+      "note": "miot-spec 产品库发布时间 2022-05（月精度）；官方 2022-06-15 FAQ 已提「上线开售」，9-7 官方账号再发新品帖"
+    },
+    {
+      "id": "xiaomi-16594",
+      "name": "米家无线吸尘器2 Lite",
+      "brand": "xiaomi",
+      "date": "2022-09-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20220930A0AJZG00",
+      "note": "IT之家 9-30 确认上架，首发 479 元"
+    },
+    {
+      "id": "xiaomi-21005",
+      "name": "小米智能墙壁插座Pro 白色",
+      "brand": "xiaomi",
+      "date": "2024-03-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240319A08ODD00",
+      "note": "白色版 3-19 上市（深空灰原版 2023-10-11 全渠道开售）"
+    },
+    {
+      "id": "mz-xiaomi-10",
+      "name": "小米10",
+      "brand": "xiaomi",
+      "date": "2020-02-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/672/672067.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：发布日2020-02-13（DoNotes/维基百科一致）；内存LPDDR5、闪存UFS3.0；另有30W无线+10W无线反充；三围与重量来自快科技发布会报道，规格来自发布会汇总（donews.com/news/detail/1/30815"
+    },
+    {
+      "id": "mz-xiaomi-10-pro",
+      "name": "小米10 Pro",
+      "brand": "xiaomi",
+      "date": "2020-02-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1312/1311008/param.shtml",
+      "note": "M2 检索取证式采集（历史机型批次一）：国内发布时间2020年02月13日（ZOL），2月18日首卖；LPDDR5+UFS3.0；30W无线+10W无线反充；长度ZOL记162.6mm（港官网162.5mm，取ZOL原文）"
+    },
+    {
+      "id": "mz-xiaomi-10-ultra",
+      "name": "小米10 至尊纪念版",
+      "brand": "xiaomi",
+      "date": "2020-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/506/323.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：发布日2020-08-11（IT之家发布会报道 https://www.ithome.com/0/502/799.htm）；等效4500mAh蝶式双串电池；120W有线+50W无线+10W反充；LPDDR5+UFS3.1；8+128/8+2"
+    },
+    {
+      "id": "mz-xiaomi-11",
+      "name": "小米11",
+      "brand": "xiaomi",
+      "date": "2020-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://news.imobile.com.cn/articles/2020/1229/211259.shtml",
+      "note": "M2 检索取证式采集（历史机型批次一）：2020-12-28晚发布、2021-01-01开售（新浪/iMobile）；50W无线+10W无线反充；LPDDR5+UFS3.1；素皮版厚8.56mm；尺寸/重量数据另见小米官网规格页 https://www.mi.com/tw/pro"
+    },
+    {
+      "id": "mz-xiaomi-11-pro",
+      "name": "小米11 Pro",
+      "brand": "xiaomi",
+      "date": "2021-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20210329A0EHFM00",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-03-29发布、4月2日开卖；硅氧负极5000mAh，67W有线+67W无线；LPDDR5+UFS3.1；8+128/8+256/12+256三档；IP68"
+    },
+    {
+      "id": "mz-xiaomi-11-ultra",
+      "name": "小米11 Ultra",
+      "brand": "xiaomi",
+      "date": "2021-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20210329A0EHFM00",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-03-29发布；67W有线+67W无线+10W反充；陶瓷后盖；8+256/12+256/12+512三档（腾讯发布会汇总）；Smartprix另列16GB LPDDR5档位未见于国内售价"
+    },
+    {
+      "id": "mz-xiaomi-12",
+      "name": "Xiaomi 12",
+      "brand": "xiaomi",
+      "date": "2021-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/595/679.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-12-28发布（IT之家/财联社/GSMArena一致）、12月31日开售；50W无线+10W无线反充；179g或180g（GSMArena，IT之家记180g）；尺寸/重量取GSMArena参数页 https://www.gsm"
+    },
+    {
+      "id": "mz-xiaomi-12-pro",
+      "name": "Xiaomi 12 Pro",
+      "brand": "xiaomi",
+      "date": "2021-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/tw/product/xiaomi-12-pro/specs/",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-12-28发布（IT之家 https://www.ithome.com/0/595/679.htm）；120W有线澎湃秒充+50W无线+10W反充；LPDDR5+UFS3.1；自研澎湃P1充电芯片；重量205g（官网）、GSMAr"
+    },
+    {
+      "id": "mz-xiaomi-13",
+      "name": "Xiaomi 13",
+      "brand": "xiaomi",
+      "date": "2022-12-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/660/930.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：发布日2022-12-11，首销12-14；玻璃版厚7.98mm/重189g，素皮版厚8.1mm/重185g；50W无线快充"
+    },
+    {
+      "id": "mz-xiaomi-13-pro",
+      "name": "Xiaomi 13 Pro",
+      "brand": "xiaomi",
+      "date": "2022-12-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/660/930.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：陶瓷版厚8.38mm/重229g，素皮版厚8.7mm/重210g；50W Pro无线快充；LPDDR5X+UFS 4.0（128GB版UFS 3.1）"
+    },
+    {
+      "id": "mz-xiaomi-13-ultra",
+      "name": "Xiaomi 13 Ultra",
+      "brand": "xiaomi",
+      "date": "2023-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/687/322.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2023-04-21开售；50W Pro无线秒充；12+256/16+512/16+1TB三档"
+    },
+    {
+      "id": "mz-xiaomi-14",
+      "name": "Xiaomi 14",
+      "brand": "xiaomi",
+      "date": "2023-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/34645/param_10723611_0_1.html",
+      "note": "M2 检索取证式采集（历史机型批次一）：2023-10-31开售；玻璃版8.20mm/193g，科技纳米皮版8.28mm/188g；50W无线快充"
+    },
+    {
+      "id": "mz-xiaomi-14-pro",
+      "name": "Xiaomi 14 Pro",
+      "brand": "xiaomi",
+      "date": "2023-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.gsmarena.com/xiaomi_14_pro-12643.php",
+      "note": "M2 检索取证式采集（历史机型批次一）：龙晶陶瓷版223g，钛金属特别版230g；50W无线快充；2023-11-01开售"
+    },
+    {
+      "id": "mz-xiaomi-14-ultra",
+      "name": "Xiaomi 14 Ultra",
+      "brand": "xiaomi",
+      "date": "2024-02-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/34645/param_10808057_0_1.html",
+      "note": "M2 检索取证式采集（历史机型批次一）：国内版5300mAh（全球版5000mAh）；黑白224.4g、龙晶蓝229.5g、钛金属特别版229.6g；80W无线充电；2024-02-27开售"
+    },
+    {
+      "id": "mz-xiaomi-15",
+      "name": "Xiaomi 15",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/806/219.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2024-10-31开售；玻璃版约8.08mm/191g；50W无线快充；小米官网(港版)标注典型值5240mAh，国内口径5400mAh"
+    },
+    {
+      "id": "mz-xiaomi-15-pro",
+      "name": "Xiaomi 15 Pro",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241029A09CTY00",
+      "note": "M2 检索取证式采集（历史机型批次一）：薄至8.35mm、重213g，长宽原文未摘录；50W无线秒充；2024-10-31开售"
+    },
+    {
+      "id": "mz-redmi-k40",
+      "name": "REDMI K40",
+      "brand": "xiaomi",
+      "date": "2021-02-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.jiemian.com/article/5728017.html",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-03-04开售；侧边指纹；LPDDR5+UFS 3.1"
+    },
+    {
+      "id": "mz-redmi-k40-pro",
+      "name": "REDMI K40 Pro",
+      "brand": "xiaomi",
+      "date": "2021-02-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/537/868.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2021-03-04开售；与K40同机身尺寸；另有K40 Pro+（12+256GB，一亿像素主摄）"
+    },
+    {
+      "id": "mz-redmi-k50",
+      "name": "REDMI K50",
+      "brand": "xiaomi",
+      "date": "2022-03-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/608/968.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2022-03-22开售；LPDDR5+UFS 3.1；侧边指纹；玻璃机身+塑料边框"
+    },
+    {
+      "id": "mz-redmi-k50-pro",
+      "name": "REDMI K50 Pro",
+      "brand": "xiaomi",
+      "date": "2022-03-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/608/968.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2022-03-22开售；LPDDR5+UFS 3.1；澎湃P1充电芯片；侧边指纹"
+    },
+    {
+      "id": "mz-redmi-k60",
+      "name": "REDMI K60",
+      "brand": "xiaomi",
+      "date": "2022-12-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/663/928.htm",
+      "note": "M2 检索取证式采集（历史机型批次一）：2022-12-31开售；玻璃版8.59mm/204g，素皮晴蓝8.79mm/199g；30W无线充电；LPDDR5+UFS 3.1；屏幕指纹"
+    },
+    {
+      "id": "mz-redmi-k60-pro",
+      "name": "REDMI K60 Pro",
+      "brand": "xiaomi",
+      "date": "2022-12-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/55731/param_10719630_0_1.html",
+      "note": "M2 检索取证式采集（历史机型批次一）：2022-12-31开售；冠军版8.87mm/201g；30W无线充电；128GB版UFS 3.1其余UFS 4.0"
+    },
+    {
+      "id": "mz-redmi-k70",
+      "name": "REDMI K70",
+      "brand": "xiaomi",
+      "date": "2023-11-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20231129A0AIHQ00",
+      "note": "M2 检索取证式采集（历史机型批次一）：2023-12-01开售；LPDDR5X+UFS 4.0；澎湃P2快充芯片+澎湃G1电源管理芯片"
+    },
+    {
+      "id": "mz-redmi-k70-pro",
+      "name": "REDMI K70 Pro",
+      "brand": "xiaomi",
+      "date": "2023-11-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1611/1610864/param.shtml",
+      "note": "M2 检索取证式采集（历史机型批次一）：2023-12-01开售；LPDDR5X+UFS 4.0，最高24GB+1TB（冠军版）；18分钟充满"
+    },
+    {
+      "id": "mz-mix-2s",
+      "name": "小米 MIX 2S",
+      "brand": "xiaomi",
+      "date": "2018-03-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mix2s/specs",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：有线充电支持 QC3.0 快充，来源未给功率数值（GSMArena 记 18W）；3400mAh(typ)/3300mAh(min)；7.5W 无线快充；发布日 2018-03-27（上海），4月3日开售。三维为小米官网"
+    },
+    {
+      "id": "mz-mix-3",
+      "name": "小米 MIX 3",
+      "brand": "xiaomi",
+      "date": "2018-10-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mix3/specs",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：3200mAh(typ)/3100mAh(min)；有线支持 QC4.0+ 但标配 18W QC3.0 充电器，10W 无线充电；10GB+256GB 为故宫特别版；北京故宫发布会，11月1日开售。三维为小米官网口径（长"
+    },
+    {
+      "id": "mz-mix-alpha",
+      "name": "小米 MIX Alpha",
+      "brand": "xiaomi",
+      "date": "2019-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://cn.technode.com/post/2019-09-24/xiaomi-mix-alpha/",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：概念机，定价19999元，计划2019年12月底上市但最终未量产发售（发布即终止）；屏幕尺寸/分辨率与重量取自中文维基与 GSMArena；4050mAh 纳米硅负极电池，标配40W有线快充；12GB+512GB UFS"
+    },
+    {
+      "id": "mz-mix-4",
+      "name": "小米 MIX 4",
+      "brand": "xiaomi",
+      "date": "2021-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/568/484.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2021-08-10 雷军年度演讲发布，8月16日首卖；4500mAh，120W有线秒充（最快15分钟充满）+50W无线；480Hz 触控采样率；LPDDR5+UFS3.1。三维为 XDA 引官方规格口径（长×宽×厚）"
+    },
+    {
+      "id": "mz-mix-fold",
+      "name": "小米 MIX FOLD",
+      "brand": "xiaomi",
+      "date": "2021-03-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/543/201.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2021-03-30 小米春季发布会发布，4月16日开售；首发澎湃C1影像芯片与液态镜头；LPDDR5+UFS3.1；内屏刷新率来源摘要未注明（外屏90Hz）；三维为折叠态（IT之家口径），内屏 8.01 / 外屏 6."
+    },
+    {
+      "id": "mz-mix-fold-2",
+      "name": "小米 MIX FOLD 2",
+      "brand": "xiaomi",
+      "date": "2022-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/634/609.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2022-08-11 雷军年度演讲发布，8月16日开售；262g 为月影黑/星耀金，月光银/玄夜黑 269g；徕卡影像；LPDDR5+UFS3.1；三维为折叠态，展开态 161.6×144.7×5.4，内屏 8.02 /"
+    },
+    {
+      "id": "mz-mix-fold-3",
+      "name": "小米 MIX FOLD 3",
+      "brand": "xiaomi",
+      "date": "2023-08-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/712/328.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2023-08-14 雷军年度演讲发布，8月16日开售；4800mAh 澎湃双硅碳负极电池，67W有线+50W无线；LPDDR5X+UFS4.0；龙骨转轴；来源仅给厚度（展开 5.26 / 折叠 10.96）与重量，未给"
+    },
+    {
+      "id": "mz-civi-1",
+      "name": "Xiaomi Civi",
+      "brand": "xiaomi",
+      "date": "2021-09-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.jiemian.com/article/6646831.html",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2021-09-27 发布，9月30日首销；内存为 LPDDR4X/UFS2.2；55W 有线秒充 45 分钟充满；前置3200万自动对焦。三维取界面新闻宽/厚 + GSMArena 高度组合（高×宽×厚）"
+    },
+    {
+      "id": "mz-civi-1s",
+      "name": "Xiaomi Civi 1S",
+      "brand": "xiaomi",
+      "date": "2022-04-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/614/221.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2022-04-21 发布并全渠道开售；LPDDR4X + UFS2.2；4500mAh 支持55W快充（45分钟充满）；下巴2.55mm 为小米最窄。三维为百度百科口径（高×宽×厚）"
+    },
+    {
+      "id": "mz-civi-2",
+      "name": "Xiaomi Civi 2",
+      "brand": "xiaomi",
+      "date": "2022-09-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/643/483.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2022-09-27 发布并当日开售；前置32MP+32MP双主摄；后置50MP(IMX766)+20MP+2MP；LPDDR4X+UFS2.2；4500mAh 高密度钴酸锂电池，67W 快充40分钟充满。三维取 GSM"
+    },
+    {
+      "id": "mz-civi-3",
+      "name": "Xiaomi Civi 3",
+      "brand": "xiaomi",
+      "date": "2023-05-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/695/183.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2023-05-25 发布，5月31日晚8点开售；12+256 为 LPDDR5，16+1TB 版中关村在线记 LPDDR5X（IT之家记 LPDDR5）；4500mAh 钴酸锂电池，67W 快充38分钟充满；前置32M"
+    },
+    {
+      "id": "mz-civi-4-pro",
+      "name": "Xiaomi Civi 4 Pro",
+      "brand": "xiaomi",
+      "date": "2024-03-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/757/221.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2024-03-21 发布，3月26日开售；重量柔雾粉/微风蓝/星空黑179.3g、春野绿177.6g、限量定制色180.9g；LPDDR5X+UFS4.0；4700mAh 电池 67W 快充40分钟充满；徕卡 Summ"
+    },
+    {
+      "id": "mz-redmi-note-9",
+      "name": "REDMI Note 9 4G",
+      "brand": "xiaomi",
+      "date": "2020-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/521/659.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：清单条目为4G版，取到的即4G版数据（同日还发布Note 9 5G：天玑800U/5000mAh，未采用）；刷新率60Hz取自notebookcheck报道；机身三维来源未给出"
+    },
+    {
+      "id": "mz-redmi-note-10-pro",
+      "name": "REDMI Note 10 Pro",
+      "brand": "xiaomi",
+      "date": "2021-05-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.igao7.com/news/202105/Z5oK4ZnucUQlVtWf.html",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：三维为来源口径（长*宽*厚）"
+    },
+    {
+      "id": "mz-redmi-note-11",
+      "name": "REDMI Note 11（5G）",
+      "brand": "xiaomi",
+      "date": "2021-10-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/792/792327.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：来源为Note 11 5G（发布会上的Note 11标准版即5G版）。三维为来源口径（长/宽/厚）"
+    },
+    {
+      "id": "mz-redmi-note-11t-pro",
+      "name": "REDMI Note 11T Pro",
+      "brand": "xiaomi",
+      "date": "2022-05-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/620/296.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：512GB为Pro+版本；12GB档见gsmarena（256GB 12GB RAM）。三维为来源口径（长×宽×厚）"
+    },
+    {
+      "id": "mz-redmi-note-12",
+      "name": "REDMI Note 12（5G标准版）",
+      "brand": "xiaomi",
+      "date": "2022-10-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/649/395.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：三维/重量取自mi.com Redmi Note 12 5G规格页（https://www.mi.com/global/product/redmi-note-12-5g/specs/，同型号）。三维为来源口径（高*宽*厚"
+    },
+    {
+      "id": "mz-redmi-note-12t-pro",
+      "name": "REDMI Note 12T Pro",
+      "brand": "xiaomi",
+      "date": "2023-05-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/696/131.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：2023-05-29官宣，05-30公布售价开售。三维为 gsmarena 口径（长×宽×厚；IT之家称厚8.87mm重200g）"
+    },
+    {
+      "id": "mz-redmi-note-13",
+      "name": "REDMI Note 13（5G，中国大陆版）",
+      "brand": "xiaomi",
+      "date": "2023-09-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/Redmi%20Note%2013/63470435",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：注意区分海外4G版（骁龙685，188.5g）；中国版搭载天玑6080；12GB内存档见百度百科；来源仅给厚度 7.6mm 与重量，未给长宽 → dims 置 null"
+    },
+    {
+      "id": "mz-redmi-turbo-3",
+      "name": "REDMI Turbo 3",
+      "brand": "xiaomi",
+      "date": "2024-04-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240410A09EZH00",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：存储含16GB+1TB档；IP64。三维为来源口径（长*宽*厚）"
+    },
+    {
+      "id": "mz-redmi-turbo-4",
+      "name": "REDMI Turbo 4",
+      "brand": "xiaomi",
+      "date": "2025-01-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20250102A099MC00",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：屏幕参数未在来源摘要中出现，填null；另有IT之家 https://www.ithome.com/0/821/852.htm 与CNMO https://phone.cnmo.com/news/786268.html "
+    },
+    {
+      "id": "mz-redmi-turbo-4-pro",
+      "name": "REDMI Turbo 4 Pro",
+      "brand": "xiaomi",
+      "date": "2025-04-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/848/731.htm",
+      "note": "M2 检索取证式采集（历史机型批次二 MIX/Civi/Note/Turbo）：另有22.5W有线反向充电；三维参考ZOL参数页 https://detail.zol.com.cn/2127/2126492/param.shtml（长×宽×厚，IT之家称中框厚7.98mm）"
+    },
+    {
+      "id": "mx-pad-4",
+      "name": "小米平板4",
+      "brand": "xiaomi",
+      "date": "2018-06-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mipad4/specs",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：发布日见IT之家 https://www.ithome.com/0/366/649.htm（2018-06-24晚公布价格并开启预约，6月29日发售）；充电5V/2A；屏幕材质IPS见GSMArena https://w"
+    },
+    {
+      "id": "mx-pad-4-plus",
+      "name": "小米平板4 Plus",
+      "brand": "xiaomi",
+      "date": "2018-08",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mipad4/specs",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：官网仅含2018年，GSMArena标注2018年8月发布；PChome评测 https://article.pchome.net/content-2077991-all.html；充电5V/2A（10W）。三维为小米官"
+    },
+    {
+      "id": "mx-pad-5",
+      "name": "小米平板5",
+      "brand": "xiaomi",
+      "date": "2021-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/568/491.htm",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：发布日2021-08-10；尺寸/重量细节来自 https://www.elecfans.com/d/1683540.html（511g）；LPDDR4X或LPDDR5 各源记载不一。三维为官方规格口径（长×宽×厚，IT"
+    },
+    {
+      "id": "mx-pad-5-pro",
+      "name": "小米平板5 Pro",
+      "brand": "xiaomi",
+      "date": "2021-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/xiaomi_pad_5_pro-11043.php",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：发布日同见IT之家 https://www.ithome.com/0/568/491.htm（2021-08-10发布）。三维为 GSMArena 口径（长×宽×厚；XDA称厚6.88mm）"
+    },
+    {
+      "id": "mx-pad-5-pro-124",
+      "name": "小米平板5 Pro 12.4",
+      "brand": "xiaomi",
+      "date": "2022-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3%E5%B9%B3%E6%9D%BF5%20Pro%2012.4%E8%8B%B1%E5%AF%B8/61872328",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2022-08-11发布，2022-08-16开售；LPDDR5+UFS3.1（百度百科另处写UFS2.1/LPDDR4X，多数来源为UFS3.1）。三维为百度百科口径（长×宽×厚）"
+    },
+    {
+      "id": "mx-pad-6",
+      "name": "小米平板6",
+      "brand": "xiaomi",
+      "date": "2023-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/687/329.htm",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2023-04-18发布会发布；LPDDR5+UFS3.1。三维为IT之家原文口径（长×宽×厚）"
+    },
+    {
+      "id": "mx-pad-6-pro",
+      "name": "小米平板6 Pro",
+      "brand": "xiaomi",
+      "date": "2023-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/687/329.htm",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2023-04-18发布，4月21日开售；LPDDR5+UFS3.1。三维为IT之家原文口径（长×宽×厚）"
+    },
+    {
+      "id": "mx-pad-6s-pro",
+      "name": "小米平板6S Pro",
+      "brand": "xiaomi",
+      "date": "2024-02-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/751/487.htm",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2024-02-22发布并开售；LPDDR5X+UFS4.0；小米德国官网 https://www.mi.com/de/product/xiaomi-pad-6s-pro-124/specs/。三维为小米德国官网/GSM"
+    },
+    {
+      "id": "mx-band-5",
+      "name": "小米手环5",
+      "brand": "xiaomi",
+      "date": "2020-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://detail.zol.com.cn/1325/1324907/param.shtml",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：发布日2020-06-11（百度百科/电子工程专辑）；磁吸式充电，充电约2小时；存储16MB。三维为ZOL口径（长×宽×厚；百度百科 46.95×18.15×12.45）"
+    },
+    {
+      "id": "mx-band-6",
+      "name": "小米手环6",
+      "brand": "xiaomi",
+      "date": "2021-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/hk/support/faq/details/KA-05297/",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2021-03-29发布（IT之家/腾讯科技报道）；磁吸充电≤2小时；中文大陆官网参数页为图片，规格取小米官网FAQ。三维为机身长×宽×厚"
+    },
+    {
+      "id": "mx-band-7",
+      "name": "小米手环7",
+      "brand": "xiaomi",
+      "date": "2022-05-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/hk/product/xiaomi-smart-band-7/specs/",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2022-05-24 Redmi夏季发布会发布（52audio/极客公园）；磁吸充电≤2小时。三维为高×宽×厚（不含表带和凸出部分）"
+    },
+    {
+      "id": "mx-band-8",
+      "name": "小米手环8",
+      "brand": "xiaomi",
+      "date": "2023-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3%E6%89%8B%E7%8E%AF8/62887701",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2023-04-18发布（IT之家）；蓝牙5.1，充电约1小时；重量为含腕带口径（与他代不含腕带口径不一致，比较时注意）。三维为主体长×宽×厚"
+    },
+    {
+      "id": "mx-band-9",
+      "name": "小米手环9",
+      "brand": "xiaomi",
+      "date": "2024-07-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240719A09RDE00",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2024-07-19第5次雷军年度演讲发布；蓝牙5.4，充电约60min；PSRAM 16MB / NAND 256MB。重量为标准版/NFC版约15.8g（不含腕带）。三维为长×宽×厚（不含心率凸台）"
+    },
+    {
+      "id": "mx-watch-s1",
+      "name": "Xiaomi Watch S1",
+      "brand": "xiaomi",
+      "date": "2021-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.xiaomitong123.com/product/79.html",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2021-12-28随小米12系列发布会发布（fonearena：发售12月31日中国首发）；磁吸无线充电；32MB内存+4GB存储（小米通）。重量为净重约65g。三维为直径×直径×厚（不含表带和局部凸起）"
+    },
+    {
+      "id": "mx-watch-s2",
+      "name": "Xiaomi Watch S2（46mm）",
+      "brand": "xiaomi",
+      "date": "2022-12-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/smartwatch/xiaomi/1692047_detail.html",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2022-12-11发布（IT之家）；官方未公布重量；磁吸触点充电。本条取 46mm 版（42mm版 1.32 英寸/305mAh/42.3×42.3×10.2 未采）。三维为直径×直径×厚"
+    },
+    {
+      "id": "mx-watch-s3",
+      "name": "Xiaomi Watch S3",
+      "brand": "xiaomi",
+      "date": "2023-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/xiaomi-watch-s3/specs/",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：2023-10-26发布（快科技），首款澎湃OS手表，蓝牙版799元/eSIM版999元；充电约70分钟。重量为44g（不含腕带）。三维为直径×直径×厚（含边框不含心率突起）"
+    },
+    {
+      "id": "mx-watch-s4",
+      "name": "Xiaomi Watch S4",
+      "brand": "xiaomi",
+      "date": "2024-10-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/xiaomi-watch-s4/specs/",
+      "note": "M3 检索取证式采集（平板/穿戴历史）：实际中国大陆发布日为2024-10-29（IT之家，999元起/eSIM版1199元），与清单预估的2024-09不符；澎湃OS 2，蓝牙5.3，旋转表冠。重量为约44.5g（不含随附腕带）。三维为高×宽×厚（不含腕带和"
+    },
+    {
+      "id": "hw-mate-40",
+      "name": "华为 Mate 40",
+      "brand": "huawei",
+      "date": "2020-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.igao7.com/news/202010/V1Wg1b6w1iX6bmwm.html",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：国行发布会为2020年10月30日（上海），10月22日为全球发布会；Mate 40不支持无线充电；IP53。三维为玻璃版高×宽×厚（素皮版厚9.2mm）"
+    },
+    {
+      "id": "hw-mate-40-pro",
+      "name": "华为 Mate 40 Pro",
+      "brand": "huawei",
+      "date": "2020-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.pingwest.com/w/221492",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：国行发布2020-10-30；支持66W有线+50W无线超级快充；IP68。三维为玻璃版高×宽×厚（素皮版厚9.5mm）"
+    },
+    {
+      "id": "hw-mate-40-pro-plus",
+      "name": "华为 Mate 40 Pro+",
+      "brand": "huawei",
+      "date": "2020-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20201026185406/https:/consumer.huawei.com/cn/phones/mate40-pro-plus/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：国行发布2020-10-30；仅12GB+256GB一个版本，售价8999元；IP68。三维为华为官网规格页高×宽×厚"
+    },
+    {
+      "id": "hw-mate-40e",
+      "name": "华为 Mate 40E",
+      "brand": "huawei",
+      "date": "2021-03-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.zinggadget.com/huawei-mate-40e-launched-china/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2021年3月10日中国发布，3月18日发售；8+128GB售价4599元；IP53。三维为玻璃背盖高×宽×厚（皮革背盖9.2mm）"
+    },
+    {
+      "id": "hw-mate-50",
+      "name": "华为 Mate 50",
+      "brand": "huawei",
+      "date": "2022-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_mate_50-11857.php",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年9月6日国内发布，9月21日开售；IT之家称机身重量202g（另有昆仑玻璃版206g）；支持50W无线快充；IP68。三维为高×宽×厚"
+    },
+    {
+      "id": "hw-mate-50-pro",
+      "name": "华为 Mate 50 Pro",
+      "brand": "huawei",
+      "date": "2022-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20Mate%2050%20Pro/60926502",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年9月6日发布，9月21日开售；昆仑破晓/昆仑霞光版重约205g，流光紫/冰霜银/曜金黑版约209g；支持50W无线快充；IP68。三维为高×宽×厚"
+    },
+    {
+      "id": "hw-mate-50-rs",
+      "name": "华为 Mate 50 RS 保时捷设计",
+      "brand": "huawei",
+      "date": "2022-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1350/1349392/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年9月6日国内发布，9月21日开售，售价12999元；支持50W无线充电；双色陶瓷机身。三维为高×宽×厚"
+    },
+    {
+      "id": "hw-mate-50e",
+      "name": "华为 Mate 50E",
+      "brand": "huawei",
+      "date": "2022-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/646/508.htm",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年9月6日随系列发布，10月14日开售；不支持无线充电（规格来源未提及）。三维为高×宽×厚"
+    },
+    {
+      "id": "hw-mate-x2",
+      "name": "华为 Mate X2",
+      "brand": "huawei",
+      "date": "2021-02-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/536/218.htm",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2021年2月22日发布，2月25日发售；8+256GB售价17999元；不支持无线充电。三维取展开态（高×宽×厚），折叠态 161.8×74.6×14.7；内屏 8 英寸 / 外屏 6.45 取内屏"
+    },
+    {
+      "id": "hw-mate-xs2",
+      "name": "华为 Mate Xs 2",
+      "brand": "huawei",
+      "date": "2022-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/kh/phones/mate-xs2/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年4月28日发布，5月6日开售；12+512GB典藏版电池4880mAh、重257g，其他版本4600mAh；仅255g为官方宣称（不含贴膜）。三维取展开态（高×宽×厚，最薄处 5.4），折叠态 156.5×75"
+    },
+    {
+      "id": "hw-mate-pocket-s",
+      "name": "华为 Pocket S",
+      "brand": "huawei",
+      "date": "2022-11-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/650/754.htm",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022年11月2日发布，11月10日开售；电池典型4000mAh（额定3900mAh）。三维取展开态（高×宽×厚），折叠态 87.3×75.5×15.2；内屏 6.9 / 外屏 1.04 取内屏"
+    },
+    {
+      "id": "hw-mate-pocket-2",
+      "name": "华为 Pocket 2",
+      "brand": "huawei",
+      "date": "2024-02-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/cn/phones/pocket-2-youxiangban/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2024年2月22日发布，3月1日开售；支持40W无线快充；素皮版重约199g、玻璃版约202g；检索到的来源未给出处理器型号，chipset 置 null。三维取展开态（高×宽×厚，玻璃版；素皮版厚7.35）"
+    },
+    {
+      "id": "hw-p50",
+      "name": "华为 P50",
+      "brand": "huawei",
+      "date": "2021-07-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1327/1326884/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2021-07-29国内发布（IT之家/百度百科一致），2021年9月上市；支持50倍数字变焦、IP68。三维为ZOL口径（长×宽×厚）"
+    },
+    {
+      "id": "hw-p50-pro",
+      "name": "华为 P50 Pro",
+      "brand": "huawei",
+      "date": "2021-07-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1381/1380721/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2021-07-29发布、2021-08-12上市；另有12GB+512GB典藏版；50W无线充电；骁龙888 4G版本9月开售。三维为ZOL口径（长×宽×厚）"
+    },
+    {
+      "id": "hw-p50-pocket",
+      "name": "华为 P50 Pocket",
+      "brand": "huawei",
+      "date": "2021-12-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1409/1408720/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：竖向折叠（上下向内折叠）：展开态170×75.5×7.2mm，折叠态厚15.2mm；12GB档为艺术定制版（12GB+512GB）；主屏21:9、1440Hz高频PWM调光。三维取展开态（长×宽×厚）"
+    },
+    {
+      "id": "hw-p60",
+      "name": "华为 P60",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20230714140505/https:/consumer.huawei.com/cn/phones/p60/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2023-03-23春季旗舰发布会发布、3-30发售；RAM 8GB据IT之家产品百科（ku.ithome.com/item/21996/canshu.html）；电池4815mAh为典型值（额定4715mAh）；另支持"
+    },
+    {
+      "id": "hw-p60-pro",
+      "name": "华为 P60 Pro",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1479/1478247/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2023-03-23发布、2023-03-30上市；骁龙8+ 4G为3.2GHz版（P60标准版为3.0GHz版）；电池4815mAh典型值；另支持50W无线充电。三维为ZOL口径（长×宽×厚）"
+    },
+    {
+      "id": "hw-p60-art",
+      "name": "华为 P60 Art",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://mobile.zol.com.cn/815/8153510.html",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2023-03-23发布、4月7日发售；两档为12GB+512GB与12GB+1TB（1TB在GB字段折记为1024）；5100mAh硅碳负极电池；超广角升级为4000万像素。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-9",
+      "name": "华为 nova 9",
+      "brand": "huawei",
+      "date": "2021-09-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20nova%209/60303246",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2021-09-23发布、2021-09-29开售；4300mAh（官网典型值4300mAh/额定4200mAh）；66W有线快充。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-10",
+      "name": "华为 nova 10",
+      "brand": "huawei",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/613/param_10706395_0_1.html",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022-07-04发布、2022-07-08开售；前置6000万像素超广角单摄；机身厚6.88mm。三维为ZOL口径（长×宽×厚）"
+    },
+    {
+      "id": "hw-nova-10-pro",
+      "name": "华为 nova 10 Pro",
+      "brand": "huawei",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20220712233848/https:/consumer.huawei.com/cn/phones/nova10-pro/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2022-07-04发布、2022-07-08开售；RAM 8GB据IT之家发布报道（8+128/8+256两档）；4500mAh为典型值（额定4400mAh）；100W华为超级快充Turbo；前置6000万追焦+800"
+    },
+    {
+      "id": "hw-nova-11",
+      "name": "华为 nova 11",
+      "brand": "huawei",
+      "date": "2023-04-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1495/1494683/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2023-04-17发布、2023-04-26上市；屏幕120Hz OLED（395PPI、P3广色域）据安兔兔发布报道（https://www.antutu.com/doc/129398）；512GB与256GB部分为"
+    },
+    {
+      "id": "hw-nova-12",
+      "name": "华为 nova 12",
+      "brand": "huawei",
+      "date": "2023-12-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1956/1955909/param.shtml",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2023-12-26发布、2024-01-05上市；处理器官方未公布，百度百科/快科技等媒体披露为麒麟8000；RAM 8GB据IT之家发布会报道（8+256/8+512两档）；120Hz OLED直屏。三维为ZOL口径"
+    },
+    {
+      "id": "hw-nova-13",
+      "name": "华为 nova 13",
+      "brand": "huawei",
+      "date": "2024-10-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/en/phones/nova13/specs/",
+      "note": "M4 检索取证式采集（华为历史线 Mate/P/nova/折叠）：2024-10-22发布、10-25开售（IT之家）；重量存在出入：华为官网规格页约195g，IT之家发布报道称191g，此处取官网值；存储档为256GB/512GB/1TB（1TB折记1024）；RAM 12GB（LP"
+    },
+    {
+      "id": "hw-mate-20",
+      "name": "华为 Mate 20",
+      "brand": "huawei",
+      "date": "2018-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1228/1227467/param.shtml",
+      "note": "检索取证式采集（历史机型）：国行上市日期2018年10月26日；官网存档规格页确认尺寸/重量/电池典型值口径。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-20-pro",
+      "name": "华为 Mate 20 Pro",
+      "brand": "huawei",
+      "date": "2018-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1225/1224162/param.shtml",
+      "note": "检索取证式采集（历史机型）：上市日期2018年10月26日；40W超级快充+15W无线；6GB版128GB、8GB版128/256GB。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-30",
+      "name": "华为 Mate 30",
+      "brand": "huawei",
+      "date": "2019-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/613/param_27796_0_1.html",
+      "note": "检索取证式采集（历史机型）：国内发布2019年9月26日；4G版6/8GB+128GB，5G版8GB+128/256GB；无线27W。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-30-pro",
+      "name": "华为 Mate 30 Pro",
+      "brand": "huawei",
+      "date": "2019-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.androidauthority.com/huawei-mate-30-pro-specs-1029252/",
+      "note": "检索取证式采集（历史机型）：国行发布与Mate 30同为2019-09-26（ZOL系列参数页）；4500mAh为典型值口径（华为官方存档页）。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p30",
+      "name": "华为 P30",
+      "brand": "huawei",
+      "date": "2019-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1316/1315681/param.shtml",
+      "note": "检索取证式采集（历史机型）：国行发布会2019年4月11日（新浪财经报道）；官网存档页标注尺寸149.1x71.36x7.57mm、约165克。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p30-pro",
+      "name": "华为 P30 Pro",
+      "brand": "huawei",
+      "date": "2019-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20200810045430/https:/consumer.huawei.com/cn/phones/p30-pro/specs/",
+      "note": "检索取证式采集（历史机型）：国行2019-04-11发布；官网存档页仅给宽度73.4mm与重量192g，厚度8.41mm来自ZOL评测（https://mobile.zol.com.cn/712/7126963.html）；40W有线+15W无线。"
+    },
+    {
+      "id": "hw-p40",
+      "name": "华为 P40",
+      "brand": "huawei",
+      "date": "2020-03-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20200326154517/https:/consumer.huawei.com/cn/phones/p40/specs/",
+      "note": "检索取证式采集（历史机型）：2020-03-26全球发布，国行发布会2020-04-08（IT之家），4月8日晚开售；不支持无线充电。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p40-pro",
+      "name": "华为 P40 Pro",
+      "brand": "huawei",
+      "date": "2020-03-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-hans/%E8%8F%AF%E7%82%BAP40%E7%B3%BB%E5%88%97",
+      "note": "检索取证式采集（历史机型）：2020-03-26发布，2020-04-07上市；40W有线+27W无线；8GB+128/256/512GB。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-5",
+      "name": "华为 nova 5",
+      "brand": "huawei",
+      "date": "2019-06-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.antutu.com/doc/118410.htm",
+      "note": "检索取证式采集（历史机型）：2019-06-21武汉发布；厚度7.33mm口径见ZOL nova 5 Pro参数页（同模具）；7月20日开售。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-5-pro",
+      "name": "华为 nova 5 Pro",
+      "brand": "huawei",
+      "date": "2019-06-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://mobile.zol.com.cn/725/7254779.html",
+      "note": "检索取证式采集（历史机型）：2019-06-21发布；40W超级快充。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-6",
+      "name": "华为 nova 6（4G版）",
+      "brand": "huawei",
+      "date": "2019-12-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/613/param_28480_0_1.html",
+      "note": "检索取证式采集（历史机型）：2019-12-05武汉发布；5G版为162.7x75.8x8.98mm/212g/4200mAh（典型值，额定4100mAh）+麒麟990+巴龙5000。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-7",
+      "name": "华为 nova 7",
+      "brand": "huawei",
+      "date": "2020-04-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/484/185.htm",
+      "note": "检索取证式采集（历史机型）：2020-04-23线上发布，4月28日开售；尺寸/重量见GSMArena（https://www.gsmarena.com/compare.php3?idPhone1=10204）；nova 7 Pro为6.57英寸2"
+    },
+    {
+      "id": "hw-nova-8",
+      "name": "华为 nova 8",
+      "brand": "huawei",
+      "date": "2020-12-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.antutu.com/doc/123935",
+      "note": "检索取证式采集（历史机型）：2020-12-23发布；66W超级快充，官方称最快35分钟充满。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-nova-8-pro",
+      "name": "华为 nova 8 Pro",
+      "brand": "huawei",
+      "date": "2020-12-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.antutu.com/doc/123935",
+      "note": "检索取证式采集（历史机型）：2020-12-23发布，2021-01-08开售（GSMArena）；120Hz/300Hz触控采样率。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-watch-gt2",
+      "name": "华为 WATCH GT 2（46mm）",
+      "brand": "huawei",
+      "date": "2019-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.vmall.com/product/10086074895536.html",
+      "note": "检索取证式采集（历史机型）：2019-09-19慕尼黑全球发布、2019-09-26上海公布国行信息，2019-11-11国内开售；电池容量455mAh取自该vmall规格页；屏幕分辨率454×454取自华为官方规格页(consumer.huawe"
+    },
+    {
+      "id": "hw-watch-gt3",
+      "name": "华为 WATCH GT 3（46mm）",
+      "brand": "huawei",
+      "date": "2021-11-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.notebookcheck.com/Huawei-Watch-GT-3-Smartwatch-im-Test-Edle-Optik-und-beeindruckender-Akku.578874.0.html",
+      "note": "检索取证式采集（历史机型）：国内发布日2021-11-17取自IT之家《华为 WATCH GT 3 系列正式发布》(ithome.com/0/587/339.htm)；RAM仅32MB、ROM 4GB（华为官方规格），故ramGb填null；电池4"
+    },
+    {
+      "id": "hw-watch-3",
+      "name": "华为 WATCH 3",
+      "brand": "huawei",
+      "date": "2021-06-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.jishusongshu.com/digital-products/huawei-watch3/",
+      "note": "检索取证式采集（历史机型）：2021-06-02国内发布、2021-06-11开售；尺寸/重量/电池450mAh/内存2GB+机身16GB取自该文（其规格摘自华为商城）；无线充电，未公布充电瓦数与刷新率；芯片型号官方规格页未明示，填null。三维为"
+    },
+    {
+      "id": "hw-band-4",
+      "name": "华为手环 4",
+      "brand": "huawei",
+      "date": "2019-10-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.vmall.com/product/10086482289125.html",
+      "note": "检索取证式采集（历史机型）：任务清单标注2020，百度百科与IT之家记载为2019-10-23国内发布，按来源取2019-10-23；屏幕0.96英寸/160×80取自中关村在线(detail.zol.com.cn/1295/1294050/par"
+    },
+    {
+      "id": "hw-band-6",
+      "name": "华为手环 6",
+      "brand": "huawei",
+      "date": "2021-04-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://detail.zol.com.cn/1367/1366272/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-04-08发布、2021-04-27发售；磁吸顶针充电（5V 0.5A/1A/1.5A/2A），未标充电瓦数；分辨率194×368取自华为官方Band 6规格页(consumer.huawei.com/sg/w"
+    },
+    {
+      "id": "hw-matepad-pro-129",
+      "name": "华为 MatePad Pro 12.6",
+      "brand": "huawei",
+      "date": "2021-06-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/sa/tablets/matepad-pro-12-6-2021/specs/",
+      "note": "检索取证式采集（历史机型）：2021-06-02随HarmonyOS 2发布会发布，2021-06-25开售；60Hz取自Notebookcheck评测页(notebookcheck-cn.com)；中国区配置：Wi-Fi版8GB+128/256G"
+    },
+    {
+      "id": "hw-matepad-11",
+      "name": "华为 MatePad 11",
+      "brand": "huawei",
+      "date": "2021-07-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.vmall.com/product/10086587207823.html",
+      "note": "检索取证式采集（历史机型）：国内2021-07-06发布（IT之家 ithome.com/0/561/254.htm）、2021-07-13开售；120Hz取自华为官网/IT之家；RAM/ROM组合含6GB+64/128/256GB与8GB+128"
+    },
+    {
+      "id": "hw-matepad-pro-11",
+      "name": "华为 MatePad Pro 11",
+      "brand": "huawei",
+      "date": "2022-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/631/898.htm",
+      "note": "检索取证式采集（历史机型）：2022-07-27发布、2022-08-10开售；骁龙870款最高40W快充（标配22.5W充电器），骁龙888款支持66W（标配40W），wiredChargeW按870标准款取40；三围尺寸取自华为官方规格页(co"
+    },
+    {
+      "id": "hw-matepad-11-2023",
+      "name": "华为 MatePad 11 英寸 2023 款",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/683/211.htm",
+      "note": "检索取证式采集（历史机型）：2023-03-23发布、2023-03-30开售；尺寸/重量取自GSMArena华为MatePad 11 (2023)条目(gsmarena.com/compare.php3?idPhone1=10943&idPhon"
+    },
+    {
+      "id": "mz-redmi-note-14",
+      "name": "REDMI Note 14（中国大陆版 5G）",
+      "brand": "xiaomi",
+      "date": "2024-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/2102/2101023/param.shtml",
+      "note": "检索取证式采集（历史机型）：国内发布时间2024年9月26日；天玑7025-Ultra；45W有线快充；支持IP64。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-redmi-turbo-5",
+      "name": "REDMI Turbo 5",
+      "brand": "xiaomi",
+      "date": "2026-01-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/917/636.htm",
+      "note": "检索取证式采集（历史机型）：2026年1月29日发布；7560mAh+100W有线秒充+27W反充；LPDDR5X Ultra+UFS4.1；尺寸与重量取自GSMArena（204g, 8.2mm）。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-1",
+      "name": "小米手机1",
+      "brand": "xiaomi",
+      "date": "2011-08-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://4g.zol.com.cn/244/2445856_param.html",
+      "note": "检索取证式采集（历史机型）：2011年8月16日北京发布；可拆卸1930mAh电池；支持MicroSD扩展。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-2",
+      "name": "小米手机2",
+      "brand": "xiaomi",
+      "date": "2012-08-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/n/2012-08-16/15157513052.shtml",
+      "note": "检索取证式采集（历史机型）：2012年8月16日北京798发布；可更换2000mAh电池（另有3100mAh选配）。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-3",
+      "name": "小米手机3",
+      "brand": "xiaomi",
+      "date": "2013-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/n/2013-09-05/14478710893.shtml",
+      "note": "检索取证式采集（历史机型）：2013年9月5日发布；3050mAh锂离子聚合物电池，支持快充；重量145g（新浪发布报道未给，取自imobile 144x73.6x8.1mm/145g）。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-4",
+      "name": "小米手机4",
+      "brand": "xiaomi",
+      "date": "2014-07-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/n/2014-07-22/14499510464.shtml",
+      "note": "检索取证式采集（历史机型）：2014年7月22日发布；3080mAh典型容量；GSMArena标注18W QC2快充；尺寸/重量与维基百科一致。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-5",
+      "name": "小米手机5",
+      "brand": "xiaomi",
+      "date": "2016-02-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mi5/specs",
+      "note": "检索取证式采集（历史机型）：2016年2月24日发布；3000mAh(typ)/2910mAh(min)，快充3.0；标准/高配版129g，陶瓷尊享版约139g。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-6",
+      "name": "小米6",
+      "brand": "xiaomi",
+      "date": "2017-04-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mi6/specs",
+      "note": "检索取证式采集（历史机型）：2017年4月19日发布；3350mAh(typ)/3250mAh(min)，快充3.0 18W；亮黑/亮蓝/亮白版168g，陶瓷尊享版182g。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-8",
+      "name": "小米8",
+      "brand": "xiaomi",
+      "date": "2018-05-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mi8/specs",
+      "note": "检索取证式采集（历史机型）：2018年5月31日深圳发布，6月5日首卖；3400mAh(typ)/3300mAh(min)，支持QC4+协议，标配18W QC3.0充电器。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-9",
+      "name": "小米9",
+      "brand": "xiaomi",
+      "date": "2019-02-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-hans/%E5%B0%8F%E7%B1%B39",
+      "note": "检索取证式采集（历史机型）：2019年2月20日发布，2月26日开售；3300mAh(typ)/3200mAh(min)；27W有线+20W无线快充。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-9-pro-5g",
+      "name": "小米9 Pro 5G",
+      "brand": "xiaomi",
+      "date": "2019-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1292/1291958/param.shtml",
+      "note": "检索取证式采集（历史机型）：2019年9月24日发布，9月27日首卖；40W有线+30W无线+10W反向无线，标配45W充电器。三维为长×宽×厚"
+    },
+    {
+      "id": "mz-mi-max-3",
+      "name": "小米Max 3",
+      "brand": "xiaomi",
+      "date": "2018-07-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/max3/specs",
+      "note": "检索取证式采集（历史机型）：2018年7月19日发布；5500mAh(typ)/5400mAh(min)，标配9V/2A 18W快充；尺寸87.4x176.15x7.99mm、约221g。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-cc9",
+      "name": "小米CC9",
+      "brand": "xiaomi",
+      "date": "2019-07-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/micc9/specs",
+      "note": "检索取证式采集（历史机型）：2019年7月2日北京水立方发布，7月5日开售；4030mAh(typ)/3940mAh(min)，支持QC4协议、标配18W充电器；8GB+256GB为美图定制版。三维为高×宽×厚"
+    },
+    {
+      "id": "mz-mi-note-3",
+      "name": "小米Note 3",
+      "brand": "xiaomi",
+      "date": "2017-09-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/minote3/specs/",
+      "note": "检索取证式采集（历史机型）：2017年9月11日发布，9月12日开卖；3500mAh(typ)/3400mAh(min)，支持快充3.0；亮黑/亮蓝约163g。三维为高×宽×厚"
+    },
+    {
+      "id": "mx-pad-1",
+      "name": "小米平板1",
+      "brand": "xiaomi",
+      "date": "2014-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3%E5%B9%B3%E6%9D%BF/13865541",
+      "note": "检索取证式采集（历史机型）：尺寸为长×宽×厚；5V2A/9V1.2A快充但功率未明示；百度百科上市价记999/1299元，发布会价1499/1699元"
+    },
+    {
+      "id": "mx-pad-2",
+      "name": "小米平板2",
+      "brand": "xiaomi",
+      "date": "2015-11-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/190/527.htm",
+      "note": "检索取证式采集（历史机型）：电池6010mAh(min)/6190mAh(typ)，此处取典型值；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-pad-3",
+      "name": "小米平板3",
+      "brand": "xiaomi",
+      "date": "2017-04-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mipad3/specs",
+      "note": "检索取证式采集（历史机型）：电池6400mAh(min)/6600mAh(typ)，取典型值；5V/2A充电；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-pad-6-max",
+      "name": "小米平板6 Max",
+      "brand": "xiaomi",
+      "date": "2023-08-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/712/330.htm",
+      "note": "检索取证式采集（历史机型）：另有33W反向充电；整机长度/宽度未在来源中给出，仅厚6.53mm，故dimsMm留空"
+    },
+    {
+      "id": "mx-book-air-13",
+      "name": "小米笔记本Air 13.3（2016）",
+      "brand": "xiaomi",
+      "date": "2016-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mibookair/specs",
+      "note": "检索取证式采集（历史机型）：电池40Wh(typ)/39Wh(min)；尺寸为长×宽×厚；适配器功率来源未标"
+    },
+    {
+      "id": "mx-book-air-12",
+      "name": "小米笔记本Air 12.5（2016）",
+      "brand": "xiaomi",
+      "date": "2016-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://cn.technode.com/post/2016-07-27/xiaomi-air/",
+      "note": "检索取证式采集（历史机型）：电池37Wh(typ)；尺寸为长×宽×厚；适配器功率来源未标"
+    },
+    {
+      "id": "mx-book-pro-15",
+      "name": "小米笔记本Pro 15.6（2017）",
+      "brand": "xiaomi",
+      "date": "2017-09-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mibookpro/specs",
+      "note": "检索取证式采集（历史机型）：电池60Wh(min)；后续GTX版同模具重约2.0Kg、厚16.9mm、适配器90W；原版适配器功率来源未标。尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-book-pro-15-2020",
+      "name": "小米笔记本Pro 15 2020",
+      "brand": "xiaomi",
+      "date": "2020-06-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3%E7%AC%94%E8%AE%B0%E6%9C%AC%20Pro%202020%E6%AC%BE/55378133",
+      "note": "检索取证式采集（历史机型）：60Wh 4芯锂电池，支持PD快充；适配器具体功率来源未标；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-gamebook",
+      "name": "小米游戏本（2018）",
+      "brand": "xiaomi",
+      "date": "2018-03-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/migaminglaptop/specs",
+      "note": "检索取证式采集（历史机型）：发布会2018-03-27，2018-04-13首发开售；电池55Wh(min)；硬盘为128/256GB SSD+1TB HDD；厚度不含进风格栅；适配器功率来源未标。尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-book-14",
+      "name": "RedmiBook 14（2019）",
+      "brand": "xiaomi",
+      "date": "2019-05-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/redmibook14/specs",
+      "note": "检索取证式采集（历史机型）：电池46Wh(min)；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-book-pro-14-2021",
+      "name": "RedmiBook Pro 14（2021）",
+      "brand": "xiaomi",
+      "date": "2021-02-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/742/742860.htm",
+      "note": "检索取证式采集（历史机型）：发布于2021-02-25 K40发布会，3月4日首卖；电池56Wh(min)，厚度16-17.25mm取官方薄至16mm；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-book-pro-15-2021",
+      "name": "RedmiBook Pro 15（2021）",
+      "brand": "xiaomi",
+      "date": "2021-02-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20210225A0EP9I00",
+      "note": "检索取证式采集（历史机型）：发布于2021-02-25，3月15日首卖；70Wh电池+100W Type-C充电器；尺寸为长×宽×厚"
     }
   ],
   "unresolved": []
