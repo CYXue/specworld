@@ -111,7 +111,7 @@ data/
 
 ```jsonc
 "groups": [
-  { "id": "body", "name": "外观与机身", "nameEn": "Appearance & Build",
+  { "id": "body", "name": "外观与机身",
     "type": "single", "guide": "尺寸/重量/材质/防护/配色" },
   { "id": "camera", "name": "摄像头", "type": "multi", "guide": "前置+后置多摄" }
 ]
@@ -186,9 +186,10 @@ data/
 
 ## 八、取值与前端适配
 
-- **管线侧一律 `pick(product, path)`**（`scripts/lib/specs.mjs`）：specs-first，
-  v1 嵌套回退。只读 specs 会让迁移后第一轮的覆盖率对比跌到 0 触发拒写；
-  只读嵌套则用户修正永远不生效。双兼容是迁移平滑的必要条件。
+- **管线侧一律 `pick(product, path)`**（`scripts/lib/specs.mjs`）：**specs-only**。
+  迁移期曾为「上一版快照还是 v1」双兼容保留嵌套回退；2026-10-21 盘上快照
+  v2-only、测试夹具同形状后，回退分支已拆除，specs 是唯一真源
+  （双真源回归由 selftest 08 的「盘上快照不得残留 v1 嵌套组」闸门守住）。
 - **前端 `src/lib/adapt.ts` 的 `toPhoneViews`**：数据加载时把 specs 展开回
   body/display 嵌套视图，33 个现有组件零改动。新品类页面直接消费 specs + schema。
 - 自测的 `REAL_P` 与前端同路（也过 adapt），保证断言的就是前端真实形状。

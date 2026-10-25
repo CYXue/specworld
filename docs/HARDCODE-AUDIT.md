@@ -3,7 +3,7 @@
 > **✅ 治理状态（2026-10-13 当日完成）**：用户裁决「全部按建议修、以最优解落地」。
 > P0 五项 + P1 展示层泛化（视图字典 + 泛化引擎）**全部已实施并通过 selftest 249 项 / build /
 > dry-run / quality / conventions 全绿**。各项结论标注见下；P2（策展表外置）按建议缓行。
-> 实施记录：data/view-phone.json（视图字典）+ src/lib/fields.ts（泛化引擎）+
+> 实施记录：data/views/phone.json（视图字典）+ src/lib/fields.ts（泛化引擎）+
 > src/lib/fieldValidate.ts（前端校验共享模块）+ selftest 新增 4 条对账闸门（接线钉死 /
 > METRICS 对账 / ABILITIES 对账 / editor 类型集弱对账）+ 渲染对账升级双向。
 

@@ -160,7 +160,7 @@ specGroups 重构为**引擎**：schema 里每个字段默认按 type 自动渲�
 ## 五、决策与实施记录
 - **2026-10-13 用户裁决**：「做成 to do，全部按建议修，不考虑兼容，以最优解直接完成」。
 - **P0（消多源）+ P1（本文件第四节最优解）当日全部落地**：
-  - 视图字典 `data/view-phone.json`（展示语义真源：组/行/合并/格式化器/hidden）；
+  - 视图字典 `data/views/phone.json`（展示语义真源：组/行/合并/格式化器/hidden）；
   - `src/lib/fields.ts` 重构为泛化引擎 `buildSpecGroups(schema, view, specs)`（flat specs 取值、
     type+unit 通用格式化、未引用字段自动追加、新组自动建）——**发现新参数 = schema 加一行，
     页面自动出现**；真机抽查与原策展逐行等价；

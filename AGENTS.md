@@ -170,9 +170,10 @@ public/data/   data/ 的构建期拷贝 —— 不入库（入库两份必然版
 
 - **`setPointerCapture` 拖过阈值（6px）才调**。在 `pointerdown` 里就调会劫持 click 的 target，
   症状是「能拖能缩但设备永远点不进去」，零报错。拖拽类交互组件各中招过一次。
-- **取值一律 `pick(product, path)`（specs-first，`scripts/lib/specs.mjs`）**。
-  v2 起品类参数在扁平 specs 容器里（`specs['display.sizeIn']`），v1 嵌套回退。
-  只读 specs 会让迁移后第一轮的覆盖率对比跌到 0 触发拒写；只读嵌套则用户修正永远不生效。
+- **取值一律 `pick(product, path)`（specs-only，`scripts/lib/specs.mjs`）**。
+  v2 起品类参数在扁平 specs 容器里（`specs['display.sizeIn']`）。
+  2026-10-21 已拆除 v1 嵌套回退——specs 是唯一真源，盘上快照 v2-only
+  由 selftest 的「双真源回归闸门」守住（夹具同形状）。
   拍平（sync 层 flattenSpecs）后**必须删掉旧嵌套组**——双真源比没有 specs 更危险：
   用户改了 specs、嵌套里还是官网旧值，任何直接读嵌套的下游都拿到旧值且零报错。
 - **命令式注入的 DOM 拿不到 Vue scoped 样式** → 必须 `:deep()` 或全局样式。
@@ -214,9 +215,12 @@ public/data/   data/ 的构建期拷贝 —— 不入库（入库两份必然版
 - **不迁 Next.js / React**。Vite + Vue3 已是当前形态，迁移收益不抵重写成本。
 - **不建字段级仲裁层**。手机参数只有官网单源，没有第二票可投，
   照搬参考项目只会造出一个永远只走第一票的空壳。
-- **i18n 已建成，不要回滚**。zh/en 双语（`src/i18n/` + `src/locales/`）+ 参数值官方术语表
-  （`data/curated/glossary.json`）是既有事实；英文残留用 `npm run i18n:residual` 守，
-  SSR 双语冒烟走 `npm run smoke:i18n`。
+- **i18n 已于 2026-10-21 按用户裁决整体移除**（vue-i18n / en 语言包 / 语言切换 /
+  `i18n:residual` / `smoke:i18n` / `i18n-keys` 对账 / `data/curated/glossary.json` 全部退役）。
+  站内为中文单语：文案字典是 `src/locales/zh.json`，取词走 `src/i18n/index.ts` 的 `t()`
+  （缺键抛错，插值 `{x}`）。数据里的 `labelEn/titleEn/unitEn/nameEn/lineEn` 等英文字段
+  已随多语言**整体删除**（2026-10-23，1050 个字段 / 20 个数据文件）；保留的英文只有
+  官方名与身份字段（`products[].name`、`vendors[].name`、`modelCode`），它们不是翻译。
 - **闸门挡不住「少取一个值」**。历史两次刷新率事故都是肉眼发现的。
   解析层改动**没有断言就是没测**。
 - 参考项目 `ai-model-world` 的**指纹层比我们弱**（它做数据×模板的组合式指纹，

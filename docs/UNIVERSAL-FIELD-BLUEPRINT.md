@@ -239,7 +239,7 @@
 
 ## 4. 新增一个品类的步骤（零代码分支）
 
-1. `data/categories.json` 的 `categories` 数组加一项：`{ "id": "laptop", "label": "笔记本", "labelEn": "Laptop", "schema": "laptop", "builtin": true }`。
+1. `data/categories.json` 的 `categories` 数组加一项：`{ "id": "laptop", "label": "笔记本", "schema": "laptop", "builtin": true }`。
 2. 复制 `data/schemas/phone.json` 为 `data/schemas/laptop.json`，按本蓝图的「笔记本」适用列挑字段，写 `groups` + `fields`（每个字段带 `group` 归属）。
 3. 在 `data/categories.json` 调整顺序（前端 `CATEGORY_ORDER` 会自动对账）。
 4. normalize 层为笔记本数据源产出 `category:'laptop'` + `specs` 拍平结果（可沿用 `flattenSpecs`）。

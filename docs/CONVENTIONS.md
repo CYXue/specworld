@@ -41,8 +41,7 @@ specworld/
 │   ├── qa/                #   体检脚本（回答「为什么是这个结果」）
 │   ├── pipeline.mjs       # 编排入口（--data-only 是 CI 与日常唯一用到的模式）
 │   ├── selftest.mjs       # 自测入口（纯函数、不联网、CI 第一个 job）
-│   ├── lib/i18n-keys.mjs  #   语言包双向对账闸门（键集/引用/插值/数据侧双语，见 §2.6.4）
-│   ├── smoke/             #   真机/SSR 级冒烟（i18n-ssr.mjs：全站双语渲染）
+│   ├── smoke/             #   真机级冒烟（_smoke.cjs / _smoke-search.cjs）
 │   └── sync-public.mjs    # 构建期 data/ → public/ 逐文件对账
 ├── src/                   # 前端（Vite + Vue3 + TS）
 │   ├── views/             #   路由级页面，一路由一文件，后缀 View
@@ -57,8 +56,8 @@ specworld/
 │   │   ├── assets.ts      #     资源路径（跟着 BASE_URL 走，Toy 挂子路径用）
 │   │   └── site.ts        #     站点标识单一真源（仓库/许可证/字体名，见 §2.5.2）
 │   ├── router/            #   路由表（hash 模式，见 §1.4；表单独 export 供 SSR 冒烟复用）
-│   ├── i18n/              #   vue-i18n 装配（缺键抛错、locale 存取、currentLocale）
-│   ├── locales/           #   语言包 zh.json / en.json（键必须一一对应，见 §2.6）
+│   ├── i18n/              #   中文单语文案字典（t() + 缺键抛错；2026-10-21 移除多语言）
+│   ├── locales/           #   zh.json 文案字典（en 包已退役）
 │   ├── types.ts           #   前端视图模型类型（见 §1.3 命名争议）
 │   ├── env.d.ts           #   Vite 环境类型声明
 │   ├── App.vue            #   根组件（页头/页脚/筛选条）
@@ -153,7 +152,7 @@ DIMENSION_KEYS = IDENTITY_KEYS + schema 里 facet:true 的参数维度
 `品类是筛选条的第一个维度` 钉死 —— 改顺序会报红。
 
 > 参数维度不写死在代码里：schema 某字段标了 `facet:true` 就自动成为筛选维度，
-> 展示名取 schema 的 `label/labelEn`（数据侧双语）。加维度 = 改 schema，不改 facets.ts。
+> 展示名取 schema 的 `label`（中文单语；数据侧英文名已于 2026-10-23 删除）。加维度 = 改 schema，不改 facets.ts。
 
 > 品牌页与机型库对比页**必须共用同一个 `FilterBar` 与 `facets.ts`**，
 > 否则「苹果折叠屏」在两页会给出不同答案（同一个问题两个答案就是 bug）。
@@ -296,8 +295,9 @@ npm run lint        # 只报告，CI 用
   站外链接一律 `target="_blank" rel="noopener noreferrer"`；
   站内相对资源走 `lib/assets.ts` 的 `asset()`，**不许硬写 `./`**；
 
-自动检查：`_smoke.cjs` / `_smoke-search.cjs`（puppeteer，真机加载 SPA、
-查控制台错误、验证路由与搜索三态）。
+自动检查：`scripts/smoke/_smoke.cjs` / `scripts/smoke/_smoke-search.cjs`
+（puppeteer，真机加载 SPA、查控制台错误、验证路由与搜索三态；
+2026-10-21 从仓库根目录归位到 `scripts/smoke/`，`npm run smoke` / `smoke:search` 入口不变）。
 （2026-10-15 去像素化后 `_smoke-pixel.cjs` / `_smoke-font.cjs` 随像素立绘与
 自定义字体一并退役；2026-10-17 补注销 CI 里对已删脚本的引用。）
 ⚠️ **smoke 脚本不跑等于没有**：新增页面要确认被某个脚本或 selftest 的
@@ -322,7 +322,13 @@ npm run lint        # 只报告，CI 用
 
 ---
 
-## 2.6 文案与多语言（i18n）纪律 🔴
+## 2.6 文案与多语言（i18n）纪律 🔴【已退役 2026-10-21】
+
+> ⚠️ **本节按用户裁决退役**：vue-i18n / en 语言包 / 语言切换 / `i18n:residual` /
+> `smoke:i18n` / `lib/i18n-keys.mjs` 对账 / `data/curated/glossary.json` 全部移除。
+> 站内为**中文单语**：文案字典 `src/locales/zh.json` + `src/i18n/index.ts` 的 `t()`
+> （缺键抛错、`{x}` 插值）。下面的历史纪律保留作档案——其中「缺键抛错不静默回退」
+> 这一条在单语字典里依然成立，继续守。
 
 > 背景：本项目原来是**诚实单语**（界面全中文、无 i18n 机制，约 150 处硬编码）。
 > 2026-10-13 全量改造为 vue-i18n（`zh-CN` / `en`）。做这套纪律的唯一理由是
@@ -358,23 +364,31 @@ npm run lint        # 只报告，CI 用
   恰好相同而「看起来是对的」，故障藏了整整一轮。
   **「看起来对」的那部分，正是最会掩护故障的部分。**
 
-### 2.6.3 数据侧双语成对
+### 2.6.3 数据侧双语成对【已删除 2026-10-23】
 
-`label` 与 `labelEn` 必须成对出现（`unit`/`unitEn`、`name`/`nameEn` 同理）：
+> ⚠️ **本节所述双语字段已整体删除**：`labelEn / titleEn / unitEn / nameEn / lineEn /
+> fallbackLabelEn / chipPrefixEn` 共 1050 个字段、20 个数据文件（schemas ×17 /
+> categories / facets / views），语义对账确认「只少了英文键、无其它改动」。
+> 保留的英文只有官方名与身份字段（`products[].name`、`vendors[].name`、`modelCode`），
+> 它们不是翻译。下表为历史档案，不再适用。
 
-| 文件 | 双语字段 |
+| 文件 | 双语字段（历史） |
 |---|---|
 | `data/schemas/phone.json` | 48 个字段的 `labelEn`，中英不同形的单位补 `unitEn`（英寸→in、核→cores、小时→h） |
-| `data/view-phone.json` | 每个 `groups[].titleEn`、每个有 `label` 的行的 `labelEn` |
+| `data/views/phone.json` | 每个 `groups[].titleEn`、每个有 `label` 的行的 `labelEn` |
 | `data/curated/facets.json` | `variants[].labelEn`、品牌 `series[].labelEn`、`priceBuckets[].labelEn`、`fallbackLabelEn`、`lineEn`、`chipPrefixEn` |
 
-**管线写进数据的文案也要键化**，不能让管线拼中文串：
+**管线写进数据的文案仍要键化**（中文单语下继续有效）：
 `scripts/sync/index.mjs` 给 `snapshot.sources[].note` 写的是中文
-（「64 条取证，0 条未解决」），前端直接展示就会在英文页吐中文。
-现在同时写 `noteKey` + `noteParams`，前端按语言渲染，**数字走插值参数**而不是拼进句子。
-改了这里必须重跑 `node scripts/pipeline.mjs --data-only` 再生一次产物。
+（「64 条取证，0 条未解决」），同时写 `noteKey` + `noteParams`，
+About 页按 `noteKey` 查 `src/locales/zh.json` 渲染、**数字走插值参数**而不是拼进句子
+（改了文案措辞不用重跑管线）。改了这里必须重跑 `node scripts/pipeline.mjs --data-only` 再生一次产物。
 
-### 2.6.4 两道闸门（都必须能报红，已反向测过）
+### 2.6.4 两道闸门（都必须能报红，已反向测过）【均随多语言退役 2026-10-21】
+
+> ⚠️ 下表两道闸门均已删除（语言包对账随 `src/locales/en.json` 退役、
+> SSR 双语冒烟随 `smoke:i18n` 退役）。保留作历史档案。
+> 单语字典仍有「缺键抛错」兜底：`t()` 打错键名当场抛，不静默回退。
 
 | 闸门 | 命令 | 拦什么 |
 |---|---|---|
@@ -521,7 +535,7 @@ specs 里的值是**中文官网原文**（数据诚信：不改写、不换算�
 | 项 | 规则 |
 |---|---|
 | 管线侧（`scripts/**`） | **只用 Node 内置模块**（`node:*`），零第三方依赖 |
-| 前端侧（`src/**`） | 依赖保持在个位数，当前为 `vue` + `vue-router` + `vue-i18n`（i18n 见 §2.6） |
+| 前端侧（`src/**`） | 依赖保持在个位数，当前为 `vue` + `vue-router`（i18n 已于 2026-10-21 移除，见 §2.6） |
 | 提交的 `package-lock.json` | `resolved` **只允许** `registry.npmjs.org`（见 `PRINCIPLES.md` §9） |
 | 新增依赖 | 先问「能不能用内置能力写」；必须加时说清替代方案与成本 |
 
@@ -533,8 +547,7 @@ specs 里的值是**中文官网原文**（数据诚信：不改写、不换算�
 | 命令 | 作用 | 何时必须跑 |
 |---|---|---|
 | `npm run data` | 跑数据管线（`--data-only`） | 改了解析器/闸门 |
-| `npm run selftest` | 纯函数自测（不联网、~1s，含 i18n 对账闸门） | **改解析器/闸门/几何/语言包前必跑** |
-| `npm run smoke:i18n` | 全站 SSR 双语冒烟（13 路由 × 2 语言） | **改了界面文案 / 加删语言包键必跑**（见 §2.6.4） |
+| `npm run selftest` | 纯函数自测（不联网、~1s） | **改解析器/闸门/几何前必跑** |
 | `npm run build` | 构建（含 prebuild 同步 + postbuild 闸门） | 交付前 |
 | `npm run lint` / `lint:fix` | 风格检查 / 自动修 | 交付前 |
 | `npm run format` | Prettier 格式化 | 交付前 |

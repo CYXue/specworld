@@ -7,8 +7,8 @@
 | 项 | 决定 |
 |---|---|
 | 品类 | **全品类 17 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / audio / media / tracker / network / pda / input / printer / storage / accessory |
-| 品牌 | **华为 + 苹果** |
-| 机型 | **913 台**（苹果 864 / 华为 49）。两条收录通道：① 官网抓取，按收录窗口 `WINDOW_START = 2024-09-01` 过滤；② 用户数据层 `add-product` **显式收录，不过窗口**（苹果老产品线 1976–2023 全部由此进站）——状态（在售/未发售/已停售）区分生命周期，与窗口无关 |
+| 品牌 | **苹果 + 华为 + 小米** |
+| 机型 | **全量收录**（2026-10-25 起，`WINDOW_START = 2000-01-01` 等效全量，机制保留可回退）。两条收录通道：① 官网抓取，官网在售目录全部进站；② 用户数据层 `add-product` **显式收录**——状态（在售/未发售/已停售）区分生命周期。官网已下架的历史机型不在采集范围，见 `docs/HISTORICAL-CATALOG-PLAN.md`（立项中） |
 | 形态 | 纯静态站（零后端），已送审 B 站 Toy（slug=specworld） |
 | 数据 | 厂商官网规格页为主源，**不做跑分/成绩分**（无可公开核查的第三方成绩源），缺数据一律 `null` |
 
@@ -45,7 +45,7 @@ docs/SPEC-PARAMETER-WORLD.md 本项目规范提炼（架构三硬规矩 + 指纹
 docs/MIGRATION-HANDBOOK.md **迁移手册**（两项目交集：七条骨架 + 领域无关判据 + 10 条实施踩坑 + 可复制骨架代码）
 src/types.ts            前端视图模型（与 data/products.json 对齐）
 src/lib/types.ts        管线侧数据契约（Node 侧；与上面同名不同职责，见 CONVENTIONS §1.3）
-src/locales/            zh/en 界面语言包（vue-i18n；参数值官方术语表在 data/curated/glossary.json）
+src/locales/            zh 界面文案字典（中文单语；2026-10-21 移除多语言，en 包已退役）
 src/lib/                渲染层逻辑：数据装载、规格分组、能力横条、搜索
 src/components/         17 个现代风组件（AppTopNav/ProductCard/FilterBar/CompareTable/…）
 src/views/              9 个页面（广场/机型详情/品牌/对比/榜单/时间线/搜索/关于 + 404）
@@ -64,7 +64,7 @@ scripts/publish/        内容指纹、产物闸门 verify-dist、依赖源规�
 admin/                  后台编辑器（overrides 录入/审核；刻意不放 public/，dist 不携带）
 data/categories.json    品类注册表（全品类目录入口：id → schemas/<id>.json）
 data/schemas/           各品类字段表（当前仅 phone.json；新增品类 = 加一行 + 加一份字段表）
-data/curated/           人工策展数据（facets 分面档位 / glossary 参数值官方术语表）
+data/curated/           人工策展数据（facets 分面档位；glossary 术语表已随多语言退役删除）
 data/products.json      唯一数据契约产物（提交入库）
 data/release-dates.json 发布日期取证表（**curated 数据**，人工核对，必须入库）
 data/discovery-pending.json 待收录队列（**curated 数据**，缺发布日期的机型，只在非空时存在）
@@ -153,9 +153,10 @@ node scripts/qa/stale-lineup.mjs         # 池子里有没有过时机型
 
 ## 新机没出现？先看待收录队列
 
-苹果新机发布了、官网也抓到了，但站上没有——**不是取数失败，是它缺发布日期**。
-官网抓取通道按发布日期过滤（`WINDOW_START = 2024-09-01`），拿不到日期就判不了在不在窗口内。
-（注意口径：窗口只管官网抓取；用户数据层 `add-product` 是显式收录，不过窗口。）
+新机发布了、官网也抓到了，但站上没有——**不是取数失败，是它缺发布日期**。
+发布日期是进站硬条件（排序与生命周期都依赖它），拿不到日期就进不了 `data/products.json`。
+2026-10-25 起收录已取消滚动窗口（`WINDOW_START = 2000-01-01` 等效全量，见 `scripts/lib/window.mjs`），
+官网在售目录全量进站；用户数据层 `add-product` 是显式收录。
 
 以前这类机器被丢进 `_work/sync-report.json` 就没了，而 `_work/` 在 `.gitignore` 里——
 **12 小时后没人知道它存在过**。现在它们进 `data/discovery-pending.json`（入库）：
