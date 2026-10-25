@@ -4750,6 +4750,376 @@
       "source": "manual",
       "sourceUrl": "https://news.qq.com/rain/a/20210225A0EP9I00",
       "note": "检索取证式采集（历史机型）：发布于2021-02-25，3月15日首卖；70Wh电池+100W Type-C充电器；尺寸为长×宽×厚"
+    },
+    {
+      "id": "mx-router-ax5",
+      "name": "Redmi 路由器 AX5",
+      "brand": "xiaomi",
+      "date": "2020-06-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2112811.html",
+      "note": "检索取证式采集（历史机型）：2020-06-09上午官宣，6月10日预售开售，249元（到手229元）。内存256MB"
+    },
+    {
+      "id": "mx-router-ax6",
+      "name": "Redmi 路由器 AX6",
+      "brand": "xiaomi",
+      "date": "2020-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/502/757.htm",
+      "note": "检索取证式采集（历史机型）：2020-08-11上架开启预售，8月14日开售，399元。内存512MB"
+    },
+    {
+      "id": "mx-router-ax1800",
+      "name": "小米路由器 AX1800",
+      "brand": "xiaomi",
+      "date": "2020-05-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/7wRRKDZIE6Y",
+      "note": "检索取证式采集（历史机型）：2020-05-13亮相（小米第二款WiFi 6路由器，5月15日预售），329元。128MB闪存、256MB内存"
+    },
+    {
+      "id": "mx-router-ax6000",
+      "name": "小米路由器 AX6000",
+      "brand": "xiaomi",
+      "date": "2020-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/527/127.htm",
+      "note": "检索取证式采集（历史机型）：2020-12-28小米11发布会发布，2021-01-08全渠道开售，599元。另有2.5G WAN/LAN网口；内存512MB"
+    },
+    {
+      "id": "mx-ac-1a1",
+      "name": "小米/米家空调 1匹 巨省电（KFR-26GW/N1A1）",
+      "brand": "xiaomi",
+      "date": "2020-11-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://finance.sina.com.cn/tech/2020-11-17/doc-iiznctke1889879.shtml",
+      "note": "检索取证式采集（历史机型）：2020-11-17发布，11月20日开售，1匹售价2299元；尺寸/噪音/能效参数取自苏宁官方旗舰店KFR-26GW/N1A1详情页（https://www.suning.com/item/0010328335/122"
+    },
+    {
+      "id": "mx-fridge-160l",
+      "name": "米家两门冰箱 160L（BCD-160MDMJ01）",
+      "brand": "xiaomi",
+      "date": "2019-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/449/663.htm",
+      "note": "检索取证式采集（历史机型）：2019-10-11发布，10-15首卖，999元。直冷、7档控温；IT之家正文写尺寸474×535×1496mm，ZOL（https://detail.zol.com.cn/1296/1295991/param.sht"
+    },
+    {
+      "id": "mx-washer-1a",
+      "name": "米家滚筒洗烘一体机 1A 8kg",
+      "brand": "xiaomi",
+      "date": "2019-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://product.yesky.com/product/1074/1074032/param.shtml",
+      "note": "检索取证式采集（历史机型）：2019-06-11北京发布会发布，6月16日开售，1999元（首发1699元）。ZOL『米家变频滚筒洗衣机1A』页尺寸为535×598×850mm、重57kg，与洗烘一体机1A参数略有出入，此处取洗烘一体机1A（yes"
+    },
+    {
+      "id": "mx-air-purifier-2s",
+      "name": "小米米家空气净化器 2S（AC-M4-AA）",
+      "brand": "xiaomi",
+      "date": "2017-11-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.znj.com/news/1995.html",
+      "note": "检索取证式采集（历史机型）：2017-11-08官网上架、11-11双11开售，899元；颗粒物CADR 310m³/h、额定功率29W（小米商城 https://www.mi.com/air2s/specs 官方规格页未列噪音数值，噪音取智能家汇"
+    },
+    {
+      "id": "mx-air-purifier-3",
+      "name": "米家空气净化器 3（AC-M6-SC）",
+      "brand": "xiaomi",
+      "date": "2019-08-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://app-common.ks3-cn-beijing.ksyun.com/%E7%B1%B3%E5%AE%B6%E7%A9%BA%E6%B0%94%E5%87%80%E5%8C%96%E5%99%A83%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%E4%B9%A6.pdf",
+      "note": "检索取证式采集（历史机型）：2019-08-09小米商城上线（发布）、8-16开售，899元，CADR 400m³/h、额定功率38W；噪音64dB(A)为说明书额定最大值（官方宣传最低32.1dB(A)）。三维已归一为 高×宽×深（原口径 宽24"
+    },
+    {
+      "id": "mx-buds-3",
+      "name": "Xiaomi Buds 3",
+      "brand": "xiaomi",
+      "date": "2021-12",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/xiaomi-buds-3/specs",
+      "note": "检索取证式采集（历史机型）：日期精度为月（发布会2021-12-28，来源仅见月度信息）。官网规格页载：型号M2111E1、蓝牙5.2、Product net weight 52g、阻抗32Ω；续航7h/32h、40dB三档降噪、单耳4.6g来自3"
+    },
+    {
+      "id": "mx-buds-3-pro",
+      "name": "Xiaomi Buds 3T Pro",
+      "brand": "xiaomi",
+      "date": "2021-12",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/xiaomi-buds-3t-pro/specs",
+      "note": "检索取证式采集（历史机型）：日期精度为月（2021-12）。官网规格页载：型号M2115E1、蓝牙5.2、Net weight 48g、阻抗32Ω。降噪/单次续航/带盒续航/单耳重量在本次检索到的摘要中未给出，按规则填null未估算"
+    },
+    {
+      "id": "mx-buds-4-pro",
+      "name": "Xiaomi Buds 4 Pro",
+      "brand": "xiaomi",
+      "date": "2022-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/xiaomi-buds-4-pro/specs",
+      "note": "检索取证式采集（历史机型）：官网规格页载：单耳5.0g(±0.2g)、充电盒39.5g(±1g)、总重49.5g(±1g)、蓝牙5.3、阻抗16Ω、耳塞53mAh/盒565mAh。发布日2022-08-11（雷军年度演讲当日，什么值得买/今日头条摘"
+    },
+    {
+      "id": "mx-buds-4",
+      "name": "Xiaomi Buds 4",
+      "brand": "xiaomi",
+      "date": "2022-12-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.sohu.com",
+      "note": "检索取证式采集（历史机型）：日期2022-12-11（知乎横评摘要明确'Buds 4是小米在2022年12月11日发布'；搜狐发布报道日期2022-12-12）。摘要口径：'支持单次6小时续航，总续航达30小时'、半入耳式舒适降噪（自适应降噪）、L"
+    },
+    {
+      "id": "mx-redmi-buds-4",
+      "name": "Redmi Buds 4",
+      "brand": "xiaomi",
+      "date": "2022-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/redmi-buds-4/specs",
+      "note": "检索取证式采集（历史机型）：日期精度为月（2022-06，搜狐开箱简评2022-06-17'才199还有降噪'）。官网规格页载：型号M2137E1、单耳净重约4.5g、含盒总重约55g、蓝牙5.2、阻抗16Ω±15%。摘要口径（凤凰网/搜狐）：'支"
+    },
+    {
+      "id": "mx-redmi-buds-5",
+      "name": "Redmi Buds 5",
+      "brand": "xiaomi",
+      "date": "2023-09-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/global/product/redmi-buds-5/specs",
+      "note": "检索取证式采集（历史机型）：发布日2023-09-21（IT之家/搜狐：9月21日晚Redmi新品发布会发布，199元起）。官网规格页载：单耳5.3g、盒31.4g、总重42g、蓝牙5.3、阻抗32Ω。摘要口径（ZOL/什么值得买）：'46db降噪"
+    },
+    {
+      "id": "hw-freebuds-4i",
+      "name": "华为 FreeBuds 4i",
+      "brand": "huawei",
+      "date": "2021-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn",
+      "note": "检索取证式采集（历史机型）：日期精度为月（2021-03，知乎文章2021-03-10、ZOL参数页2021-03-15）。摘要口径（太平洋）：'驱动单元/直径 10mm动圈单元'、'聆听音乐时长：7.5小时(降噪开)；10小时(降噪关)'，取降噪"
+    },
+    {
+      "id": "hw-freebuds-pro-2",
+      "name": "华为 FreeBuds Pro 2",
+      "brand": "huawei",
+      "date": "2022-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.sohu.com",
+      "note": "检索取证式采集（历史机型）：国内发布2022-07-27（搜狐'重量'文章日期；此前2022-06海外首发）。摘要口径：'单耳重量约 6.1克 ± 0.2克'；'30小时续航'与'最高47dB降噪深度、帝瓦雷调音、ANC主动降噪'。单次续航/蓝牙版"
+    },
+    {
+      "id": "hw-freebuds-5",
+      "name": "华为 FreeBuds 5",
+      "brand": "huawei",
+      "date": "2023-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn",
+      "note": "检索取证式采集（历史机型）：日期精度为月（来源今日头条摘要明确'华为FreeBuds 5于2023年3月正式发布'，与清单预估的2023-05不符，以来源为准）。摘要口径（太平洋）：'聆听音乐时长 降噪开:3.5小时 降噪关:5.0小时'，取降噪关"
+    },
+    {
+      "id": "hw-freebuds-pro-3",
+      "name": "华为 FreeBuds Pro 3",
+      "brand": "huawei",
+      "date": "2023-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com",
+      "note": "检索取证式采集（历史机型）：发布日2023-09-25（IT之家：'1499 元…正式发布：搭载麒麟 A2 芯片'，9-15开启预售）。摘要口径：智能动态ANC 3.0降噪系统（主动降噪能力提升50%）；ZOL促销页口径'续航可达4.5小时(单次)"
+    },
+    {
+      "id": "mz-mi-note-2",
+      "name": "小米Note 2",
+      "brand": "xiaomi",
+      "date": "2016-10-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/minote2/specs",
+      "note": "检索取证式采集（历史机型）：发布日2016-10-25（360百科：北京大学体育馆发布会）。官网规格页摘录：标准版4GB+64GB、特别版6GB+64GB、高配6GB+128GB；4070mAh(typ)/4000mAh(min)；'支持快充3.0"
+    },
+    {
+      "id": "mz-mi-2s",
+      "name": "小米手机2S",
+      "brand": "xiaomi",
+      "date": "2013-04-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn",
+      "note": "检索取证式采集（历史机型）：32GB版太平洋参数页载'发布时间 2013年年4月9日'；ZOL摘要载145g、'高通 骁龙Snapdragon APQ8064 Pro'、2000mAh；太平洋载'高通骁龙600 1.7GHz(4核)'、'4.3英寸"
+    },
+    {
+      "id": "mz-mi-5s",
+      "name": "小米5s",
+      "brand": "xiaomi",
+      "date": "2016-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mi5s/specs",
+      "note": "检索取证式采集（历史机型）：日期精度为月（360百科'2016年9月发布'；官网未载发布日）。官网规格页摘录：4GB+32GB / 3GB+64GB / 4GB+128GB三种组合、3200mAh(typ)/3100mAh(min)、'新一代快充 "
+    },
+    {
+      "id": "mz-mi-5x",
+      "name": "小米5X",
+      "brand": "xiaomi",
+      "date": "2017-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mi5x/specs",
+      "note": "检索取证式采集（历史机型）：日期精度为月（2017-07发布，官网页未载具体日）。官网规格页摘录：4GB+64GB / 4GB+32GB、3080mAh(typ)/3000mAh(min)、'5V/2A 充电'（5V×2A=10W）、重量165g、"
+    },
+    {
+      "id": "hn-honor-6",
+      "name": "荣耀6",
+      "brand": "honor",
+      "date": "2014-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "http://detail.zol.com.cn/384/383798/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL上市日期为2014年06月，仅月精度；有线充电功率该参数页未列出，置null。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-7",
+      "name": "荣耀7",
+      "brand": "honor",
+      "date": "2015-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://finance.china.com.cn/roll/20150701/3204420.shtml",
+      "note": "检索取证式采集（历史机型）：日期精度为月（2015年6月发布）；尺寸/重量等摘自搜狗元宝摘要（引百度百科/ZOL），中国网文章用于发布时间佐证；快充功率来源未明确给出，置null。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-8",
+      "name": "荣耀8",
+      "brand": "honor",
+      "date": "2016-07-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1150/1149191/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL上市日期为2016年07月（月精度），发布日2016-07-11取自太平洋产品库荣耀8条目；快充功率该参数页未列出，置null。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-9",
+      "name": "荣耀9",
+      "brand": "honor",
+      "date": "2017-06-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1166/1167243/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL上市日期2017年06月16日；发布会日期2017-06-12取自太平洋产品库荣耀9条目；屏幕材质与快充功率该参数页未列出，置null。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-10",
+      "name": "荣耀10",
+      "brand": "honor",
+      "date": "2018-04-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/mobile/honor/1062508.html",
+      "note": "检索取证式采集（历史机型）：电池容量太平洋标注为3400mAh（典型值）；发布日期2018-04-19见中国经济网报道。wiredChargeW 22.5W（原文 5V/4.5A 超级快充）。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-20",
+      "name": "荣耀20",
+      "brand": "honor",
+      "date": "2019-05-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/mobile/honor/1135167.html",
+      "note": "检索取证式采集（历史机型）：2019年5月31日国内发布（上海发布会，2019年6月1日发售）；尺寸/重量/分辨率等摘自太平洋参数页。wiredChargeW 22.5W（SuperCharge）。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-30",
+      "name": "荣耀30",
+      "brand": "honor",
+      "date": "2020-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1318/1317141/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL记录国内发布时间2020年04月15日、上市日期2020年04月21日；屏幕刷新率参数页未列出，置null。wiredChargeW 40W（原文 10V/4A，兼容5V/4.5A）。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-v10",
+      "name": "荣耀V10",
+      "brand": "honor",
+      "date": "2017-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.so.com/doc/27073400-28456967.html",
+      "note": "检索取证式采集（历史机型）：北京发布；充电仅记原文「支持快速充电(5V4.5A)」，未换算瓦数（≈22.5W 但原文未标 → wiredChargeW null）；8GB RAM档见ZOL「荣耀V10（8GB RAM/全网通）」参数页标题。三维为高"
+    },
+    {
+      "id": "hn-honor-50",
+      "name": "荣耀50",
+      "brand": "honor",
+      "date": "2021-06-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.cnmo.com/1626/1625566/param.shtml",
+      "note": "检索取证式采集（历史机型）：尺寸/重量/快充口径来自搜狗摘要中什么值得买商品页（宽73.76mm；长159.96mm；厚7.78mm；机身重量175g；66W）；屏幕与配置另有中关村在线行情页佐证。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-70",
+      "name": "荣耀70",
+      "brand": "honor",
+      "date": "2022-05-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.chinaz.com/top/ask/609_710.shtml",
+      "note": "检索取证式采集（历史机型）：2022年5月30日晚发布；重量约178克（含电池）；存储档位来源未完整列出（京东在售可见12GB+256GB）→ 置 null。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-magic-5",
+      "name": "荣耀Magic5",
+      "brand": "honor",
+      "date": "2023-02-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.hihonor.com/cn/phones/honor-magic5/spec/",
+      "note": "检索取证式采集（历史机型）：太平洋产品库上市日期记为2023-02-27（至臻版2023-03-06，国内发布会为3月6日）；重量玻璃版191g、素皮版187g。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-magic-6",
+      "name": "荣耀Magic6",
+      "brand": "honor",
+      "date": "2024-01-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/745/888.htm",
+      "note": "检索取证式采集（历史机型）：2024-01-11发布（太平洋产品库口径），2024-01-18 10:08开售（IT之家）；重量玻璃版206g、素皮版199g；分辨率IT之家正文作2800×1280，天极网参数页作2800*1264，按IT之家摘录"
+    },
+    {
+      "id": "hn-honor-x50",
+      "name": "荣耀X50",
+      "brand": "honor",
+      "date": "2023-07-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.hihonor.com/cn/phones/honor-x50/spec/",
+      "note": "检索取证式采集（历史机型）：太平洋产品报价：6.78英寸/2652×1200/120Hz AMOLED/骁龙6 Gen 1/8、12、16GB/128、256、512GB/5800mAh/35W；尺寸重量来自honor官网摘要（长163.6mm 宽"
+    },
+    {
+      "id": "hn-magic-v2",
+      "name": "荣耀Magic V2",
+      "brand": "honor",
+      "date": "2023-07-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.jiuphone.com/sjwt/24070.html",
+      "note": "检索取证式采集（历史机型）：2023-07-12发布，8999元起（ZOL）；重量素皮版约231g、玻璃版约237g（honor官网/九锋网一致）；三维取展开态三元（素皮版 高156.7×宽145.4×厚4.7），折叠态厚9.9mm（玻璃版10.1"
     }
   ],
   "unresolved": []
