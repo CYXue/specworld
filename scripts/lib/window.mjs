@@ -10,8 +10,12 @@ import { fileURLToPath } from 'node:url';
  *
  * 历史教训：两处各写一份 '2024-09-01' 字面量，改窗口时漏一处会导致
  * 「normalize 说在窗口内、sync 闸门又丢掉」的静默分叉。
+ *
+ * 2026-10-25 用户裁决：取消窗口、官网在售目录全量进站（小米 159 / 华为 166 全进）。
+ * 起点设为 '2000-01-01'（等效全量）；机制保留，env WINDOW_START 或改回字面量即可回退。
+ * 旧口径 '2024-09-01'（26 个月滚动）见 git 历史。
  */
-export const WINDOW_START = '2024-09-01';
+export const WINDOW_START = '2000-01-01';
 
 /** 精度不足的日期落在这个缓冲区内时，标记为「窗口边界不确定」而不是悄悄收录 */
 export const WINDOW_FUZZ_DAYS = 45;

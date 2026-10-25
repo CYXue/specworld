@@ -33,12 +33,52 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { windowStartEffective } from '../lib/window.mjs';
 import { mapAppleSpecs, mapAppleCompare, APPLE_SHARED_MARK } from './brands/apple.mjs';
-import { mapHuawei } from './brands/huawei.mjs';
+import {
+  mapHuawei,
+  mapHuaweiTablet,
+  mapHuaweiWearable,
+  mapHuaweiMonitor,
+  mapHuaweiLaptop,
+  mapHuaweiAudio,
+  mapHuaweiVision,
+  mapHuaweiRouter,
+} from './brands/huawei.mjs';
+import {
+  mapXiaomi,
+  mapXiaomiTablet,
+  mapXiaomiLaptop,
+  mapXiaomiVision,
+  mapXiaomiWearable,
+  mapXiaomiAudio,
+  mapXiaomiMonitor,
+  mapXiaomiRouter,
+  mapXiaomiAppliance,
+  mapXiaomiHistory,
+} from './brands/xiaomi.mjs';
 import { sliceByVariants, stripInvisible } from './parse.mjs';
 import { put, putObject, addNote, tidy, AP, AC } from './shared.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const WORK = join(ROOT, '_work');
 const SRC_HUAWEI = join(WORK, 'huawei.raw.json');
+const SRC_HUAWEI_TABLETS = join(WORK, 'huawei-tablets.raw.json');
+const SRC_HUAWEI_WEARABLES = join(WORK, 'huawei-wearables.raw.json');
+const SRC_HUAWEI_MONITORS = join(WORK, 'huawei-monitors.raw.json');
+const SRC_HUAWEI_LAPTOPS = join(WORK, 'huawei-laptops.raw.json');
+const SRC_HUAWEI_AUDIO = join(WORK, 'huawei-audio.raw.json');
+const SRC_HUAWEI_VISIONS = join(WORK, 'huawei-visions.raw.json');
+const SRC_HUAWEI_ROUTERS = join(WORK, 'huawei-routers.raw.json');
+const SRC_XIAOMI = join(WORK, 'xiaomi.raw.json');
+const XIAOMI_CHANNELS = [
+  ['tablet', 'xiaomi-tablet.raw.json', mapXiaomiTablet],
+  ['laptop', 'xiaomi-laptop.raw.json', mapXiaomiLaptop],
+  ['tv', 'xiaomi-tv.raw.json', mapXiaomiVision],
+  ['wearable', 'xiaomi-wearable.raw.json', mapXiaomiWearable],
+  ['headset', 'xiaomi-headset.raw.json', mapXiaomiAudio],
+  ['speaker', 'xiaomi-speaker.raw.json', mapXiaomiAudio],
+  ['display', 'xiaomi-display.raw.json', mapXiaomiMonitor],
+  ['network', 'xiaomi-network.raw.json', mapXiaomiRouter],
+  ['appliance', 'xiaomi-appliance.raw.json', mapXiaomiAppliance],
+];
 const SRC_APPLE = join(WORK, 'apple.raw.json');
 const SRC_APPLE_COMPARE = join(WORK, 'apple-compare.raw.json');
 const SRC_APPLE_PRICES = join(WORK, 'apple-prices.raw.json');
@@ -267,6 +307,126 @@ function main() {
 
   /* --- 通道 A：华为规格页 --- */
   const huaweiRecords = huawei.products.map(mapHuawei);
+  for (const r of huaweiRecords) r.category = 'phone'; // 数据源层显式声明品类
+
+  /* --- 通道 A2：华为平板规格页（可选：_work/huawei-tablets.raw.json 存在才跑）---
+   * 与通道 A 同一套采集器（--category tablets），映射器显式声明 category='tablet'。
+   * 品类声明纪律：各通道**显式**声明，缺失由 sync 闸门拦截（见下方一致性自检）。
+   */
+  let huaweiTabletStatus = '未就绪';
+  let huaweiTabletRecords = [];
+  if (existsSync(SRC_HUAWEI_TABLETS)) {
+    const tablets = JSON.parse(readFileSync(SRC_HUAWEI_TABLETS, 'utf8'));
+    huaweiTabletRecords = tablets.products.map(mapHuaweiTablet);
+    huaweiTabletStatus = `就绪（${huaweiTabletRecords.length} 台）`;
+  }
+
+  /* --- 通道 A3：华为穿戴规格页（可选：_work/huawei-wearables.raw.json 存在才跑）--- */
+  let huaweiWearableStatus = '未就绪';
+  let huaweiWearableRecords = [];
+  if (existsSync(SRC_HUAWEI_WEARABLES)) {
+    const wearables = JSON.parse(readFileSync(SRC_HUAWEI_WEARABLES, 'utf8'));
+    huaweiWearableRecords = wearables.products.map(mapHuaweiWearable);
+    huaweiWearableStatus = `就绪（${huaweiWearableRecords.length} 台）`;
+  }
+
+  /* --- 通道 A4：华为显示器规格页（可选：_work/huawei-monitors.raw.json 存在才跑）--- */
+  let huaweiMonitorStatus = '未就绪';
+  let huaweiMonitorRecords = [];
+  if (existsSync(SRC_HUAWEI_MONITORS)) {
+    const monitors = JSON.parse(readFileSync(SRC_HUAWEI_MONITORS, 'utf8'));
+    huaweiMonitorRecords = monitors.products.map(mapHuaweiMonitor);
+    huaweiMonitorStatus = `就绪（${huaweiMonitorRecords.length} 台）`;
+  }
+
+  /* --- 通道 A5：华为笔记本规格页（可选：_work/huawei-laptops.raw.json 存在才跑）--- */
+  let huaweiLaptopStatus = '未就绪';
+  let huaweiLaptopRecords = [];
+  if (existsSync(SRC_HUAWEI_LAPTOPS)) {
+    const laptops = JSON.parse(readFileSync(SRC_HUAWEI_LAPTOPS, 'utf8'));
+    huaweiLaptopRecords = laptops.products.map(mapHuaweiLaptop);
+    huaweiLaptopStatus = `就绪（${huaweiLaptopRecords.length} 台）`;
+  }
+
+  /* --- 通道 A6：华为音频规格页（可选：_work/huawei-audio.raw.json 存在才跑）---
+   * 音频品类跨三个官网目录段（audio/headphones/speakers），采集器按条目实际段抓取。 */
+  let huaweiAudioStatus = '未就绪';
+  let huaweiAudioRecords = [];
+  if (existsSync(SRC_HUAWEI_AUDIO)) {
+    const audio = JSON.parse(readFileSync(SRC_HUAWEI_AUDIO, 'utf8'));
+    huaweiAudioRecords = audio.products.map(mapHuaweiAudio);
+    huaweiAudioStatus = `就绪（${huaweiAudioRecords.length} 台）`;
+  }
+
+  /* --- 通道 A7：华为智慧屏规格页（可选：_work/huawei-visions.raw.json 存在才跑）---
+   * 智慧屏落 media 品类（与 Apple TV 同品类），跨主段与嵌套段 visions/huawei-vision。 */
+  let huaweiVisionStatus = '未就绪';
+  let huaweiVisionRecords = [];
+  if (existsSync(SRC_HUAWEI_VISIONS)) {
+    const visions = JSON.parse(readFileSync(SRC_HUAWEI_VISIONS, 'utf8'));
+    huaweiVisionRecords = visions.products.map(mapHuaweiVision);
+    huaweiVisionStatus = `就绪（${huaweiVisionRecords.length} 台）`;
+  }
+
+  /* --- 通道 A8：华为路由器规格页（可选：_work/huawei-routers.raw.json 存在才跑）--- */
+  let huaweiRouterStatus = '未就绪';
+  let huaweiRouterRecords = [];
+  if (existsSync(SRC_HUAWEI_ROUTERS)) {
+    const routers = JSON.parse(readFileSync(SRC_HUAWEI_ROUTERS, 'utf8'));
+    huaweiRouterRecords = routers.products.map(mapHuaweiRouter);
+    huaweiRouterStatus = `就绪（${huaweiRouterRecords.length} 台）`;
+  }
+
+  /* --- 通道 X1：小米商城规格页（可选：_work/xiaomi.raw.json 存在才跑）---
+   * 小米官方结构化数据只有「关键参数」（完整规格是图片），映射器显式声明
+   * category='phone'，覆盖率偏浅是官网结构性事实，缺的字段一律 null。 */
+  let xiaomiStatus = '未就绪';
+  let xiaomiRecords = [];
+  if (existsSync(SRC_XIAOMI)) {
+    const xiaomi = JSON.parse(readFileSync(SRC_XIAOMI, 'utf8'));
+    xiaomiRecords = xiaomi.products.map(mapXiaomi);
+    xiaomiStatus = `就绪（${xiaomiRecords.length} 台）`;
+  }
+
+  /* --- 通道 X2–X8：小米多品类（各品类 raw 文件存在才跑，采集器 --category 产出）--- */
+  const xiaomiExtraRecords = [];
+  const xiaomiExtraStatus = [];
+  for (const [cat, file, mapper] of XIAOMI_CHANNELS) {
+    const fp = join(WORK, file);
+    if (!existsSync(fp)) continue;
+    const rawCat = JSON.parse(readFileSync(fp, 'utf8'));
+    xiaomiExtraRecords.push(...rawCat.products.map(mapper));
+    xiaomiExtraStatus.push(`${cat} ${rawCat.products.length}`);
+  }
+  if (xiaomiExtraStatus.length) {
+    xiaomiStatus += `；多品类通道 ${xiaomiExtraStatus.join(' / ')}`;
+  }
+
+  /* --- 通道 X10：小米历史机型（检索取证式，data/curated/xiaomi-history*.json）---
+   * 直抓源全被墙后的路线（见 docs/HISTORICAL-CATALOG-PLAN.md §二·二）：
+   * 逐台检索取证，provenance='retrieval'，发布日期走 release-dates.json。
+   * 多批次文件按文件名拼接（batch1 数字/K 系、batch2 MIX/Civi/Note/Turbo）。 */
+  const historyFiles = [
+    join(ROOT, 'data', 'curated', 'xiaomi-history.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-batch2.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-m3.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-m2fix.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-m3b.json'),
+    join(ROOT, 'data', 'curated', 'huawei-history.json'),
+    join(ROOT, 'data', 'curated', 'huawei-history-batch2.json'),
+    join(ROOT, 'data', 'curated', 'huawei-history-m4b.json'),
+  ];
+  let historyRecords = [];
+  const historyParts = [];
+  for (const fp of historyFiles) {
+    if (!existsSync(fp)) continue;
+    const hist = JSON.parse(readFileSync(fp, 'utf8'));
+    historyRecords.push(...hist.entries.map(mapXiaomiHistory));
+    historyParts.push(hist.entries.length);
+  }
+  if (historyParts.length) {
+    xiaomiStatus += `；历史机型 ${historyRecords.length} 台（检索取证）`;
+  }
 
   /* --- 通道 B：苹果规格页（按机型拆分）---
    * 一个规格页可能含多个机型：适配器已按机型拆成独立 product（apple-iphone-18-pro /
@@ -299,6 +459,7 @@ function main() {
     }
     specsRecords.push(rec);
   }
+  for (const r of specsRecords) r.category = 'phone'; // 数据源层显式声明品类
 
   /* --- 通道 C：苹果对比页矩阵（只补规格页拿不到的机型）---
    * 矩阵一次给出全部 42 款（含 iPhone 7/8/X 这些早于窗口的老机型）。
@@ -326,8 +487,24 @@ function main() {
   let compareStatus = 'not-found';
   if (existsSync(SRC_APPLE_COMPARE)) {
     compare = JSON.parse(readFileSync(SRC_APPLE_COMPARE, 'utf8'));
-    const specIds = new Set(apple.products.map((p) => p.id));
-    const gapOnly = compare.products.filter((p) => !specIds.has(p.id));
+    // 缺口判定必须比对规格页「最终产出」的 id，不是原始产品 id：
+    // 同页拆分（一页多机型）会让 SE 2/3 这类记录 id 不出现在 apple.products 里，
+    // 只比原始 id 时矩阵通道会把它们再产一遍 → 下游 id 重复（2026-10-25 全量窗口后暴露）
+    const generatedSpecIds = new Set(specsRecords.map((r) => r.id));
+    // 用户数据层 add-product 显式收录的机型同样不得重复产出（双真源红线，
+    // 见 sync/index.mjs 队列过滤注释）：全量窗口后矩阵会把老 iPhone 全代都当「缺口」，
+    // 其中 SE 2/3 等已由用户层收录 → 排除
+    const userLayerIds = new Set();
+    const overridesPath = join(ROOT, 'data/overrides.json');
+    if (existsSync(overridesPath)) {
+      const ovr = JSON.parse(readFileSync(overridesPath, 'utf8'));
+      for (const e of ovr.entries ?? []) {
+        if (e.op === 'add-product' && e.product?.id) userLayerIds.add(e.product.id);
+      }
+    }
+    const gapOnly = compare.products.filter(
+      (p) => !generatedSpecIds.has(p.id) && !userLayerIds.has(p.id),
+    );
     for (const p of gapOnly) {
       const dated = dateById.get(p.id);
       // 只有「有取证日期且明确落在窗口外」的才在这里剪掉；
@@ -335,8 +512,11 @@ function main() {
       const outOfWindow = dated?.date
         ? Date.parse(dated.date) < Date.parse(WINDOW_START)
         : false;
-      if (!outOfWindow) compareRecords.push(mapAppleCompare(p));
-      else compareDropped.push({ id: p.id, name: p.name, date: dated.date });
+      if (!outOfWindow) {
+        const rec = mapAppleCompare(p);
+        rec.category = 'phone'; // 数据源层显式声明品类
+        compareRecords.push(rec);
+      } else compareDropped.push({ id: p.id, name: p.name, date: dated.date });
     }
     compareStatus =
       `就绪（矩阵 ${compare.products.length} 台；其中规格页没有的 ${gapOnly.length} 台，` +
@@ -361,7 +541,22 @@ function main() {
   }
 
   const byId = new Map();
-  for (const r of [...huaweiRecords, ...specsRecords, ...compareRecords]) byId.set(r.id, r);
+  for (const r of [
+    ...huaweiRecords,
+    ...huaweiTabletRecords,
+    ...huaweiWearableRecords,
+    ...huaweiMonitorRecords,
+    ...huaweiLaptopRecords,
+    ...huaweiAudioRecords,
+    ...huaweiVisionRecords,
+    ...huaweiRouterRecords,
+    ...xiaomiRecords,
+    ...xiaomiExtraRecords,
+    ...historyRecords,
+    ...specsRecords,
+    ...compareRecords,
+  ])
+    byId.set(r.id, r);
 
   /* --- 通道 D：苹果官方价格（购买页内联 JSON，逐 SKU 三重重验证）---
    * apple-prices.raw.json 的 products[] 每台带 startPriceCny + pricesByStorage。
@@ -431,16 +626,22 @@ function main() {
   }
 
   /* --- 品类声明 ---
-   * 数据源层显式声明品类：本文件是**手机专用通道**（华为/苹果官网），产出即 phone。
+   * 数据源层显式声明品类：手机通道（华为/苹果官网）产出即 phone；
+   * 平板通道（mapHuaweiTablet）在映射器里声明 category='tablet'。
    *
    * 曾经这行兜底写在 sync/index.mjs 的拍平循环里，而 validate() 的
    * 「品类缺失或未注册」闸门在那之后才跑 —— 兜底先于闸门 ⇒ 闸门永远看不到
    * 缺失值，validate.mjs 注释白纸黑字「缺失也拒绝」而实现静默放行：
    * 一个忘了声明品类的机型会被按 phone 的字段表渲染，参数表直接崩，零报错。
    *
-   * 现在各司其职：品类由数据源声明（本行），缺失与否由闸门校验
-   * （validate.mjs 的 isRegisteredCategory），同步层不再和稀泥。 */
-  for (const p of products) p.category = 'phone';
+   * 现在各司其职：品类由数据源声明（各映射器/各通道），缺失与否由闸门校验
+   * （validate.mjs 的 isRegisteredCategory），同步层不再和稀泥。
+   * 本行只做「声明齐全」的显性断言：有遗漏在这里当场炸，不留给闸门猜。 */
+  for (const p of products) {
+    if (!p.category) {
+      throw new Error(`${p.id} 未声明品类（category）——映射器必须显式声明，禁止兜底`);
+    }
+  }
 
   /* --- 自检不过不写盘 ---
    * 曾经的顺序是「先 writeFileSync，最后才打印 problems 并置 exitCode=1」——

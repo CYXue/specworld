@@ -1,0 +1,163 @@
+{
+  "id": "huawei-matepad-edge",
+  "slug": "huawei-matepad-edge",
+  "brand": "huawei",
+  "line": "MatePad",
+  "name": "HUAWEI MatePad Edge",
+  "nameZh": "HUAWEI MatePad Edge",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 312.08,
+    "widthMm": 212.02,
+    "thicknessMm": 6.85,
+    "weightG": 789,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": 14.2,
+    "type": null,
+    "resolutionPx": {
+      "w": 3120,
+      "h": 2080
+    },
+    "ppi": 264,
+    "refreshHz": null,
+    "brightnessTypicalNits": 1000,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "colorGamut": "10.7 亿色，P3 广色域"
+  },
+  "chipset": {
+    "name": "麒麟X90",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      16,
+      24,
+      32
+    ],
+    "storageGb": [
+      256,
+      512,
+      1024,
+      2048
+    ]
+  },
+  "battery": {
+    "capacityMah": 12900,
+    "capacityCaliber": "rated",
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [
+      {
+        "role": "main",
+        "mp": 50,
+        "aperture": "f/1.8",
+        "ois": null,
+        "sensorNote": null
+      },
+      {
+        "role": "ultrawide",
+        "mp": 8,
+        "aperture": "f/2.2",
+        "ois": null,
+        "sensorNote": null
+      },
+      {
+        "role": "main",
+        "mp": null,
+        "aperture": null,
+        "ois": null,
+        "sensorNote": null
+      }
+    ],
+    "front": {
+      "mp": 32,
+      "aperture": "f/2.4"
+    },
+    "videoMax": "4K"
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": "Bluetooth 5.2，支持低功耗蓝牙，支持 SBC、AAC，支持 LDAC 和 L2HC 高清音频",
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": [
+      "2.4 GHz",
+      "5 GHz"
+    ],
+    "satellite": null,
+    "usb": "Type-C，USB 3.1 Gen1，支持 DP1.2",
+    "sim": null,
+    "esim": null,
+    "gnss": null
+  },
+  "os": {
+    "launch": "HarmonyOS 5.1",
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "屏幕": "柔性 OLED 全面屏**",
+    "处理器": "麒麟X90 / 麒麟X90A",
+    "电池": "典型容量：12900 mAh | 额定容量：12800 mAh",
+    "包装清单": "HUAWEI MatePad Edge × 1 | 快速指南（含电子三包凭证）× 1 | 华为超级快充电源适配器（Max 140 W）× 1 | 电源适配器线（USB-C）× 1",
+    "感应器": "重力传感器 | 指纹传感器 | 环境光传感器 | 霍尔传感器 | 陀螺仪"
+  },
+  "notes": [
+    "display.ppi 由官网分辨率与屏幕尺寸按 √(w²+h²)/对角英寸 推得，来源记 derived",
+    "屏幕亮度原文「1000 nits****」无峰值/典型限定词，取数值记 brightnessTypicalNits",
+    "处理器原文含并列型号「麒麟X90 / 麒麟X90A」，chipset.name 取第一个：麒麟X90"
+  ],
+  "provenance": {
+    "audio.speakers": "huawei-official",
+    "body.heightMm": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.thicknessMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.ppi": "derived",
+    "display.brightnessTypicalNits": "huawei-official",
+    "display.colorGamut": "huawei-official",
+    "chipset.name": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "battery.capacityMah": "huawei-official",
+    "battery.capacityCaliber": "huawei-official",
+    "camera.rear": "huawei-official",
+    "camera.front.mp": "huawei-official",
+    "camera.videoMax": "huawei-official",
+    "connectivity.wlanBands": "huawei-official",
+    "connectivity.bluetooth": "huawei-official",
+    "connectivity.usb": "huawei-official",
+    "os.launch": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T03:59:57.964Z",
+  "lastSeenAt": "2026-10-24T03:59:57.964Z",
+  "category": "tablet",
+  "specs": {
+    "audio.speakers": "立体声扬声器 × 6"
+  }
+}

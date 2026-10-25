@@ -38,7 +38,36 @@ import { fileURLToPath } from 'node:url';
 // ---------------------------------------------------------------- constants
 
 const BASE = 'https://consumer.huawei.com';
-const CATALOG_URL = `${BASE}/cn/phones/`;
+
+/**
+ * 品类目录注册表：官网各品类的目录页路径（实测 2026-10-23，见 _work/_probe-huawei/）。
+ * 各品类目录页与手机页同构：data-config 内嵌 seriesGroups[].allProducts，
+ * 规格子页同样是 large-accordion 手风琴。新增品类只需在这里加一行。
+ * 注意：/cn/visions/ 是智慧屏（TV），头显与智能家居目录页暂未确认（404/无 allProducts）。
+ */
+const CATEGORIES = Object.freeze({
+  phones: '/cn/phones/',
+  tablets: '/cn/tablets/',
+  wearables: '/cn/wearables/',
+  laptops: '/cn/laptops/',
+  audio: '/cn/audio/',
+  monitors: '/cn/monitors/',
+  routers: '/cn/routers/',
+  visions: '/cn/visions/',
+});
+
+const DEFAULT_CATEGORY = 'phones';
+const CATALOG_URL = `${BASE}${CATEGORIES[DEFAULT_CATEGORY]}`; // 默认品类（手机），保持历史行为
+
+/**
+ * 品类的附加目录段：官网把同一品类的机型分散在多个 URL 段下
+ * （音频 = 眼镜在 /cn/audio/，耳机在 /cn/headphones/，音箱在 /cn/speakers/）。
+ * 这些段下的规格页与主段同构，只是 URL 前缀不同。
+ */
+const EXTRA_SEGMENTS = Object.freeze({
+  audio: ['/cn/headphones/', '/cn/speakers/'],
+  visions: ['/cn/visions/huawei-vision/'],
+});
 const UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
   '(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
@@ -52,10 +81,13 @@ const RETRIES = 2;
 
 /**
  * 覆盖度下限：低于此值视为「解析结果不可信」而非「机型规格少」。
- * 实测在售机型为 15–20 章节 / 约 44 扁平字段，留足余量。
+ * 实测在售手机机型为 15–20 章节 / 约 44 扁平字段，留足余量。
+ * 各品类页面本来的章节数差异大（显示器页只有屏幕/特性/支架/接口/包装清单 5 章节、
+ * 23 个字段——实测 2026-10-24），按品类覆盖下限，未覆盖的品类用手机默认值。
  */
 const MIN_SECTIONS = 6;
 const MIN_FLAT_FIELDS = 15;
+const MIN_SECTIONS_BY_CATEGORY = { monitors: 4 };
 
 /** 零宽字符 / 软连字符：官网在商品名里插 &#8288;(WORD JOINER)、&NoBreak; 等，必须剥掉 */
 const ZERO_WIDTH_RE = /[\u200B-\u200F\u2060-\u2064\uFEFF\u00AD]/g;
@@ -122,12 +154,15 @@ function normalizeUrl(u) {
 
 const stripSlash = (u) => String(u).replace(/\/+$/, '');
 
-function specsUrlFor(slug) {
-  // 末尾斜杠必需：不带会多一次 301
-  return `${BASE}/cn/phones/${slug}/specs/`;
-}
-function precheckUrlFor(slug) {
-  return `${BASE}/cn/phones/${slug}/specs.model.json`;
+/** 品类 URL 构造器工厂：同一套 specs/预检 URL 形状，只是目录段不同（/cn/phones/ → /cn/tablets/…） */
+function urlBuildersFor(category) {
+  const seg = CATEGORIES[category];
+  if (!seg) throw new Error(`unknown category: ${category} (known: ${Object.keys(CATEGORIES).join(', ')})`);
+  return {
+    catalogUrl: `${BASE}${seg}`,
+    specsUrlFor: (slug) => `${BASE}${seg}${slug}/specs/`, // 末尾斜杠必需：不带会多一次 301
+    precheckUrlFor: (slug) => `${BASE}${seg}${slug}/specs.model.json`,
+  };
 }
 
 // ---------------------------------------------------------------- fetch (串行 + 超时 + 重试)
@@ -273,7 +308,7 @@ function extractCatalogConfig(html) {
   }
   if (!payload)
     throw new Error(
-      'catalog payload (data-config with allProducts/productLink) not found in /cn/phones/',
+      'catalog payload (data-config with allProducts/productLink) not found in category page',
     );
   return JSON.parse(decodeEntities(payload));
 }
@@ -282,10 +317,11 @@ function extractCatalogConfig(html) {
  * 把目录 JSON 摊平成 catalog 条目。
  * 只列**在售**机型；已下线但页面还活着的机型不会出现（两者要分开看）。
  */
-function parseCatalog(config, sourceUrl = CATALOG_URL) {
+function parseCatalog(config, sourceUrl = CATALOG_URL, category = DEFAULT_CATEGORY) {
   const entries = [];
   const seriesSummaries = [];
   const skipped = [];
+  const seg = CATEGORIES[category];
 
   for (const g of config.seriesGroups || []) {
     const series = text(g.seriesTitle || g.seriesName || '') || '';
@@ -295,8 +331,20 @@ function parseCatalog(config, sourceUrl = CATALOG_URL) {
 
     for (const p of products) {
       const rawLink = p.productLink || p.data?.detailLink || '';
-      const m = String(rawLink).match(/^\/cn\/phones\/([a-z0-9][a-z0-9-]*)\/?$/i);
-      const slug = m ? m[1].toLowerCase() : null;
+      // 主段 + 附加段（音频的耳机/音箱挂在不同 URL 段下）都算本品类；
+      // 记下条目实际命中的段，规格页/预检 URL 按它构造（跨段 slug 可能重名）。
+      const segs = [seg, ...(EXTRA_SEGMENTS[category] ?? [])];
+      let segRe = null;
+      let slug = null;
+      for (const s of segs) {
+        const re = String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const m = String(rawLink).match(new RegExp(`^${re}([a-z0-9][a-z0-9-]*)/?$`, 'i'));
+        if (m) {
+          segRe = s;
+          slug = m[1].toLowerCase();
+          break;
+        }
+      }
       const title = text(p.productTitleText || p.productTitle || p.data?.marketingName || '');
       const priceRaw = p.data?.price;
       const price =
@@ -305,16 +353,17 @@ function parseCatalog(config, sourceUrl = CATALOG_URL) {
           : String(priceRaw).trim();
 
       if (!slug) {
-        // 目录里混进来的非手机类目（或链接形状变了）——透明记录，不猜
+        // 目录里混进来的非本品类链接（或链接形状变了）——透明记录，不猜
         skipped.push({
           id: `huawei-${rawLink || title || '(unknown)'}`,
-          reason: `catalog-entry-not-a-phone-page (productLink=${rawLink || '(empty)'}, title=${title || '(empty)'})`,
+          reason: `catalog-entry-not-a-${category}-page (productLink=${rawLink || '(empty)'}, title=${title || '(empty)'})`,
         });
         continue;
       }
 
       entries.push({
         slug,
+        segment: segRe,
         id: `huawei-${slug}`,
         title,
         series,
@@ -325,7 +374,7 @@ function parseCatalog(config, sourceUrl = CATALOG_URL) {
         ecProductId: p.data?.ecProductId ? String(p.data.ecProductId) : null,
         buyLink: p.data?.buyButtonMode?.thirdPartySiteLink || null,
         label: p.productLabel ? text(p.productLabel) : null,
-        specsUrl: specsUrlFor(slug),
+        specsUrl: `${BASE}${segRe}${slug}/specs/`, // 末尾斜杠必需：不带会多一次 301
         catalogUrl: sourceUrl,
       });
     }
@@ -539,11 +588,12 @@ function precheckTitle(body) {
 
 // ---------------------------------------------------------------- 单机型抓取
 
-/** 判断 finalUrl 是否**仍是**目标机型的 specs 页（下线机型会被 301 到 /cn/phones/） */
-function finalUrlIsTargetSpecs(finalUrl, slug) {
+/** 判断 finalUrl 是否**仍是**目标机型的 specs 页（下线机型会被 301 回品类目录页） */
+function finalUrlIsTargetSpecs(finalUrl, slug, category = DEFAULT_CATEGORY, segOverride = null) {
+  const seg = String(segOverride ?? CATEGORIES[category]).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const p = normalizeUrl(finalUrl);
   return new RegExp(
-    `^/cn/phones/${slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/specs/?$`,
+    `^${seg}${slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/specs/?$`,
     'i',
   ).test(p.replace(BASE, ''));
 }
@@ -552,8 +602,9 @@ function finalUrlIsTargetSpecs(finalUrl, slug) {
  * 抓一个机型。
  * @returns {{product: object|null, skipped: object|null, info: object}}
  */
-async function fetchOneModel(entry, cache, notes) {
+async function fetchOneModel(entry, cache, notes, category = DEFAULT_CATEGORY) {
   const id = entry.id;
+  const { precheckUrlFor } = urlBuildersFor(category);
   const preUrl = precheckUrlFor(entry.slug);
   const url = entry.specsUrl;
   const info = {
@@ -602,8 +653,9 @@ async function fetchOneModel(entry, cache, notes) {
     return { product: null, skipped: { id, reason: `http-${page.status}: ${url}` }, info };
   }
 
-  // ---- ③ 护栏一：finalUrl 必须仍是目标 specs 页（301 → /cn/phones/ 时这里会挂）
-  if (!finalUrlIsTargetSpecs(page.finalUrl, entry.slug)) {
+  // ---- ③ 护栏一：finalUrl 必须仍是目标 specs 页（301 → 品类目录页时这里会挂）
+  // 用条目实际命中的 URL 段（音频的耳机/音箱挂在附加段下，与主段不同）
+  if (!finalUrlIsTargetSpecs(page.finalUrl, entry.slug, category, entry.segment)) {
     return {
       product: null,
       skipped: {
@@ -633,12 +685,12 @@ async function fetchOneModel(entry, cache, notes) {
       info,
     };
   }
-  if (sections.length < MIN_SECTIONS || info.flatFields < MIN_FLAT_FIELDS) {
+  if (sections.length < (MIN_SECTIONS_BY_CATEGORY[category] ?? MIN_SECTIONS) || info.flatFields < MIN_FLAT_FIELDS) {
     return {
       product: null,
       skipped: {
         id,
-        reason: `implausible-specs: only ${sections.length} sections / ${info.flatFields} fields (min ${MIN_SECTIONS}/${MIN_FLAT_FIELDS}) — markup changed?`,
+        reason: `implausible-specs: only ${sections.length} sections / ${info.flatFields} fields (min ${MIN_SECTIONS_BY_CATEGORY[category] ?? MIN_SECTIONS}/${MIN_FLAT_FIELDS}) — markup changed?`,
       },
       info,
     };
@@ -685,8 +737,9 @@ async function fetchOneModel(entry, cache, notes) {
 // ---------------------------------------------------------------- 主流程
 
 /**
- * 抓取全部在售华为手机规格。
+ * 抓取全部在售华为某品类规格。
  * @param {object} [options]
+ * @param {string} [options.category] 品类 id（CATEGORIES 的键，默认 phones 保持历史行为）
  * @param {string} [options.cacheDir] 缓存目录（默认 _work/huawei.cache）
  * @param {boolean} [options.offline] 只用缓存
  * @param {string[]} [options.only] 只跑这些 slug
@@ -696,6 +749,7 @@ async function fetchOneModel(entry, cache, notes) {
  */
 export async function fetchAll(options = {}) {
   const {
+    category = DEFAULT_CATEGORY,
     cacheDir = DEFAULT_CACHE_DIR,
     offline = false,
     only = null,
@@ -712,20 +766,21 @@ export async function fetchAll(options = {}) {
   const cache = new HttpCache(cacheDir, { offline });
 
   // ---- 目录
-  log(`[catalog] ${CATALOG_URL}`);
-  const catPage = await cache.fetch(CATALOG_URL);
+  const { catalogUrl } = urlBuildersFor(category);
+  log(`[catalog] ${catalogUrl}`);
+  const catPage = await cache.fetch(catalogUrl);
   if (catPage.status !== 200) throw new Error(`catalog HTTP ${catPage.status}`);
   const {
     entries: allEntries,
     seriesSummaries,
     skipped: catalogSkipped,
-  } = parseCatalog(extractCatalogConfig(catPage.body), CATALOG_URL);
+  } = parseCatalog(extractCatalogConfig(catPage.body), catalogUrl, category);
   skipped.push(...catalogSkipped);
 
   notes.push(
-    `catalog: ${allEntries.length} 手机机型 / ${seriesSummaries.length} 系列 ` +
+    `catalog: ${allEntries.length} 机型 / ${seriesSummaries.length} 系列 ` +
       `(${seriesSummaries.map((s) => `${s.series}=${s.count}`).join(', ')})` +
-      `；非手机目录条目 ${catalogSkipped.length} 个` +
+      `；非本品类目录条目 ${catalogSkipped.length} 个` +
       `；目录页含价格 ${allEntries.filter((e) => e.price).length} 个`,
   );
 
@@ -742,7 +797,7 @@ export async function fetchAll(options = {}) {
     process.stdout.write?.(`  → ${entry.slug} ... `);
     let r;
     try {
-      r = await fetchOneModel(entry, cache, notes);
+      r = await fetchOneModel(entry, cache, notes, category);
     } catch (e) {
       r = {
         product: null,
@@ -810,7 +865,7 @@ export async function fetchAll(options = {}) {
     products,
     // 便于 --out 落盘后自查（不属于 SourceResult 契约，规范化层可忽略）
     catalog: {
-      catalogUrl: CATALOG_URL,
+      catalogUrl,
       series: seriesSummaries,
       productCount: allEntries.length,
       skippedCount: skipped.length,
@@ -833,6 +888,8 @@ function parseArgv(argv) {
     else if (a === '--cache') out.cache = argv[++i];
     else if (a === '--only') out.only = (out.only || []).concat(argv[++i].split(','));
     else if (a === '--limit') out.limit = Number(argv[++i]);
+    else if (a === '--category') out.category = argv[++i];
+    else if (a.startsWith('--category=')) out.category = a.slice(11);
     else if (a.startsWith('--out=')) out.out = a.slice(6);
     else if (a.startsWith('--cache=')) out.cache = a.slice(8);
     else if (a.startsWith('--only=')) out.only = (out.only || []).concat(a.slice(7).split(','));
@@ -848,16 +905,19 @@ function resolvePath(p) {
 
 async function main() {
   const args = parseArgv(process.argv.slice(2));
+  const category = args.category || DEFAULT_CATEGORY;
+  const { catalogUrl } = urlBuildersFor(category);
   const cacheDir = resolvePath(args.cache || DEFAULT_CACHE_DIR);
   const outPath = resolvePath(args.out || DEFAULT_OUT);
   const t0 = Date.now();
 
   const log = args.quiet ? () => {} : (m) => process.stdout.write(`  ${m}\n`);
 
-  console.log(`华为官方规格适配器 · 目录 ${CATALOG_URL}`);
+  console.log(`华为官方规格适配器 · 品类 ${category} · 目录 ${catalogUrl}`);
   console.log(`  缓存: ${cacheDir}${args.offline ? '  [offline]' : ''}`);
 
   const result = await fetchAll({
+    category,
     cacheDir,
     offline: !!args.offline,
     only: args.only || null,

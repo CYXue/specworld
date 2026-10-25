@@ -50,7 +50,28 @@ import {
 } from '../lib/schema.mjs';
 import { expandSpecs, flattenSpecs, pick, setSpec, SPEC_GROUPS } from '../lib/specs.mjs';
 import { mapAppleSpecs, mapAppleCompare } from '../normalize/brands/apple.mjs';
-import { mapHuawei } from '../normalize/brands/huawei.mjs';
+import {
+  mapHuawei,
+  mapHuaweiTablet,
+  mapHuaweiWearable,
+  mapHuaweiMonitor,
+  mapHuaweiLaptop,
+  mapHuaweiAudio,
+  mapHuaweiVision,
+  mapHuaweiRouter,
+} from '../normalize/brands/huawei.mjs';
+import {
+  mapXiaomi,
+  mapXiaomiTablet,
+  mapXiaomiLaptop,
+  mapXiaomiVision,
+  mapXiaomiWearable,
+  mapXiaomiAudio,
+  mapXiaomiMonitor,
+  mapXiaomiRouter,
+  mapXiaomiAppliance,
+  mapXiaomiHistory,
+} from '../normalize/brands/xiaomi.mjs';
 import {
   stripInvisible,
   normalizeKey,
@@ -347,7 +368,7 @@ export {
   __clearSchemaOverridesForTest, __overrideSchemaForTest, fieldMap, isRegisteredCategory,
   LIFECYCLE_STATUS_VALUES, loadCategories, loadSchema, quantifiableFields, validateSchema,
   validateSpecs, validateSpecValue, groupsOf, fieldsByGroup, valueStatus, validateStatusMap,
-  expandSpecs, flattenSpecs, pick, setSpec, SPEC_GROUPS, mapAppleSpecs, mapAppleCompare, mapHuawei,
+  expandSpecs, flattenSpecs, pick, setSpec, SPEC_GROUPS, mapAppleSpecs, mapAppleCompare, mapHuawei, mapHuaweiTablet, mapHuaweiWearable, mapHuaweiMonitor, mapHuaweiLaptop, mapHuaweiAudio, mapHuaweiVision, mapHuaweiRouter, mapXiaomi, mapXiaomiTablet, mapXiaomiLaptop, mapXiaomiVision, mapXiaomiWearable, mapXiaomiAudio, mapXiaomiMonitor, mapXiaomiRouter, mapXiaomiAppliance, mapXiaomiHistory,
   stripInvisible, normalizeKey, firstNumber, allNumbers, parseMm, parseG, parseInch,
   parsePpi, parseWatt, parseNits, parseHz, parseCapacity, parseStorageList, parseResolution,
   parseRefresh, parseWeight, parseBrightness, sliceByVariants, slugify, parseOis,

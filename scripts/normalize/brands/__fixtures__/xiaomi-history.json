@@ -1,0 +1,28 @@
+{
+  "id": "mz-xiaomi-10-ultra",
+  "name": "小米10 至尊纪念版",
+  "releaseDate": "2020-08-11",
+  "precision": "day",
+  "screenSizeIn": "6.67",
+  "screenResolution": "2340×1080",
+  "screenRefreshHz": 120,
+  "screenType": "AMOLED 双曲面 10bit 原色屏（TCL华星独供）",
+  "chipset": "高通骁龙865",
+  "ramGb": [
+    8,
+    12,
+    16
+  ],
+  "storageGb": [
+    128,
+    256,
+    512
+  ],
+  "batteryMah": 4500,
+  "wiredChargeW": 120,
+  "weightG": 221.8,
+  "dimsMm": "162.38×75.04×9.45",
+  "sourceTitle": "小米 10 至尊纪念版评测 - IT之家 / 5299元至6999元，小米10至尊纪念版正式发布 - IT之家",
+  "sourceUrl": "https://www.ithome.com/0/506/323.htm",
+  "note": "发布日2020-08-11（IT之家发布会报道 https://www.ithome.com/0/502/799.htm）；等效4500mAh蝶式双串电池；120W有线+50W无线+10W反充；LPDDR5+UFS3.1；8+128/8+256/12+256/16+512四档"
+}

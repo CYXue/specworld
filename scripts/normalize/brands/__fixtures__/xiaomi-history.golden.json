@@ -1,0 +1,115 @@
+{
+  "id": "mz-xiaomi-10-ultra",
+  "slug": "mz-xiaomi-10-ultra",
+  "brand": "xiaomi",
+  "line": "小米数字",
+  "name": "小米10 至尊纪念版",
+  "nameZh": "小米10 至尊纪念版",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 162.38,
+    "widthMm": 75.04,
+    "thicknessMm": 9.45,
+    "weightG": 221.8,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": 6.67,
+    "type": "AMOLED 双曲面 10bit 原色屏（TCL华星独供）",
+    "resolutionPx": {
+      "w": 2340,
+      "h": 1080
+    },
+    "ppi": null,
+    "refreshHz": "120",
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": "高通骁龙865",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      8,
+      12,
+      16
+    ],
+    "storageGb": [
+      128,
+      256,
+      512
+    ]
+  },
+  "battery": {
+    "capacityMah": 4500,
+    "capacityCaliber": "unmarked",
+    "wiredChargeW": 120,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "curated-retrieval",
+  "rawOfficial": {
+    "取证来源": "小米 10 至尊纪念版评测 - IT之家 / 5299元至6999元，小米10至尊纪念版正式发布 - IT之家 https://www.ithome.com/0/506/323.htm"
+  },
+  "notes": [
+    "电池容量为检索摘录数值，原文未标典型/额定口径 → capacityCaliber=unmarked",
+    "三维原文「162.38×75.04×9.45」顺序随来源不一，取前三数按 高≥宽≥厚 归位"
+  ],
+  "provenance": {
+    "display.sizeIn": "retrieval",
+    "display.resolutionPx": "retrieval",
+    "display.resolutionPx.w": "retrieval",
+    "display.resolutionPx.h": "retrieval",
+    "display.refreshHz": "retrieval",
+    "display.type": "retrieval",
+    "chipset.name": "retrieval",
+    "memory.ramGb": "retrieval",
+    "memory.storageGb": "retrieval",
+    "battery.capacityMah": "retrieval",
+    "battery.wiredChargeW": "retrieval",
+    "body.weightG": "retrieval",
+    "body.heightMm": "retrieval",
+    "body.widthMm": "retrieval",
+    "body.thicknessMm": "retrieval"
+  },
+  "firstSeenAt": "2026-10-25T00:00:00.000Z",
+  "lastSeenAt": "2026-10-25T00:00:00.000Z",
+  "category": "phone"
+}

@@ -18,7 +18,9 @@ import {
   groupsOf, fieldsByGroup, valueStatus,
   validateStatusMap, expandSpecs, flattenSpecs,
   pick, setSpec, mapAppleSpecs,
-  mapAppleCompare, mapHuawei, stripInvisible,
+  mapAppleCompare, mapHuawei, mapHuaweiTablet, mapHuaweiWearable, mapHuaweiMonitor, mapHuaweiLaptop, mapHuaweiAudio, mapHuaweiVision, mapHuaweiRouter,
+  mapXiaomi, mapXiaomiTablet, mapXiaomiLaptop, mapXiaomiVision, mapXiaomiWearable, mapXiaomiAudio, mapXiaomiMonitor, mapXiaomiRouter, mapXiaomiAppliance, mapXiaomiHistory,
+  stripInvisible,
   normalizeKey, firstNumber, allNumbers,
   parseMm, parseG, parseInch,
   parsePpi, parseWatt, parseNits,
@@ -50,6 +52,43 @@ import { check, section } from './runtime.mjs';
  * ================================================================ */
 section('品牌映射层 golden 测试');
 check('华为规格页映射 ↔ golden', () => assertGolden(mapHuawei, 'huawei.json', '华为'));
+check('华为平板映射 ↔ golden', () =>
+  assertGolden(mapHuaweiTablet, 'huawei-tablets.json', '华为平板'),
+);
+check('华为穿戴映射 ↔ golden', () =>
+  assertGolden(mapHuaweiWearable, 'huawei-wearables.json', '华为穿戴'),
+);
+check('华为显示器映射 ↔ golden', () =>
+  assertGolden(mapHuaweiMonitor, 'huawei-monitors.json', '华为显示器'),
+);
+check('华为笔记本映射 ↔ golden', () =>
+  assertGolden(mapHuaweiLaptop, 'huawei-laptops.json', '华为笔记本'),
+);
+check('华为音频映射 ↔ golden', () =>
+  assertGolden(mapHuaweiAudio, 'huawei-audio.json', '华为音频'),
+);
+check('华为智慧屏映射 ↔ golden', () =>
+  assertGolden(mapHuaweiVision, 'huawei-visions.json', '华为智慧屏'),
+);
+check('华为路由器映射 ↔ golden', () =>
+  assertGolden(mapHuaweiRouter, 'huawei-routers.json', '华为路由器'),
+);
+check('小米关键参数映射 ↔ golden', () =>
+  assertGolden(mapXiaomi, 'xiaomi.json', '小米'),
+);
+for (const [fx, fn, label] of [
+  ['xiaomi-tablet', mapXiaomiTablet, '小米平板'],
+  ['xiaomi-laptop', mapXiaomiLaptop, '小米笔记本'],
+  ['xiaomi-tv', mapXiaomiVision, '小米电视'],
+  ['xiaomi-wearable', mapXiaomiWearable, '小米穿戴'],
+  ['xiaomi-headset', mapXiaomiAudio, '小米耳机'],
+  ['xiaomi-display', mapXiaomiMonitor, '小米显示器'],
+  ['xiaomi-network', mapXiaomiRouter, '小米路由器'],
+  ['xiaomi-appliance', mapXiaomiAppliance, '米家家电'],
+  ['xiaomi-history', mapXiaomiHistory, '小米历史机型'],
+]) {
+  check(`${label}映射 ↔ golden`, () => assertGolden(fn, `${fx}.json`, label));
+}
 check('苹果规格页映射 ↔ golden', () =>
   assertGolden(mapAppleSpecs, 'apple-specs.json', '苹果规格页'),
 );

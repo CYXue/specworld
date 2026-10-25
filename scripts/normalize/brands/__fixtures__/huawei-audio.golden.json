@@ -1,0 +1,112 @@
+{
+  "id": "huawei-freebuds-pro-5",
+  "slug": "huawei-freebuds-pro-5",
+  "brand": "huawei",
+  "line": "FreeBuds",
+  "name": "HUAWEI FreeBuds Pro 5",
+  "nameZh": "HUAWEI FreeBuds Pro 5",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": 153,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "budWeightG": 5.5,
+    "waterResistance": "耳机：IP57 | 充电盒：IP54"
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null,
+    "budHours": 9,
+    "withCaseHours": 38
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": "蓝牙 6.0",
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "电池.续航时间": "声音质量优先： | 聆听音乐（降噪关）：耳机单次充电使用 8 小时，配合充电盒使用 33 小时； | 聆听音乐（降噪开）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时。 | 连接稳定优先： | 聆听音乐（降噪关）：耳机单次充电使用 9 小时，配合充电盒使用 38 小时； | 聆听音乐（降噪开）：耳机单次充电使用 6 小时，配合充电盒使用 25 小时； | 语音通话（降噪关）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时； | 语音通话（降噪开）：耳机单次充电使用 4 小时，配合充电盒使用 18 小时。",
+    "音频技术": "主动降噪/通话降噪/智慧动态降噪/通透/透传人声/智慧动态透传/AI 免摘对话/自适应音量/多 EQ",
+    "防水防尘等级": "耳机：IP57 | 充电盒：IP54",
+    "包装清单": "耳机 × 2（左右耳各 1） | 充电盒 × 1 | 耳塞 × 4（硅胶：L，M，S，XS，其中硅胶 M 号出厂时放到耳机上） | 快速指南 & 安全信息 & 保修卡 × 1 | 华为音乐权益卡 × 1"
+  },
+  "notes": [
+    "续航取官网各档位中的最大值（官网公布的最好成绩），全部档位见 rawOfficial"
+  ],
+  "provenance": {
+    "audio.anc": "huawei-official",
+    "audio.driverUnit": "huawei-official",
+    "battery.chargingMethods": "huawei-official",
+    "body.budWeightG": "huawei-official",
+    "body.weightG": "huawei-official",
+    "body.waterResistance": "huawei-official",
+    "battery.budHours": "huawei-official",
+    "battery.withCaseHours": "huawei-official",
+    "connectivity.bluetooth": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T05:11:06.226Z",
+  "lastSeenAt": "2026-10-24T05:11:06.226Z",
+  "category": "audio",
+  "specs": {
+    "audio.anc": true,
+    "audio.driverUnit": "超线性双磁路低音单元，超薄微平板高音单元",
+    "battery.chargingMethods": [
+      "有线充电：USB Type-C 接口（5V 0.5A 及以上）",
+      "无线充电：最高 5 W"
+    ]
+  }
+}

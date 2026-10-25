@@ -241,7 +241,8 @@ check('对象型字段的 provenance 查子路径而不是父路径（回归）'
 });
 
 check('品牌不在注册表被拦', () => {
-  assert.ok(validate(fleet({ brand: 'xiaomi' }), null).some((f) => f.includes('品牌不在注册表')));
+  // 2026-10-24 小米已注册进品牌表（第三品牌），反向测样本换成真正未注册的 id
+  assert.ok(validate(fleet({ brand: 'samsung' }), null).some((f) => f.includes('品牌不在注册表')));
 });
 
 check('发布日期在未来被拦', () => {

@@ -16,9 +16,10 @@
  * （CHROME_PATH 可覆盖，探测逻辑与 scripts/smoke/_smoke-paths.cjs 同源）。
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { resolve, dirname } from 'node:path';
+import pathMod, { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parseSarText } from './apple-sar-parse.mjs';
 
 const require = createRequire(import.meta.url);
@@ -28,8 +29,6 @@ const limitIdx = process.argv.indexOf('--limit');
 const LIMIT = limitIdx > -1 ? Number(process.argv[limitIdx + 1]) : Infinity;
 
 // ---------- Chrome 定位（与 smoke 同源：显式 CHROME_PATH > 常见系统路径，找不到就抛清晰错误） ----------
-import { existsSync as _e } from 'node:fs';
-import pathMod, { join } from 'node:path';
 function findChrome() {
   const explicit = process.env.CHROME_PATH;
   const candidates = explicit
@@ -46,7 +45,7 @@ function findChrome() {
           '/usr/bin/chromium-browser',
           '/snap/bin/chromium',
         ];
-  for (const c of candidates) if (_e(c)) return c;
+  for (const c of candidates) if (existsSync(c)) return c;
   throw new Error(
     '找不到 Chrome / Chromium。请设置 CHROME_PATH，例如：set CHROME_PATH=C:/Program Files/Google/Chrome/Application/chrome.exe',
   );

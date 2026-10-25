@@ -1,0 +1,104 @@
+{
+  "id": "huawei-be7-pro",
+  "slug": "huawei-be7-pro",
+  "brand": "huawei",
+  "line": "路由",
+  "name": "华为路由 BE7 Pro",
+  "nameZh": "华为路由 BE7 Pro",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 195.48,
+    "widthMm": 288,
+    "thicknessMm": null,
+    "weightG": 876,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "depthMm": 72.43
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": [
+      0.13
+    ]
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "支持 IEEE 802.11be/ax/n/g/b 2 × 2，MU-MIMO | 支持 IEEE 802.11be/ax/ac/n/a 4 × 4，MU-MIMO | 2.4 GHz 理论协商速率为 688 Mbps | 5 GHz 理论协商速率为 5765 Mbps | 理论协商速率总和 6453 Mbps | 2.4 GHz & 5 GHz，支持双频优选",
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "安全": "HUAWEI HomeSec® 安全防护：支持 Wi-Fi 防暴力破解、局域网防火墙、摄像头安全防护",
+    "包装清单": "电源适配器：1 个 | 用户手册：1 份 | 路由器： 1 个 | CPE 保护袋：1 个 | 网线：1 根"
+  },
+  "notes": [
+    "天线折叠/直立两种形态，body 三维取折叠态（收纳尺寸）；直立态见 rawOfficial"
+  ],
+  "provenance": {
+    "connectivity.ports": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.heightMm": "huawei-official",
+    "body.depthMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "memory.storageGb": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T05:59:53.766Z",
+  "lastSeenAt": "2026-10-24T05:59:53.766Z",
+  "category": "network",
+  "specs": {
+    "connectivity.ports": [
+      "电源口、网口、WPS/RESET 二合一按键"
+    ]
+  }
+}

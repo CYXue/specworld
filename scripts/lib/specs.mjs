@@ -31,15 +31,16 @@ export const SPEC_GROUPS = Object.freeze([
 ]);
 
 /**
- * 取值：specs 优先，v1 嵌套结构回退。
+ * 取值：只读 specs 容器。
  *
- * 为什么不能只读 specs：迁移后的第一轮同步里，previous（上一版快照）还是 v1 嵌套，
- * 闸门的覆盖率对比要同时能读两种形状。只读 specs 会让覆盖率瞬间跌到 0 触发拒写。
+ * 2026-10-21 迁移完成（盘上快照 v2-only、测试夹具已同形状），v1 嵌套回退分支拆除——
+ * specs 是唯一真源。保留回退会让「用户改了 specs、嵌套里还是官网旧值」的
+ * 双真源 bug 有一条永远活着的通路（见 selftest 08 的回归闸门）。
  */
 export function pick(product, path) {
   const specs = product?.specs;
   if (specs && Object.prototype.hasOwnProperty.call(specs, path)) return specs[path];
-  return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), product);
+  return undefined;
 }
 
 /** 写 specs 值。product 上没有 specs 容器时现场建（用户数据层新增的机型走这条） */

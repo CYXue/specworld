@@ -1,7 +1,7 @@
 name: 浏览器冒烟
 
 # 为什么需要这条独立工作流：
-# selftest / i18n-ssr 是零浏览器断言，抓不到「真机里点不动、画布拖不起来、
+# selftest 是零浏览器断言，抓不到「真机里点不动、画布拖不起来、
 # 容错提示不显示」这类**只有浏览器里才复现**的故障。
 # 2 个 _smoke*.cjs（_smoke.cjs / _smoke-search.cjs）正是干这个的，但它们曾在
 # .gitignore 里（CI 根本拿不到）、在 package.json 里没注册、也没有任何工作流调用
@@ -21,7 +21,7 @@ on:
       - 'scripts/**'
       - 'data/**'
       - 'public/**'
-      - '_smoke*.cjs'
+      - 'scripts/smoke/_smoke*.cjs'
       - 'package.json'
       - 'package-lock.json'
       - 'index.html'
@@ -88,7 +88,7 @@ jobs:
           fi
           echo "preview 就绪（第 ${i} 秒）"
 
-      # 一键跑完全部 2 个浏览器脚本 + selftest + i18n SSR。
+      # 一键跑完全部 2 个浏览器脚本 + selftest。
       # 失败时上传 _shots 截图：冒烟的失败信息往往只有「差了几个像素」，
       # 没有截图连排查入口都没有。
       - name: 浏览器冒烟

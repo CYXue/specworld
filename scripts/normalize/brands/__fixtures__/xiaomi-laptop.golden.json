@@ -1,0 +1,119 @@
+{
+  "id": "xiaomi-20993",
+  "slug": "xiaomi-20993",
+  "brand": "xiaomi",
+  "line": "REDMI Book",
+  "name": "REDMI Book Pro 16 2025 Ultra5-225H/32G/1T/3.1K/165Hz",
+  "nameZh": "REDMI Book Pro 16 2025 Ultra5-225H/32G/1T/3.1K/165Hz",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "weightKg": 1.88
+  },
+  "display": {
+    "sizeIn": 16,
+    "type": null,
+    "resolutionPx": {
+      "w": 2560,
+      "h": 1600
+    },
+    "ppi": null,
+    "refreshHz": "120/165",
+    "brightnessTypicalNits": 400,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "colorGamut": "100% sRGB / 100% P3"
+  },
+  "chipset": {
+    "name": "Ultra5 225H",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": "集显",
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      32
+    ],
+    "storageGb": [
+      1024
+    ]
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null,
+    "capacityWh": 99
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": "Windows 11",
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "屏幕亮度": "400 尼特 / 500尼特",
+    "屏幕色域": "100% sRGB / 100% P3",
+    "屏幕刷新率": "120Hz / 165Hz"
+  },
+  "notes": [
+    "亮度原文多档「400 尼特 / 500尼特」：取第一档，全档见 rawOfficial",
+    "CPU 原文多配置「Ultra5 225H / Ultra7 255H」：取第一段"
+  ],
+  "provenance": {
+    "power.adapterW": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.refreshHz": "huawei-official",
+    "display.brightnessTypicalNits": "huawei-official",
+    "display.colorGamut": "huawei-official",
+    "chipset.name": "huawei-official",
+    "chipset.gpu": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "battery.capacityWh": "huawei-official",
+    "body.weightKg": "huawei-official",
+    "os.launch": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T11:07:11.999Z",
+  "lastSeenAt": "2026-10-24T11:07:11.999Z",
+  "category": "laptop",
+  "specs": {
+    "power.adapterW": 140
+  }
+}

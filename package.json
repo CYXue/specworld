@@ -12,11 +12,9 @@
     "preview": "vite preview",
     "data": "node scripts/pipeline.mjs --data-only",
     "selftest": "node scripts/selftest.mjs",
-    "i18n:residual": "node scripts/i18n-residual.mjs",
-    "smoke:i18n": "node scripts/smoke/i18n-ssr.mjs",
-    "smoke": "node _smoke.cjs",
-    "smoke:search": "node _smoke-search.cjs",
-    "smoke:all": "npm run selftest && npm run smoke:i18n && npm run smoke && npm run smoke:search",
+    "smoke": "node scripts/smoke/_smoke.cjs",
+    "smoke:search": "node scripts/smoke/_smoke-search.cjs",
+    "smoke:all": "npm run selftest && npm run smoke && npm run smoke:search",
     "quality": "node scripts/report/quality.mjs",
     "editor": "node scripts/editor-server.mjs",
     "archive": "node scripts/archive.mjs",
@@ -33,7 +31,6 @@
   },
   "dependencies": {
     "vue": "^3.5.13",
-    "vue-i18n": "^9.14.4",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

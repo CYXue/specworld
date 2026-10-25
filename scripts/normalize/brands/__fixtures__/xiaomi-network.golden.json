@@ -1,0 +1,99 @@
+{
+  "id": "xiaomi-19332",
+  "slug": "xiaomi-19332",
+  "brand": "xiaomi",
+  "line": "路由",
+  "name": "Xiaomi路由器 6500 Pro",
+  "nameZh": "Xiaomi路由器 6500 Pro",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": "Qualcomm A53 四核 1.5G",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      1
+    ],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "Wi-Fi 7 | 6500M级",
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "天线": "内置高增益天线6根+内置蓝牙天线1根+内置NFC天线1根",
+    "CPU": "Qualcomm A53 四核 1.5G"
+  },
+  "notes": [],
+  "provenance": {
+    "connectivity.ports": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "chipset.name": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T11:07:13.813Z",
+  "lastSeenAt": "2026-10-24T11:07:13.813Z",
+  "category": "network",
+  "specs": {
+    "connectivity.ports": [
+      "WAN",
+      "LAN口*4"
+    ]
+  }
+}

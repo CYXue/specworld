@@ -1,0 +1,122 @@
+{
+  "id": "xiaomi-20593",
+  "slug": "xiaomi-20593",
+  "brand": "xiaomi",
+  "line": "Pad",
+  "name": "Xiaomi Pad 7 8GB+256GB 天际蓝",
+  "nameZh": "Xiaomi Pad 7 8GB+256GB 天际蓝",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": 6.18,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": 11.2,
+    "type": "LCD",
+    "resolutionPx": {
+      "w": 3200,
+      "h": 2136
+    },
+    "ppi": null,
+    "refreshHz": "144",
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": "第三代骁龙7+ 旗舰处理器",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      8,
+      12
+    ],
+    "storageGb": [
+      128,
+      256
+    ]
+  },
+  "battery": {
+    "capacityMah": 8850,
+    "capacityCaliber": "typical",
+    "wiredChargeW": 45,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "Wi-Fi 6 增强版",
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": "Type-C",
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": "Xiaomi HyperOS",
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "后置摄像头": "1300W",
+    "前置摄像头": "800W"
+  },
+  "notes": [
+    "无线快充原文「不支持」：官网明示不支持 → null"
+  ],
+  "provenance": {
+    "audio.speakers": "huawei-official",
+    "features.stylus": "huawei-official",
+    "features.keyboard": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.refreshHz": "huawei-official",
+    "chipset.name": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "battery.capacityMah": "huawei-official",
+    "battery.capacityCaliber": "huawei-official",
+    "battery.wiredChargeW": "huawei-official",
+    "body.thicknessMm": "huawei-official",
+    "connectivity.usb": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "os.launch": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T11:07:11.630Z",
+  "lastSeenAt": "2026-10-24T11:07:11.630Z",
+  "category": "tablet",
+  "specs": {
+    "audio.speakers": "4个",
+    "features.stylus": "支持",
+    "features.keyboard": "支持"
+  }
+}

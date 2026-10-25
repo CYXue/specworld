@@ -163,18 +163,6 @@ jobs:
           npm ci
           npm run build
 
-      # i18n SSR 双语冒烟：整站 13 个路由 × zh/en 双语真渲染一遍（vite SSR 管线，
-      # 零网络零浏览器）。抓两类**零报错的静默故障**：
-      #   ① 缺键抛错 —— src/i18n 配了 missing: throw，只有渲染期才炸得出来；
-      #   ② 英文页界面残留中文 —— 抽键漏网的硬编码，静态检查看不出来。
-      # 它曾在 package.json 里注册（npm run smoke:i18n）却**没有任何 CI 调用**，
-      # 引入当天就是红的（router 模块实例分裂，见 scripts/smoke/ssr-deps.ts 头注），
-      # 一整天无人察觉。「注册≠调用」：不接进 CI 的闸门等于不存在。
-      # 位置放在构建之后：prebuild 已把 data/ 同步进 public/，冒烟从那里读数据集；
-      # 放在提交/发布之前：它红就不许发布。
-      - name: i18n SSR 双语冒烟
-        run: node scripts/smoke/i18n-ssr.mjs
-
       # 从指纹结果里取判断依据。注意看的是 changed，不是 git diff。
       - name: 判断内容是否变化
         id: fp
@@ -213,12 +201,16 @@ jobs:
       #   3. **归档变了但页面没变**：官网把某个章节标题改了个字，而那个字段
       #      恰好没进 products.json。这时两个指纹都不动，但 data/raw/ 必须更新 ——
       #      否则它记的是上一个版本的官网，回放验证就成了自欺欺人。
+      #   4. **访客纠错队列变了但快照没变**：submissions.json 是待审队列，
+      #      采纳前不影响 products.json，两个指纹都不动。不带这个条件，
+      #      访客提交的纠错永远提交不进仓库（与第 2 条同款静默故障）。
       - name: 提交变化
         if: >-
           steps.fp.outputs.data_changed == 'true' ||
           steps.fp.outputs.site_changed == 'true' ||
           steps.fp.outputs.pending_changed == 'true' ||
-          steps.fp.outputs.raw_changed == 'true'
+          steps.fp.outputs.raw_changed == 'true' ||
+          steps.fp.outputs.submissions_changed == 'true'
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -237,6 +229,9 @@ jobs:
             # 归档变了但快照没变（官网改了章节标题，而该字段没进快照）：
             # 只带归档与指针。同样不带快照 —— 它这次一个字都没动。
             git add -- data/raw data/.fingerprint
+          elif [ "${{ steps.fp.outputs.submissions_changed }}" = "true" ]; then
+            # 访客纠错队列变了但快照没变：只带队列与指针。
+            git add -- data/submissions.json data/.fingerprint
           else
             # 数据内容没变（只是前端或取数代码变了）：只提交指纹指针。
             # 快照不带进来，是因为它唯一的变化是那串运行时刻字段。

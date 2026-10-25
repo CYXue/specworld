@@ -1,0 +1,108 @@
+{
+  "id": "huawei-vision-6",
+  "slug": "huawei-vision-6",
+  "brand": "huawei",
+  "line": "Vision",
+  "name": "华为Vision智慧屏 6",
+  "nameZh": "华为Vision智慧屏 6",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 1095.5,
+    "widthMm": 1890,
+    "thicknessMm": null,
+    "weightG": 38500,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "depthMm": 49.2
+  },
+  "display": {
+    "sizeIn": 85,
+    "type": "LCD（VA 软屏）",
+    "resolutionPx": {
+      "w": 3840,
+      "h": 2160
+    },
+    "ppi": null,
+    "refreshHz": "144/288",
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "colorGamut": "DCI-P3（CIE 1976）：98%（典型值）"
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": "HarmonyOS 4.3",
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [
+    "一页多尺寸变体，取最短变体名（最小尺寸档）：85 英寸",
+    "重量原文「38.5 kg」以 kg 标注，×1000 换算为 g"
+  ],
+  "provenance": {
+    "audio.speakers": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.refreshHz": "huawei-official",
+    "display.colorGamut": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.heightMm": "huawei-official",
+    "body.depthMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "os.launch": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T05:56:52.723Z",
+  "lastSeenAt": "2026-10-24T05:56:52.723Z",
+  "category": "media",
+  "specs": {
+    "audio.speakers": "2 个 20 W 全频扬声器 | 1 个 50 W 低音扬声器"
+  }
+}

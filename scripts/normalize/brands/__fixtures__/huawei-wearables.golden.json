@@ -1,0 +1,132 @@
+{
+  "id": "huawei-watch-ultimate-2",
+  "slug": "huawei-watch-ultimate-2",
+  "brand": "huawei",
+  "line": "WATCH",
+  "name": "HUAWEI WATCH Ultimate 2",
+  "nameZh": "HUAWEI WATCH Ultimate 2",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": 12.9,
+    "weightG": 80.5,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "caseSizeMm": 48.5,
+    "waterResistance": "防水：20 ATM + IP68 + IP69，潜水（最大深度 150 米）"
+  },
+  "display": {
+    "sizeIn": 1.5,
+    "type": "LTPO 2.0 AMOLED 彩屏",
+    "resolutionPx": {
+      "w": 466,
+      "h": 466
+    },
+    "ppi": 310,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "brightnessNits": 3500
+  },
+  "chipset": {
+    "name": "麒麟W80",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null,
+    "vendorClaimedHours": 108
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "2.4 GHz + 5 GHz",
+    "bluetooth": "蓝牙 5.2",
+    "nfc": true,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null,
+    "gnss": "GPS（L1 + L5 双频）/GLONASS/北斗（B1I + B1C + B2a）/GALILEO（E1 + E5a）/QZSS（L1 + L5 双频）",
+    "cellular": null
+  },
+  "os": {
+    "launch": "HarmonyOS 7",
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "理论工作时间": "全能模式常规使用：4.5 天 | 全能模式开启 AOD：3 天 | 省电模式轻度使用：11 天 | 省电模式常规使用：7 天 | 省电模式开启 AOD：4 天 | 潜水：关闭海豚声呐通信潜水可达 18 小时、开启海豚声呐通信潜水可达 12 小时 | 户外探险：40 小时 | 高尔夫：24 小时（约 4 场球）"
+  },
+  "notes": [
+    "表壳尺寸原文「48.5 mm × 48.5 mm × 12.9 mm」：caseSizeMm 取第一个数，thicknessMm 取第三个数（表壳高度）",
+    "屏幕亮度原文无「峰值」限定词，取数值记 brightnessNits（官网仅给一个亮度值）",
+    "续航取自官网「全能模式常规使用：4.5 天」档位，换算为小时；全部分档见 rawOfficial"
+  ],
+  "provenance": {
+    "features.sensors": "huawei-official",
+    "body.caseSizeMm": "huawei-official",
+    "body.thicknessMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "body.waterResistance": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.ppi": "HW",
+    "display.brightnessNits": "huawei-official",
+    "chipset.name": "huawei-official",
+    "battery.vendorClaimedHours": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "connectivity.bluetooth": "huawei-official",
+    "connectivity.gnss": "huawei-official",
+    "connectivity.nfc": "huawei-official",
+    "os.launch": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T04:45:28.396Z",
+  "lastSeenAt": "2026-10-24T04:45:28.396Z",
+  "category": "wearable",
+  "specs": {
+    "features.sensors": [
+      "加速度传感器",
+      "陀螺传感器",
+      "地磁传感器",
+      "光学心率传感器",
+      "气压传感器",
+      "环境光传感器",
+      "温度传感器",
+      "心电传感器",
+      "深度传感器",
+      "X-TAP 智感窗"
+    ]
+  }
+}

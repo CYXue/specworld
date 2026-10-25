@@ -1,0 +1,31 @@
+{
+  "id": "xiaomi-25524",
+  "brand": "xiaomi",
+  "name": "Xiaomi 18 Pro 16GB+1TB 黑色",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=25524",
+  "raw": {
+    "CPU型号": "第六代骁龙®8至尊版",
+    "CPU主频": "最高5GHz",
+    "后置摄像头": "2亿像素+2亿像素+5000万像素",
+    "前置摄像头": "5000万像素",
+    "屏幕": "AMOLED",
+    "屏幕尺寸": "正屏:6.4英寸|背屏:2.7英寸",
+    "运行内存": "最高16GB",
+    "存储容量": "最高1024GB",
+    "NFC": "支持",
+    "红外遥控": "支持",
+    "指纹识别": "超声波指纹",
+    "机身厚度": "黑色/白色/冰桃粉8.46mm|星河蓝/透明版8.56mm",
+    "电池容量": "7000mAh",
+    "有线快充": "100W",
+    "无线快充": "50W",
+    "网络类型": "5G全网通",
+    "网络模式": "双卡双待",
+    "数据接口": "Type-C",
+    "_catalog.price": "8999",
+    "_catalog.productId": "25524",
+    "_catalog.goodsId": "2230015124",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=25524"
+  },
+  "extractedAt": "2026-10-24T06:21:36.487Z"
+}

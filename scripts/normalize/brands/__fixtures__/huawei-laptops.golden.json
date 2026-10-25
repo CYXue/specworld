@@ -1,0 +1,133 @@
+{
+  "id": "huawei-matebook-x-pro-ultra-premium-edition",
+  "slug": "huawei-matebook-x-pro-ultra-premium-edition",
+  "brand": "huawei",
+  "line": "MateBook",
+  "name": "14.2 英寸MateBook X Pro 酷睿 Ultra 微绒典藏版",
+  "nameZh": "14.2 英寸MateBook X Pro 酷睿 Ultra 微绒典藏版",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": 13.5,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "weightKg": 0.98
+  },
+  "display": {
+    "sizeIn": 14.2,
+    "type": "OLED",
+    "resolutionPx": {
+      "w": 3120,
+      "h": 2080
+    },
+    "ppi": 264,
+    "refreshHz": "120",
+    "brightnessTypicalNits": 1000,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "colorGamut": "Windows 版：Adobe RGB / P3 / sRGB | Linux 版：P3"
+  },
+  "chipset": {
+    "name": "第 1 代英特尔®酷睿™ Ultra 9 185H 处理器",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": "英特尔®锐炫™显卡",
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      16,
+      32
+    ],
+    "storageGb": [
+      1024,
+      2048
+    ]
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null,
+    "capacityWh": 70
+  },
+  "camera": {
+    "rear": [],
+    "front": "1080P 高清前置摄像头",
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "IEEE 802.11a/b/g/n/ac/ax, 160 MHz | 2.4 G Hz 和 5 GHz 双频 | 2 × 2 MIMO | 支持 WPA/WPA2/WPA3",
+    "bluetooth": "Windows 版：蓝牙 5.3 | Linux 版：蓝牙 4.2",
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "键盘和触控板": "触控板支持多点触控和压力触控 | 内置“华为分享”感应区 | 1.5 mm 键程 | 全尺寸背光键盘",
+    "包装清单": "HUAWEI MateBook X Pro | 超级快充电源适配器（Max 140 W） | USB-C 数据充电线 | TypeC 数字耳机 | HUAWEI USB-C OTG 转接线 | 快速指南",
+    "尺寸与重量": "13.5 mm | 310 mm | 222 mm"
+  },
+  "notes": [
+    "官网尺寸键位与物理维度错位（长度/厚度标签混用），body.thicknessMm 取全部维度值的最小值；原文见 rawOfficial",
+    "亮度原文未标口径，按典型值记 brightnessTypicalNits：1000 尼特",
+    "处理器原文含多配置并列「第 1 代英特尔®酷睿™ Ultra 9 185H 处理器 | 第 1 代英特尔®酷睿™ Ultra 7 155H 处理器」，chipset.name 取第一段：第 1 代英特尔®酷睿™ Ultra 9 185H 处理器"
+  ],
+  "provenance": {
+    "connectivity.ports": "huawei-official",
+    "audio.speakers": "huawei-official",
+    "body.thicknessMm": "huawei-official",
+    "body.weightKg": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.ppi": "HW",
+    "display.refreshHz": "huawei-official",
+    "display.brightnessTypicalNits": "huawei-official",
+    "display.colorGamut": "huawei-official",
+    "chipset.name": "huawei-official",
+    "chipset.gpu": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "battery.capacityWh": "huawei-official",
+    "connectivity.wifi": "huawei-official",
+    "connectivity.bluetooth": "huawei-official",
+    "camera.front": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T05:06:45.556Z",
+  "lastSeenAt": "2026-10-24T05:06:45.556Z",
+  "category": "laptop",
+  "specs": {
+    "connectivity.ports": [
+      "Thunderbolt™ 4 × 2（左侧）",
+      "USB-C × 1（右侧）",
+      "摄像头隐私开关 × 1（右侧）"
+    ],
+    "audio.speakers": "扬声器 × 6"
+  }
+}

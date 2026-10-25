@@ -1,0 +1,113 @@
+{
+  "id": "huawei-mateview-se",
+  "slug": "huawei-mateview-se",
+  "brand": "huawei",
+  "line": "MateView",
+  "name": "MateView SE 23.8 英寸旋转升降支架版",
+  "nameZh": "MateView SE 23.8 英寸旋转升降支架版",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 472,
+    "widthMm": 538.5,
+    "thicknessMm": null,
+    "weightG": 4500,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "depthMm": 182
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": {
+      "w": 1920,
+      "h": 1080
+    },
+    "ppi": 93,
+    "refreshHz": "100",
+    "brightnessTypicalNits": 250,
+    "brightnessPeakNits": null,
+    "protection": null,
+    "colorGamut": "90% P3 色域（100% sRGB）"
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "包装清单": "HUAWEI MateView SE | 支架（仅旋转升降支架版标配） | 底座 | 电源适配器 | HDMI 线缆 | 快速入门 | 保修卡"
+  },
+  "notes": [
+    "机身尺寸原文含可调区间「538.5 mm × 362~472 mm × 182 mm（含支架）…」：heightMm 取区间下限，原文见 rawOfficial",
+    "重量原文「约 4.5 kg | 配置旋转升降支架版支持 5°（±2°）俯 / 18°（±2°）仰 | 配置旋转升降支架版支持 90°（+2° / 0°）垂直旋转 | 配置旋转升降支架版支持 110 mm（±5 mm）升降」以 kg 标注，×1000 换算为 g"
+  ],
+  "provenance": {
+    "connectivity.ports": "huawei-official",
+    "body.heightMm": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.depthMm": "huawei-official",
+    "body.weightG": "huawei-official",
+    "display.resolutionPx": "huawei-official",
+    "display.resolutionPx.w": "huawei-official",
+    "display.resolutionPx.h": "huawei-official",
+    "display.ppi": "HW",
+    "display.refreshHz": "huawei-official",
+    "display.brightnessTypicalNits": "huawei-official",
+    "display.colorGamut": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T05:03:17.035Z",
+  "lastSeenAt": "2026-10-24T05:03:17.035Z",
+  "category": "display",
+  "specs": {
+    "connectivity.ports": [
+      "HDMI 接口 × 1",
+      "DP 接口 × 1",
+      "电源接口 × 1"
+    ]
+  }
+}

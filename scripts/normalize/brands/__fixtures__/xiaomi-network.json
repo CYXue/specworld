@@ -1,0 +1,27 @@
+{
+  "id": "xiaomi-19332",
+  "brand": "xiaomi",
+  "name": "Xiaomi路由器 6500 Pro",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=19332",
+  "raw": {
+    "适用面积": "≤150㎡",
+    "无线速率": "6500M级",
+    "整机接口": "WAN/LAN口*4",
+    "无线协议": "Wi-Fi 7",
+    "LAN口速率": "最高支持2500M自适应",
+    "WAN口速率": "最高支持2500M自适应",
+    "天线": "内置高增益天线6根+内置蓝牙天线1根+内置NFC天线1根",
+    "CPU": "Qualcomm A53 四核 1.5G",
+    "内存": "1024MB",
+    "信号放大器": "6路独立信号放大器",
+    "Mesh组网": "支持",
+    "宽带适配": "≤2500M",
+    "调制解调": "4096 QAM",
+    "带机量": "715台",
+    "_catalog.price": "549",
+    "_catalog.productId": "19332",
+    "_catalog.goodsId": "2230016182",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=19332"
+  },
+  "extractedAt": "2026-10-24T11:07:13.813Z"
+}

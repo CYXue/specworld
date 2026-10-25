@@ -61,6 +61,14 @@ const PENDING_FILE = join(ROOT, 'data/discovery-pending.json');
  */
 const OVERRIDES_FILE = join(ROOT, 'data/overrides.json');
 /**
+ * 访客纠错待审队列（data/submissions.json）。与 discovery-pending 同一性质：
+ * 它**不影响 products.json**（待管理员审核，采用后才经 overrides 进快照），
+ * 所以队列变化时 data/site 两个指纹都不动 —— 不单算指纹，访客提交的纠错
+ * 永远提交不进仓库，12 小时后没人知道它存在过（P18 同款静默故障）。
+ * 与队列同理：单算 changed 标志供 CI 决定提交，**不参与站点指纹**。
+ */
+const SUBMISSIONS_FILE = join(ROOT, 'data/submissions.json');
+/**
  * 本次结果：含与上一次的比对。_work/ 不入库，只在同一次 CI job 内流通。
  */
 const OUT_FILE = join(ROOT, '_work/fingerprint.json');
@@ -223,6 +231,20 @@ function computeOverridesFingerprint() {
   };
 }
 
+/** 访客纠错待审队列指纹：与队列同理，内容字节直接哈希（文件可能不存在） */
+function computeSubmissionsFingerprint() {
+  if (!existsSync(SUBMISSIONS_FILE)) return { submissionsFingerprint: 'empty', submissionsCount: 0 };
+  const raw = readFileSync(SUBMISSIONS_FILE, 'utf8');
+  const parsed = JSON.parse(raw);
+  return {
+    submissionsFingerprint: createHash('sha256')
+      .update(raw.replace(/\r\n/g, '\n'))
+      .digest('hex')
+      .slice(0, 16),
+    submissionsCount: (parsed?.submissions ?? []).length,
+  };
+}
+
 function compute() {
   if (!existsSync(DATA_FILE)) {
     console.error('❌ 找不到 data/products.json，先跑一次管线');
@@ -280,6 +302,7 @@ function compute() {
     siteFingerprint,
     ...computePendingFingerprint(),
     ...computeOverridesFingerprint(),
+    ...computeSubmissionsFingerprint(),
     ...computeRawFingerprint(),
     // 下面这些只用于日志与 issue 摘要，不参与指纹计算
     stats: {
@@ -324,6 +347,9 @@ if (isMain) {
       raw: previous ? previous.rawFingerprint !== current.rawFingerprint : true,
       /** 用户数据层变化。同理：不参与站点发布，但要能提交。 */
       overrides: previous ? previous.overridesFingerprint !== current.overridesFingerprint : true,
+      /** 访客纠错待审队列变化。同理：不参与站点发布，但要能提交。 */
+      submissions:
+        previous ? previous.submissionsFingerprint !== current.submissionsFingerprint : true,
     },
     computedAt: new Date().toISOString(),
   };
@@ -347,6 +373,8 @@ if (isMain) {
       rawFingerprint: current.rawFingerprint,
       // 用户数据层指纹同理
       overridesFingerprint: current.overridesFingerprint,
+      // 访客纠错待审队列指纹同理
+      submissionsFingerprint: current.submissionsFingerprint,
     };
     writeFileSync(POINTER_FILE, `${JSON.stringify(pointer, null, 2)}\n`, 'utf8');
     console.log(`已推进入库指针 data/.fingerprint → ${current.siteFingerprint}`);
@@ -371,6 +399,9 @@ if (isMain) {
   );
   console.log(
     `用户数据层 ${current.overridesCount} 条（指纹 ${current.overridesFingerprint}）`,
+  );
+  console.log(
+    `访客纠错待审 ${current.submissionsCount} 条（指纹 ${current.submissionsFingerprint}）`,
   );
   console.log();
   if (!previous) {
@@ -407,6 +438,8 @@ if (isMain) {
     `raw_fingerprint=${current.rawFingerprint}`,
     `overrides_changed=${result.changed.overrides}`,
     `overrides_count=${current.overridesCount}`,
+    `submissions_changed=${result.changed.submissions}`,
+    `submissions_count=${current.submissionsCount}`,
     `products=${s.products}`,
   ];
 

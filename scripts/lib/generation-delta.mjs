@@ -77,13 +77,11 @@ export function generationDelta(p, prevProduct) {
 }
 
 /** 卡片展示用的紧凑文本：挑**第一个**可算差异，格式 '+500 mAh' / '-12 g' / '+0.15″' / 芯片 'A18 → A19' */
-export function deltaBadgeText(delta, locale) {
+export function deltaBadgeText(delta) {
   if (!delta) return null;
-  const en = locale === 'en';
   if (delta.battery != null) return `${delta.battery > 0 ? '+' : ''}${delta.battery} mAh`;
   if (delta.weight != null) return `${delta.weight > 0 ? '+' : ''}${delta.weight} g`;
   if (delta.size != null) return `${delta.size > 0 ? '+' : ''}${delta.size}″`;
   if (delta.chip) return delta.chip;
-  void en;
   return null;
 }

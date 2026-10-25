@@ -1,0 +1,110 @@
+{
+  "id": "xiaomi-25524",
+  "slug": "xiaomi-25524",
+  "brand": "xiaomi",
+  "line": "Xiaomi 18",
+  "name": "Xiaomi 18 Pro 16GB+1TB 黑色",
+  "nameZh": "Xiaomi 18 Pro 16GB+1TB 黑色",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": 6.4,
+    "type": "AMOLED",
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": "第六代骁龙®8至尊版",
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [
+      16
+    ],
+    "storageGb": [
+      1024
+    ]
+  },
+  "battery": {
+    "capacityMah": 7000,
+    "capacityCaliber": "typical",
+    "wiredChargeW": 100,
+    "wirelessChargeW": 50,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": true,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": true,
+    "nfcDetail": null,
+    "irBlaster": true,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": "Type-C",
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "未入契约的关键参数": "CPU主频：最高5GHz | 后置摄像头：2亿像素+2亿像素+5000万像素 | 前置摄像头：5000万像素 | 指纹识别：超声波指纹 | 机身厚度：黑色/白色/冰桃粉8.46mm|星河蓝/透明版8.56mm | 网络模式：双卡双待",
+    "后置摄像头": "2亿像素+2亿像素+5000万像素",
+    "前置摄像头": "5000万像素",
+    "指纹识别": "超声波指纹",
+    "网络模式": "双卡双待"
+  },
+  "notes": [
+    "屏幕尺寸原文为多屏标注「正屏:6.4英寸|背屏:2.7英寸」：display.sizeIn 取第一段（正屏），其余见 rawOfficial",
+    "以下关键参数未入契约（结构不合或品类不适用，官网原文见 rawOfficial）：CPU主频=最高5GHz；后置摄像头=2亿像素+2亿像素+5000万像素；前置摄像头=5000万像素；指纹识别=超声波指纹；机身厚度=黑色/白色/冰桃粉8.46mm|星河蓝/透明版8.56mm；网络模式=双卡双待"
+  ],
+  "provenance": {
+    "chipset.name": "huawei-official",
+    "battery.capacityMah": "huawei-official",
+    "battery.capacityCaliber": "huawei-official",
+    "battery.wiredChargeW": "huawei-official",
+    "battery.wirelessChargeW": "huawei-official",
+    "memory.ramGb": "huawei-official",
+    "memory.storageGb": "huawei-official",
+    "connectivity.nfc": "huawei-official",
+    "connectivity.irBlaster": "huawei-official",
+    "connectivity.usb": "huawei-official",
+    "connectivity.fiveG": "huawei-official",
+    "display.sizeIn": "huawei-official",
+    "display.type": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T06:21:36.487Z",
+  "lastSeenAt": "2026-10-24T06:21:36.487Z",
+  "category": "phone"
+}

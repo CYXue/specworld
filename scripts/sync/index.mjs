@@ -25,6 +25,7 @@ import {
   percentileOf,
 } from '../lib/derive.mjs';
 import { applyOverrides, loadOverrides, validateOverrides } from '../lib/overrides.mjs';
+import { loadSchema } from '../lib/schema.mjs';
 import { flattenSpecs, SPEC_GROUPS } from '../lib/specs.mjs';
 import { WINDOW_FUZZ_DAYS, windowStartEffective } from '../lib/window.mjs';
 import { buildQueueFile, classifyByWindow } from './queue.mjs';
@@ -137,6 +138,20 @@ function main() {
     // pick 是 specs-first 所以闸门/派生/前端读不到旧值，但归档、指纹、
     // 任何直接读嵌套的下游都会拿到旧值，且没有任何报错。
     for (const g of SPEC_GROUPS) delete p[g];
+    // 拍平后清理「schema 未注册的空键」：emptyRecord 骨架带出的 null（如平板没有
+    // nfc/ipRating 字段）会原样进 specs，闸门把它们当「未注册键」拦下。
+    // 手机既有形状不受影响——已注册键的 null 保留（形状契约）；只删未注册的空值。
+    // 未注册的**非空**值不在这里删，留给闸门报错（拍平漏组/字段名拼错是故障信号）。
+    const schema = loadSchema(p.category ?? 'phone');
+    if (schema) {
+      const registered = new Set(schema.fields.map((f) => f.path));
+      for (const k of Object.keys(p.specs)) {
+        const v = p.specs[k];
+        if ((v === null || v === '' || (Array.isArray(v) && v.length === 0)) && !registered.has(k)) {
+          delete p.specs[k];
+        }
+      }
+    }
   }
 
   // 用户数据层：每次同步重新应用。官网刷新不会冲掉用户数据——

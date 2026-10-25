@@ -1,0 +1,99 @@
+{
+  "id": "xiaomi-12115",
+  "slug": "xiaomi-12115",
+  "brand": "xiaomi",
+  "line": "米家",
+  "name": "米家冰箱 三门215L",
+  "nameZh": "米家冰箱 三门215L",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 1808,
+    "widthMm": 524,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "depthMm": 582
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "品类特有参数": "制冷方式：直冷 | 面板材质：金属面板 | 制冷系统：单系统 | 压缩机类型：定频 | 放置方式：独立式 | 净化技术：银离子抗菌 | 保鲜技术：无 | 智能互联：不支持 | 总容量：215L | 变温室容积：30L | 冷冻室容积：58L | 冷藏室容积：127L | 耗电量：0.66kW·h/24h | 深度：≤60CM | 宽度：＜60CM | 价格带：0-1000元 | 门体类型：三门"
+  },
+  "notes": [
+    "机身三维取官网「524*582*1808mm」（数值序：宽、深、高）",
+    "品类特有参数（17 项）未入契约——随品类差异大，schema 不收一次性字段，原文见 rawOfficial"
+  ],
+  "provenance": {
+    "power.ratingLevel": "huawei-official",
+    "features.noiseDb": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.depthMm": "huawei-official",
+    "body.heightMm": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T12:08:11.042Z",
+  "lastSeenAt": "2026-10-24T12:08:11.042Z",
+  "category": "home",
+  "specs": {
+    "power.ratingLevel": "3级",
+    "features.noiseDb": 38
+  }
+}

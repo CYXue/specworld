@@ -14,7 +14,7 @@
 /** 手机品类的参数组。拍平/展开都按这个清单走；其他品类用自己的 schema 字段前缀 */
 export const SPEC_GROUPS: readonly string[];
 
-/** 取值：specs 优先，v1 嵌套结构回退（迁移期新旧快照双兼容） */
+/** 取值：只读 specs 容器（2026-10-21 起 specs 是唯一真源，v1 回退已拆除） */
 export function pick(product: unknown, path: string): unknown;
 
 /** 写 specs 值。product 上没有 specs 容器时现场建 */

@@ -18,7 +18,4 @@ export declare function generationDelta(
   prevProduct: { specs?: Record<string, unknown> } | null,
 ): GenerationDelta | null;
 
-export declare function deltaBadgeText(
-  delta: GenerationDelta | null,
-  locale: string,
-): string | null;
+export declare function deltaBadgeText(delta: GenerationDelta | null): string | null;

@@ -1,0 +1,27 @@
+{
+  "id": "xiaomi-20993",
+  "brand": "xiaomi",
+  "name": "REDMI Book Pro 16 2025 Ultra5-225H/32G/1T/3.1K/165Hz",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=20993",
+  "raw": {
+    "屏幕分辨率": "2560*1600 / 3072*1920",
+    "CPU类型": "Ultra5 225H / Ultra7 255H",
+    "显卡类型": "集显",
+    "屏幕尺寸": "16英寸",
+    "固态硬盘": "1024GB",
+    "内存容量": "32GB",
+    "重量(净重)": "1.88kg",
+    "操作系统": "Windows 11",
+    "屏幕亮度": "400 尼特 / 500尼特",
+    "屏幕色域": "100% sRGB / 100% P3",
+    "屏幕刷新率": "120Hz / 165Hz",
+    "电池容量": "99Wh",
+    "电源适配器": "140W",
+    "屏幕比例": "16:10",
+    "_catalog.price": "7799",
+    "_catalog.productId": "20993",
+    "_catalog.goodsId": "2230003694",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=20993"
+  },
+  "extractedAt": "2026-10-24T11:07:11.999Z"
+}

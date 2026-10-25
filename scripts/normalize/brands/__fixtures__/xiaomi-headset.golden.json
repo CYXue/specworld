@@ -1,0 +1,113 @@
+{
+  "id": "xiaomi-20978",
+  "slug": "xiaomi-20978",
+  "brand": "xiaomi",
+  "line": "Buds",
+  "name": "Xiaomi Buds 5 Pro 钛光金",
+  "nameZh": "Xiaomi Buds 5 Pro 钛光金",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": 53,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "budWeightG": 5.6,
+    "waterResistance": "耳机IP54"
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null,
+    "budHours": 10,
+    "withCaseHours": 40
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "降噪": "55dB/5kHz",
+    "整体续航": "8h/40h；Wi-Fi版:10h/40h",
+    "音频协议": "AAC/SBC/aptX Adaptive/aptX Lossless"
+  },
+  "notes": [
+    "耳机单次续航取官网各档最大值，全档见 rawOfficial",
+    "官网关键参数自带发布日期「2025年2月」（月精度）"
+  ],
+  "provenance": {
+    "audio.anc": "huawei-official",
+    "audio.spatialAudio": "huawei-official",
+    "audio.driverUnit": "huawei-official",
+    "battery.chargingMethods": "huawei-official",
+    "body.budWeightG": "huawei-official",
+    "body.weightG": "huawei-official",
+    "body.waterResistance": "huawei-official",
+    "battery.budHours": "huawei-official",
+    "battery.withCaseHours": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-24T11:07:12.809Z",
+  "lastSeenAt": "2026-10-24T11:07:12.809Z",
+  "category": "audio",
+  "specs": {
+    "audio.anc": true,
+    "audio.spatialAudio": true,
+    "audio.driverUnit": "11mm双磁动圈+陶瓷单元+平面振膜单元",
+    "battery.chargingMethods": [
+      "支持",
+      "充电10min续航4h"
+    ]
+  }
+}

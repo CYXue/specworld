@@ -348,8 +348,14 @@ check('系列分面计数之和等于品牌台数（不能有机型漏分系列�
 });
 
 check('华为系列直接用官网 line 字段（不被机型名规则污染）', () => {
-  const hua = REAL_P.filter((p) => p.brand === 'huawei');
-  for (const p of hua) {
+  // 系列面集合断言只看手机品类：2026-10 起华为多品类进站（平板=MatePad、穿戴=WATCH…），
+  // 全量集合会随品类扩充而变化；各品类 line 的取值正确性由品牌映射层 golden 断言守住。
+  // 2026-10-25 起历史机型通道（curated-retrieval）进站，其 line 是检索侧派生值（设计如此，
+  // 由 curated 源纪律守住）——本断言只盯官网通道（specs-page），避免通道间口径混淆。
+  const hua = REAL_P.filter(
+    (p) => p.brand === 'huawei' && p.category === 'phone' && p.granularity === 'specs-page',
+  );
+  for (const p of REAL_P.filter((p) => p.brand === 'huawei')) {
     assert.equal(C.seriesOf(p), p.line, `${p.name} 系列应等于官网 line`);
   }
   const ids = C.seriesFacets(hua)
@@ -462,7 +468,9 @@ check('默认筛选 = 全量（不能少任何一台）', () => {
 });
 
 check('维度间取交集、同维度内取并集', () => {
-  const both = F.applyFilter(REAL_P, { ...F.emptyFilter(), brand: ['apple', 'huawei'] });
+  // 台数从数据推导：新增品牌（2026-10-24 起小米）进站那天这条不该假警报
+  const brandIds = [...new Set(REAL_P.map((p) => p.brand))];
+  const both = F.applyFilter(REAL_P, { ...F.emptyFilter(), brand: brandIds });
   assert.equal(both.length, REAL_P.length, '同维度多选是「或」');
   const appleFold = F.applyFilter(REAL_P, {
     ...F.emptyFilter(),
@@ -512,9 +520,13 @@ check('分面计数联动但选项枚举看全集（0 计数灰显保留，选�
   // 联动计数正确：苹果自己的芯片计数 = 苹果池内台数
   const a19 = chips.find((c) => c.id === 'A19Pro');
   assert.ok(a19 && a19.count > 0, '选苹果后 A19 Pro 必须还有计数');
-  // 而品牌分面自身不受限制，两个品牌都还能看到
+  // 而品牌分面自身不受限制，全部品牌都还能看到（台数从数据推导，品牌扩容不假警报）
   const brands = F.facetOf(REAL_P, 'brand', F.applyExcept(REAL_P, fa, 'brand'), REAL_LABELS);
-  assert.equal(brands.length, 2, '品牌分面不应被自己的选择收窄');
+  assert.equal(
+    brands.length,
+    new Set(REAL_P.map((p) => p.brand)).size,
+    '品牌分面不应被自己的选择收窄',
+  );
   assert.equal(
     brands.find((b) => b.id === 'huawei')?.count,
     REAL_P.filter((p) => p.brand === 'huawei').length,
@@ -527,7 +539,11 @@ check('反向测：选华为芯片后品牌分面仍含苹果（0 计数），�
   // FilterBar 的 dims 过滤（选项 >1 才显示）把品牌触发器整个藏掉 —— 用户没法反悔。
   const fa = { ...F.emptyFilter(), chip: ['麒麟9010S', '麒麟9030Pro'] };
   const brands = F.facetOf(REAL_P, 'brand', F.applyExcept(REAL_P, fa, 'brand'), REAL_LABELS);
-  assert.equal(brands.length, 2, '品牌分面必须仍有两个品牌');
+  assert.equal(
+    brands.length,
+    new Set(REAL_P.map((p) => p.brand)).size,
+    '品牌分面必须仍含全部品牌（不随维度选择消失）',
+  );
   const apple = brands.find((b) => b.id === 'apple');
   assert.ok(apple, '苹果必须还在品牌分面里');
   assert.equal(apple?.count, 0, '苹果计数应为 0（灰显不可点）');

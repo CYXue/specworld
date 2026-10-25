@@ -1,3 +1,4 @@
+import { WINDOW_START } from '../lib/window.mjs';
 import {
   assert, createHash, existsSync,
   readFileSync, readdirSync, statSync,
@@ -37,6 +38,7 @@ import {
   allVueSource, makeProduct,
 } from './context.mjs';
 import { check, section } from './runtime.mjs';
+// 队列文件断言引真源，不再写字面量（2026-10-25 窗口改全量后字面量断言会误杀）
 
 /* ================================================================ *
  * 11. 窗口过滤与待收录队列
@@ -321,7 +323,7 @@ check('data/discovery-pending.json 若存在，必须是无时间戳的纯数据
   const q = JSON.parse(raw);
   assert.equal(typeof q.count, 'number', 'count 必须是数字');
   assert.equal(q.count, q.items.length, 'count 必须与 items 长度一致');
-  assert.equal(q.windowStart, '2024-09-01', 'windowStart 应与管线窗口一致');
+  assert.equal(q.windowStart, WINDOW_START, 'windowStart 应与管线窗口一致（引 lib/window.mjs 真源）');
   assert.ok(
     !/generatedAt|firstSeenAt|fetchedAt|syncedAt/.test(raw),
     '队列文件含时间戳字段，会造成空提交',

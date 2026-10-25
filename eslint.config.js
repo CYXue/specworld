@@ -22,7 +22,7 @@ export default [
       'coverage/**',
       '*.md',
       'package-lock.json',
-      // 根目录 _smoke*.cjs 是 gitignore 的 puppeteer 浏览器回归脚本，刻意用 require，不纳入 lint
+      // _smoke*.cjs（puppeteer 浏览器回归脚本，已归位 scripts/smoke/）刻意用 require，不纳入 lint
       '**/*.cjs',
       // .vue 由 prettier 负责格式化，eslint 不处理（避免引入 vue-eslint-parser 复杂度）
       '**/*.vue',

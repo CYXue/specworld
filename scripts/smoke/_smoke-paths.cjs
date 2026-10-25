@@ -9,8 +9,8 @@
 const path = require('path')
 const fs = require('fs')
 
-/** 项目根目录 = 本文件所在目录（_smoke-paths.cjs 就在根下）。 */
-const ROOT = __dirname
+/** 项目根目录 = 本文件上两级（脚本已归位 scripts/smoke/ 下）。 */
+const ROOT = path.resolve(__dirname, '..', '..')
 
 /**
  * 截图输出目录。默认 <项目根>/_shots，可用 OUT_DIR 覆盖（相对路径按 ROOT 解析）。

@@ -1,0 +1,21 @@
+{
+  "id": "xiaomi-10050240",
+  "brand": "xiaomi",
+  "name": "REDMI显示器 A27U Type-C 120Hz 2027",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=25467",
+  "raw": {
+    "屏幕分辨率": "3840×2160",
+    "屏幕尺寸": "27英寸",
+    "最高刷新率": "UHD 120hz /FHD 240hzHz",
+    "接口": "HDMI2.1 *2、DP1.4*1、Audio*1、Type-C 90W、USB*2",
+    "支架调节": "多功能支架",
+    "面板类型": "IPS",
+    "屏幕比例": "16:09",
+    "屏幕类型": "直面屏",
+    "_catalog.price": "1699",
+    "_catalog.productId": "25467",
+    "_catalog.goodsId": "2230015019",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=25467"
+  },
+  "extractedAt": "2026-10-24T11:07:13.364Z"
+}
