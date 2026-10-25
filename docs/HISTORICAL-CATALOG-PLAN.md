@@ -106,6 +106,17 @@ ZOL 直连通道留档：拿到可用会话（登录 cookie/代理出口）后�
   映射器 laptop 分支（capacityWh/weightKg，长宽厚未入契约留 note）。
   FreeBuds 4 属耳机品类需 audio 专用字段（budHours 等），本批排除留待后续；
   路由/家电历史款 schema 形态差异大，同样留待后续批次。
+- **尾巴补齐（2026-10-25，同日）**：前三条尾巴全部落地——
+  ① 映射器品类分支重构（network/home/audio 各自 schema 注册面按品类落位，
+  家电三维按 curated 归一后的 高×宽×深 字面顺序、不机械排序）；
+  ② 路由 4 台 + 家电 5 台（净化器/冰箱/洗衣机/空调，能效/噪音入契约；
+  路由 AX2/AX3、电饭煲 4L 检索限流未取证）；③ 耳机 10 台（小米 Buds 3→4 Pro、
+  Redmi Buds 4/5、华为 FreeBuds 4i/Pro 2/5/Pro 3，budHours/withCaseHours/anc 入契约；
+  部分 sourceUrl 仅域名级——SERP 截断，note 内说明，弱于文章级 URL，已标注）；
+  ④ 零星早期手机 4 台（Note 2/2S/5s/5X）；⑤ **第四品牌荣耀（honor）进站**：
+  品牌注册表新增 + 14 台（荣耀6→30 数字系、V10、Magic5/6/V2、X50、50/70）。
+  schema 演进：home weightG 上界 3000→80000g（冰箱 37kg/洗衣机 62kg 真值）。
+  最终规模 1388 台（苹果 892 / 华为 217 / 小米 265 / 荣耀 14），取证表 512 条。
 
 ## 五、纪律（本工程不得违反的红线）
 
