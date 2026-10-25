@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import { buildDocs, searchWithMeta, suggestions } from '../lib/search';
 import { abilityRows } from '../lib/specs';
@@ -12,7 +12,6 @@ import LoadingState from '../components/LoadingState.vue';
 // q 与 brand 都写在 query 里（#/search?q=mate&brand=huawei），所以刷新、分享、
 // 浏览器前进后退都能还原同一份结果 —— hash 路由下这是唯一可靠的做法，
 // 拿组件内的 ref 存查询词会让「后退」直接失灵。
-const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();

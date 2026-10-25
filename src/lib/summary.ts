@@ -80,14 +80,13 @@ export interface SpecSlot {
 }
 
 /**
- * 槽位规则：**标签长在规则上**（label/labelEn 与 key 同条目），不走全局索引。
+ * 槽位规则：**标签长在规则上**（label 与 key 同条目），不走全局索引。
  * 真实故障（2026-10-17 用户报告）：曾经值按品类表取、标签却是全局
  * ['屏幕','电池','快充'] 按列位硬贴 —— HomePod mini 2 的蓝牙值贴「电池」、
  * 重量值贴「快充」，Apple TV 4K 的 217g 贴「电池」。标签与值必须同源。
  */
 interface SlotRule {
   label: string;
-  labelEn: string;
   key: string;
   fmt: (v: unknown) => string | null;
 }
@@ -95,44 +94,44 @@ interface SlotRule {
 /** 品类 → 固定 3 槽（顺序即列位，改顺序会移动整列语义，慎重） */
 const SLOT_RULES: Record<string, SlotRule[]> = {
   phone: [
-    { label: '屏幕', labelEn: 'Display', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
-    { label: '电池', labelEn: 'Battery', key: 'battery.capacityMah', fmt: (v) => (num(v) != null ? `${thousand(num(v)!)}mAh` : null) },
-    { label: '快充', labelEn: 'Charge', key: 'battery.wiredChargeW', fmt: (v) => (num(v) != null ? `${num(v)}W` : null) },
+    { label: '屏幕', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
+    { label: '电池', key: 'battery.capacityMah', fmt: (v) => (num(v) != null ? `${thousand(num(v)!)}mAh` : null) },
+    { label: '快充', key: 'battery.wiredChargeW', fmt: (v) => (num(v) != null ? `${num(v)}W` : null) },
   ],
   laptop: [
-    { label: '处理器', labelEn: 'Chip', key: 'chipset.name', fmt: str },
-    { label: '屏幕', labelEn: 'Display', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
-    { label: '内存', labelEn: 'Memory', key: 'memory.ramGb', fmt: (v) => (num(v) != null ? `${num(v)}GB` : null) },
+    { label: '处理器', key: 'chipset.name', fmt: str },
+    { label: '屏幕', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
+    { label: '内存', key: 'memory.ramGb', fmt: (v) => (num(v) != null ? `${num(v)}GB` : null) },
   ],
   display: [
-    { label: '屏幕', labelEn: 'Size', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
-    { label: '刷新率', labelEn: 'Refresh', key: 'display.refreshHz', fmt: (v) => (num(v) != null ? `${num(v)}Hz` : null) },
-    { label: '像素密度', labelEn: 'PPI', key: 'display.ppi', fmt: (v) => (num(v) != null ? `${num(v)}ppi` : null) },
+    { label: '屏幕', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
+    { label: '刷新率', key: 'display.refreshHz', fmt: (v) => (num(v) != null ? `${num(v)}Hz` : null) },
+    { label: '像素密度', key: 'display.ppi', fmt: (v) => (num(v) != null ? `${num(v)}ppi` : null) },
   ],
   // 音频：续航 / 蓝牙 / 重量。HomePod 一体音箱没有 budHours（那是耳机单元口径），
   // 该槽自然空占位，蓝牙与重量永远对得上自己的标签。
   audio: [
-    { label: '续航', labelEn: 'Battery', key: 'battery.budHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
-    { label: '蓝牙', labelEn: 'Bluetooth', key: 'connectivity.bluetooth', fmt: str },
-    { label: '重量', labelEn: 'Weight', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+    { label: '续航', key: 'battery.budHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
+    { label: '蓝牙', key: 'connectivity.bluetooth', fmt: str },
+    { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
   ],
   // 机顶盒/媒体盒（Apple TV 等）：芯片 / 存储 / 重量——没有电池，永远不挂电池槽。
   media: [
-    { label: '芯片', labelEn: 'Chip', key: 'chipset.name', fmt: str },
-    { label: '存储', labelEn: 'Storage', key: 'memory.storageGb', fmt: (v) => (Array.isArray(v) && v.length ? `${v[v.length - 1]}GB` : null) },
-    { label: '重量', labelEn: 'Weight', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+    { label: '芯片', key: 'chipset.name', fmt: str },
+    { label: '存储', key: 'memory.storageGb', fmt: (v) => (Array.isArray(v) && v.length ? `${v[v.length - 1]}GB` : null) },
+    { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
   ],
   // 平板：屏幕 / 芯片 / 重量。
   tablet: [
-    { label: '屏幕', labelEn: 'Display', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
-    { label: '芯片', labelEn: 'Chip', key: 'chipset.name', fmt: str },
-    { label: '重量', labelEn: 'Weight', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+    { label: '屏幕', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
+    { label: '芯片', key: 'chipset.name', fmt: str },
+    { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
   ],
   // 穿戴：表壳 / 续航 / 重量。
   wearable: [
-    { label: '表壳', labelEn: 'Case', key: 'body.caseSizeMm', fmt: (v) => (num(v) != null ? `${num(v)}mm` : null) },
-    { label: '续航', labelEn: 'Battery', key: 'battery.vendorClaimedHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
-    { label: '重量', labelEn: 'Weight', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+    { label: '表壳', key: 'body.caseSizeMm', fmt: (v) => (num(v) != null ? `${num(v)}mm` : null) },
+    { label: '续航', key: 'battery.vendorClaimedHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
+    { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
   ],
 };
 
@@ -140,39 +139,33 @@ const SLOT_RULES: Record<string, SlotRule[]> = {
  * 「屏幕/电池/重量」是「电池 —」到处出现的根因）。档案槽不读 specs 数值，
  * 读身份字段（发布/芯片/形态）——历史机型永远有值，占位噪音自然消失。
  */
-const ARCHIVE_SLOTS: Array<{ label: string; labelEn: string; get: (p: Product) => string | null }> = [
-  { label: '发布', labelEn: 'Released', get: (p) => shortDateLabel(p) || null },
-  { label: '芯片', labelEn: 'Chip', get: (p) => {
+const ARCHIVE_SLOTS: Array<{ label: string; get: (p: Product) => string | null }> = [
+  { label: '发布', get: (p) => shortDateLabel(p) || null },
+  { label: '芯片', get: (p) => {
       const v = (p.specs ?? {})['chipset.name'];
       return typeof v === 'string' && v.trim() ? v : null;
     } },
-  { label: '形态', labelEn: 'Form', get: (p) => formLabelOf(p) || null },
+  { label: '形态', get: (p) => formLabelOf(p) || null },
 ];
 
 /** 兜底 3 槽：未登记品类给「尺寸 / 重量」两槽 + 空槽——没有电池，不猜语义。 */
 const FALLBACK_SLOTS: SlotRule[] = [
-  { label: '尺寸', labelEn: 'Size', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
-  { label: '重量', labelEn: 'Weight', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+  { label: '尺寸', key: 'display.sizeIn', fmt: (v) => (num(v) != null ? `${num(v)}″` : null) },
+  { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
 ];
 
 /** 固定 3 槽：永远返回 3 项，值缺失的槽 value = null。axis 决定读「买点」还是「档案要点」。 */
-export function specSlotsOf(
-  p: Product,
-  locale?: string,
-  axis: 'buy' | 'archive' = 'buy',
-): SpecSlot[] {
+export function specSlotsOf(p: Product, axis: 'buy' | 'archive' = 'buy'): SpecSlot[] {
   if (axis === 'archive') {
-    const en = locale === 'en';
-    return ARCHIVE_SLOTS.map((s) => ({ label: en ? s.labelEn : s.label, value: s.get(p) }));
+    return ARCHIVE_SLOTS.map((s) => ({ label: s.label, value: s.get(p) }));
   }
   const specs = p.specs ?? {};
   const rules = SLOT_RULES[categoryOf(p)] ?? FALLBACK_SLOTS;
-  const en = locale === 'en';
   const out: SpecSlot[] = [];
   for (let i = 0; i < 3; i++) {
     const rule = rules[i];
     const v = rule ? (rule.key in specs ? rule.fmt(specs[rule.key]) : null) : null;
-    out.push({ label: rule ? (en ? rule.labelEn : rule.label) : '', value: v });
+    out.push({ label: rule ? rule.label : '', value: v });
   }
   return out;
 }

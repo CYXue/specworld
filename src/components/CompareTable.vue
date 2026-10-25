@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
 import type { Product } from '../types';
 import { specGroups, type SpecRowState } from '../lib/fields';
@@ -19,7 +19,6 @@ import MissingBadge from './MissingBadge.vue';
  * - 粒度警告提行级：混合深度行整行给提示条，不再缩在单元格角落 11px 灰字。
  */
 const props = defineProps<{ products: Product[] }>();
-const { t } = useI18n();
 const { remove } = useCompare();
 const diffOnly = ref(false);
 const openIdentical = ref(false);

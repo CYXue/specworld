@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import LoadingState from '../components/LoadingState.vue';
 import LibraryInner from '../components/LibraryInner.vue';
@@ -9,7 +9,6 @@ import LibraryInner from '../components/LibraryInner.vue';
 // 品牌页 = 该品牌内部的筛选 / 列表 / 加入对比。
 // 直接复用 LibraryInner（机型库主体），品牌维度天然只有一个取值，筛选器里它会出现但无害；
 // 这样品牌页与机型库永远共用同一套 facets 口径（同一个问题两个答案就是 bug）。
-const { t } = useI18n();
 const route = useRoute();
 const { ds, err } = useDataset();
 const derived = useDerived();

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 
 const props = withDefaults(
   defineProps<{
@@ -12,7 +12,6 @@ const props = withDefaults(
   { size: 'sm', autofocus: false },
 );
 
-const { t } = useI18n();
 const router = useRouter();
 const q = ref('');
 

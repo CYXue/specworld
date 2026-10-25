@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { statusLabelOf } from '../lib/catalog';
 
 const props = defineProps<{ status: string }>();
-const { t } = useI18n();
 
 const cls = computed(() => {
   switch (props.status) {

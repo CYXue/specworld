@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useDataset, useDerived } from '../lib/useDataset';
 import type { Product } from '../types';
 import { lifecycleLines, lineRange, barGeometry } from '../lib/timeline';
 import LoadingState from '../components/LoadingState.vue';
 
-const { t } = useI18n();
 const { ds } = useDataset();
 const derived = useDerived();
 

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import type { SpecRow, SpecRowState } from '../lib/fields';
 
 defineProps<{ title: string; rows: SpecRow[] }>();
 
-const { t } = useI18n();
 /** 已展开采集说明的行（key = 标签） */
 const expanded = ref(new Set<string>());
 function toggleNote(r: SpecRow) {

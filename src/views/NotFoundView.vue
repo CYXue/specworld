@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
-const { t } = useI18n();
 </script>
 
 <template>

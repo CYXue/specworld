@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
 import type { Product } from '../types';
 import { useDataset, useDerived } from '../lib/useDataset';
@@ -15,7 +15,6 @@ import SearchBox from '../components/SearchBox.vue';
 import LoadingState from '../components/LoadingState.vue';
 import PriceTag from '../components/PriceTag.vue';
 
-const { t } = useI18n();
 const { ds, err } = useDataset();
 const derived = useDerived();
 

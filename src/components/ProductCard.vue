@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
 import type { Product } from '../types';
 import { shortDateLabel, formLabelOf } from '../lib/catalog';
@@ -19,7 +19,6 @@ import PriceTag from './PriceTag.vue';
  * - 在售状态在标题行下方的小字位（圆点 + 文字，不靠颜色单独表意）。
  */
 const props = defineProps<{ product: Product; vendorName?: string; vendorColor?: string; order?: number }>();
-const { t, locale } = useI18n();
 const { has, toggle, ids } = useCompare();
 
 /** 副标题 =「时间 · 形态」（评审：品牌/产品线/子线三者重名，「标准」对多数机型是废话） */
@@ -29,7 +28,7 @@ const subline = computed(() =>
 
 /** 固定 3 槽，按状态轴切换：停售机走档案要点（评审：1986 年配件不挂「电池 —」） */
 const slots = computed<SpecSlot[]>(() =>
-  specSlotsOf(props.product, locale.value, props.product.status === 'retired' ? 'archive' : 'buy'),
+  specSlotsOf(props.product, props.product.status === 'retired' ? 'archive' : 'buy'),
 );
 
 const checked = computed(() => has(props.product.id));

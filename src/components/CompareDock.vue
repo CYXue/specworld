@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink, useRoute } from 'vue-router';
 import type { Product } from '../types';
 import { useCompare } from '../lib/useCompare';
 
 const props = defineProps<{ products: Product[] }>();
 const { ids, remove, clear, max } = useCompare();
-const { t } = useI18n();
 const route = useRoute();
 
 /** 在 /vs（对比结果页）隐藏托盘——托盘的终点就是当前页，「查看对比」在此处毫无意义 */

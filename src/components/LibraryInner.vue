@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import type { Product } from '../types';
 import {
   DIMENSION_KEYS,
@@ -21,7 +21,6 @@ import CompareDock from './CompareDock.vue';
 import EmptyState from './EmptyState.vue';
 
 const props = defineProps<{ products: Product[]; brandLabels?: Map<string, string> }>();
-const { t, locale } = useI18n();
 const derived = useDerived();
 
 const f = useLibraryFilters(props.products, props.brandLabels);

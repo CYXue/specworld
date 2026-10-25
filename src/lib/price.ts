@@ -9,7 +9,7 @@
  *
  * 拆在 `src/lib/price.ts`（而不是让 exportSummary 去 import catalog）是为了保住
  * exportSummary 的「零运行时依赖」——它要能被 scripts/selftest.mjs 直接
- * `await import()` 钉住数字；catalog 拖着 i18n / vue-i18n，会把纯计算层拖下水。
+ * `await import()` 钉住数字；catalog 拖着 i18n 字典与整张策展表，会把纯计算层拖下水。
  *
  * 口径（改这里等于改全站，selftest「起售价单一真身」用例会看着）：
  *   - 多容量档取**最小值**当起售价；

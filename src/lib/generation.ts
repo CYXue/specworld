@@ -22,6 +22,6 @@ export function deltaOf(
 }
 
 /** 卡片徽章文本（挑第一个可算差异；无 → null 不渲染） */
-export function deltaBadgeOf(p: Product, prev: Product | undefined, locale: string): string | null {
-  return deltaBadgeText(deltaOf(p, prev), locale);
+export function deltaBadgeOf(p: Product, prev: Product | undefined): string | null {
+  return deltaBadgeText(deltaOf(p, prev));
 }

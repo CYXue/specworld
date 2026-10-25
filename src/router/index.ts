@@ -4,8 +4,8 @@ import HomeView from '../views/HomeView.vue';
 
 // ⚠️ 必须用 hash 历史！Toy 挂在 /toy/<slug>/ 下，history.pushState 会破坏分享链接和刷新。
 // toy-publish FAQ 明确推荐 hash 模式。
-// 路由表单独导出：scripts/smoke/i18n-ssr.mjs 用它拼一个 memory history 的路由做
-// 服务端渲染冒烟，避免测试里另抄一份路由表而漏测新增页面。
+// 路由表单独导出：selftest 的「路由可达性」闸门与冒烟脚本都读同一张表，
+// 避免测试里另抄一份路由表而漏测新增页面。
 export const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/brand/:brand', name: 'brand', component: () => import('../views/BrandView.vue') },
@@ -40,8 +40,8 @@ const router = createRouter({
 // 进去对比台是空的）。这里在每次跳转前把当前选择带到目标 query：
 //   - 目标自带 sel（分享链接）→ 不覆盖，由 watcher 按链接内容同步；
 //   - 没有选择 → 不动，URL 保持干净。
-// 注：scripts/smoke/i18n-ssr.mjs 用 routes 自建 memory history 路由做 SSR 冒烟，
-// 那道链全新状态无选择，守卫有无都不影响它。
+// 注：冒烟脚本与 selftest 都以全新状态加载路由，无历史选择，
+// 守卫有无都不影响它们。
 router.beforeEach((to) => {
   if (to.query.sel) return true;
   const sel = currentSelection();

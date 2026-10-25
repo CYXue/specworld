@@ -1,8 +1,7 @@
 import curatedFacets from '../../data/curated/facets.json' with { type: 'json' };
 import { isFoldableOfficial } from '../../scripts/lib/foldable.mjs';
-import { i18n, currentLocale, pickLocale } from '../i18n';
+import { i18n } from '../i18n';
 import type { Product } from '../types';
-import { localizeSpecValue } from './glossary';
 import { basePriceCny } from './price';
 
 /**
@@ -10,17 +9,15 @@ import { basePriceCny } from './price';
  * 变体表/品牌系列策略/多芯判据/价格档全部是**数据**——加变体、调价格档、接新品牌
  * 只改 JSON，不改本文件；selftest「策展表外置对账」双向看守（结构合法性+哨兵语义）。
  */
-/** 策展条目统一带 `labelEn`（2026-10-13 i18n 治理：数据侧双语，selftest 对账） */
+/** 策展条目只读中文 label（2026-10-21 移除多语言；数据侧 labelEn 字段保留但不消费） */
 interface CuratedVariant {
   id: string;
   label: string;
-  labelEn: string;
   match: string;
   flags?: string;
 }
 interface CuratedSeriesRule {
   label: string;
-  labelEn: string;
   match?: string;
   flags?: string;
   fallback?: boolean;
@@ -28,26 +25,20 @@ interface CuratedSeriesRule {
 interface CuratedBrandSeries {
   from: 'name';
   series: CuratedSeriesRule[];
-  foldVariant?: { match: string; flags?: string; label: string; labelEn: string };
+  foldVariant?: { match: string; flags?: string; label: string };
 }
 interface CuratedDict {
   variants: CuratedVariant[];
   series: {
     default: 'line';
     brands?: Record<string, CuratedBrandSeries>;
-    /** 兜底系列 id（标准/其它）的英文名 */
-    fallbackLabelEn?: Record<string, string>;
-    /** 厂商产品线字段（`p.line`）里中文名的英译（如 畅享 → Enjoy） */
-    lineEn?: Record<string, string>;
   };
   chipMultiPrefixes: string[];
-  // 芯片名的官方英文名（麒麟 → Kirin、A18 芯片 → A18 chip）不在本字典里，
-  // 统一由 data/curated/glossary.json 管 —— 芯片名在参数表/分面/榜单/搜索建议里都要显示，
-  // 两处各写一份迟早分叉（2026-10-14 已合并）。
+  // 芯片名的官方英文名（麒麟 → Kirin）原由 data/curated/glossary.json 管，
+  // 该文件已随多语言退役（2026-10-21）删除；站内只展示官网原文。
   priceBuckets: Array<{
     id: string;
     label: string;
-    labelEn: string;
     min: number;
     max: number | null;
   }>;
@@ -120,41 +111,35 @@ type CategoryId =
 export interface CategoryDef {
   id: CategoryId;
   label: string;
-  /** 英文名。与 data/categories.json 的 label/labelEn 双字段同源（selftest 对账） */
-  labelEn: string;
 }
 
 export const CATEGORY_ORDER: CategoryDef[] = [
-  { id: 'phone', label: '手机', labelEn: 'Phone' },
-  { id: 'tablet', label: '平板', labelEn: 'Tablet' },
-  { id: 'laptop', label: '笔记本', labelEn: 'Laptop' },
-  { id: 'desktop', label: '台式电脑', labelEn: 'Desktop' },
-  { id: 'display', label: '显示器', labelEn: 'Display' },
-  { id: 'wearable', label: '可穿戴', labelEn: 'Wearable' },
-  { id: 'headset', label: '头显', labelEn: 'Headset' },
-  { id: 'home', label: '智能家居', labelEn: 'Smart Home' },
-  { id: 'audio', label: '音频', labelEn: 'Audio' },
-  { id: 'media', label: '多媒体播放器', labelEn: 'Media Player' },
-  { id: 'tracker', label: '定位器', labelEn: 'Tracker' },
-  { id: 'network', label: '网络设备', labelEn: 'Networking' },
-  { id: 'pda', label: '掌上电脑', labelEn: 'PDA' },
-  { id: 'input', label: '输入设备', labelEn: 'Input Device' },
-  { id: 'printer', label: '打印机', labelEn: 'Printer' },
-  { id: 'storage', label: '存储设备', labelEn: 'Storage' },
-  { id: 'accessory', label: '配件', labelEn: 'Accessory' },
+  { id: 'phone', label: '手机' },
+  { id: 'tablet', label: '平板' },
+  { id: 'laptop', label: '笔记本' },
+  { id: 'desktop', label: '台式电脑' },
+  { id: 'display', label: '显示器' },
+  { id: 'wearable', label: '可穿戴' },
+  { id: 'headset', label: '头显' },
+  { id: 'home', label: '智能家居' },
+  { id: 'audio', label: '音频' },
+  { id: 'media', label: '多媒体播放器' },
+  { id: 'tracker', label: '定位器' },
+  { id: 'network', label: '网络设备' },
+  { id: 'pda', label: '掌上电脑' },
+  { id: 'input', label: '输入设备' },
+  { id: 'printer', label: '打印机' },
+  { id: 'storage', label: '存储设备' },
+  { id: 'accessory', label: '配件' },
 ]
 
 /**
- * 品类展示名（语言感知）。
- *
- * ⚠️ **语言只从 `currentLocale()` 来，不由调用方传**（2026-10-13 统一口径，
- * 理由见 `src/i18n/index.ts` 的 `currentLocale` 注释）：`locale` 参数会变成
- * 第二真源，与 lib 内部 `t()` 读到的全局语言打架时产出中英混排，且无闸门可报。
+ * 品类展示名。2026-10-21 移除多语言后只读中文 label（labelEn 字段在数据里保留但不消费）。
  */
 export function categoryLabel(id: CategoryId): string {
   const c = CATEGORY_ORDER.find((x) => x.id === id);
   if (!c) return id;
-  return pickLocale(c.label, c.labelEn);
+  return c.label;
 }
 
 /**
@@ -275,7 +260,6 @@ export function formLabelOf(p: Product): string {
 interface VariantDef {
   id: string;
   label: string;
-  labelEn: string;
   test: (n: string) => boolean;
 }
 
@@ -283,7 +267,6 @@ interface VariantDef {
 const VARIANTS: VariantDef[] = CURATED.variants.map((v) => ({
   id: v.id,
   label: v.label,
-  labelEn: v.labelEn,
   test: makeNameTest(v),
 }));
 
@@ -307,18 +290,8 @@ export function seriesOf(p: Product): string {
   return p.line || SERIES_OTHER;
 }
 
-/** 系列 id → 展示名（语言感知）。查不到就原样返回（新品线不必先登记才能显示） */
+/** 系列 id → 展示名。2026-10-21 移除多语言：系列名本来就是中文站内事实，原样返回 */
 export function seriesLabel(id: string): string {
-  if (currentLocale() !== 'en') return id;
-  const cfg = CURATED.series;
-  if (cfg.fallbackLabelEn?.[id]) return cfg.fallbackLabelEn[id];
-  if (cfg.lineEn?.[id]) return cfg.lineEn[id];
-  for (const b of Object.values(cfg.brands ?? {})) {
-    const hit =
-      b.series?.find((x) => x.label === id)?.labelEn ??
-      (b.foldVariant?.label === id ? b.foldVariant.labelEn : undefined);
-    if (hit) return hit;
-  }
   return id;
 }
 
@@ -333,17 +306,16 @@ export function variantOf(p: Product): string {
 }
 
 /**
- * 变体 id → 展示名（语言感知）。
+ * 变体 id → 展示名（中文单语，2026-10-21 移除多语言）。
  *
  * ⚠️ 查表键是 **label 不是 id**：`variantOf` 与 `seriesOf` 返回的都是 label
  * （变体表/系列表用 label 作为分面值，见 `seriesLabel` 里同样的写法）。
- * 这里曾经写成 `v.id === id`，于是中文变体（优享版 / 风驰版）永远查不到
- * labelEn、英文页直接吐中文 —— 而拉丁变体（Pro / Ultra）因为 label 与 labelEn
- * 恰好相同而「看起来是对的」，故障藏了整整一轮。
+ * 这里曾经写成 `v.id === id`，于是中文变体（优享版 / 风驰版）查不到对应项，
+ * 而拉丁变体（Pro / Ultra）因为 label 与 id 恰好相同而「看起来是对的」，
+ * 故障藏了整整一轮——查表键与返回值必须是同一套口径。
  */
 export function variantLabel(id: string): string {
-  if (currentLocale() !== 'en') return id;
-  return VARIANTS.find((v) => v.label === id)?.labelEn ?? seriesLabel(id);
+  return id;
 }
 
 /** 系列/变体的兜底 id（两处共用一个常量，防止「标准」在两处写成不同字） */
@@ -433,15 +405,9 @@ export function chipName(p: Product): string {
 export function chipNameLabel(name: string): string {
   if (name === UNKNOWN) return i18n.global.t('common.unpublished');
   const s = name.replace(/(\d)(Pro)(?=$|[^A-Za-z0-9])/g, '$1 $2').trim();
-  // 芯片型号是**标识**，不是描述 —— 厂商有官方英文名就必须用官方的
-  // （麒麟 → Kirin、A18 芯片 → A18 chip）。以前这一层根本没有，英文页的
-  // 参数表/分面/榜单里直接吐「麒麟9020」「A18 芯片」——SSR 冒烟也没报，因为
-  // 「麒麟」「芯片」在 products.json 的官网原文里出现过，被数据白名单放过了。
-  //
-  // 术语翻译统一走 glossary（`data/curated/glossary.json`），这里不另写一份替换表：
-  // 芯片名在参数表、分面、榜单、搜索建议里都要显示，两处各写一份
-  // 迟早分叉（这正是上一轮刚踩过的「两份真源」）。
-  return localizeSpecValue(s);
+  // 2026-10-21 移除多语言：芯片型号是官网原文标识，站内只展示原文，
+  // 原术语翻译层（glossary，麒麟→Kirin）随双语一起退役。
+  return s;
 }
 
 /**
@@ -525,13 +491,11 @@ export { basePriceCny };
 export const PRICE_BUCKETS: Array<{
   id: string;
   label: string;
-  labelEn: string;
   min: number;
   max: number;
 }> = CURATED.priceBuckets.map((b) => ({
   id: b.id,
   label: b.label,
-  labelEn: b.labelEn,
   min: b.min,
   max: b.max ?? Infinity,
 }));
@@ -549,20 +513,19 @@ export function priceBucket(p: Product): string {
   return last ? last.id : UNKNOWN;
 }
 
-/** 价格档 id → 显示名（分面用，语言感知：档位名在 data/curated/facets.json 双语） */
+/** 价格档 id → 显示名（分面用：档位名在 data/curated/facets.json） */
 export function priceLabel(id: string): string {
   if (id === UNKNOWN) return i18n.global.t('common.priceUnpublished');
   const b = PRICE_BUCKETS.find((x) => x.id === id);
-  return pickLocale(b?.label ?? id, b?.labelEn);
+  return b?.label ?? id;
 }
 
 /**
- * 金额本地化。**千分位随语言**：中文按 zh-CN、英文按 en-US（`1,299` 两侧同形，
- * 但 `¥` 与数字的相对位置、未来更大数量级的分组都要跟着语言走，不能写死 zh-CN）。
+ * 金额本地化。中文站固定 zh-CN 千分位（2026-10-21 移除多语言后不再随语言切换）。
  */
 export function fmtPriceCny(v: number | null): string {
   if (v == null) return i18n.global.t('common.priceUnpublished');
-  return `${i18n.global.t('common.currencySymbol')}${v.toLocaleString(currentLocale() === 'en' ? 'en-US' : 'zh-CN')}`;
+  return `${i18n.global.t('common.currencySymbol')}${v.toLocaleString('zh-CN')}`;
 }
 
 // ── 榜单取样 ──

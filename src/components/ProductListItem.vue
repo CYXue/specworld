@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
 import type { Product } from '../types';
 import { seriesOf, seriesLabel } from '../lib/catalog';
@@ -10,7 +10,6 @@ import StatusBadge from './StatusBadge.vue';
 import PriceTag from './PriceTag.vue';
 
 const props = defineProps<{ product: Product; vendorName?: string; vendorColor?: string }>();
-const { t } = useI18n();
 const { has, toggle } = useCompare();
 
 const subline = computed(() =>

@@ -4,14 +4,13 @@ import laptopSchemaJson from '../../data/schemas/laptop.json' with { type: 'json
 import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' };
 import tabletSchemaJson from '../../data/schemas/tablet.json' with { type: 'json' };
 import wearableSchemaJson from '../../data/schemas/wearable.json' with { type: 'json' };
-import phoneViewJson from '../../data/view-phone.json' with { type: 'json' };
+import phoneViewJson from '../../data/views/phone.json' with { type: 'json' };
 import { classifyMissing, isNonePlaceholder, toSpecRowState } from '../../scripts/lib/missing-state.mjs';
-import { i18n, currentLocale, pickLocale } from '../i18n';
+import { i18n } from '../i18n';
 import type { Product } from '../types';
 import { categoryOf } from './catalog';
-import { localizeSpecValue } from './glossary';
 
-/** 展示文案助手：语言只从全局来（口径见 `src/i18n/index.ts` 的 `currentLocale`） */
+/** 展示文案助手（中文单语字典，口径见 `src/i18n/index.ts`） */
 const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, params ?? {});
 
 /**
@@ -21,7 +20,7 @@ const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, 
  * schema 加字段不会自动出现在页面上（靠渲染对账闸门大声拦截，但仍要手工同步）。
  * 现在改为「**全声明式字典 + 泛化引擎**」：
  *   - 数据语义在 `data/schemas/phone.json`（有什么参数/类型/区间/单位）；
- *   - 展示语义在 `data/view-phone.json`（组标题/行序/合并/格式化器/hidden 豁免）；
+ *   - 展示语义在 `data/views/phone.json`（组标题/行序/合并/格式化器/hidden 豁免）；
  *   - 引擎只认识字典，不认识任何具体字段——**schema 加一行，页面自动出现**
  *     （未引用且未 hidden 的字段自动按其 schema 分组追加，新分组自动建组）；
  *   - selftest「渲染对账」双向看守：schema 字段要么被视图引用要么在 hidden；
@@ -36,10 +35,7 @@ const t = (key: string, params?: Record<string, unknown>) => i18n.global.t(key, 
 interface SchemaFieldJson {
   path: string;
   label: string;
-  /** 英文标签。**与 label 成对存在**（selftest 的 i18n 对账闸门强制，缺一即红灯） */
-  labelEn?: string;
   unit?: string | null;
-  unitEn?: string | null;
   type: string;
   group: string;
   /** 参数级筛选声明：true = 该字段自动成为一个筛选维度（相等类引擎，任意类型） */
@@ -48,12 +44,11 @@ interface SchemaFieldJson {
   orderDeriver?: string;
 }
 interface SchemaJson {
-  groups?: Array<{ id: string; name: string; nameEn?: string }>;
+  groups?: Array<{ id: string; name: string }>;
   fields: SchemaFieldJson[];
 }
 interface ViewRow {
   label?: string;
-  labelEn?: string;
   field?: string;
   fields?: string[];
   expand?: string;
@@ -62,7 +57,6 @@ interface ViewRow {
 interface ViewGroup {
   id: string;
   title: string;
-  titleEn?: string;
   /** 一个视图组可吞并多个 schema 分组（如「芯片与存储」= chipset + memory） */
   matchGroups?: string[];
   rows: ViewRow[];
@@ -146,10 +140,10 @@ function noteFor(paths: string[], labels: string[], notes: string[] | undefined)
   );
 }
 
-/** 语言感知的标签/单位解析（数据侧 label/labelEn、unit/unitEn 双字段） */
-const labelOf = (f: { label: string; labelEn?: string }): string => pickLocale(f.label, f.labelEn);
+/** 标签/单位解析（2026-10-21 移除多语言后只读中文字段；labelEn/unitEn 在数据里保留但不消费） */
+const labelOf = (f: { label: string }): string => f.label;
 const unitOf = (f: SchemaFieldJson | undefined): string => {
-  const u = pickLocale(f?.unit ?? '', f?.unitEn);
+  const u = f?.unit ?? '';
   return u ? ` ${u}` : '';
 };
 
@@ -165,8 +159,7 @@ function defaultFormat(field: SchemaFieldJson | undefined, v: unknown): string {
     case 'array:number':
       return Array.isArray(v) && v.length ? `${v.join(' / ')}${unit}` : '—';
     case 'array:string':
-      // 枚举顿号「、」是中文特有；英文用逗号 + 空格（不是「顺手留着」的半吊子）
-      return Array.isArray(v) && v.length ? v.join(currentLocale() === 'en' ? ', ' : '、') : '—';
+      return Array.isArray(v) && v.length ? v.join('、') : '—';
     case 'object':
       return objectSummary(v, unit);
     case 'array:object':
@@ -349,14 +342,14 @@ function buildSpecGroups(
           ? defaultFormat(fields[0], values[0])
           : values.map((v, i) => defaultFormat(fields[i], v)).join(' / ');
       rows.push({
-        label: pickLocale(r.label ?? paths.join('+'), r.labelEn),
+        label: r.label ?? paths.join('+'),
         value,
         state: rowState(values, granularity),
-        note: noteFor(paths, [pickLocale(r.label ?? '', r.labelEn)], p.notes),
+        note: noteFor(paths, [r.label ?? ''], p.notes),
         prov: provFor(paths),
       });
     }
-    out.push({ id: g.id, title: pickLocale(g.title, g.titleEn), rows });
+    out.push({ id: g.id, title: g.title, rows });
   }
 
   // ── 自动补挂（最优解核心）：schema 有、视图没引用、也没 hidden 的字段 → 自动出现在页面上。
@@ -373,9 +366,9 @@ function buildSpecGroups(
     const target = bySchemaGroup.get(f.group);
     const sg = schema.groups?.find((x) => x.id === f.group);
     const key = target
-      ? pickLocale(target.title, target.titleEn)
+      ? target.title
       : sg
-        ? pickLocale(sg.name, sg.nameEn)
+        ? sg.name
         : f.group;
     if (target) targetId.set(key, target.id);
     const row: SpecRow = {
@@ -401,21 +394,14 @@ function buildSpecGroups(
 
 /**
  * 详情页/对比表共用入口（签名不变，消费方零改动）。
- *
- * 出口处统一过一遍术语本地化：specs 值是中文官网原文，英文界面下要把其中的
- * 术语换成厂商官方英文（见 `./glossary`）。放在出口而不是每个 formatter 里，
- * 是为了**只有一个接入口** —— 将来新增展示点不会漏挂。
+ * 2026-10-21 移除多语言：specs 值本就是中文官网原文，直接返回，
+ * 原出口处的术语本地化层（glossary）随双语一起退役。
  */
 export function specGroups(p: Product): SpecGroup[] {
   const category = categoryOf(p);
   const schema = schemaForCategory(category);
   const view = category === 'phone' ? PHONE_VIEW : EMPTY_VIEW;
-  const groups = buildSpecGroups(schema, view, p);
-  if (currentLocale() !== 'en') return groups;
-  return groups.map((g) => ({
-    ...g,
-    rows: g.rows.map((r) => ({ ...r, value: localizeSpecValue(r.value) })),
-  }));
+  return buildSpecGroups(schema, view, p);
 }
 
 /**

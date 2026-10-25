@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { setLocale, currentLocale } from '../i18n';
+import { t } from '../i18n';
 import { REPO_URL, CODE_LICENSE, LICENSE_PATH } from '../lib/site';
-
-const { t, locale } = useI18n();
-
-function toggleLocale() {
-  setLocale(locale.value === 'en' ? 'zh-CN' : 'en');
-}
 
 // ── 深色模式开关（纸上数据库 · 夜间纸墨）──
 // 真源 = documentElement.dataset.theme；localStorage 只做持久化。
@@ -45,9 +38,6 @@ function toggleTheme() {
           @click="toggleTheme"
         >
           {{ isDark ? '☀' : '☾' }}
-        </button>
-        <button type="button" class="font-mono text-[13px] hover:text-fg" @click="toggleLocale">
-          {{ currentLocale() === 'en' ? '中文' : 'EN' }}
         </button>
       </div>
     </div>

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useDataset } from '../lib/useDataset';
 import LoadingState from '../components/LoadingState.vue';
 import LibraryInner from '../components/LibraryInner.vue';
 
-const { t } = useI18n();
 const { ds, err } = useDataset();
 
 // 品牌分面/机型副标题用的展示名映射（Vendor.name 即官方名）。

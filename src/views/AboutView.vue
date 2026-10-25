@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useDataset } from '../lib/useDataset';
 import { CODE_LICENSE, LICENSE_PATH, REPO_URL } from '../lib/site';
 
 // 关于页 = 项目说明 + 数据与原则 + 许可与署名。
 // 「数据与原则」原先挂在每个页面底部的 SiteFooter，用户要求收敛到独立关于页，
 // 避免在所有页面重复铺开。这里自己取数据源（与 App 同源单例），不再经 props 下钻。
-const { t } = useI18n();
 const { ds } = useDataset();
 
 const generatedAt = computed(() => {

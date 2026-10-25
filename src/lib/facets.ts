@@ -1,4 +1,4 @@
-import { i18n, currentLocale, pickLocale } from '../i18n';
+import { i18n } from '../i18n';
 import type { Product } from '../types';
 import {
   FORM_LABEL_KEY,
@@ -22,7 +22,6 @@ import {
   yearOf,
 } from './catalog';
 import { PHONE_SCHEMA, facetFields } from './fields';
-import { localizeSpecValue } from './glossary';
 import type { AbilityKey } from './specs';
 import { abilityRaw } from './specs';
 
@@ -116,7 +115,7 @@ function facetFieldOf(key: DimKey) {
  */
 export function dimLabel(key: DimKey): string {
   const f = facetFieldOf(key);
-  if (f) return pickLocale(f.label, f.labelEn);
+  if (f) return f.label;
   const k = IDENTITY_LABEL_KEY[key];
   return k ? i18n.global.t(k) : key;
 }
@@ -236,10 +235,9 @@ function facetLabel(dim: DimKey, id: string): string {
     if (id === 'false') return i18n.global.t('facet.no');
   }
   // 参数维度（wifi / 卫星 / 出厂系统 等 string 型分面）的取值是**中文官网原文**，
-  // 与详情页参数行同一纪律——英文界面必须过术语表，否则英文筛选条会吐「802.11be 无线局域网」
-  // /「北斗卫星消息」/「鸿蒙操作系统 5.0」。detail 行走 specGroups→localizeSpecValue，
-  // 这里必须同路，否则又出现「详情页英文、筛选条中文」的静默分叉。
-  return localizeSpecValue(id);
+  // 与详情页参数行同一纪律。2026-10-21 移除多语言后，原术语本地化层（glossary）退役，
+  // 站内一律展示官网原文。
+  return id;
 }
 
 /**
@@ -247,8 +245,7 @@ function facetLabel(dim: DimKey, id: string): string {
  *
  * `pool` 应传入「**其它维度已过滤**」的集合（用 `applyExcept`），
  * 本维度自己不算进去 —— 这样选中某项后，同维度其它项的计数仍正确（可改主意）。
- * 语言取全局 `currentLocale()`（id 不受影响）。调用方把它放在 `computed()` 里，
- * 语言切换时整张分面表自动重算（`locale` 是 ref，读过即被追踪）。
+ * 2026-10-21 移除多语言：label 为纯中文常量，无需响应式重算。
  */
 export function facetOf(
   products: Product[],

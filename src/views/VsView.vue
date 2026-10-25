@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { RouterLink } from 'vue-router';
 import type { Product } from '../types';
 import { useDataset } from '../lib/useDataset';
@@ -10,7 +10,6 @@ import CompareDock from '../components/CompareDock.vue';
 import EmptyState from '../components/EmptyState.vue';
 import LoadingState from '../components/LoadingState.vue';
 
-const { t } = useI18n();
 const { ds, err } = useDataset();
 const { ids } = useCompare();
 

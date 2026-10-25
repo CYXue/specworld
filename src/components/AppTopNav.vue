@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useRoute, RouterLink } from 'vue-router';
 import SearchBox from './SearchBox.vue';
 import { useCompare } from '../lib/useCompare';
 
-const { t } = useI18n();
 const route = useRoute();
 const { ids } = useCompare();
 

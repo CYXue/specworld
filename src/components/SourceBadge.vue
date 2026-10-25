@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 withDefaults(
   defineProps<{
     href?: string;
@@ -9,7 +9,6 @@ withDefaults(
   }>(),
   { unpublished: false },
 );
-const { t } = useI18n();
 </script>
 
 <template>

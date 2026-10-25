@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 
 /**
  * 官网原文抽屉（评审 2026-10-16：可核查的落点）。
@@ -9,7 +9,6 @@ import { useI18n } from 'vue-i18n';
  */
 defineProps<{ sections: Record<string, string>; specUrl?: string }>();
 const open = ref(false);
-const { t } = useI18n();
 </script>
 
 <template>

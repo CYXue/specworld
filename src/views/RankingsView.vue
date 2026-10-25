@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import { useChunkedList } from '../lib/useChunkedList';
 import { ABILITIES, abilityLabel, abilityRaw, fmtAbility } from '../lib/specs';
 import { useDataset } from '../lib/useDataset';
@@ -43,7 +43,6 @@ import PriceTag from '../components/PriceTag.vue';
  * 改为「紧凑控制条 + 高密度列表（默认）/ 宽表格（切换）」——排序优先级链收成 chips，
  * 多级编辑与快捷入口进可展开面板，结果第一屏就可见。
  */
-const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { ds } = useDataset();

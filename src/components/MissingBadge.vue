@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 
 /**
  * 缺失值徽章（全站唯一实现，评审 2026-10-17 共性问题 2）：
@@ -19,7 +19,6 @@ const props = defineProps<{
   /** 补充说明（如来源粒度、采集说明 note），进 title 提示 */
   note?: string;
 }>();
-const { t } = useI18n();
 
 const label = computed(() =>
   props.state === 'unpublished' ? t('common.unpublished') : t('common.uncollected'),

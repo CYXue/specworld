@@ -6,76 +6,65 @@
       "id": "pro-max",
       "label": "Pro Max",
       "match": "Pro\\s*Max",
-      "flags": "i",
-      "labelEn": "Pro Max"
+      "flags": "i"
     },
     {
       "id": "pro-plus",
       "label": "Pro+",
       "match": "Pro\\s*\\+",
-      "flags": "i",
-      "labelEn": "Pro+"
+      "flags": "i"
     },
     {
       "id": "pro",
       "label": "Pro",
       "match": "\\bPro\\b",
-      "flags": "i",
-      "labelEn": "Pro"
+      "flags": "i"
     },
     {
       "id": "rs",
       "label": "RS",
       "match": "\\bRS\\b",
-      "flags": "i",
-      "labelEn": "RS"
+      "flags": "i"
     },
     {
       "id": "ultra",
       "label": "Ultra",
       "match": "\\bUltra\\b",
-      "flags": "i",
-      "labelEn": "Ultra"
+      "flags": "i"
     },
     {
       "id": "plus",
       "label": "Plus",
       "match": "\\bPlus\\b",
-      "flags": "i",
-      "labelEn": "Plus"
+      "flags": "i"
     },
     {
       "id": "max",
       "label": "Max",
       "match": "\\bMax\\b",
-      "flags": "i",
-      "labelEn": "Max"
+      "flags": "i"
     },
     {
       "id": "air",
       "label": "Air",
       "match": "\\bAir\\b",
-      "flags": "i",
-      "labelEn": "Air"
+      "flags": "i"
     },
     {
       "id": "se",
       "label": "SE",
       "match": "\\bSE\\b",
-      "flags": "i",
-      "labelEn": "SE"
+      "flags": "i"
     },
     {
       "id": "yxb",
       "label": "优享版",
-      "match": "优享版",
-      "labelEn": "Youxiang Edition"
+      "match": "优享版"
     },
     {
       "id": "fcb",
       "label": "风驰版",
-      "match": "风驰版",
-      "labelEn": "Fengchi Edition"
+      "match": "风驰版"
     }
   ],
   "series": {
@@ -87,41 +76,29 @@
           {
             "label": "折叠屏",
             "match": "iPhone\\s*Duo",
-            "flags": "i",
-            "labelEn": "Foldable"
+            "flags": "i"
           },
           {
             "label": "Air",
             "match": "\\bAir\\b",
-            "flags": "i",
-            "labelEn": "Air"
+            "flags": "i"
           },
           {
             "label": "SE",
             "match": "\\d+e\\b",
-            "flags": "i",
-            "labelEn": "SE"
+            "flags": "i"
           },
           {
             "label": "标准",
-            "fallback": true,
-            "labelEn": "Standard"
+            "fallback": true
           }
         ],
         "foldVariant": {
           "match": "iPhone\\s*Duo",
           "flags": "i",
-          "label": "折叠双屏",
-          "labelEn": "Dual-screen Fold"
+          "label": "折叠双屏"
         }
       }
-    },
-    "fallbackLabelEn": {
-      "标准": "Standard",
-      "其它": "Other"
-    },
-    "lineEn": {
-      "畅享": "Enjoy"
     }
   },
   "chipMultiPrefixes": [
@@ -138,50 +115,43 @@
       "id": "0-1999",
       "label": "¥0-1999",
       "min": 0,
-      "max": 1999,
-      "labelEn": "¥0-1999"
+      "max": 1999
     },
     {
       "id": "2000-2999",
       "label": "¥2000-2999",
       "min": 2000,
-      "max": 2999,
-      "labelEn": "¥2000-2999"
+      "max": 2999
     },
     {
       "id": "3000-3999",
       "label": "¥3000-3999",
       "min": 3000,
-      "max": 3999,
-      "labelEn": "¥3000-3999"
+      "max": 3999
     },
     {
       "id": "4000-4999",
       "label": "¥4000-4999",
       "min": 4000,
-      "max": 4999,
-      "labelEn": "¥4000-4999"
+      "max": 4999
     },
     {
       "id": "5000-5999",
       "label": "¥5000-5999",
       "min": 5000,
-      "max": 5999,
-      "labelEn": "¥5000-5999"
+      "max": 5999
     },
     {
       "id": "6000-7999",
       "label": "¥6000-7999",
       "min": 6000,
-      "max": 7999,
-      "labelEn": "¥6000-7999"
+      "max": 7999
     },
     {
       "id": "8000+",
       "label": "¥8000 以上",
       "min": 8000,
-      "max": null,
-      "labelEn": "¥8000+"
+      "max": null
     }
   ]
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import type { FacetItem, FilterState, SortKey } from '../lib/facets';
 import { SORTS, sortLabel } from '../lib/facets';
 
@@ -24,7 +24,6 @@ const emit = defineEmits<{
   setView: [v: 'card' | 'list'];
 }>();
 
-const { t } = useI18n();
 const openSet = ref<Set<string>>(new Set());
 const moreOpen = ref(false);
 

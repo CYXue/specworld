@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { t } from '../i18n';
 import type { Product } from '../types';
 import { basePriceCny, fmtPriceCny } from '../lib/catalog';
 import MissingBadge from './MissingBadge.vue';
@@ -17,7 +17,6 @@ import MissingBadge from './MissingBadge.vue';
  * 避免首页改好了、其他页面各自表现。
  */
 const props = defineProps<{ product: Product; size?: 'xl' | 'lg' | 'md' | 'sm' }>();
-const { t } = useI18n();
 
 const v = computed(() => basePriceCny(props.product));
 const sizeClass = computed(
