@@ -412,9 +412,12 @@ function main() {
     join(ROOT, 'data', 'curated', 'xiaomi-history-m3.json'),
     join(ROOT, 'data', 'curated', 'xiaomi-history-m2fix.json'),
     join(ROOT, 'data', 'curated', 'xiaomi-history-m3b.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-network-home.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-audio-misc.json'),
     join(ROOT, 'data', 'curated', 'huawei-history.json'),
     join(ROOT, 'data', 'curated', 'huawei-history-batch2.json'),
     join(ROOT, 'data', 'curated', 'huawei-history-m4b.json'),
+    join(ROOT, 'data', 'curated', 'honor-history.json'),
   ];
   let historyRecords = [];
   const historyParts = [];

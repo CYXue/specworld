@@ -51,7 +51,7 @@
       "type": "number",
       "range": [
         50,
-        3000
+        80000
       ],
       "dir": null,
       "quantifiable": true,

@@ -103,11 +103,12 @@
     "memory.ramGb": "retrieval",
     "memory.storageGb": "retrieval",
     "battery.capacityMah": "retrieval",
+    "battery.capacityCaliber": "retrieval",
     "battery.wiredChargeW": "retrieval",
     "body.weightG": "retrieval",
+    "body.thicknessMm": "retrieval",
     "body.heightMm": "retrieval",
-    "body.widthMm": "retrieval",
-    "body.thicknessMm": "retrieval"
+    "body.widthMm": "retrieval"
   },
   "firstSeenAt": "2026-10-25T00:00:00.000Z",
   "lastSeenAt": "2026-10-25T00:00:00.000Z",

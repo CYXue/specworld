@@ -20,7 +20,7 @@
  */
 
 /** 全部受支持品牌的 id，有序。新增品牌在此追加一项即可 */
-const BRAND_IDS = Object.freeze(['apple', 'huawei', 'xiaomi']);
+const BRAND_IDS = Object.freeze(['apple', 'huawei', 'xiaomi', 'honor']);
 
 /** 单一真源：每个品牌的完整元数据 */
 const BRANDS = Object.freeze({
@@ -49,6 +49,18 @@ const BRANDS = Object.freeze({
     shortLabel: '小米',
     accentColor: '#ff6900',
     motif: 'mi',
+    country: 'CN',
+  },
+  // 2026-10-25 新增第四品牌：荣耀（2013-2020 为华为子品牌，2020-11 独立）。
+  // 本站收录口径：荣耀品牌下 2013 年起的机型（独立后产品为主，子品牌时期主力机一并收录，
+  // 取证口径与其他品牌一致——检索式逐台 sourceUrl）。
+  honor: {
+    id: 'honor',
+    name: 'HONOR',
+    nameZh: '荣耀',
+    shortLabel: '荣耀',
+    accentColor: '#00a0e9',
+    motif: 'honor',
     country: 'CN',
   },
 });

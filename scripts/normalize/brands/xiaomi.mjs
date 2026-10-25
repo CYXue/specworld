@@ -882,6 +882,14 @@ function mapXiaomiHistory(entry) {
     } else if (entry.category === 'laptop') {
       // 笔记本契约用 weightKg（长宽厚未入 laptop schema）→ dims 不写，原文留 note
       addNote(rec, `三维原文「${tidy(entry.dimsMm)}」未入契约（laptop schema 无长宽厚字段），见本 note`);
+    } else if (entry.category === 'home') {
+      // 家电契约是 height/width/depth（深），无 thickness。
+      // 不排序——curated 源已人工归一为 高×宽×深 字面顺序（空调内机 宽>高、
+      // 洗衣机 深>宽，机械排序必然错位），note 保留原始口径。
+      rec.body.heightMm = dims[0];
+      rec.body.widthMm = dims[1];
+      rec.body.depthMm = dims[2];
+      addNote(rec, `三维按 curated 源归一后的 高×宽×深 字面顺序落位，原始口径见 note（${tidy(entry.dimsMm)}）`);
     } else {
       const [h, w, t] = [...dims].sort((a, b) => b - a);
       rec.body.heightMm = h;
@@ -906,19 +914,90 @@ function mapXiaomiHistory(entry) {
     put(rec, 'body.weightKg', rec.body.weightKg, RETRIEVAL);
   }
 
-  put(rec, 'display.sizeIn', rec.display.sizeIn, RETRIEVAL);
-  putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, RETRIEVAL, ['w', 'h']);
-  put(rec, 'display.refreshHz', rec.display.refreshHz, RETRIEVAL);
-  put(rec, 'display.type', rec.display.type, RETRIEVAL);
-  put(rec, 'chipset.name', rec.chipset.name, RETRIEVAL);
-  put(rec, 'memory.ramGb', rec.memory.ramGb, RETRIEVAL);
-  put(rec, 'memory.storageGb', rec.memory.storageGb, RETRIEVAL);
-  put(rec, 'battery.capacityMah', rec.battery.capacityMah, RETRIEVAL);
-  put(rec, 'battery.wiredChargeW', rec.battery.wiredChargeW, RETRIEVAL);
+  /* 契约字段按品类落位（各自 schema 注册面不同，跨品类乱写会被闸门拦未注册键）：
+   *   display 组        仅 phone/tablet/laptop（network/home/audio 无屏或无该组）
+   *   chipset           phone/tablet/laptop/network（audio/home 的芯片口径不稳，留 note）
+   *   memory            phone/tablet/laptop/network/wearable
+   *   battery.capacity  phone/tablet/wearable（laptop 用 Wh 见上；audio 用 budHours）
+   *   wiredChargeW      phone/tablet
+   *   body.weightG      phone/tablet/wearable/audio
+   *   三维               phone/tablet/home（其余见 dims 分支） */
+  const cat = entry.category ?? 'phone';
+  const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home'].includes(cat);
+  if (hasDisplay) {
+    put(rec, 'display.sizeIn', rec.display.sizeIn, RETRIEVAL);
+    putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, RETRIEVAL, ['w', 'h']);
+    put(rec, 'display.refreshHz', rec.display.refreshHz, RETRIEVAL);
+    put(rec, 'display.type', rec.display.type, RETRIEVAL);
+  }
+  // chipset.name 五类 schema 全注册（audio 除外——口径不稳不落位）
+  if (cat !== 'audio') {
+    put(rec, 'chipset.name', rec.chipset.name, RETRIEVAL);
+  }
+  if (cat !== 'home' && cat !== 'audio') {
+    put(rec, 'memory.ramGb', rec.memory.ramGb, RETRIEVAL);
+    put(rec, 'memory.storageGb', rec.memory.storageGb, RETRIEVAL);
+  }
+  if (['phone', 'tablet', 'wearable'].includes(cat)) {
+    put(rec, 'battery.capacityMah', rec.battery.capacityMah, RETRIEVAL);
+    put(rec, 'battery.capacityCaliber', rec.battery.capacityCaliber, RETRIEVAL);
+  }
+  if (['phone', 'tablet'].includes(cat)) {
+    put(rec, 'battery.wiredChargeW', rec.battery.wiredChargeW, RETRIEVAL);
+  }
+  // body.weightG 五类 schema 全注册
   put(rec, 'body.weightG', rec.body.weightG, RETRIEVAL);
-  put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
-  put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
-  put(rec, 'body.thicknessMm', rec.body.thicknessMm, RETRIEVAL);
+  if (['phone', 'tablet', 'wearable'].includes(cat)) {
+    put(rec, 'body.thicknessMm', rec.body.thicknessMm, RETRIEVAL);
+  }
+  if (['phone', 'tablet'].includes(cat)) {
+    put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
+    put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
+  }
+  if (cat === 'home') {
+    put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
+    put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
+    put(rec, 'body.depthMm', rec.body.depthMm, RETRIEVAL);
+    if (entry.ratingLevel != null) {
+      rec.specs = { ...(rec.specs ?? {}), 'power.ratingLevel': tidy(entry.ratingLevel) };
+      rec.provenance['power.ratingLevel'] = RETRIEVAL;
+    }
+    if (entry.noiseDb != null) {
+      rec.specs = { ...(rec.specs ?? {}), 'features.noiseDb': Number(entry.noiseDb) };
+      rec.provenance['features.noiseDb'] = RETRIEVAL;
+    }
+  }
+  if (cat === 'network') {
+    // 路由历史：无线规格是核心参数（schema connectivity.wifi 字符串）
+    const wifi = entry.wifiSpec ? tidy(entry.wifiSpec) : null;
+    if (wifi) {
+      rec.specs = { ...(rec.specs ?? {}), 'connectivity.wifi': wifi };
+      rec.provenance['connectivity.wifi'] = RETRIEVAL;
+    }
+  }
+  if (cat === 'audio') {
+    // 耳机历史：budHours/withCaseHours/budWeightG/anc/bluetooth（audio schema 注册面）
+    if (entry.anc != null) {
+      rec.specs = { ...(rec.specs ?? {}), 'audio.anc': !!entry.anc };
+      rec.provenance['audio.anc'] = RETRIEVAL;
+    }
+    if (entry.budHours != null) {
+      rec.battery.budHours = entry.budHours;
+      put(rec, 'battery.budHours', rec.battery.budHours, RETRIEVAL);
+    }
+    if (entry.withCaseHours != null) {
+      rec.battery.withCaseHours = entry.withCaseHours;
+      put(rec, 'battery.withCaseHours', rec.battery.withCaseHours, RETRIEVAL);
+    }
+    if (entry.budWeightG != null) {
+      rec.body.budWeightG = entry.budWeightG;
+      put(rec, 'body.budWeightG', rec.body.budWeightG, RETRIEVAL);
+    }
+    if (entry.bluetooth) {
+      rec.connectivity.bluetooth = tidy(entry.bluetooth);
+      put(rec, 'connectivity.bluetooth', rec.connectivity.bluetooth, RETRIEVAL);
+    }
+  }
 
   if (entry.sourceUrl) {
     // 取证 URL 不是参数，不进 specs（闸门拦未注册键）——进 rawOfficial 可回溯
