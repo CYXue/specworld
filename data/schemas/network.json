@@ -36,13 +36,13 @@
       "unit": "mm",
       "type": "number",
       "range": [
-        30,
+        5,
         700
       ],
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "下限由 AirPort Express 84mm 撑起（2026-10-15 macDB 对账批收录）"
+      "note": "下限含随行 WiFi 系列（12–25mm 口袋形态）；AirPort Express 84mm（2026-10-15 macDB 对账批收录）；上界含企业级机架设备"
     },
     {
       "path": "body.weightG",

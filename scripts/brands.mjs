@@ -20,7 +20,7 @@
  */
 
 /** 全部受支持品牌的 id，有序。新增品牌在此追加一项即可 */
-const BRAND_IDS = Object.freeze(['apple', 'huawei']);
+const BRAND_IDS = Object.freeze(['apple', 'huawei', 'xiaomi']);
 
 /** 单一真源：每个品牌的完整元数据 */
 const BRANDS = Object.freeze({
@@ -40,6 +40,15 @@ const BRANDS = Object.freeze({
     shortLabel: '华为',
     accentColor: '#cf0a2c',
     motif: 'petal',
+    country: 'CN',
+  },
+  xiaomi: {
+    id: 'xiaomi',
+    name: 'Xiaomi',
+    nameZh: '小米',
+    shortLabel: '小米',
+    accentColor: '#ff6900',
+    motif: 'mi',
     country: 'CN',
   },
 });

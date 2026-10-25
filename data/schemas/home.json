@@ -9,12 +9,12 @@
       "type": "number",
       "range": [
         10,
-        300
+        2000
       ],
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "主机口径"
+      "note": "主机口径；上界按对开门冰箱 1912mm 实测 + 余量——米家大家电扩充时放宽"
     },
     {
       "path": "body.widthMm",
@@ -23,11 +23,12 @@
       "type": "number",
       "range": [
         30,
-        400
+        1000
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body"
+      "group": "body",
+      "note": "上界按对开门冰箱 892mm 实测 + 余量——米家大家电扩充时放宽"
     },
     {
       "path": "body.depthMm",
@@ -36,11 +37,12 @@
       "type": "number",
       "range": [
         8,
-        200
+        800
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body"
+      "group": "body",
+      "note": "上界按 636L 对开冰箱 715mm 实测 + 余量——米家大家电扩充时放宽"
     },
     {
       "path": "body.weightG",
@@ -229,6 +231,17 @@
       "quantifiable": false,
       "group": "features",
       "note": "随附遥控器（第几代 Siri Remote）"
+    },
+    {
+      "path": "features.noiseDb",
+      "label": "噪音",
+      "unit": "dB",
+      "type": "number",
+      "range": [20, 90],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "features",
+      "note": "运行噪音（官网原文取数值）；冰箱 38dB、洗衣机 50dB 量级——米家家电品类扩充时新增"
     },
     {
       "path": "os.launch",

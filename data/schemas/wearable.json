@@ -94,13 +94,13 @@
       "unit": "g",
       "type": "number",
       "range": [
-        15,
-        120
+        5,
+        300
       ],
       "dir": "low",
       "quantifiable": true,
       "group": "body",
-      "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶"
+      "note": "铝金属表壳约 34g 起，钛金属 Ultra 约 61g 封顶；下界含手环（华为手环 10 约 14g）"
     },
     {
       "path": "body.material",
@@ -185,12 +185,42 @@
       "type": "number",
       "range": [
         12,
-        72
+        510
       ],
       "dir": null,
       "quantifiable": false,
       "group": "battery",
-      "note": "厂商自报（最长 18/36/72 小时），测试条件不一，只并列展示不参与排名；苹果不公布电池容量"
+      "note": "厂商自报「常规使用」档换算为小时（GT 系 21 天 ≈ 504h）；测试条件不一，只并列展示不参与排名；苹果不公布电池容量"
+    },
+    {
+      "path": "battery.capacityMah",
+      "label": "电池容量",
+      "unit": "mAh",
+      "type": "number",
+      "range": [
+        50,
+        1000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "note": "手环 125-233mAh、手表 470-500mAh 量级——M3 穿戴历史批次新增"
+    },
+    {
+      "path": "battery.capacityCaliber",
+      "label": "容量口径",
+      "unit": null,
+      "type": "enum",
+      "values": [
+        "typical",
+        "rated",
+        "unmarked"
+      ],
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "与 phone 品类同枚举；unmarked = 检索源未标口径——M3 穿戴历史批次新增"
     },
     {
       "path": "features.healthSensors",
@@ -403,6 +433,17 @@
       "quantifiable": false,
       "group": "display",
       "note": null
+    },
+    {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": "Hz",
+      "type": "string",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "display",
+      "note": "纯数字斜杠形式（「60」「60/120」）；手环/手表 60Hz 档——M3 穿戴历史批次新增"
     },
     {
       "path": "security.unlock",

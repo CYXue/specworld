@@ -359,12 +359,14 @@
       "type": "enum",
       "values": [
         "typical",
-        "rated"
+        "rated",
+        "unmarked"
       ],
       "range": null,
       "dir": null,
       "quantifiable": false,
-      "group": "battery"
+      "group": "battery",
+      "note": "unmarked = 检索取证源原文未标口径（M2 历史机型批次引入）；与 typical/rated 不混算"
     },
     {
       "path": "battery.wiredChargeW",

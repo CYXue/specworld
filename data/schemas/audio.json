@@ -197,7 +197,7 @@
       "type": "number",
       "range": [
         2,
-        30
+        80
       ],
       "dir": null,
       "quantifiable": false,
@@ -211,7 +211,7 @@
       "type": "number",
       "range": [
         10,
-        60
+        100
       ],
       "dir": null,
       "quantifiable": false,

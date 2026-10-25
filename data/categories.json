@@ -5,119 +5,102 @@
     {
       "id": "phone",
       "label": "手机",
-      "labelEn": "Phone",
       "schema": "phone",
       "builtin": true
     },
     {
       "id": "tablet",
       "label": "平板",
-      "labelEn": "Tablet",
       "schema": "tablet",
       "builtin": true
     },
     {
       "id": "laptop",
       "label": "笔记本",
-      "labelEn": "Laptop",
       "schema": "laptop",
       "builtin": true
     },
     {
       "id": "desktop",
       "label": "台式电脑",
-      "labelEn": "Desktop",
       "schema": "desktop",
       "builtin": true
     },
     {
       "id": "display",
       "label": "显示器",
-      "labelEn": "Display",
       "schema": "display",
       "builtin": true
     },
     {
       "id": "wearable",
       "label": "可穿戴",
-      "labelEn": "Wearable",
       "schema": "wearable",
       "builtin": true
     },
     {
       "id": "headset",
       "label": "头显",
-      "labelEn": "Headset",
       "schema": "headset",
       "builtin": true
     },
     {
       "id": "home",
       "label": "智能家居",
-      "labelEn": "Smart Home",
       "schema": "home",
       "builtin": true
     },
     {
       "id": "audio",
       "label": "音频",
-      "labelEn": "Audio",
       "schema": "audio",
       "builtin": true
     },
     {
       "id": "media",
       "label": "多媒体播放器",
-      "labelEn": "Media Player",
       "schema": "media",
       "builtin": true
     },
     {
       "id": "tracker",
       "label": "定位器",
-      "labelEn": "Tracker",
       "schema": "tracker",
       "builtin": true
     },
     {
       "id": "network",
       "label": "网络设备",
-      "labelEn": "Networking",
       "schema": "network",
       "builtin": true
     },
     {
       "id": "pda",
       "label": "掌上电脑",
-      "labelEn": "PDA",
       "schema": "pda",
       "builtin": true
     },
     {
       "id": "input",
       "label": "输入设备",
-      "labelEn": "Input Device",
       "schema": "input",
       "builtin": true
     },
     {
       "id": "printer",
       "label": "打印机",
-      "labelEn": "Printer",
       "schema": "printer",
       "builtin": true
     },
     {
       "id": "storage",
       "label": "存储设备",
-      "labelEn": "Storage",
       "schema": "storage",
       "builtin": true
     },
     {
       "id": "accessory",
       "label": "配件",
-      "labelEn": "Accessory",
       "schema": "accessory",
       "builtin": true
     }

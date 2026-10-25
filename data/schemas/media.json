@@ -9,11 +9,12 @@
       "type": "number",
       "range": [
         25,
-        120
+        1600
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body"
+      "group": "body",
+      "note": "下界 iPod 时代口径（iPod mini 91mm）；上界按 110 英寸电视实测 1418mm 高 + 余量——智慧屏品类扩充时放宽"
     },
     {
       "path": "body.widthMm",
@@ -22,11 +23,12 @@
       "type": "number",
       "range": [
         15,
-        80
+        2600
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body"
+      "group": "body",
+      "note": "下界 iPod 时代口径（51–62mm）；上界按 110 英寸电视实测 2468mm 宽 + 余量——智慧屏品类扩充时放宽"
     },
     {
       "path": "body.depthMm",
@@ -35,11 +37,12 @@
       "type": "number",
       "range": [
         3,
-        25
+        500
       ],
       "dir": null,
       "quantifiable": true,
-      "group": "body"
+      "group": "body",
+      "note": "下界 iPod 时代口径（nano 5.4mm）；上界按 85 英寸电视含底座实测 413mm + 余量——智慧屏品类扩充时放宽"
     },
     {
       "path": "body.weightG",
@@ -48,12 +51,12 @@
       "type": "number",
       "range": [
         10,
-        300
+        80000
       ],
       "dir": null,
       "quantifiable": true,
       "group": "body",
-      "note": "shuffle 15g 到 classic 160g 区间"
+      "note": "下界 iPod 时代口径（103–184g）；上界按 110 英寸电视实测 70kg + 余量——智慧屏品类扩充时放宽"
     },
     {
       "path": "body.colors",
@@ -71,13 +74,13 @@
       "unit": "英寸",
       "type": "number",
       "range": [
-        0,
-        5
+        1,
+        120
       ],
       "dir": "high",
       "quantifiable": true,
       "group": "display",
-      "note": "shuffle 无屏记 null"
+      "note": "shuffle 无屏记 null；上界按最大电视 110 英寸 + 余量——智慧屏品类扩充时放宽"
     },
     {
       "path": "display.type",
@@ -114,6 +117,28 @@
       "note": "Retina 326ppi（touch 归 phone）；classic 163ppi、nano 202-220ppi"
     },
     {
+      "path": "display.refreshHz",
+      "label": "刷新率",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "官网原文（如「120 Hz | 倍频刷新率 240 Hz」），与 phone/display schema 同名同型；智慧屏品类扩充时新增"
+    },
+    {
+      "path": "display.colorGamut",
+      "label": "色域",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "display",
+      "note": "官网原文（如「119% DCI-P3（典型值）」），与 tablet schema 同名同型；智慧屏品类扩充时新增"
+    },
+    {
       "path": "chipset.name",
       "label": "芯片",
       "unit": null,
@@ -148,6 +173,17 @@
       "quantifiable": true,
       "group": "memory",
       "note": "GB 数值数组；shuffle 以 GB 数值记"
+    },
+    {
+      "path": "memory.ramGb",
+      "label": "运行内存",
+      "unit": "GB",
+      "type": "array:number",
+      "range": null,
+      "dir": "high",
+      "quantifiable": true,
+      "group": "memory",
+      "note": "GB 数值数组；小米电视关键参数带「内存=4GB」，智慧屏品类扩充时新增"
     },
     {
       "path": "battery.vendorClaimedHours",
@@ -372,6 +408,17 @@
       "quantifiable": false,
       "group": "device",
       "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "整机功率",
+      "unit": "W",
+      "type": "number",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "官网原文（如「整机功率=280W」）；小米电视关键参数带，智慧屏品类扩充时新增"
     }
   ],
   "groups": [
@@ -420,6 +467,12 @@
       "name": "功能特性",
       "type": "single",
       "guide": "传感器/输入/格式"
+    },
+    {
+      "id": "power",
+      "name": "电源与功耗",
+      "type": "single",
+      "guide": "适配器/整机功率/能效"
     }
   ]
 }

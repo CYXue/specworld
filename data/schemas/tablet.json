@@ -79,12 +79,13 @@
       "unit": "mm",
       "type": "number",
       "range": [
-        190,
-        310
+        180,
+        330
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body"
+      "group": "body",
+      "note": "官网长/宽/高的标注口径不统一（横置/竖置页面混用），上界按最长边 14.2 英寸平板（312mm）+ 余量设定"
     },
     {
       "path": "body.widthMm",
@@ -92,12 +93,13 @@
       "unit": "mm",
       "type": "number",
       "range": [
-        130,
-        225
+        95,
+        330
       ],
       "dir": null,
       "quantifiable": false,
-      "group": "body"
+      "group": "body",
+      "note": "官网部分机型把长边标成「宽度」（如 MatePad 11.5 2026 宽度=262.6mm），口径按官网原文如实记录，区间放宽覆盖全量真实数据 + 余量"
     },
     {
       "path": "body.thicknessMm",
@@ -212,11 +214,12 @@
       "type": "number",
       "range": [
         200,
-        1600
+        2000
       ],
       "dir": "high",
       "quantifiable": true,
-      "group": "display"
+      "group": "display",
+      "note": "华为 MatePad 系列官网标注峰值可达 1800 nits、OLED 新品 2000 nits，上界按真实数据 + 余量放宽（原按 iPad 猜的 1600 被闸门正确拦截）"
     },
     {
       "path": "display.brightnessPeakNits",
@@ -345,6 +348,45 @@
       "quantifiable": true,
       "group": "battery",
       "note": "苹果官网以 Wh 公布（与手机 mAh 不互换算，蓝图原则 4）"
+    },
+    {
+      "path": "battery.capacityMah",
+      "label": "电池容量",
+      "unit": "mAh",
+      "type": "number",
+      "range": [
+        1500,
+        15000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "note": "华为官网以 mAh 公布（典型容量）；与 capacityWh 各记各的官方口径，绝不互换算"
+    },
+    {
+      "path": "battery.capacityCaliber",
+      "label": "容量口径",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "battery",
+      "note": "typical（典型容量）/ rated（额定容量）——有 capacityMah 值时必填，与手机 schema 同一口径纪律"
+    },
+    {
+      "path": "battery.wiredChargeW",
+      "label": "有线充电功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        5,
+        200
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "battery",
+      "note": "官网明确标注「N W」标称才取值；V/A 组合输出无 W 标称 → 记 null（不按 V×A 推算）"
     },
     {
       "path": "battery.vendorClaimedHours",
@@ -488,6 +530,28 @@
       "dir": null,
       "quantifiable": false,
       "group": "connectivity"
+    },
+    {
+      "path": "connectivity.wlanBands",
+      "label": "WLAN 频段",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "WLAN 工作频段（如 [\"2.4 GHz\",\"5 GHz\"]），与手机 schema 同名同型同口径"
+    },
+    {
+      "path": "connectivity.satellite",
+      "label": "卫星通信",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "华为部分平板支持北斗卫星消息，官网原文如实记录"
     },
     {
       "path": "connectivity.usb",
