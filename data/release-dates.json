@@ -5530,6 +5530,126 @@
       "source": "manual",
       "sourceUrl": "https://www.honor.com/cn/shop/product/10086117998723.html",
       "note": "检索取证式采集（历史机型）：官网：1.39英寸AMOLED圆屏454×454 PPI326、电池455mAh、典型工作2周、磁吸充电（Type-C，源未标充电功率）；麒麟A1+4GB存储（来自HONOR Global 2019-11-26新闻稿）；"
+    },
+    {
+      "id": "hw-ascend-p1",
+      "name": "华为 Ascend P1 LTE",
+      "brand": "huawei",
+      "date": "2012-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_p1_lte-5022.php",
+      "note": "检索取证式采集（历史机型）：按清单「首款 4G LTE 手机」取 P1 LTE（U9202L）口径，GSMArena 标 Released 2012-10、瑞典官方新闻稿 2012-10-17；清单注 2012-04 系更薄原始 P1（U9200，"
+    },
+    {
+      "id": "hw-ascend-mate",
+      "name": "华为 Ascend Mate",
+      "brand": "huawei",
+      "date": "2013-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_mate-5237.php",
+      "note": "检索取证式采集（历史机型）：清单注 2013-01 为 CES 全球发布；中国大陆开售 2013-03（快科技 2013-03-21），取中国发布月。电池 4050mAh（typical，澳洲官方规格）；维基另记 1GB RAM 版，国行 2GB+"
+    },
+    {
+      "id": "hw-ascend-p6",
+      "name": "华为 Ascend P6",
+      "brand": "huawei",
+      "date": "2013-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_p6-5467.php",
+      "note": "检索取证式采集（历史机型）：2013-06-18 伦敦全球发布、国内 2013-06-19（C114/ZOL）；厚 6.2mm（官方口径 6.18mm 全金属最薄）；国行联通版 CPU 标 K3V2E/1536MHz 与 K3V2 同系；存储 8/"
+    },
+    {
+      "id": "hw-ascend-d2",
+      "name": "华为 Ascend D2 quad",
+      "brand": "huawei",
+      "date": "2013-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_d2-5164.php",
+      "note": "检索取证式采集（历史机型）：「D2 quad」即 5 寸 1080p 四核旗舰，CES 2013-01 发布、中国 2013-01 上市（手机之家 2013-01-17），国际 2013-03，取中国月。厚 GSMArena 9.4mm（另有媒体 "
+    },
+    {
+      "id": "hw-ascend-mate-2",
+      "name": "华为 Ascend Mate 2 4G",
+      "brand": "huawei",
+      "date": "2014-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_mate2_4g-5949.php",
+      "note": "检索取证式采集（历史机型）：清单注 6.0 英寸，源（GSMArena/维基/LineageOS）均 6.1 英寸，从源。CES 2014-01 全球发布，取 2014-01；中国移动 4G TDD-LTE 国行版 2014-03。LTE 版骁龙 "
+    },
+    {
+      "id": "hw-ascend-g300",
+      "name": "华为 Ascend G300",
+      "brand": "huawei",
+      "date": "2012-04-13",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_ascend_g300-4594.php",
+      "note": "检索取证式采集（历史机型）：清单注 2013-04，但源（GSMArena 2012-05 / 维基 First released April 13 2012 / 中关村在线「2012年4月13日英国沃达丰发售」）均证为 2012 年，取 2012"
+    },
+    {
+      "id": "hn-honor-3",
+      "name": "荣耀3（outdoor）",
+      "brand": "honor",
+      "date": "2013-08-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/n/2013-08-28/20238684934.shtml",
+      "note": "检索取证式采集（历史机型）：身份校验：国内『荣耀3』为 2013-08-28 发布、08-29 开售的三防户外版（1888元）；多次检索未找到任务假设的 2013-11 千元大屏版国内来源，从源取 outdoor 款。电池 2230mAh（新浪原文"
+    },
+    {
+      "id": "hn-honor-3c",
+      "name": "荣耀3C",
+      "brand": "honor",
+      "date": "2013-12-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/065/253.htm",
+      "note": "检索取证式采集（历史机型）：2013-12-16 发布（荣耀品牌独立首发），12-17 预约、12-25 10:08 开售；1GB/4GB 版 798 元、2GB/8GB 版 998 元，故 ramGb[1,2]、storageGb[4,8]；23"
+    },
+    {
+      "id": "hn-honor-3x",
+      "name": "荣耀3X",
+      "brand": "honor",
+      "date": "2013-12",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/models/17365/detail.shtml",
+      "note": "检索取证式采集（历史机型）：2013-12-16 发布，新浪规格页仅标「上市 2013 年 12 月」→ 月精度；全球首款双卡双待双 3G（TD-SCDMA+WCDMA）；2GB RAM+8GB（移动版），另有 2GB+16GB Pro 版；300"
+    },
+    {
+      "id": "hn-honor-4a",
+      "name": "荣耀4A",
+      "brand": "honor",
+      "date": "2015-08-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/167/125.htm",
+      "note": "检索取证式采集（历史机型）：任务假设 2014-08 有误：该机 2015-07-21 发布、2015-08-04 10:08 开售（全网通 699 元/移动 599 元），从源取 2015。2200mAh 可拆卸；新浪评测评称支持 QuickCh"
+    },
+    {
+      "id": "hn-honor-4c",
+      "name": "荣耀4C",
+      "brand": "honor",
+      "date": "2015-05-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/144/360.htm",
+      "note": "检索取证式采集（历史机型）：任务假设 2014-11 有误：该机 2015-04-28（GMIC）发布、2015-05-07 10:08 开售（移动 799/电信 899/双4G 999 元），从源取 2015。2550mAh（典型值，百科规格表）"
+    },
+    {
+      "id": "hn-honor-4x",
+      "name": "荣耀4X",
+      "brand": "honor",
+      "date": "2014-11-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.leiphone.com/category/zixun/2fUja3gPfFFsObSQ.html",
+      "note": "检索取证式采集（历史机型）：任务假设 2014-12 有误：该机 2014-10-28 发布（华为旗下首款全网通手机）、2014-11-06 10:08 开售（全网通 1299 元/电信 999 元）。3000mAh 不可拆卸；ZOL 版本含 1G"
     }
   ],
   "unresolved": []
