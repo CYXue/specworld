@@ -7040,6 +7040,66 @@
       "source": "manual",
       "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_35945_0_1.html",
       "note": "检索取证式采集（历史机型）：2021-09 上市；官方名 MagicBook 16 Pro 锐龙版（对应清单『MagicBook Pro 16』，同期另有 MagicBook 16 锐龙版）；RTX 3050 / GTX 1650；56 瓦时；13"
+    },
+    {
+      "id": "hn-band-4",
+      "name": "荣耀手环 4",
+      "brand": "honor",
+      "date": "2018-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E6%89%8B%E7%8E%AF4",
+      "note": "检索取证式采集（历史机型）：2018-09-05 荣耀发布会发布（OFweek 2018-09-06）；0.95 吋 AMOLED 彩色屏（官方支付宝离线支付公告原文）；分辨率/电池/三围/重量快照未取到 → null（不猜）；sourceUrl "
+    },
+    {
+      "id": "hn-band-5",
+      "name": "荣耀手环 5",
+      "brand": "honor",
+      "date": "2019-07-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E6%89%8B%E7%8E%AF5",
+      "note": "检索取证式采集（历史机型）：2019-07-23 发布（站长之家：0.95 吋 AMOLED 幻彩屏、新增血氧）；240×120 282ppi；100mAh；约 22.7g；dims 源口径 主体外观跨度 43×宽 17.2×最大厚 11.5mm；"
+    },
+    {
+      "id": "hn-band-6",
+      "name": "荣耀手环 6",
+      "brand": "honor",
+      "date": "2020-11-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E6%89%8B%E7%8E%AF6",
+      "note": "检索取证式采集（历史机型）：2020-11-03 荣耀线上直播发布会发布；1.47 吋 2.5D 方形 AMOLED、368×194、64% 屏占比；180mAh（CSDN 转载官网配置快照）；重量/三围快照未取到 → null"
+    },
+    {
+      "id": "hn-band-7",
+      "name": "荣耀手环 7",
+      "brand": "honor",
+      "date": "2022-12-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/wearables/honor-band-7/spec/",
+      "note": "检索取证式采集（历史机型）：2022-12-26 荣耀全场景新品发布会发布、199 元起（IT之家；任务注 2021-10 有误）；官网规格：1.47 吋 AMOLED、43×25.4×10.99mm 不含表带、约 18g；分辨率 194×368/"
+    },
+    {
+      "id": "hn-band-9",
+      "name": "荣耀手环 9",
+      "brand": "honor",
+      "date": "2024-03-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/wearables/honor-band-9/spec/",
+      "note": "检索取证式采集（历史机型）：2024-03-18 荣耀春季旗舰发布会发布（任务注 2024-05 有误）、标准版 249/NFC 版 299 元；1.57 吋 AMOLED 256×402 60Hz、5ATM；额定 180mAh（我爱音频网拆解：S"
+    },
+    {
+      "id": "hn-watch-es",
+      "name": "荣耀手表 ES",
+      "brand": "honor",
+      "date": "2020-09-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E6%89%8B%E8%A1%A8ES",
+      "note": "检索取证式采集（历史机型）：2020-09-16 荣耀发布会发布、599 元；1.64 吋 AMOLED 方形屏 456×286 326ppi 70% 屏占比（搜狐快照作 456×280，以发布会通稿 456×286 为准）；180mAh、续航 1"
     }
   ],
   "unresolved": []
