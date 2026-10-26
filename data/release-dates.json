@@ -7100,6 +7100,36 @@
       "source": "manual",
       "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E6%89%8B%E8%A1%A8ES",
       "note": "检索取证式采集（历史机型）：2020-09-16 荣耀发布会发布、599 元；1.64 吋 AMOLED 方形屏 456×286 326ppi 70% 屏占比（搜狐快照作 456×280，以发布会通稿 456×286 为准）；180mAh、续航 1"
+    },
+    {
+      "id": "hn-screen-x1",
+      "name": "荣耀智慧屏 X1 55英寸",
+      "brand": "honor",
+      "date": "2020-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2020-05-18 HONOR life 新品发布会发布（中新网 2020-05-18《荣耀发布智慧屏X1系列：配备鸿鹄818 55寸2299元》），50/55/65 英寸三档、55 寸 2299 元；60Hz、2+1"
+    },
+    {
+      "id": "hn-screen-x2",
+      "name": "荣耀智慧屏 X2 65英寸",
+      "brand": "honor",
+      "date": "2021-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2021-09-26 荣耀智慧生活新品发布会发布（快科技《1秒开机无广告!荣耀智慧屏X2 65英寸图赏》/DoNews/公众号 HN65DNTA；任务注 2022-05 有误），43/55/65 三档、65 寸首销 26"
+    },
+    {
+      "id": "hn-screen-5",
+      "name": "荣耀智慧屏 5 65英寸",
+      "brand": "honor",
+      "date": "2023-07-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2023-07-12 发布会发布、07-20 首销（快科技《首发3699元起 荣耀智慧屏5发布》），65/75 两档、首发 3699 元起；刷新率按源原文 240Hz（另有 48-144Hz VRR 与 120Hz ME"
     }
   ],
   "unresolved": []
