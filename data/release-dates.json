@@ -6820,6 +6820,96 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/481/729.htm",
       "note": "检索取证式采集（历史机型）：2020-02-24 全球线上发布、国内 2020-04-08 发布预售、04-15 开售；13.9 吋 3K 3:2 十点触控；56Wh；16GB LPDDR3、512/1024GB；UHD 集显/MX250 独显可选"
+    },
+    {
+      "id": "hw-screen-v55",
+      "name": "华为智慧屏 V55 2021款",
+      "brand": "huawei",
+      "date": "2021-04-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.chinabyte.com/product/1115/1115151/param.shtml",
+      "note": "检索取证式采集（历史机型）：清单注 2020-10 有误，从源 2021-04-08 发布（55/65/75/85 四档）、2021-05-28 开售；帝瓦雷 75W、4K 120Hz、92% DCI-P3；整机重量源未给 → null；dimsM"
+    },
+    {
+      "id": "hw-screen-v75s",
+      "name": "华为智慧屏 V75 Super",
+      "brand": "huawei",
+      "date": "2021-07-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/566/068.htm",
+      "note": "检索取证式采集（历史机型）：清单注 2020-10 有误，从源 2021-07-29 发布、08-12 开售；SuperMiniLED 旗舰、120Hz、帝瓦雷 20 单元 75W；整机尺寸/重量源未给 → null"
+    },
+    {
+      "id": "hw-screen-v5",
+      "name": "华为智慧屏 V5（75英寸）",
+      "brand": "huawei",
+      "date": "2023-12-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/cn/visions/v5/specs/",
+      "note": "检索取证式采集（历史机型）：清单注 2021-10/65寸 有误——V5 于 2023-12-26 问界 M9 发布会发布、12-30 开售 17999 元，尺寸档 75/85/98 寸（无 65 寸），代表尺寸取 75 寸；weightG 为 7"
+    },
+    {
+      "id": "hw-screen-spro",
+      "name": "华为智慧屏 S Pro 65",
+      "brand": "huawei",
+      "date": "2020-12-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://jd.zol.com.cn/779/7796711.html",
+      "note": "检索取证式采集（历史机型）：清单注 2021-10 有误，从源 2020-12-21 发布、2021-01-08 首销 5699 元；3GB+32GB、1300 万磁吸可旋转 AI 摄像头、4×10W 扬声器；**dims/weightG 置 nu"
+    },
+    {
+      "id": "hw-screen-75",
+      "name": "华为智慧屏 S 75",
+      "brand": "huawei",
+      "date": "2020-12-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.chinabyte.com/product/1109/1109084/param.shtml",
+      "note": "检索取证式采集（历史机型）：清单注『智慧屏 75 2023-03』不存在，从源取最接近机型 S 75（HD75KANA，2020-12-21 发布、2021-01-08 首销）；3GB+16GB、95% 屏占比、4×10W；weightG 29.2"
+    },
+    {
+      "id": "hw-router-ws5200",
+      "name": "华为路由 WS5200",
+      "brand": "huawei",
+      "date": "2017-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/router/index897663.shtml",
+      "note": "检索取证式采集（历史机型）：2017-09 上市（清单注 2017-09 与源一致）；128MB RAM（源标 MB → 0.128GB）；机身尺寸 198×198×42mm 留此（network 不落三维契约）；重量源未给 → null"
+    },
+    {
+      "id": "hw-router-ax3",
+      "name": "华为路由 AX3",
+      "brand": "huawei",
+      "date": "2020-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/router/index960804.shtml",
+      "note": "检索取证式采集（历史机型）：清单注 2019-05 有误，从源 2020-02 上市（499 元）；128MB RAM+128MB 闪存（源标 MB → 0.128GB）；387g；支持网口盲插/L2 隔离"
+    },
+    {
+      "id": "hw-router-ax3-pro",
+      "name": "华为路由 AX3 Pro",
+      "brand": "huawei",
+      "date": "2020-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/router/index960805.shtml",
+      "note": "检索取证式采集（历史机型）：2020-04 上市（清单注 2020-04 与源一致）；凌霄 626 四核 1.4GHz；支持 160MHz 频宽、OFDMA、2×2 MIMO；RAM/存储/重量源未给全 → null"
+    },
+    {
+      "id": "hw-mateview-1",
+      "name": "华为 MateView 28.2英寸 4K+ 3:2 显示器",
+      "brand": "huawei",
+      "date": "2021-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/524/076.htm",
+      "note": "检索取证式采集（历史机型）：2021-05-19 发布、06-01 开售（3399 元）；28.2 吋 4K+（3840×2560）3:2 生产力屏、100% sRGB、触控、Type-C 96W 反向充电、KVM；刷新率源未标（60Hz）→ nu"
     }
   ],
   "unresolved": []

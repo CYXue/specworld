@@ -929,7 +929,7 @@ function mapXiaomiHistory(entry) {
    *   body.weightG      phone/tablet/wearable/audio
    *   三维               phone/tablet/home（其余见 dims 分支） */
   const cat = entry.category ?? 'phone';
-  const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home', 'media'].includes(cat);
+  const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home', 'media', 'display'].includes(cat);
   if (hasDisplay) {
     put(rec, 'display.sizeIn', rec.display.sizeIn, RETRIEVAL);
     putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, RETRIEVAL, ['w', 'h']);
