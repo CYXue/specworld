@@ -427,6 +427,8 @@ function main() {
     join(ROOT, 'data', 'curated', 'huawei-phone-1a1.json'),
     join(ROOT, 'data', 'curated', 'huawei-phone-1a2.json'),
     join(ROOT, 'data', 'curated', 'huawei-phone-1a3.json'),
+    join(ROOT, 'data', 'curated', 'honor-phone-1b1.json'),
+    join(ROOT, 'data', 'curated', 'honor-phone-1b2.json'),
   ];
   let historyRecords = [];
   const historyParts = [];

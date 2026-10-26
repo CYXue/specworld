@@ -5930,6 +5930,166 @@
       "source": "manual",
       "sourceUrl": "https://product.cnmo.com/series/818/param.html",
       "note": "检索取证式采集（历史机型）：2019-10-18 发布；4+64、6+64、4+128 三档；10W 有线充电；无指纹（面部识别）。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-5",
+      "name": "荣耀畅玩5",
+      "brand": "honor",
+      "date": "2016-08-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/493/493691.htm",
+      "note": "检索取证式采集（历史机型）：产品全称为「荣耀畅玩5」；2016-08-01 发布、08-02 开售；独立三卡槽。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-6-plus",
+      "name": "荣耀6 Plus",
+      "brand": "honor",
+      "date": "2014-12-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%806%20Plus(PE-TL10%2F%E5%8F%8C4G)/55860564",
+      "note": "检索取证式采集（历史机型）：2014-12-16 发布；标准版 16GB（1999 元）、双4G 版 32GB（2499 元）；后置双 800 万像素仿生平行双镜头。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-v8",
+      "name": "荣耀V8",
+      "brand": "honor",
+      "date": "2016-05-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/224/319.htm",
+      "note": "检索取证式采集（历史机型）：运营商/标准版 1080P+麒麟950（32GB）；全网通高配 2K+麒麟955（64GB）；快充 9V/2A=18W。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-v9",
+      "name": "荣耀V9",
+      "brand": "honor",
+      "date": "2017-02-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/294/417.htm",
+      "note": "检索取证式采集（历史机型）：三版本 4+64（2599）/6+64（2999）/6+128（3499）；快充 9V/2A=18W；国际版 Honor 8 Pro。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-x1",
+      "name": "荣耀X1",
+      "brand": "honor",
+      "date": "2014-02-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80X1/13131057",
+      "note": "检索取证式采集（历史机型）：7 寸平板手机（phablet）；2014-02-23 MWC 发布、03-08 开售（1799 元）；海外 MediaPad X1。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-x2",
+      "name": "荣耀X2",
+      "brand": "honor",
+      "date": "2015-03-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80X2/16845016",
+      "note": "检索取证式采集（历史机型）：7 寸平板手机；2015-03-03 MWC 发布、04-07 开售；海外 MediaPad X2；2+16（1999）/3+32（2499）。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-x5",
+      "name": "荣耀畅玩5X",
+      "brand": "honor",
+      "date": "2015-10-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/7eWwPfvk4vA",
+      "note": "检索取证式采集（历史机型）：任务注「荣耀X5」实为「荣耀畅玩5X」；2GB 版 999 元（移动）、3GB 版 1399 元（全网通）；2A 充电器非快充协议。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-x6",
+      "name": "荣耀畅玩6X",
+      "brand": "honor",
+      "date": "2016-10-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.izhangcao.com/10463.html",
+      "note": "检索取证式采集（历史机型）：任务注「荣耀X6」实为「荣耀畅玩6X」；2016-10-18 发布、10-25 上市；3+32（999 起）/4+64（1599）。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-chanwang-5a",
+      "name": "荣耀畅玩5A",
+      "brand": "honor",
+      "date": "2016-06-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A95A/19733795",
+      "note": "检索取证式采集（历史机型）：2016-06-12 北京发布、06-17 开售；全网通版骁龙617、移动版麒麟620；5V/1A 无快充。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-chanwang-5c",
+      "name": "荣耀畅玩5C",
+      "brand": "honor",
+      "date": "2016-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A95C/19651251",
+      "note": "检索取证式采集（历史机型）：2016-04-28 北京发布、05-05 开售；2+16/3+32 两档；后置指纹。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-chanwang-6",
+      "name": "荣耀畅玩6",
+      "brand": "honor",
+      "date": "2017-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A96/22112407",
+      "note": "检索取证式采集（历史机型）：2017-09-06 广州发布、09-07 开售；2+16/3+32 两档；前置柔光灯。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-chanwang-7",
+      "name": "荣耀畅玩7",
+      "brand": "honor",
+      "date": "2018-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A97/22593129",
+      "note": "检索取证式采集（历史机型）：日期多源不一致（维基 2018-05-21 / IT之家 05-16 / 中关村 05 月），按月精度；5V/1A 无快充。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-x7",
+      "name": "荣耀畅玩7X",
+      "brand": "honor",
+      "date": "2017-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A97X/22160563",
+      "note": "检索取证式采集（历史机型）：对应清单『荣耀X7』；X 系首款全面屏（去畅玩化前）；2017-10-11 西安发布、10-17 开售；全系 4GB+32/64/128；10W 无 SuperCharge。三维 高×宽×厚"
+    },
+    {
+      "id": "hn-honor-x8",
+      "name": "荣耀8X",
+      "brand": "honor",
+      "date": "2018-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.sogou.com/v176087881.htm",
+      "note": "检索取证式采集（历史机型）：对应清单『荣耀X8』；X 系去畅玩化后首款；2018-09-05 西安发布、09-11 开售；4+64/6+64/6+128；屏占比 91%；10W 无快充。三维 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-x9",
+      "name": "荣耀9X",
+      "brand": "honor",
+      "date": "2019-07-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/50840/param_27232_0_1.html",
+      "note": "检索取证式采集（历史机型）：对应清单『荣耀X9』；升降式全面屏屏占比 92%；2019-07-23 西安发布（维基记 07-24）、07-30 开售；后置 4800+200 万、前置 1600 万升降式；UFS2.1；10W 无快充。三维 长×宽×"
+    },
+    {
+      "id": "hn-honor-chanwang-8",
+      "name": "荣耀畅玩8",
+      "brand": "honor",
+      "date": "2019-07-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E8%8D%A3%E8%80%80%E7%95%85%E7%8E%A98/52205381",
+      "note": "检索取证式采集（历史机型）：型号 KSA-AL00；2019-07 上市（PConline 记 07-09）；2+32；水滴屏；5W 无快充。三维 长×宽×厚"
     }
   ],
   "unresolved": []
