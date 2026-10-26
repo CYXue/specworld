@@ -103,6 +103,16 @@
   Mac mini M4、Watch Series 10、AirPods 4）；2025/2026 最新机型齐全（iPhone 18 系/M5 Mac 系/
   Mac mini M6/Mac Studio M5 Ultra/iPad Pro M5/Watch Series 12/AirPods Max 2/HomePod mini 2/
   Studio Display XDR）。media 停在 iPod（2022 停产）属预期，非缺口。**结论：无缺口，无新增。**
+- 2026-10-26 **2a 小米·非手机 前三子批 +19**：
+  - 2a-1 media 电视/盒子 7（电视 3/4/4A/5 代 + 盒子初代/3/4；电视 4/4A/5 日期从源纠正；
+    电视 dims 归一高×宽×厚、盒子 dims 足迹两维在前避 heightMm 下界；mx-box-2 与盘上增强版重复已弃）。
+  - 2a-2 network 路由老款 8（初代/2/Pro/3/HD/4/4A/4C；代理纠正初代=BCM4709 非 MT7620、
+    路由3=MT7620A 非 IPQ8064、Pro/HD 实为 2017-03；存储 MB↔TB 跨量归一 GB）。
+  - 2a-3 laptop 2018-2022 中段 4（Air13 2018/Pro15 2018 GTX/RedmiBook14 2020/Pro15 2021 OLED；
+    走 capacityWh/weightKg/adapterW 契约）。
+  - 修复：network 不传 dimsMm（映射器 else-分支给 network 的 thicknessMm 赋值但无 provenance → 自检拦）。
+  → 1528 总台（小米 320）。**2a 待续**：tablet（REDMI Pad 初代系）、wearable（Xiaomi Watch 初代系）、
+  audio（Redmi Buds 早期系）、home（米家家电中段）。
 
 ## 纪律（本工程沿用）
 

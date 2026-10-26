@@ -6350,6 +6350,186 @@
       "source": "manual",
       "sourceUrl": "https://www.mi.com/global/product/redmi-a7/specs/",
       "note": "检索取证式采集（历史机型）：小米全球官网规格页；2026-08 发布（月精度，TechNave 马来西亚页称 08-10 开售，无逐日官宣）；UNISOC T7250；120Hz；3+64；15W；电池 5200mAh。三维 高×宽×厚"
+    },
+    {
+      "id": "mx-tv-3",
+      "name": "小米电视 3（55英寸）",
+      "brand": "xiaomi",
+      "date": "2015-10-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/184/750.htm",
+      "note": "检索取证式采集（历史机型）：2015-10-27 发布、11-03 开售（任务注 2015-11 系开售月）；48/55 英寸两档，取 55 寸代表档（裸机 16.2kg 含底座 17kg）；另有 60 寸版；55 寸三星/LG 双屏源。dimsM"
+    },
+    {
+      "id": "mx-tv-4",
+      "name": "小米电视 4（55英寸）",
+      "brand": "xiaomi",
+      "date": "2017-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mitv4/55/specs",
+      "note": "检索取证式采集（历史机型）：4.9mm 超薄旗舰，2017-05-18 发布（任务注 2016-05 有误）、06-01 开售；49/55/65 英寸三档，取 55 寸（三星屏）；整机重量源未单独确认 55 寸 → weightG/dims nul"
+    },
+    {
+      "id": "mx-tv-4a",
+      "name": "小米电视 4A（43英寸）",
+      "brand": "xiaomi",
+      "date": "2017-03-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.ifeng.com/c/7ZxzWUob4Mf",
+      "note": "检索取证式采集（历史机型）：入门款，2017-03-21 发布（任务注 2016-09 有误）、03-23 开售；43/49/55/65 英寸四档，取 43 寸代表档（全高清直下式背光，裸机 7.8kg）；55/65 寸为真4K"
+    },
+    {
+      "id": "mx-tv-5",
+      "name": "小米电视 5（55英寸）",
+      "brand": "xiaomi",
+      "date": "2019-11-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/455/944.htm",
+      "note": "检索取证式采集（历史机型）：2019-11-05 发布（任务注 2020-04 有误）、11-11 开售；55/65/75 英寸，取 55 寸代表档；3GB+32GB；65 寸含底座 25.2kg → 55 寸整机重源未单独确认 → weightG"
+    },
+    {
+      "id": "mx-box-1",
+      "name": "小米盒子（初代）",
+      "brand": "xiaomi",
+      "date": "2013-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.diankeji.com/xinpin/2013/4243.html",
+      "note": "检索取证式采集（历史机型）：2013-09 官网上线、09-17 首轮开售，299 元；双核 1.5GHz、蓝牙 3.0、双频 Wi-Fi；输出最高 1080p（源未在摘要明确标 → resolution 填 null）；机身重量约 234g 为非"
+    },
+    {
+      "id": "mx-box-4",
+      "name": "小米盒子 4",
+      "brand": "xiaomi",
+      "date": "2018-01-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mibox4/specs",
+      "note": "检索取证式采集（历史机型）：2018-01-29 发布（任务注 2017-04 有误）、02-01 开售，349 元；2GB+8GB，蓝牙 4.1、802.11b/g/n 2.4GHz；4K HDR 输出，标配蓝牙语音遥控器。dimsMm 足迹两维"
+    },
+    {
+      "id": "mx-router-1",
+      "name": "小米路由器（初代 R1D）",
+      "brand": "xiaomi",
+      "date": "2014-04-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/miwifi/param",
+      "note": "检索取证式采集（历史机型）：2014-04-23 发布、04-25 开售；256MB DDR3-1600，内置 2.5 寸 1TB SATA 硬盘（storageGb 1024=1TB），16MB SPI Flash；处理器为博通 BCM4709（"
+    },
+    {
+      "id": "mx-router-2",
+      "name": "小米路由器 2（R2D）",
+      "brand": "xiaomi",
+      "date": "2015-06-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://m.c114.com.cn/w51-902263.html",
+      "note": "检索取证式采集（历史机型）：2015-06-10 发布（任务注 2014-08 有误）；1TB 版 699 元、6TB 版 2999 元（3.5 寸监控级硬盘，storageGb 1024/6144=1TB/6TB）；512MB SLC Nand "
+    },
+    {
+      "id": "mx-router-pro",
+      "name": "小米路由器 Pro",
+      "brand": "xiaomi",
+      "date": "2017-03-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/miwifihd/specs",
+      "note": "检索取证式采集（历史机型）：2017-03-02 发布、03-03 开售（任务注 2015-03 有误）；Pro 不带硬盘（硬盘版为 HD），256M SLC Nand Flash → storageGb null；4 根外置双频天线，256M 内"
+    },
+    {
+      "id": "mx-router-3",
+      "name": "小米路由器 3",
+      "brand": "xiaomi",
+      "date": "2016-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tw.news.yahoo.com/%E5%B0%8F%E7%B1%B3%E8%B7%AF%E7%94%B1%E5%99%A8-3-%E7%99%BC%E4%BD%88-%E5%9B%9B%E5%A4%A9%E7%B6%AB-128mb-095300168.html",
+      "note": "检索取证式采集（历史机型）：2016-03-29 发布（任务注 2015-06 有误）、04-06 开售；处理器 MT7620A（非 IPQ8064）；128MB DDR2 内存（ramGb 0.125=128MB）+128MB SLC Nand "
+    },
+    {
+      "id": "mx-router-hd",
+      "name": "小米路由器 HD",
+      "brand": "xiaomi",
+      "date": "2017-03-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/521/521878.htm",
+      "note": "检索取证式采集（历史机型）：2017-03-02 品鉴会、03-03 全网发售（任务注 2016-01 有误）；3.5 寸 SATA3.0 硬盘 1TB/2T/8T 版（storageGb 1024/2048/8192）；512MB DDR3（ra"
+    },
+    {
+      "id": "mx-router-4",
+      "name": "小米路由器 4",
+      "brand": "xiaomi",
+      "date": "2018-05-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/miwifi4/specs",
+      "note": "检索取证式采集（历史机型）：2018-05-22 发布（任务注 2017-04 有误）、05-25 开售；128MB DDR3-1200（ramGb 0.128）+128MB SLC Nand Flash（storageGb 0.128）；全千兆网"
+    },
+    {
+      "id": "mx-router-4a",
+      "name": "小米路由器 4A",
+      "brand": "xiaomi",
+      "date": "2019-03-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/miwifi4a/specs",
+      "note": "检索取证式采集（历史机型）：2019-03-12 发布（任务注 2016-06 有误）；64MB 内存（ramGb 0.064=64MB）+16MB ROM（storageGb 0.016=16MB）；百兆网口，119 元；尺寸 188×100.5"
+    },
+    {
+      "id": "mx-router-4c",
+      "name": "小米路由器 4C",
+      "brand": "xiaomi",
+      "date": "2018-07-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.sina.cn/mobile/xp/2018-07-30/detail-ihfxsxzi1133936.d.html",
+      "note": "检索取证式采集（历史机型）：2018-07-30 发布（任务注 2016-12 有误）；64MB DDR2 内存（ramGb 0.064）+16MB NorFlash（storageGb 0.016）；仅 2.4GHz 单频，99 元"
+    },
+    {
+      "id": "mx-lab-air13-2018",
+      "name": "小米笔记本 Air 13.3 四核增强版（2018）",
+      "brand": "xiaomi",
+      "date": "2018-01-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/344/419.htm",
+      "note": "检索取证式采集（历史机型）：2018-01-21 发布、i5-8250U 版 5399 元；电池 40Wh（新浪 40 瓦时、极客公园 40WHr、notebookcheck 实测 39Wh）；官方最薄 14.8mm、重 1.3kg（新浪实测整机 "
+    },
+    {
+      "id": "mx-lab-pro15-2018",
+      "name": "小米笔记本 Pro 15.6（2018，GTX版）",
+      "brand": "xiaomi",
+      "date": "2018-08-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/mibookpro-gtx",
+      "note": "检索取证式采集（历史机型）：2018-08-03 ChinaJoy 首发；GTX 1050 Max-Q 4GB 独显；官网 60Wh(min) 电池、约 1.95kg 含电池、8/16GB DDR4 2400 双通道、256GB PCIe SSD；"
+    },
+    {
+      "id": "mx-lab-redmibook14-2020",
+      "name": "RedmiBook 14 Ⅱ（2020，酷睿版）",
+      "brand": "xiaomi",
+      "date": "2020-07-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/496/717.htm",
+      "note": "检索取证式采集（历史机型）：2020-07-08 发布 Intel 版（锐龙版 2020-05 先发 R5-4500U 约1.2kg/44Wh）；MX350 2GB 独显、40Wh 电池+65W Type-C 适配器、DDR4 3200MHz、1."
+    },
+    {
+      "id": "mx-lab-pro15-2021",
+      "name": "小米笔记本 Pro 15（2021，OLED）",
+      "brand": "xiaomi",
+      "date": "2021-03-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/543/221.htm",
+      "note": "检索取证式采集（历史机型）：2021-03-30 发布、04-02 开售；3.5K 16:10 261PPI OLED；MX450 独显可选；约 15.9mm 厚、约 1.8kg；66Wh 电池（GSMArena）+100W 双 Type-C 充电"
     }
   ],
   "unresolved": []
