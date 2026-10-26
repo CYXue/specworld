@@ -6670,6 +6670,156 @@
       "source": "manual",
       "sourceUrl": "https://news.qq.com/rain/a/20211015A0770Z00",
       "note": "检索取证式采集（历史机型）：2021-10-15 发布、10-20 定金预售、原价 3499/首发 2999 元；吸拖洗三合一、75℃热水洗地、15 次/秒高频擦地；内置 4000mAh 电池续航 35 分钟、净水箱 780mL、污水箱 640mL"
+    },
+    {
+      "id": "hw-matepad-t1-10",
+      "name": "华为 MediaPad T1 10",
+      "brand": "huawei",
+      "date": "2015-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_mediapad_t1_10-7308.php",
+      "note": "检索取证式采集（历史机型）：2015-03 MWC 发布（清单注 2016-05 有误，从源 2015-03）；骁龙 410、1GB+8/16GB、4800mAh、无快充；入门大屏平板。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-matepad-m5-84",
+      "name": "华为平板 M5 8.4 英寸",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/355/123.htm",
+      "note": "检索取证式采集（历史机型）：2018-02-25 MWC 全球发布、2018-04-12 中国发布（18:08 开售）；与盘上 M5 10.8/M5 Pro 同批（2018-04-12）；麒麟 960、4GB+32/64/128GB、5100mAh"
+    },
+    {
+      "id": "hw-matepad-104",
+      "name": "华为 MatePad 10.4",
+      "brand": "huawei",
+      "date": "2020-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1301/1300652/param.shtml",
+      "note": "检索取证式采集（历史机型）：2020-04 中国发布（清单注 2020-09 有误，从源 2020-04）；首发麒麟 810+18W，2020-10 新版升级麒麟 820+22.5W；4/6GB+64/128GB、7250mAh、60Hz、450g"
+    },
+    {
+      "id": "hw-matepad-pro-132",
+      "name": "华为 MatePad Pro 13.2 英寸",
+      "brand": "huawei",
+      "date": "2023-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/721/487.htm",
+      "note": "检索取证式采集（历史机型）：2023-09-25 中国秋季全场景发布会发布（清单注 2024-02 有误，从源 2023-09-25）；13.2 吋 3:2 柔性 OLED 144Hz、麒麟 9000s、12/16GB+256/512/1024GB"
+    },
+    {
+      "id": "hw-band-8",
+      "name": "华为手环 8 标准版",
+      "brand": "huawei",
+      "date": "2023-04-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1509/1508776/param.shtml",
+      "note": "检索取证式采集（历史机型）：2023-04-17 nova 11 系列发布会发布、04-26 开售（清单注 2022-07 有误）；1.47 吋 AMOLED 282ppi；180mAh 额定；磁吸顶针充电 5V/1A 未标瓦数 → null；主体"
+    },
+    {
+      "id": "hw-band-9",
+      "name": "华为手环 9",
+      "brand": "huawei",
+      "date": "2024-04-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/华为手环9/64175353",
+      "note": "检索取证式采集（历史机型）：2024-04-08 国内发布、04-12 开售（清单注 2024-05 偏差）；1.47 吋 282ppi；180mAh；9 轴传感器；NFC 仅 NFC 版；14g 不含腕带。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-watch-2",
+      "name": "华为 WATCH 2",
+      "brand": "huawei",
+      "date": "2017-03-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://post.smzdm.com/p/akw52n4/",
+      "note": "检索取证式采集（历史机型）：国内 2017-03-24（与 P10 同场，清单注 2017-12 有误）；AMOLED 圆屏 326ppi、Android Wear 2.0；768MB RAM（0.768GB）+4GB；420mAh、有线 10W（"
+    },
+    {
+      "id": "hw-watch-fit-2",
+      "name": "华为 WATCH FIT 2",
+      "brand": "huawei",
+      "date": "2022-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/628/396.htm",
+      "note": "检索取证式采集（历史机型）：2022-07-08 开售（发布日源未给，取月精度；全球 2022-05-18）；1.74 吋 AMOLED 336ppi 屏占比 70%；292mAh 典型、5W 磁吸；续航典型 10 天；weightG 26 为活力"
+    },
+    {
+      "id": "hw-watch-gt-1",
+      "name": "华为 WATCH GT 初代",
+      "brand": "huawei",
+      "date": "2018-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20WATCH%20GT/23759062",
+      "note": "检索取证式采集（历史机型）：2018-10-16 伦敦发布、10-26 上海发布会国内上市（清单注 2018-12 有误）；1.39 吋 AMOLED 326ppi、LiteOS、5ATM；RAM/存储 GSMArena 口径 16MB/128MB"
+    },
+    {
+      "id": "hw-matebook-x-2016",
+      "name": "华为 MateBook X",
+      "brand": "huawei",
+      "date": "2017-06-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/313/333.htm",
+      "note": "检索取证式采集（历史机型）：2017-05-23 柏林发布、国内 2017-06-07 CES Asia 发布开售（清单注 2016-09 有误）；13 吋 2K 3:2；41.4Wh（华为官方口径）；4/8GB LPDDR3、256/512GB；"
+    },
+    {
+      "id": "hw-matebook-xpro-2018",
+      "name": "华为 MateBook X Pro",
+      "brand": "huawei",
+      "date": "2018-02-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.huawei.com/cn/news/2018/2/huawei-matebook-mediapad-m5-series",
+      "note": "检索取证式采集（历史机型）：2018-02-25 MWC 巴塞罗那全球发布（首款全面屏笔记本）；13.9 吋 3K 3:2；57.4Wh 典型；8/16GB LPDDR3、256/512GB；MX150 2GB 独显可选；1.33kg；适配器功率源"
+    },
+    {
+      "id": "hw-matebook-13-2018",
+      "name": "华为 MateBook 13",
+      "brand": "huawei",
+      "date": "2018-12-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.yesky.com/product/1063/1063152/param.shtml",
+      "note": "检索取证式采集（历史机型）：2018-11-06 武汉亮相、2018-12-17 长沙正式发布、12-25 开售（MateBook 13 首代）；13 吋 2K 3:2 触控；41.8Wh 典型；8GB、256/512GB；集显版 1.28kg/独"
+    },
+    {
+      "id": "hw-matebook-14-2019",
+      "name": "华为 MateBook 14",
+      "brand": "huawei",
+      "date": "2019-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20MateBook%2014/23767879",
+      "note": "检索取证式采集（历史机型）：2019-02-24 MWC 全球发布、国内 2019-04-11 随 P30 系列发布会发布（MateBook 14 首代）；14 吋 2K 3:2；57.4Wh；8GB、512GB；UHD620 集显/MX250 独"
+    },
+    {
+      "id": "hw-matebook-16s",
+      "name": "华为 MateBook 16s",
+      "brand": "huawei",
+      "date": "2022-05-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/620/024.htm",
+      "note": "检索取证式采集（历史机型）：2022-05-23 发布（清单注 2019-10/15.9 寸有误，从源 2022-05/16 寸）；全球首款 i9-12900H EVO 认证笔记本；16 吋 2.5K 3:2 触控；84Wh、135W USB-C "
+    },
+    {
+      "id": "hw-matebook-xpro-2020",
+      "name": "华为 MateBook X Pro 2020款",
+      "brand": "huawei",
+      "date": "2020-04-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/481/729.htm",
+      "note": "检索取证式采集（历史机型）：2020-02-24 全球线上发布、国内 2020-04-08 发布预售、04-15 开售；13.9 吋 3K 3:2 十点触控；56Wh；16GB LPDDR3、512/1024GB；UHD 集显/MX250 独显可选"
     }
   ],
   "unresolved": []
