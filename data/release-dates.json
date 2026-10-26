@@ -7370,6 +7370,76 @@
       "source": "manual",
       "sourceUrl": null,
       "note": "检索取证式采集（历史机型）：2021-04-27 发布（IT之家/网易/36氪同日报道）、04-30 开售、1999 元起；天玑 1200、120Hz 柔性直屏（TCL 华星 6.67 吋）、5065mAh、67W、磁动力肩键；分辨率/12+256"
+    },
+    {
+      "id": "hn-honor-7i",
+      "name": "荣耀 7i（ATH-AL00）",
+      "brand": "honor",
+      "date": "2015-08-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/cell_phone/index511464.shtml",
+      "note": "检索取证式采集（历史机型）：2015-08-20 北京发布（百度百科/ZOL 问答；任务注 2015-09 有误）；翻转摄像头机型；5.2 吋 1080P、骁龙 616、2+16/3+32 两档、3090mAh；充电/尺寸/重量快照未给 → nul"
+    },
+    {
+      "id": "hn-watch-4",
+      "name": "荣耀手表 4",
+      "brand": "honor",
+      "date": "2023-07-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/wearables/honor-watch-4/",
+      "note": "检索取证式采集（历史机型）：复验更正：2023-07-12 荣耀 Magic V2 发布会发布、999 元（网易/搜狐当日报道；任务注 2023-05 有误）；官网规格页：1.75 吋 AMOLED 390×450、60Hz、eSIM 典型续航 1"
+    },
+    {
+      "id": "hn-watch-gs-3",
+      "name": "荣耀手表 GS 3",
+      "brand": "honor",
+      "date": "2022-01-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/wearables/honor-watch-gs-3/",
+      "note": "检索取证式采集（历史机型）：复验更正：2022-01-10 荣耀 Magic V 发布会发布、1299 元起（快科技/中证网 2022-01-11；任务注 2021-12 有误）；官网：1.43 吋 AMOLED 326PPI、最薄处 10.5mm"
+    },
+    {
+      "id": "hn-watch-5",
+      "name": "荣耀手表 5",
+      "brand": "honor",
+      "date": "2024-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/wearables/honor-watch-5/",
+      "note": "检索取证式采集（历史机型）：复验更正：国内 2024-10-30 与 Magic7 系列同台发布（腾讯新闻 2024-10-17 预告；任务注 2024-06 不成立，IFA2024 为 9 月全球亮相）；官网：1.85 吋 AMOLED、最高 6"
+    },
+    {
+      "id": "hn-pad-v7",
+      "name": "荣耀平板 V7",
+      "brand": "honor",
+      "date": "2021-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2021-09-26 发布（今日头条微头条摘要；任务注 2021-02 有误，08-12 为 V7 Pro）；10.4 吋 2000×1200 90Hz、迅鲲 900T、6GB+128GB、2299 元；电池/重量快照未"
+    },
+    {
+      "id": "hn-pad-v8",
+      "name": "荣耀平板 V8",
+      "brand": "honor",
+      "date": "2023-04-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2023-04-29 发布（另有 04-28 上架开售之报道，发布报道日取 04-29）、8+128 1799/8+256 1899 元；11 吋 2560×1600 120Hz、天玑 8020 首发、7250mAh、2"
+    },
+    {
+      "id": "hn-lab-magicbook-v14",
+      "name": "荣耀 MagicBook V 14 2021",
+      "brand": "honor",
+      "date": "2021-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2021-09-26 发布、6199 元起、首发 Windows 11、500 万高清双摄；14.2 吋 2520×1680 90Hz、60Wh 电池（网易/新浪众测/搜狐评测一致）；RAM/存储档位/整机重量/适配器功"
     }
   ],
   "unresolved": []
