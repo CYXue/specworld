@@ -890,6 +890,12 @@ function mapXiaomiHistory(entry) {
       rec.body.widthMm = dims[1];
       rec.body.depthMm = dims[2];
       addNote(rec, `三维按 curated 源归一后的 高×宽×深 字面顺序落位，原始口径见 note（${tidy(entry.dimsMm)}）`);
+    } else if (entry.category === 'media') {
+      // 电视：宽>高>厚，curated 源归一为 高×宽×厚 字面顺序（不排序，排序会把宽当高）。
+      // media schema 无 thicknessMm（Apple TV/盒子量级无厚度字段）→ 厚度不入契约，留 note。
+      rec.body.heightMm = dims[0];
+      rec.body.widthMm = dims[1];
+      addNote(rec, `三维按 curated 源归一后的 高×宽×厚 字面顺序落位（电视 宽>高，不排序），厚度 ${dims[2] ?? '—'}mm 未入契约`);
     } else {
       const [h, w, t] = [...dims].sort((a, b) => b - a);
       rec.body.heightMm = h;
@@ -923,7 +929,7 @@ function mapXiaomiHistory(entry) {
    *   body.weightG      phone/tablet/wearable/audio
    *   三维               phone/tablet/home（其余见 dims 分支） */
   const cat = entry.category ?? 'phone';
-  const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home'].includes(cat);
+  const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home', 'media'].includes(cat);
   if (hasDisplay) {
     put(rec, 'display.sizeIn', rec.display.sizeIn, RETRIEVAL);
     putObject(rec, 'display.resolutionPx', rec.display.resolutionPx, RETRIEVAL, ['w', 'h']);
@@ -950,7 +956,7 @@ function mapXiaomiHistory(entry) {
   if (['phone', 'tablet', 'wearable'].includes(cat)) {
     put(rec, 'body.thicknessMm', rec.body.thicknessMm, RETRIEVAL);
   }
-  if (['phone', 'tablet'].includes(cat)) {
+  if (['phone', 'tablet', 'media'].includes(cat)) {
     put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
     put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
   }

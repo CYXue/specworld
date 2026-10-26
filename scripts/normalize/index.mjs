@@ -418,6 +418,10 @@ function main() {
     join(ROOT, 'data', 'curated', 'huawei-history-batch2.json'),
     join(ROOT, 'data', 'curated', 'huawei-history-m4b.json'),
     join(ROOT, 'data', 'curated', 'honor-history.json'),
+    join(ROOT, 'data', 'curated', 'huawei-history-early.json'),
+    join(ROOT, 'data', 'curated', 'huawei-history-early-wearable-tablet.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-history-firstgen.json'),
+    join(ROOT, 'data', 'curated', 'honor-history-continue.json'),
   ];
   let historyRecords = [];
   const historyParts = [];

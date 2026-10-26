@@ -68,7 +68,7 @@
       "type": "number",
       "range": [
         28,
-        60
+        70
       ],
       "dir": null,
       "quantifiable": false,
@@ -198,7 +198,7 @@
       "unit": "mAh",
       "type": "number",
       "range": [
-        50,
+        40,
         1000
       ],
       "dir": "high",
@@ -401,7 +401,7 @@
       "unit": "英寸",
       "type": "number",
       "range": [
-        0.5,
+        0.4,
         100
       ],
       "dir": null,
