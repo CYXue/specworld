@@ -6530,6 +6530,56 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/543/221.htm",
       "note": "检索取证式采集（历史机型）：2021-03-30 发布、04-02 开售；3.5K 16:10 261PPI OLED；MX450 独显可选；约 15.9mm 厚、约 1.8kg；66Wh 电池（GSMArena）+100W 双 Type-C 充电"
+    },
+    {
+      "id": "mx-tab-redmi-pad",
+      "name": "REDMI Pad（初代）",
+      "brand": "xiaomi",
+      "date": "2022-10-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20221031A0982P00",
+      "note": "检索取证式采集（历史机型）：中国大陆发布日 2022-10-27（10-31 开售），国行首发 4+128（1099 元）/6+128（1399 元），海外另有 3GB+64GB；支持 18W 快充（标配 22.5W 充电器）；清单所列 2021-"
+    },
+    {
+      "id": "mx-tab-redmi-pad-se",
+      "name": "REDMI Pad SE",
+      "brand": "xiaomi",
+      "date": "2023-09-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/720/777.htm",
+      "note": "检索取证式采集（历史机型）：国行发布/上市日 2023-09-21；6+128（899 元）/8+128（999 元）/8+256（1299 元）；支持 18W 充电但标配 10W 充电器；薄至 7.36mm、轻至 478g，完整三围源未给全 → "
+    },
+    {
+      "id": "mx-tab-redmi-pad-pro",
+      "name": "REDMI Pad Pro",
+      "brand": "xiaomi",
+      "date": "2024-04-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/761/078.htm",
+      "note": "检索取证式采集（历史机型）：国行发布日 2024-04-10（Turbo 3 发布会）；6+128（1499 元）/8+128（首发 1599 元）/8+256（首发 1799 元）；33W 快充及反向充电；厚 7.52mm、重 571g，完整三围"
+    },
+    {
+      "id": "mx-watch-2",
+      "name": "Xiaomi Watch 2",
+      "brand": "xiaomi",
+      "date": "2024-02-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/xiaomi_watch_2-12828.php",
+      "note": "检索取证式采集（历史机型）：Wear OS 表款，2024-02-12 发布、02-22 发售（国行随小米 14 Ultra 发布会上市）；磁吸充电，源未给功率 → wiredChargeW null；刷新率源未标 → null；2GB+32GB；"
+    },
+    {
+      "id": "mx-band-10",
+      "name": "小米手环 10 标准版",
+      "brand": "xiaomi",
+      "date": "2025-06-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/wiki/%E5%B0%8F%E7%B1%B3%E6%89%8B%E7%8E%AF10",
+      "note": "检索取证式采集（历史机型）：中国大陆发布日 2025-06-27（人车家全生态发布会），标准版/NFC 版/陶瓷版；规格佐证 mi.com/global specs（46.57×22.54×10.95mm、15.95g、蓝牙 5.4、5ATM）；额"
     }
   ],
   "unresolved": []

@@ -111,8 +111,10 @@
   - 2a-3 laptop 2018-2022 中段 4（Air13 2018/Pro15 2018 GTX/RedmiBook14 2020/Pro15 2021 OLED；
     走 capacityWh/weightKg/adapterW 契约）。
   - 修复：network 不传 dimsMm（映射器 else-分支给 network 的 thicknessMm 赋值但无 provenance → 自检拦）。
-  → 1528 总台（小米 320）。**2a 待续**：tablet（REDMI Pad 初代系）、wearable（Xiaomi Watch 初代系）、
-  audio（Redmi Buds 早期系）、home（米家家电中段）。
+  → 1528 总台（小米 320）。
+  - 2a-4 tablet 3（REDMI Pad 初代 2022/SE 2023/Pro 2024；『平板4a』实为 4 Plus 已在盘上、重复弃）。
+  - 2a-5 wearable 2（Xiaomi Watch 2 2024 / 手环 10 标准 2025；『Watch 初代』实为 S1 已在盘上、重复弃）。
+  → 1533 总台（小米 325）。**2a 待续**：audio（Redmi Buds 早期系）、home（米家家电中段）。
 
 ## 纪律（本工程沿用）
 

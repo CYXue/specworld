@@ -1,0 +1,8 @@
+{
+  "_doc": "小米穿戴·全品类全历史补全工程 2a（子批五：Xiaomi Watch 主表线 + 手环 10 标准，盘上有 S 系但缺主表线 Watch 2 与手环 10 标准）。检索取证式，逐台 sourceUrl。代理身份判定：『Xiaomi Watch 初代』实为主表线首代 S1（已在盘上 mx-watch-s1，重复已弃）；Watch 2 2023-07→实为 2024-02-22、手环 10 2025-09→实为 2025-06-27（从源纠正）。wearable 走 caseSizeMm（前两数最大值）/thicknessMm（第三数）表壳口径，手环电池取典型值 240。",
+  "version": 1,
+  "entries": [
+    {"id":"mx-watch-2","name":"Xiaomi Watch 2","brand":"xiaomi","releaseDate":"2024-02-22","precision":"day","screenSizeIn":1.43,"screenResolution":"466×466","screenRefreshHz":null,"screenType":"AMOLED（600nits，326ppi）","chipset":"高通 Snapdragon W5+ Gen 1（4nm）","ramGb":[2],"storageGb":[32],"batteryMah":495,"wiredChargeW":null,"weightG":36.8,"dimsMm":"47.5×45.9×11.8","sourceTitle":"Xiaomi Watch 2 - GSMArena","sourceUrl":"https://www.gsmarena.com/xiaomi_watch_2-12828.php","note":"Wear OS 表款，2024-02-12 发布、02-22 发售（国行随小米 14 Ultra 发布会上市）；磁吸充电，源未给功率 → wiredChargeW null；刷新率源未标 → null；2GB+32GB；清单所列 2023-07 与实际不符。dimsMm 长×宽×厚（表壳口径）","category":"wearable"},
+    {"id":"mx-band-10","name":"小米手环 10 标准版","brand":"xiaomi","releaseDate":"2025-06-27","precision":"day","screenSizeIn":1.72,"screenResolution":"212×520","screenRefreshHz":60,"screenType":"AMOLED（1500nits HBM，四等窄 2.0mm 边框）","chipset":null,"ramGb":null,"storageGb":null,"batteryMah":"240（典型值）额定233","wiredChargeW":null,"weightG":15.95,"dimsMm":"46.57×22.54×10.95","sourceTitle":"小米手环10 - 维基百科","sourceUrl":"https://zh.wikipedia.org/wiki/%E5%B0%8F%E7%B1%B3%E6%89%8B%E7%8E%AF10","note":"中国大陆发布日 2025-06-27（人车家全生态发布会），标准版/NFC 版/陶瓷版；规格佐证 mi.com/global specs（46.57×22.54×10.95mm、15.95g、蓝牙 5.4、5ATM）；额定 233/典型 240mAh（取典型）；磁吸充电源未给功率 → wiredChargeW null；手环无芯片/内存档位 → null；清单所列 2025-09 与实际不符。dimsMm 长×宽×厚（主体不含心率凸台/腕带）","category":"wearable"}
+  ]
+}
