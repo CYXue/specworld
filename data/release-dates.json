@@ -7210,6 +7210,86 @@
       "source": "manual",
       "sourceUrl": null,
       "note": "检索取证式采集（历史机型）：搜狐数码 2013-01-22 报道发布；4.5 吋 IPS、K3V2 四核 1.4GHz、1GB RAM、800 万主摄 1080p；**2000mAh 出自 ZOL 问答栏非参数表 → batteryMah null"
+    },
+    {
+      "id": "hw-maimang-1",
+      "name": "华为麦芒 1（A199）",
+      "brand": "huawei",
+      "date": "2013-04-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2013-04-25 中国电信×华为×腾讯三方联合发布、1999 元（网易 2013-04-25）；5 吋 720P、K3V2 四核、2GB RAM、2150mAh；『最大 32GB』为扩展上限非机身存储 → stora"
+    },
+    {
+      "id": "hw-maimang-2",
+      "name": "华为麦芒 2（B199）",
+      "brand": "huawei",
+      "date": "2014-01-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2014-01-14 发布（网易/Engadget 中文；任务注 2013-08 有误）、1999 元、电信双卡；5.5 吋 IPS 720P、MSM8628、2GB+16GB、3000mAh、170g、Android "
+    },
+    {
+      "id": "hw-maimang-3",
+      "name": "华为麦芒 3（C199）",
+      "brand": "huawei",
+      "date": "2014-08-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2014-08-15 青海西宁发布（新浪/中国网）、电信 4G、1999 元；5.5 吋 720P、2GB+16GB、1300 万主摄、Android 4.4；骁龙具体型号/电池/重量/尺寸源未给 → null；快照 U"
+    },
+    {
+      "id": "hw-freebuds-1",
+      "name": "华为 FreeBuds 初代真无线耳机",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2018-04-12 上海东方体育中心春季新品发布会发布（搜狐拆解 2018-07-09；任务注 2019-09 有误）、华为首款 TWS；动圈+动铁；无主动降噪 → anc false；单耳重/续航/蓝牙版本/电池数值"
+    },
+    {
+      "id": "hw-freebuds-pro-1",
+      "name": "华为 FreeBuds Pro（初代）",
+      "brand": "huawei",
+      "date": "2020-09-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2020-09-10 华为全场景发布会发布、1099 元起（任务注 2019-10 有误）；全球首发动态降噪 40dB；budHours 7h/含盒 30h 为关降噪口径（开降噪 4.5h/20h 留档）；支持无线充电；"
+    },
+    {
+      "id": "hw-freebuds-3",
+      "name": "华为 FreeBuds 3",
+      "brand": "huawei",
+      "date": "2019-09-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2019-09-06 柏林 IFA2019 发布（任务注 2019-09 相符）；全球首发麒麟 A1 芯片、全球首款蓝牙 5.1 TWS；单次 4h/含盒 20h、支持快充；开降噪口径 2.5h/15h 摘要不完整留档；"
+    },
+    {
+      "id": "hw-watch-fit-1",
+      "name": "华为 WATCH FIT（初代）",
+      "brand": "huawei",
+      "date": "2020-12-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2020-12-23 随 nova 8 系列发布会发布、华为首款方形智能手表、活力款 799 元（12-23 预售、2021-01-08 开售）；1.64 吋 2.5D 方形 AMOLED 456×280；4GB 存储、"
+    },
+    {
+      "id": "hw-band-b5",
+      "name": "华为手环 B5",
+      "brand": "huawei",
+      "date": "2018-07-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2018-07-11 正式开售（快科技/搜狐预售）；手环/蓝牙耳机二合一（屏幕部分拆下当耳机）；1.13 吋 AMOLED（ZOL 参数系列页佐证）；**分辨率 160×300 仅 AI 摘要弱源 → 置 null 待复"
     }
   ],
   "unresolved": []
