@@ -6910,6 +6910,136 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/524/076.htm",
       "note": "检索取证式采集（历史机型）：2021-05-19 发布、06-01 开售（3399 元）；28.2 吋 4K+（3840×2560）3:2 生产力屏、100% sRGB、触控、Type-C 96W 反向充电、KVM；刷新率源未标（60Hz）→ nu"
+    },
+    {
+      "id": "hn-pad-5",
+      "name": "荣耀平板 5",
+      "brand": "honor",
+      "date": "2018-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1236/1235879/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL：上市 2018-10（任务注 2019-11/2K 有误，从源 2018-10/1920×1200）；麒麟 659 八核 2.0GHz；3/4GB+32/64/128GB；5100mAh；充电功率/重量/三围源未"
+    },
+    {
+      "id": "hn-pad-v7-pro",
+      "name": "荣耀平板 V7 Pro",
+      "brand": "honor",
+      "date": "2021-08-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1380/1379685/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-08-12 发布（环球网/IT之家，全球首发迅鲲 1300T）、ZOL 上市 2021-08；11 吋 2560×1600 120Hz（任务注 12.6 寸 3K 有误）；6/8GB+128/256GB（另支持"
+    },
+    {
+      "id": "hn-pad-8",
+      "name": "荣耀平板 8",
+      "brand": "honor",
+      "date": "2022-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1421/1420061/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL：上市 2022-07（任务注 2022-09/3K 有误，从源 2022-07/2000×1200）；Magic UI 6.1；4/6/8GB+128/256GB；7250mAh、22.5W；刷新率/重量源未标 "
+    },
+    {
+      "id": "hn-pad-9",
+      "name": "荣耀平板 9",
+      "brand": "honor",
+      "date": "2023-12-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.so.com/link?m=wwXXTOf4FNBqj1JemmHojf8DPnmTebMf6q9H8ywVdB83mGBHLarsdVpjnSpufzW%2F%2BpfofC2p06t08VJpPN3hj8dO34VJl2aaMlCINWwMAEKoJbuwVpepavpKHDxtgOjvpitSyK7Z0RKCUmY58Qctgyx72xnILjzTWoKN1WpA%2F86c8aS2qK%2Bt%2BvtPk7yvlNK5EvU6Q1rXvocMJ9raAQ1RrdYLQHSni%2Fh%2FTTPU2aJ2N%2B82zwq7d3wUrS5ffYltrSWSLqj8Khw%3D%3D",
+      "note": "检索取证式采集（历史机型）：IT之家 2023-12-21 报道（任务注 2023-04 有误）；12.1 吋 2560×1600 120Hz、骁龙 6 Gen 1、1499 元起；电池/内存/存储/充电/重量/三围快照未给 → null（不估算）"
+    },
+    {
+      "id": "hn-pad-magicpad-13",
+      "name": "荣耀平板 MagicPad 13",
+      "brand": "honor",
+      "date": "2023-07-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.360kuai.com/pc/9eeb5191a79dd9871?cota=3&kuai_so=1&sign=360_57c3bbd1&refer_scene=so_1",
+      "note": "检索取证式采集（历史机型）：2023-07-12 发布（快科技 07-13 稿/什么值得买 07-12；任务注 2024-04 有误）；13 吋 2.8K（源未给像素 → resolution null 不估算）、骁龙 888、最高 16GB+51"
+    },
+    {
+      "id": "hn-lab-magicbook-1",
+      "name": "荣耀 MagicBook（初代，14英寸）",
+      "brand": "honor",
+      "date": "2018-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_23430_0_1.html",
+      "note": "检索取证式采集（历史机型）：i7 版 2018-04 上市、i5/R5 版 2018-06/07（取首发 2018-04）；电池 57.4 瓦时；1.47kg（R5 集显 512G 版 1.45、触屏版 1.57）；65W 适配器；显卡 MX150"
+    },
+    {
+      "id": "hn-lab-magicbook-pro-2018",
+      "name": "荣耀 MagicBook Pro（2019，16.1英寸）",
+      "brand": "honor",
+      "date": "2019-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_27239_0_1.html",
+      "note": "检索取证式采集（历史机型）：ZOL 上市 2019-07（8GB 档）/2019-09（16GB 档），取 2019-07；电池 56Wh；1.7kg；65W；锐龙版（R5 3500U/R7 3750H）另属 MagicBook Pro 2019 "
+    },
+    {
+      "id": "hn-lab-magicbook-14-2019",
+      "name": "荣耀 MagicBook 14（2019）",
+      "brand": "honor",
+      "date": "2019-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_28350_0_1.html",
+      "note": "检索取证式采集（历史机型）：R5/R7 款 2019-11 上市、Intel 十代款 2020-01（取首发）；56 瓦时聚合物电池；1.38kg；65W。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-lab-magicbook-15-2019",
+      "name": "荣耀 MagicBook 15（2019）",
+      "brand": "honor",
+      "date": "2019-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_28352_0_1.html",
+      "note": "检索取证式采集（历史机型）：R5 款 2019-11 上市、Intel 款 2020-01（取首发）；42 瓦时锂聚合物；1.53kg；65W。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-lab-magicbook-pro-2020",
+      "name": "荣耀 MagicBook Pro 2020（16.1英寸）",
+      "brand": "honor",
+      "date": "2020-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_30077_0_1.html",
+      "note": "检索取证式采集（历史机型）：ZOL 上市 2020-05（任务注 2020-07 有误）；56Wh；MX350 独显；1.7kg；65W；锐龙版另属 2020 锐龙版系列。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-lab-magicbook-14-2021",
+      "name": "荣耀 MagicBook 14 2021",
+      "brand": "honor",
+      "date": "2021-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_32728_0_1.html",
+      "note": "检索取证式采集（历史机型）：ZOL 上市 2021-01；4 芯锂电池 56 瓦时；16GB（8×2）DDR4 3200；65W 超级快充；锐龙 5000 系版另列。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-lab-magicbook-15-2021",
+      "name": "荣耀 MagicBook 15 2021",
+      "brand": "honor",
+      "date": "2021-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_32729_0_1.html",
+      "note": "检索取证式采集（历史机型）：Tiger Lake 款 2021-01 上市（i5-10210U 版 2021-07）；3 芯锂电池 42 瓦时；1.56kg（10210U 版 2.01kg）；65W；锐龙版另列。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-lab-magicbook-pro-16",
+      "name": "荣耀 MagicBook 16 Pro 锐龙版（2021，16.1英寸）",
+      "brand": "honor",
+      "date": "2021-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/16/50840/param_35945_0_1.html",
+      "note": "检索取证式采集（历史机型）：2021-09 上市；官方名 MagicBook 16 Pro 锐龙版（对应清单『MagicBook Pro 16』，同期另有 MagicBook 16 锐龙版）；RTX 3050 / GTX 1650；56 瓦时；13"
     }
   ],
   "unresolved": []

@@ -136,6 +136,14 @@
   - 2b-5 network 3 + display 1（路由 WS5200/AX3/AX3 Pro + 显示器 MateView 28.2；WS8300 预算耗尽 notfound；
     AX3 实为 2020-02；**映射器演进**：hasDisplay 列表补入 display，路由 MB→GB 换算、不传 dimsMm）。
   → **2b 全部完成 +24 台**（tablet 4/wearable 5/laptop 6/media 5/network 3/display 1），→ 1566 总台（华为 295）。
+- 2026-10-26 **2c 荣耀·非手机（进行中，已 +13）**：
+  - 2c-1 tablet 5（平板 5 2018/V7 Pro 2021/平板 8 2022/平板 9 2023/MagicPad 13 2023；
+    代理纠错：平板 5 实为 2018-10、V7 Pro 实为 11 寸、MagicPad 13 实为 2023-07；notfound×3：
+    『荣耀平板 2018』/5 Pro/5i 无独立机型；MagicPad 13 源仅『2.8K』→ resolution null 不估算）。
+  - 2c-2 laptop MagicBook 8（初代 2018/Pro 2019 16.1寸/14 2019/15 2019/Pro 2020/14 2021/15 2021/
+    16 Pro 锐龙版 2021；『MagicBook Pro 16』官方名实为 16 Pro 锐龙版；走 capacityWh/weightKg/adapterW）。
+  → 1579 总台（荣耀 59）。**2c 待续**：穿戴（手环 4-9/手表 ES/4，首轮检索因搜索通道 429 限流全军覆没，
+  待恢复重派）、智慧屏/显示器。
 
 ## 纪律（本工程沿用）
 
