@@ -5120,6 +5120,416 @@
       "source": "manual",
       "sourceUrl": "https://www.jiuphone.com/sjwt/24070.html",
       "note": "检索取证式采集（历史机型）：2023-07-12发布，8999元起（ZOL）；重量素皮版约231g、玻璃版约237g（honor官网/九锋网一致）；三维取展开态三元（素皮版 高156.7×宽145.4×厚4.7），折叠态厚9.9mm（玻璃版10.1"
+    },
+    {
+      "id": "hw-p8",
+      "name": "华为 P8",
+      "brand": "huawei",
+      "date": "2015-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/400/399779/param.shtml",
+      "note": "检索取证式采集（历史机型）：2015-04-15伦敦全球发布，国行2015-05上市；电池 ZOL 参数页2680mAh/官网 PR 口径2600mAh，取参数页 2680。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p8-max",
+      "name": "华为 P8max",
+      "brand": "huawei",
+      "date": "2015-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://mobile.zol.com.cn/525/5258000.html",
+      "note": "检索取证式采集（历史机型）：2015-04-15伦敦全球发布，国行2015-07上市；国行双4G版 3GB+64GB，海外标准32GB/高配64GB；支持反向充电。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p9",
+      "name": "华为 P9",
+      "brand": "huawei",
+      "date": "2016-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/ProductComp_param_404275-1141875.html",
+      "note": "检索取证式采集（历史机型）：2016-04-06伦敦全球发布，国行发布2016-04-15；标准版无快充（P9 Plus 才支持 9V/2A）。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p9-plus",
+      "name": "华为 P9 Plus",
+      "brand": "huawei",
+      "date": "2016-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/ProductComp_param_404275-1141875.html",
+      "note": "检索取证式采集（历史机型）：2016-04-06伦敦全球发布，国行发布2016-04-15、零售2016-05-20；快充 9V/2A=18W。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-p10",
+      "name": "华为 P10",
+      "brand": "huawei",
+      "date": "2017-03-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1166/1160028/param.shtml",
+      "note": "检索取证式采集（历史机型）：2017-02-26 MWC巴塞罗那全球发布，国行发布2017-03-24上海；SuperCharge 5V/4.5A=22.5W。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-7",
+      "name": "华为 Mate 7",
+      "brand": "huawei",
+      "date": "2014-09-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://tech.sina.com.cn/mobile/models/18003/detail.shtml",
+      "note": "检索取证式采集（历史机型）：2014-09-05柏林IFA全球发布，中国正式发布2014-09-12上海；电池4100mAh。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-8",
+      "name": "华为 Mate 8",
+      "brand": "huawei",
+      "date": "2015-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.huawei.com/cn/news/2016/1/huawei-mate8-yue-xiao-chao-bai-wan-tai",
+      "note": "检索取证式采集（历史机型）：2015-11-11柏林IFA全球发布；国行上市口径不一（ZOL/天极 2015-11-26 / 官网 12-09），取月精度 2015-11；快充18W；4000mAh 官方典型值。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-9",
+      "name": "华为 Mate 9",
+      "brand": "huawei",
+      "date": "2016-11-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20161106224053/http:/consumer.huawei.com/en/mobile-phones/tech-specs/mate9-en.htm",
+      "note": "检索取证式采集（历史机型）：2016-11-14上海国行发布会；SuperCharge 4.5V/5A=22.5W；官方标注4000mAh典型值。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-9-pro",
+      "name": "华为 Mate 9 Pro",
+      "brand": "huawei",
+      "date": "2016-11-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20Mate%209%20Pro/57829405",
+      "note": "检索取证式采集（历史机型）：2016-11-14上海国行发布会，首销2016-12-15；SuperCharge 3.5V-5V/5A=22.5W；官网同系列标注4000mAh典型值。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mate-10",
+      "name": "华为 Mate 10",
+      "brand": "huawei",
+      "date": "2017-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1166/1165672/param.shtml",
+      "note": "检索取证式采集（历史机型）：2017-10-16慕尼黑全球发布、2017-10-20国行发布上海（清单初稿误标 2016-11）；官方4000mAh典型值，22.5W快充。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-talkband-b1",
+      "name": "华为 TalkBand B1",
+      "brand": "huawei",
+      "date": "2014-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "http://tc.people.com.cn/n/2014/0224/c183175-24443499.html",
+      "note": "检索取证式采集（历史机型）：2014-02-24 MWC全球发布，2014年3月中国上市；官方JP规格页仅提供腕带长度（L:247.5/S:221.5mm）与重量（L≈28.6g/S≈26.8g），无标准长宽高三元 → dims null；屏幕1."
+    },
+    {
+      "id": "hw-talkband-b2",
+      "name": "华为 TalkBand B2",
+      "brand": "huawei",
+      "date": "2015-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/131/599.htm",
+      "note": "检索取证式采集（历史机型）：2015-03-01 MWC全球发布，2015年4月上市；模块本体尺寸 62×20.6×11.5mm、重量 26.2g（耳机9.4+腕带16.8）来自华为日本官方PR；电池容量未公开 → batteryMah null；"
+    },
+    {
+      "id": "hw-talkband-b3",
+      "name": "华为 TalkBand B3",
+      "brand": "huawei",
+      "date": "2016-04",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/hk/wearables/talkband-b3/specs/",
+      "note": "检索取证式采集（历史机型）：2016年4月中国发布；官方HK页给出的是腕带展开尺寸（Active款 210.0×21.7×12.2mm，Classic款 200.0×21.7×12.2mm）——210/200 是整条腕带展开长，非表壳 → dims"
+    },
+    {
+      "id": "hw-watch-1",
+      "name": "HUAWEI WATCH",
+      "brand": "huawei",
+      "date": "2015-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://caijing.chinadaily.com.cn/2015-11/27/content_22524350.htm",
+      "note": "检索取证式采集（历史机型）：2015-03-01 MWC全球发布，2015-11-26国内发布（随Mate8）；42mm 圆形表壳、400×400 AMOLED、300mAh、61g（黑色真皮表带款）；RAM 512MB/存储4GB；Android"
+    },
+    {
+      "id": "hw-mediapad-m1-80",
+      "name": "华为 MediaPad M1 8.0",
+      "brand": "huawei",
+      "date": "2014-06-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/tabletpc/series/411675_detail.html",
+      "note": "检索取证式采集（历史机型）：2014-02-23 MWC全球发布，2014-06-12中国正式发布（京东618首销）；WiFi/3G/4G三版本。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mediapad-m2-80",
+      "name": "华为揽阅 M2 8.0",
+      "brand": "huawei",
+      "date": "2015-07-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/702/19202_1.html",
+      "note": "检索取证式采集（历史机型）：2015-07-14中国发布，7月16日预约；中国版3GB RAM（海外有2GB）；Harman Kardon Clari-Fi音效，Hi6402音效芯片。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-mediapad-m3-84",
+      "name": "华为揽阅 M3 8.4",
+      "brand": "huawei",
+      "date": "2016-09-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.huawei.com/cn/news/2016/9/huawei-unveils-mediapad-m3",
+      "note": "检索取证式采集（历史机型）：2016-09-01 IFA全球首发，2016-09-20中国发布/9-26开售；官方口径约310g，GSMArena标注326g，取326；AK4376 DAC，Harman Kardon认证。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-matepad-m5-108",
+      "name": "华为平板 M5 10.8",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://pad.zol.com.cn/685/6850689_all.html",
+      "note": "检索取证式采集（历史机型）：2018-02-25 MWC全球发布，2018-04-12国内随P20发布开售；9V/2A=18W快充，四扬声器Harman Kardon调音。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-matepad-m5-pro",
+      "name": "华为平板 M5 Pro",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://pad.zol.com.cn/685/6850689_all.html",
+      "note": "检索取证式采集（历史机型）：2018-04-12国内发布；与M5 10.8同尺寸同电池，核心区别为 M-Pen 4096级压感手写笔及电脑模式；国内上市仅64GB版本。三维为长×宽×厚"
+    },
+    {
+      "id": "hw-matepad-m6-108",
+      "name": "华为平板 M6 10.8",
+      "brand": "huawei",
+      "date": "2019-06-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://pad.zol.com.cn/719/7199244.html",
+      "note": "检索取证式采集（历史机型）：2019-06-21国内发布（武汉），7-10开售；6GB+256GB为后续高能版（2019-09）；四扬声器Harman Kardon，18W快充，平行视界。三维为长×宽×厚"
+    },
+    {
+      "id": "mx-tv-1-47",
+      "name": "小米电视 1代 47英寸",
+      "brand": "xiaomi",
+      "date": "2013-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-cn/小米电视",
+      "note": "检索取证式采集（历史机型）：2013-09-05发布会发布，10月中旬开卖；LG/三星 1080p 屏，2GB+8GB eMMC；源口径重量约16.9kg、尺寸106.5×69×4.8cm，三维已归一为 高690×宽1065×厚48。厚度未入 me"
+    },
+    {
+      "id": "mx-tv-2-49",
+      "name": "小米电视 2代 49英寸",
+      "brand": "xiaomi",
+      "date": "2014-05-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://it.people.com.cn/n/2014/0515/c1009-25022434.html",
+      "note": "检索取证式采集（历史机型）：2014-05-15发布，5-27首发，3999元（含土豪金版）；LG/华星光电 4K 面板，2GB+8GB；源口径重12.9kg、厚度15.5mm、边框6.2mm，无完整长宽高 → dims 置 null"
+    },
+    {
+      "id": "mx-box-3",
+      "name": "小米盒子增强版",
+      "brand": "xiaomi",
+      "date": "2014-04-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com.tw/news/87062",
+      "note": "检索取证式采集（历史机型）：2014-04-23发布（清单初稿误标 2014-03）；媒体盒子无屏幕 → sizeIn null，screenResolution 为最高 4K 输出；Amlogic S802，2GB DDR3+4GB eMMC；源"
+    },
+    {
+      "id": "mx-band-1",
+      "name": "小米手环 1代",
+      "brand": "xiaomi",
+      "date": "2014-07-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/小米手环/15082378",
+      "note": "检索取证式采集（历史机型）：2014-07-22北京发布，79元；无屏幕；电池45mAh（部分源标41mAh，取百科/官网口径45）；重量主体5.0g（不含腕带）；三维为 长36×宽14×厚9（wearable 表壳口径 caseSize=36）"
+    },
+    {
+      "id": "mx-band-2",
+      "name": "小米手环 2代",
+      "brand": "xiaomi",
+      "date": "2016-06-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/小米手环2/19507406",
+      "note": "检索取证式采集（历史机型）：2016-06-02发布（6-7开售）149元；0.42英寸OLED首代带屏（身份源未标分辨率，维基表列128×72，按纪律置 null）；电池70mAh，主体7.0g；三维为 高40.3×宽15.7×厚10.5"
+    },
+    {
+      "id": "mx-band-3",
+      "name": "小米手环 3代",
+      "brand": "xiaomi",
+      "date": "2018-05-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shouhuan3/specs",
+      "note": "检索取证式采集（历史机型）：2018-05-31随小米8发布；0.78英寸OLED 128×80，110mAh；重量约20g（含腕带，主体8.5g）；三维源顺序 17.9×46.9×12（wearable 表壳口径 caseSize=46.9）；防"
+    },
+    {
+      "id": "mx-band-4",
+      "name": "小米手环 4代",
+      "brand": "xiaomi",
+      "date": "2019-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/shouhuan4/specs",
+      "note": "检索取证式采集（历史机型）：2019-06-11发布，169元起；0.95英寸AMOLED 120×240 RGB，LiPo 135mAh（NFC版125mAh/22.2g）；规格页未列主体完整尺寸 → dims null；蓝牙5.0"
+    },
+    {
+      "id": "mx-powerbank-10000",
+      "name": "小米移动电源 10000mAh",
+      "brand": "xiaomi",
+      "date": "2013-12-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/264/262.htm",
+      "note": "检索取证式采集（历史机型）：首代移动电源2013-12-04发布（雷军12-3微博宣布，12-10上市，69元）；注意首代实为10400mAh（4节LG/三星18650电芯，每节2600mAh），并非精确10000mAh，2015年才推10000m"
+    },
+    {
+      "id": "mx-air-purifier-1",
+      "name": "小米空气净化器 1代",
+      "brand": "xiaomi",
+      "date": "2014-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/415/415238.htm",
+      "note": "检索取证式采集（历史机型）：2014-12-09发布，899元；CADR 406m³/h（home schema 无 CADR 字段 → 留 note）；源未给能效等级 → ratingLevel null；噪音无单一标称值（新浪实测静音40.7/"
+    },
+    {
+      "id": "mx-robot-vacuum-1",
+      "name": "米家扫地机器人 1代",
+      "brand": "xiaomi",
+      "date": "2016-08-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/roomrobot/specs",
+      "note": "检索取证式采集（历史机型）：2016-08-31小米生态链秋季沟通会发布，9-6开售1699元；源未给能效/标称噪音 → 两字段 null；电池14.4V/5200mAh、最大风压1800Pa、LDS激光测距（home schema 无对应字段 →"
+    },
+    {
+      "id": "mx-scale-1",
+      "name": "小米体重秤",
+      "brand": "xiaomi",
+      "date": "2015-03-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/scale/specs",
+      "note": "检索取证式采集（历史机型）：2015-03-31米粉节沟通会发布，4-8米粉节首发99元；净重1.9kg、尺寸300×300×28.2mm；超白钢化玻璃面板，5~150kg量程，最小分度50g，蓝牙4.0；无能效/噪音 → 两字段 null；三维已"
+    },
+    {
+      "id": "hn-honor-v20",
+      "name": "荣耀V20",
+      "brand": "honor",
+      "date": "2018-12-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-hans/荣耀V20",
+      "note": "检索取证式采集（历史机型）：2018-12-26发布、12-28中国大陆上市；60Hz、22.5W；电池锂聚合物4000mAh（源未标典型/额定）；重量约180g含电池。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-v30",
+      "name": "荣耀V30",
+      "brand": "honor",
+      "date": "2019-11",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20200313003743/https:/www.honor.cn/products/mobile-phones/honorv30/spec/",
+      "note": "检索取证式采集（历史机型）：官网仅给出上市时间2019年11月（月精度）；4200mAh+40W（充电器10V/4A）；60Hz。三维为长×宽×厚（官网原文）"
+    },
+    {
+      "id": "hn-honor-v40",
+      "name": "荣耀V40",
+      "brand": "honor",
+      "date": "2021-01-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/531/500.htm",
+      "note": "检索取证式采集（历史机型）：2021-01-22发布，尺寸为实测值；6GB+128/8GB+128/8GB+256；另支持50W无线快充（高配版）。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-play",
+      "name": "荣耀Play",
+      "brand": "honor",
+      "date": "2018-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1216/1215468/param.shtml",
+      "note": "检索取证式采集（历史机型）：ZOL上市2018-06-11，发布2018-06-06；3750mAh（典型值）+9V/2A快充（wiredChargeW 按口径记 18W）；刷新率各源未标 → null。三维为长×宽×厚（ZOL原文）"
+    },
+    {
+      "id": "hn-honor-x10",
+      "name": "荣耀X10",
+      "brand": "honor",
+      "date": "2020-05-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/7wd8YtitirI",
+      "note": "检索取证式采集（历史机型）：2020-05-20发布；6+64/6+128/8+128；升降摄像头设计，屏占比92%。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-honor-x20",
+      "name": "荣耀X20",
+      "brand": "honor",
+      "date": "2021-08-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/50840/param_35065_0_1.html",
+      "note": "检索取证式采集（历史机型）：ZOL国内发布2021-08-12、上市2021-08-20；电池典型4300/额定4200mAh（取典型）；120Hz智慧动态帧率。三维为长×宽×厚（ZOL原文）"
+    },
+    {
+      "id": "hn-honor-x30",
+      "name": "荣耀X30",
+      "brand": "honor",
+      "date": "2021-12-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/phones/honor-x30/",
+      "note": "检索取证式采集（历史机型）：官网：最大有线充电66W、电池典型4800/额定4700mAh（取典型）、最高120Hz刷新率+240Hz触控采样率；8GB运存另有6/12GB版；2021-12-16发布、12-24开售。三维为长×宽×厚"
+    },
+    {
+      "id": "hn-magic-vs",
+      "name": "荣耀Magic Vs",
+      "brand": "honor",
+      "date": "2022-11-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.da2boss.com/digit-devices-show/magicvs-401552.php",
+      "note": "检索取证式采集（历史机型）：2022-11-23发布、11-30开售；取展开态三维（160.3×141.5×6.1，折叠态160.3×72.6×12.9见 note）；内屏7.9英寸2272×1984 90Hz、外屏6.45英寸2560×1080 "
+    },
+    {
+      "id": "hn-pad-v6",
+      "name": "荣耀平板V6",
+      "brand": "honor",
+      "date": "2020-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/shop/help/category-80.html",
+      "note": "检索取证式采集（历史机型）：官网：电池7250mAh（典型值）/7150mAh（额定），10.4英寸IPS 2000×1200 225PPI、约475g、10V/2.25A快充（wiredChargeW 按口径记 22.5W）；发布2020-05-"
+    },
+    {
+      "id": "hn-magicwatch-2",
+      "name": "荣耀手表 MagicWatch 2 46mm",
+      "brand": "honor",
+      "date": "2019-11-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/shop/product/10086117998723.html",
+      "note": "检索取证式采集（历史机型）：官网：1.39英寸AMOLED圆屏454×454 PPI326、电池455mAh、典型工作2周、磁吸充电（Type-C，源未标充电功率）；麒麟A1+4GB存储（来自HONOR Global 2019-11-26新闻稿）；"
     }
   ],
   "unresolved": []
