@@ -5650,6 +5650,286 @@
       "source": "manual",
       "sourceUrl": "https://www.leiphone.com/category/zixun/2fUja3gPfFFsObSQ.html",
       "note": "检索取证式采集（历史机型）：任务假设 2014-12 有误：该机 2014-10-28 发布（华为旗下首款全网通手机）、2014-11-06 10:08 开售（全网通 1299 元/电信 999 元）。3000mAh 不可拆卸；ZOL 版本含 1G"
+    },
+    {
+      "id": "hw-p7",
+      "name": "华为 P7",
+      "brand": "huawei",
+      "date": "2014-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "http://finance.people.com.cn/n/2014/0512/c348883-25004773.html",
+      "note": "检索取证式采集（历史机型）：2014-05-07 巴黎发布、5 月大陆开售（人民网，月精度）；GSMArena 记全球上市 2014-06；2GB+16GB 支持 microSD；源未给快充 → null。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-g6",
+      "name": "华为 G6",
+      "brand": "huawei",
+      "date": "2014-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-1702446-all.html",
+      "note": "检索取证式采集（历史机型）：MWC 2014-02 发布、电信版 2014-03-14 大陆现货开售（月精度）；清单注 2014-07 有误，从源 2014-03。4G 版为后续版本。三维 长×宽×厚（ZOL 电信版口径）"
+    },
+    {
+      "id": "hw-g7",
+      "name": "华为 G7",
+      "brand": "huawei",
+      "date": "2014-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.diankeji.com/pingce/2014/16396.html",
+      "note": "检索取证式采集（历史机型）：2014 年 9 月 IFA 发布、10 月大陆上市（月精度）；清单注 2015-08 有误，从源 2014-10；官方 1999 元。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-nova",
+      "name": "华为 nova",
+      "brand": "huawei",
+      "date": "2016-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20170523173922/http:/consumer.huawei.com/cn/mobile-phones/huawei-nova/conf.htm",
+      "note": "检索取证式采集（历史机型）：2016-09-01 IFA 柏林发布、10 月起大陆上市（月精度）；官网国行 4GB+64GB；18W 取自 GSMArena。三维 高×宽×厚（官网口径）"
+    },
+    {
+      "id": "hw-nova-plus",
+      "name": "华为 nova Plus",
+      "brand": "huawei",
+      "date": "2016-09",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_nova_plus-8312.php",
+      "note": "检索取证式采集（历史机型）：2016-09-01 IFA 与 nova 同步发布、10 月起上市（月精度）；32/3GB 与 64/4GB 两档；18W 同页。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-nova-2",
+      "name": "华为 nova 2",
+      "brand": "huawei",
+      "date": "2017-05-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_nova_2-8672.php",
+      "note": "检索取证式采集（历史机型）：2017-05-26 长沙发布、6-16 全面开售；清单注 2017-11 有误，从源 2017-05-26；国行 4GB+64GB；18W 见 GSMArena 对比页。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-nova-2s",
+      "name": "华为 nova 2s",
+      "brand": "huawei",
+      "date": "2017-12-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://cn.technode.com/post/2017-12-07/huawei-nova-2s/",
+      "note": "检索取证式采集（历史机型）：2017-12-07 发布、12-12 发售；三档 4+64/6+64/6+128；18W 取自 GSMArena 对比页。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-p20",
+      "name": "华为 P20",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/355/113.htm",
+      "note": "检索取证式采集（历史机型）：2018-03-27 巴黎全球发布、2018-04-12 上海国行开售；国行 6GB+64/128、海外另有 4GB 版；22.5W SuperCharge。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-p20-pro",
+      "name": "华为 P20 Pro",
+      "brand": "huawei",
+      "date": "2018-04-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/355/113.htm",
+      "note": "检索取证式采集（历史机型）：2018-03-27 巴黎全球发布、2018-04-12 上海国行开售；国行 6GB+64/128/256 三档；IP67；22.5W SuperCharge。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-p20-lite",
+      "name": "华为 P20 lite",
+      "brand": "huawei",
+      "date": "2018-03-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BAP20%20Lite/22381339",
+      "note": "检索取证式采集（历史机型）：国内对应 nova 3e（ANE-AL00），2018-03-20 长沙发布；清单注 2018-04 有误，从源 2018-03-20；18W 快充；ROM 64/128 两档。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-nova-3",
+      "name": "华为 nova 3",
+      "brand": "huawei",
+      "date": "2018-07-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_nova_3-9267.php",
+      "note": "检索取证式采集（历史机型）：中国 2018-07-18 深圳发布（ofweek 确认）；电池 3750mAh（ofweek 稿误写 3650，从 GSMArena）。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-nova-3i",
+      "name": "华为 nova 3i",
+      "brand": "huawei",
+      "date": "2018-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_nova_3i-9632.php",
+      "note": "检索取证式采集（历史机型）：2018-07-18 发布、07-27 上市（global），中国同月；电池官网标典型值、5V/2A=10W。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y220",
+      "name": "华为 Ascend Y220",
+      "brand": "huawei",
+      "date": "2014-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/compare.php3?idPhone1=5386&idPhone2=5921",
+      "note": "检索取证式采集（历史机型）：announced 2013-12、released 2014-03（GSMArena global 口径）；RAM 256MB/存储 512MB 按 GB 折算 0.25/0.5；无前置摄像头。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y300",
+      "name": "华为 Ascend Y300",
+      "brand": "huawei",
+      "date": "2013-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Huawei_Ascend_Y300",
+      "note": "检索取证式采集（历史机型）：维基/GSMArena/phonebunch 一致：first released March 2013；5MP 后置+VGA 前置，1730mAh 可换电池。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y360",
+      "name": "华为 Ascend Y360",
+      "brand": "huawei",
+      "date": "2015-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_y360-7077.php",
+      "note": "检索取证式采集（历史机型）：announced 2015-03、released 2015-06（GSMArena/维基），别名 Y3；电池 1730mAh（MWC 2015 稿称 2000mAh，从 GSMArena 1730）。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y5",
+      "name": "华为 Y5",
+      "brand": "huawei",
+      "date": "2015-06",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Huawei_Y5",
+      "note": "检索取证式采集（历史机型）：别名 Y560；维基 first released June 2015；重量 141.5g（维基）；5W 标准充电非快充 → wiredChargeW null。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y6",
+      "name": "华为 Y6",
+      "brand": "huawei",
+      "date": "2015-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_y6-7440.php",
+      "note": "检索取证式采集（历史机型）：GSMArena announced/released 2015-07；中国大陆称荣耀畅玩4A（共享硬件，区域品牌差异，按华为 Y6 收录）；重量 125g。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-y7",
+      "name": "华为 Y7",
+      "brand": "huawei",
+      "date": "2017-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/huawei_y7-8687.php",
+      "note": "检索取证式采集（历史机型）：华为 Y 系列无 2015 款 Y7；唯一『华为Y7』为 2017 款（骁龙435/2GB/16GB/4000mAh，released 2017-07；海外 Nova Lite+、美 AT&T Ascend XT2、中国"
+    },
+    {
+      "id": "hw-y9",
+      "name": "华为 Y9 (2018)",
+      "brand": "huawei",
+      "date": "2018-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Huawei_Y9_(2018)",
+      "note": "检索取证式采集（历史机型）：华为 Y 系列无 2016 款 Y9；Y9 系列自 2018 起（Kirin 659 中端，5.93 吋 FHD+ 18:9，4000mAh；中国名畅享8 Plus，2018-03-29 发布；另有 Y9 2019=Ki"
+    },
+    {
+      "id": "hw-changxiang-5",
+      "name": "华为 畅享 5",
+      "brand": "huawei",
+      "date": "2015-10-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB5/18714121",
+      "note": "检索取证式采集（历史机型）：任务注 2016-06 有误，从源 2015-10-10；源载支持快充/反向充电但未给瓦数 → null；2GB+16GB 单档。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-5s",
+      "name": "华为 畅享 5S",
+      "brand": "huawei",
+      "date": "2015-12-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB5S/18905071",
+      "note": "检索取证式采集（历史机型）：金属机身+后置指纹；2GB+16GB 单档；源未标充电瓦数。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-6",
+      "name": "华为 畅享 6",
+      "brand": "huawei",
+      "date": "2016-10-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB6/20179275",
+      "note": "检索取证式采集（历史机型）：源载快速充电 5V/2A=10W；3GB+16GB 单档；维基注明 4100mAh 为典型值。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-6s",
+      "name": "华为 畅享 6S",
+      "brand": "huawei",
+      "date": "2016-12-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.025zz.com.cn/html/yidong/sm/2016/1227/102984.html",
+      "note": "检索取证式采集（历史机型）：源载 3020mAh（不支持快充）→ wiredChargeW null；2016-12-19 发布、12-24 开售。三维 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-7",
+      "name": "华为 畅享 7",
+      "brand": "huawei",
+      "date": "2017-07-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB7/22034246",
+      "note": "检索取证式采集（历史机型）：任务注 2017-04 为畅享7 Plus 日期，从源 2017-07-07；源载 5V/1A=5W；2+16 与 3+32 两档。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-8",
+      "name": "华为 畅享 8",
+      "brand": "huawei",
+      "date": "2018-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB8/22439837",
+      "note": "检索取证式采集（历史机型）：18:9 全面屏；3+32 与 4+64 两档；源未标充电规格 → null。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-9",
+      "name": "华为 畅享 9",
+      "brand": "huawei",
+      "date": "2018-12-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://news.imobile.com.cn/articles/2018/1217/192296.shtml",
+      "note": "检索取证式采集（历史机型）：2018-12-05 上架、12-17 发布开售；配 5V/2A=10W；3+32 与 4+64 两档。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-9-plus",
+      "name": "华为 畅享 9 Plus",
+      "brand": "huawei",
+      "date": "2018-10-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB9%20Plus/22934209",
+      "note": "检索取证式采集（历史机型）：刘海屏；4+64、4+128、6+128 三档（2018-10-15 发布、10-20 开售）；源未标充电瓦数。三维 高×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-10",
+      "name": "华为 畅享 10",
+      "brand": "huawei",
+      "date": "2019-10-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.cnmo.com/series/818/param.html",
+      "note": "检索取证式采集（历史机型）：2019-10-18 发布；4+64、6+64、4+128 三档；10W 有线充电；无指纹（面部识别）。三维 长×宽×厚"
     }
   ],
   "unresolved": []
