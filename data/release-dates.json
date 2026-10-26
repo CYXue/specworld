@@ -7130,6 +7130,86 @@
       "source": "manual",
       "sourceUrl": null,
       "note": "检索取证式采集（历史机型）：2023-07-12 发布会发布、07-20 首销（快科技《首发3699元起 荣耀智慧屏5发布》），65/75 两档、首发 3699 元起；刷新率按源原文 240Hz（另有 48-144Hz VRR 与 120Hz ME"
+    },
+    {
+      "id": "hw-ascend-p1-u9200",
+      "name": "华为 Ascend P1（U9200）",
+      "brand": "huawei",
+      "date": "2012-04-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2012-01 CES 全球首发、2012-04-18 中国发布会上市（IT之家 2012-04-01 预告）；ZOL：4.3 吋 960×540、TI OMAP4460、1670mAh 不可拆；3533 手机世界：12"
+    },
+    {
+      "id": "hw-ascend-p2",
+      "name": "华为 Ascend P2",
+      "brand": "huawei",
+      "date": "2013-02",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2013-02-24 MWC 全球发布（人民网 2013-02-28 专稿，'全球最快'，8.4mm 机身）；大陆上市日源未给 → 取全球发布 2013-02 月精度；1GB+16GB、2420mAh 典型；快照 URL"
+    },
+    {
+      "id": "hw-ascend-d1",
+      "name": "华为 Ascend D1 四核（U9510）",
+      "brand": "huawei",
+      "date": "2012-08",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：中国大陆 2012-08 上市（月精度，ZOL 2012-10 行情佐证）；K3V2 首发机型之一；1GB+8GB、1800mAh 不可拆；快照 URL 截断 → sourceUrl null"
+    },
+    {
+      "id": "hw-ascend-g520",
+      "name": "华为 Ascend G520",
+      "brand": "huawei",
+      "date": "2013-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：360百科：4.5 吋 IPS 854×480、厚 9.9mm、1700mAh；G520-T10 四核 1.2G、Android 4.1、TD-SCDMA、2013 年上市；RAM/ROM 快照未给 → null；发布月"
+    },
+    {
+      "id": "hw-ascend-g525",
+      "name": "华为 Ascend G525",
+      "brand": "huawei",
+      "date": "2013-08",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：国内上市约 2013-08（月精度，ZOL 2013-07 报道佐证）；4.5 吋 540×960 240PPI、MSM8X25Q 四核、1GB+4GB、500 万+30 万摄像头、Android 4.1.2；电池快照未"
+    },
+    {
+      "id": "hw-ascend-w1",
+      "name": "华为 Ascend W1",
+      "brand": "huawei",
+      "date": "2013-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2013-01 CES 期间发布、华为首款 Windows Phone 8 手机，欧洲/中国/美国同步上市；4 吋 800×480、MSM8230 双核、1950mAh、1599 元（网易）；RAM/ROM 快照截断未确"
+    },
+    {
+      "id": "hw-ascend-w2",
+      "name": "华为 Ascend W2（W2-U00）",
+      "brand": "huawei",
+      "date": "2013-08",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：国内 2013-08 上市（月精度，2013-06 亚洲通信博览会亮相、ZOL 评测 2013-08-19）；Windows Phone 8 GDR2；1700mAh；处理器/RAM/ROM/重量/尺寸快照未给 → nu"
+    },
+    {
+      "id": "hw-ascend-g615",
+      "name": "华为 Ascend G615",
+      "brand": "huawei",
+      "date": "2013-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：搜狐数码 2013-01-22 报道发布；4.5 吋 IPS、K3V2 四核 1.4GHz、1GB RAM、800 万主摄 1080p；**2000mAh 出自 ZOL 问答栏非参数表 → batteryMah null"
     }
   ],
   "unresolved": []
