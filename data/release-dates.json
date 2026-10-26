@@ -6580,6 +6580,96 @@
       "source": "manual",
       "sourceUrl": "https://zh.wikipedia.org/wiki/%E5%B0%8F%E7%B1%B3%E6%89%8B%E7%8E%AF10",
       "note": "检索取证式采集（历史机型）：中国大陆发布日 2025-06-27（人车家全生态发布会），标准版/NFC 版/陶瓷版；规格佐证 mi.com/global specs（46.57×22.54×10.95mm、15.95g、蓝牙 5.4、5ATM）；额"
+    },
+    {
+      "id": "mx-audio-xiaoai-1",
+      "name": "小爱音箱 初代",
+      "brand": "xiaomi",
+      "date": "2017-07-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3AI%E9%9F%B3%E7%AE%B1/22046214",
+      "note": "检索取证式采集（历史机型）：2017-07-26 发布、09-26 开售；机身约 636g；双频 WiFi、蓝牙 4.1；插电式无内置电池 → budHours/withCaseHours null；64 位 Cortex-A53 四核 1.2GH"
+    },
+    {
+      "id": "mx-audio-xiaoai-pro",
+      "name": "小爱音箱 Pro",
+      "brand": "xiaomi",
+      "date": "2019-09-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.yesky.com/product/1081/1081168/param.shtml",
+      "note": "检索取证式采集（历史机型）：2019-09-17 随小爱音箱一同发布（清单注 2018-04 有误）；蓝牙 4.2、1187g（天极网参数页，脚本之家称 1207g 取参数页口径）；插电式无内置电池 → budHours/withCaseHours"
+    },
+    {
+      "id": "mx-audio-mibuds-1",
+      "name": "小米蓝牙耳机 初代",
+      "brand": "xiaomi",
+      "date": "2015-06-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/history/lanyaerji/xiaomi/",
+      "note": "检索取证式采集（历史机型）：2015-06-18 上市、79 元（清单注 2018-07 有误，此为小米官网最早期半入耳式蓝牙耳机 mi.com/bluetooth-headset）；单耳 6.5g、蓝牙 4.1；非 TWS 无充电盒、源未给通话续"
+    },
+    {
+      "id": "mx-audio-earbuds-s",
+      "name": "小米蓝牙耳机 Air（Mi True Wireless Earphones）",
+      "brand": "xiaomi",
+      "date": "2019-01",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/hk/support/faq/details/KA-05421/",
+      "note": "检索取证式采集（历史机型）：型号 TWSEJ01JY；2018-11 过 FCC、2019-01 中国大陆发布（取月精度）；单耳 5.8g、充电盒/整机约 58g；单次 3 小时、含盒 10 小时；支持 ANC 主动降噪（波束成形+ENC）；蓝牙 "
+    },
+    {
+      "id": "mx-home-air4",
+      "name": "米家空气净化器 4",
+      "brand": "xiaomi",
+      "date": "2021-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/purifier/index1390735.shtml",
+      "note": "检索取证式采集（历史机型）：2021-09-26 发布开售、899 元（清单注 2022-08 有误，从源 2021-09）；颗粒物 CADR 400m³/h、甲醛 CADR 150m³/h、额定 30W、适用 20-50㎡、滤芯 3-6 个月；噪"
+    },
+    {
+      "id": "mx-home-humidifier-2",
+      "name": "米家加湿器 2",
+      "brand": "xiaomi",
+      "date": "2022-07-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/632/069.htm",
+      "note": "检索取证式采集（历史机型）：2022-07-28 发布、07-31 开售（清单注 2019-04 有误，从源 2022-07）；水箱 4L、加湿量 300mL/h、额定 28W、噪音 ≤38dB(A)、99 元；圆柱机身源口径 Φ190×335（直"
+    },
+    {
+      "id": "mx-home-ricecooker-1",
+      "name": "米家 IH 压力电饭煲 1代",
+      "brand": "xiaomi",
+      "date": "2016-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/dianfanbao2/specs",
+      "note": "检索取证式采集（历史机型）：2016-03-29 发布、04-06 首售、999 元；3L 版（另有 4L 版）、IH 压力加热 1.2 倍压、灰铸铁内胆 0.94kg、额定 1130W（3L 版）、净重 4.4kg；Wi-Fi 2.4GHz；di"
+    },
+    {
+      "id": "mx-home-vacuum-2",
+      "name": "米家扫地机器人 2",
+      "brand": "xiaomi",
+      "date": "2021-07-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://smarthome.ofweek.com/2021-07/ART-91005-8110-30511750.html",
+      "note": "检索取证式采集（历史机型）：2021-07-21 发布预售、首发 1599 元（清单注 2018-05 有误，从源 2021-07）；最高吸力 2800Pa（4 档）、8 颗 dToF 激光避障、LDS 激光导航、声波震动拖地 10000 次/分钟"
+    },
+    {
+      "id": "mx-home-washer-1",
+      "name": "米家无线洗地机 1代（高温）",
+      "brand": "xiaomi",
+      "date": "2021-10-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20211015A0770Z00",
+      "note": "检索取证式采集（历史机型）：2021-10-15 发布、10-20 定金预售、原价 3499/首发 2999 元；吸拖洗三合一、75℃热水洗地、15 次/秒高频擦地；内置 4000mAh 电池续航 35 分钟、净水箱 780mL、污水箱 640mL"
     }
   ],
   "unresolved": []

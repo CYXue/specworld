@@ -437,6 +437,8 @@ function main() {
     join(ROOT, 'data', 'curated', 'xiaomi-laptop-2a3.json'),
     join(ROOT, 'data', 'curated', 'xiaomi-tablet-2a4.json'),
     join(ROOT, 'data', 'curated', 'xiaomi-wearable-2a5.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-audio-2a6.json'),
+    join(ROOT, 'data', 'curated', 'xiaomi-home-2a7.json'),
   ];
   let historyRecords = [];
   const historyParts = [];

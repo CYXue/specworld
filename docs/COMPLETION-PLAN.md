@@ -114,7 +114,13 @@
   → 1528 总台（小米 320）。
   - 2a-4 tablet 3（REDMI Pad 初代 2022/SE 2023/Pro 2024；『平板4a』实为 4 Plus 已在盘上、重复弃）。
   - 2a-5 wearable 2（Xiaomi Watch 2 2024 / 手环 10 标准 2025；『Watch 初代』实为 S1 已在盘上、重复弃）。
-  → 1533 总台（小米 325）。**2a 待续**：audio（Redmi Buds 早期系）、home（米家家电中段）。
+  → 1533 总台（小米 325）。
+  - 2a-6 audio 4（小爱音箱初代 2017/Pro 2019 + 小米蓝牙耳机初代 2015/Air 2019；Buds 初代/2 海外机 notfound；
+    audio 检索路径只落 anc/budHours/withCaseHours/budWeightG/bluetooth/weightG，chipset 仅 note）。
+  - 2a-7 home 5（空净4 2021/加湿器2 2022/电饭煲IH 1代 2016/扫地2 2021/洗地1代 2021；全效400 notfound；
+    品类特有参数 CADR/容积/吸力Pa 进 note 不造字段；圆柱 Φ190×335 几何归一 高×宽×深）。
+  → **2a 全部完成 +33 台**（media 7/network 8/laptop 4/tablet 3/wearable 2/audio 4/home 5），
+  → 1542 总台（小米 334）。米家家电长尾 SKU 留开放空间（77+5 台已覆盖旗舰线 2014-2026）。
 
 ## 纪律（本工程沿用）
 
