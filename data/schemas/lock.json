@@ -1,0 +1,253 @@
+{
+  "_doc": "智能门锁品类字段表（小米智能门锁全系；2026-10-27 从 home 拆出）。结构性特点：电池供电（门锁/摄像头双电源）、以安防为中心；核心参数是锁芯等级、开锁方式、续航与摄像头。开锁方式是文本列表，按官网原文空格/顿号分隔成数组。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "lock.lockCylinder",
+      "label": "锁芯",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文（直插式C级锁芯）"
+    },
+    {
+      "path": "lock.unlockMethods",
+      "label": "开锁方式",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文按空格/顿号分列（人脸识别 / 指纹 / 密码 / 临时密码 / 蓝牙 / 钥匙 / NFC）"
+    },
+    {
+      "path": "lock.form",
+      "label": "门锁形态",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文（半把手 / 横把手 / 推拉式）"
+    },
+    {
+      "path": "lock.indoorLock",
+      "label": "室内反锁",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文（电子反锁 / 旋钮反锁）"
+    },
+    {
+      "path": "lock.doorbell",
+      "label": "门铃",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文"
+    },
+    {
+      "path": "lock.batteryLife",
+      "label": "门锁续航",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文（含电池型号/数量，如「12个月 干电池*8节」）；不换算成天数"
+    },
+    {
+      "path": "lock.cameraAngle",
+      "label": "摄像头角度",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文；「无」照录"
+    },
+    {
+      "path": "lock.cameraBattery",
+      "label": "摄像头续航",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文"
+    },
+    {
+      "path": "lock.connectivity",
+      "label": "连接方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文（蓝牙&WiFi / 蓝牙）"
+    },
+    {
+      "path": "lock.frontPanel",
+      "label": "前面板材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文"
+    },
+    {
+      "path": "lock.frameMaterial",
+      "label": "中框材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "lock",
+      "note": "官网原文"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        2200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身口径；官网「宽*深*高」数值序为宽、深、高"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        1200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "门锁厚度（前面板口径）"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        100,
+        20000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "整机净重；官网未公布记 null"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；带蜂窝的机型才有，其余 unknown。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码；含 WLAN/蓝牙的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "lock",
+      "name": "安防与开锁"
+    },
+    {
+      "id": "body",
+      "name": "外观与机身"
+    },
+    {
+      "id": "device",
+      "name": "型号与监管"
+    }
+  ]
+}

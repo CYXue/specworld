@@ -1,0 +1,113 @@
+{
+  "id": "xiaomi-19556",
+  "slug": "xiaomi-19556",
+  "brand": "xiaomi",
+  "line": "米家",
+  "name": "米家双核净水器 1200G Pro",
+  "nameZh": "米家双核净水器 1200G Pro",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [],
+  "provenance": {
+    "features.noiseDb": "huawei-official",
+    "waterpurifier.filterTech": "huawei-official",
+    "waterpurifier.faucet": "huawei-official",
+    "waterpurifier.pureWasteRatio": "huawei-official",
+    "waterpurifier.filterLife": "huawei-official",
+    "waterpurifier.zeroStaleWater": "huawei-official",
+    "waterpurifier.appSupport": "huawei-official",
+    "waterpurifier.warranty": "huawei-official",
+    "waterpurifier.flowRateLpm": "huawei-official",
+    "waterpurifier.fillCupTimeS": "huawei-official",
+    "waterpurifier.filterCount": "huawei-official",
+    "waterpurifier.certifications": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.776Z",
+  "lastSeenAt": "2026-10-27T12:42:12.776Z",
+  "category": "waterpurifier",
+  "specs": {
+    "features.noiseDb": 40.8,
+    "waterpurifier.filterTech": "RO反渗透",
+    "waterpurifier.faucet": "OLED屏显水龙头",
+    "waterpurifier.pureWasteRatio": "5:1",
+    "waterpurifier.filterLife": "PPC复合滤芯 2年 400GRO反渗透滤芯 2年 800GRO反渗透滤芯 8年",
+    "waterpurifier.zeroStaleWater": "零陈水2.0 纯水回流，改善水质",
+    "waterpurifier.appSupport": "支持连接米家APP，查看水质、用水量、滤芯使用情况等",
+    "waterpurifier.warranty": "整机3年质保 核心部件5年质保",
+    "waterpurifier.flowRateLpm": 3.2,
+    "waterpurifier.fillCupTimeS": 3,
+    "waterpurifier.filterCount": 3,
+    "waterpurifier.certifications": [
+      "母婴级净水认证 无双酚A",
+      "特优水质认证"
+    ]
+  }
+}

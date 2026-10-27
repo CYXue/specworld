@@ -1,0 +1,115 @@
+{
+  "id": "xiaomi-21223",
+  "slug": "xiaomi-21223",
+  "brand": "xiaomi",
+  "line": "米家",
+  "name": "米家无线洗地机4 Pro",
+  "nameZh": "米家无线洗地机4 Pro",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": 5140,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "品类特有参数": "洗地介质：冷水 | 洗地方式：冷水"
+  },
+  "notes": [
+    "官网关键参数原文见 rawOfficial（2 项；本行已按 cleaner schema 落位可量化项）"
+  ],
+  "provenance": {
+    "cleaner.type": "huawei-official",
+    "cleaner.selfClean": "huawei-official",
+    "cleaner.dryMethod": "huawei-official",
+    "cleaner.edgeClean": "huawei-official",
+    "cleaner.brushType": "huawei-official",
+    "cleaner.sterilize": "huawei-official",
+    "cleaner.innovation": "huawei-official",
+    "cleaner.cleanWaterMl": "huawei-official",
+    "cleaner.wasteWaterMl": "huawei-official",
+    "cleaner.suctionKpa": "huawei-official",
+    "cleaner.runtimeMin": "huawei-official",
+    "cleaner.batteryMah": "huawei-official",
+    "body.weightG": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.754Z",
+  "lastSeenAt": "2026-10-27T12:42:12.754Z",
+  "category": "cleaner",
+  "specs": {
+    "cleaner.type": "洗地机",
+    "cleaner.selfClean": "100℃沸水杀菌洗",
+    "cleaner.dryMethod": "90℃热风静音烘+5min快烘",
+    "cleaner.edgeClean": "双侧贴边",
+    "cleaner.brushType": "单滚刷",
+    "cleaner.sterilize": "电解水",
+    "cleaner.innovation": "21KPa大吸力|水渍快干防缠毛",
+    "cleaner.cleanWaterMl": 1000,
+    "cleaner.wasteWaterMl": 700,
+    "cleaner.suctionKpa": 21,
+    "cleaner.runtimeMin": 40,
+    "cleaner.batteryMah": 4000
+  }
+}

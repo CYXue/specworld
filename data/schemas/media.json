@@ -156,12 +156,12 @@
       "type": "number",
       "range": [
         1,
-        2
+        8
       ],
       "dir": null,
       "quantifiable": false,
       "group": "chipset",
-      "note": "iPod 主控非通用 CPU，官方未公布记 null"
+      "note": "iPod 主控非通用 CPU，官方未公布记 null；上界按小米盒子 4S Pro 的 Amlogic 四核放宽（2026-10-27 长图补录批）"
     },
     {
       "path": "memory.storageGb",

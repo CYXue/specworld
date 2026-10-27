@@ -1,0 +1,270 @@
+{
+  "_doc": "净水器品类字段表（米家净水器/净饮机；2026-10-27 从 home 拆出）。结构性特点：带市电（增压泵）、无屏幕主体字段；核心参数是过滤技术、流速、纯废水比与滤芯。流速单位统一 L/min，官网「接满150ml水杯时间」按秒存。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "waterpurifier.filterTech",
+      "label": "主过滤技术",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文（RO反渗透）"
+    },
+    {
+      "path": "waterpurifier.flowRateLpm",
+      "label": "常温水流速",
+      "unit": "L/min",
+      "type": "number",
+      "range": [
+        0.1,
+        10
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "waterpurifier",
+      "note": "官网原文（3.2L/min）"
+    },
+    {
+      "path": "waterpurifier.fillCupTimeS",
+      "label": "接满 150ml 水杯时间",
+      "unit": "s",
+      "type": "number",
+      "range": [
+        1,
+        120
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "waterpurifier",
+      "note": "官网口径的时间秒数（只取「N秒」里的 N，不取 150ml 的 150）"
+    },
+    {
+      "path": "waterpurifier.faucet",
+      "label": "龙头类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文"
+    },
+    {
+      "path": "waterpurifier.pureWasteRatio",
+      "label": "纯废水比",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文（如 5:1）；比值不拆成两个数"
+    },
+    {
+      "path": "waterpurifier.filterCount",
+      "label": "滤芯数量",
+      "unit": "个",
+      "type": "number",
+      "range": [
+        1,
+        12
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "waterpurifier",
+      "note": "官网「滤芯数量」取数值"
+    },
+    {
+      "path": "waterpurifier.filterLife",
+      "label": "滤芯寿命",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文逐芯描述"
+    },
+    {
+      "path": "waterpurifier.certifications",
+      "label": "水质认证",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文（母婴级净水认证 / 无双酚A / 特优水质认证）"
+    },
+    {
+      "path": "waterpurifier.zeroStaleWater",
+      "label": "零陈水",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文"
+    },
+    {
+      "path": "waterpurifier.appSupport",
+      "label": "米家 APP",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文"
+    },
+    {
+      "path": "waterpurifier.warranty",
+      "label": "质保",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "waterpurifier",
+      "note": "官网原文"
+    },
+    {
+      "path": "features.noiseDb",
+      "label": "噪音",
+      "unit": "dB",
+      "type": "number",
+      "range": [
+        20,
+        90
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "features",
+      "note": "官网「噪音」取数值（dB(A)）"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        2200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身口径；官网「宽*深*高」数值序为宽、深、高"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        1200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身深度；官网未公布记 null"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        100,
+        50000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "整机净重；官网未公布记 null"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；带蜂窝的机型才有，其余 unknown。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码；含 WLAN/蓝牙的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "waterpurifier",
+      "name": "过滤与水质"
+    },
+    {
+      "id": "body",
+      "name": "外观与机身"
+    },
+    {
+      "id": "features",
+      "name": "功能特性"
+    },
+    {
+      "id": "device",
+      "name": "型号与监管"
+    }
+  ]
+}

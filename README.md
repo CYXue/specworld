@@ -6,7 +6,7 @@
 
 | 项 | 决定 |
 |---|---|
-| 品类 | **全品类 18 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / washer / audio / media / tracker / network / pda / input / printer / storage / accessory |
+| 品类 | **全品类 26 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / fridge / aircon / aircare / climate / cleaner / kitchen / waterpurifier / lock / washer / audio / media / tracker / network / pda / input / printer / storage / accessory |
 | 品牌 | **苹果 + 华为 + 小米 + 荣耀**（注册表单一真源 `scripts/brands.mjs`） |
 | 机型 | **全量收录，粒度＝每型号一条**（2026-10-25 裁决：同型号存储/颜色配置在记录内以档位数组合并，不按 SKU 拆条；生态链/贴牌品牌不收，只收官方自营品牌）。两条收录通道：① 官网抓取，官网在售目录全部进站；② 用户数据层 `add-product` **显式收录**——状态（在售/未发售/已停售）区分生命周期。官网已下架的历史机型不在采集范围，见 `docs/HISTORICAL-CATALOG-PLAN.md`（检索取证式批次已入库） |
 | 形态 | 纯静态站（零后端），已送审 B 站 Toy（slug=specworld） |
@@ -63,7 +63,7 @@ scripts/publish/        内容指纹、产物闸门 verify-dist、依赖源规�
 .github/workflows/      每 12 小时自动同步 + 每日 Toy 送审
 admin/                  后台编辑器（overrides 录入/审核；刻意不放 public/，dist 不携带）
 data/categories.json    品类注册表（全品类目录入口：id → schemas/<id>.json）
-data/schemas/           各品类字段表（当前仅 phone.json；新增品类 = 加一行 + 加一份字段表）
+data/schemas/           各品类字段表（26 份；新增品类 = 加一行 + 加一份字段表）
 data/curated/           人工策展数据（facets 分面档位；glossary 术语表已随多语言退役删除）
 data/products.json      唯一数据契约产物（提交入库）
 data/release-dates.json 发布日期取证表（**curated 数据**，人工核对，必须入库）

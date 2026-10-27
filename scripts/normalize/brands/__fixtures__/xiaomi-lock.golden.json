@@ -1,0 +1,119 @@
+{
+  "id": "xiaomi-20289",
+  "slug": "xiaomi-20289",
+  "brand": "xiaomi",
+  "line": "Xiaomi",
+  "name": "小米智能门锁2 Pro",
+  "nameZh": "小米智能门锁2 Pro",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [
+      "深灰色"
+    ],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [],
+  "provenance": {
+    "lock.lockCylinder": "huawei-official",
+    "lock.form": "huawei-official",
+    "lock.indoorLock": "huawei-official",
+    "lock.doorbell": "huawei-official",
+    "lock.batteryLife": "huawei-official",
+    "lock.cameraAngle": "huawei-official",
+    "lock.cameraBattery": "huawei-official",
+    "lock.connectivity": "huawei-official",
+    "lock.frontPanel": "huawei-official",
+    "lock.frameMaterial": "huawei-official",
+    "lock.unlockMethods": "huawei-official",
+    "body.colors": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.799Z",
+  "lastSeenAt": "2026-10-27T12:42:12.799Z",
+  "category": "lock",
+  "specs": {
+    "lock.lockCylinder": "直插式C级锁芯",
+    "lock.form": "半把手",
+    "lock.indoorLock": "电子反锁",
+    "lock.doorbell": "感应式门铃",
+    "lock.batteryLife": "总续航8个月 锂电池*1+干电池*4",
+    "lock.cameraAngle": "160°",
+    "lock.cameraBattery": "4个月 锂电池*1（与门锁共用）",
+    "lock.connectivity": "蓝牙&WiFi",
+    "lock.frontPanel": "钢化玻璃",
+    "lock.frameMaterial": "铝合金",
+    "lock.unlockMethods": [
+      "人脸识别",
+      "指纹",
+      "密码",
+      "临时密码",
+      "蓝牙",
+      "钥匙",
+      "NFC"
+    ]
+  }
+}

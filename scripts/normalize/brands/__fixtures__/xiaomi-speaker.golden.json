@@ -1,0 +1,98 @@
+{
+  "id": "xiaomi-22104",
+  "slug": "xiaomi-22104",
+  "brand": "xiaomi",
+  "line": "Sound",
+  "name": "Xiaomi Sound 2 Max",
+  "nameZh": "Xiaomi Sound 2 Max",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "budWeightG": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": "2.4G/5GHzHz",
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {
+    "出音方式": "前向出音",
+    "麦克风": "线形麦克风阵列",
+    "组合立体声": "支持",
+    "语音通话": "不支持",
+    "红外控制": "不支持"
+  },
+  "notes": [
+    "Wi-Fi 频段原文「2.4G/5GHzHz」单位重复（官网笔误），按原文保留：connectivity.wifi"
+  ],
+  "provenance": {
+    "audio.driverUnit": "huawei-official",
+    "connectivity.wifi": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:40:43.099Z",
+  "lastSeenAt": "2026-10-27T12:40:43.099Z",
+  "category": "audio",
+  "specs": {
+    "audio.driverUnit": "2个4英寸低音+1个4英寸中音+1个1.5英寸高音"
+  }
+}

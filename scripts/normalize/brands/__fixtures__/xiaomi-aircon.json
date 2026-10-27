@@ -1,0 +1,25 @@
+{
+  "id": "xiaomi-13143",
+  "brand": "xiaomi",
+  "name": "巨省电 1.5匹新一级能效 小米空调",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=13143",
+  "raw": {
+    "款式": "壁挂式",
+    "产品系列": "巨省电",
+    "匹数": "1.5匹",
+    "能效": "一级",
+    "适用面积": "16-20㎡",
+    "冷暖类型": "冷暖",
+    "定频/变频": "变频",
+    "是否支持小爱同学控制": "是",
+    "整机质保期": "10年",
+    "APF值": "5.27",
+    "制冷量（整机）": "3500（150-5100）",
+    "制热量（整机）": "5000(150-6610)W",
+    "_catalog.price": "1799",
+    "_catalog.productId": "13143",
+    "_catalog.goodsId": "1204700007",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=13143"
+  },
+  "extractedAt": "2026-10-27T12:42:12.658Z"
+}

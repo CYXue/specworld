@@ -1,0 +1,25 @@
+{
+  "id": "xiaomi-20289",
+  "brand": "xiaomi",
+  "name": "小米智能门锁2 Pro",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=20289",
+  "raw": {
+    "锁芯": "直插式C级锁芯",
+    "门锁续航": "总续航8个月 锂电池*1+干电池*4",
+    "开锁方式": "人脸识别 指纹 密码 临时密码 蓝牙 钥匙 NFC",
+    "门锁形态": "半把手",
+    "室内反锁": "电子反锁",
+    "门铃": "感应式门铃",
+    "摄像头角度": "160°",
+    "摄像头续航": "4个月 锂电池*1（与门锁共用） ",
+    "连接方式": "蓝牙&WiFi",
+    "门锁颜色": "深灰色",
+    "前面板材质": "钢化玻璃",
+    "中框材质": "铝合金",
+    "_catalog.price": "1399",
+    "_catalog.productId": "20289",
+    "_catalog.goodsId": "2230002265",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=20289"
+  },
+  "extractedAt": "2026-10-27T12:42:12.799Z"
+}

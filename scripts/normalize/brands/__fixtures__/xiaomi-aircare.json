@@ -1,0 +1,20 @@
+{
+  "id": "xiaomi-20836",
+  "brand": "xiaomi",
+  "name": "米家空气净化器 5 Pro",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=20836",
+  "raw": {
+    "建议最大适用面积": "96㎡",
+    "建议场所": "整屋",
+    "净化类型": "复合净化：\nPM1、PM10、3nm颗粒物、PM2.5、沙尘、肺炎克雷伯氏菌、花粉过敏原、大肠杆菌、二手烟、甲醛、白色葡萄球菌、金黄色葡萄球菌、异味、甲型流感病毒 H1N1、猫皮屑过敏原、狗皮屑过敏原、尘螨过敏原、TVOC 等",
+    "颗粒物CADR ": "实测1050m³/h",
+    "甲醛CADR": "实测720m³/h",
+    "滤网类型": "复合滤网：\n初效滤网｜抗菌涂层｜高效纳米级滤材｜强力除醛分子滤层｜专效除醛配方炭层",
+    "能效等级": "2级",
+    "_catalog.price": "1999",
+    "_catalog.productId": "20836",
+    "_catalog.goodsId": "2230003367",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=20836"
+  },
+  "extractedAt": "2026-10-27T12:42:12.745Z"
+}

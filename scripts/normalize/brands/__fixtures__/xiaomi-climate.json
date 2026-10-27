@@ -1,0 +1,20 @@
+{
+  "id": "xiaomi-18463",
+  "brand": "xiaomi",
+  "name": "米家智能蒸发式冷风扇",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=18463",
+  "raw": {
+    "类型": "塔扇",
+    "功能": "强劲制冷",
+    "变频/定频": "定频",
+    "操控方式": "机身按键+米家APP+AI语音控制",
+    "放置方式": "落地式",
+    "俯仰角度": "/",
+    "摇头角度": "80°",
+    "_catalog.price": "499",
+    "_catalog.productId": "18463",
+    "_catalog.goodsId": "2221502124",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=18463"
+  },
+  "extractedAt": "2026-10-27T00:00:00.000Z"
+}

@@ -1,0 +1,281 @@
+{
+  "_doc": "清洁电器品类字段表（洗地机/吸尘器/扫地机器人；2026-10-27 从 home 拆出）。结构性特点：电池供电、无屏幕主体字段；核心参数是吸力、续航、水箱与滚刷。续航官网可能分场景给出多档（40（洗地）min / 50（吸尘）min），本字段取首档，全档见 rawOfficial。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "cleaner.type",
+      "label": "产品类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "由官方商品名的品类词判定（洗地机 / 吸尘器 / 扫地机器人），不是参数推算"
+    },
+    {
+      "path": "cleaner.selfClean",
+      "label": "滚刷自清洁",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文"
+    },
+    {
+      "path": "cleaner.dryMethod",
+      "label": "干燥方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文（热风烘干 / 90℃热风静音烘）"
+    },
+    {
+      "path": "cleaner.edgeClean",
+      "label": "滚刷贴边",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文（双侧贴边 / 单侧贴边）"
+    },
+    {
+      "path": "cleaner.brushType",
+      "label": "滚刷类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文（单滚刷）"
+    },
+    {
+      "path": "cleaner.cleanWaterMl",
+      "label": "清水箱容量",
+      "unit": "ml",
+      "type": "number",
+      "range": [
+        100,
+        4000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "cleaner"
+    },
+    {
+      "path": "cleaner.wasteWaterMl",
+      "label": "污水箱容量",
+      "unit": "ml",
+      "type": "number",
+      "range": [
+        100,
+        4000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "cleaner"
+    },
+    {
+      "path": "cleaner.suctionKpa",
+      "label": "最大吸力",
+      "unit": "kPa",
+      "type": "number",
+      "range": [
+        1,
+        60
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "cleaner",
+      "note": "官网原文（「21(主电机)Kpa」→ 21）"
+    },
+    {
+      "path": "cleaner.runtimeMin",
+      "label": "续航时间",
+      "unit": "min",
+      "type": "number",
+      "range": [
+        5,
+        360
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "cleaner",
+      "note": "官网多场景分档时取首档（如洗地 40min / 吸尘 50min），全档见 rawOfficial"
+    },
+    {
+      "path": "cleaner.batteryMah",
+      "label": "电池标称容量",
+      "unit": "mAh",
+      "type": "number",
+      "range": [
+        500,
+        30000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "cleaner"
+    },
+    {
+      "path": "cleaner.sterilize",
+      "label": "除菌方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文（电解水 / 沸水杀菌）"
+    },
+    {
+      "path": "cleaner.innovation",
+      "label": "创新技术",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "cleaner",
+      "note": "官网原文"
+    },
+    {
+      "path": "power.ratingLevel",
+      "label": "能效等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "中国能效标识等级（如 1级）；energylabel.com.cn 可查"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        2200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身口径；官网「宽*深*高」数值序为宽、深、高"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        1200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身深度（主机口径）"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        100,
+        30000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "整机净重；官网未公布记 null"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；带蜂窝的机型才有，其余 unknown。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码；含 WLAN/蓝牙的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "cleaner",
+      "name": "清洁性能"
+    },
+    {
+      "id": "body",
+      "name": "外观与机身"
+    },
+    {
+      "id": "power",
+      "name": "电源与能效"
+    },
+    {
+      "id": "device",
+      "name": "型号与监管"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "xiaomi-22104",
+  "brand": "xiaomi",
+  "name": "Xiaomi Sound 2 Max",
+  "specsUrl": "https://www.mi.com/shop/buy/detail?product_id=22104",
+  "raw": {
+    "红外控制": "不支持",
+    "扬声器": "2个4英寸低音+1个4英寸中音+1个1.5英寸高音",
+    "麦克风": "线形麦克风阵列",
+    "出音方式": "前向出音",
+    "组合立体声": "支持",
+    "语音通话": "不支持",
+    "Wi-Fi 频段": "2.4G/5GHzHz",
+    "_catalog.price": "1649",
+    "_catalog.productId": "22104",
+    "_catalog.goodsId": "2230005417",
+    "_catalog.shopUrl": "https://www.mi.com/shop/buy/detail?product_id=22104"
+  },
+  "extractedAt": "2026-10-27T12:40:43.099Z"
+}

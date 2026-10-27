@@ -1,0 +1,119 @@
+{
+  "id": "xiaomi-10050211",
+  "slug": "xiaomi-10050211",
+  "brand": "xiaomi",
+  "line": "米家",
+  "name": "米家洗衣机 健康洗 三筒11kg",
+  "nameZh": "米家洗衣机 健康洗 三筒11kg",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": 850,
+    "widthMm": 598,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null,
+    "depthMm": 607
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [
+    "机身三维取官网「598*607*850mm」（数值序：宽、深、高）",
+    "能效等级原文「一级级」归一为「1级」（官网混写/笔误，值语义不变）"
+  ],
+  "provenance": {
+    "power.ratingLevel": "huawei-official",
+    "features.noiseDb": "huawei-official",
+    "washer.type": "huawei-official",
+    "washer.washCapacity": "huawei-official",
+    "washer.motor": "huawei-official",
+    "washer.sterilization": "huawei-official",
+    "washer.drainType": "huawei-official",
+    "washer.doorType": "huawei-official",
+    "washer.smart": "huawei-official",
+    "washer.drumMaterial": "huawei-official",
+    "washer.dryMethod": "huawei-official",
+    "washer.washRatio": "huawei-official",
+    "washer.maxSpinRpm": "huawei-official",
+    "body.widthMm": "huawei-official",
+    "body.depthMm": "huawei-official",
+    "body.heightMm": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.707Z",
+  "lastSeenAt": "2026-10-27T12:42:12.707Z",
+  "category": "washer",
+  "specs": {
+    "power.ratingLevel": "1级",
+    "features.noiseDb": 52,
+    "washer.type": "分区洗衣机",
+    "washer.washCapacity": "大筒10kg、小筒0.5kg+0.5kg",
+    "washer.motor": "直驱变频电机",
+    "washer.sterilization": "除菌除螨",
+    "washer.drainType": "上排水",
+    "washer.doorType": "前开式",
+    "washer.smart": "支持智能",
+    "washer.drumMaterial": "不锈钢",
+    "washer.dryMethod": "无烘干",
+    "washer.washRatio": 1.3,
+    "washer.maxSpinRpm": 1200
+  }
+}

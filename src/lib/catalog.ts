@@ -101,6 +101,7 @@ type CategoryId =
   | 'fridge'
   | 'aircon'
   | 'aircare'
+  | 'climate'
   | 'cleaner'
   | 'kitchen'
   | 'waterpurifier'

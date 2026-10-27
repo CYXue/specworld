@@ -1,0 +1,351 @@
+{
+  "_doc": "环境电器品类字段表（除湿机/加湿器/蒸发式冷风扇；2026-10-27 从 home 拆出）。结构性特点：带市电、无屏幕主体字段；核心参数是除湿量/加湿量/水箱容量/风量，官网口径分别为 L/D（高温除湿量）、mL/h（额定加湿量）、L、m³/h。除湿量只取官网原文数值（工况标注 30℃/80%RH 由原文承担），不做单位换算、不估算。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "climate.type",
+      "label": "产品类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "由官方商品名/官网「类型」判定（除湿机 / 加湿器 / 净化加湿器 / 冷风扇）"
+    },
+    {
+      "path": "climate.dehumidifyLpd",
+      "label": "高温除湿量",
+      "unit": "L/D",
+      "type": "number",
+      "range": [
+        1,
+        120
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "climate",
+      "note": "官网「高温除湿量 22L/D(30℃/80%RH)」取数值 22；工况由原文承担"
+    },
+    {
+      "path": "climate.dehumidifyNominalKgph",
+      "label": "名义除湿量",
+      "unit": "kg/h",
+      "type": "number",
+      "range": [
+        0.05,
+        6
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "climate",
+      "note": "官网「名义除湿量 0.45kg/h(27℃/60%RH)」取数值；与高温除湿量是不同工况口径，分列不合算"
+    },
+    {
+      "path": "climate.humidifyMlph",
+      "label": "额定加湿量",
+      "unit": "mL/h",
+      "type": "number",
+      "range": [
+        50,
+        5000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "climate",
+      "note": "官网「额定加湿量 2600mL/h」取数值"
+    },
+    {
+      "path": "climate.tankL",
+      "label": "水箱容量",
+      "unit": "L",
+      "type": "number",
+      "range": [
+        0.5,
+        40
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "climate",
+      "note": "官网「水箱容量/额定水箱容量」取数值"
+    },
+    {
+      "path": "climate.airflowM3h",
+      "label": "风量",
+      "unit": "m³/h",
+      "type": "number",
+      "range": [
+        20,
+        2000
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "climate",
+      "note": "官网「风量 140m³/h」取数值；冷风扇/除湿机共有"
+    },
+    {
+      "path": "climate.control",
+      "label": "操控方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "官网原文（机身按键+米家APP+AI语音控制）"
+    },
+    {
+      "path": "climate.placement",
+      "label": "放置方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "官网原文（落地式 / 台式）"
+    },
+    {
+      "path": "climate.inverter",
+      "label": "变频/定频",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "官网原文（变频 / 定频）"
+    },
+    {
+      "path": "climate.function",
+      "label": "功能",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "官网原文（强劲制冷 / 除湿 / 加湿）"
+    },
+    {
+      "path": "climate.oscillationAngle",
+      "label": "摇头角度",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "climate",
+      "note": "官网原文（80°）；官网写「/」表示无此功能记 null"
+    },
+    {
+      "path": "features.noiseDb",
+      "label": "噪音",
+      "unit": "dB",
+      "type": "number",
+      "range": [
+        20,
+        90
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "features",
+      "note": "官网「噪声（声功率级）」取数值；睡眠挡噪音不进本字段"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        2200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身口径；圆柱机型「Φ290×520mm」按高 520、宽/深 290 记"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        1200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        100,
+        80000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "整机净重；官网未公布记 null"
+    },
+    {
+      "path": "body.colors",
+      "label": "配色",
+      "unit": null,
+      "type": "array:string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "body"
+    },
+    {
+      "path": "connectivity.wifi",
+      "label": "无线连接",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文（Wi-Fi IEEE 802.11b/g/n 2.4GHz）"
+    },
+    {
+      "path": "connectivity.bluetooth",
+      "label": "蓝牙",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "connectivity",
+      "note": "官网原文；仅配网用低功耗蓝牙的设备照录"
+    },
+    {
+      "path": "power.inputVoltage",
+      "label": "额定电压",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "铭牌原文（220V~ 50Hz / 适配器输入 100-240V~）"
+    },
+    {
+      "path": "power.inputPower",
+      "label": "额定功率",
+      "unit": "W",
+      "type": "number",
+      "range": [
+        1,
+        2500
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "power",
+      "note": "额定输入功率/名义工况功率；官网只给最大输入功率时不代填"
+    },
+    {
+      "path": "power.ratingLevel",
+      "label": "能效等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "中国能效标识等级（如 1级 / I类 2级）"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；带蜂窝的机型才有，其余 unknown。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码；含 WLAN/蓝牙的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "climate",
+      "name": "环境性能"
+    },
+    {
+      "id": "body",
+      "name": "外观与机身"
+    },
+    {
+      "id": "features",
+      "name": "功能特性"
+    },
+    {
+      "id": "connectivity",
+      "name": "网络与连接"
+    },
+    {
+      "id": "power",
+      "name": "电源与能效"
+    },
+    {
+      "id": "device",
+      "name": "型号与监管"
+    }
+  ]
+}

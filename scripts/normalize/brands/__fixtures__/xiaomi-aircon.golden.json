@@ -1,0 +1,112 @@
+{
+  "id": "xiaomi-13143",
+  "slug": "xiaomi-13143",
+  "brand": "xiaomi",
+  "line": "Xiaomi",
+  "name": "巨省电 1.5匹新一级能效 小米空调",
+  "nameZh": "巨省电 1.5匹新一级能效 小米空调",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [
+    "能效等级原文「一级」归一为「1级」（官网混写/笔误，值语义不变）"
+  ],
+  "provenance": {
+    "power.ratingLevel": "huawei-official",
+    "aircon.style": "huawei-official",
+    "aircon.series": "huawei-official",
+    "aircon.coolingHeating": "huawei-official",
+    "aircon.inverter": "huawei-official",
+    "aircon.applicableArea": "huawei-official",
+    "aircon.voiceControl": "huawei-official",
+    "aircon.horsepower": "huawei-official",
+    "aircon.apf": "huawei-official",
+    "aircon.coolingCapacityW": "huawei-official",
+    "aircon.heatingCapacityW": "huawei-official",
+    "aircon.warrantyYears": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.658Z",
+  "lastSeenAt": "2026-10-27T12:42:12.658Z",
+  "category": "aircon",
+  "specs": {
+    "power.ratingLevel": "1级",
+    "aircon.style": "壁挂式",
+    "aircon.series": "巨省电",
+    "aircon.coolingHeating": "冷暖",
+    "aircon.inverter": "变频",
+    "aircon.applicableArea": "16-20㎡",
+    "aircon.voiceControl": "是",
+    "aircon.horsepower": 1.5,
+    "aircon.apf": 5.27,
+    "aircon.coolingCapacityW": 3500,
+    "aircon.heatingCapacityW": 5000,
+    "aircon.warrantyYears": 10
+  }
+}

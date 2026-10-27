@@ -1,0 +1,311 @@
+{
+  "_doc": "厨房电器品类字段表（电饭煲/电压力锅/油烟机/烟灶套装/微波炉等；2026-10-27 从 home 拆出）。结构性特点：多个子族（烹饪类与烟灶类）字段互斥——电饭煲只有容量/加热/内胆，油烟机只有风量/静压/火力；缺值即 null（unknown），不解释成「无」。",
+  "version": 1,
+  "fields": [
+    {
+      "path": "kitchen.type",
+      "label": "产品类型",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "由官方商品名的品类词判定（电饭煲 / 油烟机 / 烟灶套装 / 微波炉 / 电水壶 / 电磁炉 / 洗碗机）"
+    },
+    {
+      "path": "kitchen.capacityL",
+      "label": "容量",
+      "unit": "L",
+      "type": "number",
+      "range": [
+        0.5,
+        60
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "kitchen",
+      "note": "电饭煲/微波炉等烹饪容器的标称容量"
+    },
+    {
+      "path": "kitchen.heatingMethod",
+      "label": "加热方式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文（IH加热 / 底盘加热）"
+    },
+    {
+      "path": "kitchen.innerPot",
+      "label": "内胆材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文"
+    },
+    {
+      "path": "kitchen.functions",
+      "label": "功能",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文"
+    },
+    {
+      "path": "kitchen.applicablePeople",
+      "label": "适用人数",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文（如「3L 2-4人」）"
+    },
+    {
+      "path": "kitchen.hoodStyle",
+      "label": "烟机款式",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文（顶吸 / 侧吸）"
+    },
+    {
+      "path": "kitchen.airVolume",
+      "label": "风量",
+      "unit": "m³/min",
+      "type": "number",
+      "range": [
+        5,
+        40
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "kitchen",
+      "note": "烟机风量（官网原文取数值）"
+    },
+    {
+      "path": "kitchen.maxStaticPressure",
+      "label": "最大静压",
+      "unit": "Pa",
+      "type": "number",
+      "range": [
+        50,
+        2500
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "kitchen"
+    },
+    {
+      "path": "kitchen.gasPowerKw",
+      "label": "火力",
+      "unit": "kW",
+      "type": "number",
+      "range": [
+        1,
+        30
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "kitchen",
+      "note": "灶具额定热负荷（官网「5.2kW天然气」取数值）"
+    },
+    {
+      "path": "kitchen.thermalEfficiency",
+      "label": "热效率",
+      "unit": "%",
+      "type": "number",
+      "range": [
+        30,
+        100
+      ],
+      "dir": "high",
+      "quantifiable": true,
+      "group": "kitchen"
+    },
+    {
+      "path": "kitchen.hoodSmart",
+      "label": "烟机智能控制",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文（烟灶联动 / 米家APP）"
+    },
+    {
+      "path": "kitchen.panelMaterial",
+      "label": "面板材质",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "kitchen",
+      "note": "官网原文"
+    },
+    {
+      "path": "features.noiseDb",
+      "label": "噪音",
+      "unit": "dB",
+      "type": "number",
+      "range": [
+        20,
+        90
+      ],
+      "dir": "low",
+      "quantifiable": true,
+      "group": "features",
+      "note": "烟机噪音（声功率级，官网原文取数值）"
+    },
+    {
+      "path": "power.ratingLevel",
+      "label": "能效等级",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "power",
+      "note": "中国能效标识等级（如 1级）；energylabel.com.cn 可查"
+    },
+    {
+      "path": "body.heightMm",
+      "label": "高度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        10,
+        2200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身口径；官网「宽*深*高」数值序为宽、深、高"
+    },
+    {
+      "path": "body.widthMm",
+      "label": "宽度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        30,
+        1200
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body"
+    },
+    {
+      "path": "body.depthMm",
+      "label": "深度",
+      "unit": "mm",
+      "type": "number",
+      "range": [
+        8,
+        900
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "机身深度（烟机/内机口径）"
+    },
+    {
+      "path": "body.weightG",
+      "label": "重量",
+      "unit": "g",
+      "type": "number",
+      "range": [
+        100,
+        100000
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "body",
+      "note": "整机净重；官网未公布记 null"
+    },
+    {
+      "path": "device.ctaNo",
+      "label": "进网许可证编号",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "工信部进网许可标志三行信息之一；带蜂窝的机型才有，其余 unknown。jwxk.miit.gov.cn 可验真"
+    },
+    {
+      "path": "device.srrcId",
+      "label": "CMIIT ID",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "SRRC 无线电发射设备型号核准代码；含 WLAN/蓝牙的设备均需核准。只存原文"
+    },
+    {
+      "path": "device.origin",
+      "label": "产地",
+      "unit": null,
+      "type": "string",
+      "range": null,
+      "dir": null,
+      "quantifiable": false,
+      "group": "device",
+      "note": "铭牌强制项（制造地，如 中国）"
+    },
+    {
+      "path": "device.envUsePeriod",
+      "label": "环保使用期限",
+      "unit": "年",
+      "type": "number",
+      "range": [
+        0,
+        30
+      ],
+      "dir": null,
+      "quantifiable": true,
+      "group": "device",
+      "note": "China RoHS 环保使用期限（环保标志圈内数字，常见 10-20 年）"
+    }
+  ],
+  "groups": [
+    {
+      "id": "kitchen",
+      "name": "烹饪与烟灶"
+    },
+    {
+      "id": "body",
+      "name": "外观与机身"
+    },
+    {
+      "id": "features",
+      "name": "功能特性"
+    },
+    {
+      "id": "power",
+      "name": "电源与能效"
+    },
+    {
+      "id": "device",
+      "name": "型号与监管"
+    }
+  ]
+}

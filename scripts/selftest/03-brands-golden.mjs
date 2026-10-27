@@ -89,6 +89,7 @@ for (const [fx, fn, label] of [
   ['xiaomi-washer', mapXiaomiAppliance, '米家洗衣机'],
   ['xiaomi-aircon', mapXiaomiAppliance, '米家空调'],
   ['xiaomi-aircare', mapXiaomiAppliance, '米家空气净化'],
+  ['xiaomi-climate', mapXiaomiAppliance, '米家环境电器'],
   ['xiaomi-cleaner', mapXiaomiAppliance, '米家清洁电器'],
   ['xiaomi-kitchen', mapXiaomiAppliance, '米家厨房电器'],
   ['xiaomi-waterpurifier', mapXiaomiAppliance, '米家净水器'],
@@ -224,4 +225,26 @@ check('小米音箱：扬声器→驱动单元、Wi-Fi 频段→WLAN，组合立
   assert.equal(rec.connectivity.wifi, '2.4G/5GHz');
   assert.equal(rec.specs['audio.spatialAudio'], undefined, '组合立体声不是空间音频');
   assert.equal(rec.rawOfficial['组合立体声'], '支持', '未落位的官网项必须进 rawOfficial');
+});
+
+check('米家环境电器：加湿器/除湿机/冷风扇路由到 climate（净化加湿器不得误入 aircare）', () => {
+  // 真实故障：这三类此前全部留在 home，核心参数（除湿量/加湿量/水箱）没有字段可落，
+  // 页面上只剩名字。路由还必须先于 aircare ——「米家净化加湿器」含「净化」但不是净化器。
+  const of = (name, raw = {}) =>
+    mapXiaomiAppliance({ id: 'test-climate', name, raw, extractedAt: '2026-10-27T00:00:00.000Z' });
+  assert.equal(of('米家无雾加湿器 3 Pro').category, 'climate');
+  assert.equal(of('米家智能除湿机 22L').category, 'climate');
+  assert.equal(of('米家智能蒸发式冷风扇').category, 'climate');
+  assert.equal(of('米家净化加湿器 3 Max').category, 'climate', '净化加湿器不是空气净化器');
+  assert.equal(of('米家空气净化器 5').category, 'aircare', '真正的空气净化器仍归 aircare');
+  const rec = of('米家除湿机 50L', {
+    高温除湿量: '50L/D(30℃/80%RH)',
+    名义除湿量: '1.3kg/h(27℃/60%RH)',
+    水箱容量: '7L',
+    风量: '285m³/h',
+  });
+  assert.equal(rec.specs['climate.dehumidifyLpd'], 50);
+  assert.equal(rec.specs['climate.dehumidifyNominalKgph'], 1.3);
+  assert.equal(rec.specs['climate.tankL'], 7);
+  assert.equal(rec.specs['climate.airflowM3h'], 285);
 });

@@ -1,0 +1,108 @@
+{
+  "id": "xiaomi-19939",
+  "slug": "xiaomi-19939",
+  "brand": "xiaomi",
+  "line": "米家",
+  "name": "米家智能欧式吸油烟机S2烟灶套装5.2kw（天然气）",
+  "nameZh": "米家智能欧式吸油烟机S2烟灶套装5.2kw（天然气）",
+  "releaseDate": null,
+  "releaseDatePrecision": null,
+  "status": "on-sale",
+  "retiredAt": null,
+  "body": {
+    "heightMm": null,
+    "widthMm": null,
+    "thicknessMm": null,
+    "weightG": null,
+    "ipRating": null,
+    "material": null,
+    "colors": [],
+    "folded": null
+  },
+  "display": {
+    "sizeIn": null,
+    "type": null,
+    "resolutionPx": null,
+    "ppi": null,
+    "refreshHz": null,
+    "brightnessTypicalNits": null,
+    "brightnessPeakNits": null,
+    "protection": null
+  },
+  "chipset": {
+    "name": null,
+    "processNm": null,
+    "cpuCores": null,
+    "gpu": null,
+    "npu": null
+  },
+  "memory": {
+    "ramGb": [],
+    "storageGb": []
+  },
+  "battery": {
+    "capacityMah": null,
+    "capacityCaliber": null,
+    "wiredChargeW": null,
+    "wirelessChargeW": null,
+    "vendorClaimedVideoHours": null,
+    "measuredHours": null
+  },
+  "camera": {
+    "rear": [],
+    "front": null,
+    "videoMax": null
+  },
+  "connectivity": {
+    "fiveG": null,
+    "wifi": null,
+    "bluetooth": null,
+    "nfc": null,
+    "nfcDetail": null,
+    "irBlaster": null,
+    "cellularBands": null,
+    "wlanBands": null,
+    "satellite": null,
+    "usb": null,
+    "sim": null,
+    "esim": null
+  },
+  "os": {
+    "launch": null,
+    "upgradableTo": null
+  },
+  "skus": [],
+  "scores": [],
+  "granularity": "specs-page",
+  "rawOfficial": {},
+  "notes": [
+    "能效等级原文「1级能效」归一为「1级」（官网混写/笔误，值语义不变）"
+  ],
+  "provenance": {
+    "power.ratingLevel": "huawei-official",
+    "features.noiseDb": "huawei-official",
+    "kitchen.type": "huawei-official",
+    "kitchen.hoodStyle": "huawei-official",
+    "kitchen.hoodSmart": "huawei-official",
+    "kitchen.panelMaterial": "huawei-official",
+    "kitchen.airVolume": "huawei-official",
+    "kitchen.maxStaticPressure": "huawei-official",
+    "kitchen.gasPowerKw": "huawei-official",
+    "kitchen.thermalEfficiency": "huawei-official"
+  },
+  "firstSeenAt": "2026-10-27T12:42:12.771Z",
+  "lastSeenAt": "2026-10-27T12:42:12.771Z",
+  "category": "kitchen",
+  "specs": {
+    "power.ratingLevel": "1级",
+    "features.noiseDb": 66,
+    "kitchen.type": "烟灶套装",
+    "kitchen.hoodStyle": "顶吸",
+    "kitchen.hoodSmart": "烟灶联动 米家APP 小爱同学语音",
+    "kitchen.panelMaterial": "钢化玻璃",
+    "kitchen.airVolume": 23,
+    "kitchen.maxStaticPressure": 500,
+    "kitchen.gasPowerKw": 5.2,
+    "kitchen.thermalEfficiency": 63
+  }
+}
