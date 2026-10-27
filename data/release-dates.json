@@ -7520,6 +7520,66 @@
       "source": "manual",
       "sourceUrl": "https://product.yesky.com/product/1086/1086211/",
       "note": "检索取证式采集（历史机型）：天极网产品库上市时间 2019-12-08（苏宁商品页作 2019-04 冲突，留痕后取带日精度口径）"
+    },
+    {
+      "id": "hw-changxiang-20",
+      "name": "华为畅享 20",
+      "brand": "huawei",
+      "date": "2020-09-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1338/1337911/param.shtml",
+      "note": "检索取证式采集（历史机型）：2020-09-03 发布、09-10 上市（任务注 2020-07 有误）；4/6GB+128GB；10W（5V/2A）；188g。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-20-plus",
+      "name": "华为畅享 20 Plus",
+      "brand": "huawei",
+      "date": "2020-09-03",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/mobile/series/438004_detail.html",
+      "note": "检索取证式采集（历史机型）：2020-09-03 与畅享 20 同场发布；天玑 720、90Hz、4200mAh 典型、40W 超级快充；6+128/8+128；197g/三维取自 CNMO 参数表（非官方规格页口径，留痕）。dimsMm 长×宽×"
+    },
+    {
+      "id": "hw-changxiang-20-pro",
+      "name": "华为畅享 20 Pro",
+      "brand": "huawei",
+      "date": "2020-06-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://mobile.zol.com.cn/756/7568047.html",
+      "note": "检索取证式采集（历史机型）：2020-06-19 发布、06-24 开售、1999/2299 元；天玑 800、90Hz、4000mAh、10V/2.25A=22.5W；192g。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-50",
+      "name": "华为畅享 50",
+      "brand": "huawei",
+      "date": "2022-06-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/622/625.htm",
+      "note": "检索取证式采集（历史机型）：2022-06-06 发布、06-16 开售、1299 元起（任务注 2023-05 有误）；6+128/8+128/8+256；22.5W 超级快充；三维/重量拆机文快照截断未完整取证 → null"
+    },
+    {
+      "id": "hw-changxiang-50-pro",
+      "name": "华为畅享 50 Pro",
+      "brand": "huawei",
+      "date": "2022-07-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/632/325.htm",
+      "note": "检索取证式采集（历史机型）：2022-07-29 公布价格并预售、08-04 开售、1699 元起（任务注 2023-08 有误）；90Hz/270Hz 触控采样、40W（10V/4A，天极网参数页印证）；195g 取自凤凰网体验文（非官方规格页，"
+    },
+    {
+      "id": "hw-changxiang-60",
+      "name": "华为畅享 60",
+      "brand": "huawei",
+      "date": "2023-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/681/844.htm",
+      "note": "检索取证式采集（历史机型）：2023-03-23 华为春季旗舰发布会发布、03-24 开售（任务注 2024-04 有误）；60Hz、22.5W；199g/三维百度百科与手机之家参数页交叉印证。dimsMm 长×宽×厚"
     }
   ],
   "unresolved": []
