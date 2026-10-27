@@ -7660,6 +7660,56 @@
       "source": "manual",
       "sourceUrl": "https://news.qq.com/rain/a/20210426A02NB900",
       "note": "检索取证式采集（历史机型）：2021-04-26 公布并预售、04-30 全渠道开售（任务注 2021-08 有误）；4+128（899）/6+128（1099）/8+128（1399）；充电 5V/2A 无快充 → wiredChargeW nu"
+    },
+    {
+      "id": "hw-maimang-4",
+      "name": "华为麦芒 4（RIO-AL00）",
+      "brand": "huawei",
+      "date": "2015-07-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/405/404776/param.shtml",
+      "note": "检索取证式采集（历史机型）：2015-07-30 青海湖发布会发布、08-07 首销；标配 2+16、高配 3+32；指纹识别；无快充口径 → null。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-maimang-5",
+      "name": "华为麦芒 5（MLA-AL00）",
+      "brand": "huawei",
+      "date": "2016-07-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1150/1149485/param.shtml",
+      "note": "检索取证式采集（历史机型）：2016-07-14 广州发布、07-21 首销；标配 3+32、高配 4+64；支持 802.11ac MU-MIMO、QC3.0（IT之家）但规格页未标瓦数 → null。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-maimang-6",
+      "name": "华为麦芒 6",
+      "brand": "huawei",
+      "date": "2017-09-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.vmall.com/product/981811982.html",
+      "note": "检索取证式采集（历史机型）：2017-09-22 北京发布、09-28 首售；华为首款四摄全面屏；4+64；华为商城标 3340mAh 典型值；无快充口径 → null。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-maimang-8",
+      "name": "华为麦芒 8",
+      "brand": "huawei",
+      "date": "2019-06-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.antutu.com/doc/118218",
+      "note": "检索取证式采集（历史机型）：2019-06-05 成都发布、06-12 开售；6+128 单版本；5V/2A 充电器无快充 → null；重量两源不一（160g vs 约 172g）→ 取发布会报道 160g 留痕。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-maimang-10",
+      "name": "麦芒 10（TYH612M，中国电信）",
+      "brand": "huawei",
+      "date": "2021-12-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/593/616.htm",
+      "note": "检索取证式采集（历史机型）：2021-12-20 发布、12-24 开售、2299 元；8+128 单版本；40W 有线快充；**dims/weightG 置 null**：百度百科口径 160.68×73.3×8.4/179g 与荣耀 Play "
     }
   ],
   "unresolved": []
