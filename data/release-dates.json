@@ -8420,6 +8420,56 @@
       "source": "manual",
       "sourceUrl": "https://www.52audio.com/archives/59928.html",
       "note": "检索取证式采集（历史机型）：2020-10-22 随 Mate40 系列全球发布会发布、10-23 预售；40mm 振膜、L2HC；关降噪 24h（开降噪 20h 留档）；整机重量 ≤265g（百科规格表口径）；头戴无含盒续航 → withCase"
+    },
+    {
+      "id": "mx-mix-fold-4",
+      "name": "小米 MIX FOLD 4",
+      "brand": "xiaomi",
+      "date": "2024-07-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/783/027.htm",
+      "note": "检索取证式采集（历史机型）：2024-07-19 雷军年度演讲发布；普通版 226g/龙鳞纤维版 228g；IPX8、50W 无线；内屏分辨率 IT之家/ZOL 2488×2244（GSMArena 2488×2224，差异留痕）；dimsMm n"
+    },
+    {
+      "id": "mx-redmi-k50-ultra",
+      "name": "Redmi K50 至尊版",
+      "brand": "xiaomi",
+      "date": "2022-08-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1425/1424181/param.shtml",
+      "note": "检索取证式采集（历史机型）：2022-08-11 发布、08-16 开售、2999 元起；另有 12+512 冠军版；澎湃 P1 快充芯片。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-k60-ultra",
+      "name": "Redmi K60 至尊版",
+      "brand": "xiaomi",
+      "date": "2023-08-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh-cn.xiaomi-miui.gr/redmi-k60-ultra-announced-in-china-specs-and-prices-103833-2/",
+      "note": "检索取证式采集（历史机型）：2023-08-14 发布、08-16 首销；IP68、独显芯片 X7、蓝牙 5.3；ram 24GB/storage 1024=1TB 档。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-earbuds-x5",
+      "name": "荣耀亲选 Earbuds X5",
+      "brand": "honor",
+      "date": "2023-05-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/695/978.htm",
+      "note": "检索取证式采集（历史机型）：2023-05-29 荣耀 90 系列发布会发布、06-07 开售；半入耳、仅通话降噪 → anc false（海外 Honor Choice Earbuds X5 为入耳 ANC 30dB/35h 不同型号版本，not"
+    },
+    {
+      "id": "hn-earbuds-x2",
+      "name": "荣耀亲选 Earbuds X2",
+      "brand": "honor",
+      "date": "2021-09-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20210926A0F4K100",
+      "note": "检索取证式采集（历史机型）：2021-09-26 荣耀智慧生活新品发布会发布（任务注 2022 有误）；型号 ALD-00、半入耳 12mm 生物振膜、双麦通话降噪无主动降噪 → anc false；单耳约 4.3g（官方）/实测 4.8g、整机 "
     }
   ],
   "unresolved": []
