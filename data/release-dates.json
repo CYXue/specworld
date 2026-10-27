@@ -8540,6 +8540,86 @@
       "source": "manual",
       "sourceUrl": "https://www.mi.com/dianfanbao2-4l/specs",
       "note": "检索取证式采集（历史机型）：2017-03-30 米粉节第一弹发布（任务注 2018-06 有误）、04-06 开售、599 元；品类参数：4.0L、IH 电磁环绕加热、1430W、3mm 烈焰厚釜、大金 PFA 涂层、Wi-Fi 2.4GHz（C"
+    },
+    {
+      "id": "mx-home-heater",
+      "name": "米家智能电暖器",
+      "brand": "xiaomi",
+      "date": "2019-11-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/454/085.htm",
+      "note": "检索取证式采集（历史机型）：2019-11-01 开售、399 元；品类参数：2200W 对流速热、高效铝片发热体、18-28℃ 六挡、1/3/5/9 四挡定时、IPX4 防溅水、一体晾衣架承重 1.5kg；另有温控版（2019-09-25，三挡功"
+    },
+    {
+      "id": "mx-home-warm-fan",
+      "name": "米家立式暖风机",
+      "brand": "xiaomi",
+      "date": "2020-10-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/513/596.htm",
+      "note": "检索取证式采集（历史机型）：2020-10-14 发布、10-16 开售、399 元；品类参数：2100W、无光半导体陶瓷 PTC、红外感应自动对准、5 种模式、100° 广角、睡眠模式 38dB；重 3.67kg；**源仅给高 555mm 单值 "
+    },
+    {
+      "id": "mx-home-fan-2",
+      "name": "米家直流变频落地扇 2",
+      "brand": "xiaomi",
+      "date": "2020-05-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/487/650.htm",
+      "note": "检索取证式采集（历史机型）：2020-05-17 发布、05-18 首卖、349 元；品类参数：7+5 双层扇叶、送风 14 米、100 挡风速、140° 广角、15W、最大风量 20m³/min、俯仰 39°；另有电池版（33.6Wh，2020-"
+    },
+    {
+      "id": "mx-home-fan-circle",
+      "name": "米家智能直流变频循环扇（落地式）",
+      "brand": "xiaomi",
+      "date": "2022-04-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/612/320.htm",
+      "note": "检索取证式采集（历史机型）：2022-04-11 发布、04-13 众筹 429 元/零售 499 元；品类参数：风量 29m³/s（源原文口径）、2 分钟整屋循环、霍尔传感器、水平 150°/垂直 90° 自动摇头、内置温湿度传感器、双节杆、10"
+    },
+    {
+      "id": "mx-home-fan-tower",
+      "name": "米家直流变频塔扇",
+      "brand": "xiaomi",
+      "date": "2020-04-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/485/052.htm",
+      "note": "检索取证式采集（历史机型）：2020-04-29 众筹、05-15 开售 349 元；品类参数：直流变频无刷、最高 541m³/h、150° 广角、22W、8 小时定时、100 挡变速、小爱语音；重 4.3kg；**ZOL 尺寸 111×310×3"
+    },
+    {
+      "id": "mx-home-vacuum-mop-2",
+      "name": "米家全能扫拖机器人（1代）",
+      "brand": "xiaomi",
+      "date": "2022-03-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/610/189.htm",
+      "note": "检索取证式采集（历史机型）：2022-03-29 宣布、04-06 首发 3999 元；品类参数：70W/14.4V、电池 5200mAh（英文说明书额定 4800mAh 留痕）、充电 6.5h、续航 121-180 分钟、结构光避障+LDS&视觉"
+    },
+    {
+      "id": "mx-home-vacuum-mop-3",
+      "name": "米家全能扫拖机器人 2",
+      "brand": "xiaomi",
+      "date": "2023-07",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/926/926111.htm",
+      "note": "检索取证式采集（历史机型）：2023-07 上架（官方 3499 元、8 月中旬开售）→ 月精度；品类参数：吸力 6000Pa、4L 水箱湿拖 500㎡、上下水 2.0+防溢水、双风道循环集尘 75 天免倒尘、扭扭擦贴边、S-Cross 广域结构光"
+    },
+    {
+      "id": "mx-home-iron",
+      "name": "米家手持挂烫机",
+      "brand": "xiaomi",
+      "date": "2020-05-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/485/821.htm",
+      "note": "检索取证式采集（历史机型）：2020-05-06 众筹、99 元/零售 129 元；品类参数：1200W、微增压 20kPa 120℃ 大蒸汽、除菌除螨 99.9%、130℃ 铝压铸面板+陶瓷釉、160mL 可拆水箱；挂烫机 2（折叠、730g、3"
     }
   ],
   "unresolved": []
