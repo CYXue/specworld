@@ -8350,6 +8350,76 @@
       "source": "manual",
       "sourceUrl": "http://news.imobile.com.cn/articles/2019/0812/198501.shtml",
       "note": "检索取证式采集（历史机型）：存在性确认；2019-08-10 华为开发者大会发布（任务注 2019-11 有误）、08-22 预售、08-29 首售 129 元；0.5 吋 PMOLED、主体仅 6g、6 轴传感器、5ATM、典型续航约 2 周；电"
+    },
+    {
+      "id": "hw-mate-x",
+      "name": "华为 Mate X",
+      "brand": "huawei",
+      "date": "2019-10-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.jiemian.com/article/3607398.html",
+      "note": "检索取证式采集（历史机型）：2019-02-24 MWC 全球首发（第一财经），国行 2019-10-23 发布、11-15 开售、8+256 16999 元；55W；展开态单边 5.4mm/折叠态 11mm（无完整三元 → dimsMm null"
+    },
+    {
+      "id": "hw-mate-xs",
+      "name": "华为 Mate Xs",
+      "brand": "huawei",
+      "date": "2020-02-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20200225A0JHJK00?pc=",
+      "note": "检索取证式采集（历史机型）：2020-02-24 线上发布会发布、02-26 国内预售；2480×2200 为展开态口径（驱动中国）；存储 8+256/8+512 两报道口径双档并录；重量/完整三维源未给 → null"
+    },
+    {
+      "id": "hw-nova-9-se",
+      "name": "华为 nova 9 SE",
+      "brand": "huawei",
+      "date": "2022-03-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/608/089.htm",
+      "note": "检索取证式采集（历史机型）：2022-03-16 发布、03-18 开售；IT之家标厚 8mm、GSMArena 164.6×75.6×7.9（7.94）→ 取 GSMArena 三元留口径差异；66W。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-nova-11-se",
+      "name": "华为 nova 11 SE",
+      "brand": "huawei",
+      "date": "2023-10-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/728/808.htm",
+      "note": "检索取证式采集（历史机型）：2023-10-31 发布；HarmonyOS 4；厚 7.39mm/重 186g（IT之家），三维 GSMArena 同口径。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-nova-12-se",
+      "name": "华为 nova 12 SE（海外版）",
+      "brand": "huawei",
+      "date": "2024-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/758/400.htm",
+      "note": "检索取证式采集（历史机型）：**国内 nova 12 系列无 SE 档**——该机为 nova 11 SE 海外对应版，2024-03 面向马来西亚等国际市场（GSMArena 公布 03-19）→ 月精度收录并注明；EMUI 14；蓝牙 5.0。"
+    },
+    {
+      "id": "hw-freebuds-5i",
+      "name": "华为 FreeBuds 5i",
+      "brand": "huawei",
+      "date": "2022-06-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.xinhuanet.com/tech/20220607/b792c6e2f2564a149cd04333ccaabcba/c.html",
+      "note": "检索取证式采集（历史机型）：2022-06-06 华为 618 新品直播发布、599 元、06-18 开售；最大降噪深度 42dB；单次 7.5h（关降噪 50% 音量 AAC）/含盒 28h（官网口径）；单耳 4.9g；整机重源未给 → null"
+    },
+    {
+      "id": "hw-freebuds-studio",
+      "name": "华为 FreeBuds Studio（头戴）",
+      "brand": "huawei",
+      "date": "2020-10-22",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.52audio.com/archives/59928.html",
+      "note": "检索取证式采集（历史机型）：2020-10-22 随 Mate40 系列全球发布会发布、10-23 预售；40mm 振膜、L2HC；关降噪 24h（开降噪 20h 留档）；整机重量 ≤265g（百科规格表口径）；头戴无含盒续航 → withCase"
     }
   ],
   "unresolved": []
