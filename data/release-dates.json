@@ -7880,6 +7880,86 @@
       "source": "manual",
       "sourceUrl": "http://www.news.cn/info/20220511/b41aeaa23b2a43a495c1e3bbc338bf86/c.html",
       "note": "检索取证式采集（历史机型）：存在性确认；2022-05-10 中国电信发布（华为智选渠道）、05-17 开售、1799 元起；型号 TYH622M；90Hz、4800 万 AI 双摄、6/8GB+128/256GB；入网口径额定 5900mAh/百"
+    },
+    {
+      "id": "hw-changxiang-9e",
+      "name": "华为畅享 9e",
+      "brand": "huawei",
+      "date": "2019-03-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://news.imobile.com.cn/articles/2019/0325/194152.shtml",
+      "note": "检索取证式采集（历史机型）：2019-03-25 西安发布、04-11 开售；3GB+32/64；5V/1A=5W 无快充 → null；发布时称 12nm 八核、百科确认 Helio P35。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-10-plus",
+      "name": "华为畅享 10 Plus",
+      "brand": "huawei",
+      "date": "2019-09-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.antutu.com/doc/119177",
+      "note": "检索取证式采集（历史机型）：2019-09-05 西安发布；4/6/8GB+128；10W Type-C；官方发布会未公布处理器型号、业界普遍为麒麟 710F（留 note）；三围源未给 → null"
+    },
+    {
+      "id": "hw-changxiang-10s",
+      "name": "华为畅享 10S",
+      "brand": "huawei",
+      "date": "2019-12-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.ifeng.com/c/7s3RxonnLWX",
+      "note": "检索取证式采集（历史机型）：2019-12-05 武汉发布；不支持快充、标配 5V/2A → null；内存/存储各源有出入（官网规格 6/8GB+128GB，IT之家/安兔兔 6GB+64GB，GSMArena 64/128 可选）→ 融合口径 "
+    },
+    {
+      "id": "hw-changxiang-20e",
+      "name": "华为畅享 20e",
+      "brand": "huawei",
+      "date": "2021-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%8D%8E%E4%B8%BA%E7%95%85%E4%BA%AB%2020e/60226484",
+      "note": "检索取证式采集（历史机型）：2021-10-20 发布；10W（5V/2A）、支持反向充电；标准版 P35+EMUI 10.1、高配 6+128 为麒麟 710A+HarmonyOS 2。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-50z",
+      "name": "华为畅享 50z",
+      "brand": "huawei",
+      "date": "2022-12-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/659/895.htm",
+      "note": "检索取证式采集（历史机型）：2022-12-09 冬季全场景发布会发布、12-26 开售；处理器为八核 4G 芯片、官方未公布型号（百科记骁龙 680 存疑）→ chipset null；**尺寸两源冲突**（IT之家 厚 8.94/188g vs"
+    },
+    {
+      "id": "hw-changxiang-60-pro",
+      "name": "华为畅享 60 Pro",
+      "brand": "huawei",
+      "date": "2023-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/693/576.htm",
+      "note": "检索取证式采集（历史机型）：2023-05-18 夏季全场景发布会发布（任务注 2024-05 有误）、05-25 开售；40W 超级快充 Turbo；侧边指纹；尺寸来自 KompasTekno/GizChina 汇总。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-changxiang-70",
+      "name": "华为畅享 70",
+      "brand": "huawei",
+      "date": "2023-11-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/737/549.htm",
+      "note": "检索取证式采集（历史机型）：2023-11-28 新品发布会发布、12-07 开售（ZOL 参数页 2024-01-08 与发布会时间不符，从发布会）；处理器/内存官方未公布 → chipset/ramGb null（中关村传麒麟 710A 14n"
+    },
+    {
+      "id": "hw-changxiang-70-pro",
+      "name": "华为畅享 70 Pro",
+      "brand": "huawei",
+      "date": "2024-01-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/744/322.htm",
+      "note": "检索取证式采集（历史机型）：2024-01-08 发布、01-10 开售；40W 超级快充 Turbo（10V/4A）；**刷新率冲突**（华为官网 60Hz vs ZOL 90Hz）→ 取官网口径留痕；108MP 主摄；尺寸/重量来自百度百科与太"
     }
   ],
   "unresolved": []
