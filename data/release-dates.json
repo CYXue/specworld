@@ -8470,6 +8470,76 @@
       "source": "manual",
       "sourceUrl": "https://news.qq.com/rain/a/20210926A0F4K100",
       "note": "检索取证式采集（历史机型）：2021-09-26 荣耀智慧生活新品发布会发布（任务注 2022 有误）；型号 ALD-00、半入耳 12mm 生物振膜、双麦通话降噪无主动降噪 → anc false；单耳约 4.3g（官方）/实测 4.8g、整机 "
+    },
+    {
+      "id": "mx-home-induction",
+      "name": "米家电磁炉青春版（DCL02CM）",
+      "brand": "xiaomi",
+      "date": "2018-11-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/ProductComp_param_1207413-1269392.html",
+      "note": "检索取证式采集（历史机型）：2018-11-06 发布、11-11 开售（任务注 2019-09 有误；首代 DCL01CM 为 2017-12 另档）；品类参数：2100W、9 档火力、156mm 加粗密绕线圈、旋钮控制。dimsMm 高×宽×深"
+    },
+    {
+      "id": "mx-home-blender",
+      "name": "米家智能破壁料理机",
+      "brand": "xiaomi",
+      "date": "2020-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://article.pchome.net/content-2122829.html",
+      "note": "检索取证式采集（历史机型）：2020-12-28 开启预售（任务注 2021-10 有误；1.75L 系 2024 款破壁机 N1 非首代）；品类参数：9 档变频破壁、8 叶精钢刀片 3 层、800W 加热、热饮 1200ml/冷饮 1600ml、"
+    },
+    {
+      "id": "mx-home-health-kettle",
+      "name": "米家智能多功能养生壶",
+      "brand": "xiaomi",
+      "date": "2020-11-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/520/204.htm",
+      "note": "检索取证式采集（历史机型）：2020-11-18 开启众筹（任务注 2019-09 有误）、139 元、12-25 正式开售 169 元；品类参数：1.5L、1000W、100-1000W 共 10 挡火力、45-85℃ 九挡保温、高硼硅玻璃+30"
+    },
+    {
+      "id": "mx-home-oven",
+      "name": "米家电烤箱（MDKXDE1ACM）",
+      "brand": "xiaomi",
+      "date": "2019-06-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/631/631091.htm",
+      "note": "检索取证式采集（历史机型）：2019-06-11 发布会发布、06-16 开售、299 元（任务注 2020-05 有误）；品类参数：32L、1600W、70-230℃ 无级调温、40℃ 恒温发酵、360° 旋转烤叉、循环风扇、4 加热管；净重 6"
+    },
+    {
+      "id": "mx-home-airfryer",
+      "name": "米家智能空气炸锅 3.5L（MAF02）",
+      "brand": "xiaomi",
+      "date": "2021-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/542/693.htm",
+      "note": "检索取证式采集（历史机型）：2021-03-28 上架、04-02 开售、首发 349 元（此前众筹 299）→ 月精度；品类参数：3.5L、1500W、40-200℃ 精准控温、360° 热风循环、OLED 屏、24 小时预约；净重 3.9kg。"
+    },
+    {
+      "id": "mx-home-dishwasher",
+      "name": "米家互联网洗碗机 4 套台面式（VDW0401M）",
+      "brand": "xiaomi",
+      "date": "2020-02-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.yingjianzhijia.com/sms/19636.html",
+      "note": "检索取证式采集（历史机型）：2020-02-26 小米商城众筹（任务注 2019-08 有误）、4 套台面式众筹 999/零售 1299 元；品类参数：4 套 32 件餐具、900W、75℃ 高温除菌 99.99%、11000Pa 水压、双层喷淋臂"
+    },
+    {
+      "id": "mx-home-rice-cooker-4l",
+      "name": "米家 IH 电饭煲 4L（IHFB02CM）",
+      "brand": "xiaomi",
+      "date": "2017-03-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/dianfanbao2-4l/specs",
+      "note": "检索取证式采集（历史机型）：2017-03-30 米粉节第一弹发布（任务注 2018-06 有误）、04-06 开售、599 元；品类参数：4.0L、IH 电磁环绕加热、1430W、3mm 烈焰厚釜、大金 PFA 涂层、Wi-Fi 2.4GHz（C"
     }
   ],
   "unresolved": []
