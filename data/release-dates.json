@@ -8620,6 +8620,86 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/485/821.htm",
       "note": "检索取证式采集（历史机型）：2020-05-06 众筹、99 元/零售 129 元；品类参数：1200W、微增压 20kPa 120℃ 大蒸汽、除菌除螨 99.9%、130℃ 铝压铸面板+陶瓷釉、160mL 可拆水箱；挂烫机 2（折叠、730g、3"
+    },
+    {
+      "id": "mx-home-purifier-2",
+      "name": "小米/米家空气净化器 2",
+      "brand": "xiaomi",
+      "date": "2015-11-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/air2/specs",
+      "note": "检索取证式采集（历史机型）：2015-11-24 发布、11-27 开售、699 元（任务注 2016-04 有误）；品类参数：颗粒物 CADR 标准 330/超强 388m³/h（官网后期标称 310 留痕）、适用 21-37㎡、360° 桶形一"
+    },
+    {
+      "id": "mx-home-purifier-f1",
+      "name": "米家空气净化器 F1（AC-MD1-SC）",
+      "brand": "xiaomi",
+      "date": "2020-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://joeyhc.blogspot.com/2020/03/f1.html",
+      "note": "检索取证式采集（历史机型）：2020-03-23 发布、03-27 开卖、1199 元（任务注 2020-11 有误）；品类参数：颗粒物 CADR 400m³/h、甲醛 CADR 200m³/h（实测 264）、颗粒物 CCM 21346mg、甲醛"
+    },
+    {
+      "id": "mx-home-purifier-4pro",
+      "name": "米家空气净化器 4 Pro（AC-M15-SC）",
+      "brand": "xiaomi",
+      "date": "2021-09-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://joeyhc.blogspot.com/2021/09/4-pro.html",
+      "note": "检索取证式采集（历史机型）：2021-09-08 开售、首发 1299 元（任务注 2022-03 为海外发布日期，国内 2021-09）；品类参数：颗粒物 CADR 500m³/h、甲醛 CADR 200m³/h、花粉 CADR 550m³/h、"
+    },
+    {
+      "id": "mx-home-humidifier-1",
+      "name": "智米除菌加湿器（米家加湿器 1 代，CJJSQ01ZM）",
+      "brand": "xiaomi",
+      "date": "2016-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/503/503992.htm",
+      "note": "检索取证式采集（历史机型）：2016-10-20 小米众筹第 48 期上线、众筹 799 元；品类参数：最大加湿量 384ml/h（官网另有 355ml/h 口径留痕）、水箱约 3.5L、一次注水最长 16h、紫外线杀菌（日本斯坦雷冷阴极）、上注水"
+    },
+    {
+      "id": "mx-home-purifier-water-1a",
+      "name": "小米净水器 1A（厨下式，MR432）",
+      "brand": "xiaomi",
+      "date": "2018-04-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/water1a/specs",
+      "note": "检索取证式采集（历史机型）：2018-04-02 上线发布（任务注 2017-11 有误）、04-08 开售、1499 元；品类参数：通量 400G、净水流量 1L/min、纯废水比 1:1、额定总净水量 2000L（RO 滤芯总产水 7200L "
+    },
+    {
+      "id": "mx-home-purifier-water-600g",
+      "name": "小米净水器 600G（厨下式）",
+      "brand": "xiaomi",
+      "date": "2019-04-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.geekpark.net/news/240763",
+      "note": "检索取证式采集（历史机型）：2019-04-17 众筹（任务注 2019-06 有误）、众筹 1999/正式 2499 元；品类参数：通量 600G、出水 1.4L/min（最快 1.6）、纯废水比最高 2:1（智能纯水提升）、四滤芯无罐；重 12"
+    },
+    {
+      "id": "mx-home-purifier-water-1000g",
+      "name": "米家净水器 1000G",
+      "brand": "xiaomi",
+      "date": "2022-04-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/612/074.htm",
+      "note": "检索取证式采集（历史机型）：2022-04-07 上架、04-15 预售、首发 2199 元；品类参数：通量 1000G、出水 2.65L/min、额定总净水量 6500L、纯废水比 3:1（水质差 2:1）、五合一 PPC 复合滤芯 2 年+RO"
+    },
+    {
+      "id": "mx-home-desk-purifier",
+      "name": "米家台式净饮机 冷热版",
+      "brand": "xiaomi",
+      "date": "2022-03-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/609/878.htm",
+      "note": "检索取证式采集（历史机型）：2022-03-26 推出、04-05 全平台开售、2499 元（初代台式净饮机 2020-10 另档）；品类参数：压缩机冷（最低 5℃、5-15℃ 每 1℃ 可调）、厚膜加热 2100W 3 秒速热（热水 40-95℃"
     }
   ],
   "unresolved": []
