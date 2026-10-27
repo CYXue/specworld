@@ -8030,6 +8030,106 @@
       "source": "manual",
       "sourceUrl": "https://news.mydrivers.com/1/721/721201.htm",
       "note": "检索取证式采集（历史机型）：2020-10-22 随 Mate40 全球发布官网上架（IT之家百科 10-21 为上架日）、国行 2020-10-30 上海发布会公布售价（5299/5799）并当日 18:08 开卖；40W 有线+27W 无线。d"
+    },
+    {
+      "id": "hn-honor-20-pro",
+      "name": "荣耀 20 Pro",
+      "brand": "honor",
+      "date": "2019-05-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://android.poppur.com/huawei/9631.html",
+      "note": "检索取证式采集（历史机型）：2019-05-21 伦敦全球首发、05-31 国内发布；8GB+128/256；4800 万主摄 f/1.4、双 OIS；22.5W（GSMArena 佐证）。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-20s",
+      "name": "荣耀 20S",
+      "brand": "honor",
+      "date": "2019-09-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://android.poppur.com/huawei/9631.html",
+      "note": "检索取证式采集（历史机型）：2019-09-04 发布；6/8GB+128；3200 万人像超级自拍；20W（10V/2A 充电器功率换算）。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-30-pro",
+      "name": "荣耀 30 Pro",
+      "brand": "honor",
+      "date": "2020-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20200421142227/https:/www.honor.cn/products/mobile-phones/honor30pro/spec/",
+      "note": "检索取证式采集（历史机型）：2020-04-15 发布、04-21 上市；8GB+128/256；50 倍远摄；厚 8.38mm 为机身底部口径（顶部约 8.63，note 留痕）；刷新率官网未标 90Hz → null。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-30-pro-plus",
+      "name": "荣耀 30 Pro+",
+      "brand": "honor",
+      "date": "2020-04-15",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/482/828.htm",
+      "note": "检索取证式采集（历史机型）：2020-04-15 发布、04-21 上市；8/12GB+256；5000 万 RYYB 主摄、双扬声器；40W 有线+27W 无线。dimsMm 长×宽×厚（GSMArena 口径）"
+    },
+    {
+      "id": "mx-mi-12x",
+      "name": "小米 12X",
+      "brand": "xiaomi",
+      "date": "2021-12-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1397/1396282/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-12-28 发布、12-31 开售；8/12GB+128/256；哈曼卡顿对称双扬；67W；不支持无线充电。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-mi-12s",
+      "name": "小米 12S",
+      "brand": "xiaomi",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/series/57/34645/param_10710363_0_1.html",
+      "note": "检索取证式采集（历史机型）：2022-07-04 发布、07-06 上市；徕卡光学全焦段（Summicron 镜头）；重量玻璃 182g/素皮 179-180g（维基）取玻璃口径；67W 有线+50W 无线。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-mi-12s-pro",
+      "name": "小米 12S Pro",
+      "brand": "xiaomi",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-hans/%E5%B0%8F%E7%B1%B312S",
+      "note": "检索取证式采集（历史机型）：2022-07-04 发布、07-06 上市；2K LTPO、120W 澎湃秒充+50W 无线；重量玻璃 204g/素皮 203g、厚玻璃 8.16/素皮 8.66 → 取玻璃口径留 note。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-mi-12s-ultra",
+      "name": "小米 12S Ultra",
+      "brand": "xiaomi",
+      "date": "2022-07-04",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://zh.wikipedia.org/zh-hans/%E5%B0%8F%E7%B1%B312S",
+      "note": "检索取证式采集（历史机型）：2022-07-04 发布、07-08 上市；索尼 IMX989 一英寸主摄、徕卡 Summicron；4860mAh 硅氧负极单电芯、67W+50W 无线；IP68。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-k80",
+      "name": "REDMI K80",
+      "brand": "xiaomi",
+      "date": "2024-11-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241127A09W7S00",
+      "note": "检索取证式采集（历史机型）：2024-11-27 发布；6550mAh 小米金沙江电池、90W；IP68+IP69、超声波指纹；storage 1024=1TB 档。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "mx-redmi-k80-pro",
+      "name": "REDMI K80 Pro",
+      "brand": "xiaomi",
+      "date": "2024-11-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20241127A09W7S00",
+      "note": "检索取证式采集（历史机型）：2024-11-27 发布；6000mAh 金沙江电池、120W 有线+50W 无线；212g 为标准版（冠军版 217g、4999 元留 note）；IP68+IP69。dimsMm 长×宽×厚"
     }
   ],
   "unresolved": []
