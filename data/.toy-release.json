@@ -1,10 +1,12 @@
 {
-  "siteFingerprint": "67ec30e4f5d0d35a",
-  "dataFingerprint": "4832cc561c18d439",
-  "products": 62,
+  "siteFingerprint": "bfa89bcefacabe50",
+  "dataFingerprint": "0a766dd140b59618",
+  "products": 1627,
   "byBrand": {
-    "apple": 13,
-    "huawei": 49
+    "apple": 891,
+    "honor": 104,
+    "huawei": 243,
+    "xiaomi": 389
   },
-  "packedAt": "2026-10-15T07:39:22.593Z"
+  "packedAt": "2026-10-27T17:22:01.311Z"
 }
