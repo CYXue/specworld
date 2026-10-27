@@ -93021,6 +93021,50 @@
       "createdAt": "2026-10-23",
       "active": true,
       "source": "manual-evidence"
+    },
+    {
+      "id": "ovr-mi-view-25768-1239",
+      "op": "set-field",
+      "productId": "xiaomi-25768",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-view",
+      "field": "battery.capacityMah",
+      "value": 300,
+      "reason": "mi.com view 接口关键参数表：电池容量 300mAh（product_id=25768 REDMI手环 4 锖色，商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-view-25768-1240",
+      "op": "set-field",
+      "productId": "xiaomi-25768",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-view",
+      "field": "connectivity.bluetooth",
+      "value": "5.3",
+      "reason": "mi.com view 接口关键参数表：蓝牙版本 5.3（product_id=25768）"
+    },
+    {
+      "id": "ovr-mi-view-25768-1241",
+      "op": "set-field",
+      "productId": "xiaomi-25768",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-view",
+      "field": "body.material",
+      "value": "纤维高强聚合物",
+      "reason": "mi.com view 接口关键参数表：材质 纤维高强聚合物（product_id=25768）"
+    },
+    {
+      "id": "ovr-mi-view-25768-caliber",
+      "op": "set-field",
+      "productId": "xiaomi-25768",
+      "field": "battery.capacityCaliber",
+      "value": "unmarked",
+      "reason": "mi.com view 关键参数表仅标『电池容量 300mAh』未标典型/额定口径；穿戴品类惯例 unmarked（同 hn-band 系）",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-view"
     }
   ]
 }
