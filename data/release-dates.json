@@ -7440,6 +7440,86 @@
       "source": "manual",
       "sourceUrl": null,
       "note": "检索取证式采集（历史机型）：2021-09-26 发布、6199 元起、首发 Windows 11、500 万高清双摄；14.2 吋 2520×1680 90Hz、60Wh 电池（网易/新浪众测/搜狐评测一致）；RAM/存储档位/整机重量/适配器功"
+    },
+    {
+      "id": "mx-tv-6",
+      "name": "小米电视 6 至尊版（65英寸）",
+      "brand": "xiaomi",
+      "date": "2021-06-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1377/1376206/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-06-28 发布（与 ES 2022 款同场；ZOL『上市 2021-01』与有日期的发布会报道不符，从报道口径）；4.5GB+64GB；含底座 34.7kg；另有同系列 OLED 版 65 寸（ZOL ind"
+    },
+    {
+      "id": "mx-tv-es2022",
+      "name": "小米电视 ES 2022款（65英寸）",
+      "brand": "xiaomi",
+      "date": "2021-06-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1377/1376448/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-06-28 同场发布、55/65/75 寸（3399/4399/5999 元）；2GB+32GB、WiFi6、含底座 18.9kg；刷新率源未标 → null；dimsMm 高×宽×厚（源口径 厚269.2×宽"
+    },
+    {
+      "id": "mx-tv-master-65",
+      "name": "小米电视 大师 65英寸 OLED",
+      "brand": "xiaomi",
+      "date": "2020-07-02",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1331/1330055/param.shtml",
+      "note": "检索取证式采集（历史机型）：2020-07-02 发布、12999 元（网易科技；任务注 2019-09 有误）；3GB+32GB、机身最薄 4.6mm、含底座 36.7kg；dimsMm 高×宽×厚（源口径 宽1448.7×高872.8×厚248"
+    },
+    {
+      "id": "mx-tv-s-pro-2022",
+      "name": "小米电视 S Pro 65 Mini LED（2023款）",
+      "brand": "xiaomi",
+      "date": "2023-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2023-10-10 开启预售（月精度；与盘上 2025 款 S Pro 为不同代际）；4GB+64GB、双 HDMI 2.1；快照 URL 截断 → sourceUrl null；dimsMm 高×宽×厚（源口径 宽1"
+    },
+    {
+      "id": "mx-box-4s",
+      "name": "小米盒子 4S",
+      "brand": "xiaomi",
+      "date": "2020-10-21",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2020-10-21 发布（ZNDS）、11-01 开卖 289 元（IT之家 10-31『明日开卖』）；2GB+8GB、双频 WiFi、HDMI 2.0、Android 6.0；源口径『4K HDR 超高清输出』→ 分"
+    },
+    {
+      "id": "mx-box-4s-pro",
+      "name": "小米盒子 4S Pro",
+      "brand": "xiaomi",
+      "date": "2020-10",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2020-10 推出、399 元、11-05 预约开启（月精度）；源口径『8K 视频解码』为解码能力非输出分辨率 → resolution null（不归一）；16GB 存储（标题口径，留 note）；快照 URL 截断"
+    },
+    {
+      "id": "mx-box-5",
+      "name": "小米盒子 5",
+      "brand": "xiaomi",
+      "date": "2025-05-09",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": null,
+      "note": "检索取证式采集（历史机型）：2025-05-09 发布、05-15 20:00 开售 299 元起（IT之家；任务注 2021-11 有误，中国大陆盒子 5 系列实为 2025）；标准版 2GB+32GB（Max 4GB+64GB）、杜比视界/全景"
+    },
+    {
+      "id": "mx-tv-e55x",
+      "name": "小米全面屏电视 E55X",
+      "brand": "xiaomi",
+      "date": "2019-12-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.yesky.com/product/1086/1086211/",
+      "note": "检索取证式采集（历史机型）：天极网产品库上市时间 2019-12-08（苏宁商品页作 2019-04 冲突，留痕后取带日精度口径）"
     }
   ],
   "unresolved": []
