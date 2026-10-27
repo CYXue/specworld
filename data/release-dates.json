@@ -7760,6 +7760,86 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/619/697.htm",
       "note": "检索取证式采集（历史机型）：大陆发布日未在检索中确认 → 取海外亮相 2022-05 月精度留痕（台湾 2022-08 上市）；单耳 5.1g/37mAh，单次 6h/配盒 24h（音乐口径）；10mm 动圈、双麦通话降噪、无主动降噪 → anc "
+    },
+    {
+      "id": "mx-home-purifier-400g",
+      "name": "小米净水器（400G）厨下式",
+      "brand": "xiaomi",
+      "date": "2015-07-16",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/%E5%B0%8F%E7%B1%B3%E5%87%80%E6%B0%B4%E5%99%A8%EF%BC%88%E5%8E%A8%E4%B8%8B%E5%BC%8F%EF%BC%89/55384544",
+      "note": "检索取证式采集（历史机型）：2015-07-16 发布、07-28 开卖（任务注 2016-07 有误）；品类参数：通量 400G（1.0L/min，提升模式 1.1L/min）、RO 反渗透 4 级滤芯、过滤精度 0.0001μm、额定总产水量 "
+    },
+    {
+      "id": "mx-home-air-pro",
+      "name": "米家空气净化器 Pro",
+      "brand": "xiaomi",
+      "date": "2016-11-01",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://tech.sina.cn/digi/elec/2016-11-01/detail-ifxxfuff7489170.d.html",
+      "note": "检索取证式采集（历史机型）：2016-11-01 发布、11-11 开售、1499 元；品类参数：颗粒物 CADR 500m³/h、甲醛 CADR 70m³/h、CCM P2、适用 35-60㎡、额定 66W、OLED 显示屏；重 9.7kg 含滤"
+    },
+    {
+      "id": "mx-home-fan-1",
+      "name": "米家直流变频落地扇（1代）",
+      "brand": "xiaomi",
+      "date": "2018-06-07",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/363/760.htm",
+      "note": "检索取证式采集（历史机型）：2018-06-07 公布售价、06-08 开售、349 元；小米×智米共同研发，取消内置电池与遥控器（智米初代 2016-06 众筹 799 元非米家品牌）；100 挡无级变速、最低运行功率 1.8W、摆头 30/60"
+    },
+    {
+      "id": "mx-home-vacuum-1",
+      "name": "米家扫地机器人（1代）",
+      "brand": "xiaomi",
+      "date": "2016-08-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/253/923.htm",
+      "note": "检索取证式采集（历史机型）：2016-08-31 生态链秋季沟通会发布、09-06 开售、1699 元；品类参数：LDS 激光测距（1800 次/秒、最大 6m）、SLAM 算法、NIDEC 无刷电机 1800Pa、电池 5200mAh 14.4V"
+    },
+    {
+      "id": "mx-home-vacuum-mop-1",
+      "name": "米家扫拖机器人（LDS 激光导航版）",
+      "brand": "xiaomi",
+      "date": "2019-08-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://news.imobile.com.cn/articles/2019/0812/198523.shtml",
+      "note": "检索取证式采集（历史机型）：2019-08-12 发布、08-16 开售、首发 1799/正式 1999 元，型号 STYJ02YM；品类参数：最大吸力 2100Pa（强劲模式）、NIDEC 无刷电机、LDS 扫描 6×360°/秒测距 8m、电控"
+    },
+    {
+      "id": "mx-home-ac-15",
+      "name": "米家互联网空调（一级能效）1.5匹",
+      "brand": "xiaomi",
+      "date": "2018-12-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/608/608100.htm",
+      "note": "检索取证式采集（历史机型）：2018-12-20 发布、12-27 全面开售（任务注 2019-11 有误）；品类参数：1.5 匹分体壁挂、全直流变频、APF 4.75、额定制冷量 3500W、循环风量 680m³/h、电辅热 900W、R410A"
+    },
+    {
+      "id": "mx-home-fridge-2door",
+      "name": "米家冰箱 两门 160L",
+      "brand": "xiaomi",
+      "date": "2019-10-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/449/663.htm",
+      "note": "检索取证式采集（历史机型）：2019-10-11 发布、10-15 首卖、首发 999/正式 1099 元；品类参数：总容积 160L（冷藏 100+冷冻 60）、直冷、7 档控温、日耗电 0.58kWh/24h、钛空灰；39dB 低噪。dimsM"
+    },
+    {
+      "id": "mx-home-kettle",
+      "name": "米家恒温电水壶（1代）",
+      "brand": "xiaomi",
+      "date": "2017-03",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.mi.com/kettle/specs",
+      "note": "检索取证式采集（历史机型）：大陆上市 2017-03（月精度，小米商城无发布日、ZNDS 评测 2017-03-23；台湾 2018-06-20 开售对应海外口径）；品类参数：容量 1.5L、额定 1800W、蓝牙 4.0 BLE、恒温 40-90"
     }
   ],
   "unresolved": []
