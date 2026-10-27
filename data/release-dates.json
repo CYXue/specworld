@@ -8280,6 +8280,76 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/806/543.htm",
       "note": "检索取证式采集（历史机型）：2024-10-30 发布、11-08 开售；尺寸/重量取 ZOL（IT之家 8.8mm/223g 系 Pro 版口径，note 留痕）；1TB 版支持卫星通讯。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-watch-gt-4",
+      "name": "华为 WATCH GT 4（46mm）",
+      "brand": "huawei",
+      "date": "2023-09-25",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.vmall.com/product/10086423724433.html",
+      "note": "检索取证式采集（历史机型）：2023-09-25 发布（海外 09-14）、1488 元起；型号 PNX-B19、HarmonyOS 4；无线充电、5ATM/IP68；约 48g 不含表带。dimsMm 表壳口径（不含表带）"
+    },
+    {
+      "id": "hw-watch-gt-5",
+      "name": "华为 WATCH GT 5（46mm）",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://product.pconline.com.cn/smartwatch/huawei/2371219_detail.html",
+      "note": "检索取证式采集（历史机型）：2024-09-24 秋季发布会发布；无线充电、5ATM/IP69K；约 48g 不含表带。dimsMm 表壳口径"
+    },
+    {
+      "id": "hw-watch-gt-5-pro",
+      "name": "华为 WATCH GT 5 Pro（46mm）",
+      "brand": "huawei",
+      "date": "2024-09-24",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://consumer.huawei.com/hk/wearables/watch-gt5-pro/specs/",
+      "note": "检索取证式采集（历史机型）：2024-09-24 国行发布、2488 元起；钛合金前壳、5ATM/IP69K/40 米自由潜、最长续航 14 天；**官网未给电池 mAh 数值 → null 不猜**；约 53g 不含表带。dimsMm 表壳口径"
+    },
+    {
+      "id": "hw-watch-4",
+      "name": "华为 WATCH 4",
+      "brand": "huawei",
+      "date": "2023-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gizmochina.com/2023/06/09/huawei-watch-4-pro-launch-sale-europe/",
+      "note": "检索取证式采集（历史机型）：2023-05-18 夏季发布会发布；eSIM 独立通话智能手表；不锈钢表壳；530mAh 取 Gizmochina 报道原文；尺寸自屏幕面至后盖不含传感器区。dimsMm 表壳口径"
+    },
+    {
+      "id": "hw-watch-4-pro",
+      "name": "华为 WATCH 4 Pro",
+      "brand": "huawei",
+      "date": "2023-05-18",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gizmochina.com/2023/06/09/huawei-watch-4-pro-launch-sale-europe/",
+      "note": "检索取证式采集（历史机型）：2023-05-18 发布；航天级钛合金表壳、球面蓝宝石（仅 Pro）；780mAh（Gizmochina 原文 bigger 780mAh battery）；不含传感器区与球面玻璃厚度。dimsMm 表壳口径"
+    },
+    {
+      "id": "hw-band-7",
+      "name": "华为手环 7",
+      "brand": "huawei",
+      "date": "2022-04-28",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.52audio.com/archives/122987.html",
+      "note": "检索取证式采集（历史机型）：2022-04-28 发布会当晚、269 元起、05-10 开售；14 天续航、蓝牙 5.0；180mAh 为额定（电池型号 HB351731EFW）；方形机身 dimsMm 长×宽×厚（非圆形表壳口径，留痕）"
+    },
+    {
+      "id": "hw-band-4e",
+      "name": "华为手环 4e 篮球精灵",
+      "brand": "huawei",
+      "date": "2019-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://news.imobile.com.cn/articles/2019/0812/198501.shtml",
+      "note": "检索取证式采集（历史机型）：存在性确认；2019-08-10 华为开发者大会发布（任务注 2019-11 有误）、08-22 预售、08-29 首售 129 元；0.5 吋 PMOLED、主体仅 6g、6 轴传感器、5ATM、典型续航约 2 周；电"
     }
   ],
   "unresolved": []
