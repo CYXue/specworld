@@ -418,13 +418,28 @@ section('商城 listing 名清洗（cleanListingName）');
     if (N.cleanListingName('REDMI Pad 2 6GB+128GB 灰色') !== 'REDMI Pad 2')
       throw new Error('低端位配置同样剥离');
   });
-  check('纯配色/版本词后缀保留（型号区分信息）', () => {
-    if (N.cleanListingName('小米手环11 银色') !== '小米手环11 银色') throw new Error('纯配色不属于配置后缀');
-    if (N.cleanListingName('小米手环10 标准版') !== '小米手环10 标准版') throw new Error('版本词保留');
-    if (N.cleanListingName('Xiaomi Watch S5 46mm 黑色氟胶表带款') !== 'Xiaomi Watch S5 46mm 黑色氟胶表带款')
-      throw new Error('尺寸+表带款保留');
+  check('尾部纯配色后缀剥离（配色在 body.colors 合并）', () => {
+    if (N.cleanListingName('REDMI手环 4 锖色') !== 'REDMI手环 4') throw new Error('锖色应剥离');
+    if (N.cleanListingName('小米手环11 银色') !== '小米手环11') throw new Error('银色应剥离');
+    if (N.cleanListingName('米家冰箱Pro 微冰鲜双系统 十字平嵌560L 冰晶白') !== '米家冰箱Pro 微冰鲜双系统 十字平嵌560L')
+      throw new Error('冰晶白应剥离');
     if (N.cleanListingName('REDMI K100 Max 12GB+256GB 暗影黑') !== 'REDMI K100 Max')
-      throw new Error('K 系配置后缀同样剥离');
+      throw new Error('配置+配色后缀同样剥离');
+  });
+  check('连字配色剥色留版本词/复合 token 不误剥/版本词保留', () => {
+    if (N.cleanListingName('REDMI Buds 6 活力版-白色') !== 'REDMI Buds 6 活力版')
+      throw new Error('连字配色应剥、版本词保留');
+    if (N.cleanListingName('Xiaomi Watch S5 46mm 黑色氟胶表带款') !== 'Xiaomi Watch S5 46mm 黑色氟胶表带款')
+      throw new Error('表带款复合 token 是变体区分信息，保留');
+    if (N.cleanListingName('白色（1主3子）套装') !== '白色（1主3子）套装')
+      throw new Error('套装组合 token 保留');
+    if (N.cleanListingName('小米手环10 标准版') !== '小米手环10 标准版') throw new Error('版本词保留');
+  });
+  check('粘连与斜杠形态的尾部配色剥离', () => {
+    if (N.cleanListingName('米家洗衣机 洗烘12kg灰色') !== '米家洗衣机 洗烘12kg')
+      throw new Error('kg 后粘连配色应剥离');
+    if (N.cleanListingName('Xiaomi Book Pro 14 Ultra5-325/24G/1T/雅灰') !== 'Xiaomi Book Pro 14 Ultra5-325/24G/1T')
+      throw new Error('斜杠后配色应剥离');
   });
   check('无配置后缀/非字符串原样通过', () => {
     if (N.cleanListingName('小米 MIX FOLD') !== '小米 MIX FOLD') throw new Error('无后缀应原样');
