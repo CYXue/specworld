@@ -69,6 +69,13 @@ if (SKIP_SOURCES) {
   console.log(`\n▶ 取数：跳过（${OFFLINE ? 'offline 模式' : '--skip-sources'}），使用已有缓存`);
   const need = [
     '_work/huawei.raw.json',
+    '_work/huawei-tablets.raw.json',
+    '_work/huawei-wearables.raw.json',
+    '_work/huawei-laptops.raw.json',
+    '_work/huawei-audio.raw.json',
+    '_work/huawei-monitors.raw.json',
+    '_work/huawei-routers.raw.json',
+    '_work/huawei-visions.raw.json',
     '_work/apple.raw.json',
     '_work/xiaomi.raw.json',
     '_work/xiaomi-tablet.raw.json',
@@ -94,6 +101,28 @@ if (SKIP_SOURCES) {
     '--cache',
     '_work/huawei.cache',
   ]);
+  // 华为分品类取数：normalize 的 A2–A8 通道都是「_work/huawei-<品类>.raw.json 存在才跑」，
+  // 管线此前只抓手机主线，CI 全新 checkout 拿不到这些文件 → 静默少 116 台华为
+  // （本机靠手工跑适配器留下的缓存兜住呈静默，与小米缺失是同一类坑）。
+  // 输出文件名与 normalize/index.mjs 的 SRC_HUAWEI_* 一一对齐。
+  for (const cat of [
+    'tablets',
+    'wearables',
+    'laptops',
+    'audio',
+    'monitors',
+    'routers',
+    'visions',
+  ]) {
+    run(`华为官网取数 · ${cat}`, 'scripts/sources/huawei.mjs', [
+      '--category',
+      cat,
+      '--out',
+      `_work/huawei-${cat}.raw.json`,
+      '--cache',
+      '_work/huawei.cache',
+    ]);
+  }
   run('苹果官网取数', 'scripts/sources/apple.mjs', [
     '--out',
     '_work/apple.raw.json',
