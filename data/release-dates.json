@@ -7960,6 +7960,76 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/744/322.htm",
       "note": "检索取证式采集（历史机型）：2024-01-08 发布、01-10 开售；40W 超级快充 Turbo（10V/4A）；**刷新率冲突**（华为官网 60Hz vs ZOL 90Hz）→ 取官网口径留痕；108MP 主摄；尺寸/重量来自百度百科与太"
+    },
+    {
+      "id": "hw-nova-4",
+      "name": "华为 nova 4",
+      "brand": "huawei",
+      "date": "2018-12-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/400/818.htm",
+      "note": "检索取证式采集（历史机型）：2018-12-17 长沙发布、12-27 开售；标准 6+128（2799）/8+128（3099）、高配 4800 万 IMX586 8+128（3399）；18W 快充（GSMArena）。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-nova-4e",
+      "name": "华为 nova 4e",
+      "brand": "huawei",
+      "date": "2019-03-14",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://android.poppur.com/huawei/8874.html",
+      "note": "检索取证式采集（历史机型）：2019-03-14 北京发布；4GB 版 1999/6GB 版 2299 元；前置 3200 万；9V/2A=18W（GSMArena 标 18W wired）。dimsMm 长×宽×厚（源口径 宽×厚×长，已归一）"
+    },
+    {
+      "id": "hw-p10-plus",
+      "name": "华为 P10 Plus",
+      "brand": "huawei",
+      "date": "2017-03-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://ku.ithome.com/item/22683/canshu.html",
+      "note": "检索取证式采集（历史机型）：2017-02-26 MWC 全球发布、国行 2017-03-23、4388 元起；4/6GB+64/128；SuperCharge 5V/4.5A 低压快充但源未标瓦数 → null；徕卡 SUMMILUX-H 双摄。"
+    },
+    {
+      "id": "hw-p40-pro-plus",
+      "name": "华为 P40 Pro+",
+      "brand": "huawei",
+      "date": "2020-04-08",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://web.archive.org/web/20200326154520/https:/consumer.huawei.com/cn/phones/p40-pro-plus/specs/",
+      "note": "检索取证式采集（历史机型）：2020-03-26 全球发布、国行 2020-04-08 线上发布会、06-06 开售；8+256（7988）/8+512（8888）；超感知徕卡五摄、10 倍光变；40W 有线+40W 无线。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-mate-10-pro",
+      "name": "华为 Mate 10 Pro",
+      "brand": "huawei",
+      "date": "2017-10-20",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://mobile.pconline.com.cn/1015/10155284.html",
+      "note": "检索取证式采集（历史机型）：2017-10-16 慕尼黑全球发布、国行 2017-10-20 上海发布、11-15 开售；6+64（4899）/6+128（5399）；22.5W SuperCharge；IP67。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-mate-20-x",
+      "name": "华为 Mate 20 X",
+      "brand": "huawei",
+      "date": "2018-10-26",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://baike.baidu.com/item/HUAWEI%20Mate%2020%20X/22938424",
+      "note": "检索取证式采集（历史机型）：2018-10-16 伦敦全球发布、国行 2018-10-26 上海发布当日 18:08 开售；石墨烯+液冷散热、双扬声器；22.5W（GSMArena）；厚度百科 8.15/GSMArena 8.2 → 取百科口径留痕"
+    },
+    {
+      "id": "hw-mate-30e-pro",
+      "name": "华为 Mate 30E Pro 5G",
+      "brand": "huawei",
+      "date": "2020-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/721/721201.htm",
+      "note": "检索取证式采集（历史机型）：2020-10-22 随 Mate40 全球发布官网上架（IT之家百科 10-21 为上架日）、国行 2020-10-30 上海发布会公布售价（5299/5799）并当日 18:08 开卖；40W 有线+27W 无线。d"
     }
   ],
   "unresolved": []
