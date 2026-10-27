@@ -8130,6 +8130,86 @@
       "source": "manual",
       "sourceUrl": "https://news.qq.com/rain/a/20241127A09W7S00",
       "note": "检索取证式采集（历史机型）：2024-11-27 发布；6000mAh 金沙江电池、120W 有线+50W 无线；212g 为标准版（冠军版 217g、4999 元留 note）；IP68+IP69。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-80",
+      "name": "荣耀 80",
+      "brand": "honor",
+      "date": "2022-11-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/656/082.htm",
+      "note": "检索取证式采集（历史机型）：2022-11-23 发布、2399-4099 元；1.6 亿主摄；66W；厚度薄至 7.7mm/轻至 180g（官网宣传口径）。dimsMm 长×宽×厚（GSMArena）"
+    },
+    {
+      "id": "hn-honor-80-pro",
+      "name": "荣耀 80 Pro",
+      "brand": "honor",
+      "date": "2022-11-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/shop/help/category-240.html",
+      "note": "检索取证式采集（历史机型）：2022-11-23 发布；官网帮助中心：163.3×74.9×7.8mm、含电池约 188g、66W 超级快充。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-90",
+      "name": "荣耀 90",
+      "brand": "honor",
+      "date": "2023-05-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/phones/honor-90/",
+      "note": "检索取证式采集（历史机型）：2023-05-29 发布；2 亿像素写真相机；3840Hz 超高频 PWM 零风险调光。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-90-pro",
+      "name": "荣耀 90 Pro",
+      "brand": "honor",
+      "date": "2023-05-29",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.sina.cn/sx/2023-06-09/detail-imywsuaa8406787.d.html",
+      "note": "检索取证式采集（历史机型）：2023-05-29 发布；163.8×74.8×8.1、约 192g 含电池；90W。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-100",
+      "name": "荣耀 100",
+      "brand": "honor",
+      "date": "2023-11-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/honor_100-12700.php",
+      "note": "检索取证式采集（历史机型）：2023-11-23 发布；首发第三代骁龙 7、100W 快充。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-100-pro",
+      "name": "荣耀 100 Pro",
+      "brand": "honor",
+      "date": "2023-11-23",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.phonearena.com/phones/compare/Honor-100,Honor-100-Pro/phones/12251,12252",
+      "note": "检索取证式采集（历史机型）：2023-11-23 发布；12+256（3399）至 16+1TB（4399）；100W。storage 1024=1TB 档。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-200",
+      "name": "荣耀 200",
+      "brand": "honor",
+      "date": "2024-05-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20240527A0A4IL00",
+      "note": "检索取证式采集（历史机型）：2024-05-27 发布；雅顾光影写真大师合作；100W。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-honor-200-pro",
+      "name": "荣耀 200 Pro",
+      "brand": "honor",
+      "date": "2024-05-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.gsmarena.com/honor_200_pro-13049.php",
+      "note": "检索取证式采集（历史机型）：2024-05-27 发布；100W 有线+66W 无线；storage 1024=1TB 档。dimsMm 长×宽×厚"
     }
   ],
   "unresolved": []
