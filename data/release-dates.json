@@ -7710,6 +7710,56 @@
       "source": "manual",
       "sourceUrl": "https://www.ithome.com/0/593/616.htm",
       "note": "检索取证式采集（历史机型）：2021-12-20 发布、12-24 开售、2299 元；8+128 单版本；40W 有线快充；**dims/weightG 置 null**：百度百科口径 160.68×73.3×8.4/179g 与荣耀 Play "
+    },
+    {
+      "id": "mx-tv-6-oled",
+      "name": "小米电视 6 OLED（65英寸）",
+      "brand": "xiaomi",
+      "date": "2021-08-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://detail.zol.com.cn/1382/1381715/param.shtml",
+      "note": "检索取证式采集（历史机型）：2021-08-10 发布；不含底座 22kg、含底座 22.4kg（取不含底座口径）、整机最薄 4.6mm；与至尊版同系列双旗舰。dimsMm 高×宽×厚（源口径 宽×厚×高 不含底座 1448.7×105.3×835"
+    },
+    {
+      "id": "hw-freebuds-2",
+      "name": "华为 FreeBuds 2 无线耳机",
+      "brand": "huawei",
+      "date": "2018-12-05",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/398/585.htm",
+      "note": "检索取证式采集（历史机型）：2018-12-05 上架华为商城、12-07 开启预购（任务注 2019 有误）；官方续航为通话口径：单次 2.5 小时/配盒累计 15 小时（音乐可达 20 小时，留 note）；13mm 动圈半入耳；仅通话降噪非主"
+    },
+    {
+      "id": "hw-freebuds-2-pro",
+      "name": "华为 FreeBuds 2 Pro 无线耳机",
+      "brand": "huawei",
+      "date": "2018-12-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.mydrivers.com/1/607/607185.htm",
+      "note": "检索取证式采集（历史机型）：2018-12-12 正式发售（任务注 2019 有误）；单耳 4.1g±0.1g（天极产品库对比页）；官方通话口径续航 单次约 2.5h/配盒 15h（音乐约 20h）；骨声纹 ID、Qi 无线充电、IP54；芯片 B"
+    },
+    {
+      "id": "hw-freebuds-4",
+      "name": "华为 FreeBuds 4 无线耳机",
+      "brand": "huawei",
+      "date": "2021-05-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/552/306.htm",
+      "note": "检索取证式采集（历史机型）：2021-05-19 发布、06-01 开售（任务注 2021-07 有误）；单次 4h/配盒 22h（关降噪口径，IT之家国内稿；官网新加坡页为 4h/20h，取国内口径留痕）；半开放主动降噪 2.0 最大 25dB；"
+    },
+    {
+      "id": "hw-freebuds-se",
+      "name": "华为 FreeBuds SE 无线耳机",
+      "brand": "huawei",
+      "date": "2022-05",
+      "precision": "month",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/619/697.htm",
+      "note": "检索取证式采集（历史机型）：大陆发布日未在检索中确认 → 取海外亮相 2022-05 月精度留痕（台湾 2022-08 上市）；单耳 5.1g/37mAh，单次 6h/配盒 24h（音乐口径）；10mm 动圈、双麦通话降噪、无主动降噪 → anc "
     }
   ],
   "unresolved": []
