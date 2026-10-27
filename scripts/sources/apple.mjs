@@ -1219,8 +1219,10 @@ async function main() {
   };
 
   if (opts.out) {
-    // 与 huawei.mjs 同一口径：相对路径按项目根解析，不随调用时的 cwd 漂移
-    const outPath = isAbsolute(opts.out) ? opts.out : resolve(HERE, '..', opts.out);
+    // 与 huawei.mjs 同一口径：相对路径按项目根解析（HERE=scripts/sources/ → ../..），
+    // 不随调用时的 cwd 漂移。曾错写 '..' 一级，产物落到 scripts/_work/，
+    // 本机被旧 _work/apple.raw.json 兜住呈静默，CI 全新 checkout 则 ENOENT 停摆。
+    const outPath = isAbsolute(opts.out) ? opts.out : resolve(HERE, '..', '..', opts.out);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, `${JSON.stringify(result, null, 2)}\n`, 'utf8');
     process.stderr.write(`\n已写出 ${outPath}\n`);
