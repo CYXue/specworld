@@ -93065,6 +93065,254 @@
       "createdAt": "2026-10-27",
       "active": true,
       "source": "mi-com-view"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1243",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.heightMm",
+      "value": 163.45,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1244",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.widthMm",
+      "value": 78.27,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1245",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.thicknessMm",
+      "value": 8.46,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1246",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.weightG",
+      "value": 226,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1247",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.ipRating",
+      "value": "IP66/IP68/IP69/IP69K",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1248",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "body.colors",
+      "value": [
+        "流沙橙",
+        "元气绿",
+        "黑色"
+      ],
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1249",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "display.refreshHz",
+      "value": "120",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1250",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "display.brightnessPeakNits",
+      "value": 3500,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1251",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "display.protection",
+      "value": "康宁大猩猩 Victus 2",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1252",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "chipset.processNm",
+      "value": 4,
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1253",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "chipset.cpuCores",
+      "value": 8,
+      "reason": "mi.com 官网规格页：八核处理器，最高主频 2.4GHz（cpuCores 契约为数值，主频留痕）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1254",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "chipset.gpu",
+      "value": "Adreno",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1255",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "memory.ramGb",
+      "value": [
+        6,
+        8
+      ],
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1256",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "memory.storageGb",
+      "value": [
+        128,
+        256
+      ],
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1257",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "camera.rear",
+      "value": [
+        {
+          "role": "main",
+          "mp": 50,
+          "aperture": "ƒ/1.8",
+          "ois": null,
+          "sensorNote": "1/2.76\" 4in1 1.28μm"
+        },
+        {
+          "role": "depth",
+          "mp": 2,
+          "aperture": "ƒ/2.4",
+          "ois": null,
+          "sensorNote": "1/5\""
+        }
+      ],
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1258",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "camera.front",
+      "value": {
+        "mp": 8,
+        "aperture": null
+      },
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1259",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "camera.videoMax",
+      "value": "1080P 30FPS",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1260",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "connectivity.bluetooth",
+      "value": "5.1",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1261",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "connectivity.wifi",
+      "value": "Wi-Fi 5/Wi-Fi 4（2.4G/5G，Wi-Fi Direct/Miracast）",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
+    },
+    {
+      "id": "ovr-mi-specs-25687-1262",
+      "op": "set-field",
+      "productId": "xiaomi-25687",
+      "createdAt": "2026-10-27",
+      "active": true,
+      "source": "mi-com-specs",
+      "field": "os.launch",
+      "value": "Xiaomi HyperOS 3",
+      "reason": "mi.com 官网规格页 redmi-note-17-pro-new/specs + view 接口 25687（商品名已校验）"
     }
   ]
 }
