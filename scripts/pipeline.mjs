@@ -67,7 +67,20 @@ function run(label, script, args = []) {
 /* ---- 1. 取数 ---- */
 if (SKIP_SOURCES) {
   console.log(`\n▶ 取数：跳过（${OFFLINE ? 'offline 模式' : '--skip-sources'}），使用已有缓存`);
-  const need = ['_work/huawei.raw.json', '_work/apple.raw.json'];
+  const need = [
+    '_work/huawei.raw.json',
+    '_work/apple.raw.json',
+    '_work/xiaomi.raw.json',
+    '_work/xiaomi-tablet.raw.json',
+    '_work/xiaomi-laptop.raw.json',
+    '_work/xiaomi-tv.raw.json',
+    '_work/xiaomi-wearable.raw.json',
+    '_work/xiaomi-headset.raw.json',
+    '_work/xiaomi-speaker.raw.json',
+    '_work/xiaomi-display.raw.json',
+    '_work/xiaomi-network.raw.json',
+    '_work/xiaomi-appliance.raw.json',
+  ];
   const missing = need.filter((f) => !existsSync(join(ROOT, f)));
   if (missing.length) {
     console.error(`❌ 缺少取数缓存：${missing.join(', ')}`);
@@ -99,6 +112,32 @@ if (SKIP_SOURCES) {
     '--cache',
     '_work/apple-prices.cache',
   ]);
+  // 小米商城取数：每品类一份 raw（phone 落 xiaomi.raw.json，其余落 xiaomi-<品类>.raw.json）。
+  // 目录候选池是商城首页 HTML 里的 200 个 product_id，各品类按自己的正则筛——
+  // shop.html 与商品 view 响应都进 _work/xiaomi.cache，品类间共享，只抓一遍。
+  // 之前管线漏了这一步：本机靠手工跑适配器留下的 _work 缓存兜住，呈静默；
+  // CI 全新 checkout 没有缓存 → 规范化「未就绪」静默跳过小米 → 闸门以引用悬空拒绝写盘。
+  for (const cat of [
+    'phone',
+    'tablet',
+    'laptop',
+    'tv',
+    'wearable',
+    'headset',
+    'speaker',
+    'display',
+    'network',
+    'appliance',
+  ]) {
+    run(`小米商城取数 · ${cat}`, 'scripts/sources/xiaomi.mjs', [
+      '--category',
+      cat,
+      '--out',
+      cat === 'phone' ? '_work/xiaomi.raw.json' : `_work/xiaomi-${cat}.raw.json`,
+      '--cache',
+      '_work/xiaomi.cache',
+    ]);
+  }
 }
 
 /* ---- 2. 规范化 ---- */

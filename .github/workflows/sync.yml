@@ -137,6 +137,7 @@ jobs:
             _work/apple.cache
             _work/apple-compare.cache
             _work/apple-prices.cache
+            _work/xiaomi.cache
           key: sync-http-cache-${{ github.run_id }}
           restore-keys: sync-http-cache-
 
