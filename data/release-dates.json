@@ -8210,6 +8210,76 @@
       "source": "manual",
       "sourceUrl": "https://www.gsmarena.com/honor_200_pro-13049.php",
       "note": "检索取证式采集（历史机型）：2024-05-27 发布；100W 有线+66W 无线；storage 1024=1TB 档。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-2",
+      "name": "荣耀 Magic2",
+      "brand": "honor",
+      "date": "2018-10-31",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/391/974.htm",
+      "note": "检索取证式采集（历史机型）：2018-10-31 发布；滑盖全面屏；尺寸/重量引自 CNMO 入网报道与 Android Authority。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-3",
+      "name": "荣耀 Magic3",
+      "brand": "honor",
+      "date": "2021-08-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/news/magic/",
+      "note": "检索取证式采集（历史机型）：2021-08-12 发布；8+128/8+256；尺寸重量玻璃版（素皮版 202g/9.5mm 留 note）。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-4",
+      "name": "荣耀 Magic4",
+      "brand": "honor",
+      "date": "2022-03-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://news.qq.com/rain/a/20220317A0DAS600",
+      "note": "检索取证式采集（历史机型）：海外 2022-02-28 MWC 首发、国行 2022-03-17；潜望式长焦。dimsMm 长×宽×厚（XDA 同口径）"
+    },
+    {
+      "id": "hn-magic-4-pro",
+      "name": "荣耀 Magic4 Pro",
+      "brand": "honor",
+      "date": "2022-03-17",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.xda-developers.com/honor-magic-4-series-launch/",
+      "note": "检索取证式采集（历史机型）：2022-03-17 国行发布；100W 有线，无线国行 50W（海外 100W 因法规下调，note 留痕）；素皮版 209g/9.10mm 留 note。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-5-pro",
+      "name": "荣耀 Magic5 Pro",
+      "brand": "honor",
+      "date": "2023-03-06",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/677/705.htm",
+      "note": "检索取证式采集（历史机型）：2023-03-06 发布；第二代青海湖电池首发；重量玻璃 219g/素皮 215g（ZOL）取玻璃口径。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-6-pro",
+      "name": "荣耀 Magic6 Pro",
+      "brand": "honor",
+      "date": "2024-01-11",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.honor.com/cn/news/honor-magic6-launch/",
+      "note": "检索取证式采集（历史机型）：2024-01-11 发布、01-18 开售；80W；重量素皮 225g/玻璃 229g；1TB=storage 1024 档。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hn-magic-7",
+      "name": "荣耀 Magic7",
+      "brand": "honor",
+      "date": "2024-10-30",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/806/543.htm",
+      "note": "检索取证式采集（历史机型）：2024-10-30 发布、11-08 开售；尺寸/重量取 ZOL（IT之家 8.8mm/223g 系 Pro 版口径，note 留痕）；1TB 版支持卫星通讯。dimsMm 长×宽×厚"
     }
   ],
   "unresolved": []
