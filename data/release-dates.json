@@ -7840,6 +7840,46 @@
       "source": "manual",
       "sourceUrl": "https://www.mi.com/kettle/specs",
       "note": "检索取证式采集（历史机型）：大陆上市 2017-03（月精度，小米商城无发布日、ZNDS 评测 2017-03-23；台湾 2018-06-20 开售对应海外口径）；品类参数：容量 1.5L、额定 1800W、蓝牙 4.0 BLE、恒温 40-90"
+    },
+    {
+      "id": "hw-maimang-7",
+      "name": "华为麦芒 7",
+      "brand": "huawei",
+      "date": "2018-09-12",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.elecfans.com/d/777848.html",
+      "note": "检索取证式采集（历史机型）：2018-09-12 广州发布、09-15 开售、2399 元；6+64 单档；9V/2A=18W 快充；电池两源不一（3750 发布口径 vs 3650 爆料）→ 取发布口径；尺寸/重量取自 phablet.jp 规格"
+    },
+    {
+      "id": "hw-maimang-9",
+      "name": "华为麦芒 9",
+      "brand": "huawei",
+      "date": "2020-07-27",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/499/998.htm",
+      "note": "检索取证式采集（历史机型）：2020-07-27 线上发布、08-07 开售、2199 元起，麦芒系列首款 5G 机型；IT之家/快科技/比特网一致；6+128/8+128；22.5W 超级快充；刷新率源未给 → null。dimsMm 长×宽×厚"
+    },
+    {
+      "id": "hw-maimang-10-se",
+      "name": "华为麦芒 10 SE（电信 5G）",
+      "brand": "huawei",
+      "date": "2021-07-19",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "https://www.ithome.com/0/563/752.htm",
+      "note": "检索取证式采集（历史机型）：存在性确认；2021-07-19 中国电信发布（华为智选渠道，非华为直营）、07-24 开售；6+128 单档；22.5W；60Hz；**分辨率两源冲突**（天极网 2340×1080 vs devicespecific"
+    },
+    {
+      "id": "hw-maimang-11",
+      "name": "华为麦芒 11（华为智选 5G）",
+      "brand": "huawei",
+      "date": "2022-05-10",
+      "precision": "day",
+      "source": "manual",
+      "sourceUrl": "http://www.news.cn/info/20220511/b41aeaa23b2a43a495c1e3bbc338bf86/c.html",
+      "note": "检索取证式采集（历史机型）：存在性确认；2022-05-10 中国电信发布（华为智选渠道）、05-17 开售、1799 元起；型号 TYH622M；90Hz、4800 万 AI 双摄、6/8GB+128/256GB；入网口径额定 5900mAh/百"
     }
   ],
   "unresolved": []
