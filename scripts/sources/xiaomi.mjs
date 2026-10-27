@@ -24,6 +24,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cleanListingName } from '../lib/names.mjs';
 
 const SHOP_URL = 'https://www.mi.com/shop';
 const VIEW_URL = 'https://api2.order.mi.com/product/view';
@@ -204,7 +205,7 @@ export async function fetchAll(options = {}) {
     products.push({
       id: `xiaomi-${id}`,
       brand: 'xiaomi',
-      name: g.name,
+      name: cleanListingName(g.name), // listing 名剥配置+配色后缀（全站每型号一条口径），specs 数组承接档位
       specsUrl: raw['_catalog.shopUrl'],
       raw,
       extractedAt: new Date().toISOString(),

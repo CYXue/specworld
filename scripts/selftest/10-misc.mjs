@@ -406,3 +406,30 @@ section('macdb-sync fill-core：串号防线与单位自愈（fixture）');
     assert.equal(FC.rangeHeal(99999, 40, 1500), null);
   });
 }
+
+section('商城 listing 名清洗（cleanListingName）');
+{
+  const N = await import('../lib/names.mjs');
+  check('配置+配色后缀剥离（每型号一条口径）', () => {
+    if (N.cleanListingName('REDMI Note 17 Pro 焕新版 8GB+256GB 流沙橙') !== 'REDMI Note 17 Pro 焕新版')
+      throw new Error('配置与配色应剥离');
+    if (N.cleanListingName('Xiaomi 18 Fold 16GB+1TB 暖金白') !== 'Xiaomi 18 Fold')
+      throw new Error('TB 配置同样剥离');
+    if (N.cleanListingName('REDMI Pad 2 6GB+128GB 灰色') !== 'REDMI Pad 2')
+      throw new Error('低端位配置同样剥离');
+  });
+  check('纯配色/版本词后缀保留（型号区分信息）', () => {
+    if (N.cleanListingName('小米手环11 银色') !== '小米手环11 银色') throw new Error('纯配色不属于配置后缀');
+    if (N.cleanListingName('小米手环10 标准版') !== '小米手环10 标准版') throw new Error('版本词保留');
+    if (N.cleanListingName('Xiaomi Watch S5 46mm 黑色氟胶表带款') !== 'Xiaomi Watch S5 46mm 黑色氟胶表带款')
+      throw new Error('尺寸+表带款保留');
+    if (N.cleanListingName('REDMI K100 Max 12GB+256GB 暗影黑') !== 'REDMI K100 Max')
+      throw new Error('K 系配置后缀同样剥离');
+  });
+  check('无配置后缀/非字符串原样通过', () => {
+    if (N.cleanListingName('小米 MIX FOLD') !== '小米 MIX FOLD') throw new Error('无后缀应原样');
+    if (N.cleanListingName('小米电视S Pro 65 Mini LED 2026') !== '小米电视S Pro 65 Mini LED 2026')
+      throw new Error('尺寸词不误剥');
+    if (N.cleanListingName(null) !== null) throw new Error('非字符串透传');
+  });
+}
