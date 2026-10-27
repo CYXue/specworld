@@ -6,7 +6,7 @@
 
 | 项 | 决定 |
 |---|---|
-| 品类 | **全品类 17 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / audio / media / tracker / network / pda / input / printer / storage / accessory |
+| 品类 | **全品类 18 类**（v2 目录，新增品类零代码，见 `docs/UNIVERSAL-CATALOG.md`）：phone / tablet / laptop / desktop / display / wearable / headset / home / washer / audio / media / tracker / network / pda / input / printer / storage / accessory |
 | 品牌 | **苹果 + 华为 + 小米 + 荣耀**（注册表单一真源 `scripts/brands.mjs`） |
 | 机型 | **全量收录，粒度＝每型号一条**（2026-10-25 裁决：同型号存储/颜色配置在记录内以档位数组合并，不按 SKU 拆条；生态链/贴牌品牌不收，只收官方自营品牌）。两条收录通道：① 官网抓取，官网在售目录全部进站；② 用户数据层 `add-product` **显式收录**——状态（在售/未发售/已停售）区分生命周期。官网已下架的历史机型不在采集范围，见 `docs/HISTORICAL-CATALOG-PLAN.md`（检索取证式批次已入库） |
 | 形态 | 纯静态站（零后端），已送审 B 站 Toy（slug=specworld） |

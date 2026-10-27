@@ -19,6 +19,7 @@
     "colors": [],
     "folded": null,
     "budWeightG": 5.5,
+    "caseWeightG": 43,
     "waterResistance": "耳机：IP57 | 充电盒：IP54"
   },
   "display": {
@@ -79,9 +80,11 @@
   "scores": [],
   "granularity": "specs-page",
   "rawOfficial": {
-    "电池.续航时间": "声音质量优先： | 聆听音乐（降噪关）：耳机单次充电使用 8 小时，配合充电盒使用 33 小时； | 聆听音乐（降噪开）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时。 | 连接稳定优先： | 聆听音乐（降噪关）：耳机单次充电使用 9 小时，配合充电盒使用 38 小时； | 聆听音乐（降噪开）：耳机单次充电使用 6 小时，配合充电盒使用 25 小时； | 语音通话（降噪关）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时； | 语音通话（降噪开）：耳机单次充电使用 4 小时，配合充电盒使用 18 小时。",
+    "电池.续航": "声音质量优先： | 聆听音乐（降噪关）：耳机单次充电使用 8 小时，配合充电盒使用 33 小时； | 聆听音乐（降噪开）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时。 | 连接稳定优先： | 聆听音乐（降噪关）：耳机单次充电使用 9 小时，配合充电盒使用 38 小时； | 聆听音乐（降噪开）：耳机单次充电使用 6 小时，配合充电盒使用 25 小时； | 语音通话（降噪关）：耳机单次充电使用 5 小时，配合充电盒使用 22 小时； | 语音通话（降噪开）：耳机单次充电使用 4 小时，配合充电盒使用 18 小时。",
     "音频技术": "主动降噪/通话降噪/智慧动态降噪/通透/透传人声/智慧动态透传/AI 免摘对话/自适应音量/多 EQ",
     "防水防尘等级": "耳机：IP57 | 充电盒：IP54",
+    "尺寸": "高度：29.1 mm | 宽度：21.8 mm | 深度：23.7 mm",
+    "电池": "单只耳机：60 mAh | 充电盒：537 mAh",
     "包装清单": "耳机 × 2（左右耳各 1） | 充电盒 × 1 | 耳塞 × 4（硅胶：L，M，S，XS，其中硅胶 M 号出厂时放到耳机上） | 快速指南 & 安全信息 & 保修卡 × 1 | 华为音乐权益卡 × 1"
   },
   "notes": [
@@ -90,8 +93,10 @@
   "provenance": {
     "audio.anc": "huawei-official",
     "audio.driverUnit": "huawei-official",
+    "features.sensors": "huawei-official",
     "battery.chargingMethods": "huawei-official",
     "body.budWeightG": "huawei-official",
+    "body.caseWeightG": "huawei-official",
     "body.weightG": "huawei-official",
     "body.waterResistance": "huawei-official",
     "battery.budHours": "huawei-official",
@@ -104,6 +109,15 @@
   "specs": {
     "audio.anc": true,
     "audio.driverUnit": "超线性双磁路低音单元，超薄微平板高音单元",
+    "features.sensors": [
+      "红外传感器",
+      "霍尔传感器",
+      "陀螺仪",
+      "加速度传感器",
+      "骨声纹传感器",
+      "触摸传感器",
+      "按压传感器"
+    ],
     "battery.chargingMethods": [
       "有线充电：USB Type-C 接口（5V 0.5A 及以上）",
       "无线充电：最高 5 W"

@@ -1,5 +1,5 @@
 {
-  "_doc": "品类注册表（全品类目录的入口）。每个品类引用 data/schemas/<id>.json 定义其可量化参数字段。新增品类 = 加一行 + 加一份 schema 文件，管线、闸门、前端分面自动识别。注意：前端展示顺序另有 src/lib/catalog.ts 的 CATEGORY_ORDER，两处顺序必须一致（selftest 有对账断言）。2026-10-15 苹果全产品线扩充：激活 tablet/laptop/audio（苹果 iPad/Mac/AirPods），新增 desktop（iMac/Mac mini/Mac Studio/Mac Pro——与笔记本分开，屏幕/电池组结构性不适用）与 wearable（Apple Watch）。 2026-10-15 晚批：新增 display（Studio Display 系列外接显示器——与 desktop 结构性分开：显示器无芯片算力主体/无电池，屏幕参数是本体而非外设）。 2026-10-15 收官批：新增 headset（Apple Vision Pro——空间计算头显，双芯片 M+R1 结构性区别于任何既有品类）与 home（智能家居设备：Apple TV 4K 机顶盒起，未来 HomeView 带屏中枢同品类——无电池、常供电、以服务为中心的设备族）。 2026-10-15 全系列批（用户决策）：新增 media（多媒体播放器——iPod classic/nano/shuffle 等 MP3/MP4 类）与 tracker（定位器——AirTag）。iPod touch 归 phone（有屏有 iOS，无蜂窝字段 null）。 2026-10-15 补全批（用户决策）：新增 network（AirPort 路由器/Time Capsule/Xserve 服务器——无屏无系统 UI 的网络基础设施设备族）。 2026-10-15 vintage 批：新增 pda（Newton MessagePad 手写掌上电脑——笔输入+手写识别，结构性区别于任何既有品类）。 2026-10-15 补全批二（用户决策）：新增 input（键盘/鼠标/触控板）、printer（LaserWriter/ImageWriter/StyleWriter）、accessory（电源适配器/iSight/遥控器）三品类——外围配件成体系。 2026-10-15 macDB 对账批：新增 storage（外置存储设备——Disk II 软驱/ProFile 硬盘/AppleCD 光驱/Xserve RAID 磁盘阵列/USB SuperDrive，本体是「容量+介质+接口」，与 network 服务器、accessory 配件结构性分开）。",
+  "_doc": "品类注册表（全品类目录的入口）。每个品类引用 data/schemas/<id>.json 定义其可量化参数字段。新增品类 = 加一行 + 加一份 schema 文件，管线、闸门、前端分面自动识别。注意：前端展示顺序另有 src/lib/catalog.ts 的 CATEGORY_ORDER，两处顺序必须一致（selftest 有对账断言）。2026-10-27 洗衣机批：新增 washer（米家洗衣机/洗烘一体机从 home 拆出；洗地机/洗碗机仍留 home）。2026-10-27 家电批：新增 fridge/aircon/aircare/cleaner/kitchen/waterpurifier/lock 七类，把官网「关键参数」里有真实结构化数据的家电从 home 拆出（此前它们只有名字+通用字段，品类特有参数全塞在 rawOfficial 里）；home 只留机顶盒/中枢与无结构化参数的家电。2026-10-27 环境电器批：新增 climate（除湿机/加湿器/蒸发式冷风扇——核心参数是除湿量/加湿量/水箱/风量，home 装不下）。2026-10-15 苹果全产品线扩充：激活 tablet/laptop/audio（苹果 iPad/Mac/AirPods），新增 desktop（iMac/Mac mini/Mac Studio/Mac Pro——与笔记本分开，屏幕/电池组结构性不适用）与 wearable（Apple Watch）。 2026-10-15 晚批：新增 display（Studio Display 系列外接显示器——与 desktop 结构性分开：显示器无芯片算力主体/无电池，屏幕参数是本体而非外设）。 2026-10-15 收官批：新增 headset（Apple Vision Pro——空间计算头显，双芯片 M+R1 结构性区别于任何既有品类）与 home（智能家居设备：Apple TV 4K 机顶盒起，未来 HomeView 带屏中枢同品类——无电池、常供电、以服务为中心的设备族）。 2026-10-15 全系列批（用户决策）：新增 media（多媒体播放器——iPod classic/nano/shuffle 等 MP3/MP4 类）与 tracker（定位器——AirTag）。iPod touch 归 phone（有屏有 iOS，无蜂窝字段 null）。 2026-10-15 补全批（用户决策）：新增 network（AirPort 路由器/Time Capsule/Xserve 服务器——无屏无系统 UI 的网络基础设施设备族）。 2026-10-15 vintage 批：新增 pda（Newton MessagePad 手写掌上电脑——笔输入+手写识别，结构性区别于任何既有品类）。 2026-10-15 补全批二（用户决策）：新增 input（键盘/鼠标/触控板）、printer（LaserWriter/ImageWriter/StyleWriter）、accessory（电源适配器/iSight/遥控器）三品类——外围配件成体系。 2026-10-15 macDB 对账批：新增 storage（外置存储设备——Disk II 软驱/ProFile 硬盘/AppleCD 光驱/Xserve RAID 磁盘阵列/USB SuperDrive，本体是「容量+介质+接口」，与 network 服务器、accessory 配件结构性分开）。",
   "version": 1,
   "categories": [
     {
@@ -48,6 +48,60 @@
       "id": "home",
       "label": "智能家居",
       "schema": "home",
+      "builtin": true
+    },
+    {
+      "id": "fridge",
+      "label": "冰箱",
+      "schema": "fridge",
+      "builtin": true
+    },
+    {
+      "id": "aircon",
+      "label": "空调",
+      "schema": "aircon",
+      "builtin": true
+    },
+    {
+      "id": "aircare",
+      "label": "空气净化",
+      "schema": "aircare",
+      "builtin": true
+    },
+    {
+      "id": "climate",
+      "label": "环境电器",
+      "schema": "climate",
+      "builtin": true
+    },
+    {
+      "id": "cleaner",
+      "label": "清洁电器",
+      "schema": "cleaner",
+      "builtin": true
+    },
+    {
+      "id": "kitchen",
+      "label": "厨房电器",
+      "schema": "kitchen",
+      "builtin": true
+    },
+    {
+      "id": "waterpurifier",
+      "label": "净水器",
+      "schema": "waterpurifier",
+      "builtin": true
+    },
+    {
+      "id": "lock",
+      "label": "智能门锁",
+      "schema": "lock",
+      "builtin": true
+    },
+    {
+      "id": "washer",
+      "label": "洗衣机",
+      "schema": "washer",
       "builtin": true
     },
     {

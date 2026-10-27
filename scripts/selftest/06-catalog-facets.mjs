@@ -85,11 +85,32 @@ check('折叠屏判据不误伤直板机（对照组取真实机型）', () => {
   assert.ok(bars.includes('iPhone 16'), 'iPhone 16 应判为直板');
   assert.ok(bars.includes('HUAWEI Mate 90'), 'Mate 90 应判为直板');
   assert.ok(bars.includes('华为畅享 90'), '畅享 90 应判为直板');
-  for (const p of REAL_P) {
+  // 只对手机品类做「原文里不该有折叠」的检查：其他品类的「折叠」是别的意思
+  // （路由器「天线折叠/直立」、折叠桌椅「折叠尺寸」），不属于折叠屏判据的适用范围。
+  for (const p of REAL_P.filter((x) => C.categoryOf(x) === 'phone')) {
     if (C.isFoldable(p)) continue;
     const dims = String(p.rawOfficial?.['尺寸与重量'] ?? '');
     assert.ok(!/折叠|展开/.test(dims), `${p.name} 被误判成折叠屏`);
   }
+});
+
+check('反向测：非手机品类的「折叠」原文不得判成折叠屏', () => {
+  // 真实故障：2026-10-27 华为路由补全后，「尺寸与重量」原文写「天线折叠/直立两种形态」，
+  // 判据没有品类门禁 → 25 台路由全被标成折叠屏，selftest 才报红。
+  const router = pdoc({
+    id: 'fake-router',
+    name: 'BE7 Pro',
+    category: 'network',
+    rawOfficial: { 尺寸与重量: '288 mm（长）× 195.48 mm（宽）× 72.43 mm（高），天线折叠/直立两种形态' },
+  });
+  assert.equal(C.isFoldable(router), false, '路由器不是折叠屏');
+  const phone = pdoc({
+    id: 'fake-fold-phone',
+    name: 'Fold Phone',
+    category: 'phone',
+    rawOfficial: { 尺寸与重量: '折叠态：12.3 mm | 展开态：4.0 mm' },
+  });
+  assert.equal(C.isFoldable(phone), true, '手机品类照旧按原文判定');
 });
 
 check('折叠屏判据在真实数据上命中已知机型', () => {

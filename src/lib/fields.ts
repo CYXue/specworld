@@ -1,8 +1,28 @@
+import accessorySchemaJson from '../../data/schemas/accessory.json' with { type: 'json' };
+import aircareSchemaJson from '../../data/schemas/aircare.json' with { type: 'json' };
+import airconSchemaJson from '../../data/schemas/aircon.json' with { type: 'json' };
 import audioSchemaJson from '../../data/schemas/audio.json' with { type: 'json' };
+import cleanerSchemaJson from '../../data/schemas/cleaner.json' with { type: 'json' };
+import climateSchemaJson from '../../data/schemas/climate.json' with { type: 'json' };
 import desktopSchemaJson from '../../data/schemas/desktop.json' with { type: 'json' };
+import displaySchemaJson from '../../data/schemas/display.json' with { type: 'json' };
+import fridgeSchemaJson from '../../data/schemas/fridge.json' with { type: 'json' };
+import headsetSchemaJson from '../../data/schemas/headset.json' with { type: 'json' };
+import homeSchemaJson from '../../data/schemas/home.json' with { type: 'json' };
+import inputSchemaJson from '../../data/schemas/input.json' with { type: 'json' };
+import kitchenSchemaJson from '../../data/schemas/kitchen.json' with { type: 'json' };
 import laptopSchemaJson from '../../data/schemas/laptop.json' with { type: 'json' };
+import lockSchemaJson from '../../data/schemas/lock.json' with { type: 'json' };
+import mediaSchemaJson from '../../data/schemas/media.json' with { type: 'json' };
+import networkSchemaJson from '../../data/schemas/network.json' with { type: 'json' };
+import pdaSchemaJson from '../../data/schemas/pda.json' with { type: 'json' };
 import phoneSchemaJson from '../../data/schemas/phone.json' with { type: 'json' };
+import printerSchemaJson from '../../data/schemas/printer.json' with { type: 'json' };
+import storageSchemaJson from '../../data/schemas/storage.json' with { type: 'json' };
 import tabletSchemaJson from '../../data/schemas/tablet.json' with { type: 'json' };
+import trackerSchemaJson from '../../data/schemas/tracker.json' with { type: 'json' };
+import washerSchemaJson from '../../data/schemas/washer.json' with { type: 'json' };
+import waterpurifierSchemaJson from '../../data/schemas/waterpurifier.json' with { type: 'json' };
 import wearableSchemaJson from '../../data/schemas/wearable.json' with { type: 'json' };
 import phoneViewJson from '../../data/views/phone.json' with { type: 'json' };
 import { classifyMissing, isNonePlaceholder, toSpecRowState } from '../../scripts/lib/missing-state.mjs';
@@ -72,7 +92,8 @@ export const PHONE_SCHEMA = phoneSchemaJson as unknown as SchemaJson;
 const PHONE_VIEW = phoneViewJson as unknown as ViewDict;
 
 /**
- * 品类 → schema 字段表（2026-10-15 苹果全产品线扩充，六品类齐备）。
+ * 品类 → schema 字段表（2026-10-15 苹果全产品线扩充，六品类齐备；
+ * 2026-10-27 新增 washer——米家洗衣机/洗烘一体机从 home 拆出）。
  *
  * 与 data/categories.json 注册表同源（selftest 对账）。specGroups 按
  * `categoryOf(p)` 选表——非手机品类没有 view 字典（phone 专属的
@@ -85,8 +106,28 @@ const SCHEMAS: Record<string, SchemaJson> = {
   tablet: tabletSchemaJson as unknown as SchemaJson,
   laptop: laptopSchemaJson as unknown as SchemaJson,
   desktop: desktopSchemaJson as unknown as SchemaJson,
+  display: displaySchemaJson as unknown as SchemaJson,
   wearable: wearableSchemaJson as unknown as SchemaJson,
+  headset: headsetSchemaJson as unknown as SchemaJson,
+  home: homeSchemaJson as unknown as SchemaJson,
+  washer: washerSchemaJson as unknown as SchemaJson,
+  fridge: fridgeSchemaJson as unknown as SchemaJson,
+  aircon: airconSchemaJson as unknown as SchemaJson,
+  aircare: aircareSchemaJson as unknown as SchemaJson,
+  climate: climateSchemaJson as unknown as SchemaJson,
+  cleaner: cleanerSchemaJson as unknown as SchemaJson,
+  kitchen: kitchenSchemaJson as unknown as SchemaJson,
+  waterpurifier: waterpurifierSchemaJson as unknown as SchemaJson,
+  lock: lockSchemaJson as unknown as SchemaJson,
   audio: audioSchemaJson as unknown as SchemaJson,
+  media: mediaSchemaJson as unknown as SchemaJson,
+  tracker: trackerSchemaJson as unknown as SchemaJson,
+  network: networkSchemaJson as unknown as SchemaJson,
+  pda: pdaSchemaJson as unknown as SchemaJson,
+  input: inputSchemaJson as unknown as SchemaJson,
+  printer: printerSchemaJson as unknown as SchemaJson,
+  storage: storageSchemaJson as unknown as SchemaJson,
+  accessory: accessorySchemaJson as unknown as SchemaJson,
 };
 
 const EMPTY_VIEW: ViewDict = { groups: [], hidden: [] };

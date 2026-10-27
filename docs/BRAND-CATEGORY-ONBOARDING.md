@@ -12,8 +12,8 @@
   智慧屏还有嵌套段 `visions/huawei-vision/`），全记进 `EXTRA_SEGMENTS`。
 - [ ] **规格页结构核实**：抽 2–3 台详情页确认是否同构（华为各品类都是 `large-accordion`
   手风琴；平板规格在独立 `/specs/` 子页，手机是同页）。
-- [ ] **品类映射决策**：新产物落在现有 17 品类中的哪一个（智慧屏 → media，与 Apple TV
-  同品类）。没有合适品类才新建（`categories.json` + `schemas/<id>.json` 零代码 recipe）。
+- [ ] **品类映射决策**：新产物落在现有 18 品类中的哪一个（智慧屏 → media，与 Apple TV
+  同品类；洗衣机 → washer）。没有合适品类才新建（`categories.json` + `schemas/<id>.json` 零代码 recipe）。
 - [ ] **护栏阈值**：各品类页面的章节数差异大（显示器页只有 5 章节），必要时在
   `MIN_SECTIONS_BY_CATEGORY` 按品类放宽；「机型规格少」不是「解析结果不可信」。
 

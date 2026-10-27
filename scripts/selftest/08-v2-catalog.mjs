@@ -872,6 +872,24 @@ check('品类注册表与前端 CATEGORY_ORDER 顺序对账（双真源防漂移
   }
 });
 
+check('每个已建设品类的详情页都必须用本品类 schema（不得静默回退手机表）', () => {
+  // 2026-10-27 真实缺陷：src/lib/fields.ts 的 SCHEMAS 只登记了 14 个品类，
+  // network / display / media / home / printer / storage / accessory 等 11 个品类
+  // 的详情页全部回退到手机表 —— 路由器页面显示「蜂窝网络 / 后置摄像头」且整列「—」，
+  // 零报错、零测试红。品类注册表说「加一份 schema 页面自动出现」，漏登记就退化成这句话的反面。
+  for (const c of CAT.CATEGORY_ORDER) {
+    if (c.id === 'phone') continue;
+    const own = loadSchema(c.id);
+    if (!own) continue;
+    const used = FIELDS_LIB.schemaForCategory(c.id);
+    assert.deepEqual(
+      used.fields.map((f) => f.path),
+      own.fields.map((f) => f.path),
+      `${c.id} 的详情页回退到了手机 schema（fields.ts 的 SCHEMAS 漏登记本品类）`,
+    );
+  }
+});
+
 check('schema 结构校验：phone 无分组/字段错误', () => {
   // 借鉴准绳 groups 表：字段必须归属到一个已注册分组，分组 id 不可重复。
   const schema = loadSchema('phone');
@@ -1043,6 +1061,29 @@ check('set-field：值替换 + provenance 标 user-manual + 官网原值进 repo
   assert.equal(report.replaced.length, 1, '被覆盖的官网原值必须记录（可回查）');
   assert.equal(report.replaced[0].from, 6.1);
   assert.equal(products[0].specs['display.sizeIn'], 6.1, 'applyOverrides 不改原数组');
+});
+
+check('set-field 对象值：子键 provenance 必须一并登记（闸门 10b 查 .w/.h）', () => {
+  // 真实故障（2026-10-27 长图补录）：覆写 display.resolutionPx 时只登记父路径，
+  // 闸门判「有值但缺 provenance」拒绝写盘。修法是与 putObject 口径一致，
+  // 对象值的每个子键都登记 provenance。
+  const { products: out } = applyOverrides([makeProduct('p1')], {
+    entries: [
+      {
+        id: 'o-obj',
+        op: 'set-field',
+        productId: 'p1',
+        field: 'display.resolutionPx',
+        value: { w: 3200, h: 2000 },
+        reason: '官网规格页补分辨率',
+        createdAt: '2026-10-27',
+      },
+    ],
+  });
+  assert.deepEqual(pick(out[0], 'display.resolutionPx'), { w: 3200, h: 2000 });
+  assert.equal(out[0].provenance['display.resolutionPx'], 'user-manual');
+  assert.equal(out[0].provenance['display.resolutionPx.w'], 'user-manual', '对象子键 .w 必须登记');
+  assert.equal(out[0].provenance['display.resolutionPx.h'], 'user-manual', '对象子键 .h 必须登记');
 });
 
 check('add-product：整机入池 + 身份字段兜底 + provenance 完整', () => {

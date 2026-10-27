@@ -46,10 +46,15 @@
  */
 
 /**
- * @param {{rawOfficial?: Record<string, unknown>}} p
+ * @param {{category?: string, rawOfficial?: Record<string, unknown>}} p
  * @returns {boolean}
  */
 export function isFoldableOfficial(p) {
+  // 「折叠」是**手机的形态维度**，不是任何品类的通用词。路由器官网写「天线折叠/直立两种形态」、
+  // 折叠桌椅写「折叠尺寸」，这些原文里都有「折叠」二字 —— 不加品类门禁，它们会被判成折叠屏，
+  // 2026-10-27 华为路由补全后真实发生过（selftest「折叠屏必须全部落在 phone 品类里」报红）。
+  // 品类缺失（旧快照 / 测试夹具）按 phone 处理，与 categoryOf 的回退口径一致。
+  if (p?.category && p.category !== 'phone') return false;
   const dims = p?.rawOfficial?.['尺寸与重量'];
   const text = typeof dims === 'string' ? dims : '';
   return /折叠|展开/.test(text);

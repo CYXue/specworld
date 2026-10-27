@@ -57,6 +57,69 @@ const TAG_RULES: Record<string, TagRule[]> = {
     { key: 'battery.budHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
     { key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
   ],
+  // 洗衣机：容量 / 洗净比 / 能效 / 转速（2026-10-27 新增品类摘要）
+  washer: [
+    { key: 'washer.washCapacity', fmt: str },
+    { key: 'washer.washRatio', fmt: (v) => (num(v) != null ? `洗净比 ${num(v)}` : null) },
+    { key: 'power.ratingLevel', fmt: str },
+    { key: 'washer.maxSpinRpm', fmt: (v) => (num(v) != null ? `${num(v)}rpm` : null) },
+  ],
+  // 冰箱：总容量 / 能效 / 日耗电 / 噪音（2026-10-27 家电批）
+  fridge: [
+    { key: 'fridge.totalCapacityL', fmt: (v) => (num(v) != null ? `${num(v)}L` : null) },
+    { key: 'power.ratingLevel', fmt: str },
+    { key: 'fridge.dailyEnergyKwh', fmt: (v) => (num(v) != null ? `${num(v)}kWh/24h` : null) },
+    { key: 'features.noiseDb', fmt: (v) => (num(v) != null ? `${num(v)}dB` : null) },
+  ],
+  // 空调：匹数 / 能效 / APF / 适用面积
+  aircon: [
+    { key: 'aircon.horsepower', fmt: (v) => (num(v) != null ? `${num(v)}匹` : null) },
+    { key: 'power.ratingLevel', fmt: str },
+    { key: 'aircon.apf', fmt: (v) => (num(v) != null ? `APF ${num(v)}` : null) },
+    { key: 'aircon.applicableArea', fmt: str },
+  ],
+  // 空气净化：颗粒物 CADR / 甲醛 CADR / 适用面积 / 能效
+  aircare: [
+    { key: 'aircare.cadrParticle', fmt: (v) => (num(v) != null ? `颗粒物 ${num(v)}m³/h` : null) },
+    { key: 'aircare.cadrFormaldehyde', fmt: (v) => (num(v) != null ? `甲醛 ${num(v)}m³/h` : null) },
+    { key: 'aircare.maxAreaM2', fmt: (v) => (num(v) != null ? `${num(v)}㎡` : null) },
+    { key: 'power.ratingLevel', fmt: str },
+  ],
+  // 环境电器：除湿量 / 加湿量 / 水箱（除湿机与加湿器各显示自己那一项，缺项自动跳过）
+  climate: [
+    { key: 'climate.dehumidifyLpd', fmt: (v) => (num(v) != null ? `${num(v)}L/D` : null) },
+    { key: 'climate.humidifyMlph', fmt: (v) => (num(v) != null ? `${num(v)}mL/h` : null) },
+    { key: 'climate.tankL', fmt: (v) => (num(v) != null ? `水箱 ${num(v)}L` : null) },
+    { key: 'features.noiseDb', fmt: (v) => (num(v) != null ? `${num(v)}dB` : null) },
+  ],
+  // 清洁电器：吸力 / 续航 / 清水箱 / 主机重量
+  cleaner: [
+    { key: 'cleaner.suctionKpa', fmt: (v) => (num(v) != null ? `${num(v)}kPa` : null) },
+    { key: 'cleaner.runtimeMin', fmt: (v) => (num(v) != null ? `${num(v)}min` : null) },
+    { key: 'cleaner.cleanWaterMl', fmt: (v) => (num(v) != null ? `${num(v)}ml` : null) },
+    { key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)! / 1000}kg` : null) },
+  ],
+  // 厨房电器：容量 / 风量 / 能效 / 噪音（烹饪类看容量、烟灶类看风量，缺项自动跳过）
+  kitchen: [
+    { key: 'kitchen.capacityL', fmt: (v) => (num(v) != null ? `${num(v)}L` : null) },
+    { key: 'kitchen.airVolume', fmt: (v) => (num(v) != null ? `${num(v)}m³/min` : null) },
+    { key: 'power.ratingLevel', fmt: str },
+    { key: 'features.noiseDb', fmt: (v) => (num(v) != null ? `${num(v)}dB` : null) },
+  ],
+  // 净水器：流速 / 纯废水比 / 滤芯数 / 认证
+  waterpurifier: [
+    { key: 'waterpurifier.flowRateLpm', fmt: (v) => (num(v) != null ? `${num(v)}L/min` : null) },
+    { key: 'waterpurifier.pureWasteRatio', fmt: str },
+    { key: 'waterpurifier.filterCount', fmt: (v) => (num(v) != null ? `${num(v)}芯` : null) },
+    { key: 'waterpurifier.certifications', fmt: (v) => (Array.isArray(v) && v.length ? String(v[0]) : null) },
+  ],
+  // 智能门锁：锁芯 / 开锁方式数 / 续航 / 形态
+  lock: [
+    { key: 'lock.lockCylinder', fmt: str },
+    { key: 'lock.unlockMethods', fmt: (v) => (Array.isArray(v) && v.length ? `${v.length} 种开锁` : null) },
+    { key: 'lock.batteryLife', fmt: str },
+    { key: 'lock.form', fmt: str },
+  ],
 };
 
 /** 兜底表：未列出的品类尽量给一点可识别信息，缺了就少显示。 */
@@ -132,6 +195,60 @@ const SLOT_RULES: Record<string, SlotRule[]> = {
     { label: '表壳', key: 'body.caseSizeMm', fmt: (v) => (num(v) != null ? `${num(v)}mm` : null) },
     { label: '续航', key: 'battery.vendorClaimedHours', fmt: (v) => (num(v) != null ? `${num(v)}h` : null) },
     { label: '重量', key: 'body.weightG', fmt: (v) => (num(v) != null ? `${num(v)}g` : null) },
+  ],
+  // 洗衣机：容量 / 洗净比 / 能效（2026-10-27 新增品类；卡片三槽直接回答「洗多少、洗多干净」）
+  washer: [
+    { label: '容量', key: 'washer.washCapacity', fmt: str },
+    { label: '洗净比', key: 'washer.washRatio', fmt: (v) => (num(v) != null ? `${num(v)}` : null) },
+    { label: '能效', key: 'power.ratingLevel', fmt: str },
+  ],
+  // 冰箱：容量 / 能效 / 日耗电
+  fridge: [
+    { label: '容量', key: 'fridge.totalCapacityL', fmt: (v) => (num(v) != null ? `${num(v)}L` : null) },
+    { label: '能效', key: 'power.ratingLevel', fmt: str },
+    { label: '耗电', key: 'fridge.dailyEnergyKwh', fmt: (v) => (num(v) != null ? `${num(v)}kWh/24h` : null) },
+  ],
+  // 空调：匹数 / 能效 / APF
+  aircon: [
+    { label: '匹数', key: 'aircon.horsepower', fmt: (v) => (num(v) != null ? `${num(v)}匹` : null) },
+    { label: '能效', key: 'power.ratingLevel', fmt: str },
+    { label: 'APF', key: 'aircon.apf', fmt: (v) => (num(v) != null ? `${num(v)}` : null) },
+  ],
+  // 空气净化：颗粒物 CADR / 甲醛 CADR / 适用面积
+  aircare: [
+    { label: '颗粒物', key: 'aircare.cadrParticle', fmt: (v) => (num(v) != null ? `${num(v)}m³/h` : null) },
+    { label: '甲醛', key: 'aircare.cadrFormaldehyde', fmt: (v) => (num(v) != null ? `${num(v)}m³/h` : null) },
+    { label: '适用面积', key: 'aircare.maxAreaM2', fmt: (v) => (num(v) != null ? `${num(v)}㎡` : null) },
+  ],
+  // 环境电器：除湿量 / 加湿量 / 水箱（除湿机与加湿器各占自己那一槽，缺项占位）
+  climate: [
+    { label: '除湿量', key: 'climate.dehumidifyLpd', fmt: (v) => (num(v) != null ? `${num(v)}L/D` : null) },
+    { label: '加湿量', key: 'climate.humidifyMlph', fmt: (v) => (num(v) != null ? `${num(v)}mL/h` : null) },
+    { label: '水箱', key: 'climate.tankL', fmt: (v) => (num(v) != null ? `${num(v)}L` : null) },
+  ],
+  // 清洁电器：吸力 / 续航 / 清水箱
+  cleaner: [
+    { label: '吸力', key: 'cleaner.suctionKpa', fmt: (v) => (num(v) != null ? `${num(v)}kPa` : null) },
+    { label: '续航', key: 'cleaner.runtimeMin', fmt: (v) => (num(v) != null ? `${num(v)}min` : null) },
+    { label: '清水箱', key: 'cleaner.cleanWaterMl', fmt: (v) => (num(v) != null ? `${num(v)}ml` : null) },
+  ],
+  // 厨房电器：容量 / 风量 / 能效（烹饪类与烟灶类各取所长，缺项占位）
+  kitchen: [
+    { label: '容量', key: 'kitchen.capacityL', fmt: (v) => (num(v) != null ? `${num(v)}L` : null) },
+    { label: '风量', key: 'kitchen.airVolume', fmt: (v) => (num(v) != null ? `${num(v)}m³/min` : null) },
+    { label: '能效', key: 'power.ratingLevel', fmt: str },
+  ],
+  // 净水器：流速 / 纯废水比 / 滤芯数
+  waterpurifier: [
+    { label: '流速', key: 'waterpurifier.flowRateLpm', fmt: (v) => (num(v) != null ? `${num(v)}L/min` : null) },
+    { label: '纯废水比', key: 'waterpurifier.pureWasteRatio', fmt: str },
+    { label: '滤芯数', key: 'waterpurifier.filterCount', fmt: (v) => (num(v) != null ? `${num(v)}` : null) },
+  ],
+  // 智能门锁：锁芯 / 开锁方式 / 续航
+  lock: [
+    { label: '锁芯', key: 'lock.lockCylinder', fmt: str },
+    { label: '开锁方式', key: 'lock.unlockMethods', fmt: (v) => (Array.isArray(v) && v.length ? `${v.length} 种` : null) },
+    { label: '续航', key: 'lock.batteryLife', fmt: str },
   ],
 };
 

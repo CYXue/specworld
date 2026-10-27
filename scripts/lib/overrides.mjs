@@ -188,7 +188,13 @@ export function applyOverrides(products, overrides) {
       setSpec(target, e.field, e.value);
       // provenance 按条目来源派生：macDB 第二票数据标 'macdb-cn'，
       // 其余（真正的用户手改）标 'user-manual'。见 src/lib/types.ts 的取值契约。
-      target.provenance[e.field] = e.source === 'macdb-cn' ? 'macdb-cn' : 'user-manual';
+      const prov = e.source === 'macdb-cn' ? 'macdb-cn' : 'user-manual';
+      target.provenance[e.field] = prov;
+      // 对象型字段（display.resolutionPx 等）还要登记子键：闸门 10b 查的是 .w/.h，
+      // 与管线 putObject 的口径一致。只登记父路径会被判「有值但缺 provenance」拒写盘。
+      if (e.value && typeof e.value === 'object' && !Array.isArray(e.value)) {
+        for (const k of Object.keys(e.value)) target.provenance[`${e.field}.${k}`] = prov;
+      }
       report.applied.push({ id: e.id, op: 'set-field', productId: e.productId, field: e.field, value: e.value });
       if (before !== undefined && before !== null) {
         report.replaced.push({ id: e.id, productId: e.productId, field: e.field, from: before, to: e.value });

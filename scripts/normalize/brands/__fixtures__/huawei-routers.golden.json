@@ -10,7 +10,7 @@
   "status": "on-sale",
   "retiredAt": null,
   "body": {
-    "heightMm": 195.48,
+    "heightMm": 72.43,
     "widthMm": 288,
     "thicknessMm": null,
     "weightG": 876,
@@ -18,7 +18,7 @@
     "material": null,
     "colors": [],
     "folded": null,
-    "depthMm": 72.43
+    "depthMm": 195.48
   },
   "display": {
     "sizeIn": null,
@@ -38,7 +38,9 @@
     "npu": null
   },
   "memory": {
-    "ramGb": [],
+    "ramGb": [
+      0.5
+    ],
     "storageGb": [
       0.13
     ]
@@ -78,19 +80,27 @@
   "scores": [],
   "granularity": "specs-page",
   "rawOfficial": {
+    "重量": "约 876 g（主机）",
+    "存储": "512 MB RAM + 128 MB ROM",
+    "尺寸与重量": "288 mm（长）× 195.48 mm（宽）× 72.43 mm（高）",
+    "功耗": "产品供电：12 V DC，2 A | 产品功耗：< 24 W | 输入电压：100-240 V AC | 输入电压频率：50-60 Hz",
     "安全": "HUAWEI HomeSec® 安全防护：支持 Wi-Fi 防暴力破解、局域网防火墙、摄像头安全防护",
     "包装清单": "电源适配器：1 个 | 用户手册：1 份 | 路由器： 1 个 | CPE 保护袋：1 个 | 网线：1 根"
   },
   "notes": [
-    "天线折叠/直立两种形态，body 三维取折叠态（收纳尺寸）；直立态见 rawOfficial"
+    "内存原文「512 MB RAM + 128 MB ROM」：MB→GB 是单位换算（除以 1024）",
+    "power.inputPower 取官网「产品功耗」的 W 值（非铭牌额定输入功率，原文见 rawOfficial）"
   ],
   "provenance": {
     "connectivity.ports": "huawei-official",
+    "power.inputPower": "huawei-official",
+    "power.inputVoltage": "huawei-official",
     "body.widthMm": "huawei-official",
     "body.heightMm": "huawei-official",
     "body.depthMm": "huawei-official",
     "body.weightG": "huawei-official",
     "connectivity.wifi": "huawei-official",
+    "memory.ramGb": "huawei-official",
     "memory.storageGb": "huawei-official"
   },
   "firstSeenAt": "2026-10-24T05:59:53.766Z",
@@ -98,7 +108,9 @@
   "category": "network",
   "specs": {
     "connectivity.ports": [
-      "电源口、网口、WPS/RESET 二合一按键"
-    ]
+      "4 个 WAN/LAN 自适应，10/100/1000/2500 M 自适应速率的以太网接口。"
+    ],
+    "power.inputPower": 24,
+    "power.inputVoltage": "100-240 V AC | 50-60 Hz"
   }
 }

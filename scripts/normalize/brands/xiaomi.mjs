@@ -10,6 +10,7 @@
  *     显式映射表解析；解析不出的项原文进 notes，**不猜**。
  *   - 「新品礼（不发货）」这类非实体商品由采集端目录筛选兜住，映射端不重复判断。
  */
+import { fieldMap, loadSchema } from '../../lib/schema.mjs';
 import {
   emptyRecord,
   put,
@@ -546,7 +547,10 @@ function mapXiaomiAudio(rawProduct) {
     rec.specs = { ...(rec.specs ?? {}), 'audio.spatialAudio': !/不支持/.test(spatial) };
     rec.provenance['audio.spatialAudio'] = HW;
   }
-  const driver = kv(raw, '发音单元') ?? kv(raw, '发声单元');
+  /* 音箱版式官网把扬声器叫「扬声器」（「2英寸全频」「4英寸低频+3个1.5英寸全频+3个无源辐射器」），
+   * 耳机版式叫「发音单元/发声单元」。三者语义相同 → 同一个契约字段 audio.driverUnit，
+   * 口径与华为音频通道一致（那边也是 `发声单元 → 扬声器.扬声器单元 → 扬声器` 回退）。 */
+  const driver = kv(raw, '发音单元') ?? kv(raw, '发声单元') ?? kv(raw, '扬声器');
   if (driver) {
     rec.specs = { ...(rec.specs ?? {}), 'audio.driverUnit': tidy(driver) };
     rec.provenance['audio.driverUnit'] = HW;
@@ -569,6 +573,13 @@ function mapXiaomiAudio(rawProduct) {
   const water = tidy(kv(raw, '防尘防水') ?? '') || null;
   if (water) rec.body.waterResistance = water;
   rec.connectivity.bluetooth = tidy(kv(raw, '蓝牙版本') ?? kv(raw, '蓝牙') ?? '') || null;
+  /* 音箱版式给「Wi-Fi 频段」（「2.4G/5GHz」）→ connectivity.wifi。官网部分页面把单位写重
+   * （「2.4G/5GHzHz」），按原文保留并记 note，不做「帮官网改错字」的静默修正。 */
+  const wifiBand = tidy(kv(raw, 'Wi-Fi 频段') ?? kv(raw, 'WiFi 频段') ?? '') || null;
+  rec.connectivity.wifi = wifiBand;
+  if (/HzHz$/i.test(wifiBand ?? '')) {
+    addNote(rec, `Wi-Fi 频段原文「${wifiBand}」单位重复（官网笔误），按原文保留：connectivity.wifi`);
+  }
   /* 充电方式 */
   const charge = [kv(raw, '充电盒无线充电'), kv(raw, '快充')].filter(Boolean).map(tidy);
   if (charge.length) {
@@ -582,6 +593,12 @@ function mapXiaomiAudio(rawProduct) {
   pushOfficial(rec, '降噪', anc);
   pushOfficial(rec, '整体续航', kv(raw, '整体续航'));
   pushOfficial(rec, '音频协议', kv(raw, '音频协议'));
+  /* 音箱版式没有对应契约字段的项，原文进 rawOfficial（不丢、不猜、不硬塞语义相近的字段）：
+   * 「组合立体声」是两台音箱配左右声道，不是空间音频；麦克风/出音方式/语音通话/红外控制
+   * 在 audio schema 里也没有字段。 */
+  for (const k of ['出音方式', '麦克风', '组合立体声', '语音通话', '红外控制']) {
+    pushOfficial(rec, k, kv(raw, k));
+  }
 
   put(rec, 'body.budWeightG', rec.body.budWeightG, HW);
   put(rec, 'body.weightG', rec.body.weightG, HW);
@@ -589,6 +606,7 @@ function mapXiaomiAudio(rawProduct) {
   put(rec, 'battery.budHours', rec.battery.budHours, HW);
   put(rec, 'battery.withCaseHours', rec.battery.withCaseHours, HW);
   put(rec, 'connectivity.bluetooth', rec.connectivity.bluetooth, HW);
+  put(rec, 'connectivity.wifi', rec.connectivity.wifi, HW);
 
   return rec;
 }
@@ -678,16 +696,299 @@ function mapXiaomiRouter(rawProduct) {
   return rec;
 }
 
-/** 通道 X9：米家家电（category='home'，复用 data/schemas/home.json）。
+/* ── 家电品类路由与字段表（2026-10-27 家电批）────────────────────────────
+ * 背景：官网「关键参数」随品类完全不同，此前只有洗衣机拆出了专用 schema，
+ * 其余家电的特有参数整块塞进 rawOfficial —— 详情页只剩名字 + 通用字段
+ * （三维/能效/噪音），用户看到的就是「只有名字、没有详细参数」。
+ * 现在按官方商品名把家电路由到各自的品类（每个品类一份 schema），
+ * 官网给的每个键按下面的显式表落位；没落位的键仍进 rawOfficial（不丢原文）。
+ * 纪律：解析不出数值的字段一律留 null（如「变温室容积=-L」），不估算、不补 0。
+ */
+const APPLIANCE_FAMILY_RULES = [
+  ['washer', (n) => /洗衣机|洗烘一体机/.test(n) && !/洗碗机|洗地机/.test(n)],
+  ['fridge', (n) => /冰箱/.test(n)],
+  /* 「空调伴侣」是插座式遥控配件、不是空调本体（官网把它列在家电目录下） */
+  ['aircon', (n) => /空调/.test(n) && !/伴侣/.test(n)],
+  ['aircare', (n) => /空气净化器|净化器/.test(n)],
+  /* 除湿机/加湿器/蒸发式冷风扇：核心参数是除湿量/加湿量/水箱/风量，home 装不下 */
+  ['climate', (n) => /加湿器|除湿机|冷风扇/.test(n)],
+  ['waterpurifier', (n) => /净水器|净饮机|净水机/.test(n)],
+  ['cleaner', (n) => /洗地机|吸尘器|扫地机器人|扫拖机器人|除螨仪/.test(n)],
+  [
+    'kitchen',
+    (n) =>
+      /电饭煲|电压力锅|油烟机|烟灶|微波炉|电水壶|电热水壶|电磁炉|洗碗机|空气炸锅|蒸烤箱|蒸烤一体机/.test(
+        n,
+      ),
+  ],
+  ['lock', (n) => /门锁/.test(n)],
+];
+
+function applianceFamilyOf(name) {
+  for (const [id, test] of APPLIANCE_FAMILY_RULES) if (test(name)) return id;
+  return 'home';
+}
+
+/** 产品类型由官方商品名的品类词判定（不是参数推算）；顺序敏感：「烟灶套装」先于「油烟机」 */
+const APPLIANCE_TYPE_RULES = {
+  cleaner: [
+    [/洗地机/, '洗地机'],
+    [/吸尘器/, '吸尘器'],
+    [/扫地机器人|扫拖机器人/, '扫地机器人'],
+    [/除螨仪/, '除螨仪'],
+  ],
+  kitchen: [
+    [/烟灶套装/, '烟灶套装'],
+    [/油烟机|烟机/, '油烟机'],
+    [/电饭煲|电压力锅/, '电饭煲'],
+    [/微波炉/, '微波炉'],
+    [/电热水壶|电水壶/, '电水壶'],
+    [/电磁炉/, '电磁炉'],
+    [/洗碗机/, '洗碗机'],
+    [/空气炸锅/, '空气炸锅'],
+    [/蒸烤箱|蒸烤一体机/, '蒸烤箱'],
+  ],
+  climate: [
+    [/净化加湿器/, '净化加湿器'],
+    [/加湿器/, '加湿器'],
+    [/除湿机/, '除湿机'],
+    [/冷风扇/, '冷风扇'],
+  ],
+};
+
+/** 多筒容量原文清洗：「大筒10kg、小筒0.5kg +0.5kgkg」→ 去重复 kg、去 + 两侧空格 */
+function cleanWasherCapacity(value) {
+  return tidy(value ?? '')
+    .replace(/kgkg/gi, 'kg')
+    .replace(/\s*\+\s*/g, '+');
+}
+
+/** 官网原文首个数值（「实测值949m³/h」→949、「21(主电机)Kpa」→21）；无数字 → null */
+const firstNum = (text) => {
+  const m = tidy(text ?? '').match(/\d+(?:\.\d+)?/);
+  return m ? Number(m[0]) : null;
+};
+/** 时间取「N秒」里的 N（不能取首个数字：「接满150ml水杯时间=3秒」首数是 150） */
+const secondsNum = (text) => {
+  const m = tidy(text ?? '').match(/(\d+(?:\.\d+)?)\s*秒/);
+  return m ? Number(m[1]) : null;
+};
+/** 千克 → 克（官网「主机重量=5.14kg」）；识别不出 kg 单位 → null */
+const kgToG = (text) => {
+  const m = tidy(text ?? '').match(/(\d+(?:\.\d+)?)\s*kg/i);
+  return m ? Math.round(Number(m[1]) * 1000) : null;
+};
+const spaceList = (text) => tidy(text ?? '').split(/[\s、,，/]+/).map(tidy).filter(Boolean);
+
+/**
+ * 家电字段表：`[路径, 官网键, 取值方式]`。
+ *   text / num / seconds / kgToG / spaceList / singleList / slashListAll
+ * 数值方式识别不出就留 null（不写 0）。
+ */
+const APPLIANCE_FIELD_MAP = {
+  washer: {
+    text: [
+      ['washer.type', ['产品类型']],
+      ['washer.washCapacity', ['洗涤容量'], cleanWasherCapacity],
+      ['washer.dryCapacity', ['烘干容量'], cleanWasherCapacity],
+      ['washer.motor', ['电机类型']],
+      ['washer.sterilization', ['除菌方式']],
+      ['washer.drainType', ['排水方式']],
+      ['washer.doorType', ['开门方式']],
+      ['washer.smart', ['智能互联']],
+      ['washer.drumMaterial', ['内筒材质']],
+      ['washer.dryMethod', ['烘干方式']],
+    ],
+    num: [
+      ['washer.washRatio', ['洗净比'], 'num'],
+      ['washer.maxSpinRpm', ['最高转速'], 'num'],
+    ],
+  },
+  fridge: {
+    text: [
+      ['fridge.doorType', ['门体类型']],
+      ['fridge.placement', ['放置方式']],
+      ['fridge.coolingType', ['制冷方式']],
+      ['fridge.coolingSystem', ['制冷系统']],
+      ['fridge.compressor', ['压缩机类型']],
+      ['fridge.panelMaterial', ['面板材质']],
+      ['fridge.purifyTech', ['净化技术']],
+      ['fridge.freshTech', ['保鲜技术']],
+      ['fridge.smart', ['智能互联']],
+    ],
+    num: [
+      ['fridge.totalCapacityL', ['总容量'], 'num'],
+      ['fridge.fridgeCapacityL', ['冷藏室容积'], 'num'],
+      ['fridge.freezerCapacityL', ['冷冻室容积'], 'num'],
+      ['fridge.variableCapacityL', ['变温室容积'], 'num'],
+      ['fridge.dailyEnergyKwh', ['耗电量'], 'num'],
+    ],
+  },
+  aircon: {
+    text: [
+      ['aircon.style', ['款式']],
+      ['aircon.series', ['产品系列']],
+      ['aircon.coolingHeating', ['冷暖类型']],
+      ['aircon.inverter', ['定频/变频']],
+      ['aircon.applicableArea', ['适用面积']],
+      ['aircon.voiceControl', ['是否支持小爱同学控制']],
+    ],
+    num: [
+      ['aircon.horsepower', ['匹数'], 'num'],
+      ['aircon.apf', ['APF值'], 'num'],
+      ['aircon.coolingCapacityW', ['制冷量（整机）'], 'num'],
+      ['aircon.heatingCapacityW', ['制热量（整机）'], 'num'],
+      ['aircon.warrantyYears', ['整机质保期'], 'num'],
+    ],
+  },
+  aircare: {
+    text: [
+      ['aircare.scene', ['建议场所']],
+      ['aircare.purifyType', ['净化类型']],
+      ['aircare.measure', ['测量功能']],
+      ['aircare.filterType', ['滤网类型']],
+    ],
+    num: [
+      ['aircare.maxAreaM2', ['建议最大适用面积'], 'num'],
+      ['aircare.cadrParticle', ['颗粒物CADR'], 'num'],
+      ['aircare.cadrFormaldehyde', ['甲醛CADR'], 'num'],
+    ],
+  },
+  cleaner: {
+    text: [
+      ['cleaner.selfClean', ['滚刷自清洁']],
+      ['cleaner.dryMethod', ['干燥方式']],
+      ['cleaner.edgeClean', ['滚刷贴边']],
+      ['cleaner.brushType', ['滚刷类型']],
+      ['cleaner.sterilize', ['除菌方式']],
+      ['cleaner.innovation', ['创新技术']],
+    ],
+    num: [
+      ['cleaner.cleanWaterMl', ['净水容量'], 'num'],
+      ['cleaner.wasteWaterMl', ['污水容量'], 'num'],
+      ['cleaner.suctionKpa', ['最大吸力'], 'num'],
+      ['cleaner.runtimeMin', ['续航时间'], 'num'],
+      ['cleaner.batteryMah', ['电池标称容量'], 'num'],
+      ['body.weightG', ['主机重量'], 'kgToG'],
+    ],
+  },
+  kitchen: {
+    text: [
+      ['kitchen.heatingMethod', ['加热方式']],
+      ['kitchen.innerPot', ['内胆材质']],
+      ['kitchen.functions', ['功能']],
+      ['kitchen.applicablePeople', ['适用人数']],
+      ['kitchen.hoodStyle', ['烟机款式']],
+      ['kitchen.hoodSmart', ['烟机智能控制']],
+      ['kitchen.panelMaterial', ['面板材质']],
+    ],
+    num: [
+      ['kitchen.capacityL', ['容量'], 'num'],
+      ['kitchen.airVolume', ['风量风速'], 'num'],
+      ['kitchen.maxStaticPressure', ['最大静压'], 'num'],
+      ['kitchen.gasPowerKw', ['火力/气源'], 'num'],
+      ['kitchen.thermalEfficiency', ['热效率'], 'num'],
+    ],
+  },
+  waterpurifier: {
+    text: [
+      ['waterpurifier.filterTech', ['主过滤技术']],
+      ['waterpurifier.faucet', ['龙头类型']],
+      ['waterpurifier.pureWasteRatio', ['纯废水比']],
+      ['waterpurifier.filterLife', ['滤芯寿命']],
+      ['waterpurifier.zeroStaleWater', ['零陈水']],
+      ['waterpurifier.appSupport', ['米家APP']],
+      ['waterpurifier.warranty', ['质保']],
+    ],
+    num: [
+      ['waterpurifier.flowRateLpm', ['常温水流速'], 'num'],
+      ['waterpurifier.fillCupTimeS', ['接满150ml水杯时间'], 'seconds'],
+      ['waterpurifier.filterCount', ['滤芯数量'], 'num'],
+    ],
+    list: [['waterpurifier.certifications', ['母婴净水器', '特优水质'], 'slashListAll']],
+  },
+  climate: {
+    text: [
+      ['climate.control', ['操控方式']],
+      ['climate.placement', ['放置方式']],
+      ['climate.inverter', ['变频/定频']],
+      ['climate.function', ['功能']],
+      ['climate.oscillationAngle', ['摇头角度']],
+    ],
+    num: [
+      ['climate.dehumidifyLpd', ['高温除湿量', '除湿量'], 'num'],
+      ['climate.dehumidifyNominalKgph', ['名义除湿量'], 'num'],
+      ['climate.humidifyMlph', ['额定加湿量', '加湿量'], 'num'],
+      ['climate.tankL', ['水箱容量'], 'num'],
+      ['climate.airflowM3h', ['风量'], 'num'],
+      ['body.weightG', ['产品净重'], 'kgToG'],
+    ],
+  },
+  lock: {
+    text: [
+      ['lock.lockCylinder', ['锁芯']],
+      ['lock.form', ['门锁形态']],
+      ['lock.indoorLock', ['室内反锁']],
+      ['lock.doorbell', ['门铃']],
+      ['lock.batteryLife', ['门锁续航']],
+      ['lock.cameraAngle', ['摄像头角度']],
+      ['lock.cameraBattery', ['摄像头续航']],
+      ['lock.connectivity', ['连接方式']],
+      ['lock.frontPanel', ['前面板材质']],
+      ['lock.frameMaterial', ['中框材质']],
+    ],
+    list: [
+      ['lock.unlockMethods', ['开锁方式'], 'spaceList'],
+      ['body.colors', ['门锁颜色'], 'singleList'],
+    ],
+  },
+};
+
+/** 家电品类集合（含 home：机顶盒/开关/插座等没有专用字段表的一律留在这里） */
+const APPLIANCE_CATS = new Set([
+  'home',
+  'washer',
+  'fridge',
+  'aircon',
+  'aircare',
+  'climate',
+  'cleaner',
+  'kitchen',
+  'waterpurifier',
+  'lock',
+]);
+
+/** 家电字段写入：body.* 落 v1 组（拍平由 sync 统一做），其余直接落 specs */
+function setApplianceField(rec, path, value) {
+  if (value === null || value === undefined || value === '') return;
+  if (Array.isArray(value) && value.length === 0) return;
+  if (path.startsWith('body.')) rec.body[path.slice('body.'.length)] = value;
+  else rec.specs = { ...(rec.specs ?? {}), [path]: value };
+  rec.provenance[path] = HW;
+}
+
+/**
+ * 该品类 schema 是否注册了这个路径。
+ * 用于能效/噪音这类「跨家电通用、但不是每个品类字段表都收」的字段：
+ * 未注册就写进 specs 会被闸门当未注册键拦下（整条管线拒绝写盘），
+ * 所以这里先查注册面，不收的键继续走 rawOfficial（原文不丢）。
+ */
+function schemaHas(category, path) {
+  return fieldMap(loadSchema(category)).has(path);
+}
+
+/** 通道 X9：米家家电（按名称路由到各自品类，schema 见 data/schemas/<品类>.json）。
  *
- * 家电的「关键参数」体系随品类完全不同（空调匹数/冰箱容积/洗衣机转速/门锁续航，
- * 唯有 能效等级/尺寸/噪音/智能互联 勉强通用）——设计决策：schema 不为单一品类
- * 造一次性字段，只收通用字段；品类特有参数整块进 rawOfficial（原文可查）。
  * 尺寸语义：官网按品类给「尺寸」「宽*深*高」两种键，数值序都是 宽、深、高。
+ * 能效/噪音是跨家电的通用字段，统一落 power.ratingLevel / features.noiseDb。
  */
 function mapXiaomiAppliance(rawProduct) {
-  const raw = rawProduct.raw;
+  const raw0 = rawProduct.raw ?? {};
   const name = stripInvisible(rawProduct.name);
+  /* 键名去尾空格（官网「颗粒物CADR  」实测带两个尾空格，精确匹配会静默漏取） */
+  const raw = {};
+  for (const [k, v] of Object.entries(raw0)) if (!k.startsWith('_')) raw[k.trim()] = realValue(v);
+  const family = applianceFamilyOf(name);
   const rec = emptyRecord({
     id: rawProduct.id,
     brand: 'xiaomi',
@@ -698,24 +999,27 @@ function mapXiaomiAppliance(rawProduct) {
     firstSeenAt: rawProduct.extractedAt,
     lastSeenAt: rawProduct.extractedAt,
   });
-  rec.category = 'home'; // 数据源层显式声明品类
+  rec.category = family; // 数据源层显式声明品类
+
+  const consumed = new Set();
 
   /* 尺寸：「524*582*1808mm」（冰箱尺寸）与「宽*深*高 = 598*610*850」（洗衣机）两种键，
    * 数值序一致：宽、深、高 */
-  const dimsText = kv(raw, '宽*深*高') ?? kv(raw, '尺寸') ?? '';
+  const dimsText = raw['宽*深*高'] ?? raw['尺寸'] ?? '';
   const dims = (tidy(dimsText).match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
   if (dims.length >= 3) {
     rec.body.widthMm = dims[0];
     rec.body.depthMm = dims[1];
     rec.body.heightMm = dims[2];
     addNote(rec, `机身三维取官网「${tidy(dimsText)}」（数值序：宽、深、高）`);
+    consumed.add(raw['宽*深*高'] !== undefined ? '宽*深*高' : '尺寸');
   }
   /* 能效等级 → power.ratingLevel。官网原文混写（「一级」「1级」「1」「一级级」笔误、
-   * 「无能效级」），契约字段做最小归一：数字/中文数字能提取的统一「N级」，
-   * 否则直存原文（如「无能效级」）。 */
-  const rating = kv(raw, '能效等级') ?? kv(raw, '能效');
-  if (rating) {
-    const ratingText = tidy(rating);
+   * 「灶具能效=1级能效」「无能效级」），契约字段做最小归一：数字/中文数字能提取的
+   * 统一「N级」，否则直存原文（如「无能效级」）。 */
+  const ratingKey = ['能效等级', '能效', '灶具能效'].find((k) => raw[k] !== undefined);
+  if (ratingKey && schemaHas(family, 'power.ratingLevel')) {
+    const ratingText = tidy(raw[ratingKey]);
     const cnDigit = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5 };
     const level = ratingText.match(/(\d+)\s*级?/) ?? ratingText.match(/([一二三四五])级?/);
     const digit = level
@@ -729,19 +1033,67 @@ function mapXiaomiAppliance(rawProduct) {
     if (normalized !== ratingText) {
       addNote(rec, `能效等级原文「${ratingText}」归一为「${normalized}」（官网混写/笔误，值语义不变）`);
     }
+    consumed.add(ratingKey);
   }
-  /* 噪音 → features.noiseDb（首数值；洗衣机原文「洗涤噪音值=50dB」） */
-  const noiseText = kv(raw, '噪音值') ?? kv(raw, '洗涤噪音值');
-  const noise = allNums(noiseText);
-  if (noise.length) {
-    rec.specs = { ...(rec.specs ?? {}), 'features.noiseDb': noise[0] };
-    rec.provenance['features.noiseDb'] = HW;
+  /* 噪音 → features.noiseDb（首数值）。洗衣机「洗涤噪音值」、烟机「噪音(声功级)」、
+   * 净水器「噪音」，键名随品类不同，取值口径一致（官网标称 dB）。 */
+  const noiseKey = ['噪音值', '洗涤噪音值', '噪音(声功级)', '噪音'].find(
+    (k) => raw[k] !== undefined,
+  );
+  if (noiseKey && schemaHas(family, 'features.noiseDb')) {
+    const noise = allNums(raw[noiseKey]);
+    if (noise.length) {
+      rec.specs = { ...(rec.specs ?? {}), 'features.noiseDb': noise[0] };
+      rec.provenance['features.noiseDb'] = HW;
+    }
+    consumed.add(noiseKey);
   }
 
-  /* 品类特有参数整块进 rawOfficial（匹数/容积/CADR/门锁续航……不做 schema 字段） */
-  const special = Object.keys(raw)
-    .filter((k) => !k.startsWith('_'))
-    .filter((k) => !['能效等级', '能效', '尺寸', '宽*深*高', '噪音值', '洗涤噪音值'].includes(k));
+  /* 产品类型：由官方商品名判定（仅清洁/厨电这类一家多子族的品类需要） */
+  const typeRules = APPLIANCE_TYPE_RULES[family];
+  if (typeRules) {
+    const hit = typeRules.find(([re]) => re.test(name));
+    if (hit) setApplianceField(rec, `${family}.type`, hit[1]);
+  }
+
+  /* 品类字段表：官网逐键落位 */
+  const map = APPLIANCE_FIELD_MAP[family];
+  if (map) {
+    for (const [path, keys, transform] of map.text ?? []) {
+      const key = keys.find((k) => raw[k] !== undefined);
+      if (!key) continue;
+      const text = transform ? transform(raw[key]) : tidy(raw[key]);
+      setApplianceField(rec, path, text);
+      consumed.add(key);
+    }
+    for (const [path, keys, kind] of map.num ?? []) {
+      const key = keys.find((k) => raw[k] !== undefined);
+      if (!key) continue;
+      const value =
+        kind === 'seconds' ? secondsNum(raw[key])
+        : kind === 'kgToG' ? kgToG(raw[key])
+        : firstNum(raw[key]);
+      setApplianceField(rec, path, value);
+      consumed.add(key);
+    }
+    for (const [path, keys, kind] of map.list ?? []) {
+      const present = keys.filter((k) => raw[k] !== undefined);
+      if (!present.length) continue;
+      let list = [];
+      if (kind === 'slashListAll') {
+        list = present.flatMap((k) => tidy(raw[k]).split(/\s*\/\s*/)).map(tidy).filter(Boolean);
+      } else if (kind === 'spaceList') {
+        list = spaceList(raw[present[0]]);
+      } else {
+        list = [tidy(raw[present[0]])].filter(Boolean);
+      }
+      if (list.length) setApplianceField(rec, path, [...new Set(list)]);
+      present.forEach((k) => consumed.add(k));
+    }
+  }
+
+  /* 官网给了但本品类未落位的键 → 原文进 rawOfficial（不丢、不猜） */
+  const special = Object.keys(raw).filter((k) => !consumed.has(k));
   if (special.length) {
     pushOfficial(
       rec,
@@ -751,13 +1103,14 @@ function mapXiaomiAppliance(rawProduct) {
     );
     addNote(
       rec,
-      `品类特有参数（${special.length} 项）未入契约——随品类差异大，schema 不收一次性字段，原文见 rawOfficial`,
+      `官网关键参数原文见 rawOfficial（${special.length} 项；本行已按 ${family} schema 落位可量化项）`,
     );
   }
 
   put(rec, 'body.widthMm', rec.body.widthMm, HW);
   put(rec, 'body.depthMm', rec.body.depthMm, HW);
   put(rec, 'body.heightMm', rec.body.heightMm, HW);
+  put(rec, 'body.weightG', rec.body.weightG, HW);
 
   return rec;
 }
@@ -777,6 +1130,18 @@ const HISTORY_BATCH_AT = '2026-10-25T00:00:00.000Z';
 
 function mapXiaomiHistory(entry) {
   const name = stripInvisible(entry.name);
+  /* 家电条目（curated 里旧的是 home/washer）按官方商品名重新路由到 2026-10-27 拆出的
+   * 专用品类：同一台机器不能一半在 home、一半在新品类里。非家电名一律落到 home，
+   * 此时仍沿用条目自带的 category（phone/tablet/…）。 */
+  const family = applianceFamilyOf(name);
+  const declared = entry.category ?? 'phone';
+  const category =
+    declared === 'home' || declared === 'washer'
+      ? family
+      : declared === 'phone' && family !== 'home'
+        ? family
+        : declared;
+  const isAppliance = APPLIANCE_CATS.has(category);
   const rec = emptyRecord({
     id: entry.id,
     // 品牌取条目值（M4 起华为历史条目共用本映射器），缺省 xiaomi（既有小米批次）
@@ -812,7 +1177,10 @@ function mapXiaomiHistory(entry) {
     firstSeenAt: HISTORY_BATCH_AT,
     lastSeenAt: HISTORY_BATCH_AT,
   });
-  rec.category = entry.category ?? 'phone'; // 数据源层显式声明品类（M3 起平板/穿戴条目自带品类）
+  rec.category = category; // 数据源层显式声明品类（M3 起平板/穿戴条目自带品类；家电按名称路由）
+  const cat = category;
+  // 家电条目的产品线与小米手机那条正则无关（否则冰箱/空调会被标成「小米数字」）
+  if (isAppliance) rec.line = name.startsWith('米家') ? '米家' : 'Xiaomi';
 
   /* 屏幕：尺寸原文可能是「6.53英寸」「8.01（内屏）/ 6.52（外屏）」→ 取首个数字
    * （折叠屏取内屏，note 已在 curated 源注明） */
@@ -875,22 +1243,22 @@ function mapXiaomiHistory(entry) {
       ? (tidy(entry.dimsMm).match(/\d+(?:\.\d+)?/g) ?? []).map(Number).slice(0, 3)
       : [];
   if (dims.length === 3) {
-    if (entry.category === 'wearable') {
+    if (cat === 'wearable') {
       rec.body.caseSizeMm = Math.max(dims[0], dims[1]);
       rec.body.thicknessMm = dims[2];
       addNote(rec, `三维原文「${tidy(entry.dimsMm)}」按穿戴表壳口径归位：caseSize=前两数最大值、thickness=第三数`);
-    } else if (entry.category === 'laptop') {
+    } else if (cat === 'laptop') {
       // 笔记本契约用 weightKg（长宽厚未入 laptop schema）→ dims 不写，原文留 note
       addNote(rec, `三维原文「${tidy(entry.dimsMm)}」未入契约（laptop schema 无长宽厚字段），见本 note`);
-    } else if (entry.category === 'home') {
-      // 家电契约是 height/width/depth（深），无 thickness。
+    } else if (APPLIANCE_CATS.has(cat)) {
+      // 家电契约是 height/width/depth（深），无 thickness；洗衣机（washer）同口径。
       // 不排序——curated 源已人工归一为 高×宽×深 字面顺序（空调内机 宽>高、
       // 洗衣机 深>宽，机械排序必然错位），note 保留原始口径。
       rec.body.heightMm = dims[0];
       rec.body.widthMm = dims[1];
       rec.body.depthMm = dims[2];
       addNote(rec, `三维按 curated 源归一后的 高×宽×深 字面顺序落位，原始口径见 note（${tidy(entry.dimsMm)}）`);
-    } else if (entry.category === 'media') {
+    } else if (cat === 'media') {
       // 电视：宽>高>厚，curated 源归一为 高×宽×厚 字面顺序（不排序，排序会把宽当高）。
       // media schema 无 thicknessMm（Apple TV/盒子量级无厚度字段）→ 厚度不入契约，留 note。
       rec.body.heightMm = dims[0];
@@ -906,7 +1274,7 @@ function mapXiaomiHistory(entry) {
   }
 
   /* 笔记本（M3 续批）：契约用 capacityWh/weightKg，与手机的 mAh/g 不同 */
-  if (entry.category === 'laptop') {
+  if (cat === 'laptop') {
     rec.battery.capacityMah = null;
     rec.battery.capacityCaliber = null;
     rec.battery.capacityWh = entry.batteryWh ?? null;
@@ -920,6 +1288,24 @@ function mapXiaomiHistory(entry) {
     put(rec, 'body.weightKg', rec.body.weightKg, RETRIEVAL);
   }
 
+  /* 家电品类（home 除外）的 schema 没有屏幕/芯片/内存/电池分组。
+   * provenance 只登记来源、**不阻止拍平**：flattenSpecs 会把记录里这些组的非空值
+   * 原样搬进 specs，未注册键会被闸门拦下（如扫地机器人条目带的 chipset）。
+   * 所以必须清空值本身，不能只跳过 put。 */
+  if (isAppliance && cat !== 'home') {
+    rec.display.sizeIn = null;
+    rec.display.type = null;
+    rec.display.resolutionPx = null;
+    rec.display.refreshHz = null;
+    rec.chipset.name = null;
+    rec.memory.ramGb = [];
+    rec.memory.storageGb = [];
+    rec.battery.capacityMah = null;
+    rec.battery.capacityCaliber = null;
+    rec.battery.wiredChargeW = null;
+    rec.battery.wirelessChargeW = null;
+  }
+
   /* 契约字段按品类落位（各自 schema 注册面不同，跨品类乱写会被闸门拦未注册键）：
    *   display 组        仅 phone/tablet/laptop（network/home/audio 无屏或无该组）
    *   chipset           phone/tablet/laptop/network（audio/home 的芯片口径不稳，留 note）
@@ -927,8 +1313,7 @@ function mapXiaomiHistory(entry) {
    *   battery.capacity  phone/tablet/wearable（laptop 用 Wh 见上；audio 用 budHours）
    *   wiredChargeW      phone/tablet
    *   body.weightG      phone/tablet/wearable/audio
-   *   三维               phone/tablet/home（其余见 dims 分支） */
-  const cat = entry.category ?? 'phone';
+   *   三维               phone/tablet/media/家电（其余见 dims 分支） */
   const hasDisplay = ['phone', 'tablet', 'laptop', 'wearable', 'home', 'media', 'display'].includes(cat);
   if (hasDisplay) {
     put(rec, 'display.sizeIn', rec.display.sizeIn, RETRIEVAL);
@@ -936,11 +1321,12 @@ function mapXiaomiHistory(entry) {
     put(rec, 'display.refreshHz', rec.display.refreshHz, RETRIEVAL);
     put(rec, 'display.type', rec.display.type, RETRIEVAL);
   }
-  // chipset.name 五类 schema 全注册（audio 除外——口径不稳不落位）
-  if (cat !== 'audio') {
+  // chipset.name：audio 口径不稳、washer 与 2026-10-27 拆出的家电品类无芯片字段
+  const NO_CHIPSET = new Set(['audio', 'washer', 'fridge', 'aircon', 'aircare', 'cleaner', 'kitchen', 'waterpurifier', 'lock']);
+  if (!NO_CHIPSET.has(cat)) {
     put(rec, 'chipset.name', rec.chipset.name, RETRIEVAL);
   }
-  if (cat !== 'home' && cat !== 'audio') {
+  if (!['home', 'audio'].includes(cat) && !NO_CHIPSET.has(cat)) {
     put(rec, 'memory.ramGb', rec.memory.ramGb, RETRIEVAL);
     put(rec, 'memory.storageGb', rec.memory.storageGb, RETRIEVAL);
   }
@@ -960,15 +1346,16 @@ function mapXiaomiHistory(entry) {
     put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
     put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
   }
-  if (cat === 'home') {
+  if (APPLIANCE_CATS.has(cat)) {
     put(rec, 'body.heightMm', rec.body.heightMm, RETRIEVAL);
     put(rec, 'body.widthMm', rec.body.widthMm, RETRIEVAL);
     put(rec, 'body.depthMm', rec.body.depthMm, RETRIEVAL);
-    if (entry.ratingLevel != null) {
+    // 能效/噪音不是每个家电 schema 都收（如 lock 两者皆无、aircon 无噪音）
+    if (entry.ratingLevel != null && schemaHas(cat, 'power.ratingLevel')) {
       rec.specs = { ...(rec.specs ?? {}), 'power.ratingLevel': tidy(entry.ratingLevel) };
       rec.provenance['power.ratingLevel'] = RETRIEVAL;
     }
-    if (entry.noiseDb != null) {
+    if (entry.noiseDb != null && schemaHas(cat, 'features.noiseDb')) {
       rec.specs = { ...(rec.specs ?? {}), 'features.noiseDb': Number(entry.noiseDb) };
       rec.provenance['features.noiseDb'] = RETRIEVAL;
     }

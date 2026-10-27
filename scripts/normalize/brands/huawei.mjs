@@ -1064,23 +1064,112 @@ function mapHuaweiLaptop(rawProduct) {
   return rec;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+ * 音频 / 网络两条通道共用的取值助手
+ *
+ * 华为规格页的键名有两类 hwLookup 取不到的写法（实测 2026-10-27，20 台音频 +
+ * 25 台路由逐键核对）：
+ *   · 键尾带全角冒号：`电池.续航：` / `WLAN 规格.传输标准：`（新旧版式混用）；
+ *   · 分节子键：`防水防尘等级.耳机` / `尺寸与重量.母路由` / `充电方式.有线充电`。
+ * hwLookup 是整键或「首段」精确匹配，冒号会让整条取值静默落空——「少取一个值」
+ * 正是闸门唯一挡不住的错误类型，所以这两条通道一律走下面三个助手。
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/** 去掉键名末尾的全角/半角冒号 */
+const stripColon = (s) => s.replace(/\s*[：:]\s*$/, '').trim();
+
+/** 按「归一后的完整键名」取值（`电池.续航：` → 电池.续航） */
+function hwField(raw, base) {
+  const target = stripColon(base);
+  const key = Object.keys(raw).find((k) => stripColon(k.split('@')[0]) === target);
+  return key === undefined ? undefined : realValue(raw[key]);
+}
+
+/** 取某分节下的全部子键：`防水防尘等级` → 裸键 + `.耳机` / `.充电盒` */
+function hwSection(raw, base) {
+  return Object.keys(raw)
+    .filter((k) => k.split('@')[0].split('.')[0] === base)
+    .map((k) => {
+      const sub = stripColon(k.split('@')[0].split('.').slice(1).join('.'));
+      const value = realValue(raw[k]);
+      return value ? { sub, value } : null;
+    })
+    .filter(Boolean);
+}
+
+/** 从「无线连接」合并行里摘蓝牙版本（`蓝牙：BT 5.4` / `不支持 WLAN，Bluetooth 5.4`） */
+function extractBluetooth(text) {
+  const t = tidy(text ?? '');
+  const labelled = t.match(/蓝牙\s*[：:]\s*([^|｜]+)/);
+  if (labelled) return tidy(labelled[1]);
+  const word = t.match(/Bluetooth\s*[\d.]+/i);
+  return word ? tidy(word[0]) : null;
+}
+
+/**
+ * 续航原文 → 单次 / 含盒两个最大值。
+ * 官网三种写法混用：`电池.续航`（档位用 | 分隔、单位 h）、`电池.续航时间`
+ * （`耳机单次充电使用 8 小时，配合充电盒使用 33 小时`）、眼镜的
+ * `续航时间.聆听音乐`（`眼镜单次充满电使用 11 小时`）。
+ * 取各档位最大值 = 「官网公布的最好成绩」，全部档位进 rawOfficial。
+ */
+function parseAudioHours(text) {
+  const bud = [];
+  const withCase = [];
+  let mode = null; // 分节小标题决定后续无标签数值归属
+  for (const seg of tidy(text ?? '').split(/\s*[|｜]\s*/)) {
+    if (!/\d/.test(seg)) {
+      if (/单次|单耳|耳机聆听|眼镜单次/.test(seg)) mode = 'bud';
+      else if (/配合充电盒|整机|配合满电充电盒/.test(seg)) mode = 'case';
+      continue;
+    }
+    for (const part of seg.split(/[，,；;]/)) {
+      const m = part.match(/(\d+(?:\.\d+)?)\s*(?:小时|h\b)/i);
+      if (!m) continue;
+      const target = /配合充电盒|整机|配合满电充电盒/.test(part)
+        ? 'case'
+        : /单次|单耳|耳机聆听|眼镜单次/.test(part)
+          ? 'bud'
+          : mode;
+      if (target === 'bud') bud.push(Number(m[1]));
+      else if (target === 'case') withCase.push(Number(m[1]));
+    }
+  }
+  return {
+    bud: bud.length ? Math.max(...bud) : null,
+    withCase: withCase.length ? Math.max(...withCase) : null,
+  };
+}
+
 /**
  * 通道 A6：华为音频规格页 → ProductRecord（category='audio'）。
  *
- * 音频页口径（实测 2026-10-24，耳机 FreeBuds/FreeClip 系 + 音箱 Sound 系两种版式）：
+ * 音频页口径（实测 2026-10-27，耳机 FreeBuds/FreeClip/FreeArc 系、音箱 Sound/悦彰 系、
+ * 智能眼镜三种版式）：
  *   1. 耳机续航按场景分档（降噪开/关 × 质量优先/稳定优先），budHours 取「耳机单次充电」
  *      的最大值、withCaseHours 取「配合充电盒」的最大值——官网给的是各档位，取最大
  *      档是「官网公布的最好成绩」口径，全部档位进 rawOfficial。
- *   2. 降噪是布尔：音频技术原文含「主动降噪」→ true；没提 → null（不替官网下结论）。
- *   3. 音箱页（Sound 系）键结构与耳机不同，本映射器只取两版式共有的键，缺的留空。
+ *   2. 降噪是布尔：音频技术原文含「主动降噪」→ true；明确写「不支持主动降噪」→ false；
+ *      没提 → null（不替官网下结论）。
+ *   3. 三种版式的键结构不同，按「耳机 / 音箱 / 眼镜」分别取共有键，缺的留空：
+ *      · 耳机：单耳机 / 充电盒 / 整机（含包装）分列，或合并一行 `单耳机：3.8 g | 充电盒：33 g`；
+ *      · 音箱：`尺寸.高度` + `尺寸.重量` + `扬声器.扬声器单元` + `连接.WLAN/蓝牙`；
+ *      · 眼镜：`重量.<镜框变体>` + `续航时间.聆听音乐` + `数据连接.蓝牙/WLAN`。
+ *      audio schema 无长/宽/直径与电池容量字段，这些值只进 rawOfficial，不造字段。
  */
 function mapHuaweiAudio(rawProduct) {
   const raw = rawProduct.raw;
   const name = stripInvisible(rawProduct.name);
+  const isGlasses = /眼镜/.test(name);
+  const isSpeaker = /Sound|悦彰|家庭影院/.test(name);
   const rec = emptyRecord({
     id: rawProduct.id,
     brand: 'huawei',
-    line: /FreeBuds|FreeClip|FreeArc/i.test(name) ? 'FreeBuds' : /Sound/i.test(name) ? 'Sound' : 'Eyewear',
+    line: /FreeBuds|FreeClip|FreeArc/i.test(name)
+      ? 'FreeBuds'
+      : /Sound|悦彰/.test(name)
+        ? 'Sound'
+        : 'Eyewear',
     name,
     nameZh: name,
     granularity: 'specs-page',
@@ -1088,74 +1177,160 @@ function mapHuaweiAudio(rawProduct) {
     lastSeenAt: rawProduct.extractedAt,
   });
   rec.category = 'audio'; // 数据源层显式声明品类
+  rec.specs = {}; // 音频 / features 前缀不在 sync 的 SPEC_GROUPS 里，直写扁平容器
 
-  /* ---- 尺寸与重量（耳机版式）------------------------------------------- */
-  rec.body.budWeightG = parseWeight(hwLookup(raw, '重量.单耳机', name).value ?? '').value;
-  rec.body.weightG = parseWeight(hwLookup(raw, '重量.整机（含包装）', name).value ?? '').value;
-  const caseText = hwLookup(raw, '尺寸.充电盒', name).value ?? '';
-  if (caseText) rec.body.material = null; // 充电盒配色文本不进 material（诚实留空）
-  const waterText = hwLookup(raw, '防水防尘等级', name).value ?? '';
-  if (waterText) rec.body.waterResistance = tidy(waterText);
+  /* ---- 尺寸（音箱：立方/圆柱机身只有高度对得上 audio schema）------------- */
+  if (isSpeaker) {
+    const heightText = hwField(raw, '尺寸.高度');
+    if (heightText && /环绕音箱|重低音音箱/.test(heightText)) {
+      addNote(rec, `尺寸原文按声道音箱/环绕/重低音分列（「${tidy(heightText)}」），多箱体口径不统一，body 三维记 null`);
+    } else {
+      rec.body.heightMm = parseMm(heightText ?? '');
+    }
+  }
+
+  /* ---- 重量：耳机分列 / 合并一行 / 音箱净重 / 眼镜按镜框分列 -------------- */
+  const w = (k) => hwLookup(raw, k, name);
+  const budW = parseWeight(w('重量.单耳机').value ?? w('重量.单只耳机').value ?? w('重量.耳机').value ?? '');
+  const caseW = parseWeight(w('重量.充电盒（不含耳机）').value ?? w('重量.充电盒').value ?? '');
+  const totalW = parseWeight(w('重量.整机（含包装）').value ?? w('尺寸.重量').value ?? '');
+  rec.body.budWeightG = budW.value;
+  rec.body.caseWeightG = caseW.value;
+  rec.body.weightG = totalW.value;
+
+  const combo = w('重量'); // 合并写法（SE 3）或按镜框分列（眼镜）
+  if (combo.value && !budW.value && !caseW.value && !totalW.value) {
+    for (const seg of combo.value.split(/\s*[|｜]\s*/)) {
+      const one = parseWeight(seg);
+      if (one.value === null) continue;
+      if (/充电盒/.test(seg)) rec.body.caseWeightG = rec.body.caseWeightG ?? one.value;
+      else if (/耳机|镜腿/.test(seg)) rec.body.budWeightG = rec.body.budWeightG ?? one.value;
+      else rec.body.weightG = rec.body.weightG ?? one.value;
+    }
+    if (combo.variant) {
+      addNote(rec, `重量原文按镜框分列（${combo.variant} 等），body.weightG 取第一个变体（不带衬片），其余见 rawOfficial`);
+    }
+  }
+  if (!rec.body.weightG && /kg/.test(tidy(w('重量').value ?? ''))) {
+    addNote(rec, `重量原文为多箱体 kg 口径（「${tidy(w('重量').value)}」），契约是单值 g，body.weightG 记 null`);
+  }
+
+  /* ---- 防水 / 材质 ------------------------------------------------------ */
+  const waterSec = [...hwSection(raw, '防水防尘等级'), ...hwSection(raw, '防尘抗水')];
+  const waterText = waterSec.map((e) => (e.sub ? `${e.sub}：${e.value}` : e.value)).join(' | ');
+  if (waterText) rec.body.waterResistance = waterText;
+  if (!isGlasses) {
+    // 眼镜的 `材质.<镜框>` 是配色描述（「镜框：亮黑色」），不是材质 → 不映射
+    const mat = hwField(raw, '材质') ?? hwField(raw, '材质.耳机');
+    if (mat) rec.body.material = tidy(mat);
+  }
 
   /* ---- 音频特性 --------------------------------------------------------- */
-  const techText = hwLookup(raw, '音频技术', name).value ?? '';
-  if (techText) {
-    rec.specs = {
-      ...(rec.specs ?? {}),
-      ...( /主动降噪/.test(techText) ? { 'audio.anc': true } : {}),
-      ...( /空间音频|全景声/.test(techText) ? { 'audio.spatialAudio': true } : {}),
-    };
-    if (/主动降噪/.test(techText)) rec.provenance['audio.anc'] = HW;
-    if (/空间音频|全景声/.test(techText)) rec.provenance['audio.spatialAudio'] = HW;
+  const techText = hwField(raw, '音频技术') ?? '';
+  if (/主动降噪/.test(techText)) {
+    rec.specs['audio.anc'] = !/不支持主动降噪/.test(techText);
+    rec.provenance['audio.anc'] = HW;
   }
-  const driver = hwLookup(raw, '发声单元', name).value ?? '';
+  if (/空间音频|全景声/.test(techText)) {
+    rec.specs['audio.spatialAudio'] = true;
+    rec.provenance['audio.spatialAudio'] = HW;
+  }
+  // 耳机看 `发声单元`、音箱看 `扬声器.扬声器单元`、多箱体套装看 `扬声器`
+  const driver = hwField(raw, '发声单元') ?? hwField(raw, '扬声器.扬声器单元') ?? hwField(raw, '扬声器');
   if (driver) {
-    rec.specs = { ...(rec.specs ?? {}), 'audio.driverUnit': tidy(driver) };
+    rec.specs['audio.driverUnit'] = tidy(driver);
     rec.provenance['audio.driverUnit'] = HW;
+  }
+  const sensors = hwField(raw, '传感器');
+  if (sensors) {
+    rec.specs['features.sensors'] = sensors.split(/[\/／]/).map(tidy).filter(Boolean);
+    rec.provenance['features.sensors'] = HW;
   }
 
   /* ---- 续航：耳机单次 / 配合充电盒 -------------------------------------- */
-  const batteryText = hwLookup(raw, '电池.续航时间', name).value ?? '';
-  if (batteryText) {
-    const hours = [...batteryText.matchAll(/(\d+(?:\.\d+)?)\s*小时/g)].map((m) => Number(m[1]));
-    const bud = [...batteryText.matchAll(/耳机单次充电使用\s*(\d+(?:\.\d+)?)\s*小时/g)].map((m) => Number(m[1]));
-    const withCase = [
-      ...batteryText.matchAll(/配合充电盒使用\s*(\d+(?:\.\d+)?)\s*小时/g),
-    ].map((m) => Number(m[1]));
-    if (bud.length) rec.battery.budHours = Math.max(...bud);
-    if (withCase.length) rec.battery.withCaseHours = Math.max(...withCase);
-    if (!bud.length && !withCase.length && hours.length) {
-      rec.battery.budHours = Math.max(...hours); // 音箱/其他版式只有一个续航数
-    }
-    if (rec.battery.budHours !== null || rec.battery.withCaseHours !== null) {
-      addNote(rec, '续航取官网各档位中的最大值（官网公布的最好成绩），全部档位见 rawOfficial');
-    }
-    pushOfficial(rec, '电池.续航时间', batteryText);
+  const lifeText = hwField(raw, '电池.续航') ?? hwField(raw, '电池.续航时间') ?? hwField(raw, '续航时间.聆听音乐');
+  const hours = parseAudioHours(lifeText);
+  rec.battery.budHours = hours.bud;
+  rec.battery.withCaseHours = hours.withCase;
+  if (hours.bud !== null || hours.withCase !== null) {
+    addNote(rec, '续航取官网各档位中的最大值（官网公布的最好成绩），全部档位见 rawOfficial');
   }
-  const chargeMethods = hwLookup(raw, '电池.充电方式', name).value ?? '';
-  if (chargeMethods) {
-    rec.specs = {
-      ...(rec.specs ?? {}),
-      'battery.chargingMethods': chargeMethods.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean),
-    };
+  pushOfficial(rec, '电池.续航', lifeText);
+
+  /* ---- 充电方式 --------------------------------------------------------- */
+  const chargeList = [];
+  const chargeBody = hwField(raw, '电池.充电方式');
+  if (chargeBody) chargeList.push(...chargeBody.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean));
+  for (const e of hwSection(raw, '充电方式')) {
+    if (e.sub) chargeList.push(`${e.sub}：${e.value}`);
+  }
+  if (chargeList.length) {
+    rec.specs['battery.chargingMethods'] = chargeList;
     rec.provenance['battery.chargingMethods'] = HW;
   }
 
   /* ---- 连接 ------------------------------------------------------------- */
-  rec.connectivity.bluetooth = hwLookup(raw, '无线连接.蓝牙版本', name).value ?? null;
+  const bt =
+    hwField(raw, '无线连接.蓝牙版本') ??
+    hwField(raw, '无线连接.蓝牙') ??
+    hwField(raw, '数据连接.蓝牙') ??
+    hwField(raw, '连接.蓝牙') ??
+    extractBluetooth(hwField(raw, '无线连接') ?? hwField(raw, '数据连接'));
+  rec.connectivity.bluetooth = bt ? tidy(bt) : null;
+
+  let wifi = hwField(raw, '连接.WLAN') ?? hwField(raw, '数据连接.WLAN');
+  if (!wifi) {
+    // 合并行（`不支持 WLAN，Bluetooth 5.4`）只摘 WLAN 那一段；耳机行没有 WLAN 则不记
+    const combos = hwField(raw, '无线连接') ?? hwField(raw, '数据连接');
+    if (combos && /WLAN|Wi-?Fi|802\.11/i.test(combos) && !/不支持\s*WLAN/i.test(combos)) {
+      wifi = combos.split(/\s*[|｜]\s*/).find((seg) => /WLAN|Wi-?Fi|802\.11/i.test(seg));
+    }
+  }
+  rec.connectivity.wifi = wifi ? tidy(wifi) : null;
 
   /* ---- 官网原文节选 ---------------------------------------------------- */
   pushOfficial(rec, '音频技术', techText);
   pushOfficial(rec, '防水防尘等级', waterText);
+  pushOfficial(
+    rec,
+    '尺寸',
+    [hwField(raw, '尺寸.耳机'), hwField(raw, '尺寸.充电盒'), hwField(raw, '尺寸.长度')]
+      .filter(Boolean)
+      .join(' | '),
+  );
+  pushOfficial(
+    rec,
+    '扬声器',
+    [
+      hwField(raw, '扬声器.理论功率'),
+      hwField(raw, '扬声器.频响范围'),
+      hwField(raw, '扬声器.声道'),
+    ]
+      .filter(Boolean)
+      .join(' | '),
+  );
+  pushOfficial(
+    rec,
+    '电池',
+    hwField(raw, '电池.电池容量') ??
+      hwField(raw, '电池.额定容量') ??
+      hwField(raw, '电池.容量') ??
+      hwField(raw, '电池容量.容量') ??
+      hwField(raw, '电池'),
+  );
   pushOfficial(rec, '包装清单', raw['包装清单']);
 
   /* ---- provenance ------------------------------------------------------ */
+  put(rec, 'body.heightMm', rec.body.heightMm, HW);
   put(rec, 'body.budWeightG', rec.body.budWeightG, HW);
+  put(rec, 'body.caseWeightG', rec.body.caseWeightG, HW);
   put(rec, 'body.weightG', rec.body.weightG, HW);
   put(rec, 'body.waterResistance', rec.body.waterResistance, HW);
+  put(rec, 'body.material', rec.body.material, HW);
   put(rec, 'battery.budHours', rec.battery.budHours, HW);
   put(rec, 'battery.withCaseHours', rec.battery.withCaseHours, HW);
   put(rec, 'connectivity.bluetooth', rec.connectivity.bluetooth, HW);
+  put(rec, 'connectivity.wifi', rec.connectivity.wifi, HW);
 
   return rec;
 }
@@ -1250,15 +1425,162 @@ function mapHuaweiVision(rawProduct) {
   return rec;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+ * 网络设备的「标签口径」三维解析
+ *
+ * 华为路由规格页有七种尺寸写法（实测 2026-10-27，25 台逐一核对）：
+ *   · `288 mm（长）× 195.48 mm（宽）× 72.43 mm（高）`（值在前、标签在括号里）
+ *   · `长度：193 mm | 宽度：80 mm | 高度：33 mm`（标签在前、分节子键）
+ *   · `98 × 73 × 182.95 mm`（只有数字，顺序由键名「长 × 宽 × 高」给定）
+ *   · `高度：250.9 mm | 直径：123.2 mm`（圆柱机身）
+ *   · 主子路由分列：`母路由：145.32 mm | 子路由：125 mm`
+ *   · 分版本：`天线折叠时… | 天线直立时…`、`8 口母路由 | 5 口母路由 | 子路由`
+ *   · 分开的键：`尺寸与重量.高度 / 宽度 / 长度 / 厚度` 或 `尺寸.高度…`
+ * 统一先还原成标签字典 {长,宽,高,厚,直径}，再按物理口径落位：
+ *   有直径 → 高=高度、宽=厚=直径；
+ *   有长   → 宽=长、厚=宽、高=高（或厚）—— 「长 × 宽 × 高」是占地口径；
+ *   无长   → 高=高（或厚）、宽=宽、厚=厚 —— 「高 × 宽 × 厚」是立面口径。
+ * 不能按数值排序猜（旧实现取最大=宽度，把 BE7 折叠态的 195.48 宽记成了高度）。
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+const AXIS_KEYS = { 长度: '长', 宽度: '宽', 高度: '高', 厚度: '厚', 直径: '直径' };
+
+/** 从一段尺寸原文里摘出标签 → 数值（值在前「288 mm（长）」与标签在前「长度：193 mm」两种） */
+function dimLabelMap(text) {
+  const t = tidy(text ?? '');
+  const got = {};
+  const set = (label, rawNum) => {
+    const v = Number(rawNum);
+    if (!Number.isFinite(v) || v <= 0) return;
+    const key = /直径/.test(label)
+      ? '直径'
+      : /厚/.test(label)
+        ? '厚'
+        : /高/.test(label)
+          ? '高'
+          : /宽/.test(label)
+            ? '宽'
+            : '长';
+    if (got[key] === undefined) got[key] = v;
+  };
+  for (const m of t.matchAll(
+    /([\d.]+)\s*(?:mm|毫米)\s*[（(]\s*(长|宽|高|厚|厚度|深度|直径)\s*[）)]/g,
+  ))
+    set(m[2], m[1]);
+  for (const m of t.matchAll(
+    /(长|宽|高|厚|厚度|深度|直径)\s*度?\s*[：:]\s*([\d.]+)\s*(?:mm|毫米)/g,
+  ))
+    set(m[1], m[2]);
+  return got;
+}
+
+/** 无标签的 `98 × 73 × 182.95 mm`：按键名给定的顺序落位（华为一律「长 × 宽 × 高」） */
+function positionalDims(text, order = ['长', '宽', '高']) {
+  const nums = [...tidy(text ?? '').matchAll(/([\d.]+)\s*(?:mm|毫米)?/g)]
+    .map((m) => Number(m[1]))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  if (nums.length < 3) return null;
+  const got = {};
+  order.forEach((label, i) => {
+    got[label] = nums[i];
+  });
+  return got;
+}
+
+/** 标签字典 → body 三维（物理口径，见上方说明） */
+function dimsToBody(got) {
+  const { 长: L, 宽: W, 高: H, 厚: T, 直径: D } = got;
+  if (D !== undefined) {
+    return { heightMm: H ?? T ?? null, widthMm: D, depthMm: D };
+  }
+  if (L !== undefined) {
+    return { heightMm: H ?? T ?? null, widthMm: L, depthMm: W ?? T ?? null };
+  }
+  return {
+    heightMm: H ?? T ?? null,
+    widthMm: W ?? null,
+    depthMm: H !== undefined ? (T ?? null) : null,
+  };
+}
+
+/** 分轴键（`尺寸与重量.长度` 等）→ 标签字典；每个键取第一个含数值的分段（母路由优先） */
+function axisDims(raw) {
+  for (const prefix of ['尺寸与重量', '尺寸']) {
+    const got = {};
+    for (const [k, label] of Object.entries(AXIS_KEYS)) {
+      const text = hwField(raw, `${prefix}.${k}`);
+      if (!text) continue;
+      const seg =
+        tidy(text)
+          .split(/\s*[|｜]\s*/)
+          .find((s) => /([\d.]+)\s*(?:mm|毫米)/.test(s)) ?? '';
+      const m = seg.match(/([\d.]+)\s*(?:mm|毫米)/);
+      if (m) got[label] = Number(m[1]);
+    }
+    if (Object.keys(got).length >= 2) return got;
+  }
+  return null;
+}
+
+/** 网口 / 接口原文 → 字符串数组；`8 口母路由： | 6 个…` 的悬空标签与下一段合并 */
+function splitPorts(text) {
+  const segs = tidy(text ?? '')
+    .split(/\s*[|｜]\s*/)
+    .map(tidy)
+    .filter(Boolean);
+  const out = [];
+  let label = '';
+  for (const s of segs) {
+    if (/[：:]$/.test(s)) {
+      label = s;
+      continue;
+    }
+    const merged = `${label}${s}`;
+    label = '';
+    if (/\d/.test(merged)) out.push(merged);
+  }
+  return out;
+}
+
+/** 存储原文 → { ramGb, storageGb }；覆盖华为五种写法（见调用处注释） */
+function routerMemory(text) {
+  const t = tidy(text ?? '');
+  const toGb = (n, u) =>
+    u.toUpperCase() === 'GB' ? Number(n) : Math.round((Number(n) / 1024) * 100) / 100;
+  const grab = (...patterns) => {
+    for (const re of patterns) {
+      const m = t.match(re);
+      if (m) return toGb(m[1], m[2]);
+    }
+    return undefined;
+  };
+  const ram = grab(
+    /运行内存\s*[（(]\s*RAM\s*[）)]\s*[：:]\s*([\d.]+)\s*(MB|GB)/i,
+    /([\d.]+)\s*(MB|GB)\s*[（(]\s*RAM\s*[）)]/i,
+    /([\d.]+)\s*(MB|GB)\s*RAM\b/i,
+    /([\d.]+)\s*(MB|GB)\s*[+＋]/i,
+  );
+  const rom = grab(
+    /机身内存\s*[（(]\s*ROM\s*[）)]\s*[：:]\s*([\d.]+)\s*(MB|GB)/i,
+    /([\d.]+)\s*(MB|GB)\s*[（(]\s*ROM\s*[）)]/i,
+    /([\d.]+)\s*(MB|GB)\s*ROM\b/i,
+    /[+＋]\s*([\d.]+)\s*(MB|GB)/i,
+  );
+  return { ramGb: ram, storageGb: rom };
+}
+
 /**
  * 通道 A8：华为路由器规格页 → ProductRecord（category='network'）。
  *
- * 路由器页口径（实测 2026-10-24，家用路由凌霄/X/BE/AX 系 + 随行 WiFi 系两种版式）：
- *   1. 家用路由尺寸是「天线折叠/天线直立」两种形态文本 → 厚度取折叠态（最小三维），
- *      与笔记本「三维最小 = 厚度」同一结构性判定；随行 WiFi 是常规长宽高。
+ * 路由器页口径（实测 2026-10-27，家用路由凌霄/X/BE/AX 系 + 移动路由 + 随行 WiFi 三种版式）：
+ *   1. 三维按「标签口径」落位（长/宽/高/厚/直径），不按数值排序猜；
+ *      主子路由套装取母路由（首个单元）口径，其余单元与分版本尺寸进 rawOfficial。
  *   2. WLAN 规格（传输标准/无线速率/频段）全量进 connectivity.wifi 拼接原文；
- *      网口列表进 connectivity.ports。
- *   3. 随行 WiFi 电池原文只记 note 不进契约（network schema 无电池字段，不造字段）。
+ *      网口优先于接口（接口含按键与电源口，不是以太网口口径），分节子键按 `母路由：…` 记录。
+ *   3. 内存五种写法归一（`512 MB RAM + 128 MB ROM` / `256 MB（RAM）+ 128 MB（ROM）` /
+ *      `运行内存（RAM）：128 MB | 机身内存（ROM）：128 MB` …），MB→GB 除以 1024。
+ *   4. 功耗取官网「产品功耗」上限写 power.inputPower；AC/DC 电源或「输入电压」写
+ *      power.inputVoltage。wireless/蜂窝/屏幕/电池在 network schema 无字段 → 只进 rawOfficial。
  */
 function mapHuaweiRouter(rawProduct) {
   const raw = rawProduct.raw;
@@ -1266,7 +1588,11 @@ function mapHuaweiRouter(rawProduct) {
   const rec = emptyRecord({
     id: rawProduct.id,
     brand: 'huawei',
-    line: /mobile-wifi|随行/i.test(name) ? '随行WiFi' : '路由',
+    line: /mobile-wifi|随行/i.test(name)
+      ? '随行WiFi'
+      : /mobile-router|移动路由/i.test(name)
+        ? '移动路由'
+        : '路由',
     name,
     nameZh: name,
     granularity: 'specs-page',
@@ -1274,64 +1600,198 @@ function mapHuaweiRouter(rawProduct) {
     lastSeenAt: rawProduct.extractedAt,
   });
   rec.category = 'network'; // 数据源层显式声明品类
+  rec.specs = {};
 
   /* ---- 尺寸与重量 ------------------------------------------------------ */
-  const foldText = hwLookup(raw, '尺寸与重量.天线折叠', name).value;
-  const upText = hwLookup(raw, '尺寸与重量.天线直立', name).value;
-  const h = hwLookup(raw, '尺寸与重量.高度', name).value;
-  const w = hwLookup(raw, '尺寸与重量.宽度', name).value;
-  const t = hwLookup(raw, '尺寸与重量.厚度', name).value;
-  const dimsText = foldText ?? upText ?? [h, w, t].filter(Boolean).join(' | ');
-  const dims = (tidy(dimsText).match(/(\d+(?:\.\d+)?)\s*mm/g) ?? []).map(parseFloat);
-  if (foldText && upText) {
-    // 两种形态都给：折叠态尺寸更小，取折叠态记入契约（整机收纳尺寸），直立态进 rawOfficial
-    const fold = (tidy(foldText).match(/(\d+(?:\.\d+)?)\s*mm/g) ?? []).map(parseFloat);
-    if (fold.length >= 3) {
-      rec.body.widthMm = Math.max(...fold);
-      rec.body.heightMm = [...fold].sort((a, b) => b - a)[1];
-      rec.body.depthMm = Math.min(...fold);
-      addNote(rec, `天线折叠/直立两种形态，body 三维取折叠态（收纳尺寸）；直立态见 rawOfficial`);
+  const dimCandidates = [
+    '尺寸与重量.主机尺寸（长 × 宽 × 高）',
+    '尺寸与重量.天线折叠',
+    '尺寸与重量.母路由',
+    '尺寸与重量.子路由',
+    '尺寸.不包含支架',
+    '尺寸.包含支架',
+  ];
+  const dimParts = dimCandidates.map((k) => hwField(raw, k)).filter(Boolean);
+  for (const prefix of ['尺寸与重量', '尺寸']) {
+    for (const k of Object.keys(AXIS_KEYS)) {
+      const v = hwField(raw, `${prefix}.${k}`);
+      if (v) dimParts.push(`${k}：${v}`);
     }
-  } else if (dims.length >= 3) {
-    const sorted = [...dims].sort((a, b) => b - a);
-    rec.body.widthMm = sorted[0];
-    rec.body.heightMm = sorted[1];
-    rec.body.depthMm = sorted[2];
   }
-  rec.body.weightG = parseWeight(hwLookup(raw, '尺寸与重量.重量', name).value ?? '').value;
+
+  let dimSrc = '';
+  let gotDims = null;
+  for (const k of dimCandidates) {
+    const text = hwField(raw, k);
+    if (!text) continue;
+    const labeled = dimLabelMap(text);
+    const parsed = Object.keys(labeled).length >= 2 ? labeled : positionalDims(text);
+    if (parsed) {
+      gotDims = parsed;
+      dimSrc = text;
+      break;
+    }
+  }
+  if (!gotDims) {
+    const axis = axisDims(raw);
+    if (axis) {
+      gotDims = axis;
+      dimSrc = Object.keys(axis).join('、');
+    }
+  }
+  if (gotDims) {
+    const body = dimsToBody(gotDims);
+    rec.body.heightMm = body.heightMm;
+    rec.body.widthMm = body.widthMm;
+    rec.body.depthMm = body.depthMm;
+  }
+  if (/天线直立/.test(dimSrc) && /天线折叠/.test(dimSrc)) {
+    addNote(rec, `天线折叠/直立两种形态，body 三维取折叠态（收纳尺寸）；直立态见 rawOfficial`);
+  } else if (/天线直立时/.test(dimSrc) && /天线折叠时/.test(dimSrc)) {
+    addNote(rec, `天线折叠/直立两种形态，body 三维取折叠态（收纳尺寸）；直立态见 rawOfficial`);
+  } else if (/母路由|子路由/.test(dimSrc)) {
+    if (/母路由/.test(dimSrc)) {
+      addNote(rec, `尺寸原文按母路由/子路由（或套装版本）分列，body 三维取母路由口径；其余见 rawOfficial`);
+    } else {
+      addNote(rec, `尺寸原文只公布子路由口径，body 三维记子路由`);
+    }
+  }
+
+  const weightKeys = ['尺寸与重量.主机重量', '尺寸与重量.母路由重量', '尺寸与重量.重量', '重量'];
+  let weightText = '';
+  for (const k of weightKeys) {
+    const text = hwField(raw, k);
+    if (!text) continue;
+    weightText = text;
+    const segs = tidy(text)
+      .split(/\s*[|｜]\s*/)
+      .filter((s) => /\d/.test(s));
+    const seg = segs.find((s) => /裸机|主机重量|不含包装/.test(s)) ?? segs[0] ?? '';
+    const w = parseWeight(seg);
+    rec.body.weightG = w.value;
+    if (w.value !== null) {
+      if (segs.length > 1) {
+        addNote(rec, `重量原文按母/子路由或包装版本分列，body.weightG 取主机裸机口径（${tidy(seg)}）；其余见 rawOfficial`);
+      }
+      break;
+    }
+  }
+  pushOfficial(rec, '重量', weightText);
 
   /* ---- WLAN / 网口 / 内存 ---------------------------------------------- */
-  const wlanParts = [
-    hwLookup(raw, 'WLAN 规格.传输标准', name).value,
-    hwLookup(raw, 'WLAN 规格.无线速率', name).value,
-    hwLookup(raw, 'WLAN 规格.无线频段', name).value,
-    hwLookup(raw, '传输标准', name).value,
-    hwLookup(raw, '无线速率', name).value,
-    hwLookup(raw, '无线频段', name).value,
-  ].filter(Boolean);
-  rec.connectivity.wifi = wlanParts.map(tidy).join(' | ') || null;
-  const portsText = hwLookup(raw, '接口', name).value ?? hwLookup(raw, '网口', name).value ?? '';
-  if (portsText) {
-    rec.specs = {
-      ...(rec.specs ?? {}),
-      'connectivity.ports': portsText.split(/\s*[|｜]\s*/).map(tidy).filter(Boolean),
-    };
+  const wifiStd =
+    hwField(raw, 'WLAN 规格.传输标准') ??
+    hwField(raw, 'WLAN 规格.WLAN 传输标准') ??
+    hwField(raw, 'WLAN 规格.网络传输标准') ??
+    hwField(raw, '传输标准');
+  const wifiRate =
+    hwField(raw, 'WLAN 规格.无线速率') ?? hwField(raw, 'WLAN 速率') ?? hwField(raw, '无线速率');
+  const wifiBand =
+    hwField(raw, 'WLAN 规格.无线频段') ?? hwField(raw, 'WLAN 频率') ?? hwField(raw, '无线频段');
+  rec.connectivity.wifi = [wifiStd, wifiRate, wifiBand].filter(Boolean).map(tidy).join(' | ') || null;
+
+  // 网口优先：分节子键（`网口.母路由`）单独记录单元；无网口才回退到接口
+  let portList = splitPorts(hwField(raw, '网口'));
+  if (!portList.length) {
+    const subPorts = hwSection(raw, '网口');
+    if (subPorts.length) portList = subPorts.map((e) => `${e.sub}：${e.value}`);
+  }
+  if (!portList.length) portList = splitPorts(hwField(raw, '接口'));
+  if (portList.length) {
+    rec.specs['connectivity.ports'] = portList;
     rec.provenance['connectivity.ports'] = HW;
   }
-  // 「存储.运行内存（RAM）+ 机身内存（ROM）」形如「512 MB + 128 MB」
-  const memText = hwLookup(raw, '存储.运行内存（RAM）+ 机身内存（ROM）', name).value ?? '';
-  const ramM = tidy(memText).match(/([\d.]+)\s*(MB|GB)\s*\+/i);
-  const romM = tidy(memText).match(/\+\s*([\d.]+)\s*(MB|GB)/i);
-  const toGb = (n, u) => (u.toUpperCase() === 'GB' ? Number(n) : Math.round((Number(n) / 1024) * 100) / 100);
-  if (ramM) rec.memory.ramGb = [toGb(ramM[1], ramM[2])];
-  if (romM) rec.memory.storageGb = [toGb(romM[1], romM[2])];
-  if (ramM && romM) {
-    addNote(rec, `内存原文「${tidy(memText)}」：MB→GB 是单位换算（除以 1024）`);
+
+  // 内存五种写法：`512 MB RAM + 128 MB ROM` / `256 MB（RAM）+ 128 MB（ROM）` /
+  // `运行内存（RAM）：128 MB | 机身内存（ROM）：128 MB`（套装取首组=母路由）
+  const memText =
+    hwField(raw, '存储.运行内存（RAM）+ 机身内存（ROM）') ??
+    hwField(raw, '存储') ??
+    hwSection(raw, '存储')
+      .map((e) => `${e.sub}：${e.value}`)
+      .join(' | ');
+  const mem = routerMemory(memText);
+  if (mem.ramGb !== undefined) rec.memory.ramGb = [mem.ramGb];
+  if (mem.storageGb !== undefined) rec.memory.storageGb = [mem.storageGb];
+  if (mem.ramGb !== undefined || mem.storageGb !== undefined) {
+    if (/母路由|子路由|口母路由/.test(tidy(memText))) {
+      addNote(rec, `内存原文按母/子路由分列，memory 取首组（母路由）口径；其余见 rawOfficial`);
+    }
+    if (/MB/i.test(tidy(memText))) {
+      addNote(rec, `内存原文「${tidy(memText)}」：MB→GB 是单位换算（除以 1024）`);
+    }
+  }
+  pushOfficial(rec, '存储', memText);
+
+  /* ---- 功耗 / 输入电压 / 芯片 ------------------------------------------- */
+  const powerTexts = ['功耗', '功耗.母路由', '功耗.子路由']
+    .map((k) => hwField(raw, k))
+    .filter(Boolean);
+  const powerText = powerTexts.join(' | ');
+  const powerMatch = powerText.match(/([\d.]+)\s*W\b/);
+  if (powerMatch) {
+    rec.specs['power.inputPower'] = Number(powerMatch[1]);
+    rec.provenance['power.inputPower'] = HW;
+    addNote(
+      rec,
+      powerTexts.length > 1
+        ? 'power.inputPower 取官网「产品功耗」首个单元的 W 值（非铭牌额定输入功率）；母/子分列见 rawOfficial'
+        : 'power.inputPower 取官网「产品功耗」的 W 值（非铭牌额定输入功率，原文见 rawOfficial）',
+    );
+  }
+  const acdc =
+    hwField(raw, '功耗.AC/DC电源') ??
+    hwField(raw, '功耗.AC/DC 电源') ??
+    hwField(raw, 'AC/DC电源') ??
+    hwField(raw, 'AC/DC 电源');
+  let voltage = acdc ? tidy(acdc) : null;
+  if (!voltage && powerText) {
+    const v = powerText.match(/输入电压\s*[：:]\s*([^|｜]+)/);
+    const f = powerText.match(/输入电压频率\s*[：:]\s*([^|｜]+)/);
+    const inline = powerText.match(/AC\/DC\s*电源\s*[：:]\s*([^|｜]+)/);
+    if (v) voltage = [tidy(v[1]), tidy(f?.[1])].filter(Boolean).join(' | ');
+    else if (inline) voltage = tidy(inline[1]);
+  }
+  if (voltage) {
+    rec.specs['power.inputVoltage'] = voltage;
+    rec.provenance['power.inputVoltage'] = HW;
+  }
+  const cpu = hwField(raw, 'CPU') ?? hwField(raw, '处理器');
+  if (cpu) {
+    rec.chipset.name = tidy(cpu);
+    rec.provenance['chipset.name'] = HW;
   }
 
   /* ---- 官网原文节选 ---------------------------------------------------- */
-  pushOfficial(rec, '电池', raw['电池.电池容量']);
-  pushOfficial(rec, '安全', raw['安全.防火墙安全管理'] ?? raw['安全.防火墙']);
+  pushOfficial(rec, '尺寸与重量', dimParts.join(' | '));
+  pushOfficial(rec, '功耗', powerText);
+  pushOfficial(
+    rec,
+    '蜂窝传输速率',
+    hwField(raw, '蜂窝传输速率') ??
+      [
+        hwField(raw, '蜂窝传输速率.最高下行速度'),
+        hwField(raw, '蜂窝传输速率.最高上行速度'),
+      ]
+        .filter(Boolean)
+        .join(' | '),
+  );
+  pushOfficial(
+    rec,
+    '显示屏',
+    [
+      hwField(raw, '显示屏.屏幕尺寸') ?? hwField(raw, '屏幕.屏幕尺寸'),
+      hwField(raw, '显示屏.屏幕类型') ?? hwField(raw, '屏幕.屏幕类型'),
+    ]
+      .filter(Boolean)
+      .join(' | '),
+  );
+  pushOfficial(
+    rec,
+    '电池',
+    hwField(raw, '电池') ?? hwField(raw, '电池.电池容量') ?? hwField(raw, '电池.额定容量'),
+  );
+  pushOfficial(rec, '安全', hwField(raw, '安全') ?? raw['安全.防火墙安全管理'] ?? raw['安全.防火墙']);
   pushOfficial(rec, '包装清单', raw['包装清单']);
 
   /* ---- provenance ------------------------------------------------------ */
@@ -1342,6 +1802,7 @@ function mapHuaweiRouter(rawProduct) {
   put(rec, 'connectivity.wifi', rec.connectivity.wifi, HW);
   put(rec, 'memory.ramGb', rec.memory.ramGb, HW);
   put(rec, 'memory.storageGb', rec.memory.storageGb, HW);
+  put(rec, 'chipset.name', rec.chipset.name, HW);
 
   return rec;
 }

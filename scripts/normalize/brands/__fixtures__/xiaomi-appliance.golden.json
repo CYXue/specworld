@@ -76,24 +76,50 @@
   "scores": [],
   "granularity": "specs-page",
   "rawOfficial": {
-    "品类特有参数": "制冷方式：直冷 | 面板材质：金属面板 | 制冷系统：单系统 | 压缩机类型：定频 | 放置方式：独立式 | 净化技术：银离子抗菌 | 保鲜技术：无 | 智能互联：不支持 | 总容量：215L | 变温室容积：30L | 冷冻室容积：58L | 冷藏室容积：127L | 耗电量：0.66kW·h/24h | 深度：≤60CM | 宽度：＜60CM | 价格带：0-1000元 | 门体类型：三门"
+    "品类特有参数": "保鲜技术：undefined | 深度：≤60CM | 宽度：＜60CM | 价格带：0-1000元"
   },
   "notes": [
     "机身三维取官网「524*582*1808mm」（数值序：宽、深、高）",
-    "品类特有参数（17 项）未入契约——随品类差异大，schema 不收一次性字段，原文见 rawOfficial"
+    "官网关键参数原文见 rawOfficial（4 项；本行已按 fridge schema 落位可量化项）"
   ],
   "provenance": {
     "power.ratingLevel": "huawei-official",
     "features.noiseDb": "huawei-official",
+    "fridge.doorType": "huawei-official",
+    "fridge.placement": "huawei-official",
+    "fridge.coolingType": "huawei-official",
+    "fridge.coolingSystem": "huawei-official",
+    "fridge.compressor": "huawei-official",
+    "fridge.panelMaterial": "huawei-official",
+    "fridge.purifyTech": "huawei-official",
+    "fridge.smart": "huawei-official",
+    "fridge.totalCapacityL": "huawei-official",
+    "fridge.fridgeCapacityL": "huawei-official",
+    "fridge.freezerCapacityL": "huawei-official",
+    "fridge.variableCapacityL": "huawei-official",
+    "fridge.dailyEnergyKwh": "huawei-official",
     "body.widthMm": "huawei-official",
     "body.depthMm": "huawei-official",
     "body.heightMm": "huawei-official"
   },
   "firstSeenAt": "2026-10-24T12:08:11.042Z",
   "lastSeenAt": "2026-10-24T12:08:11.042Z",
-  "category": "home",
+  "category": "fridge",
   "specs": {
     "power.ratingLevel": "3级",
-    "features.noiseDb": 38
+    "features.noiseDb": 38,
+    "fridge.doorType": "三门",
+    "fridge.placement": "独立式",
+    "fridge.coolingType": "直冷",
+    "fridge.coolingSystem": "单系统",
+    "fridge.compressor": "定频",
+    "fridge.panelMaterial": "金属面板",
+    "fridge.purifyTech": "银离子抗菌",
+    "fridge.smart": "不支持",
+    "fridge.totalCapacityL": 215,
+    "fridge.fridgeCapacityL": 127,
+    "fridge.freezerCapacityL": 58,
+    "fridge.variableCapacityL": 30,
+    "fridge.dailyEnergyKwh": 0.66
   }
 }

@@ -98,6 +98,14 @@ type CategoryId =
   | 'wearable'
   | 'headset'
   | 'home'
+  | 'fridge'
+  | 'aircon'
+  | 'aircare'
+  | 'cleaner'
+  | 'kitchen'
+  | 'waterpurifier'
+  | 'lock'
+  | 'washer'
   | 'audio'
   | 'media'
   | 'tracker'
@@ -122,6 +130,15 @@ export const CATEGORY_ORDER: CategoryDef[] = [
   { id: 'wearable', label: '可穿戴' },
   { id: 'headset', label: '头显' },
   { id: 'home', label: '智能家居' },
+  { id: 'fridge', label: '冰箱' },
+  { id: 'aircon', label: '空调' },
+  { id: 'aircare', label: '空气净化' },
+  { id: 'climate', label: '环境电器' },
+  { id: 'cleaner', label: '清洁电器' },
+  { id: 'kitchen', label: '厨房电器' },
+  { id: 'waterpurifier', label: '净水器' },
+  { id: 'lock', label: '智能门锁' },
+  { id: 'washer', label: '洗衣机' },
   { id: 'audio', label: '音频' },
   { id: 'media', label: '多媒体播放器' },
   { id: 'tracker', label: '定位器' },
